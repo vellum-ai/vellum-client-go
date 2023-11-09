@@ -74,6 +74,27 @@ func (c *Client) List(ctx context.Context, request *vellumclientgo.DocumentsList
 	return response, nil
 }
 
+// A UUID string identifying this document.
+func (c *Client) Destroy(ctx context.Context, id string) error {
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/documents/%v", id)
+
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:     endpointURL,
+			Method:  http.MethodDelete,
+			Headers: c.header,
+		},
+	); err != nil {
+		return err
+	}
+	return nil
+}
+
 // Update a Document, keying off of its Vellum-generated ID. Particularly useful for updating its metadata.
 //
 // A UUID string identifying this document.
@@ -98,27 +119,6 @@ func (c *Client) PartialUpdate(ctx context.Context, id string, request *vellumcl
 		return nil, err
 	}
 	return response, nil
-}
-
-// A UUID string identifying this document.
-func (c *Client) Destroy(ctx context.Context, id string) error {
-	baseURL := "https://api.vellum.ai"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/documents/%v", id)
-
-	if err := c.caller.Call(
-		ctx,
-		&core.CallParams{
-			URL:     endpointURL,
-			Method:  http.MethodDelete,
-			Headers: c.header,
-		},
-	); err != nil {
-		return err
-	}
-	return nil
 }
 
 // Upload a document to be indexed and used for search.
