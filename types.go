@@ -575,9 +575,11 @@ type EnrichedNormalizedCompletion struct {
 	// The logprobs of the completion. Only present if specified in the original request options.
 	Logprobs *NormalizedLogProbs `json:"logprobs,omitempty"`
 	// The ID of the model version used to generate this completion.
-	ModelVersionId  string              `json:"model_version_id"`
-	PromptVersionId *string             `json:"prompt_version_id,omitempty"`
-	Type            *VellumVariableType `json:"type,omitempty"`
+	ModelVersionId       string              `json:"model_version_id"`
+	PromptVersionId      string              `json:"prompt_version_id"`
+	Type                 *VellumVariableType `json:"type,omitempty"`
+	DeploymentReleaseTag string              `json:"deployment_release_tag"`
+	ModelName            string              `json:"model_name"`
 
 	_rawJSON json.RawMessage
 }
@@ -1321,38 +1323,6 @@ func (m *ModelVersionBuildConfig) String() string {
 	return fmt.Sprintf("%#v", m)
 }
 
-type ModelVersionCompiledPrompt struct {
-	// The fully compiled prompt in normalized ChatML syntax after all variable substitutions and templating functions are applied.
-	Text string `json:"text"`
-	// The approximate number of tokens used by the compiled prompt.
-	NumTokens int `json:"num_tokens"`
-
-	_rawJSON json.RawMessage
-}
-
-func (m *ModelVersionCompiledPrompt) UnmarshalJSON(data []byte) error {
-	type unmarshaler ModelVersionCompiledPrompt
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*m = ModelVersionCompiledPrompt(value)
-	m._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (m *ModelVersionCompiledPrompt) String() string {
-	if len(m._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(m); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", m)
-}
-
 type ModelVersionExecConfig struct {
 	// The generation parameters that are passed to the LLM provider at runtime.
 	Parameters *ModelVersionExecConfigParameters `json:"parameters,omitempty"`
@@ -1586,9 +1556,9 @@ func (n *NodeInputCompiledJsonValue) String() string {
 }
 
 type NodeInputCompiledNumberValue struct {
-	NodeInputId string `json:"node_input_id"`
-	Key         string `json:"key"`
-	Value       *int   `json:"value,omitempty"`
+	NodeInputId string   `json:"node_input_id"`
+	Key         string   `json:"key"`
+	Value       *float64 `json:"value,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -3203,8 +3173,8 @@ func (t *TemplatingNodeJsonResult) String() string {
 }
 
 type TemplatingNodeNumberResult struct {
-	Id    string `json:"id"`
-	Value *int   `json:"value,omitempty"`
+	Id    string   `json:"id"`
+	Value *float64 `json:"value,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -3621,8 +3591,8 @@ func (t *TerminalNodeJsonResult) String() string {
 type TerminalNodeNumberResult struct {
 	Id *string `json:"id,omitempty"`
 	// The unique name given to the terminal node that produced this output.
-	Name  string `json:"name"`
-	Value *int   `json:"value,omitempty"`
+	Name  string   `json:"name"`
+	Value *float64 `json:"value,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -5156,8 +5126,8 @@ type WorkflowResultEventOutputDataNumber struct {
 	State  WorkflowNodeResultEventState `json:"state,omitempty"`
 	NodeId string                       `json:"node_id"`
 	// The newly output string value. Only relevant for string outputs with a state of STREAMING.
-	Delta *string `json:"delta,omitempty"`
-	Value *int    `json:"value,omitempty"`
+	Delta *string  `json:"delta,omitempty"`
+	Value *float64 `json:"value,omitempty"`
 
 	_rawJSON json.RawMessage
 }

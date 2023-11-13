@@ -9,41 +9,6 @@ import (
 	time "time"
 )
 
-type ModelVersionCompilePromptRequestRequest struct {
-	// Key/value pairs for each variable found within the model version's prompt template.
-	InputValues map[string]interface{} `json:"input_values,omitempty"`
-}
-
-type ModelVersionCompilePromptResponse struct {
-	// Information about the compiled prompt.
-	Prompt *ModelVersionCompiledPrompt `json:"prompt,omitempty"`
-
-	_rawJSON json.RawMessage
-}
-
-func (m *ModelVersionCompilePromptResponse) UnmarshalJSON(data []byte) error {
-	type unmarshaler ModelVersionCompilePromptResponse
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*m = ModelVersionCompilePromptResponse(value)
-	m._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (m *ModelVersionCompilePromptResponse) String() string {
-	if len(m._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(m); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", m)
-}
-
 type ModelVersionRead struct {
 	// Vellum-generated ID that uniquely identifies this model version.
 	Id string `json:"id"`
@@ -54,6 +19,8 @@ type ModelVersionRead struct {
 	// Which LLM provider this model version is associated with.
 	//
 	// * `ANTHROPIC` - Anthropic
+	// * `AWS_BEDROCK` - AWS Bedrock
+	// * `AZURE_OPENAI` - Azure OpenAI
 	// * `COHERE` - Cohere
 	// * `GOOGLE` - Google
 	// * `HOSTED` - Hosted
@@ -62,6 +29,7 @@ type ModelVersionRead struct {
 	// * `HUGGINGFACE` - HuggingFace
 	// * `MYSTIC` - Mystic
 	// * `PYQ` - Pyq
+	// * `REPLICATE` - Replicate
 	Provider ProviderEnum `json:"provider,omitempty"`
 	// The unique id of this model version as it exists in the above provider's system.
 	ExternalId string `json:"external_id"`

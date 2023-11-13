@@ -52,29 +52,3 @@ func (c *Client) Retrieve(ctx context.Context, id string) (*vellumclientgo.Model
 	}
 	return response, nil
 }
-
-// Compiles the prompt backing the model version using the provided input values.
-//
-// A UUID string identifying this model version.
-func (c *Client) ModelVersionCompilePrompt(ctx context.Context, id string, request *vellumclientgo.ModelVersionCompilePromptRequestRequest) (*vellumclientgo.ModelVersionCompilePromptResponse, error) {
-	baseURL := "https://api.vellum.ai"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/model-versions/%v/compile-prompt", id)
-
-	var response *vellumclientgo.ModelVersionCompilePromptResponse
-	if err := c.caller.Call(
-		ctx,
-		&core.CallParams{
-			URL:      endpointURL,
-			Method:   http.MethodPost,
-			Headers:  c.header,
-			Request:  request,
-			Response: &response,
-		},
-	); err != nil {
-		return nil, err
-	}
-	return response, nil
-}

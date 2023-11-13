@@ -18,6 +18,8 @@ type RegisterPromptRequestRequest struct {
 	// The initial LLM provider to use for this prompt
 	//
 	// * `ANTHROPIC` - Anthropic
+	// * `AWS_BEDROCK` - AWS Bedrock
+	// * `AZURE_OPENAI` - Azure OpenAI
 	// * `COHERE` - Cohere
 	// * `GOOGLE` - Google
 	// * `HOSTED` - Hosted
@@ -26,7 +28,8 @@ type RegisterPromptRequestRequest struct {
 	// * `HUGGINGFACE` - HuggingFace
 	// * `MYSTIC` - Mystic
 	// * `PYQ` - Pyq
-	Provider ProviderEnum `json:"provider,omitempty"`
+	// * `REPLICATE` - Replicate
+	Provider *ProviderEnum `json:"provider,omitempty"`
 	// The initial model to use for this prompt
 	Model string `json:"model"`
 	// The initial model parameters to use for  this prompt
@@ -36,6 +39,8 @@ type RegisterPromptRequestRequest struct {
 }
 
 // * `ANTHROPIC` - Anthropic
+// * `AWS_BEDROCK` - AWS Bedrock
+// * `AZURE_OPENAI` - Azure OpenAI
 // * `COHERE` - Cohere
 // * `GOOGLE` - Google
 // * `HOSTED` - Hosted
@@ -44,10 +49,13 @@ type RegisterPromptRequestRequest struct {
 // * `HUGGINGFACE` - HuggingFace
 // * `MYSTIC` - Mystic
 // * `PYQ` - Pyq
+// * `REPLICATE` - Replicate
 type ProviderEnum string
 
 const (
 	ProviderEnumAnthropic   ProviderEnum = "ANTHROPIC"
+	ProviderEnumAwsBedrock  ProviderEnum = "AWS_BEDROCK"
+	ProviderEnumAzureOpenai ProviderEnum = "AZURE_OPENAI"
 	ProviderEnumCohere      ProviderEnum = "COHERE"
 	ProviderEnumGoogle      ProviderEnum = "GOOGLE"
 	ProviderEnumHosted      ProviderEnum = "HOSTED"
@@ -56,12 +64,17 @@ const (
 	ProviderEnumHuggingface ProviderEnum = "HUGGINGFACE"
 	ProviderEnumMystic      ProviderEnum = "MYSTIC"
 	ProviderEnumPyq         ProviderEnum = "PYQ"
+	ProviderEnumReplicate   ProviderEnum = "REPLICATE"
 )
 
 func NewProviderEnumFromString(s string) (ProviderEnum, error) {
 	switch s {
 	case "ANTHROPIC":
 		return ProviderEnumAnthropic, nil
+	case "AWS_BEDROCK":
+		return ProviderEnumAwsBedrock, nil
+	case "AZURE_OPENAI":
+		return ProviderEnumAzureOpenai, nil
 	case "COHERE":
 		return ProviderEnumCohere, nil
 	case "GOOGLE":
@@ -78,6 +91,8 @@ func NewProviderEnumFromString(s string) (ProviderEnum, error) {
 		return ProviderEnumMystic, nil
 	case "PYQ":
 		return ProviderEnumPyq, nil
+	case "REPLICATE":
+		return ProviderEnumReplicate, nil
 	}
 	var t ProviderEnum
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -124,8 +139,7 @@ func (r *RegisterPromptModelParametersRequest) String() string {
 }
 
 type RegisterPromptPromptInfoRequest struct {
-	PromptSyntaxVersion *int                            `json:"prompt_syntax_version,omitempty"`
-	PromptBlockData     *PromptTemplateBlockDataRequest `json:"prompt_block_data,omitempty"`
+	PromptBlockData *PromptTemplateBlockDataRequest `json:"prompt_block_data,omitempty"`
 	// The input variables specified in the prompt template.
 	InputVariables []*RegisteredPromptInputVariableRequest `json:"input_variables,omitempty"`
 
@@ -164,6 +178,8 @@ type RegisterPromptResponse struct {
 	Sandbox *RegisteredPromptSandbox `json:"sandbox,omitempty"`
 	// Information about the generated model version
 	ModelVersion *RegisteredPromptModelVersion `json:"model_version,omitempty"`
+	// The ID of the generated prompt version
+	PromptVersionId string `json:"prompt_version_id"`
 	// Information about the generated deployment
 	Deployment *RegisteredPromptDeployment `json:"deployment,omitempty"`
 
