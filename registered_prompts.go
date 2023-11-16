@@ -107,7 +107,7 @@ type RegisterPromptModelParametersRequest struct {
 	MaxTokens        int                 `json:"max_tokens"`
 	Stop             []string            `json:"stop,omitempty"`
 	TopP             float64             `json:"top_p"`
-	TopK             *float64            `json:"top_k,omitempty"`
+	TopK             *int                `json:"top_k,omitempty"`
 	FrequencyPenalty float64             `json:"frequency_penalty"`
 	PresencePenalty  float64             `json:"presence_penalty"`
 	LogitBias        map[string]*float64 `json:"logit_bias,omitempty"`

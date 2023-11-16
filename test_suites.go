@@ -8,45 +8,183 @@ import (
 	core "github.com/vellum-ai/vellum-client-go/core"
 )
 
-type EvaluationParamsRequest struct {
-	// The target value to compare the LLM output against. Typically what you expect or desire the LLM output to be.
-	Target *string `json:"target,omitempty"`
-
-	_rawJSON json.RawMessage
+type TestCaseVariableValueRequest struct {
+	Type          string
+	String        *TestCaseStringVariableValueRequest
+	Number        *TestCaseNumberVariableValueRequest
+	Json          *TestCaseJsonVariableValueRequest
+	ChatHistory   *TestCaseChatHistoryVariableValueRequest
+	SearchResults *TestCaseSearchResultsVariableValueRequest
+	Error         *TestCaseErrorVariableValueRequest
 }
 
-func (e *EvaluationParamsRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler EvaluationParamsRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+func NewTestCaseVariableValueRequestFromString(value *TestCaseStringVariableValueRequest) *TestCaseVariableValueRequest {
+	return &TestCaseVariableValueRequest{Type: "STRING", String: value}
+}
+
+func NewTestCaseVariableValueRequestFromNumber(value *TestCaseNumberVariableValueRequest) *TestCaseVariableValueRequest {
+	return &TestCaseVariableValueRequest{Type: "NUMBER", Number: value}
+}
+
+func NewTestCaseVariableValueRequestFromJson(value *TestCaseJsonVariableValueRequest) *TestCaseVariableValueRequest {
+	return &TestCaseVariableValueRequest{Type: "JSON", Json: value}
+}
+
+func NewTestCaseVariableValueRequestFromChatHistory(value *TestCaseChatHistoryVariableValueRequest) *TestCaseVariableValueRequest {
+	return &TestCaseVariableValueRequest{Type: "CHAT_HISTORY", ChatHistory: value}
+}
+
+func NewTestCaseVariableValueRequestFromSearchResults(value *TestCaseSearchResultsVariableValueRequest) *TestCaseVariableValueRequest {
+	return &TestCaseVariableValueRequest{Type: "SEARCH_RESULTS", SearchResults: value}
+}
+
+func NewTestCaseVariableValueRequestFromError(value *TestCaseErrorVariableValueRequest) *TestCaseVariableValueRequest {
+	return &TestCaseVariableValueRequest{Type: "ERROR", Error: value}
+}
+
+func (t *TestCaseVariableValueRequest) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*e = EvaluationParamsRequest(value)
-	e._rawJSON = json.RawMessage(data)
+	t.Type = unmarshaler.Type
+	switch unmarshaler.Type {
+	case "STRING":
+		value := new(TestCaseStringVariableValueRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.String = value
+	case "NUMBER":
+		value := new(TestCaseNumberVariableValueRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Number = value
+	case "JSON":
+		value := new(TestCaseJsonVariableValueRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Json = value
+	case "CHAT_HISTORY":
+		value := new(TestCaseChatHistoryVariableValueRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.ChatHistory = value
+	case "SEARCH_RESULTS":
+		value := new(TestCaseSearchResultsVariableValueRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.SearchResults = value
+	case "ERROR":
+		value := new(TestCaseErrorVariableValueRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Error = value
+	}
 	return nil
 }
 
-func (e *EvaluationParamsRequest) String() string {
-	if len(e._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
-			return value
+func (t TestCaseVariableValueRequest) MarshalJSON() ([]byte, error) {
+	switch t.Type {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", t.Type, t)
+	case "STRING":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TestCaseStringVariableValueRequest
+		}{
+			Type:                               t.Type,
+			TestCaseStringVariableValueRequest: t.String,
 		}
+		return json.Marshal(marshaler)
+	case "NUMBER":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TestCaseNumberVariableValueRequest
+		}{
+			Type:                               t.Type,
+			TestCaseNumberVariableValueRequest: t.Number,
+		}
+		return json.Marshal(marshaler)
+	case "JSON":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TestCaseJsonVariableValueRequest
+		}{
+			Type:                             t.Type,
+			TestCaseJsonVariableValueRequest: t.Json,
+		}
+		return json.Marshal(marshaler)
+	case "CHAT_HISTORY":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TestCaseChatHistoryVariableValueRequest
+		}{
+			Type:                                    t.Type,
+			TestCaseChatHistoryVariableValueRequest: t.ChatHistory,
+		}
+		return json.Marshal(marshaler)
+	case "SEARCH_RESULTS":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TestCaseSearchResultsVariableValueRequest
+		}{
+			Type: t.Type,
+			TestCaseSearchResultsVariableValueRequest: t.SearchResults,
+		}
+		return json.Marshal(marshaler)
+	case "ERROR":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TestCaseErrorVariableValueRequest
+		}{
+			Type:                              t.Type,
+			TestCaseErrorVariableValueRequest: t.Error,
+		}
+		return json.Marshal(marshaler)
 	}
-	if value, err := core.StringifyJSON(e); err == nil {
-		return value
+}
+
+type TestCaseVariableValueRequestVisitor interface {
+	VisitString(*TestCaseStringVariableValueRequest) error
+	VisitNumber(*TestCaseNumberVariableValueRequest) error
+	VisitJson(*TestCaseJsonVariableValueRequest) error
+	VisitChatHistory(*TestCaseChatHistoryVariableValueRequest) error
+	VisitSearchResults(*TestCaseSearchResultsVariableValueRequest) error
+	VisitError(*TestCaseErrorVariableValueRequest) error
+}
+
+func (t *TestCaseVariableValueRequest) Accept(visitor TestCaseVariableValueRequestVisitor) error {
+	switch t.Type {
+	default:
+		return fmt.Errorf("invalid type %s in %T", t.Type, t)
+	case "STRING":
+		return visitor.VisitString(t.String)
+	case "NUMBER":
+		return visitor.VisitNumber(t.Number)
+	case "JSON":
+		return visitor.VisitJson(t.Json)
+	case "CHAT_HISTORY":
+		return visitor.VisitChatHistory(t.ChatHistory)
+	case "SEARCH_RESULTS":
+		return visitor.VisitSearchResults(t.SearchResults)
+	case "ERROR":
+		return visitor.VisitError(t.Error)
 	}
-	return fmt.Sprintf("%#v", e)
 }
 
 type TestSuiteTestCase struct {
-	// The id of the test case to update. If none is provided, an id will be generated and a new test case will be appended.
-	TestCaseId *string `json:"test_case_id,omitempty"`
-	// A human-friendly label for the test case.
-	Label *string `json:"label,omitempty"`
-	// Key/value pairs for each input variable that the Test Suite expects.
-	InputValues map[string]interface{} `json:"input_values,omitempty"`
-	// Parameters to use when evaluating the test case, specific to the test suite's evaluation metric.
-	EvaluationParams *EvaluationParams `json:"evaluation_params,omitempty"`
+	Id               *string                  `json:"id,omitempty"`
+	Label            *string                  `json:"label,omitempty"`
+	InputValues      []*TestCaseVariableValue `json:"input_values,omitempty"`
+	EvaluationValues []*TestCaseVariableValue `json:"evaluation_values,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -75,12 +213,8 @@ func (t *TestSuiteTestCase) String() string {
 }
 
 type TestSuiteTestCaseRequest struct {
-	// The id of the test case to update. If none is provided, an id will be generated and a new test case will be appended.
-	TestCaseId *string `json:"test_case_id,omitempty"`
-	// A human-friendly label for the test case.
-	Label *string `json:"label,omitempty"`
-	// Key/value pairs for each input variable that the Test Suite expects.
-	InputValues map[string]interface{} `json:"input_values,omitempty"`
-	// Parameters to use when evaluating the test case, specific to the test suite's evaluation metric.
-	EvaluationParams *EvaluationParamsRequest `json:"evaluation_params,omitempty"`
+	TestSuiteTestCaseRequestId *string                         `json:"id,omitempty"`
+	Label                      *string                         `json:"label,omitempty"`
+	InputValues                []*TestCaseVariableValueRequest `json:"input_values,omitempty"`
+	EvaluationValues           []*TestCaseVariableValueRequest `json:"evaluation_values,omitempty"`
 }

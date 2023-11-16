@@ -15,8 +15,9 @@ type ExecuteWorkflowStreamRequest struct {
 	// The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
 	WorkflowDeploymentName *string `json:"workflow_deployment_name,omitempty"`
 	// Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
-	ReleaseTag *string                        `json:"release_tag,omitempty"`
-	Inputs     []*WorkflowRequestInputRequest `json:"inputs,omitempty"`
+	ReleaseTag *string `json:"release_tag,omitempty"`
+	// The list of inputs defined in the Workflow's deployment with their corresponding values.
+	Inputs []*WorkflowRequestInputRequest `json:"inputs,omitempty"`
 	// Optionally include a unique identifier for tracking purposes.
 	ExternalId *string `json:"external_id,omitempty"`
 	// Optionally specify which events you want to receive. Defaults to only WORKFLOW events. Note that the schema of non-WORKFLOW events is unstable and should be used with caution.
@@ -654,6 +655,36 @@ func (e *EvaluationParams) UnmarshalJSON(data []byte) error {
 }
 
 func (e *EvaluationParams) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+type EvaluationParamsRequest struct {
+	// The target value to compare the LLM output against. Typically what you expect or desire the LLM output to be.
+	Target *string `json:"target,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (e *EvaluationParamsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler EvaluationParamsRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = EvaluationParamsRequest(value)
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *EvaluationParamsRequest) String() string {
 	if len(e._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
 			return value
@@ -2793,6 +2824,40 @@ func (s *SearchResultDocument) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
+type SearchResultDocumentRequest struct {
+	// The human-readable name for the document.
+	Label string `json:"label"`
+	// The unique ID of the document as represented in an external system and specified when it was originally uploaded.
+	ExternalId *string `json:"external_id,omitempty"`
+	// A previously supplied JSON object containing metadata that can be filtered on when searching.
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (s *SearchResultDocumentRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchResultDocumentRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SearchResultDocumentRequest(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SearchResultDocumentRequest) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
 type SearchResultMergingRequest struct {
 	// Whether to enable merging results
 	Enabled *bool `json:"enabled,omitempty"`
@@ -2812,6 +2877,41 @@ func (s *SearchResultMergingRequest) UnmarshalJSON(data []byte) error {
 }
 
 func (s *SearchResultMergingRequest) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type SearchResultRequest struct {
+	// The text of the chunk that matched the search query.
+	Text string `json:"text"`
+	// A score representing how well the chunk matches the search query.
+	Score    float64  `json:"score"`
+	Keywords []string `json:"keywords,omitempty"`
+	// The document that contains the chunk that matched the search query.
+	Document *SearchResultDocumentRequest `json:"document,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (s *SearchResultRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchResultRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SearchResultRequest(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SearchResultRequest) String() string {
 	if len(s._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
 			return value
@@ -3914,6 +4014,538 @@ func (t *TerminalNodeStringResult) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+type TestCaseChatHistoryVariableValue struct {
+	VariableId string         `json:"variable_id"`
+	Value      []*ChatMessage `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestCaseChatHistoryVariableValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestCaseChatHistoryVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestCaseChatHistoryVariableValue(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestCaseChatHistoryVariableValue) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestCaseChatHistoryVariableValueRequest struct {
+	VariableId string                `json:"variable_id"`
+	Value      []*ChatMessageRequest `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestCaseChatHistoryVariableValueRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestCaseChatHistoryVariableValueRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestCaseChatHistoryVariableValueRequest(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestCaseChatHistoryVariableValueRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestCaseErrorVariableValue struct {
+	VariableId string       `json:"variable_id"`
+	Value      *VellumError `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestCaseErrorVariableValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestCaseErrorVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestCaseErrorVariableValue(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestCaseErrorVariableValue) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestCaseErrorVariableValueRequest struct {
+	VariableId string              `json:"variable_id"`
+	Value      *VellumErrorRequest `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestCaseErrorVariableValueRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestCaseErrorVariableValueRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestCaseErrorVariableValueRequest(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestCaseErrorVariableValueRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestCaseJsonVariableValue struct {
+	VariableId string                 `json:"variable_id"`
+	Value      map[string]interface{} `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestCaseJsonVariableValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestCaseJsonVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestCaseJsonVariableValue(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestCaseJsonVariableValue) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestCaseJsonVariableValueRequest struct {
+	VariableId string                 `json:"variable_id"`
+	Value      map[string]interface{} `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestCaseJsonVariableValueRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestCaseJsonVariableValueRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestCaseJsonVariableValueRequest(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestCaseJsonVariableValueRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestCaseNumberVariableValue struct {
+	VariableId string   `json:"variable_id"`
+	Value      *float64 `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestCaseNumberVariableValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestCaseNumberVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestCaseNumberVariableValue(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestCaseNumberVariableValue) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestCaseNumberVariableValueRequest struct {
+	VariableId string   `json:"variable_id"`
+	Value      *float64 `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestCaseNumberVariableValueRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestCaseNumberVariableValueRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestCaseNumberVariableValueRequest(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestCaseNumberVariableValueRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestCaseSearchResultsVariableValue struct {
+	VariableId string          `json:"variable_id"`
+	Value      []*SearchResult `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestCaseSearchResultsVariableValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestCaseSearchResultsVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestCaseSearchResultsVariableValue(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestCaseSearchResultsVariableValue) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestCaseSearchResultsVariableValueRequest struct {
+	VariableId string                 `json:"variable_id"`
+	Value      []*SearchResultRequest `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestCaseSearchResultsVariableValueRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestCaseSearchResultsVariableValueRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestCaseSearchResultsVariableValueRequest(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestCaseSearchResultsVariableValueRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestCaseStringVariableValue struct {
+	VariableId string  `json:"variable_id"`
+	Value      *string `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestCaseStringVariableValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestCaseStringVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestCaseStringVariableValue(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestCaseStringVariableValue) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestCaseStringVariableValueRequest struct {
+	VariableId string  `json:"variable_id"`
+	Value      *string `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestCaseStringVariableValueRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestCaseStringVariableValueRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestCaseStringVariableValueRequest(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestCaseStringVariableValueRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestCaseVariableValue struct {
+	Type          string
+	String        *TestCaseStringVariableValue
+	Number        *TestCaseNumberVariableValue
+	Json          *TestCaseJsonVariableValue
+	ChatHistory   *TestCaseChatHistoryVariableValue
+	SearchResults *TestCaseSearchResultsVariableValue
+	Error         *TestCaseErrorVariableValue
+}
+
+func NewTestCaseVariableValueFromString(value *TestCaseStringVariableValue) *TestCaseVariableValue {
+	return &TestCaseVariableValue{Type: "STRING", String: value}
+}
+
+func NewTestCaseVariableValueFromNumber(value *TestCaseNumberVariableValue) *TestCaseVariableValue {
+	return &TestCaseVariableValue{Type: "NUMBER", Number: value}
+}
+
+func NewTestCaseVariableValueFromJson(value *TestCaseJsonVariableValue) *TestCaseVariableValue {
+	return &TestCaseVariableValue{Type: "JSON", Json: value}
+}
+
+func NewTestCaseVariableValueFromChatHistory(value *TestCaseChatHistoryVariableValue) *TestCaseVariableValue {
+	return &TestCaseVariableValue{Type: "CHAT_HISTORY", ChatHistory: value}
+}
+
+func NewTestCaseVariableValueFromSearchResults(value *TestCaseSearchResultsVariableValue) *TestCaseVariableValue {
+	return &TestCaseVariableValue{Type: "SEARCH_RESULTS", SearchResults: value}
+}
+
+func NewTestCaseVariableValueFromError(value *TestCaseErrorVariableValue) *TestCaseVariableValue {
+	return &TestCaseVariableValue{Type: "ERROR", Error: value}
+}
+
+func (t *TestCaseVariableValue) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	t.Type = unmarshaler.Type
+	switch unmarshaler.Type {
+	case "STRING":
+		value := new(TestCaseStringVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.String = value
+	case "NUMBER":
+		value := new(TestCaseNumberVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Number = value
+	case "JSON":
+		value := new(TestCaseJsonVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Json = value
+	case "CHAT_HISTORY":
+		value := new(TestCaseChatHistoryVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.ChatHistory = value
+	case "SEARCH_RESULTS":
+		value := new(TestCaseSearchResultsVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.SearchResults = value
+	case "ERROR":
+		value := new(TestCaseErrorVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Error = value
+	}
+	return nil
+}
+
+func (t TestCaseVariableValue) MarshalJSON() ([]byte, error) {
+	switch t.Type {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", t.Type, t)
+	case "STRING":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TestCaseStringVariableValue
+		}{
+			Type:                        t.Type,
+			TestCaseStringVariableValue: t.String,
+		}
+		return json.Marshal(marshaler)
+	case "NUMBER":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TestCaseNumberVariableValue
+		}{
+			Type:                        t.Type,
+			TestCaseNumberVariableValue: t.Number,
+		}
+		return json.Marshal(marshaler)
+	case "JSON":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TestCaseJsonVariableValue
+		}{
+			Type:                      t.Type,
+			TestCaseJsonVariableValue: t.Json,
+		}
+		return json.Marshal(marshaler)
+	case "CHAT_HISTORY":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TestCaseChatHistoryVariableValue
+		}{
+			Type:                             t.Type,
+			TestCaseChatHistoryVariableValue: t.ChatHistory,
+		}
+		return json.Marshal(marshaler)
+	case "SEARCH_RESULTS":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TestCaseSearchResultsVariableValue
+		}{
+			Type:                               t.Type,
+			TestCaseSearchResultsVariableValue: t.SearchResults,
+		}
+		return json.Marshal(marshaler)
+	case "ERROR":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TestCaseErrorVariableValue
+		}{
+			Type:                       t.Type,
+			TestCaseErrorVariableValue: t.Error,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type TestCaseVariableValueVisitor interface {
+	VisitString(*TestCaseStringVariableValue) error
+	VisitNumber(*TestCaseNumberVariableValue) error
+	VisitJson(*TestCaseJsonVariableValue) error
+	VisitChatHistory(*TestCaseChatHistoryVariableValue) error
+	VisitSearchResults(*TestCaseSearchResultsVariableValue) error
+	VisitError(*TestCaseErrorVariableValue) error
+}
+
+func (t *TestCaseVariableValue) Accept(visitor TestCaseVariableValueVisitor) error {
+	switch t.Type {
+	default:
+		return fmt.Errorf("invalid type %s in %T", t.Type, t)
+	case "STRING":
+		return visitor.VisitString(t.String)
+	case "NUMBER":
+		return visitor.VisitNumber(t.Number)
+	case "JSON":
+		return visitor.VisitJson(t.Json)
+	case "CHAT_HISTORY":
+		return visitor.VisitChatHistory(t.ChatHistory)
+	case "SEARCH_RESULTS":
+		return visitor.VisitSearchResults(t.SearchResults)
+	case "ERROR":
+		return visitor.VisitError(t.Error)
+	}
+}
+
 type UploadDocumentErrorResponse struct {
 	Detail string `json:"detail"`
 
@@ -4029,6 +4661,36 @@ func NewVellumErrorCodeEnumFromString(s string) (VellumErrorCodeEnum, error) {
 
 func (v VellumErrorCodeEnum) Ptr() *VellumErrorCodeEnum {
 	return &v
+}
+
+type VellumErrorRequest struct {
+	Message string              `json:"message"`
+	Code    VellumErrorCodeEnum `json:"code,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (v *VellumErrorRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler VellumErrorRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = VellumErrorRequest(value)
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VellumErrorRequest) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
 }
 
 type VellumVariable struct {
