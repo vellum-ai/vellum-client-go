@@ -55,11 +55,11 @@ func (c *ConflictError) Unwrap() error {
 
 type ForbiddenError struct {
 	*core.APIError
-	Body *GenerateErrorResponse
+	Body interface{}
 }
 
 func (f *ForbiddenError) UnmarshalJSON(data []byte) error {
-	var body *GenerateErrorResponse
+	var body interface{}
 	if err := json.Unmarshal(data, &body); err != nil {
 		return err
 	}
