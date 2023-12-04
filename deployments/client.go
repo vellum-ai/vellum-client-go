@@ -52,3 +52,26 @@ func (c *Client) Retrieve(ctx context.Context, id string) (*vellumclientgo.Deplo
 	}
 	return response, nil
 }
+
+func (c *Client) RetrieveProviderPayload(ctx context.Context, request *vellumclientgo.DeploymentProviderPayloadRequest) (*vellumclientgo.DeploymentProviderPayloadResponse, error) {
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	endpointURL := baseURL + "/" + "v1/deployments/provider-payload"
+
+	var response *vellumclientgo.DeploymentProviderPayloadResponse
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:      endpointURL,
+			Method:   http.MethodPost,
+			Headers:  c.header,
+			Request:  request,
+			Response: &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}

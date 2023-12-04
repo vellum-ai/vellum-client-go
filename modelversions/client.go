@@ -28,7 +28,7 @@ func NewClient(opts ...core.ClientOption) *Client {
 	}
 }
 
-// Used to retrieve a model version given its ID.
+// Deprecated. Use the `deployments/provider-payload` endpoint to fetch information that we send to Model providers.
 //
 // A UUID string identifying this model version.
 func (c *Client) Retrieve(ctx context.Context, id string) (*vellumclientgo.ModelVersionRead, error) {

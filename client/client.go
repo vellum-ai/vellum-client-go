@@ -118,6 +118,71 @@ func (c *Client) ExecutePrompt(ctx context.Context, request *vellumclientgo.Exec
 	return response, nil
 }
 
+// Executes a deployed Prompt and streams back the results.
+func (c *Client) ExecutePromptStream(ctx context.Context, request *vellumclientgo.ExecutePromptRequest) (*vellumclientgo.ExecutePromptStreamingResponse, error) {
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	endpointURL := baseURL + "/" + "v1/execute-prompt-stream"
+
+	errorDecoder := func(statusCode int, body io.Reader) error {
+		raw, err := io.ReadAll(body)
+		if err != nil {
+			return err
+		}
+		apiError := core.NewAPIError(statusCode, errors.New(string(raw)))
+		decoder := json.NewDecoder(bytes.NewReader(raw))
+		switch statusCode {
+		case 400:
+			value := new(vellumclientgo.BadRequestError)
+			value.APIError = apiError
+			if err := decoder.Decode(value); err != nil {
+				return apiError
+			}
+			return value
+		case 403:
+			value := new(vellumclientgo.ForbiddenError)
+			value.APIError = apiError
+			if err := decoder.Decode(value); err != nil {
+				return apiError
+			}
+			return value
+		case 404:
+			value := new(vellumclientgo.NotFoundError)
+			value.APIError = apiError
+			if err := decoder.Decode(value); err != nil {
+				return apiError
+			}
+			return value
+		case 500:
+			value := new(vellumclientgo.InternalServerError)
+			value.APIError = apiError
+			if err := decoder.Decode(value); err != nil {
+				return apiError
+			}
+			return value
+		}
+		return apiError
+	}
+
+	var response *vellumclientgo.ExecutePromptStreamingResponse
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:          endpointURL,
+			Method:       http.MethodPost,
+			Headers:      c.header,
+			Request:      request,
+			Response:     &response,
+			ErrorDecoder: errorDecoder,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
 // Executes a deployed Workflow and streams back its results.
 func (c *Client) ExecuteWorkflowStream(ctx context.Context, request *vellumclientgo.ExecuteWorkflowStreamRequest) (*core.Stream[vellumclientgo.WorkflowStreamEvent], error) {
 	baseURL := "https://predict.vellum.ai"

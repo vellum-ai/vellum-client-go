@@ -9,17 +9,6 @@ import (
 	time "time"
 )
 
-type ExecutePromptRequest struct {
-	Inputs []*PromptDeploymentInputRequest `json:"inputs,omitempty"`
-	// The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
-	PromptDeploymentId *string `json:"prompt_deployment_id,omitempty"`
-	// The name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
-	PromptDeploymentName *string `json:"prompt_deployment_name,omitempty"`
-	// Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
-	ReleaseTag *string `json:"release_tag,omitempty"`
-	ExternalId *string `json:"external_id,omitempty"`
-}
-
 type ExecuteWorkflowStreamRequest struct {
 	// The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
 	WorkflowDeploymentId *string `json:"workflow_deployment_id,omitempty"`
@@ -362,6 +351,35 @@ func (c *ConditionalNodeResultData) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+type DeploymentProviderPayloadResponse struct {
+	Payload map[string]interface{} `json:"payload,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (d *DeploymentProviderPayloadResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler DeploymentProviderPayloadResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DeploymentProviderPayloadResponse(value)
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DeploymentProviderPayloadResponse) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
 type DeploymentRead struct {
 	Id      string    `json:"id"`
 	Created time.Time `json:"created"`
@@ -380,7 +398,8 @@ type DeploymentRead struct {
 	// * `DEVELOPMENT` - Development
 	// * `STAGING` - Staging
 	// * `PRODUCTION` - Production
-	Environment           *EnvironmentEnum  `json:"environment,omitempty"`
+	Environment *EnvironmentEnum `json:"environment,omitempty"`
+	// Deprecated. The Prompt execution endpoints return a `prompt_version_id` that could be used instead.
 	ActiveModelVersionIds []string          `json:"active_model_version_ids,omitempty"`
 	LastDeployedOn        time.Time         `json:"last_deployed_on"`
 	InputVariables        []*VellumVariable `json:"input_variables,omitempty"`
@@ -679,8 +698,8 @@ func (e EnvironmentEnum) Ptr() *EnvironmentEnum {
 }
 
 type ErrorExecutePromptResponse struct {
-	Value       *VellumError `json:"value,omitempty"`
 	ExecutionId string       `json:"execution_id"`
+	Value       *VellumError `json:"value,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -798,6 +817,42 @@ func (e *ExecutePromptApiErrorResponse) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
+type ExecutePromptRequest struct {
+	Inputs []*PromptDeploymentInputRequest `json:"inputs,omitempty"`
+	// The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
+	PromptDeploymentId *string `json:"prompt_deployment_id,omitempty"`
+	// The name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
+	PromptDeploymentName *string `json:"prompt_deployment_name,omitempty"`
+	// Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
+	ReleaseTag *string `json:"release_tag,omitempty"`
+	ExternalId *string `json:"external_id,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (e *ExecutePromptRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler ExecutePromptRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = ExecutePromptRequest(value)
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ExecutePromptRequest) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
 type ExecutePromptResponse struct {
 	Type   string
 	Error  *ErrorExecutePromptResponse
@@ -901,6 +956,132 @@ func (e *ExecutePromptResponse) Accept(visitor ExecutePromptResponseVisitor) err
 	}
 }
 
+type ExecutePromptStreamingResponse struct {
+	State     string
+	Initiated *InitiatedExecutePromptStreamingResponse
+	Streaming *StreamingExecutePromptStreamingResponse
+	Fulfilled *FulfilledExecutePromptStreamingResponse
+	Rejected  *RejectedExecutePromptStreamingResponse
+}
+
+func NewExecutePromptStreamingResponseFromInitiated(value *InitiatedExecutePromptStreamingResponse) *ExecutePromptStreamingResponse {
+	return &ExecutePromptStreamingResponse{State: "INITIATED", Initiated: value}
+}
+
+func NewExecutePromptStreamingResponseFromStreaming(value *StreamingExecutePromptStreamingResponse) *ExecutePromptStreamingResponse {
+	return &ExecutePromptStreamingResponse{State: "STREAMING", Streaming: value}
+}
+
+func NewExecutePromptStreamingResponseFromFulfilled(value *FulfilledExecutePromptStreamingResponse) *ExecutePromptStreamingResponse {
+	return &ExecutePromptStreamingResponse{State: "FULFILLED", Fulfilled: value}
+}
+
+func NewExecutePromptStreamingResponseFromRejected(value *RejectedExecutePromptStreamingResponse) *ExecutePromptStreamingResponse {
+	return &ExecutePromptStreamingResponse{State: "REJECTED", Rejected: value}
+}
+
+func (e *ExecutePromptStreamingResponse) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		State string `json:"state"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	e.State = unmarshaler.State
+	switch unmarshaler.State {
+	case "INITIATED":
+		value := new(InitiatedExecutePromptStreamingResponse)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		e.Initiated = value
+	case "STREAMING":
+		value := new(StreamingExecutePromptStreamingResponse)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		e.Streaming = value
+	case "FULFILLED":
+		value := new(FulfilledExecutePromptStreamingResponse)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		e.Fulfilled = value
+	case "REJECTED":
+		value := new(RejectedExecutePromptStreamingResponse)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		e.Rejected = value
+	}
+	return nil
+}
+
+func (e ExecutePromptStreamingResponse) MarshalJSON() ([]byte, error) {
+	switch e.State {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", e.State, e)
+	case "INITIATED":
+		var marshaler = struct {
+			State string `json:"state"`
+			*InitiatedExecutePromptStreamingResponse
+		}{
+			State:                                   e.State,
+			InitiatedExecutePromptStreamingResponse: e.Initiated,
+		}
+		return json.Marshal(marshaler)
+	case "STREAMING":
+		var marshaler = struct {
+			State string `json:"state"`
+			*StreamingExecutePromptStreamingResponse
+		}{
+			State:                                   e.State,
+			StreamingExecutePromptStreamingResponse: e.Streaming,
+		}
+		return json.Marshal(marshaler)
+	case "FULFILLED":
+		var marshaler = struct {
+			State string `json:"state"`
+			*FulfilledExecutePromptStreamingResponse
+		}{
+			State:                                   e.State,
+			FulfilledExecutePromptStreamingResponse: e.Fulfilled,
+		}
+		return json.Marshal(marshaler)
+	case "REJECTED":
+		var marshaler = struct {
+			State string `json:"state"`
+			*RejectedExecutePromptStreamingResponse
+		}{
+			State:                                  e.State,
+			RejectedExecutePromptStreamingResponse: e.Rejected,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type ExecutePromptStreamingResponseVisitor interface {
+	VisitInitiated(*InitiatedExecutePromptStreamingResponse) error
+	VisitStreaming(*StreamingExecutePromptStreamingResponse) error
+	VisitFulfilled(*FulfilledExecutePromptStreamingResponse) error
+	VisitRejected(*RejectedExecutePromptStreamingResponse) error
+}
+
+func (e *ExecutePromptStreamingResponse) Accept(visitor ExecutePromptStreamingResponseVisitor) error {
+	switch e.State {
+	default:
+		return fmt.Errorf("invalid type %s in %T", e.State, e)
+	case "INITIATED":
+		return visitor.VisitInitiated(e.Initiated)
+	case "STREAMING":
+		return visitor.VisitStreaming(e.Streaming)
+	case "FULFILLED":
+		return visitor.VisitFulfilled(e.Fulfilled)
+	case "REJECTED":
+		return visitor.VisitRejected(e.Rejected)
+	}
+}
+
 type ExecuteWorkflowStreamErrorResponse struct {
 	// Details about why the request failed.
 	Detail string `json:"detail"`
@@ -957,6 +1138,35 @@ func NewFinishReasonEnumFromString(s string) (FinishReasonEnum, error) {
 
 func (f FinishReasonEnum) Ptr() *FinishReasonEnum {
 	return &f
+}
+
+type FulfilledExecutePromptStreamingResponse struct {
+	Data *ExecutePromptResponse `json:"data,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (f *FulfilledExecutePromptStreamingResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler FulfilledExecutePromptStreamingResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*f = FulfilledExecutePromptStreamingResponse(value)
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FulfilledExecutePromptStreamingResponse) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
 }
 
 type GenerateErrorResponse struct {
@@ -1304,9 +1514,68 @@ func (i IndexingStateEnum) Ptr() *IndexingStateEnum {
 	return &i
 }
 
+type InitiatedExecutePromptResponse struct {
+	Type        VellumVariableType `json:"type,omitempty"`
+	ExecutionId string             `json:"execution_id"`
+
+	_rawJSON json.RawMessage
+}
+
+func (i *InitiatedExecutePromptResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler InitiatedExecutePromptResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InitiatedExecutePromptResponse(value)
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InitiatedExecutePromptResponse) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type InitiatedExecutePromptStreamingResponse struct {
+	Data *InitiatedExecutePromptResponse `json:"data,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (i *InitiatedExecutePromptStreamingResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler InitiatedExecutePromptStreamingResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InitiatedExecutePromptStreamingResponse(value)
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InitiatedExecutePromptStreamingResponse) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
 type JsonExecutePromptResponse struct {
-	Value       map[string]interface{} `json:"value,omitempty"`
 	ExecutionId string                 `json:"execution_id"`
+	Value       map[string]interface{} `json:"value,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -2847,6 +3116,66 @@ func (r *RegisteredPromptSandboxSnapshot) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
+type RejectedExecutePromptResponse struct {
+	Type        string       `json:"type"`
+	Value       *VellumError `json:"value,omitempty"`
+	ExecutionId string       `json:"execution_id"`
+
+	_rawJSON json.RawMessage
+}
+
+func (r *RejectedExecutePromptResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler RejectedExecutePromptResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RejectedExecutePromptResponse(value)
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RejectedExecutePromptResponse) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+type RejectedExecutePromptStreamingResponse struct {
+	Data *RejectedExecutePromptResponse `json:"data,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (r *RejectedExecutePromptStreamingResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler RejectedExecutePromptStreamingResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RejectedExecutePromptStreamingResponse(value)
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RejectedExecutePromptStreamingResponse) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
 type SandboxMetricInputParams struct {
 	Params *EvaluationParams `json:"params,omitempty"`
 
@@ -3381,9 +3710,38 @@ func (s *SlimDocument) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
+type StreamingExecutePromptStreamingResponse struct {
+	Data *ExecutePromptResponse `json:"data,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (s *StreamingExecutePromptStreamingResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler StreamingExecutePromptStreamingResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = StreamingExecutePromptStreamingResponse(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *StreamingExecutePromptStreamingResponse) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
 type StringExecutePromptResponse struct {
-	Value       string `json:"value"`
 	ExecutionId string `json:"execution_id"`
+	Value       string `json:"value"`
 
 	_rawJSON json.RawMessage
 }
