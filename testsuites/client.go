@@ -37,7 +37,7 @@ func NewClient(opts ...core.ClientOption) *Client {
 // or overwritten with default values.
 //
 // A UUID string identifying this test suite.
-func (c *Client) UpsertTestSuiteTestCase(ctx context.Context, id string, request *vellumclientgo.TestSuiteTestCaseRequest) (*vellumclientgo.TestSuiteTestCase, error) {
+func (c *Client) UpsertTestSuiteTestCase(ctx context.Context, id string, request *vellumclientgo.UpsertTestSuiteTestCaseRequest) (*vellumclientgo.TestSuiteTestCase, error) {
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
