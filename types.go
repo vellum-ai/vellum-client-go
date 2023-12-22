@@ -9,6 +9,40 @@ import (
 	time "time"
 )
 
+type ExecutePromptRequest struct {
+	Inputs []*PromptDeploymentInputRequest `json:"inputs,omitempty"`
+	// The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
+	PromptDeploymentId *string `json:"prompt_deployment_id,omitempty"`
+	// The name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
+	PromptDeploymentName *string `json:"prompt_deployment_name,omitempty"`
+	// Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
+	ReleaseTag *string `json:"release_tag,omitempty"`
+	ExternalId *string `json:"external_id,omitempty"`
+	// The name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
+	ExpandMeta   *PromptDeploymentExpandMetaRequestRequest `json:"expand_meta,omitempty"`
+	RawOverrides *RawPromptExecutionOverridesRequest       `json:"raw_overrides,omitempty"`
+	// Returns the raw API response data sent from the model host. Combined with `raw_overrides`, it can be used to access new features from models.
+	ExpandRaw []string               `json:"expand_raw,omitempty"`
+	Metadata  map[string]interface{} `json:"metadata,omitempty"`
+}
+
+type ExecutePromptStreamRequest struct {
+	Inputs []*PromptDeploymentInputRequest `json:"inputs,omitempty"`
+	// The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
+	PromptDeploymentId *string `json:"prompt_deployment_id,omitempty"`
+	// The name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
+	PromptDeploymentName *string `json:"prompt_deployment_name,omitempty"`
+	// Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
+	ReleaseTag *string `json:"release_tag,omitempty"`
+	ExternalId *string `json:"external_id,omitempty"`
+	// The name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
+	ExpandMeta   *PromptDeploymentExpandMetaRequestRequest `json:"expand_meta,omitempty"`
+	RawOverrides *RawPromptExecutionOverridesRequest       `json:"raw_overrides,omitempty"`
+	// Returns the raw API response data sent from the model host. Combined with `raw_overrides`, it can be used to access new features from models.
+	ExpandRaw []string               `json:"expand_raw,omitempty"`
+	Metadata  map[string]interface{} `json:"metadata,omitempty"`
+}
+
 type ExecuteWorkflowStreamRequest struct {
 	// The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
 	WorkflowDeploymentId *string `json:"workflow_deployment_id,omitempty"`
@@ -138,10 +172,10 @@ func (a *ApiNodeResultData) String() string {
 	return fmt.Sprintf("%#v", a)
 }
 
-// * `CHAT_MESSAGE` - CHAT_MESSAGE
-// * `CHAT_HISTORY` - CHAT_HISTORY
-// * `JINJA` - JINJA
-// * `FUNCTION_DEFINITION` - FUNCTION_DEFINITION
+// - `CHAT_MESSAGE` - CHAT_MESSAGE
+// - `CHAT_HISTORY` - CHAT_HISTORY
+// - `JINJA` - JINJA
+// - `FUNCTION_DEFINITION` - FUNCTION_DEFINITION
 type BlockTypeEnum string
 
 const (
@@ -261,10 +295,10 @@ func (c *ChatMessageRequest) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// * `SYSTEM` - System
-// * `ASSISTANT` - Assistant
-// * `USER` - User
-// * `FUNCTION` - Function
+// - `SYSTEM` - System
+// - `ASSISTANT` - Assistant
+// - `USER` - User
+// - `FUNCTION` - Function
 type ChatMessageRole string
 
 const (
@@ -799,15 +833,15 @@ type DeploymentRead struct {
 	Name string `json:"name"`
 	// The current status of the deployment
 	//
-	// * `ACTIVE` - Active
-	// * `INACTIVE` - Inactive
-	// * `ARCHIVED` - Archived
+	// - `ACTIVE` - Active
+	// - `INACTIVE` - Inactive
+	// - `ARCHIVED` - Archived
 	Status *DeploymentStatus `json:"status,omitempty"`
 	// The environment this deployment is used in
 	//
-	// * `DEVELOPMENT` - Development
-	// * `STAGING` - Staging
-	// * `PRODUCTION` - Production
+	// - `DEVELOPMENT` - Development
+	// - `STAGING` - Staging
+	// - `PRODUCTION` - Production
 	Environment *EnvironmentEnum `json:"environment,omitempty"`
 	// Deprecated. The Prompt execution endpoints return a `prompt_version_id` that could be used instead.
 	ActiveModelVersionIds []string          `json:"active_model_version_ids,omitempty"`
@@ -840,9 +874,9 @@ func (d *DeploymentRead) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// * `ACTIVE` - Active
-// * `INACTIVE` - Inactive
-// * `ARCHIVED` - Archived
+// - `ACTIVE` - Active
+// - `INACTIVE` - Inactive
+// - `ARCHIVED` - Archived
 type DeploymentStatus string
 
 const (
@@ -875,11 +909,11 @@ type DocumentDocumentToDocumentIndex struct {
 	DocumentIndexId string `json:"document_index_id"`
 	// An enum value representing where this document is along its indexing lifecycle for this index.
 	//
-	// * `AWAITING_PROCESSING` - Awaiting Processing
-	// * `QUEUED` - Queued
-	// * `INDEXING` - Indexing
-	// * `INDEXED` - Indexed
-	// * `FAILED` - Failed
+	// - `AWAITING_PROCESSING` - Awaiting Processing
+	// - `QUEUED` - Queued
+	// - `INDEXING` - Indexing
+	// - `INDEXED` - Indexed
+	// - `FAILED` - Failed
 	IndexingState *IndexingStateEnum `json:"indexing_state,omitempty"`
 
 	_rawJSON json.RawMessage
@@ -917,14 +951,14 @@ type DocumentIndexRead struct {
 	Name string `json:"name"`
 	// The current status of the document index
 	//
-	// * `ACTIVE` - Active
-	// * `ARCHIVED` - Archived
+	// - `ACTIVE` - Active
+	// - `ARCHIVED` - Archived
 	Status *DocumentIndexStatus `json:"status,omitempty"`
 	// The environment this document index is used in
 	//
-	// * `DEVELOPMENT` - Development
-	// * `STAGING` - Staging
-	// * `PRODUCTION` - Production
+	// - `DEVELOPMENT` - Development
+	// - `STAGING` - Staging
+	// - `PRODUCTION` - Production
 	Environment *EnvironmentEnum `json:"environment,omitempty"`
 	// Configuration representing how documents should be indexed
 	IndexingConfig map[string]interface{} `json:"indexing_config,omitempty"`
@@ -955,8 +989,8 @@ func (d *DocumentIndexRead) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// * `ACTIVE` - Active
-// * `ARCHIVED` - Archived
+// - `ACTIVE` - Active
+// - `ARCHIVED` - Archived
 type DocumentIndexStatus string
 
 const (
@@ -988,14 +1022,14 @@ type DocumentRead struct {
 	Label string `json:"label"`
 	// The current processing state of the document
 	//
-	// * `QUEUED` - Queued
-	// * `PROCESSING` - Processing
-	// * `PROCESSED` - Processed
-	// * `FAILED` - Failed
+	// - `QUEUED` - Queued
+	// - `PROCESSING` - Processing
+	// - `PROCESSED` - Processed
+	// - `FAILED` - Failed
 	ProcessingState *ProcessingStateEnum `json:"processing_state,omitempty"`
 	// The current status of the document
 	//
-	// * `ACTIVE` - Active
+	// - `ACTIVE` - Active
 	Status                    *DocumentStatus                    `json:"status,omitempty"`
 	OriginalFileUrl           *string                            `json:"original_file_url,omitempty"`
 	ProcessedFileUrl          *string                            `json:"processed_file_url,omitempty"`
@@ -1040,9 +1074,9 @@ type EnrichedNormalizedCompletion struct {
 	Text string `json:"text"`
 	// The reason the generation finished.
 	//
-	// * `LENGTH` - LENGTH
-	// * `STOP` - STOP
-	// * `UNKNOWN` - UNKNOWN
+	// - `LENGTH` - LENGTH
+	// - `STOP` - STOP
+	// - `UNKNOWN` - UNKNOWN
 	FinishReason *FinishReasonEnum `json:"finish_reason,omitempty"`
 	// The logprobs of the completion. Only present if specified in the original request options.
 	Logprobs *NormalizedLogProbs `json:"logprobs,omitempty"`
@@ -1079,9 +1113,9 @@ func (e *EnrichedNormalizedCompletion) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
-// * `DEVELOPMENT` - Development
-// * `STAGING` - Staging
-// * `PRODUCTION` - Production
+// - `DEVELOPMENT` - Development
+// - `STAGING` - Staging
+// - `PRODUCTION` - Production
 type EnvironmentEnum string
 
 const (
@@ -1105,6 +1139,35 @@ func NewEnvironmentEnumFromString(s string) (EnvironmentEnum, error) {
 
 func (e EnvironmentEnum) Ptr() *EnvironmentEnum {
 	return &e
+}
+
+type ErrorVariableValue struct {
+	Value *VellumError `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (e *ErrorVariableValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler ErrorVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = ErrorVariableValue(value)
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ErrorVariableValue) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
 }
 
 type EvaluationParams struct {
@@ -1167,6 +1230,242 @@ func (e *EvaluationParamsRequest) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
+type ExecutePromptApiErrorResponse struct {
+	// Details about why the request failed.
+	Detail string `json:"detail"`
+
+	_rawJSON json.RawMessage
+}
+
+func (e *ExecutePromptApiErrorResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ExecutePromptApiErrorResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = ExecutePromptApiErrorResponse(value)
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ExecutePromptApiErrorResponse) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+type ExecutePromptEvent struct {
+	State     string
+	Initiated *InitiatedExecutePromptEvent
+	Streaming *StreamingExecutePromptEvent
+	Fulfilled *FulfilledExecutePromptEvent
+	Rejected  *RejectedExecutePromptEvent
+}
+
+func NewExecutePromptEventFromInitiated(value *InitiatedExecutePromptEvent) *ExecutePromptEvent {
+	return &ExecutePromptEvent{State: "INITIATED", Initiated: value}
+}
+
+func NewExecutePromptEventFromStreaming(value *StreamingExecutePromptEvent) *ExecutePromptEvent {
+	return &ExecutePromptEvent{State: "STREAMING", Streaming: value}
+}
+
+func NewExecutePromptEventFromFulfilled(value *FulfilledExecutePromptEvent) *ExecutePromptEvent {
+	return &ExecutePromptEvent{State: "FULFILLED", Fulfilled: value}
+}
+
+func NewExecutePromptEventFromRejected(value *RejectedExecutePromptEvent) *ExecutePromptEvent {
+	return &ExecutePromptEvent{State: "REJECTED", Rejected: value}
+}
+
+func (e *ExecutePromptEvent) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		State string `json:"state"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	e.State = unmarshaler.State
+	switch unmarshaler.State {
+	case "INITIATED":
+		value := new(InitiatedExecutePromptEvent)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		e.Initiated = value
+	case "STREAMING":
+		value := new(StreamingExecutePromptEvent)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		e.Streaming = value
+	case "FULFILLED":
+		value := new(FulfilledExecutePromptEvent)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		e.Fulfilled = value
+	case "REJECTED":
+		value := new(RejectedExecutePromptEvent)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		e.Rejected = value
+	}
+	return nil
+}
+
+func (e ExecutePromptEvent) MarshalJSON() ([]byte, error) {
+	switch e.State {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", e.State, e)
+	case "INITIATED":
+		var marshaler = struct {
+			State string `json:"state"`
+			*InitiatedExecutePromptEvent
+		}{
+			State:                       e.State,
+			InitiatedExecutePromptEvent: e.Initiated,
+		}
+		return json.Marshal(marshaler)
+	case "STREAMING":
+		var marshaler = struct {
+			State string `json:"state"`
+			*StreamingExecutePromptEvent
+		}{
+			State:                       e.State,
+			StreamingExecutePromptEvent: e.Streaming,
+		}
+		return json.Marshal(marshaler)
+	case "FULFILLED":
+		var marshaler = struct {
+			State string `json:"state"`
+			*FulfilledExecutePromptEvent
+		}{
+			State:                       e.State,
+			FulfilledExecutePromptEvent: e.Fulfilled,
+		}
+		return json.Marshal(marshaler)
+	case "REJECTED":
+		var marshaler = struct {
+			State string `json:"state"`
+			*RejectedExecutePromptEvent
+		}{
+			State:                      e.State,
+			RejectedExecutePromptEvent: e.Rejected,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type ExecutePromptEventVisitor interface {
+	VisitInitiated(*InitiatedExecutePromptEvent) error
+	VisitStreaming(*StreamingExecutePromptEvent) error
+	VisitFulfilled(*FulfilledExecutePromptEvent) error
+	VisitRejected(*RejectedExecutePromptEvent) error
+}
+
+func (e *ExecutePromptEvent) Accept(visitor ExecutePromptEventVisitor) error {
+	switch e.State {
+	default:
+		return fmt.Errorf("invalid type %s in %T", e.State, e)
+	case "INITIATED":
+		return visitor.VisitInitiated(e.Initiated)
+	case "STREAMING":
+		return visitor.VisitStreaming(e.Streaming)
+	case "FULFILLED":
+		return visitor.VisitFulfilled(e.Fulfilled)
+	case "REJECTED":
+		return visitor.VisitRejected(e.Rejected)
+	}
+}
+
+type ExecutePromptResponse struct {
+	State     string
+	Fulfilled *FulfilledExecutePromptResponse
+	Rejected  *RejectedExecutePromptResponse
+}
+
+func NewExecutePromptResponseFromFulfilled(value *FulfilledExecutePromptResponse) *ExecutePromptResponse {
+	return &ExecutePromptResponse{State: "FULFILLED", Fulfilled: value}
+}
+
+func NewExecutePromptResponseFromRejected(value *RejectedExecutePromptResponse) *ExecutePromptResponse {
+	return &ExecutePromptResponse{State: "REJECTED", Rejected: value}
+}
+
+func (e *ExecutePromptResponse) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		State string `json:"state"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	e.State = unmarshaler.State
+	switch unmarshaler.State {
+	case "FULFILLED":
+		value := new(FulfilledExecutePromptResponse)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		e.Fulfilled = value
+	case "REJECTED":
+		value := new(RejectedExecutePromptResponse)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		e.Rejected = value
+	}
+	return nil
+}
+
+func (e ExecutePromptResponse) MarshalJSON() ([]byte, error) {
+	switch e.State {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", e.State, e)
+	case "FULFILLED":
+		var marshaler = struct {
+			State string `json:"state"`
+			*FulfilledExecutePromptResponse
+		}{
+			State:                          e.State,
+			FulfilledExecutePromptResponse: e.Fulfilled,
+		}
+		return json.Marshal(marshaler)
+	case "REJECTED":
+		var marshaler = struct {
+			State string `json:"state"`
+			*RejectedExecutePromptResponse
+		}{
+			State:                         e.State,
+			RejectedExecutePromptResponse: e.Rejected,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type ExecutePromptResponseVisitor interface {
+	VisitFulfilled(*FulfilledExecutePromptResponse) error
+	VisitRejected(*RejectedExecutePromptResponse) error
+}
+
+func (e *ExecutePromptResponse) Accept(visitor ExecutePromptResponseVisitor) error {
+	switch e.State {
+	default:
+		return fmt.Errorf("invalid type %s in %T", e.State, e)
+	case "FULFILLED":
+		return visitor.VisitFulfilled(e.Fulfilled)
+	case "REJECTED":
+		return visitor.VisitRejected(e.Rejected)
+	}
+}
+
 type ExecuteWorkflowStreamErrorResponse struct {
 	// Details about why the request failed.
 	Detail string `json:"detail"`
@@ -1197,9 +1496,9 @@ func (e *ExecuteWorkflowStreamErrorResponse) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
-// * `LENGTH` - LENGTH
-// * `STOP` - STOP
-// * `UNKNOWN` - UNKNOWN
+// - `LENGTH` - LENGTH
+// - `STOP` - STOP
+// - `UNKNOWN` - UNKNOWN
 type FinishReasonEnum string
 
 const (
@@ -1223,6 +1522,106 @@ func NewFinishReasonEnumFromString(s string) (FinishReasonEnum, error) {
 
 func (f FinishReasonEnum) Ptr() *FinishReasonEnum {
 	return &f
+}
+
+type FulfilledEnum = string
+
+// The final data event returned indicating that the stream has ended and all final resolved values from the model can be found.
+type FulfilledExecutePromptEvent struct {
+	Outputs     []*PromptOutput               `json:"outputs,omitempty"`
+	ExecutionId string                        `json:"execution_id"`
+	Meta        *FulfilledPromptExecutionMeta `json:"meta,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (f *FulfilledExecutePromptEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler FulfilledExecutePromptEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*f = FulfilledExecutePromptEvent(value)
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FulfilledExecutePromptEvent) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
+// The successful response from the model containing all of the resolved values generated by the prompt.
+type FulfilledExecutePromptResponse struct {
+	Meta *PromptExecutionMeta `json:"meta,omitempty"`
+	// The subset of the raw response from the model that the request opted into with `expand_raw`.
+	Raw map[string]interface{} `json:"raw,omitempty"`
+	// The ID of the execution.
+	ExecutionId string          `json:"execution_id"`
+	Outputs     []*PromptOutput `json:"outputs,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (f *FulfilledExecutePromptResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler FulfilledExecutePromptResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*f = FulfilledExecutePromptResponse(value)
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FulfilledExecutePromptResponse) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
+// The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
+type FulfilledPromptExecutionMeta struct {
+	Latency      *int              `json:"latency,omitempty"`
+	FinishReason *FinishReasonEnum `json:"finish_reason,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (f *FulfilledPromptExecutionMeta) UnmarshalJSON(data []byte) error {
+	type unmarshaler FulfilledPromptExecutionMeta
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*f = FulfilledPromptExecutionMeta(value)
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FulfilledPromptExecutionMeta) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
 }
 
 type GenerateErrorResponse struct {
@@ -1258,8 +1657,8 @@ func (g *GenerateErrorResponse) String() string {
 type GenerateOptionsRequest struct {
 	// Which logprobs to include, if any. Defaults to NONE.
 	//
-	// * `ALL` - ALL
-	// * `NONE` - NONE
+	// - `ALL` - ALL
+	// - `NONE` - NONE
 	Logprobs *LogprobsEnum `json:"logprobs,omitempty"`
 
 	_rawJSON json.RawMessage
@@ -1534,11 +1933,11 @@ func (g *GenerateStreamResultData) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-// * `AWAITING_PROCESSING` - Awaiting Processing
-// * `QUEUED` - Queued
-// * `INDEXING` - Indexing
-// * `INDEXED` - Indexed
-// * `FAILED` - Failed
+// - `AWAITING_PROCESSING` - Awaiting Processing
+// - `QUEUED` - Queued
+// - `INDEXING` - Indexing
+// - `INDEXED` - Indexed
+// - `FAILED` - Failed
 type IndexingStateEnum string
 
 const (
@@ -1568,6 +1967,72 @@ func NewIndexingStateEnumFromString(s string) (IndexingStateEnum, error) {
 
 func (i IndexingStateEnum) Ptr() *IndexingStateEnum {
 	return &i
+}
+
+type InitiatedEnum = string
+
+// The initial data returned indicating that the response from the model has returned and begun streaming.
+type InitiatedExecutePromptEvent struct {
+	Meta        *InitiatedPromptExecutionMeta `json:"meta,omitempty"`
+	ExecutionId string                        `json:"execution_id"`
+
+	_rawJSON json.RawMessage
+}
+
+func (i *InitiatedExecutePromptEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler InitiatedExecutePromptEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InitiatedExecutePromptEvent(value)
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InitiatedExecutePromptEvent) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
+type InitiatedPromptExecutionMeta struct {
+	ModelName            *string `json:"model_name,omitempty"`
+	Latency              *int    `json:"latency,omitempty"`
+	DeploymentReleaseTag *string `json:"deployment_release_tag,omitempty"`
+	PromptVersionId      *string `json:"prompt_version_id,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (i *InitiatedPromptExecutionMeta) UnmarshalJSON(data []byte) error {
+	type unmarshaler InitiatedPromptExecutionMeta
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InitiatedPromptExecutionMeta(value)
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InitiatedPromptExecutionMeta) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
 }
 
 type JsonInputRequest struct {
@@ -1601,24 +2066,53 @@ func (j *JsonInputRequest) String() string {
 	return fmt.Sprintf("%#v", j)
 }
 
-// * `=` - EQUALS
-// * `!=` - DOES_NOT_EQUAL
-// * `<` - LESS_THAN
-// * `>` - GREATER_THAN
-// * `<=` - LESS_THAN_OR_EQUAL_TO
-// * `>=` - GREATER_THAN_OR_EQUAL_TO
-// * `contains` - CONTAINS
-// * `beginsWith` - BEGINS_WITH
-// * `endsWith` - ENDS_WITH
-// * `doesNotContain` - DOES_NOT_CONTAIN
-// * `doesNotBeginWith` - DOES_NOT_BEGIN_WITH
-// * `doesNotEndWith` - DOES_NOT_END_WITH
-// * `null` - NULL
-// * `notNull` - NOT_NULL
-// * `in` - IN
-// * `notIn` - NOT_IN
-// * `between` - BETWEEN
-// * `notBetween` - NOT_BETWEEN
+type JsonVariableValue struct {
+	Value map[string]interface{} `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (j *JsonVariableValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler JsonVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*j = JsonVariableValue(value)
+	j._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (j *JsonVariableValue) String() string {
+	if len(j._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(j._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(j); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", j)
+}
+
+// - `=` - EQUALS
+// - `!=` - DOES_NOT_EQUAL
+// - `<` - LESS_THAN
+// - `>` - GREATER_THAN
+// - `<=` - LESS_THAN_OR_EQUAL_TO
+// - `>=` - GREATER_THAN_OR_EQUAL_TO
+// - `contains` - CONTAINS
+// - `beginsWith` - BEGINS_WITH
+// - `endsWith` - ENDS_WITH
+// - `doesNotContain` - DOES_NOT_CONTAIN
+// - `doesNotBeginWith` - DOES_NOT_BEGIN_WITH
+// - `doesNotEndWith` - DOES_NOT_END_WITH
+// - `null` - NULL
+// - `notNull` - NOT_NULL
+// - `in` - IN
+// - `notIn` - NOT_IN
+// - `between` - BETWEEN
+// - `notBetween` - NOT_BETWEEN
 type LogicalOperator string
 
 const (
@@ -1707,8 +2201,8 @@ func (l LogicalOperator) Ptr() *LogicalOperator {
 	return &l
 }
 
-// * `ALL` - ALL
-// * `NONE` - NONE
+// - `ALL` - ALL
+// - `NONE` - NONE
 type LogprobsEnum string
 
 const (
@@ -1765,8 +2259,8 @@ func (m *MetadataFilterConfigRequest) String() string {
 	return fmt.Sprintf("%#v", m)
 }
 
-// * `and` - AND
-// * `or` - OR
+// - `and` - AND
+// - `or` - OR
 type MetadataFilterRuleCombinator string
 
 const (
@@ -1928,10 +2422,67 @@ func (m *ModelVersionExecConfigParameters) String() string {
 	return fmt.Sprintf("%#v", m)
 }
 
-// * `CREATING` - Creating
-// * `READY` - Ready
-// * `CREATION_FAILED` - Creation Failed
-// * `DISABLED` - Disabled
+type ModelVersionRead struct {
+	// Vellum-generated ID that uniquely identifies this model version.
+	Id string `json:"id"`
+	// Timestamp of when this model version was created.
+	Created time.Time `json:"created"`
+	// Human-friendly name for this model version.
+	Label string `json:"label"`
+	// Which LLM provider this model version is associated with.
+	//
+	// - `ANTHROPIC` - Anthropic
+	// - `AWS_BEDROCK` - AWS Bedrock
+	// - `AZURE_OPENAI` - Azure OpenAI
+	// - `COHERE` - Cohere
+	// - `GOOGLE` - Google
+	// - `HOSTED` - Hosted
+	// - `MOSAICML` - MosaicML
+	// - `OPENAI` - OpenAI
+	// - `FIREWORKS_AI` - Fireworks AI
+	// - `HUGGINGFACE` - HuggingFace
+	// - `MYSTIC` - Mystic
+	// - `PYQ` - Pyq
+	// - `REPLICATE` - Replicate
+	Provider ProviderEnum `json:"provider,omitempty"`
+	// The unique id of this model version as it exists in the above provider's system.
+	ExternalId string `json:"external_id"`
+	// Configuration used to build this model version.
+	BuildConfig *ModelVersionBuildConfig `json:"build_config,omitempty"`
+	// Configuration used to execute this model version.
+	ExecConfig *ModelVersionExecConfig     `json:"exec_config,omitempty"`
+	Status     *ModelVersionReadStatusEnum `json:"status,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (m *ModelVersionRead) UnmarshalJSON(data []byte) error {
+	type unmarshaler ModelVersionRead
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = ModelVersionRead(value)
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *ModelVersionRead) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// - `CREATING` - Creating
+// - `READY` - Ready
+// - `CREATION_FAILED` - Creation Failed
+// - `DISABLED` - Disabled
 type ModelVersionReadStatusEnum string
 
 const (
@@ -2173,6 +2724,178 @@ func (n *NamedTestCaseStringVariableValueRequest) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", n)
+}
+
+type NamedTestCaseVariableValueRequest struct {
+	Type          string
+	String        *NamedTestCaseStringVariableValueRequest
+	Number        *NamedTestCaseNumberVariableValueRequest
+	Json          *NamedTestCaseJsonVariableValueRequest
+	ChatHistory   *NamedTestCaseChatHistoryVariableValueRequest
+	SearchResults *NamedTestCaseSearchResultsVariableValueRequest
+	Error         *NamedTestCaseErrorVariableValueRequest
+}
+
+func NewNamedTestCaseVariableValueRequestFromString(value *NamedTestCaseStringVariableValueRequest) *NamedTestCaseVariableValueRequest {
+	return &NamedTestCaseVariableValueRequest{Type: "STRING", String: value}
+}
+
+func NewNamedTestCaseVariableValueRequestFromNumber(value *NamedTestCaseNumberVariableValueRequest) *NamedTestCaseVariableValueRequest {
+	return &NamedTestCaseVariableValueRequest{Type: "NUMBER", Number: value}
+}
+
+func NewNamedTestCaseVariableValueRequestFromJson(value *NamedTestCaseJsonVariableValueRequest) *NamedTestCaseVariableValueRequest {
+	return &NamedTestCaseVariableValueRequest{Type: "JSON", Json: value}
+}
+
+func NewNamedTestCaseVariableValueRequestFromChatHistory(value *NamedTestCaseChatHistoryVariableValueRequest) *NamedTestCaseVariableValueRequest {
+	return &NamedTestCaseVariableValueRequest{Type: "CHAT_HISTORY", ChatHistory: value}
+}
+
+func NewNamedTestCaseVariableValueRequestFromSearchResults(value *NamedTestCaseSearchResultsVariableValueRequest) *NamedTestCaseVariableValueRequest {
+	return &NamedTestCaseVariableValueRequest{Type: "SEARCH_RESULTS", SearchResults: value}
+}
+
+func NewNamedTestCaseVariableValueRequestFromError(value *NamedTestCaseErrorVariableValueRequest) *NamedTestCaseVariableValueRequest {
+	return &NamedTestCaseVariableValueRequest{Type: "ERROR", Error: value}
+}
+
+func (n *NamedTestCaseVariableValueRequest) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	n.Type = unmarshaler.Type
+	switch unmarshaler.Type {
+	case "STRING":
+		value := new(NamedTestCaseStringVariableValueRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.String = value
+	case "NUMBER":
+		value := new(NamedTestCaseNumberVariableValueRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.Number = value
+	case "JSON":
+		value := new(NamedTestCaseJsonVariableValueRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.Json = value
+	case "CHAT_HISTORY":
+		value := new(NamedTestCaseChatHistoryVariableValueRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.ChatHistory = value
+	case "SEARCH_RESULTS":
+		value := new(NamedTestCaseSearchResultsVariableValueRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.SearchResults = value
+	case "ERROR":
+		value := new(NamedTestCaseErrorVariableValueRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.Error = value
+	}
+	return nil
+}
+
+func (n NamedTestCaseVariableValueRequest) MarshalJSON() ([]byte, error) {
+	switch n.Type {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", n.Type, n)
+	case "STRING":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*NamedTestCaseStringVariableValueRequest
+		}{
+			Type:                                    n.Type,
+			NamedTestCaseStringVariableValueRequest: n.String,
+		}
+		return json.Marshal(marshaler)
+	case "NUMBER":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*NamedTestCaseNumberVariableValueRequest
+		}{
+			Type:                                    n.Type,
+			NamedTestCaseNumberVariableValueRequest: n.Number,
+		}
+		return json.Marshal(marshaler)
+	case "JSON":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*NamedTestCaseJsonVariableValueRequest
+		}{
+			Type:                                  n.Type,
+			NamedTestCaseJsonVariableValueRequest: n.Json,
+		}
+		return json.Marshal(marshaler)
+	case "CHAT_HISTORY":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*NamedTestCaseChatHistoryVariableValueRequest
+		}{
+			Type: n.Type,
+			NamedTestCaseChatHistoryVariableValueRequest: n.ChatHistory,
+		}
+		return json.Marshal(marshaler)
+	case "SEARCH_RESULTS":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*NamedTestCaseSearchResultsVariableValueRequest
+		}{
+			Type: n.Type,
+			NamedTestCaseSearchResultsVariableValueRequest: n.SearchResults,
+		}
+		return json.Marshal(marshaler)
+	case "ERROR":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*NamedTestCaseErrorVariableValueRequest
+		}{
+			Type:                                   n.Type,
+			NamedTestCaseErrorVariableValueRequest: n.Error,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type NamedTestCaseVariableValueRequestVisitor interface {
+	VisitString(*NamedTestCaseStringVariableValueRequest) error
+	VisitNumber(*NamedTestCaseNumberVariableValueRequest) error
+	VisitJson(*NamedTestCaseJsonVariableValueRequest) error
+	VisitChatHistory(*NamedTestCaseChatHistoryVariableValueRequest) error
+	VisitSearchResults(*NamedTestCaseSearchResultsVariableValueRequest) error
+	VisitError(*NamedTestCaseErrorVariableValueRequest) error
+}
+
+func (n *NamedTestCaseVariableValueRequest) Accept(visitor NamedTestCaseVariableValueRequestVisitor) error {
+	switch n.Type {
+	default:
+		return fmt.Errorf("invalid type %s in %T", n.Type, n)
+	case "STRING":
+		return visitor.VisitString(n.String)
+	case "NUMBER":
+		return visitor.VisitNumber(n.Number)
+	case "JSON":
+		return visitor.VisitJson(n.Json)
+	case "CHAT_HISTORY":
+		return visitor.VisitChatHistory(n.ChatHistory)
+	case "SEARCH_RESULTS":
+		return visitor.VisitSearchResults(n.SearchResults)
+	case "ERROR":
+		return visitor.VisitError(n.Error)
+	}
 }
 
 type NodeInputCompiledChatHistoryValue struct {
@@ -2627,8 +3350,8 @@ func (p *PaginatedSlimDocumentList) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
-// * `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit
-// * `INVALID_FILE` - Invalid File
+// - `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit
+// - `INVALID_FILE` - Invalid File
 type ProcessingFailureReasonEnum string
 
 const (
@@ -2651,10 +3374,10 @@ func (p ProcessingFailureReasonEnum) Ptr() *ProcessingFailureReasonEnum {
 	return &p
 }
 
-// * `QUEUED` - Queued
-// * `PROCESSING` - Processing
-// * `PROCESSED` - Processed
-// * `FAILED` - Failed
+// - `QUEUED` - Queued
+// - `PROCESSING` - Processing
+// - `PROCESSED` - Processed
+// - `FAILED` - Failed
 type ProcessingStateEnum string
 
 const (
@@ -2681,6 +3404,44 @@ func NewProcessingStateEnumFromString(s string) (ProcessingStateEnum, error) {
 
 func (p ProcessingStateEnum) Ptr() *ProcessingStateEnum {
 	return &p
+}
+
+type PromptDeploymentExpandMetaRequestRequest struct {
+	// If enabled, the response will include the model identifier representing the ML Model invoked by the Prompt Deployment.
+	ModelName *bool `json:"model_name,omitempty"`
+	// If enabled, the response will include the time in nanoseconds it took to execute the Prompt Deployment.
+	Latency *bool `json:"latency,omitempty"`
+	// If enabled, the response will include the release tag of the Prompt Deployment.
+	DeploymentReleaseTag *bool `json:"deployment_release_tag,omitempty"`
+	// If enabled, the response will include the ID of the Prompt Version backing the deployment.
+	PromptVersionId *bool `json:"prompt_version_id,omitempty"`
+	// If enabled, the response will include the reason provided by the model for why the execution finished.
+	FinishReason *bool `json:"finish_reason,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (p *PromptDeploymentExpandMetaRequestRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler PromptDeploymentExpandMetaRequestRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PromptDeploymentExpandMetaRequestRequest(value)
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PromptDeploymentExpandMetaRequestRequest) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
 }
 
 type PromptDeploymentInputRequest struct {
@@ -2786,6 +3547,40 @@ func (p *PromptDeploymentInputRequest) Accept(visitor PromptDeploymentInputReque
 	}
 }
 
+// The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
+type PromptExecutionMeta struct {
+	ModelName            *string           `json:"model_name,omitempty"`
+	Latency              *int              `json:"latency,omitempty"`
+	DeploymentReleaseTag *string           `json:"deployment_release_tag,omitempty"`
+	PromptVersionId      *string           `json:"prompt_version_id,omitempty"`
+	FinishReason         *FinishReasonEnum `json:"finish_reason,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (p *PromptExecutionMeta) UnmarshalJSON(data []byte) error {
+	type unmarshaler PromptExecutionMeta
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PromptExecutionMeta(value)
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PromptExecutionMeta) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
 type PromptNodeResult struct {
 	Data *PromptNodeResultData `json:"data,omitempty"`
 
@@ -2844,6 +3639,109 @@ func (p *PromptNodeResultData) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", p)
+}
+
+type PromptOutput struct {
+	Type   string
+	String *StringVariableValue
+	Json   *JsonVariableValue
+	Error  *ErrorVariableValue
+}
+
+func NewPromptOutputFromString(value *StringVariableValue) *PromptOutput {
+	return &PromptOutput{Type: "STRING", String: value}
+}
+
+func NewPromptOutputFromJson(value *JsonVariableValue) *PromptOutput {
+	return &PromptOutput{Type: "JSON", Json: value}
+}
+
+func NewPromptOutputFromError(value *ErrorVariableValue) *PromptOutput {
+	return &PromptOutput{Type: "ERROR", Error: value}
+}
+
+func (p *PromptOutput) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	p.Type = unmarshaler.Type
+	switch unmarshaler.Type {
+	case "STRING":
+		value := new(StringVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.String = value
+	case "JSON":
+		value := new(JsonVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.Json = value
+	case "ERROR":
+		value := new(ErrorVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.Error = value
+	}
+	return nil
+}
+
+func (p PromptOutput) MarshalJSON() ([]byte, error) {
+	switch p.Type {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", p.Type, p)
+	case "STRING":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*StringVariableValue
+		}{
+			Type:                p.Type,
+			StringVariableValue: p.String,
+		}
+		return json.Marshal(marshaler)
+	case "JSON":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*JsonVariableValue
+		}{
+			Type:              p.Type,
+			JsonVariableValue: p.Json,
+		}
+		return json.Marshal(marshaler)
+	case "ERROR":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ErrorVariableValue
+		}{
+			Type:               p.Type,
+			ErrorVariableValue: p.Error,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type PromptOutputVisitor interface {
+	VisitString(*StringVariableValue) error
+	VisitJson(*JsonVariableValue) error
+	VisitError(*ErrorVariableValue) error
+}
+
+func (p *PromptOutput) Accept(visitor PromptOutputVisitor) error {
+	switch p.Type {
+	default:
+		return fmt.Errorf("invalid type %s in %T", p.Type, p)
+	case "STRING":
+		return visitor.VisitString(p.String)
+	case "JSON":
+		return visitor.VisitJson(p.Json)
+	case "ERROR":
+		return visitor.VisitError(p.Error)
+	}
 }
 
 type PromptTemplateBlock struct {
@@ -3042,6 +3940,107 @@ func (p *PromptTemplateBlockRequest) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
+// - `ANTHROPIC` - Anthropic
+// - `AWS_BEDROCK` - AWS Bedrock
+// - `AZURE_OPENAI` - Azure OpenAI
+// - `COHERE` - Cohere
+// - `GOOGLE` - Google
+// - `HOSTED` - Hosted
+// - `MOSAICML` - MosaicML
+// - `OPENAI` - OpenAI
+// - `FIREWORKS_AI` - Fireworks AI
+// - `HUGGINGFACE` - HuggingFace
+// - `MYSTIC` - Mystic
+// - `PYQ` - Pyq
+// - `REPLICATE` - Replicate
+type ProviderEnum string
+
+const (
+	ProviderEnumAnthropic   ProviderEnum = "ANTHROPIC"
+	ProviderEnumAwsBedrock  ProviderEnum = "AWS_BEDROCK"
+	ProviderEnumAzureOpenai ProviderEnum = "AZURE_OPENAI"
+	ProviderEnumCohere      ProviderEnum = "COHERE"
+	ProviderEnumGoogle      ProviderEnum = "GOOGLE"
+	ProviderEnumHosted      ProviderEnum = "HOSTED"
+	ProviderEnumMosaicml    ProviderEnum = "MOSAICML"
+	ProviderEnumOpenai      ProviderEnum = "OPENAI"
+	ProviderEnumFireworksAi ProviderEnum = "FIREWORKS_AI"
+	ProviderEnumHuggingface ProviderEnum = "HUGGINGFACE"
+	ProviderEnumMystic      ProviderEnum = "MYSTIC"
+	ProviderEnumPyq         ProviderEnum = "PYQ"
+	ProviderEnumReplicate   ProviderEnum = "REPLICATE"
+)
+
+func NewProviderEnumFromString(s string) (ProviderEnum, error) {
+	switch s {
+	case "ANTHROPIC":
+		return ProviderEnumAnthropic, nil
+	case "AWS_BEDROCK":
+		return ProviderEnumAwsBedrock, nil
+	case "AZURE_OPENAI":
+		return ProviderEnumAzureOpenai, nil
+	case "COHERE":
+		return ProviderEnumCohere, nil
+	case "GOOGLE":
+		return ProviderEnumGoogle, nil
+	case "HOSTED":
+		return ProviderEnumHosted, nil
+	case "MOSAICML":
+		return ProviderEnumMosaicml, nil
+	case "OPENAI":
+		return ProviderEnumOpenai, nil
+	case "FIREWORKS_AI":
+		return ProviderEnumFireworksAi, nil
+	case "HUGGINGFACE":
+		return ProviderEnumHuggingface, nil
+	case "MYSTIC":
+		return ProviderEnumMystic, nil
+	case "PYQ":
+		return ProviderEnumPyq, nil
+	case "REPLICATE":
+		return ProviderEnumReplicate, nil
+	}
+	var t ProviderEnum
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (p ProviderEnum) Ptr() *ProviderEnum {
+	return &p
+}
+
+type RawPromptExecutionOverridesRequest struct {
+	Body map[string]interface{} `json:"body,omitempty"`
+	// The raw headers to send to the model host.
+	Headers map[string]*string `json:"headers,omitempty"`
+	// The raw URL to send to the model host.
+	Url *string `json:"url,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (r *RawPromptExecutionOverridesRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler RawPromptExecutionOverridesRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RawPromptExecutionOverridesRequest(value)
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RawPromptExecutionOverridesRequest) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
 type RegisterPromptErrorResponse struct {
 	// Details about why the request failed.
 	Detail string `json:"detail"`
@@ -3061,6 +4060,42 @@ func (r *RegisterPromptErrorResponse) UnmarshalJSON(data []byte) error {
 }
 
 func (r *RegisterPromptErrorResponse) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+type RegisterPromptModelParametersRequest struct {
+	Temperature      float64             `json:"temperature"`
+	MaxTokens        int                 `json:"max_tokens"`
+	Stop             []string            `json:"stop,omitempty"`
+	TopP             float64             `json:"top_p"`
+	TopK             *int                `json:"top_k,omitempty"`
+	FrequencyPenalty float64             `json:"frequency_penalty"`
+	PresencePenalty  float64             `json:"presence_penalty"`
+	LogitBias        map[string]*float64 `json:"logit_bias,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (r *RegisterPromptModelParametersRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler RegisterPromptModelParametersRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RegisterPromptModelParametersRequest(value)
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RegisterPromptModelParametersRequest) String() string {
 	if len(r._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
 			return value
@@ -3093,6 +4128,77 @@ func (r *RegisterPromptPrompt) UnmarshalJSON(data []byte) error {
 }
 
 func (r *RegisterPromptPrompt) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+type RegisterPromptPromptInfoRequest struct {
+	PromptBlockData *PromptTemplateBlockDataRequest `json:"prompt_block_data,omitempty"`
+	// The input variables specified in the prompt template.
+	InputVariables []*RegisteredPromptInputVariableRequest `json:"input_variables,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (r *RegisterPromptPromptInfoRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler RegisterPromptPromptInfoRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RegisterPromptPromptInfoRequest(value)
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RegisterPromptPromptInfoRequest) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+type RegisterPromptResponse struct {
+	// Information about the generated prompt
+	Prompt *RegisterPromptPrompt `json:"prompt,omitempty"`
+	// Information about the generated sandbox snapshot
+	SandboxSnapshot *RegisteredPromptSandboxSnapshot `json:"sandbox_snapshot,omitempty"`
+	// Information about the generated sandbox
+	Sandbox *RegisteredPromptSandbox `json:"sandbox,omitempty"`
+	// Information about the generated model version
+	ModelVersion *RegisteredPromptModelVersion `json:"model_version,omitempty"`
+	// The ID of the generated prompt version
+	PromptVersionId string `json:"prompt_version_id"`
+	// Information about the generated deployment
+	Deployment *RegisteredPromptDeployment `json:"deployment,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (r *RegisterPromptResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler RegisterPromptResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RegisterPromptResponse(value)
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RegisterPromptResponse) String() string {
 	if len(r._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
 			return value
@@ -3263,6 +4369,106 @@ func (r *RegisteredPromptSandboxSnapshot) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
+type RejectedEnum = string
+
+// The final data returned indicating an error occurred during the stream.
+type RejectedExecutePromptEvent struct {
+	Error       *VellumError                 `json:"error,omitempty"`
+	ExecutionId string                       `json:"execution_id"`
+	Meta        *RejectedPromptExecutionMeta `json:"meta,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (r *RejectedExecutePromptEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler RejectedExecutePromptEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RejectedExecutePromptEvent(value)
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RejectedExecutePromptEvent) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+// The unsuccessful response from the model containing an error of what went wrong.
+type RejectedExecutePromptResponse struct {
+	Meta *PromptExecutionMeta `json:"meta,omitempty"`
+	// The subset of the raw response from the model that the request opted into with `expand_raw`.
+	Raw map[string]interface{} `json:"raw,omitempty"`
+	// The ID of the execution.
+	ExecutionId string       `json:"execution_id"`
+	Error       *VellumError `json:"error,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (r *RejectedExecutePromptResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler RejectedExecutePromptResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RejectedExecutePromptResponse(value)
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RejectedExecutePromptResponse) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+// The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
+type RejectedPromptExecutionMeta struct {
+	Latency      *int              `json:"latency,omitempty"`
+	FinishReason *FinishReasonEnum `json:"finish_reason,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (r *RejectedPromptExecutionMeta) UnmarshalJSON(data []byte) error {
+	type unmarshaler RejectedPromptExecutionMeta
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RejectedPromptExecutionMeta(value)
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RejectedPromptExecutionMeta) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
 type SandboxMetricInputParams struct {
 	Params *EvaluationParams `json:"params,omitempty"`
 
@@ -3281,6 +4487,69 @@ func (s *SandboxMetricInputParams) UnmarshalJSON(data []byte) error {
 }
 
 func (s *SandboxMetricInputParams) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type SandboxMetricInputParamsRequest struct {
+	Params *EvaluationParamsRequest `json:"params,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (s *SandboxMetricInputParamsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SandboxMetricInputParamsRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SandboxMetricInputParamsRequest(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SandboxMetricInputParamsRequest) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type SandboxScenario struct {
+	Label *string `json:"label,omitempty"`
+	// The inputs for the scenario
+	Inputs []*ScenarioInput `json:"inputs,omitempty"`
+	// The id of the scenario
+	Id                string                    `json:"id"`
+	MetricInputParams *SandboxMetricInputParams `json:"metric_input_params,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (s *SandboxScenario) UnmarshalJSON(data []byte) error {
+	type unmarshaler SandboxScenario
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SandboxScenario(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SandboxScenario) String() string {
 	if len(s._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
 			return value
@@ -3324,8 +4593,40 @@ func (s *ScenarioInput) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// * `TEXT` - Text
-// * `CHAT_HISTORY` - Chat History
+type ScenarioInputRequest struct {
+	Key         string                 `json:"key"`
+	Type        *ScenarioInputTypeEnum `json:"type,omitempty"`
+	Value       *string                `json:"value,omitempty"`
+	ChatHistory []*ChatMessageRequest  `json:"chat_history,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (s *ScenarioInputRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler ScenarioInputRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = ScenarioInputRequest(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *ScenarioInputRequest) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// - `TEXT` - Text
+// - `CHAT_HISTORY` - Chat History
 type ScenarioInputTypeEnum string
 
 const (
@@ -3751,19 +5052,19 @@ type SlimDocument struct {
 	Label string `json:"label"`
 	// An enum value representing where this document is along its processing lifecycle. Note that this is different than its indexing lifecycle.
 	//
-	// * `QUEUED` - Queued
-	// * `PROCESSING` - Processing
-	// * `PROCESSED` - Processed
-	// * `FAILED` - Failed
+	// - `QUEUED` - Queued
+	// - `PROCESSING` - Processing
+	// - `PROCESSED` - Processed
+	// - `FAILED` - Failed
 	ProcessingState *ProcessingStateEnum `json:"processing_state,omitempty"`
 	// An enum value representing why the document could not be processed. Is null unless processing_state is FAILED.
 	//
-	// * `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit
-	// * `INVALID_FILE` - Invalid File
+	// - `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit
+	// - `INVALID_FILE` - Invalid File
 	ProcessingFailureReason *ProcessingFailureReasonEnum `json:"processing_failure_reason,omitempty"`
 	// The document's current status.
 	//
-	// * `ACTIVE` - Active
+	// - `ACTIVE` - Active
 	Status *DocumentStatus `json:"status,omitempty"`
 	// A list of keywords associated with this document. Originally provided when uploading the document.
 	Keywords []string `json:"keywords,omitempty"`
@@ -3797,6 +5098,73 @@ func (s *SlimDocument) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
+type StreamingEnum = string
+
+// The data returned for each delta during the prompt execution stream.
+type StreamingExecutePromptEvent struct {
+	Output      *PromptOutput                 `json:"output,omitempty"`
+	OutputIndex int                           `json:"output_index"`
+	ExecutionId string                        `json:"execution_id"`
+	Meta        *StreamingPromptExecutionMeta `json:"meta,omitempty"`
+	// The subset of the raw response from the model that the request opted into with `expand_raw`.
+	Raw map[string]interface{} `json:"raw,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (s *StreamingExecutePromptEvent) UnmarshalJSON(data []byte) error {
+	type unmarshaler StreamingExecutePromptEvent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = StreamingExecutePromptEvent(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *StreamingExecutePromptEvent) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
+type StreamingPromptExecutionMeta struct {
+	Latency *int `json:"latency,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (s *StreamingPromptExecutionMeta) UnmarshalJSON(data []byte) error {
+	type unmarshaler StreamingPromptExecutionMeta
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = StreamingPromptExecutionMeta(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *StreamingPromptExecutionMeta) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
 type StringInputRequest struct {
 	// The variable's name, as defined in the deployment.
 	Name  string `json:"name"`
@@ -3817,6 +5185,35 @@ func (s *StringInputRequest) UnmarshalJSON(data []byte) error {
 }
 
 func (s *StringInputRequest) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type StringVariableValue struct {
+	Value *string `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (s *StringVariableValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler StringVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = StringVariableValue(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *StringVariableValue) String() string {
 	if len(s._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
 			return value
@@ -5182,6 +6579,38 @@ func (t *TestCaseVariableValue) Accept(visitor TestCaseVariableValueVisitor) err
 	}
 }
 
+type TestSuiteTestCase struct {
+	Id               *string                  `json:"id,omitempty"`
+	Label            *string                  `json:"label,omitempty"`
+	InputValues      []*TestCaseVariableValue `json:"input_values,omitempty"`
+	EvaluationValues []*TestCaseVariableValue `json:"evaluation_values,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestSuiteTestCase) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteTestCase
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteTestCase(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteTestCase) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
 type UploadDocumentErrorResponse struct {
 	Detail string `json:"detail"`
 
@@ -5271,9 +6700,9 @@ func (v *VellumError) String() string {
 	return fmt.Sprintf("%#v", v)
 }
 
-// * `INVALID_REQUEST` - INVALID_REQUEST
-// * `PROVIDER_ERROR` - PROVIDER_ERROR
-// * `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
+// - `INVALID_REQUEST` - INVALID_REQUEST
+// - `PROVIDER_ERROR` - PROVIDER_ERROR
+// - `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
 type VellumErrorCodeEnum string
 
 const (
@@ -5360,12 +6789,13 @@ func (v *VellumVariable) String() string {
 	return fmt.Sprintf("%#v", v)
 }
 
-// * `STRING` - STRING
-// * `NUMBER` - NUMBER
-// * `JSON` - JSON
-// * `CHAT_HISTORY` - CHAT_HISTORY
-// * `SEARCH_RESULTS` - SEARCH_RESULTS
-// * `ERROR` - ERROR
+// - `STRING` - STRING
+// - `NUMBER` - NUMBER
+// - `JSON` - JSON
+// - `CHAT_HISTORY` - CHAT_HISTORY
+// - `SEARCH_RESULTS` - SEARCH_RESULTS
+// - `ERROR` - ERROR
+// - `ARRAY` - ARRAY
 type VellumVariableType string
 
 const (
@@ -5375,6 +6805,7 @@ const (
 	VellumVariableTypeChatHistory   VellumVariableType = "CHAT_HISTORY"
 	VellumVariableTypeSearchResults VellumVariableType = "SEARCH_RESULTS"
 	VellumVariableTypeError         VellumVariableType = "ERROR"
+	VellumVariableTypeArray         VellumVariableType = "ARRAY"
 )
 
 func NewVellumVariableTypeFromString(s string) (VellumVariableType, error) {
@@ -5391,6 +6822,8 @@ func NewVellumVariableTypeFromString(s string) (VellumVariableType, error) {
 		return VellumVariableTypeSearchResults, nil
 	case "ERROR":
 		return VellumVariableTypeError, nil
+	case "ARRAY":
+		return VellumVariableTypeArray, nil
 	}
 	var t VellumVariableType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -5544,12 +6977,12 @@ func (w *WorkflowExecutionActualStringRequest) String() string {
 	return fmt.Sprintf("%#v", w)
 }
 
-// * `WORKFLOW_INITIALIZATION` - WORKFLOW_INITIALIZATION
-// * `NODE_EXECUTION_COUNT_LIMIT_REACHED` - NODE_EXECUTION_COUNT_LIMIT_REACHED
-// * `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
-// * `NODE_EXECUTION` - NODE_EXECUTION
-// * `LLM_PROVIDER` - LLM_PROVIDER
-// * `INVALID_TEMPLATE` - INVALID_TEMPLATE
+// - `WORKFLOW_INITIALIZATION` - WORKFLOW_INITIALIZATION
+// - `NODE_EXECUTION_COUNT_LIMIT_REACHED` - NODE_EXECUTION_COUNT_LIMIT_REACHED
+// - `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
+// - `NODE_EXECUTION` - NODE_EXECUTION
+// - `LLM_PROVIDER` - LLM_PROVIDER
+// - `INVALID_TEMPLATE` - INVALID_TEMPLATE
 type WorkflowExecutionEventErrorCode string
 
 const (
@@ -5584,8 +7017,8 @@ func (w WorkflowExecutionEventErrorCode) Ptr() *WorkflowExecutionEventErrorCode 
 	return &w
 }
 
-// * `NODE` - Node
-// * `WORKFLOW` - Workflow
+// - `NODE` - Node
+// - `WORKFLOW` - Workflow
 type WorkflowExecutionEventType string
 
 const (
@@ -5903,10 +7336,10 @@ func (w *WorkflowNodeResultEvent) String() string {
 	return fmt.Sprintf("%#v", w)
 }
 
-// * `INITIATED` - INITIATED
-// * `STREAMING` - STREAMING
-// * `FULFILLED` - FULFILLED
-// * `REJECTED` - REJECTED
+// - `INITIATED` - INITIATED
+// - `STREAMING` - STREAMING
+// - `FULFILLED` - FULFILLED
+// - `REJECTED` - REJECTED
 type WorkflowNodeResultEventState string
 
 const (
@@ -5971,6 +7404,7 @@ type WorkflowRequestInputRequest struct {
 	String      *WorkflowRequestStringInputRequest
 	Json        *WorkflowRequestJsonInputRequest
 	ChatHistory *WorkflowRequestChatHistoryInputRequest
+	Number      *WorkflowRequestNumberInputRequest
 }
 
 func NewWorkflowRequestInputRequestFromString(value *WorkflowRequestStringInputRequest) *WorkflowRequestInputRequest {
@@ -5983,6 +7417,10 @@ func NewWorkflowRequestInputRequestFromJson(value *WorkflowRequestJsonInputReque
 
 func NewWorkflowRequestInputRequestFromChatHistory(value *WorkflowRequestChatHistoryInputRequest) *WorkflowRequestInputRequest {
 	return &WorkflowRequestInputRequest{Type: "CHAT_HISTORY", ChatHistory: value}
+}
+
+func NewWorkflowRequestInputRequestFromNumber(value *WorkflowRequestNumberInputRequest) *WorkflowRequestInputRequest {
+	return &WorkflowRequestInputRequest{Type: "NUMBER", Number: value}
 }
 
 func (w *WorkflowRequestInputRequest) UnmarshalJSON(data []byte) error {
@@ -6012,6 +7450,12 @@ func (w *WorkflowRequestInputRequest) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		w.ChatHistory = value
+	case "NUMBER":
+		value := new(WorkflowRequestNumberInputRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		w.Number = value
 	}
 	return nil
 }
@@ -6047,6 +7491,15 @@ func (w WorkflowRequestInputRequest) MarshalJSON() ([]byte, error) {
 			WorkflowRequestChatHistoryInputRequest: w.ChatHistory,
 		}
 		return json.Marshal(marshaler)
+	case "NUMBER":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*WorkflowRequestNumberInputRequest
+		}{
+			Type:                              w.Type,
+			WorkflowRequestNumberInputRequest: w.Number,
+		}
+		return json.Marshal(marshaler)
 	}
 }
 
@@ -6054,6 +7507,7 @@ type WorkflowRequestInputRequestVisitor interface {
 	VisitString(*WorkflowRequestStringInputRequest) error
 	VisitJson(*WorkflowRequestJsonInputRequest) error
 	VisitChatHistory(*WorkflowRequestChatHistoryInputRequest) error
+	VisitNumber(*WorkflowRequestNumberInputRequest) error
 }
 
 func (w *WorkflowRequestInputRequest) Accept(visitor WorkflowRequestInputRequestVisitor) error {
@@ -6066,6 +7520,8 @@ func (w *WorkflowRequestInputRequest) Accept(visitor WorkflowRequestInputRequest
 		return visitor.VisitJson(w.Json)
 	case "CHAT_HISTORY":
 		return visitor.VisitChatHistory(w.ChatHistory)
+	case "NUMBER":
+		return visitor.VisitNumber(w.Number)
 	}
 }
 
@@ -6089,6 +7545,37 @@ func (w *WorkflowRequestJsonInputRequest) UnmarshalJSON(data []byte) error {
 }
 
 func (w *WorkflowRequestJsonInputRequest) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
+}
+
+type WorkflowRequestNumberInputRequest struct {
+	// The variable's name, as defined in the Workflow.
+	Name  string  `json:"name"`
+	Value float64 `json:"value"`
+
+	_rawJSON json.RawMessage
+}
+
+func (w *WorkflowRequestNumberInputRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler WorkflowRequestNumberInputRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*w = WorkflowRequestNumberInputRequest(value)
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowRequestNumberInputRequest) String() string {
 	if len(w._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
 			return value
