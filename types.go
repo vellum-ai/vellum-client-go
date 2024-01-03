@@ -1593,6 +1593,38 @@ func (f *FulfilledExecutePromptResponse) String() string {
 	return fmt.Sprintf("%#v", f)
 }
 
+// The final resolved function call value.
+type FulfilledFunctionCall struct {
+	Arguments map[string]interface{} `json:"arguments,omitempty"`
+	Id        *string                `json:"id,omitempty"`
+	Name      string                 `json:"name"`
+
+	_rawJSON json.RawMessage
+}
+
+func (f *FulfilledFunctionCall) UnmarshalJSON(data []byte) error {
+	type unmarshaler FulfilledFunctionCall
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*f = FulfilledFunctionCall(value)
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FulfilledFunctionCall) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
 // The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
 type FulfilledPromptExecutionMeta struct {
 	Latency      *int              `json:"latency,omitempty"`
@@ -1613,6 +1645,115 @@ func (f *FulfilledPromptExecutionMeta) UnmarshalJSON(data []byte) error {
 }
 
 func (f *FulfilledPromptExecutionMeta) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
+type FunctionCall struct {
+	State     string
+	Fulfilled *FulfilledFunctionCall
+	Rejected  *RejectedFunctionCall
+}
+
+func NewFunctionCallFromFulfilled(value *FulfilledFunctionCall) *FunctionCall {
+	return &FunctionCall{State: "FULFILLED", Fulfilled: value}
+}
+
+func NewFunctionCallFromRejected(value *RejectedFunctionCall) *FunctionCall {
+	return &FunctionCall{State: "REJECTED", Rejected: value}
+}
+
+func (f *FunctionCall) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		State string `json:"state"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	f.State = unmarshaler.State
+	switch unmarshaler.State {
+	case "FULFILLED":
+		value := new(FulfilledFunctionCall)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		f.Fulfilled = value
+	case "REJECTED":
+		value := new(RejectedFunctionCall)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		f.Rejected = value
+	}
+	return nil
+}
+
+func (f FunctionCall) MarshalJSON() ([]byte, error) {
+	switch f.State {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", f.State, f)
+	case "FULFILLED":
+		var marshaler = struct {
+			State string `json:"state"`
+			*FulfilledFunctionCall
+		}{
+			State:                 f.State,
+			FulfilledFunctionCall: f.Fulfilled,
+		}
+		return json.Marshal(marshaler)
+	case "REJECTED":
+		var marshaler = struct {
+			State string `json:"state"`
+			*RejectedFunctionCall
+		}{
+			State:                f.State,
+			RejectedFunctionCall: f.Rejected,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type FunctionCallVisitor interface {
+	VisitFulfilled(*FulfilledFunctionCall) error
+	VisitRejected(*RejectedFunctionCall) error
+}
+
+func (f *FunctionCall) Accept(visitor FunctionCallVisitor) error {
+	switch f.State {
+	default:
+		return fmt.Errorf("invalid type %s in %T", f.State, f)
+	case "FULFILLED":
+		return visitor.VisitFulfilled(f.Fulfilled)
+	case "REJECTED":
+		return visitor.VisitRejected(f.Rejected)
+	}
+}
+
+type FunctionCallVariableValue struct {
+	Value *FunctionCall `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (f *FunctionCallVariableValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler FunctionCallVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*f = FunctionCallVariableValue(value)
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FunctionCallVariableValue) String() string {
 	if len(f._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
 			return value
@@ -3642,10 +3783,11 @@ func (p *PromptNodeResultData) String() string {
 }
 
 type PromptOutput struct {
-	Type   string
-	String *StringVariableValue
-	Json   *JsonVariableValue
-	Error  *ErrorVariableValue
+	Type         string
+	String       *StringVariableValue
+	Json         *JsonVariableValue
+	Error        *ErrorVariableValue
+	FunctionCall *FunctionCallVariableValue
 }
 
 func NewPromptOutputFromString(value *StringVariableValue) *PromptOutput {
@@ -3658,6 +3800,10 @@ func NewPromptOutputFromJson(value *JsonVariableValue) *PromptOutput {
 
 func NewPromptOutputFromError(value *ErrorVariableValue) *PromptOutput {
 	return &PromptOutput{Type: "ERROR", Error: value}
+}
+
+func NewPromptOutputFromFunctionCall(value *FunctionCallVariableValue) *PromptOutput {
+	return &PromptOutput{Type: "FUNCTION_CALL", FunctionCall: value}
 }
 
 func (p *PromptOutput) UnmarshalJSON(data []byte) error {
@@ -3687,6 +3833,12 @@ func (p *PromptOutput) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		p.Error = value
+	case "FUNCTION_CALL":
+		value := new(FunctionCallVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.FunctionCall = value
 	}
 	return nil
 }
@@ -3722,6 +3874,15 @@ func (p PromptOutput) MarshalJSON() ([]byte, error) {
 			ErrorVariableValue: p.Error,
 		}
 		return json.Marshal(marshaler)
+	case "FUNCTION_CALL":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*FunctionCallVariableValue
+		}{
+			Type:                      p.Type,
+			FunctionCallVariableValue: p.FunctionCall,
+		}
+		return json.Marshal(marshaler)
 	}
 }
 
@@ -3729,6 +3890,7 @@ type PromptOutputVisitor interface {
 	VisitString(*StringVariableValue) error
 	VisitJson(*JsonVariableValue) error
 	VisitError(*ErrorVariableValue) error
+	VisitFunctionCall(*FunctionCallVariableValue) error
 }
 
 func (p *PromptOutput) Accept(visitor PromptOutputVisitor) error {
@@ -3741,6 +3903,8 @@ func (p *PromptOutput) Accept(visitor PromptOutputVisitor) error {
 		return visitor.VisitJson(p.Json)
 	case "ERROR":
 		return visitor.VisitError(p.Error)
+	case "FUNCTION_CALL":
+		return visitor.VisitFunctionCall(p.FunctionCall)
 	}
 }
 
@@ -4427,6 +4591,38 @@ func (r *RejectedExecutePromptResponse) UnmarshalJSON(data []byte) error {
 }
 
 func (r *RejectedExecutePromptResponse) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+// Returned if the function call failed to parse for some reason.
+type RejectedFunctionCall struct {
+	Error *VellumError `json:"error,omitempty"`
+	Id    *string      `json:"id,omitempty"`
+	Name  string       `json:"name"`
+
+	_rawJSON json.RawMessage
+}
+
+func (r *RejectedFunctionCall) UnmarshalJSON(data []byte) error {
+	type unmarshaler RejectedFunctionCall
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RejectedFunctionCall(value)
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RejectedFunctionCall) String() string {
 	if len(r._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
 			return value
@@ -6796,6 +6992,7 @@ func (v *VellumVariable) String() string {
 // - `SEARCH_RESULTS` - SEARCH_RESULTS
 // - `ERROR` - ERROR
 // - `ARRAY` - ARRAY
+// - `FUNCTION_CALL` - FUNCTION_CALL
 type VellumVariableType string
 
 const (
@@ -6806,6 +7003,7 @@ const (
 	VellumVariableTypeSearchResults VellumVariableType = "SEARCH_RESULTS"
 	VellumVariableTypeError         VellumVariableType = "ERROR"
 	VellumVariableTypeArray         VellumVariableType = "ARRAY"
+	VellumVariableTypeFunctionCall  VellumVariableType = "FUNCTION_CALL"
 )
 
 func NewVellumVariableTypeFromString(s string) (VellumVariableType, error) {
@@ -6824,6 +7022,8 @@ func NewVellumVariableTypeFromString(s string) (VellumVariableType, error) {
 		return VellumVariableTypeError, nil
 	case "ARRAY":
 		return VellumVariableTypeArray, nil
+	case "FUNCTION_CALL":
+		return VellumVariableTypeFunctionCall, nil
 	}
 	var t VellumVariableType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
