@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 module github.com/vellum-ai/vellum-client-go
 
 go 1.18
