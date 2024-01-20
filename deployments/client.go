@@ -8,6 +8,7 @@ import (
 	vellumclientgo "github.com/vellum-ai/vellum-client-go"
 	core "github.com/vellum-ai/vellum-client-go/core"
 	http "net/http"
+	url "net/url"
 )
 
 type Client struct {
@@ -26,6 +27,45 @@ func NewClient(opts ...core.ClientOption) *Client {
 		caller:  core.NewCaller(options.HTTPClient),
 		header:  options.ToHeader(),
 	}
+}
+
+func (c *Client) List(ctx context.Context, request *vellumclientgo.DeploymentsListRequest) (*vellumclientgo.PaginatedSlimDeploymentReadList, error) {
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	endpointURL := baseURL + "/" + "v1/deployments"
+
+	queryParams := make(url.Values)
+	if request.Limit != nil {
+		queryParams.Add("limit", fmt.Sprintf("%v", *request.Limit))
+	}
+	if request.Offset != nil {
+		queryParams.Add("offset", fmt.Sprintf("%v", *request.Offset))
+	}
+	if request.Ordering != nil {
+		queryParams.Add("ordering", fmt.Sprintf("%v", *request.Ordering))
+	}
+	if request.Status != nil {
+		queryParams.Add("status", fmt.Sprintf("%v", request.Status))
+	}
+	if len(queryParams) > 0 {
+		endpointURL += "?" + queryParams.Encode()
+	}
+
+	var response *vellumclientgo.PaginatedSlimDeploymentReadList
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:      endpointURL,
+			Method:   http.MethodGet,
+			Headers:  c.header,
+			Response: &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
 }
 
 // Used to retrieve a deployment given its ID or name.

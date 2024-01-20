@@ -10,6 +10,7 @@ import (
 )
 
 type ExecutePromptRequest struct {
+	// The list of inputs defined in the Prompt's deployment with their corresponding values.
 	Inputs []*PromptDeploymentInputRequest `json:"inputs,omitempty"`
 	// The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
 	PromptDeploymentId *string `json:"prompt_deployment_id,omitempty"`
@@ -27,6 +28,7 @@ type ExecutePromptRequest struct {
 }
 
 type ExecutePromptStreamRequest struct {
+	// The list of inputs defined in the Prompt's deployment with their corresponding values.
 	Inputs []*PromptDeploymentInputRequest `json:"inputs,omitempty"`
 	// The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
 	PromptDeploymentId *string `json:"prompt_deployment_id,omitempty"`
@@ -172,6 +174,272 @@ func (a *ApiNodeResultData) String() string {
 	return fmt.Sprintf("%#v", a)
 }
 
+// A list of chat message content items.
+type ArrayChatMessageContent struct {
+	Value []*ArrayChatMessageContentItem `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (a *ArrayChatMessageContent) UnmarshalJSON(data []byte) error {
+	type unmarshaler ArrayChatMessageContent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*a = ArrayChatMessageContent(value)
+	a._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *ArrayChatMessageContent) String() string {
+	if len(a._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(a._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
+
+type ArrayChatMessageContentItem struct {
+	Type         string
+	String       *StringChatMessageContent
+	FunctionCall *FunctionCallChatMessageContent
+	Image        *ImageChatMessageContent
+}
+
+func NewArrayChatMessageContentItemFromString(value *StringChatMessageContent) *ArrayChatMessageContentItem {
+	return &ArrayChatMessageContentItem{Type: "STRING", String: value}
+}
+
+func NewArrayChatMessageContentItemFromFunctionCall(value *FunctionCallChatMessageContent) *ArrayChatMessageContentItem {
+	return &ArrayChatMessageContentItem{Type: "FUNCTION_CALL", FunctionCall: value}
+}
+
+func NewArrayChatMessageContentItemFromImage(value *ImageChatMessageContent) *ArrayChatMessageContentItem {
+	return &ArrayChatMessageContentItem{Type: "IMAGE", Image: value}
+}
+
+func (a *ArrayChatMessageContentItem) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	a.Type = unmarshaler.Type
+	switch unmarshaler.Type {
+	case "STRING":
+		value := new(StringChatMessageContent)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		a.String = value
+	case "FUNCTION_CALL":
+		value := new(FunctionCallChatMessageContent)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		a.FunctionCall = value
+	case "IMAGE":
+		value := new(ImageChatMessageContent)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		a.Image = value
+	}
+	return nil
+}
+
+func (a ArrayChatMessageContentItem) MarshalJSON() ([]byte, error) {
+	switch a.Type {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", a.Type, a)
+	case "STRING":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*StringChatMessageContent
+		}{
+			Type:                     a.Type,
+			StringChatMessageContent: a.String,
+		}
+		return json.Marshal(marshaler)
+	case "FUNCTION_CALL":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*FunctionCallChatMessageContent
+		}{
+			Type:                           a.Type,
+			FunctionCallChatMessageContent: a.FunctionCall,
+		}
+		return json.Marshal(marshaler)
+	case "IMAGE":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ImageChatMessageContent
+		}{
+			Type:                    a.Type,
+			ImageChatMessageContent: a.Image,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type ArrayChatMessageContentItemVisitor interface {
+	VisitString(*StringChatMessageContent) error
+	VisitFunctionCall(*FunctionCallChatMessageContent) error
+	VisitImage(*ImageChatMessageContent) error
+}
+
+func (a *ArrayChatMessageContentItem) Accept(visitor ArrayChatMessageContentItemVisitor) error {
+	switch a.Type {
+	default:
+		return fmt.Errorf("invalid type %s in %T", a.Type, a)
+	case "STRING":
+		return visitor.VisitString(a.String)
+	case "FUNCTION_CALL":
+		return visitor.VisitFunctionCall(a.FunctionCall)
+	case "IMAGE":
+		return visitor.VisitImage(a.Image)
+	}
+}
+
+type ArrayChatMessageContentItemRequest struct {
+	Type         string
+	String       *StringChatMessageContentRequest
+	FunctionCall *FunctionCallChatMessageContentRequest
+	Image        *ImageChatMessageContentRequest
+}
+
+func NewArrayChatMessageContentItemRequestFromString(value *StringChatMessageContentRequest) *ArrayChatMessageContentItemRequest {
+	return &ArrayChatMessageContentItemRequest{Type: "STRING", String: value}
+}
+
+func NewArrayChatMessageContentItemRequestFromFunctionCall(value *FunctionCallChatMessageContentRequest) *ArrayChatMessageContentItemRequest {
+	return &ArrayChatMessageContentItemRequest{Type: "FUNCTION_CALL", FunctionCall: value}
+}
+
+func NewArrayChatMessageContentItemRequestFromImage(value *ImageChatMessageContentRequest) *ArrayChatMessageContentItemRequest {
+	return &ArrayChatMessageContentItemRequest{Type: "IMAGE", Image: value}
+}
+
+func (a *ArrayChatMessageContentItemRequest) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	a.Type = unmarshaler.Type
+	switch unmarshaler.Type {
+	case "STRING":
+		value := new(StringChatMessageContentRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		a.String = value
+	case "FUNCTION_CALL":
+		value := new(FunctionCallChatMessageContentRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		a.FunctionCall = value
+	case "IMAGE":
+		value := new(ImageChatMessageContentRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		a.Image = value
+	}
+	return nil
+}
+
+func (a ArrayChatMessageContentItemRequest) MarshalJSON() ([]byte, error) {
+	switch a.Type {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", a.Type, a)
+	case "STRING":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*StringChatMessageContentRequest
+		}{
+			Type:                            a.Type,
+			StringChatMessageContentRequest: a.String,
+		}
+		return json.Marshal(marshaler)
+	case "FUNCTION_CALL":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*FunctionCallChatMessageContentRequest
+		}{
+			Type:                                  a.Type,
+			FunctionCallChatMessageContentRequest: a.FunctionCall,
+		}
+		return json.Marshal(marshaler)
+	case "IMAGE":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ImageChatMessageContentRequest
+		}{
+			Type:                           a.Type,
+			ImageChatMessageContentRequest: a.Image,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type ArrayChatMessageContentItemRequestVisitor interface {
+	VisitString(*StringChatMessageContentRequest) error
+	VisitFunctionCall(*FunctionCallChatMessageContentRequest) error
+	VisitImage(*ImageChatMessageContentRequest) error
+}
+
+func (a *ArrayChatMessageContentItemRequest) Accept(visitor ArrayChatMessageContentItemRequestVisitor) error {
+	switch a.Type {
+	default:
+		return fmt.Errorf("invalid type %s in %T", a.Type, a)
+	case "STRING":
+		return visitor.VisitString(a.String)
+	case "FUNCTION_CALL":
+		return visitor.VisitFunctionCall(a.FunctionCall)
+	case "IMAGE":
+		return visitor.VisitImage(a.Image)
+	}
+}
+
+// A list of chat message content items.
+type ArrayChatMessageContentRequest struct {
+	Value []*ArrayChatMessageContentItemRequest `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (a *ArrayChatMessageContentRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler ArrayChatMessageContentRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*a = ArrayChatMessageContentRequest(value)
+	a._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *ArrayChatMessageContentRequest) String() string {
+	if len(a._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(a._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
+
 // - `CHAT_MESSAGE` - CHAT_MESSAGE
 // - `CHAT_HISTORY` - CHAT_HISTORY
 // - `JINJA` - JINJA
@@ -204,6 +472,7 @@ func (b BlockTypeEnum) Ptr() *BlockTypeEnum {
 	return &b
 }
 
+// A user input representing a list of chat messages
 type ChatHistoryInputRequest struct {
 	// The variable's name, as defined in the deployment.
 	Name  string                `json:"name"`
@@ -236,8 +505,9 @@ func (c *ChatHistoryInputRequest) String() string {
 }
 
 type ChatMessage struct {
-	Text string          `json:"text"`
-	Role ChatMessageRole `json:"role,omitempty"`
+	Text    *string             `json:"text,omitempty"`
+	Role    ChatMessageRole     `json:"role,omitempty"`
+	Content *ChatMessageContent `json:"content,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -265,9 +535,262 @@ func (c *ChatMessage) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+type ChatMessageContent struct {
+	Type         string
+	String       *StringChatMessageContent
+	FunctionCall *FunctionCallChatMessageContent
+	Array        *ArrayChatMessageContent
+	Image        *ImageChatMessageContent
+}
+
+func NewChatMessageContentFromString(value *StringChatMessageContent) *ChatMessageContent {
+	return &ChatMessageContent{Type: "STRING", String: value}
+}
+
+func NewChatMessageContentFromFunctionCall(value *FunctionCallChatMessageContent) *ChatMessageContent {
+	return &ChatMessageContent{Type: "FUNCTION_CALL", FunctionCall: value}
+}
+
+func NewChatMessageContentFromArray(value *ArrayChatMessageContent) *ChatMessageContent {
+	return &ChatMessageContent{Type: "ARRAY", Array: value}
+}
+
+func NewChatMessageContentFromImage(value *ImageChatMessageContent) *ChatMessageContent {
+	return &ChatMessageContent{Type: "IMAGE", Image: value}
+}
+
+func (c *ChatMessageContent) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	c.Type = unmarshaler.Type
+	switch unmarshaler.Type {
+	case "STRING":
+		value := new(StringChatMessageContent)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		c.String = value
+	case "FUNCTION_CALL":
+		value := new(FunctionCallChatMessageContent)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		c.FunctionCall = value
+	case "ARRAY":
+		value := new(ArrayChatMessageContent)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		c.Array = value
+	case "IMAGE":
+		value := new(ImageChatMessageContent)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		c.Image = value
+	}
+	return nil
+}
+
+func (c ChatMessageContent) MarshalJSON() ([]byte, error) {
+	switch c.Type {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", c.Type, c)
+	case "STRING":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*StringChatMessageContent
+		}{
+			Type:                     c.Type,
+			StringChatMessageContent: c.String,
+		}
+		return json.Marshal(marshaler)
+	case "FUNCTION_CALL":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*FunctionCallChatMessageContent
+		}{
+			Type:                           c.Type,
+			FunctionCallChatMessageContent: c.FunctionCall,
+		}
+		return json.Marshal(marshaler)
+	case "ARRAY":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ArrayChatMessageContent
+		}{
+			Type:                    c.Type,
+			ArrayChatMessageContent: c.Array,
+		}
+		return json.Marshal(marshaler)
+	case "IMAGE":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ImageChatMessageContent
+		}{
+			Type:                    c.Type,
+			ImageChatMessageContent: c.Image,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type ChatMessageContentVisitor interface {
+	VisitString(*StringChatMessageContent) error
+	VisitFunctionCall(*FunctionCallChatMessageContent) error
+	VisitArray(*ArrayChatMessageContent) error
+	VisitImage(*ImageChatMessageContent) error
+}
+
+func (c *ChatMessageContent) Accept(visitor ChatMessageContentVisitor) error {
+	switch c.Type {
+	default:
+		return fmt.Errorf("invalid type %s in %T", c.Type, c)
+	case "STRING":
+		return visitor.VisitString(c.String)
+	case "FUNCTION_CALL":
+		return visitor.VisitFunctionCall(c.FunctionCall)
+	case "ARRAY":
+		return visitor.VisitArray(c.Array)
+	case "IMAGE":
+		return visitor.VisitImage(c.Image)
+	}
+}
+
+type ChatMessageContentRequest struct {
+	Type         string
+	String       *StringChatMessageContentRequest
+	FunctionCall *FunctionCallChatMessageContentRequest
+	Array        *ArrayChatMessageContentRequest
+	Image        *ImageChatMessageContentRequest
+}
+
+func NewChatMessageContentRequestFromString(value *StringChatMessageContentRequest) *ChatMessageContentRequest {
+	return &ChatMessageContentRequest{Type: "STRING", String: value}
+}
+
+func NewChatMessageContentRequestFromFunctionCall(value *FunctionCallChatMessageContentRequest) *ChatMessageContentRequest {
+	return &ChatMessageContentRequest{Type: "FUNCTION_CALL", FunctionCall: value}
+}
+
+func NewChatMessageContentRequestFromArray(value *ArrayChatMessageContentRequest) *ChatMessageContentRequest {
+	return &ChatMessageContentRequest{Type: "ARRAY", Array: value}
+}
+
+func NewChatMessageContentRequestFromImage(value *ImageChatMessageContentRequest) *ChatMessageContentRequest {
+	return &ChatMessageContentRequest{Type: "IMAGE", Image: value}
+}
+
+func (c *ChatMessageContentRequest) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	c.Type = unmarshaler.Type
+	switch unmarshaler.Type {
+	case "STRING":
+		value := new(StringChatMessageContentRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		c.String = value
+	case "FUNCTION_CALL":
+		value := new(FunctionCallChatMessageContentRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		c.FunctionCall = value
+	case "ARRAY":
+		value := new(ArrayChatMessageContentRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		c.Array = value
+	case "IMAGE":
+		value := new(ImageChatMessageContentRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		c.Image = value
+	}
+	return nil
+}
+
+func (c ChatMessageContentRequest) MarshalJSON() ([]byte, error) {
+	switch c.Type {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", c.Type, c)
+	case "STRING":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*StringChatMessageContentRequest
+		}{
+			Type:                            c.Type,
+			StringChatMessageContentRequest: c.String,
+		}
+		return json.Marshal(marshaler)
+	case "FUNCTION_CALL":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*FunctionCallChatMessageContentRequest
+		}{
+			Type:                                  c.Type,
+			FunctionCallChatMessageContentRequest: c.FunctionCall,
+		}
+		return json.Marshal(marshaler)
+	case "ARRAY":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ArrayChatMessageContentRequest
+		}{
+			Type:                           c.Type,
+			ArrayChatMessageContentRequest: c.Array,
+		}
+		return json.Marshal(marshaler)
+	case "IMAGE":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ImageChatMessageContentRequest
+		}{
+			Type:                           c.Type,
+			ImageChatMessageContentRequest: c.Image,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type ChatMessageContentRequestVisitor interface {
+	VisitString(*StringChatMessageContentRequest) error
+	VisitFunctionCall(*FunctionCallChatMessageContentRequest) error
+	VisitArray(*ArrayChatMessageContentRequest) error
+	VisitImage(*ImageChatMessageContentRequest) error
+}
+
+func (c *ChatMessageContentRequest) Accept(visitor ChatMessageContentRequestVisitor) error {
+	switch c.Type {
+	default:
+		return fmt.Errorf("invalid type %s in %T", c.Type, c)
+	case "STRING":
+		return visitor.VisitString(c.String)
+	case "FUNCTION_CALL":
+		return visitor.VisitFunctionCall(c.FunctionCall)
+	case "ARRAY":
+		return visitor.VisitArray(c.Array)
+	case "IMAGE":
+		return visitor.VisitImage(c.Image)
+	}
+}
+
 type ChatMessageRequest struct {
-	Text string          `json:"text"`
-	Role ChatMessageRole `json:"role,omitempty"`
+	Text    *string                    `json:"text,omitempty"`
+	Role    ChatMessageRole            `json:"role,omitempty"`
+	Content *ChatMessageContentRequest `json:"content,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -834,19 +1357,18 @@ type DeploymentRead struct {
 	// The current status of the deployment
 	//
 	// - `ACTIVE` - Active
-	// - `INACTIVE` - Inactive
 	// - `ARCHIVED` - Archived
-	Status *DeploymentStatus `json:"status,omitempty"`
+	Status *EntityStatus `json:"status,omitempty"`
 	// The environment this deployment is used in
 	//
 	// - `DEVELOPMENT` - Development
 	// - `STAGING` - Staging
 	// - `PRODUCTION` - Production
-	Environment *EnvironmentEnum `json:"environment,omitempty"`
+	Environment    *EnvironmentEnum  `json:"environment,omitempty"`
+	LastDeployedOn time.Time         `json:"last_deployed_on"`
+	InputVariables []*VellumVariable `json:"input_variables,omitempty"`
 	// Deprecated. The Prompt execution endpoints return a `prompt_version_id` that could be used instead.
-	ActiveModelVersionIds []string          `json:"active_model_version_ids,omitempty"`
-	LastDeployedOn        time.Time         `json:"last_deployed_on"`
-	InputVariables        []*VellumVariable `json:"input_variables,omitempty"`
+	ActiveModelVersionIds []string `json:"active_model_version_ids,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -872,34 +1394,6 @@ func (d *DeploymentRead) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", d)
-}
-
-// - `ACTIVE` - Active
-// - `INACTIVE` - Inactive
-// - `ARCHIVED` - Archived
-type DeploymentStatus string
-
-const (
-	DeploymentStatusActive   DeploymentStatus = "ACTIVE"
-	DeploymentStatusInactive DeploymentStatus = "INACTIVE"
-	DeploymentStatusArchived DeploymentStatus = "ARCHIVED"
-)
-
-func NewDeploymentStatusFromString(s string) (DeploymentStatus, error) {
-	switch s {
-	case "ACTIVE":
-		return DeploymentStatusActive, nil
-	case "INACTIVE":
-		return DeploymentStatusInactive, nil
-	case "ARCHIVED":
-		return DeploymentStatusArchived, nil
-	}
-	var t DeploymentStatus
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (d DeploymentStatus) Ptr() *DeploymentStatus {
-	return &d
 }
 
 type DocumentDocumentToDocumentIndex struct {
@@ -953,7 +1447,7 @@ type DocumentIndexRead struct {
 	//
 	// - `ACTIVE` - Active
 	// - `ARCHIVED` - Archived
-	Status *DocumentIndexStatus `json:"status,omitempty"`
+	Status *EntityStatus `json:"status,omitempty"`
 	// The environment this document index is used in
 	//
 	// - `DEVELOPMENT` - Development
@@ -987,30 +1481,6 @@ func (d *DocumentIndexRead) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", d)
-}
-
-// - `ACTIVE` - Active
-// - `ARCHIVED` - Archived
-type DocumentIndexStatus string
-
-const (
-	DocumentIndexStatusActive   DocumentIndexStatus = "ACTIVE"
-	DocumentIndexStatusArchived DocumentIndexStatus = "ARCHIVED"
-)
-
-func NewDocumentIndexStatusFromString(s string) (DocumentIndexStatus, error) {
-	switch s {
-	case "ACTIVE":
-		return DocumentIndexStatusActive, nil
-	case "ARCHIVED":
-		return DocumentIndexStatusArchived, nil
-	}
-	var t DocumentIndexStatus
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (d DocumentIndexStatus) Ptr() *DocumentIndexStatus {
-	return &d
 }
 
 type DocumentRead struct {
@@ -1111,6 +1581,30 @@ func (e *EnrichedNormalizedCompletion) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", e)
+}
+
+// - `ACTIVE` - Active
+// - `ARCHIVED` - Archived
+type EntityStatus string
+
+const (
+	EntityStatusActive   EntityStatus = "ACTIVE"
+	EntityStatusArchived EntityStatus = "ARCHIVED"
+)
+
+func NewEntityStatusFromString(s string) (EntityStatus, error) {
+	switch s {
+	case "ACTIVE":
+		return EntityStatusActive, nil
+	case "ARCHIVED":
+		return EntityStatusArchived, nil
+	}
+	var t EntityStatus
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (e EntityStatus) Ptr() *EntityStatus {
+	return &e
 }
 
 // - `DEVELOPMENT` - Development
@@ -1736,6 +2230,132 @@ func (f *FunctionCall) Accept(visitor FunctionCallVisitor) error {
 	}
 }
 
+// A function call value that is used in a chat message.
+type FunctionCallChatMessageContent struct {
+	Value *FunctionCallChatMessageContentValue `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (f *FunctionCallChatMessageContent) UnmarshalJSON(data []byte) error {
+	type unmarshaler FunctionCallChatMessageContent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*f = FunctionCallChatMessageContent(value)
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FunctionCallChatMessageContent) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
+// A function call value that is used in a chat message.
+type FunctionCallChatMessageContentRequest struct {
+	Value *FunctionCallChatMessageContentValueRequest `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (f *FunctionCallChatMessageContentRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler FunctionCallChatMessageContentRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*f = FunctionCallChatMessageContentRequest(value)
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FunctionCallChatMessageContentRequest) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
+// The final resolved function call value.
+type FunctionCallChatMessageContentValue struct {
+	Name      string                 `json:"name"`
+	Arguments map[string]interface{} `json:"arguments,omitempty"`
+	Id        *string                `json:"id,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (f *FunctionCallChatMessageContentValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler FunctionCallChatMessageContentValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*f = FunctionCallChatMessageContentValue(value)
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FunctionCallChatMessageContentValue) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
+// The final resolved function call value.
+type FunctionCallChatMessageContentValueRequest struct {
+	Name      string                 `json:"name"`
+	Arguments map[string]interface{} `json:"arguments,omitempty"`
+	Id        *string                `json:"id,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (f *FunctionCallChatMessageContentValueRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler FunctionCallChatMessageContentValueRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*f = FunctionCallChatMessageContentValueRequest(value)
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FunctionCallChatMessageContentValueRequest) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
+type FunctionCallEnum = string
+
 type FunctionCallVariableValue struct {
 	Value *FunctionCall `json:"value,omitempty"`
 
@@ -2074,6 +2694,68 @@ func (g *GenerateStreamResultData) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
+// An image value that is used in a chat message.
+type ImageChatMessageContent struct {
+	Value *VellumImage `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (i *ImageChatMessageContent) UnmarshalJSON(data []byte) error {
+	type unmarshaler ImageChatMessageContent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = ImageChatMessageContent(value)
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *ImageChatMessageContent) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// An image value that is used in a chat message.
+type ImageChatMessageContentRequest struct {
+	Value *VellumImageRequest `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (i *ImageChatMessageContentRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler ImageChatMessageContentRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = ImageChatMessageContentRequest(value)
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *ImageChatMessageContentRequest) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type ImageEnum = string
+
 // - `AWAITING_PROCESSING` - Awaiting Processing
 // - `QUEUED` - Queued
 // - `INDEXING` - Indexing
@@ -2176,6 +2858,7 @@ func (i *InitiatedPromptExecutionMeta) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
+// A user input representing a JSON object
 type JsonInputRequest struct {
 	// The variable's name, as defined in the deployment.
 	Name  string                 `json:"name"`
@@ -2528,14 +3211,15 @@ func (m *ModelVersionExecConfig) String() string {
 }
 
 type ModelVersionExecConfigParameters struct {
-	Temperature      *float64            `json:"temperature,omitempty"`
-	MaxTokens        *int                `json:"max_tokens,omitempty"`
-	TopP             float64             `json:"top_p"`
-	FrequencyPenalty float64             `json:"frequency_penalty"`
-	PresencePenalty  float64             `json:"presence_penalty"`
-	LogitBias        map[string]*float64 `json:"logit_bias,omitempty"`
-	Stop             []string            `json:"stop,omitempty"`
-	TopK             *float64            `json:"top_k,omitempty"`
+	Temperature      *float64               `json:"temperature,omitempty"`
+	MaxTokens        *int                   `json:"max_tokens,omitempty"`
+	TopP             float64                `json:"top_p"`
+	FrequencyPenalty float64                `json:"frequency_penalty"`
+	PresencePenalty  float64                `json:"presence_penalty"`
+	LogitBias        map[string]*float64    `json:"logit_bias,omitempty"`
+	Stop             []string               `json:"stop,omitempty"`
+	TopK             *float64               `json:"top_k,omitempty"`
+	CustomParameters map[string]interface{} `json:"custom_parameters,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -3459,6 +4143,38 @@ func (n *NormalizedTokenLogProbs) String() string {
 	return fmt.Sprintf("%#v", n)
 }
 
+type PaginatedSlimDeploymentReadList struct {
+	Count    *int                  `json:"count,omitempty"`
+	Next     *string               `json:"next,omitempty"`
+	Previous *string               `json:"previous,omitempty"`
+	Results  []*SlimDeploymentRead `json:"results,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (p *PaginatedSlimDeploymentReadList) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaginatedSlimDeploymentReadList
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaginatedSlimDeploymentReadList(value)
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaginatedSlimDeploymentReadList) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
 type PaginatedSlimDocumentList struct {
 	Count    *int            `json:"count,omitempty"`
 	Next     *string         `json:"next,omitempty"`
@@ -3480,6 +4196,38 @@ func (p *PaginatedSlimDocumentList) UnmarshalJSON(data []byte) error {
 }
 
 func (p *PaginatedSlimDocumentList) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PaginatedSlimWorkflowDeploymentList struct {
+	Count    *int                      `json:"count,omitempty"`
+	Next     *string                   `json:"next,omitempty"`
+	Previous *string                   `json:"previous,omitempty"`
+	Results  []*SlimWorkflowDeployment `json:"results,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (p *PaginatedSlimWorkflowDeploymentList) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaginatedSlimWorkflowDeploymentList
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaginatedSlimWorkflowDeploymentList(value)
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaginatedSlimWorkflowDeploymentList) String() string {
 	if len(p._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
 			return value
@@ -4236,14 +4984,15 @@ func (r *RegisterPromptErrorResponse) String() string {
 }
 
 type RegisterPromptModelParametersRequest struct {
-	Temperature      float64             `json:"temperature"`
-	MaxTokens        int                 `json:"max_tokens"`
-	Stop             []string            `json:"stop,omitempty"`
-	TopP             float64             `json:"top_p"`
-	TopK             *int                `json:"top_k,omitempty"`
-	FrequencyPenalty float64             `json:"frequency_penalty"`
-	PresencePenalty  float64             `json:"presence_penalty"`
-	LogitBias        map[string]*float64 `json:"logit_bias,omitempty"`
+	Temperature      float64                `json:"temperature"`
+	MaxTokens        int                    `json:"max_tokens"`
+	Stop             []string               `json:"stop,omitempty"`
+	TopP             float64                `json:"top_p"`
+	TopK             *int                   `json:"top_k,omitempty"`
+	FrequencyPenalty float64                `json:"frequency_penalty"`
+	PresencePenalty  float64                `json:"presence_penalty"`
+	LogitBias        map[string]*float64    `json:"logit_bias,omitempty"`
+	CustomParameters map[string]interface{} `json:"custom_parameters,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -5237,6 +5986,53 @@ func (s *SearchWeightsRequest) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
+type SlimDeploymentRead struct {
+	Id      string    `json:"id"`
+	Created time.Time `json:"created"`
+	// A human-readable label for the deployment
+	Label string `json:"label"`
+	// A name that uniquely identifies this deployment within its workspace
+	Name string `json:"name"`
+	// The current status of the deployment
+	//
+	// - `ACTIVE` - Active
+	// - `ARCHIVED` - Archived
+	Status *EntityStatus `json:"status,omitempty"`
+	// The environment this deployment is used in
+	//
+	// - `DEVELOPMENT` - Development
+	// - `STAGING` - Staging
+	// - `PRODUCTION` - Production
+	Environment    *EnvironmentEnum  `json:"environment,omitempty"`
+	LastDeployedOn time.Time         `json:"last_deployed_on"`
+	InputVariables []*VellumVariable `json:"input_variables,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (s *SlimDeploymentRead) UnmarshalJSON(data []byte) error {
+	type unmarshaler SlimDeploymentRead
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SlimDeploymentRead(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SlimDeploymentRead) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
 type SlimDocument struct {
 	// Vellum-generated ID that uniquely identifies this document.
 	Id string `json:"id"`
@@ -5283,6 +6079,56 @@ func (s *SlimDocument) UnmarshalJSON(data []byte) error {
 }
 
 func (s *SlimDocument) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type SlimWorkflowDeployment struct {
+	Id string `json:"id"`
+	// A name that uniquely identifies this workflow deployment within its workspace
+	Name string `json:"name"`
+	// A human-readable label for the workflow deployment
+	Label string `json:"label"`
+	// The current status of the workflow deployment
+	//
+	// - `ACTIVE` - Active
+	// - `ARCHIVED` - Archived
+	Status *EntityStatus `json:"status,omitempty"`
+	// The environment this workflow deployment is used in
+	//
+	// - `DEVELOPMENT` - Development
+	// - `STAGING` - Staging
+	// - `PRODUCTION` - Production
+	Environment    *EnvironmentEnum `json:"environment,omitempty"`
+	Created        time.Time        `json:"created"`
+	LastDeployedOn time.Time        `json:"last_deployed_on"`
+	// The input variables this Workflow Deployment expects to receive values for when it is executed.
+	InputVariables []*VellumVariable `json:"input_variables,omitempty"`
+	// The output variables this Workflow Deployment will produce when it is executed.
+	OutputVariables []*VellumVariable `json:"output_variables,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (s *SlimWorkflowDeployment) UnmarshalJSON(data []byte) error {
+	type unmarshaler SlimWorkflowDeployment
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SlimWorkflowDeployment(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SlimWorkflowDeployment) String() string {
 	if len(s._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
 			return value
@@ -5361,6 +6207,69 @@ func (s *StreamingPromptExecutionMeta) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
+// A string value that is used in a chat message.
+type StringChatMessageContent struct {
+	Value string `json:"value"`
+
+	_rawJSON json.RawMessage
+}
+
+func (s *StringChatMessageContent) UnmarshalJSON(data []byte) error {
+	type unmarshaler StringChatMessageContent
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = StringChatMessageContent(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *StringChatMessageContent) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// A string value that is used in a chat message.
+type StringChatMessageContentRequest struct {
+	Value string `json:"value"`
+
+	_rawJSON json.RawMessage
+}
+
+func (s *StringChatMessageContentRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler StringChatMessageContentRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = StringChatMessageContentRequest(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *StringChatMessageContentRequest) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type StringEnum = string
+
+// A user input representing a string value
 type StringInputRequest struct {
 	// The variable's name, as defined in the deployment.
 	Name  string `json:"name"`
@@ -6954,6 +7863,66 @@ func (v *VellumErrorRequest) String() string {
 	return fmt.Sprintf("%#v", v)
 }
 
+type VellumImage struct {
+	Src      string                 `json:"src"`
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (v *VellumImage) UnmarshalJSON(data []byte) error {
+	type unmarshaler VellumImage
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = VellumImage(value)
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VellumImage) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+type VellumImageRequest struct {
+	Src      string                 `json:"src"`
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (v *VellumImageRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler VellumImageRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = VellumImageRequest(value)
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VellumImageRequest) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
 type VellumVariable struct {
 	Id   string             `json:"id"`
 	Key  string             `json:"key"`
@@ -6993,6 +7962,7 @@ func (v *VellumVariable) String() string {
 // - `ERROR` - ERROR
 // - `ARRAY` - ARRAY
 // - `FUNCTION_CALL` - FUNCTION_CALL
+// - `IMAGE` - IMAGE
 type VellumVariableType string
 
 const (
@@ -7004,6 +7974,7 @@ const (
 	VellumVariableTypeError         VellumVariableType = "ERROR"
 	VellumVariableTypeArray         VellumVariableType = "ARRAY"
 	VellumVariableTypeFunctionCall  VellumVariableType = "FUNCTION_CALL"
+	VellumVariableTypeImage         VellumVariableType = "IMAGE"
 )
 
 func NewVellumVariableTypeFromString(s string) (VellumVariableType, error) {
@@ -7024,6 +7995,8 @@ func NewVellumVariableTypeFromString(s string) (VellumVariableType, error) {
 		return VellumVariableTypeArray, nil
 	case "FUNCTION_CALL":
 		return VellumVariableTypeFunctionCall, nil
+	case "IMAGE":
+		return VellumVariableTypeImage, nil
 	}
 	var t VellumVariableType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)

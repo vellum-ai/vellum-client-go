@@ -16,6 +16,7 @@ import (
 	registeredprompts "github.com/vellum-ai/vellum-client-go/registeredprompts"
 	sandboxes "github.com/vellum-ai/vellum-client-go/sandboxes"
 	testsuites "github.com/vellum-ai/vellum-client-go/testsuites"
+	workflowdeployments "github.com/vellum-ai/vellum-client-go/workflowdeployments"
 	io "io"
 	http "net/http"
 )
@@ -25,13 +26,14 @@ type Client struct {
 	caller  *core.Caller
 	header  http.Header
 
-	Deployments       *deployments.Client
-	DocumentIndexes   *documentindexes.Client
-	Documents         *documents.Client
-	ModelVersions     *modelversions.Client
-	RegisteredPrompts *registeredprompts.Client
-	Sandboxes         *sandboxes.Client
-	TestSuites        *testsuites.Client
+	Deployments         *deployments.Client
+	DocumentIndexes     *documentindexes.Client
+	Documents           *documents.Client
+	ModelVersions       *modelversions.Client
+	RegisteredPrompts   *registeredprompts.Client
+	Sandboxes           *sandboxes.Client
+	TestSuites          *testsuites.Client
+	WorkflowDeployments *workflowdeployments.Client
 }
 
 func NewClient(opts ...core.ClientOption) *Client {
@@ -40,16 +42,17 @@ func NewClient(opts ...core.ClientOption) *Client {
 		opt(options)
 	}
 	return &Client{
-		baseURL:           options.BaseURL,
-		caller:            core.NewCaller(options.HTTPClient),
-		header:            options.ToHeader(),
-		Deployments:       deployments.NewClient(opts...),
-		DocumentIndexes:   documentindexes.NewClient(opts...),
-		Documents:         documents.NewClient(opts...),
-		ModelVersions:     modelversions.NewClient(opts...),
-		RegisteredPrompts: registeredprompts.NewClient(opts...),
-		Sandboxes:         sandboxes.NewClient(opts...),
-		TestSuites:        testsuites.NewClient(opts...),
+		baseURL:             options.BaseURL,
+		caller:              core.NewCaller(options.HTTPClient),
+		header:              options.ToHeader(),
+		Deployments:         deployments.NewClient(opts...),
+		DocumentIndexes:     documentindexes.NewClient(opts...),
+		Documents:           documents.NewClient(opts...),
+		ModelVersions:       modelversions.NewClient(opts...),
+		RegisteredPrompts:   registeredprompts.NewClient(opts...),
+		Sandboxes:           sandboxes.NewClient(opts...),
+		TestSuites:          testsuites.NewClient(opts...),
+		WorkflowDeployments: workflowdeployments.NewClient(opts...),
 	}
 }
 

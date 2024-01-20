@@ -11,7 +11,7 @@ type DocumentIndexCreateRequest struct {
 	//
 	// * `ACTIVE` - Active
 	// * `ARCHIVED` - Archived
-	Status *DocumentIndexStatus `json:"status,omitempty"`
+	Status *EntityStatus `json:"status,omitempty"`
 	// The environment this document index is used in
 	//
 	// * `DEVELOPMENT` - Development
