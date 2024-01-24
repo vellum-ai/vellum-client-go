@@ -190,7 +190,7 @@ func (c *Client) ExecutePromptStream(ctx context.Context, request *vellumclientg
 
 // Executes a deployed Workflow and returns its outputs.
 func (c *Client) ExecuteWorkflow(ctx context.Context, request *vellumclientgo.ExecuteWorkflowRequest) (*vellumclientgo.ExecuteWorkflowResponse, error) {
-	baseURL := "https://api.vellum.ai"
+	baseURL := "https://predict.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
