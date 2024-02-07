@@ -14,9 +14,6 @@ type DeploymentsListRequest struct {
 	// Which field to use when ordering the results.
 	Ordering *string `json:"-"`
 	// The current status of the deployment
-	//
-	// - `ACTIVE` - Active
-	// - `ARCHIVED` - Archived
 	Status *DeploymentsListRequestStatus `json:"-"`
 }
 

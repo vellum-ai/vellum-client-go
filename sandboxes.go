@@ -7,6 +7,5 @@ type UpsertSandboxScenarioRequestRequest struct {
 	// The inputs for the scenario
 	Inputs []*ScenarioInputRequest `json:"inputs,omitempty"`
 	// The id of the scenario to update. If none is provided, an id will be generated and a new scenario will be appended.
-	ScenarioId        *string                          `json:"scenario_id,omitempty"`
-	MetricInputParams *SandboxMetricInputParamsRequest `json:"metric_input_params,omitempty"`
+	ScenarioId *string `json:"scenario_id,omitempty"`
 }
