@@ -57,9 +57,6 @@ func NewClient(opts ...core.ClientOption) *Client {
 }
 
 // Executes a deployed Prompt and returns the result.
-//
-// Note: This endpoint temporarily does not support prompts with function calling, support is coming soon.
-// In the meantime, we recommend still using the `/generate` endpoint for prompts with function calling.
 func (c *Client) ExecutePrompt(ctx context.Context, request *vellumclientgo.ExecutePromptRequest) (*vellumclientgo.ExecutePromptResponse, error) {
 	baseURL := "https://predict.vellum.ai"
 	if c.baseURL != "" {
@@ -125,9 +122,6 @@ func (c *Client) ExecutePrompt(ctx context.Context, request *vellumclientgo.Exec
 }
 
 // Executes a deployed Prompt and streams back the results.
-//
-// Note: This endpoint temporarily does not support prompts with function calling, support is coming soon.
-// In the meantime, we recommend still using the `/generate-stream` endpoint for prompts with function calling
 func (c *Client) ExecutePromptStream(ctx context.Context, request *vellumclientgo.ExecutePromptStreamRequest) (*core.Stream[vellumclientgo.ExecutePromptEvent], error) {
 	baseURL := "https://predict.vellum.ai"
 	if c.baseURL != "" {
