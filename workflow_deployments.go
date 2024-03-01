@@ -13,10 +13,7 @@ type WorkflowDeploymentsListRequest struct {
 	Offset *int `json:"-"`
 	// Which field to use when ordering the results.
 	Ordering *string `json:"-"`
-	// The current status of the workflow deployment
-	//
-	// - `ACTIVE` - Active
-	// - `ARCHIVED` - Archived
+	// status
 	Status *WorkflowDeploymentsListRequestStatus `json:"-"`
 }
 

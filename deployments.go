@@ -13,7 +13,7 @@ type DeploymentsListRequest struct {
 	Offset *int `json:"-"`
 	// Which field to use when ordering the results.
 	Ordering *string `json:"-"`
-	// The current status of the deployment
+	// status
 	Status *DeploymentsListRequestStatus `json:"-"`
 }
 

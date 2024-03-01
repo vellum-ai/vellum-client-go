@@ -67,3 +67,28 @@ func (c *Client) List(ctx context.Context, request *vellumclientgo.WorkflowDeplo
 	}
 	return response, nil
 }
+
+// Used to retrieve a workflow deployment given its ID or name.
+//
+// Either the Workflow Deployment's ID or its unique name
+func (c *Client) Retrieve(ctx context.Context, id string) (*vellumclientgo.WorkflowDeploymentRead, error) {
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/workflow-deployments/%v", id)
+
+	var response *vellumclientgo.WorkflowDeploymentRead
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:      endpointURL,
+			Method:   http.MethodGet,
+			Headers:  c.header,
+			Response: &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
