@@ -1245,7 +1245,8 @@ func (c *CodeExecutionNodeResult) String() string {
 }
 
 type CodeExecutionNodeResultData struct {
-	Output *CodeExecutionNodeResultOutput `json:"output,omitempty"`
+	Output      *CodeExecutionNodeResultOutput `json:"output,omitempty"`
+	LogOutputId *string                        `json:"log_output_id,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -7555,6 +7556,36 @@ func (s *SubmitWorkflowExecutionActualRequest) Accept(visitor SubmitWorkflowExec
 	}
 }
 
+type SubworkflowEnum = string
+
+// A Node Result Event emitted from a Subworkflow Node.
+type SubworkflowNodeResult struct {
+	_rawJSON json.RawMessage
+}
+
+func (s *SubworkflowNodeResult) UnmarshalJSON(data []byte) error {
+	type unmarshaler SubworkflowNodeResult
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SubworkflowNodeResult(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SubworkflowNodeResult) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
 type TemplatingNodeChatHistoryResult struct {
 	Id    string         `json:"id"`
 	Value []*ChatMessage `json:"value,omitempty"`
@@ -7966,6 +7997,38 @@ func (t *TemplatingNodeStringResult) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+type TerminalNodeArrayResult struct {
+	Id *string `json:"id,omitempty"`
+	// The unique name given to the terminal node that produced this output.
+	Name  string                    `json:"name"`
+	Value []*ArrayVariableValueItem `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TerminalNodeArrayResult) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalNodeArrayResult
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalNodeArrayResult(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalNodeArrayResult) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
 type TerminalNodeChatHistoryResult struct {
 	Id *string `json:"id,omitempty"`
 	// The unique name given to the terminal node that produced this output.
@@ -8019,6 +8082,38 @@ func (t *TerminalNodeErrorResult) UnmarshalJSON(data []byte) error {
 }
 
 func (t *TerminalNodeErrorResult) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TerminalNodeFunctionCallResult struct {
+	Id *string `json:"id,omitempty"`
+	// The unique name given to the terminal node that produced this output.
+	Name  string        `json:"name"`
+	Value *FunctionCall `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TerminalNodeFunctionCallResult) UnmarshalJSON(data []byte) error {
+	type unmarshaler TerminalNodeFunctionCallResult
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TerminalNodeFunctionCallResult(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TerminalNodeFunctionCallResult) String() string {
 	if len(t._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
 			return value
@@ -8160,6 +8255,8 @@ type TerminalNodeResultOutput struct {
 	Json          *TerminalNodeJsonResult
 	ChatHistory   *TerminalNodeChatHistoryResult
 	SearchResults *TerminalNodeSearchResultsResult
+	Array         *TerminalNodeArrayResult
+	FunctionCall  *TerminalNodeFunctionCallResult
 	Error         *TerminalNodeErrorResult
 }
 
@@ -8181,6 +8278,14 @@ func NewTerminalNodeResultOutputFromChatHistory(value *TerminalNodeChatHistoryRe
 
 func NewTerminalNodeResultOutputFromSearchResults(value *TerminalNodeSearchResultsResult) *TerminalNodeResultOutput {
 	return &TerminalNodeResultOutput{Type: "SEARCH_RESULTS", SearchResults: value}
+}
+
+func NewTerminalNodeResultOutputFromArray(value *TerminalNodeArrayResult) *TerminalNodeResultOutput {
+	return &TerminalNodeResultOutput{Type: "ARRAY", Array: value}
+}
+
+func NewTerminalNodeResultOutputFromFunctionCall(value *TerminalNodeFunctionCallResult) *TerminalNodeResultOutput {
+	return &TerminalNodeResultOutput{Type: "FUNCTION_CALL", FunctionCall: value}
 }
 
 func NewTerminalNodeResultOutputFromError(value *TerminalNodeErrorResult) *TerminalNodeResultOutput {
@@ -8226,6 +8331,18 @@ func (t *TerminalNodeResultOutput) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		t.SearchResults = value
+	case "ARRAY":
+		value := new(TerminalNodeArrayResult)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Array = value
+	case "FUNCTION_CALL":
+		value := new(TerminalNodeFunctionCallResult)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.FunctionCall = value
 	case "ERROR":
 		value := new(TerminalNodeErrorResult)
 		if err := json.Unmarshal(data, &value); err != nil {
@@ -8285,6 +8402,24 @@ func (t TerminalNodeResultOutput) MarshalJSON() ([]byte, error) {
 			TerminalNodeSearchResultsResult: t.SearchResults,
 		}
 		return json.Marshal(marshaler)
+	case "ARRAY":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TerminalNodeArrayResult
+		}{
+			Type:                    t.Type,
+			TerminalNodeArrayResult: t.Array,
+		}
+		return json.Marshal(marshaler)
+	case "FUNCTION_CALL":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TerminalNodeFunctionCallResult
+		}{
+			Type:                           t.Type,
+			TerminalNodeFunctionCallResult: t.FunctionCall,
+		}
+		return json.Marshal(marshaler)
 	case "ERROR":
 		var marshaler = struct {
 			Type string `json:"type"`
@@ -8303,6 +8438,8 @@ type TerminalNodeResultOutputVisitor interface {
 	VisitJson(*TerminalNodeJsonResult) error
 	VisitChatHistory(*TerminalNodeChatHistoryResult) error
 	VisitSearchResults(*TerminalNodeSearchResultsResult) error
+	VisitArray(*TerminalNodeArrayResult) error
+	VisitFunctionCall(*TerminalNodeFunctionCallResult) error
 	VisitError(*TerminalNodeErrorResult) error
 }
 
@@ -8320,6 +8457,10 @@ func (t *TerminalNodeResultOutput) Accept(visitor TerminalNodeResultOutputVisito
 		return visitor.VisitChatHistory(t.ChatHistory)
 	case "SEARCH_RESULTS":
 		return visitor.VisitSearchResults(t.SearchResults)
+	case "ARRAY":
+		return visitor.VisitArray(t.Array)
+	case "FUNCTION_CALL":
+		return visitor.VisitFunctionCall(t.FunctionCall)
 	case "ERROR":
 		return visitor.VisitError(t.Error)
 	}
@@ -8865,12 +9006,14 @@ func (v *VellumError) String() string {
 // - `INVALID_REQUEST` - INVALID_REQUEST
 // - `PROVIDER_ERROR` - PROVIDER_ERROR
 // - `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
+// - `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
 type VellumErrorCodeEnum string
 
 const (
 	VellumErrorCodeEnumInvalidRequest      VellumErrorCodeEnum = "INVALID_REQUEST"
 	VellumErrorCodeEnumProviderError       VellumErrorCodeEnum = "PROVIDER_ERROR"
 	VellumErrorCodeEnumInternalServerError VellumErrorCodeEnum = "INTERNAL_SERVER_ERROR"
+	VellumErrorCodeEnumUserDefinedError    VellumErrorCodeEnum = "USER_DEFINED_ERROR"
 )
 
 func NewVellumErrorCodeEnumFromString(s string) (VellumErrorCodeEnum, error) {
@@ -8881,6 +9024,8 @@ func NewVellumErrorCodeEnumFromString(s string) (VellumErrorCodeEnum, error) {
 		return VellumErrorCodeEnumProviderError, nil
 	case "INTERNAL_SERVER_ERROR":
 		return VellumErrorCodeEnumInternalServerError, nil
+	case "USER_DEFINED_ERROR":
+		return VellumErrorCodeEnumUserDefinedError, nil
 	}
 	var t VellumErrorCodeEnum
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -9263,6 +9408,7 @@ func (w *WorkflowExecutionActualStringRequest) String() string {
 // - `NODE_EXECUTION` - NODE_EXECUTION
 // - `LLM_PROVIDER` - LLM_PROVIDER
 // - `INVALID_TEMPLATE` - INVALID_TEMPLATE
+// - `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
 type WorkflowExecutionEventErrorCode string
 
 const (
@@ -9272,6 +9418,7 @@ const (
 	WorkflowExecutionEventErrorCodeNodeExecution                  WorkflowExecutionEventErrorCode = "NODE_EXECUTION"
 	WorkflowExecutionEventErrorCodeLlmProvider                    WorkflowExecutionEventErrorCode = "LLM_PROVIDER"
 	WorkflowExecutionEventErrorCodeInvalidTemplate                WorkflowExecutionEventErrorCode = "INVALID_TEMPLATE"
+	WorkflowExecutionEventErrorCodeUserDefinedError               WorkflowExecutionEventErrorCode = "USER_DEFINED_ERROR"
 )
 
 func NewWorkflowExecutionEventErrorCodeFromString(s string) (WorkflowExecutionEventErrorCode, error) {
@@ -9288,6 +9435,8 @@ func NewWorkflowExecutionEventErrorCodeFromString(s string) (WorkflowExecutionEv
 		return WorkflowExecutionEventErrorCodeLlmProvider, nil
 	case "INVALID_TEMPLATE":
 		return WorkflowExecutionEventErrorCodeInvalidTemplate, nil
+	case "USER_DEFINED_ERROR":
+		return WorkflowExecutionEventErrorCodeUserDefinedError, nil
 	}
 	var t WorkflowExecutionEventErrorCode
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -9396,6 +9545,7 @@ type WorkflowNodeResultData struct {
 	Conditional   *ConditionalNodeResult
 	Api           *ApiNodeResult
 	Terminal      *TerminalNodeResult
+	Subworkflow   *SubworkflowNodeResult
 }
 
 func NewWorkflowNodeResultDataFromPrompt(value *PromptNodeResult) *WorkflowNodeResultData {
@@ -9424,6 +9574,10 @@ func NewWorkflowNodeResultDataFromApi(value *ApiNodeResult) *WorkflowNodeResultD
 
 func NewWorkflowNodeResultDataFromTerminal(value *TerminalNodeResult) *WorkflowNodeResultData {
 	return &WorkflowNodeResultData{Type: "TERMINAL", Terminal: value}
+}
+
+func NewWorkflowNodeResultDataFromSubworkflow(value *SubworkflowNodeResult) *WorkflowNodeResultData {
+	return &WorkflowNodeResultData{Type: "SUBWORKFLOW", Subworkflow: value}
 }
 
 func (w *WorkflowNodeResultData) UnmarshalJSON(data []byte) error {
@@ -9477,6 +9631,12 @@ func (w *WorkflowNodeResultData) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		w.Terminal = value
+	case "SUBWORKFLOW":
+		value := new(SubworkflowNodeResult)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		w.Subworkflow = value
 	}
 	return nil
 }
@@ -9548,6 +9708,15 @@ func (w WorkflowNodeResultData) MarshalJSON() ([]byte, error) {
 			TerminalNodeResult: w.Terminal,
 		}
 		return json.Marshal(marshaler)
+	case "SUBWORKFLOW":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*SubworkflowNodeResult
+		}{
+			Type:                  w.Type,
+			SubworkflowNodeResult: w.Subworkflow,
+		}
+		return json.Marshal(marshaler)
 	}
 }
 
@@ -9559,6 +9728,7 @@ type WorkflowNodeResultDataVisitor interface {
 	VisitConditional(*ConditionalNodeResult) error
 	VisitApi(*ApiNodeResult) error
 	VisitTerminal(*TerminalNodeResult) error
+	VisitSubworkflow(*SubworkflowNodeResult) error
 }
 
 func (w *WorkflowNodeResultData) Accept(visitor WorkflowNodeResultDataVisitor) error {
@@ -9579,6 +9749,8 @@ func (w *WorkflowNodeResultData) Accept(visitor WorkflowNodeResultDataVisitor) e
 		return visitor.VisitApi(w.Api)
 	case "TERMINAL":
 		return visitor.VisitTerminal(w.Terminal)
+	case "SUBWORKFLOW":
+		return visitor.VisitSubworkflow(w.Subworkflow)
 	}
 }
 
@@ -9747,6 +9919,7 @@ type WorkflowOutput struct {
 	Json          *WorkflowOutputJson
 	ChatHistory   *WorkflowOutputChatHistory
 	SearchResults *WorkflowOutputSearchResults
+	Array         *WorkflowOutputArray
 	Error         *WorkflowOutputError
 	FunctionCall  *WorkflowOutputFunctionCall
 	Image         *WorkflowOutputImage
@@ -9770,6 +9943,10 @@ func NewWorkflowOutputFromChatHistory(value *WorkflowOutputChatHistory) *Workflo
 
 func NewWorkflowOutputFromSearchResults(value *WorkflowOutputSearchResults) *WorkflowOutput {
 	return &WorkflowOutput{Type: "SEARCH_RESULTS", SearchResults: value}
+}
+
+func NewWorkflowOutputFromArray(value *WorkflowOutputArray) *WorkflowOutput {
+	return &WorkflowOutput{Type: "ARRAY", Array: value}
 }
 
 func NewWorkflowOutputFromError(value *WorkflowOutputError) *WorkflowOutput {
@@ -9823,6 +10000,12 @@ func (w *WorkflowOutput) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		w.SearchResults = value
+	case "ARRAY":
+		value := new(WorkflowOutputArray)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		w.Array = value
 	case "ERROR":
 		value := new(WorkflowOutputError)
 		if err := json.Unmarshal(data, &value); err != nil {
@@ -9894,6 +10077,15 @@ func (w WorkflowOutput) MarshalJSON() ([]byte, error) {
 			WorkflowOutputSearchResults: w.SearchResults,
 		}
 		return json.Marshal(marshaler)
+	case "ARRAY":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*WorkflowOutputArray
+		}{
+			Type:                w.Type,
+			WorkflowOutputArray: w.Array,
+		}
+		return json.Marshal(marshaler)
 	case "ERROR":
 		var marshaler = struct {
 			Type string `json:"type"`
@@ -9930,6 +10122,7 @@ type WorkflowOutputVisitor interface {
 	VisitJson(*WorkflowOutputJson) error
 	VisitChatHistory(*WorkflowOutputChatHistory) error
 	VisitSearchResults(*WorkflowOutputSearchResults) error
+	VisitArray(*WorkflowOutputArray) error
 	VisitError(*WorkflowOutputError) error
 	VisitFunctionCall(*WorkflowOutputFunctionCall) error
 	VisitImage(*WorkflowOutputImage) error
@@ -9949,6 +10142,8 @@ func (w *WorkflowOutput) Accept(visitor WorkflowOutputVisitor) error {
 		return visitor.VisitChatHistory(w.ChatHistory)
 	case "SEARCH_RESULTS":
 		return visitor.VisitSearchResults(w.SearchResults)
+	case "ARRAY":
+		return visitor.VisitArray(w.Array)
 	case "ERROR":
 		return visitor.VisitError(w.Error)
 	case "FUNCTION_CALL":
@@ -9956,6 +10151,39 @@ func (w *WorkflowOutput) Accept(visitor WorkflowOutputVisitor) error {
 	case "IMAGE":
 		return visitor.VisitImage(w.Image)
 	}
+}
+
+// An array output from a Workflow execution.
+type WorkflowOutputArray struct {
+	Id string `json:"id"`
+	// The output's name, as defined in the workflow
+	Name  string                    `json:"name"`
+	Value []*ArrayVariableValueItem `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (w *WorkflowOutputArray) UnmarshalJSON(data []byte) error {
+	type unmarshaler WorkflowOutputArray
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*w = WorkflowOutputArray(value)
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowOutputArray) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
 }
 
 // A chat history output from a Workflow execution.
@@ -10517,6 +10745,8 @@ type WorkflowResultEventOutputData struct {
 	Json          *WorkflowResultEventOutputDataJson
 	ChatHistory   *WorkflowResultEventOutputDataChatHistory
 	SearchResults *WorkflowResultEventOutputDataSearchResults
+	Array         *WorkflowResultEventOutputDataArray
+	FunctionCall  *WorkflowResultEventOutputDataFunctionCall
 	Error         *WorkflowResultEventOutputDataError
 }
 
@@ -10538,6 +10768,14 @@ func NewWorkflowResultEventOutputDataFromChatHistory(value *WorkflowResultEventO
 
 func NewWorkflowResultEventOutputDataFromSearchResults(value *WorkflowResultEventOutputDataSearchResults) *WorkflowResultEventOutputData {
 	return &WorkflowResultEventOutputData{Type: "SEARCH_RESULTS", SearchResults: value}
+}
+
+func NewWorkflowResultEventOutputDataFromArray(value *WorkflowResultEventOutputDataArray) *WorkflowResultEventOutputData {
+	return &WorkflowResultEventOutputData{Type: "ARRAY", Array: value}
+}
+
+func NewWorkflowResultEventOutputDataFromFunctionCall(value *WorkflowResultEventOutputDataFunctionCall) *WorkflowResultEventOutputData {
+	return &WorkflowResultEventOutputData{Type: "FUNCTION_CALL", FunctionCall: value}
 }
 
 func NewWorkflowResultEventOutputDataFromError(value *WorkflowResultEventOutputDataError) *WorkflowResultEventOutputData {
@@ -10583,6 +10821,18 @@ func (w *WorkflowResultEventOutputData) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		w.SearchResults = value
+	case "ARRAY":
+		value := new(WorkflowResultEventOutputDataArray)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		w.Array = value
+	case "FUNCTION_CALL":
+		value := new(WorkflowResultEventOutputDataFunctionCall)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		w.FunctionCall = value
 	case "ERROR":
 		value := new(WorkflowResultEventOutputDataError)
 		if err := json.Unmarshal(data, &value); err != nil {
@@ -10642,6 +10892,24 @@ func (w WorkflowResultEventOutputData) MarshalJSON() ([]byte, error) {
 			WorkflowResultEventOutputDataSearchResults: w.SearchResults,
 		}
 		return json.Marshal(marshaler)
+	case "ARRAY":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*WorkflowResultEventOutputDataArray
+		}{
+			Type:                               w.Type,
+			WorkflowResultEventOutputDataArray: w.Array,
+		}
+		return json.Marshal(marshaler)
+	case "FUNCTION_CALL":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*WorkflowResultEventOutputDataFunctionCall
+		}{
+			Type: w.Type,
+			WorkflowResultEventOutputDataFunctionCall: w.FunctionCall,
+		}
+		return json.Marshal(marshaler)
 	case "ERROR":
 		var marshaler = struct {
 			Type string `json:"type"`
@@ -10660,6 +10928,8 @@ type WorkflowResultEventOutputDataVisitor interface {
 	VisitJson(*WorkflowResultEventOutputDataJson) error
 	VisitChatHistory(*WorkflowResultEventOutputDataChatHistory) error
 	VisitSearchResults(*WorkflowResultEventOutputDataSearchResults) error
+	VisitArray(*WorkflowResultEventOutputDataArray) error
+	VisitFunctionCall(*WorkflowResultEventOutputDataFunctionCall) error
 	VisitError(*WorkflowResultEventOutputDataError) error
 }
 
@@ -10677,9 +10947,49 @@ func (w *WorkflowResultEventOutputData) Accept(visitor WorkflowResultEventOutput
 		return visitor.VisitChatHistory(w.ChatHistory)
 	case "SEARCH_RESULTS":
 		return visitor.VisitSearchResults(w.SearchResults)
+	case "ARRAY":
+		return visitor.VisitArray(w.Array)
+	case "FUNCTION_CALL":
+		return visitor.VisitFunctionCall(w.FunctionCall)
 	case "ERROR":
 		return visitor.VisitError(w.Error)
 	}
+}
+
+// An Array output returned from a Workflow execution.
+type WorkflowResultEventOutputDataArray struct {
+	Id     *string                      `json:"id,omitempty"`
+	Name   string                       `json:"name"`
+	State  WorkflowNodeResultEventState `json:"state,omitempty"`
+	NodeId string                       `json:"node_id"`
+	// The newly output string value. Only relevant for string outputs with a state of STREAMING.
+	Delta *string                   `json:"delta,omitempty"`
+	Value []*ArrayVariableValueItem `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (w *WorkflowResultEventOutputDataArray) UnmarshalJSON(data []byte) error {
+	type unmarshaler WorkflowResultEventOutputDataArray
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*w = WorkflowResultEventOutputDataArray(value)
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowResultEventOutputDataArray) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
 }
 
 // A Chat History output streamed from a Workflow execution.
@@ -10743,6 +11053,42 @@ func (w *WorkflowResultEventOutputDataError) UnmarshalJSON(data []byte) error {
 }
 
 func (w *WorkflowResultEventOutputDataError) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
+}
+
+// A Function Call output returned from a Workflow execution.
+type WorkflowResultEventOutputDataFunctionCall struct {
+	Id     *string                      `json:"id,omitempty"`
+	Name   string                       `json:"name"`
+	State  WorkflowNodeResultEventState `json:"state,omitempty"`
+	NodeId string                       `json:"node_id"`
+	// The newly output string value. Only relevant for string outputs with a state of STREAMING.
+	Delta *string       `json:"delta,omitempty"`
+	Value *FunctionCall `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (w *WorkflowResultEventOutputDataFunctionCall) UnmarshalJSON(data []byte) error {
+	type unmarshaler WorkflowResultEventOutputDataFunctionCall
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*w = WorkflowResultEventOutputDataFunctionCall(value)
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowResultEventOutputDataFunctionCall) String() string {
 	if len(w._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
 			return value
