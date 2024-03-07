@@ -5121,6 +5121,38 @@ func (n *NumberVariableValue) String() string {
 	return fmt.Sprintf("%#v", n)
 }
 
+type PaginatedDocumentIndexReadList struct {
+	Count    *int                 `json:"count,omitempty"`
+	Next     *string              `json:"next,omitempty"`
+	Previous *string              `json:"previous,omitempty"`
+	Results  []*DocumentIndexRead `json:"results,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (p *PaginatedDocumentIndexReadList) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaginatedDocumentIndexReadList
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaginatedDocumentIndexReadList(value)
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaginatedDocumentIndexReadList) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
 type PaginatedSlimDeploymentReadList struct {
 	Count    *int                  `json:"count,omitempty"`
 	Next     *string               `json:"next,omitempty"`
