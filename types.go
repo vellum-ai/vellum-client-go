@@ -48,27 +48,27 @@ type ExecutePromptStreamRequest struct {
 }
 
 type ExecuteWorkflowRequest struct {
+	// The list of inputs defined in the Workflow's Deployment with their corresponding values.
+	Inputs []*WorkflowRequestInputRequest `json:"inputs,omitempty"`
 	// The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
 	WorkflowDeploymentId *string `json:"workflow_deployment_id,omitempty"`
 	// The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
 	WorkflowDeploymentName *string `json:"workflow_deployment_name,omitempty"`
 	// Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
 	ReleaseTag *string `json:"release_tag,omitempty"`
-	// The list of inputs defined in the Workflow's Deployment with their corresponding values.
-	Inputs []*WorkflowRequestInputRequest `json:"inputs,omitempty"`
-	// Optionally include a unique identifier for monitoring purposes. Must be unique for a given workflow deployment.
+	// Optionally include a unique identifier for tracking purposes. Must be unique for a given workflow deployment.
 	ExternalId *string `json:"external_id,omitempty"`
 }
 
 type ExecuteWorkflowStreamRequest struct {
+	// The list of inputs defined in the Workflow's Deployment with their corresponding values.
+	Inputs []*WorkflowRequestInputRequest `json:"inputs,omitempty"`
 	// The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
 	WorkflowDeploymentId *string `json:"workflow_deployment_id,omitempty"`
 	// The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
 	WorkflowDeploymentName *string `json:"workflow_deployment_name,omitempty"`
 	// Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
 	ReleaseTag *string `json:"release_tag,omitempty"`
-	// The list of inputs defined in the Workflow's deployment with their corresponding values.
-	Inputs []*WorkflowRequestInputRequest `json:"inputs,omitempty"`
 	// Optionally include a unique identifier for tracking purposes. Must be unique for a given workflow deployment.
 	ExternalId *string `json:"external_id,omitempty"`
 	// Optionally specify which events you want to receive. Defaults to only WORKFLOW events. Note that the schema of non-WORKFLOW events is unstable and should be used with caution.
@@ -752,6 +752,8 @@ type ChatMessage struct {
 	Text    *string             `json:"text,omitempty"`
 	Role    ChatMessageRole     `json:"role,omitempty"`
 	Content *ChatMessageContent `json:"content,omitempty"`
+	// An optional identifier representing who or what generated this message.
+	Source *string `json:"source,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -1035,6 +1037,8 @@ type ChatMessageRequest struct {
 	Text    *string                    `json:"text,omitempty"`
 	Role    ChatMessageRole            `json:"role,omitempty"`
 	Content *ChatMessageContentRequest `json:"content,omitempty"`
+	// An optional identifier representing who or what generated this message.
+	Source *string `json:"source,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -2318,6 +2322,480 @@ func (e *ExecuteWorkflowWorkflowResultEvent) Accept(visitor ExecuteWorkflowWorkf
 		return visitor.VisitFulfilled(e.Fulfilled)
 	case "REJECTED":
 		return visitor.VisitRejected(e.Rejected)
+	}
+}
+
+type ExecutionArrayVellumValue struct {
+	// The variable's uniquely identifying internal id.
+	Id    string                    `json:"id"`
+	Name  string                    `json:"name"`
+	Value []*ArrayVariableValueItem `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (e *ExecutionArrayVellumValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler ExecutionArrayVellumValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = ExecutionArrayVellumValue(value)
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ExecutionArrayVellumValue) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+type ExecutionChatHistoryVellumValue struct {
+	// The variable's uniquely identifying internal id.
+	Id    string         `json:"id"`
+	Name  string         `json:"name"`
+	Value []*ChatMessage `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (e *ExecutionChatHistoryVellumValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler ExecutionChatHistoryVellumValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = ExecutionChatHistoryVellumValue(value)
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ExecutionChatHistoryVellumValue) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+type ExecutionErrorVellumValue struct {
+	// The variable's uniquely identifying internal id.
+	Id    string       `json:"id"`
+	Name  string       `json:"name"`
+	Value *VellumError `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (e *ExecutionErrorVellumValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler ExecutionErrorVellumValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = ExecutionErrorVellumValue(value)
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ExecutionErrorVellumValue) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+type ExecutionFunctionCallVellumValue struct {
+	// The variable's uniquely identifying internal id.
+	Id    string        `json:"id"`
+	Name  string        `json:"name"`
+	Value *FunctionCall `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (e *ExecutionFunctionCallVellumValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler ExecutionFunctionCallVellumValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = ExecutionFunctionCallVellumValue(value)
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ExecutionFunctionCallVellumValue) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+type ExecutionJsonVellumValue struct {
+	// The variable's uniquely identifying internal id.
+	Id    string                 `json:"id"`
+	Name  string                 `json:"name"`
+	Value map[string]interface{} `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (e *ExecutionJsonVellumValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler ExecutionJsonVellumValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = ExecutionJsonVellumValue(value)
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ExecutionJsonVellumValue) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+type ExecutionNumberVellumValue struct {
+	// The variable's uniquely identifying internal id.
+	Id    string   `json:"id"`
+	Name  string   `json:"name"`
+	Value *float64 `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (e *ExecutionNumberVellumValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler ExecutionNumberVellumValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = ExecutionNumberVellumValue(value)
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ExecutionNumberVellumValue) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+type ExecutionSearchResultsVellumValue struct {
+	// The variable's uniquely identifying internal id.
+	Id    string          `json:"id"`
+	Name  string          `json:"name"`
+	Value []*SearchResult `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (e *ExecutionSearchResultsVellumValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler ExecutionSearchResultsVellumValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = ExecutionSearchResultsVellumValue(value)
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ExecutionSearchResultsVellumValue) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+type ExecutionStringVellumValue struct {
+	// The variable's uniquely identifying internal id.
+	Id    string  `json:"id"`
+	Name  string  `json:"name"`
+	Value *string `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (e *ExecutionStringVellumValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler ExecutionStringVellumValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = ExecutionStringVellumValue(value)
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ExecutionStringVellumValue) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+type ExecutionVellumValue struct {
+	Type          string
+	String        *ExecutionStringVellumValue
+	Number        *ExecutionNumberVellumValue
+	Json          *ExecutionJsonVellumValue
+	ChatHistory   *ExecutionChatHistoryVellumValue
+	SearchResults *ExecutionSearchResultsVellumValue
+	Error         *ExecutionErrorVellumValue
+	Array         *ExecutionArrayVellumValue
+	FunctionCall  *ExecutionFunctionCallVellumValue
+}
+
+func NewExecutionVellumValueFromString(value *ExecutionStringVellumValue) *ExecutionVellumValue {
+	return &ExecutionVellumValue{Type: "STRING", String: value}
+}
+
+func NewExecutionVellumValueFromNumber(value *ExecutionNumberVellumValue) *ExecutionVellumValue {
+	return &ExecutionVellumValue{Type: "NUMBER", Number: value}
+}
+
+func NewExecutionVellumValueFromJson(value *ExecutionJsonVellumValue) *ExecutionVellumValue {
+	return &ExecutionVellumValue{Type: "JSON", Json: value}
+}
+
+func NewExecutionVellumValueFromChatHistory(value *ExecutionChatHistoryVellumValue) *ExecutionVellumValue {
+	return &ExecutionVellumValue{Type: "CHAT_HISTORY", ChatHistory: value}
+}
+
+func NewExecutionVellumValueFromSearchResults(value *ExecutionSearchResultsVellumValue) *ExecutionVellumValue {
+	return &ExecutionVellumValue{Type: "SEARCH_RESULTS", SearchResults: value}
+}
+
+func NewExecutionVellumValueFromError(value *ExecutionErrorVellumValue) *ExecutionVellumValue {
+	return &ExecutionVellumValue{Type: "ERROR", Error: value}
+}
+
+func NewExecutionVellumValueFromArray(value *ExecutionArrayVellumValue) *ExecutionVellumValue {
+	return &ExecutionVellumValue{Type: "ARRAY", Array: value}
+}
+
+func NewExecutionVellumValueFromFunctionCall(value *ExecutionFunctionCallVellumValue) *ExecutionVellumValue {
+	return &ExecutionVellumValue{Type: "FUNCTION_CALL", FunctionCall: value}
+}
+
+func (e *ExecutionVellumValue) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	e.Type = unmarshaler.Type
+	switch unmarshaler.Type {
+	case "STRING":
+		value := new(ExecutionStringVellumValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		e.String = value
+	case "NUMBER":
+		value := new(ExecutionNumberVellumValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		e.Number = value
+	case "JSON":
+		value := new(ExecutionJsonVellumValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		e.Json = value
+	case "CHAT_HISTORY":
+		value := new(ExecutionChatHistoryVellumValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		e.ChatHistory = value
+	case "SEARCH_RESULTS":
+		value := new(ExecutionSearchResultsVellumValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		e.SearchResults = value
+	case "ERROR":
+		value := new(ExecutionErrorVellumValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		e.Error = value
+	case "ARRAY":
+		value := new(ExecutionArrayVellumValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		e.Array = value
+	case "FUNCTION_CALL":
+		value := new(ExecutionFunctionCallVellumValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		e.FunctionCall = value
+	}
+	return nil
+}
+
+func (e ExecutionVellumValue) MarshalJSON() ([]byte, error) {
+	switch e.Type {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", e.Type, e)
+	case "STRING":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ExecutionStringVellumValue
+		}{
+			Type:                       e.Type,
+			ExecutionStringVellumValue: e.String,
+		}
+		return json.Marshal(marshaler)
+	case "NUMBER":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ExecutionNumberVellumValue
+		}{
+			Type:                       e.Type,
+			ExecutionNumberVellumValue: e.Number,
+		}
+		return json.Marshal(marshaler)
+	case "JSON":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ExecutionJsonVellumValue
+		}{
+			Type:                     e.Type,
+			ExecutionJsonVellumValue: e.Json,
+		}
+		return json.Marshal(marshaler)
+	case "CHAT_HISTORY":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ExecutionChatHistoryVellumValue
+		}{
+			Type:                            e.Type,
+			ExecutionChatHistoryVellumValue: e.ChatHistory,
+		}
+		return json.Marshal(marshaler)
+	case "SEARCH_RESULTS":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ExecutionSearchResultsVellumValue
+		}{
+			Type:                              e.Type,
+			ExecutionSearchResultsVellumValue: e.SearchResults,
+		}
+		return json.Marshal(marshaler)
+	case "ERROR":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ExecutionErrorVellumValue
+		}{
+			Type:                      e.Type,
+			ExecutionErrorVellumValue: e.Error,
+		}
+		return json.Marshal(marshaler)
+	case "ARRAY":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ExecutionArrayVellumValue
+		}{
+			Type:                      e.Type,
+			ExecutionArrayVellumValue: e.Array,
+		}
+		return json.Marshal(marshaler)
+	case "FUNCTION_CALL":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ExecutionFunctionCallVellumValue
+		}{
+			Type:                             e.Type,
+			ExecutionFunctionCallVellumValue: e.FunctionCall,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type ExecutionVellumValueVisitor interface {
+	VisitString(*ExecutionStringVellumValue) error
+	VisitNumber(*ExecutionNumberVellumValue) error
+	VisitJson(*ExecutionJsonVellumValue) error
+	VisitChatHistory(*ExecutionChatHistoryVellumValue) error
+	VisitSearchResults(*ExecutionSearchResultsVellumValue) error
+	VisitError(*ExecutionErrorVellumValue) error
+	VisitArray(*ExecutionArrayVellumValue) error
+	VisitFunctionCall(*ExecutionFunctionCallVellumValue) error
+}
+
+func (e *ExecutionVellumValue) Accept(visitor ExecutionVellumValueVisitor) error {
+	switch e.Type {
+	default:
+		return fmt.Errorf("invalid type %s in %T", e.Type, e)
+	case "STRING":
+		return visitor.VisitString(e.String)
+	case "NUMBER":
+		return visitor.VisitNumber(e.Number)
+	case "JSON":
+		return visitor.VisitJson(e.Json)
+	case "CHAT_HISTORY":
+		return visitor.VisitChatHistory(e.ChatHistory)
+	case "SEARCH_RESULTS":
+		return visitor.VisitSearchResults(e.SearchResults)
+	case "ERROR":
+		return visitor.VisitError(e.Error)
+	case "ARRAY":
+		return visitor.VisitArray(e.Array)
+	case "FUNCTION_CALL":
+		return visitor.VisitFunctionCall(e.FunctionCall)
 	}
 }
 
@@ -5762,6 +6240,7 @@ func (p *PromptTemplateBlockDataRequest) String() string {
 type PromptTemplateBlockProperties struct {
 	ChatRole                *ChatMessageRole       `json:"chat_role,omitempty"`
 	ChatMessageUnterminated *bool                  `json:"chat_message_unterminated,omitempty"`
+	ChatSource              *string                `json:"chat_source,omitempty"`
 	Template                *string                `json:"template,omitempty"`
 	TemplateType            *VellumVariableType    `json:"template_type,omitempty"`
 	FunctionName            *string                `json:"function_name,omitempty"`
@@ -5799,6 +6278,7 @@ func (p *PromptTemplateBlockProperties) String() string {
 type PromptTemplateBlockPropertiesRequest struct {
 	ChatRole                *ChatMessageRole              `json:"chat_role,omitempty"`
 	ChatMessageUnterminated *bool                         `json:"chat_message_unterminated,omitempty"`
+	ChatSource              *string                       `json:"chat_source,omitempty"`
 	Template                *string                       `json:"template,omitempty"`
 	TemplateType            *VellumVariableType           `json:"template_type,omitempty"`
 	FunctionName            *string                       `json:"function_name,omitempty"`
@@ -9478,8 +9958,8 @@ func (w WorkflowExecutionEventErrorCode) Ptr() *WorkflowExecutionEventErrorCode 
 	return &w
 }
 
-// - `NODE` - Node
-// - `WORKFLOW` - Workflow
+// - `NODE` - NODE
+// - `WORKFLOW` - WORKFLOW
 type WorkflowExecutionEventType string
 
 const (
@@ -10743,6 +11223,7 @@ type WorkflowResultEvent struct {
 	Output  *WorkflowResultEventOutputData `json:"output,omitempty"`
 	Error   *WorkflowEventError            `json:"error,omitempty"`
 	Outputs []*WorkflowOutput              `json:"outputs,omitempty"`
+	Inputs  []*ExecutionVellumValue        `json:"inputs,omitempty"`
 
 	_rawJSON json.RawMessage
 }
