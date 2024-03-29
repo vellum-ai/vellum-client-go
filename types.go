@@ -467,6 +467,7 @@ type ArrayVariableValueItem struct {
 	SearchResults *SearchResultsVariableValue
 	Error         *ErrorVariableValue
 	FunctionCall  *FunctionCallVariableValue
+	Image         *ImageVariableValue
 }
 
 func NewArrayVariableValueItemFromString(value *StringVariableValue) *ArrayVariableValueItem {
@@ -495,6 +496,10 @@ func NewArrayVariableValueItemFromError(value *ErrorVariableValue) *ArrayVariabl
 
 func NewArrayVariableValueItemFromFunctionCall(value *FunctionCallVariableValue) *ArrayVariableValueItem {
 	return &ArrayVariableValueItem{Type: "FUNCTION_CALL", FunctionCall: value}
+}
+
+func NewArrayVariableValueItemFromImage(value *ImageVariableValue) *ArrayVariableValueItem {
+	return &ArrayVariableValueItem{Type: "IMAGE", Image: value}
 }
 
 func (a *ArrayVariableValueItem) UnmarshalJSON(data []byte) error {
@@ -548,6 +553,12 @@ func (a *ArrayVariableValueItem) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		a.FunctionCall = value
+	case "IMAGE":
+		value := new(ImageVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		a.Image = value
 	}
 	return nil
 }
@@ -619,6 +630,15 @@ func (a ArrayVariableValueItem) MarshalJSON() ([]byte, error) {
 			FunctionCallVariableValue: a.FunctionCall,
 		}
 		return json.Marshal(marshaler)
+	case "IMAGE":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ImageVariableValue
+		}{
+			Type:               a.Type,
+			ImageVariableValue: a.Image,
+		}
+		return json.Marshal(marshaler)
 	}
 }
 
@@ -630,6 +650,7 @@ type ArrayVariableValueItemVisitor interface {
 	VisitSearchResults(*SearchResultsVariableValue) error
 	VisitError(*ErrorVariableValue) error
 	VisitFunctionCall(*FunctionCallVariableValue) error
+	VisitImage(*ImageVariableValue) error
 }
 
 func (a *ArrayVariableValueItem) Accept(visitor ArrayVariableValueItemVisitor) error {
@@ -650,6 +671,8 @@ func (a *ArrayVariableValueItem) Accept(visitor ArrayVariableValueItemVisitor) e
 		return visitor.VisitError(a.Error)
 	case "FUNCTION_CALL":
 		return visitor.VisitFunctionCall(a.FunctionCall)
+	case "IMAGE":
+		return visitor.VisitImage(a.Image)
 	}
 }
 
@@ -2993,12 +3016,14 @@ func (f *FulfilledPromptExecutionMeta) String() string {
 
 // An event that indicates that the node has fulfilled its execution.
 type FulfilledWorkflowNodeResultEvent struct {
-	Id           string                     `json:"id"`
-	NodeId       string                     `json:"node_id"`
-	NodeResultId string                     `json:"node_result_id"`
-	Ts           *time.Time                 `json:"ts,omitempty"`
-	Data         *WorkflowNodeResultData    `json:"data,omitempty"`
-	OutputValues []*NodeOutputCompiledValue `json:"output_values,omitempty"`
+	Id                string                     `json:"id"`
+	NodeId            string                     `json:"node_id"`
+	NodeResultId      string                     `json:"node_result_id"`
+	Ts                *time.Time                 `json:"ts,omitempty"`
+	Data              *WorkflowNodeResultData    `json:"data,omitempty"`
+	SourceExecutionId *string                    `json:"source_execution_id,omitempty"`
+	OutputValues      []*NodeOutputCompiledValue `json:"output_values,omitempty"`
+	Mocked            *bool                      `json:"mocked,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -3327,7 +3352,7 @@ func (g *GenerateOptionsRequest) String() string {
 type GenerateRequest struct {
 	// Key/value pairs for each template variable defined in the deployment's prompt.
 	InputValues map[string]interface{} `json:"input_values,omitempty"`
-	// Optionally provide a list of chat messages that'll be used in place of the special {$chat_history} variable, if included in the prompt.
+	// Optionally provide a list of chat messages that'll be used in place of the special chat_history variable, if included in the prompt.
 	ChatHistory []*ChatMessageRequest `json:"chat_history,omitempty"`
 	// Optionally include a unique identifier for each generation, as represented outside of Vellum. Note that this should generally be a list of length one.
 	ExternalIds []string `json:"external_ids,omitempty"`
@@ -3632,6 +3657,36 @@ func (i *ImageChatMessageContentRequest) String() string {
 
 type ImageEnum = string
 
+// A base Vellum primitive value representing an image.
+type ImageVariableValue struct {
+	Value *VellumImage `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (i *ImageVariableValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler ImageVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = ImageVariableValue(value)
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *ImageVariableValue) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
 // - `AWAITING_PROCESSING` - Awaiting Processing
 // - `QUEUED` - Queued
 // - `INDEXING` - Indexing
@@ -3736,12 +3791,13 @@ func (i *InitiatedPromptExecutionMeta) String() string {
 
 // An event that indicates that the node has initiated its execution.
 type InitiatedWorkflowNodeResultEvent struct {
-	Id           string                            `json:"id"`
-	NodeId       string                            `json:"node_id"`
-	NodeResultId string                            `json:"node_result_id"`
-	Ts           *time.Time                        `json:"ts,omitempty"`
-	Data         *WorkflowNodeResultData           `json:"data,omitempty"`
-	InputValues  []*NodeInputVariableCompiledValue `json:"input_values,omitempty"`
+	Id                string                            `json:"id"`
+	NodeId            string                            `json:"node_id"`
+	NodeResultId      string                            `json:"node_result_id"`
+	Ts                *time.Time                        `json:"ts,omitempty"`
+	Data              *WorkflowNodeResultData           `json:"data,omitempty"`
+	SourceExecutionId *string                           `json:"source_execution_id,omitempty"`
+	InputValues       []*NodeInputVariableCompiledValue `json:"input_values,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -6940,12 +6996,13 @@ func (r *RejectedPromptExecutionMeta) String() string {
 
 // An event that indicates that the node has rejected its execution.
 type RejectedWorkflowNodeResultEvent struct {
-	Id           string                  `json:"id"`
-	NodeId       string                  `json:"node_id"`
-	NodeResultId string                  `json:"node_result_id"`
-	Ts           *time.Time              `json:"ts,omitempty"`
-	Data         *WorkflowNodeResultData `json:"data,omitempty"`
-	Error        *WorkflowEventError     `json:"error,omitempty"`
+	Id                string                  `json:"id"`
+	NodeId            string                  `json:"node_id"`
+	NodeResultId      string                  `json:"node_result_id"`
+	Ts                *time.Time              `json:"ts,omitempty"`
+	Data              *WorkflowNodeResultData `json:"data,omitempty"`
+	SourceExecutionId *string                 `json:"source_execution_id,omitempty"`
+	Error             *WorkflowEventError     `json:"error,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -7741,13 +7798,14 @@ func (s *StreamingPromptExecutionMeta) String() string {
 
 // An event that indicates that the node has execution is in progress.
 type StreamingWorkflowNodeResultEvent struct {
-	Id           string                   `json:"id"`
-	NodeId       string                   `json:"node_id"`
-	NodeResultId string                   `json:"node_result_id"`
-	Ts           *time.Time               `json:"ts,omitempty"`
-	Data         *WorkflowNodeResultData  `json:"data,omitempty"`
-	Output       *NodeOutputCompiledValue `json:"output,omitempty"`
-	OutputIndex  *int                     `json:"output_index,omitempty"`
+	Id                string                   `json:"id"`
+	NodeId            string                   `json:"node_id"`
+	NodeResultId      string                   `json:"node_result_id"`
+	Ts                *time.Time               `json:"ts,omitempty"`
+	Data              *WorkflowNodeResultData  `json:"data,omitempty"`
+	SourceExecutionId *string                  `json:"source_execution_id,omitempty"`
+	Output            *NodeOutputCompiledValue `json:"output,omitempty"`
+	OutputIndex       *int                     `json:"output_index,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -9915,6 +9973,7 @@ func (w *WorkflowExecutionActualStringRequest) String() string {
 }
 
 // - `WORKFLOW_INITIALIZATION` - WORKFLOW_INITIALIZATION
+// - `WORKFLOW_CANCELLED` - WORKFLOW_CANCELLED
 // - `NODE_EXECUTION_COUNT_LIMIT_REACHED` - NODE_EXECUTION_COUNT_LIMIT_REACHED
 // - `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
 // - `NODE_EXECUTION` - NODE_EXECUTION
@@ -9925,6 +9984,7 @@ type WorkflowExecutionEventErrorCode string
 
 const (
 	WorkflowExecutionEventErrorCodeWorkflowInitialization         WorkflowExecutionEventErrorCode = "WORKFLOW_INITIALIZATION"
+	WorkflowExecutionEventErrorCodeWorkflowCancelled              WorkflowExecutionEventErrorCode = "WORKFLOW_CANCELLED"
 	WorkflowExecutionEventErrorCodeNodeExecutionCountLimitReached WorkflowExecutionEventErrorCode = "NODE_EXECUTION_COUNT_LIMIT_REACHED"
 	WorkflowExecutionEventErrorCodeInternalServerError            WorkflowExecutionEventErrorCode = "INTERNAL_SERVER_ERROR"
 	WorkflowExecutionEventErrorCodeNodeExecution                  WorkflowExecutionEventErrorCode = "NODE_EXECUTION"
@@ -9937,6 +9997,8 @@ func NewWorkflowExecutionEventErrorCodeFromString(s string) (WorkflowExecutionEv
 	switch s {
 	case "WORKFLOW_INITIALIZATION":
 		return WorkflowExecutionEventErrorCodeWorkflowInitialization, nil
+	case "WORKFLOW_CANCELLED":
+		return WorkflowExecutionEventErrorCodeWorkflowCancelled, nil
 	case "NODE_EXECUTION_COUNT_LIMIT_REACHED":
 		return WorkflowExecutionEventErrorCodeNodeExecutionCountLimitReached, nil
 	case "INTERNAL_SERVER_ERROR":

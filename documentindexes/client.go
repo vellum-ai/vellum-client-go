@@ -117,3 +117,78 @@ func (c *Client) Retrieve(ctx context.Context, id string) (*vellumclientgo.Docum
 	}
 	return response, nil
 }
+
+// Used to fully update a Document Index given its ID.
+//
+// A UUID string identifying this document index.
+func (c *Client) Update(ctx context.Context, id string, request *vellumclientgo.DocumentIndexUpdateRequest) (*vellumclientgo.DocumentIndexRead, error) {
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/document-indexes/%v", id)
+
+	var response *vellumclientgo.DocumentIndexRead
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:      endpointURL,
+			Method:   http.MethodPut,
+			Headers:  c.header,
+			Request:  request,
+			Response: &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Used to delete a Document Index given its ID.
+//
+// A UUID string identifying this document index.
+func (c *Client) Destroy(ctx context.Context, id string) error {
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/document-indexes/%v", id)
+
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:     endpointURL,
+			Method:  http.MethodDelete,
+			Headers: c.header,
+		},
+	); err != nil {
+		return err
+	}
+	return nil
+}
+
+// Used to partial update a Document Index given its ID.
+//
+// A UUID string identifying this document index.
+func (c *Client) PartialUpdate(ctx context.Context, id string, request *vellumclientgo.PatchedDocumentIndexUpdateRequest) (*vellumclientgo.DocumentIndexRead, error) {
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/document-indexes/%v", id)
+
+	var response *vellumclientgo.DocumentIndexRead
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:      endpointURL,
+			Method:   http.MethodPatch,
+			Headers:  c.header,
+			Request:  request,
+			Response: &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
