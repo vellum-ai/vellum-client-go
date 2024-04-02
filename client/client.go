@@ -16,6 +16,7 @@ import (
 	modelversions "github.com/vellum-ai/vellum-client-go/modelversions"
 	registeredprompts "github.com/vellum-ai/vellum-client-go/registeredprompts"
 	sandboxes "github.com/vellum-ai/vellum-client-go/sandboxes"
+	testsuiteruns "github.com/vellum-ai/vellum-client-go/testsuiteruns"
 	testsuites "github.com/vellum-ai/vellum-client-go/testsuites"
 	workflowdeployments "github.com/vellum-ai/vellum-client-go/workflowdeployments"
 	io "io"
@@ -34,6 +35,7 @@ type Client struct {
 	ModelVersions       *modelversions.Client
 	RegisteredPrompts   *registeredprompts.Client
 	Sandboxes           *sandboxes.Client
+	TestSuiteRuns       *testsuiteruns.Client
 	TestSuites          *testsuites.Client
 	WorkflowDeployments *workflowdeployments.Client
 }
@@ -54,6 +56,7 @@ func NewClient(opts ...core.ClientOption) *Client {
 		ModelVersions:       modelversions.NewClient(opts...),
 		RegisteredPrompts:   registeredprompts.NewClient(opts...),
 		Sandboxes:           sandboxes.NewClient(opts...),
+		TestSuiteRuns:       testsuiteruns.NewClient(opts...),
 		TestSuites:          testsuites.NewClient(opts...),
 		WorkflowDeployments: workflowdeployments.NewClient(opts...),
 	}
