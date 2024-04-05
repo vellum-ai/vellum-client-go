@@ -79,7 +79,7 @@ func (c *Client) Retrieve(ctx context.Context, id string) (*vellumclientgo.TestS
 }
 
 // A UUID string identifying this test suite run.
-func (c *Client) ListTestSuiteRunExecutions(ctx context.Context, id string, request *vellumclientgo.ListTestSuiteRunExecutionsRequest) (*vellumclientgo.PaginatedTestSuiteRunExecutionList, error) {
+func (c *Client) ListExecutions(ctx context.Context, id string, request *vellumclientgo.TestSuiteRunsListExecutionsRequest) (*vellumclientgo.PaginatedTestSuiteRunExecutionList, error) {
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL

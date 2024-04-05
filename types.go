@@ -1121,6 +1121,36 @@ func (c ChatMessageRole) Ptr() *ChatMessageRole {
 	return &c
 }
 
+type CodeExecutionNodeArrayResult struct {
+	Id    string                    `json:"id"`
+	Value []*ArrayVariableValueItem `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (c *CodeExecutionNodeArrayResult) UnmarshalJSON(data []byte) error {
+	type unmarshaler CodeExecutionNodeArrayResult
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CodeExecutionNodeArrayResult(value)
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CodeExecutionNodeArrayResult) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
 type CodeExecutionNodeChatHistoryResult struct {
 	Id    string         `json:"id"`
 	Value []*ChatMessage `json:"value,omitempty"`
@@ -1170,6 +1200,36 @@ func (c *CodeExecutionNodeErrorResult) UnmarshalJSON(data []byte) error {
 }
 
 func (c *CodeExecutionNodeErrorResult) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type CodeExecutionNodeFunctionCallResult struct {
+	Id    string        `json:"id"`
+	Value *FunctionCall `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (c *CodeExecutionNodeFunctionCallResult) UnmarshalJSON(data []byte) error {
+	type unmarshaler CodeExecutionNodeFunctionCallResult
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CodeExecutionNodeFunctionCallResult(value)
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CodeExecutionNodeFunctionCallResult) String() string {
 	if len(c._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
 			return value
@@ -1309,6 +1369,8 @@ type CodeExecutionNodeResultOutput struct {
 	ChatHistory   *CodeExecutionNodeChatHistoryResult
 	SearchResults *CodeExecutionNodeSearchResultsResult
 	Error         *CodeExecutionNodeErrorResult
+	Array         *CodeExecutionNodeArrayResult
+	FunctionCall  *CodeExecutionNodeFunctionCallResult
 }
 
 func NewCodeExecutionNodeResultOutputFromString(value *CodeExecutionNodeStringResult) *CodeExecutionNodeResultOutput {
@@ -1333,6 +1395,14 @@ func NewCodeExecutionNodeResultOutputFromSearchResults(value *CodeExecutionNodeS
 
 func NewCodeExecutionNodeResultOutputFromError(value *CodeExecutionNodeErrorResult) *CodeExecutionNodeResultOutput {
 	return &CodeExecutionNodeResultOutput{Type: "ERROR", Error: value}
+}
+
+func NewCodeExecutionNodeResultOutputFromArray(value *CodeExecutionNodeArrayResult) *CodeExecutionNodeResultOutput {
+	return &CodeExecutionNodeResultOutput{Type: "ARRAY", Array: value}
+}
+
+func NewCodeExecutionNodeResultOutputFromFunctionCall(value *CodeExecutionNodeFunctionCallResult) *CodeExecutionNodeResultOutput {
+	return &CodeExecutionNodeResultOutput{Type: "FUNCTION_CALL", FunctionCall: value}
 }
 
 func (c *CodeExecutionNodeResultOutput) UnmarshalJSON(data []byte) error {
@@ -1380,6 +1450,18 @@ func (c *CodeExecutionNodeResultOutput) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		c.Error = value
+	case "ARRAY":
+		value := new(CodeExecutionNodeArrayResult)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		c.Array = value
+	case "FUNCTION_CALL":
+		value := new(CodeExecutionNodeFunctionCallResult)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		c.FunctionCall = value
 	}
 	return nil
 }
@@ -1442,6 +1524,24 @@ func (c CodeExecutionNodeResultOutput) MarshalJSON() ([]byte, error) {
 			CodeExecutionNodeErrorResult: c.Error,
 		}
 		return json.Marshal(marshaler)
+	case "ARRAY":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*CodeExecutionNodeArrayResult
+		}{
+			Type:                         c.Type,
+			CodeExecutionNodeArrayResult: c.Array,
+		}
+		return json.Marshal(marshaler)
+	case "FUNCTION_CALL":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*CodeExecutionNodeFunctionCallResult
+		}{
+			Type:                                c.Type,
+			CodeExecutionNodeFunctionCallResult: c.FunctionCall,
+		}
+		return json.Marshal(marshaler)
 	}
 }
 
@@ -1452,6 +1552,8 @@ type CodeExecutionNodeResultOutputVisitor interface {
 	VisitChatHistory(*CodeExecutionNodeChatHistoryResult) error
 	VisitSearchResults(*CodeExecutionNodeSearchResultsResult) error
 	VisitError(*CodeExecutionNodeErrorResult) error
+	VisitArray(*CodeExecutionNodeArrayResult) error
+	VisitFunctionCall(*CodeExecutionNodeFunctionCallResult) error
 }
 
 func (c *CodeExecutionNodeResultOutput) Accept(visitor CodeExecutionNodeResultOutputVisitor) error {
@@ -1470,6 +1572,10 @@ func (c *CodeExecutionNodeResultOutput) Accept(visitor CodeExecutionNodeResultOu
 		return visitor.VisitSearchResults(c.SearchResults)
 	case "ERROR":
 		return visitor.VisitError(c.Error)
+	case "ARRAY":
+		return visitor.VisitArray(c.Array)
+	case "FUNCTION_CALL":
+		return visitor.VisitFunctionCall(c.FunctionCall)
 	}
 }
 
@@ -4785,6 +4891,37 @@ func (n *NodeInputCompiledErrorValue) String() string {
 	return fmt.Sprintf("%#v", n)
 }
 
+type NodeInputCompiledFunctionCall struct {
+	NodeInputId string        `json:"node_input_id"`
+	Key         string        `json:"key"`
+	Value       *FunctionCall `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (n *NodeInputCompiledFunctionCall) UnmarshalJSON(data []byte) error {
+	type unmarshaler NodeInputCompiledFunctionCall
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*n = NodeInputCompiledFunctionCall(value)
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NodeInputCompiledFunctionCall) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
 type NodeInputCompiledJsonValue struct {
 	NodeInputId string                 `json:"node_input_id"`
 	Key         string                 `json:"key"`
@@ -4918,6 +5055,7 @@ type NodeInputVariableCompiledValue struct {
 	SearchResults *NodeInputCompiledSearchResultsValue
 	Error         *NodeInputCompiledErrorValue
 	Array         *NodeInputCompiledArrayValue
+	FunctionCall  *NodeInputCompiledFunctionCall
 }
 
 func NewNodeInputVariableCompiledValueFromString(value *NodeInputCompiledStringValue) *NodeInputVariableCompiledValue {
@@ -4946,6 +5084,10 @@ func NewNodeInputVariableCompiledValueFromError(value *NodeInputCompiledErrorVal
 
 func NewNodeInputVariableCompiledValueFromArray(value *NodeInputCompiledArrayValue) *NodeInputVariableCompiledValue {
 	return &NodeInputVariableCompiledValue{Type: "ARRAY", Array: value}
+}
+
+func NewNodeInputVariableCompiledValueFromFunctionCall(value *NodeInputCompiledFunctionCall) *NodeInputVariableCompiledValue {
+	return &NodeInputVariableCompiledValue{Type: "FUNCTION_CALL", FunctionCall: value}
 }
 
 func (n *NodeInputVariableCompiledValue) UnmarshalJSON(data []byte) error {
@@ -4999,6 +5141,12 @@ func (n *NodeInputVariableCompiledValue) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		n.Array = value
+	case "FUNCTION_CALL":
+		value := new(NodeInputCompiledFunctionCall)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.FunctionCall = value
 	}
 	return nil
 }
@@ -5070,6 +5218,15 @@ func (n NodeInputVariableCompiledValue) MarshalJSON() ([]byte, error) {
 			NodeInputCompiledArrayValue: n.Array,
 		}
 		return json.Marshal(marshaler)
+	case "FUNCTION_CALL":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*NodeInputCompiledFunctionCall
+		}{
+			Type:                          n.Type,
+			NodeInputCompiledFunctionCall: n.FunctionCall,
+		}
+		return json.Marshal(marshaler)
 	}
 }
 
@@ -5081,6 +5238,7 @@ type NodeInputVariableCompiledValueVisitor interface {
 	VisitSearchResults(*NodeInputCompiledSearchResultsValue) error
 	VisitError(*NodeInputCompiledErrorValue) error
 	VisitArray(*NodeInputCompiledArrayValue) error
+	VisitFunctionCall(*NodeInputCompiledFunctionCall) error
 }
 
 func (n *NodeInputVariableCompiledValue) Accept(visitor NodeInputVariableCompiledValueVisitor) error {
@@ -5101,6 +5259,8 @@ func (n *NodeInputVariableCompiledValue) Accept(visitor NodeInputVariableCompile
 		return visitor.VisitError(n.Error)
 	case "ARRAY":
 		return visitor.VisitArray(n.Array)
+	case "FUNCTION_CALL":
+		return visitor.VisitFunctionCall(n.FunctionCall)
 	}
 }
 
@@ -5784,7 +5944,7 @@ func (p *PaginatedSlimWorkflowDeploymentList) String() string {
 }
 
 type PaginatedTestSuiteRunExecutionList struct {
-	Count    *int                     `json:"count,omitempty"`
+	Count    int                      `json:"count"`
 	Next     *string                  `json:"next,omitempty"`
 	Previous *string                  `json:"previous,omitempty"`
 	Results  []*TestSuiteRunExecution `json:"results,omitempty"`
@@ -8188,6 +8348,36 @@ func (s *SubworkflowNodeResult) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
+type TemplatingNodeArrayResult struct {
+	Id    string                    `json:"id"`
+	Value []*ArrayVariableValueItem `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TemplatingNodeArrayResult) UnmarshalJSON(data []byte) error {
+	type unmarshaler TemplatingNodeArrayResult
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TemplatingNodeArrayResult(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TemplatingNodeArrayResult) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
 type TemplatingNodeChatHistoryResult struct {
 	Id    string         `json:"id"`
 	Value []*ChatMessage `json:"value,omitempty"`
@@ -8237,6 +8427,36 @@ func (t *TemplatingNodeErrorResult) UnmarshalJSON(data []byte) error {
 }
 
 func (t *TemplatingNodeErrorResult) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TemplatingNodeFunctionCallResult struct {
+	Id    string        `json:"id"`
+	Value *FunctionCall `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TemplatingNodeFunctionCallResult) UnmarshalJSON(data []byte) error {
+	type unmarshaler TemplatingNodeFunctionCallResult
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TemplatingNodeFunctionCallResult(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TemplatingNodeFunctionCallResult) String() string {
 	if len(t._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
 			return value
@@ -8375,6 +8595,8 @@ type TemplatingNodeResultOutput struct {
 	ChatHistory   *TemplatingNodeChatHistoryResult
 	SearchResults *TemplatingNodeSearchResultsResult
 	Error         *TemplatingNodeErrorResult
+	Array         *TemplatingNodeArrayResult
+	FunctionCall  *TemplatingNodeFunctionCallResult
 }
 
 func NewTemplatingNodeResultOutputFromString(value *TemplatingNodeStringResult) *TemplatingNodeResultOutput {
@@ -8399,6 +8621,14 @@ func NewTemplatingNodeResultOutputFromSearchResults(value *TemplatingNodeSearchR
 
 func NewTemplatingNodeResultOutputFromError(value *TemplatingNodeErrorResult) *TemplatingNodeResultOutput {
 	return &TemplatingNodeResultOutput{Type: "ERROR", Error: value}
+}
+
+func NewTemplatingNodeResultOutputFromArray(value *TemplatingNodeArrayResult) *TemplatingNodeResultOutput {
+	return &TemplatingNodeResultOutput{Type: "ARRAY", Array: value}
+}
+
+func NewTemplatingNodeResultOutputFromFunctionCall(value *TemplatingNodeFunctionCallResult) *TemplatingNodeResultOutput {
+	return &TemplatingNodeResultOutput{Type: "FUNCTION_CALL", FunctionCall: value}
 }
 
 func (t *TemplatingNodeResultOutput) UnmarshalJSON(data []byte) error {
@@ -8446,6 +8676,18 @@ func (t *TemplatingNodeResultOutput) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		t.Error = value
+	case "ARRAY":
+		value := new(TemplatingNodeArrayResult)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Array = value
+	case "FUNCTION_CALL":
+		value := new(TemplatingNodeFunctionCallResult)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.FunctionCall = value
 	}
 	return nil
 }
@@ -8508,6 +8750,24 @@ func (t TemplatingNodeResultOutput) MarshalJSON() ([]byte, error) {
 			TemplatingNodeErrorResult: t.Error,
 		}
 		return json.Marshal(marshaler)
+	case "ARRAY":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TemplatingNodeArrayResult
+		}{
+			Type:                      t.Type,
+			TemplatingNodeArrayResult: t.Array,
+		}
+		return json.Marshal(marshaler)
+	case "FUNCTION_CALL":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TemplatingNodeFunctionCallResult
+		}{
+			Type:                             t.Type,
+			TemplatingNodeFunctionCallResult: t.FunctionCall,
+		}
+		return json.Marshal(marshaler)
 	}
 }
 
@@ -8518,6 +8778,8 @@ type TemplatingNodeResultOutputVisitor interface {
 	VisitChatHistory(*TemplatingNodeChatHistoryResult) error
 	VisitSearchResults(*TemplatingNodeSearchResultsResult) error
 	VisitError(*TemplatingNodeErrorResult) error
+	VisitArray(*TemplatingNodeArrayResult) error
+	VisitFunctionCall(*TemplatingNodeFunctionCallResult) error
 }
 
 func (t *TemplatingNodeResultOutput) Accept(visitor TemplatingNodeResultOutputVisitor) error {
@@ -8536,6 +8798,10 @@ func (t *TemplatingNodeResultOutput) Accept(visitor TemplatingNodeResultOutputVi
 		return visitor.VisitSearchResults(t.SearchResults)
 	case "ERROR":
 		return visitor.VisitError(t.Error)
+	case "ARRAY":
+		return visitor.VisitArray(t.Array)
+	case "FUNCTION_CALL":
+		return visitor.VisitFunctionCall(t.FunctionCall)
 	}
 }
 
@@ -10345,7 +10611,7 @@ type TestSuiteRunRead struct {
 	// - `COMPLETE` - Complete
 	// - `FAILED` - Failed
 	// - `CANCELLED` - Cancelled
-	State *TestSuiteRunState `json:"state,omitempty"`
+	State TestSuiteRunState `json:"state,omitempty"`
 	// Configuration that defines how the Test Suite should be run
 	ExecConfig *TestSuiteRunExecConfig `json:"exec_config,omitempty"`
 
