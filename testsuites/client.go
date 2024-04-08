@@ -8,6 +8,7 @@ import (
 	vellumclientgo "github.com/vellum-ai/vellum-client-go"
 	core "github.com/vellum-ai/vellum-client-go/core"
 	http "net/http"
+	url "net/url"
 )
 
 type Client struct {
@@ -26,6 +27,42 @@ func NewClient(opts ...core.ClientOption) *Client {
 		caller:  core.NewCaller(options.HTTPClient),
 		header:  options.ToHeader(),
 	}
+}
+
+// List the Test Cases associated with a Test Suite
+//
+// A UUID string identifying this test suite.
+func (c *Client) ListTestSuiteTestCases(ctx context.Context, id string, request *vellumclientgo.ListTestSuiteTestCasesRequest) (*vellumclientgo.PaginatedTestSuiteTestCaseList, error) {
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/test-suites/%v/test-cases", id)
+
+	queryParams := make(url.Values)
+	if request.Limit != nil {
+		queryParams.Add("limit", fmt.Sprintf("%v", *request.Limit))
+	}
+	if request.Offset != nil {
+		queryParams.Add("offset", fmt.Sprintf("%v", *request.Offset))
+	}
+	if len(queryParams) > 0 {
+		endpointURL += "?" + queryParams.Encode()
+	}
+
+	var response *vellumclientgo.PaginatedTestSuiteTestCaseList
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:      endpointURL,
+			Method:   http.MethodGet,
+			Headers:  c.header,
+			Response: &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
 }
 
 // Upserts a new test case for a test suite, keying off of the optionally provided test case id.

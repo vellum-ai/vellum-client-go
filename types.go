@@ -5975,6 +5975,38 @@ func (p *PaginatedTestSuiteRunExecutionList) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
+type PaginatedTestSuiteTestCaseList struct {
+	Count    int                  `json:"count"`
+	Next     *string              `json:"next,omitempty"`
+	Previous *string              `json:"previous,omitempty"`
+	Results  []*TestSuiteTestCase `json:"results,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (p *PaginatedTestSuiteTestCaseList) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaginatedTestSuiteTestCaseList
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaginatedTestSuiteTestCaseList(value)
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaginatedTestSuiteTestCaseList) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
 // - `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit
 // - `INVALID_FILE` - Invalid File
 type ProcessingFailureReasonEnum string
@@ -10522,8 +10554,13 @@ type TestSuiteRunMetricNumberOutputTypeEnum = string
 
 type TestSuiteRunMetricOutput struct {
 	Type   string
+	String *TestSuiteRunMetricStringOutput
 	Number *TestSuiteRunMetricNumberOutput
 	Error  *TestSuiteRunMetricErrorOutput
+}
+
+func NewTestSuiteRunMetricOutputFromString(value *TestSuiteRunMetricStringOutput) *TestSuiteRunMetricOutput {
+	return &TestSuiteRunMetricOutput{Type: "STRING", String: value}
 }
 
 func NewTestSuiteRunMetricOutputFromNumber(value *TestSuiteRunMetricNumberOutput) *TestSuiteRunMetricOutput {
@@ -10543,6 +10580,12 @@ func (t *TestSuiteRunMetricOutput) UnmarshalJSON(data []byte) error {
 	}
 	t.Type = unmarshaler.Type
 	switch unmarshaler.Type {
+	case "STRING":
+		value := new(TestSuiteRunMetricStringOutput)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.String = value
 	case "NUMBER":
 		value := new(TestSuiteRunMetricNumberOutput)
 		if err := json.Unmarshal(data, &value); err != nil {
@@ -10563,6 +10606,15 @@ func (t TestSuiteRunMetricOutput) MarshalJSON() ([]byte, error) {
 	switch t.Type {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", t.Type, t)
+	case "STRING":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TestSuiteRunMetricStringOutput
+		}{
+			Type:                           t.Type,
+			TestSuiteRunMetricStringOutput: t.String,
+		}
+		return json.Marshal(marshaler)
 	case "NUMBER":
 		var marshaler = struct {
 			Type string `json:"type"`
@@ -10585,6 +10637,7 @@ func (t TestSuiteRunMetricOutput) MarshalJSON() ([]byte, error) {
 }
 
 type TestSuiteRunMetricOutputVisitor interface {
+	VisitString(*TestSuiteRunMetricStringOutput) error
 	VisitNumber(*TestSuiteRunMetricNumberOutput) error
 	VisitError(*TestSuiteRunMetricErrorOutput) error
 }
@@ -10593,12 +10646,47 @@ func (t *TestSuiteRunMetricOutput) Accept(visitor TestSuiteRunMetricOutputVisito
 	switch t.Type {
 	default:
 		return fmt.Errorf("invalid type %s in %T", t.Type, t)
+	case "STRING":
+		return visitor.VisitString(t.String)
 	case "NUMBER":
 		return visitor.VisitNumber(t.Number)
 	case "ERROR":
 		return visitor.VisitError(t.Error)
 	}
 }
+
+// Output for a test suite run metric that is of type STRING
+type TestSuiteRunMetricStringOutput struct {
+	Value string `json:"value"`
+	Name  string `json:"name"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestSuiteRunMetricStringOutput) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteRunMetricStringOutput
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteRunMetricStringOutput(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunMetricStringOutput) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestSuiteRunMetricStringOutputTypeEnum = string
 
 type TestSuiteRunRead struct {
 	Id        string                 `json:"id"`

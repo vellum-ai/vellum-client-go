@@ -2,6 +2,13 @@
 
 package api
 
+type ListTestSuiteTestCasesRequest struct {
+	// Number of results to return per page.
+	Limit *int `json:"-"`
+	// The initial index from which to return the results.
+	Offset *int `json:"-"`
+}
+
 type UpsertTestSuiteTestCaseRequest struct {
 	UpsertTestSuiteTestCaseRequestId *string                              `json:"id,omitempty"`
 	Label                            *string                              `json:"label,omitempty"`
