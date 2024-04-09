@@ -3093,6 +3093,7 @@ func (f *FulfilledFunctionCall) String() string {
 type FulfilledPromptExecutionMeta struct {
 	Latency      *int              `json:"latency,omitempty"`
 	FinishReason *FinishReasonEnum `json:"finish_reason,omitempty"`
+	Usage        *MlModelUsage     `json:"usage,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -4205,6 +4206,39 @@ func (m *MetadataFilterRuleRequest) UnmarshalJSON(data []byte) error {
 }
 
 func (m *MetadataFilterRuleRequest) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+type MlModelUsage struct {
+	OutputTokenCount *int `json:"output_token_count,omitempty"`
+	InputTokenCount  *int `json:"input_token_count,omitempty"`
+	InputCharCount   *int `json:"input_char_count,omitempty"`
+	OutputCharCount  *int `json:"output_char_count,omitempty"`
+	ComputeNanos     *int `json:"compute_nanos,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (m *MlModelUsage) UnmarshalJSON(data []byte) error {
+	type unmarshaler MlModelUsage
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MlModelUsage(value)
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MlModelUsage) String() string {
 	if len(m._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
 			return value
@@ -6074,6 +6108,8 @@ type PromptDeploymentExpandMetaRequestRequest struct {
 	PromptVersionId *bool `json:"prompt_version_id,omitempty"`
 	// If enabled, the response will include the reason provided by the model for why the execution finished.
 	FinishReason *bool `json:"finish_reason,omitempty"`
+	// If enabled, the response will include model host usage tracking. This may increase latency for some model hosts.
+	Usage *bool `json:"usage,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -6206,6 +6242,7 @@ func (p *PromptDeploymentInputRequest) Accept(visitor PromptDeploymentInputReque
 
 // The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
 type PromptExecutionMeta struct {
+	Usage                *MlModelUsage     `json:"usage,omitempty"`
 	ModelName            *string           `json:"model_name,omitempty"`
 	Latency              *int              `json:"latency,omitempty"`
 	DeploymentReleaseTag *string           `json:"deployment_release_tag,omitempty"`
