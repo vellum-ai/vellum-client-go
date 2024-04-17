@@ -87,6 +87,9 @@ func (c *Client) ListExecutions(ctx context.Context, id string, request *vellumc
 	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/test-suite-runs/%v/executions", id)
 
 	queryParams := make(url.Values)
+	for _, value := range request.Expand {
+		queryParams.Add("expand", fmt.Sprintf("%v", *value))
+	}
 	if request.Limit != nil {
 		queryParams.Add("limit", fmt.Sprintf("%v", *request.Limit))
 	}

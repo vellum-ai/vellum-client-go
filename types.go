@@ -4480,9 +4480,10 @@ func (m *ModelVersionSandboxSnapshot) String() string {
 	return fmt.Sprintf("%#v", m)
 }
 
+// Named Test Case value that is of type CHAT_HISTORY
 type NamedTestCaseChatHistoryVariableValueRequest struct {
-	Name  string                `json:"name"`
 	Value []*ChatMessageRequest `json:"value,omitempty"`
+	Name  string                `json:"name"`
 
 	_rawJSON json.RawMessage
 }
@@ -4510,9 +4511,10 @@ func (n *NamedTestCaseChatHistoryVariableValueRequest) String() string {
 	return fmt.Sprintf("%#v", n)
 }
 
+// Named Test Case value that is of type ERROR
 type NamedTestCaseErrorVariableValueRequest struct {
-	Name  string              `json:"name"`
 	Value *VellumErrorRequest `json:"value,omitempty"`
+	Name  string              `json:"name"`
 
 	_rawJSON json.RawMessage
 }
@@ -4540,9 +4542,10 @@ func (n *NamedTestCaseErrorVariableValueRequest) String() string {
 	return fmt.Sprintf("%#v", n)
 }
 
+// Named Test Case value that is of type JSON
 type NamedTestCaseJsonVariableValueRequest struct {
-	Name  string                 `json:"name"`
 	Value map[string]interface{} `json:"value,omitempty"`
+	Name  string                 `json:"name"`
 
 	_rawJSON json.RawMessage
 }
@@ -4570,9 +4573,10 @@ func (n *NamedTestCaseJsonVariableValueRequest) String() string {
 	return fmt.Sprintf("%#v", n)
 }
 
+// Named Test Case value that is of type NUMBER
 type NamedTestCaseNumberVariableValueRequest struct {
-	Name  string   `json:"name"`
 	Value *float64 `json:"value,omitempty"`
+	Name  string   `json:"name"`
 
 	_rawJSON json.RawMessage
 }
@@ -4600,9 +4604,10 @@ func (n *NamedTestCaseNumberVariableValueRequest) String() string {
 	return fmt.Sprintf("%#v", n)
 }
 
+// Named Test Case value that is of type SEARCH_RESULTS
 type NamedTestCaseSearchResultsVariableValueRequest struct {
-	Name  string                 `json:"name"`
 	Value []*SearchResultRequest `json:"value,omitempty"`
+	Name  string                 `json:"name"`
 
 	_rawJSON json.RawMessage
 }
@@ -4630,9 +4635,10 @@ func (n *NamedTestCaseSearchResultsVariableValueRequest) String() string {
 	return fmt.Sprintf("%#v", n)
 }
 
+// Named Test Case value that is of type STRING
 type NamedTestCaseStringVariableValueRequest struct {
-	Name  string  `json:"name"`
 	Value *string `json:"value,omitempty"`
+	Name  string  `json:"name"`
 
 	_rawJSON json.RawMessage
 }
@@ -6467,6 +6473,7 @@ type PromptTemplateBlock struct {
 	Id         string                         `json:"id"`
 	BlockType  BlockTypeEnum                  `json:"block_type,omitempty"`
 	Properties *PromptTemplateBlockProperties `json:"properties,omitempty"`
+	State      *PromptTemplateBlockState      `json:"state,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -6634,6 +6641,7 @@ type PromptTemplateBlockRequest struct {
 	Id         string                                `json:"id"`
 	BlockType  BlockTypeEnum                         `json:"block_type,omitempty"`
 	Properties *PromptTemplateBlockPropertiesRequest `json:"properties,omitempty"`
+	State      *PromptTemplateBlockState             `json:"state,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -6659,6 +6667,30 @@ func (p *PromptTemplateBlockRequest) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", p)
+}
+
+// - `ENABLED` - ENABLED
+// - `DISABLED` - DISABLED
+type PromptTemplateBlockState string
+
+const (
+	PromptTemplateBlockStateEnabled  PromptTemplateBlockState = "ENABLED"
+	PromptTemplateBlockStateDisabled PromptTemplateBlockState = "DISABLED"
+)
+
+func NewPromptTemplateBlockStateFromString(s string) (PromptTemplateBlockState, error) {
+	switch s {
+	case "ENABLED":
+		return PromptTemplateBlockStateEnabled, nil
+	case "DISABLED":
+		return PromptTemplateBlockStateDisabled, nil
+	}
+	var t PromptTemplateBlockState
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (p PromptTemplateBlockState) Ptr() *PromptTemplateBlockState {
+	return &p
 }
 
 // - `ANTHROPIC` - Anthropic
@@ -10141,9 +10173,11 @@ func (t *TestSuiteRunExecution) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+// Execution output of an entity evaluated during a Test Suite Run that is of type CHAT_HISTORY
 type TestSuiteRunExecutionChatHistoryOutput struct {
-	OutputVariableId string         `json:"output_variable_id"`
+	Name             string         `json:"name"`
 	Value            []*ChatMessage `json:"value,omitempty"`
+	OutputVariableId string         `json:"output_variable_id"`
 
 	_rawJSON json.RawMessage
 }
@@ -10171,9 +10205,11 @@ func (t *TestSuiteRunExecutionChatHistoryOutput) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+// Execution output of an entity evaluated during a Test Suite Run that is of type ERROR
 type TestSuiteRunExecutionErrorOutput struct {
-	OutputVariableId string       `json:"output_variable_id"`
+	Name             string       `json:"name"`
 	Value            *VellumError `json:"value,omitempty"`
+	OutputVariableId string       `json:"output_variable_id"`
 
 	_rawJSON json.RawMessage
 }
@@ -10201,9 +10237,11 @@ func (t *TestSuiteRunExecutionErrorOutput) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+// Execution output of an entity evaluated during a Test Suite Run that is of type JSON
 type TestSuiteRunExecutionJsonOutput struct {
-	OutputVariableId string                 `json:"output_variable_id"`
+	Name             string                 `json:"name"`
 	Value            map[string]interface{} `json:"value,omitempty"`
+	OutputVariableId string                 `json:"output_variable_id"`
 
 	_rawJSON json.RawMessage
 }
@@ -10231,9 +10269,42 @@ func (t *TestSuiteRunExecutionJsonOutput) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+type TestSuiteRunExecutionMetricDefinition struct {
+	Id    *string `json:"id,omitempty"`
+	Label *string `json:"label,omitempty"`
+	Name  *string `json:"name,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestSuiteRunExecutionMetricDefinition) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteRunExecutionMetricDefinition
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteRunExecutionMetricDefinition(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunExecutionMetricDefinition) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
 type TestSuiteRunExecutionMetricResult struct {
-	MetricId string                      `json:"metric_id"`
-	Outputs  []*TestSuiteRunMetricOutput `json:"outputs,omitempty"`
+	MetricId         string                                 `json:"metric_id"`
+	Outputs          []*TestSuiteRunMetricOutput            `json:"outputs,omitempty"`
+	MetricLabel      *string                                `json:"metric_label,omitempty"`
+	MetricDefinition *TestSuiteRunExecutionMetricDefinition `json:"metric_definition,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -10261,9 +10332,11 @@ func (t *TestSuiteRunExecutionMetricResult) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+// Execution output of an entity evaluated during a Test Suite Run that is of type NUMBER
 type TestSuiteRunExecutionNumberOutput struct {
-	OutputVariableId string   `json:"output_variable_id"`
+	Name             string   `json:"name"`
 	Value            *float64 `json:"value,omitempty"`
+	OutputVariableId string   `json:"output_variable_id"`
 
 	_rawJSON json.RawMessage
 }
@@ -10463,9 +10536,11 @@ func (t *TestSuiteRunExecutionOutput) Accept(visitor TestSuiteRunExecutionOutput
 	}
 }
 
+// Execution output of an entity evaluated during a Test Suite Run that is of type SEARCH_RESULTS
 type TestSuiteRunExecutionSearchResultsOutput struct {
-	OutputVariableId string          `json:"output_variable_id"`
+	Name             string          `json:"name"`
 	Value            []*SearchResult `json:"value,omitempty"`
+	OutputVariableId string          `json:"output_variable_id"`
 
 	_rawJSON json.RawMessage
 }
@@ -10493,9 +10568,11 @@ func (t *TestSuiteRunExecutionSearchResultsOutput) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+// Execution output of an entity evaluated during a Test Suite Run that is of type STRING
 type TestSuiteRunExecutionStringOutput struct {
-	OutputVariableId string  `json:"output_variable_id"`
+	Name             string  `json:"name"`
 	Value            *string `json:"value,omitempty"`
+	OutputVariableId string  `json:"output_variable_id"`
 
 	_rawJSON json.RawMessage
 }
