@@ -676,38 +676,6 @@ func (a *ArrayVariableValueItem) Accept(visitor ArrayVariableValueItemVisitor) e
 	}
 }
 
-// - `CHAT_MESSAGE` - CHAT_MESSAGE
-// - `CHAT_HISTORY` - CHAT_HISTORY
-// - `JINJA` - JINJA
-// - `FUNCTION_DEFINITION` - FUNCTION_DEFINITION
-type BlockTypeEnum string
-
-const (
-	BlockTypeEnumChatMessage        BlockTypeEnum = "CHAT_MESSAGE"
-	BlockTypeEnumChatHistory        BlockTypeEnum = "CHAT_HISTORY"
-	BlockTypeEnumJinja              BlockTypeEnum = "JINJA"
-	BlockTypeEnumFunctionDefinition BlockTypeEnum = "FUNCTION_DEFINITION"
-)
-
-func NewBlockTypeEnumFromString(s string) (BlockTypeEnum, error) {
-	switch s {
-	case "CHAT_MESSAGE":
-		return BlockTypeEnumChatMessage, nil
-	case "CHAT_HISTORY":
-		return BlockTypeEnumChatHistory, nil
-	case "JINJA":
-		return BlockTypeEnumJinja, nil
-	case "FUNCTION_DEFINITION":
-		return BlockTypeEnumFunctionDefinition, nil
-	}
-	var t BlockTypeEnum
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (b BlockTypeEnum) Ptr() *BlockTypeEnum {
-	return &b
-}
-
 type ChatHistoryEnum = string
 
 // A user input representing a list of chat messages
@@ -731,6 +699,70 @@ func (c *ChatHistoryInputRequest) UnmarshalJSON(data []byte) error {
 }
 
 func (c *ChatHistoryInputRequest) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// A block of that represents a chat history variable in a prompt template.
+type ChatHistoryPromptTemplateBlock struct {
+	Properties map[string]interface{}    `json:"properties,omitempty"`
+	Id         string                    `json:"id"`
+	State      *PromptTemplateBlockState `json:"state,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (c *ChatHistoryPromptTemplateBlock) UnmarshalJSON(data []byte) error {
+	type unmarshaler ChatHistoryPromptTemplateBlock
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = ChatHistoryPromptTemplateBlock(value)
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *ChatHistoryPromptTemplateBlock) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// A block of that represents a chat history variable in a prompt template.
+type ChatHistoryPromptTemplateBlockRequest struct {
+	Properties map[string]interface{}    `json:"properties,omitempty"`
+	Id         string                    `json:"id"`
+	State      *PromptTemplateBlockState `json:"state,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (c *ChatHistoryPromptTemplateBlockRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler ChatHistoryPromptTemplateBlockRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = ChatHistoryPromptTemplateBlockRequest(value)
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *ChatHistoryPromptTemplateBlockRequest) String() string {
 	if len(c._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
 			return value
@@ -1054,6 +1086,138 @@ func (c *ChatMessageContentRequest) Accept(visitor ChatMessageContentRequestVisi
 	case "IMAGE":
 		return visitor.VisitImage(c.Image)
 	}
+}
+
+type ChatMessageEnum = string
+
+// A block of that represents a chat message in a prompt template.
+type ChatMessagePromptTemplateBlock struct {
+	Properties *ChatMessagePromptTemplateBlockProperties `json:"properties,omitempty"`
+	Id         string                                    `json:"id"`
+	State      *PromptTemplateBlockState                 `json:"state,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (c *ChatMessagePromptTemplateBlock) UnmarshalJSON(data []byte) error {
+	type unmarshaler ChatMessagePromptTemplateBlock
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = ChatMessagePromptTemplateBlock(value)
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *ChatMessagePromptTemplateBlock) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The properties of a ChatMessagePromptTemplateBlock
+type ChatMessagePromptTemplateBlockProperties struct {
+	Blocks                  []*PromptTemplateBlock `json:"blocks,omitempty"`
+	ChatRole                *ChatMessageRole       `json:"chat_role,omitempty"`
+	ChatSource              *string                `json:"chat_source,omitempty"`
+	ChatMessageUnterminated *bool                  `json:"chat_message_unterminated,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (c *ChatMessagePromptTemplateBlockProperties) UnmarshalJSON(data []byte) error {
+	type unmarshaler ChatMessagePromptTemplateBlockProperties
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = ChatMessagePromptTemplateBlockProperties(value)
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *ChatMessagePromptTemplateBlockProperties) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The properties of a ChatMessagePromptTemplateBlock
+type ChatMessagePromptTemplateBlockPropertiesRequest struct {
+	Blocks                  []*PromptTemplateBlockRequest `json:"blocks,omitempty"`
+	ChatRole                *ChatMessageRole              `json:"chat_role,omitempty"`
+	ChatSource              *string                       `json:"chat_source,omitempty"`
+	ChatMessageUnterminated *bool                         `json:"chat_message_unterminated,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (c *ChatMessagePromptTemplateBlockPropertiesRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler ChatMessagePromptTemplateBlockPropertiesRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = ChatMessagePromptTemplateBlockPropertiesRequest(value)
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *ChatMessagePromptTemplateBlockPropertiesRequest) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// A block of that represents a chat message in a prompt template.
+type ChatMessagePromptTemplateBlockRequest struct {
+	Properties *ChatMessagePromptTemplateBlockPropertiesRequest `json:"properties,omitempty"`
+	Id         string                                           `json:"id"`
+	State      *PromptTemplateBlockState                        `json:"state,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (c *ChatMessagePromptTemplateBlockRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler ChatMessagePromptTemplateBlockRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = ChatMessagePromptTemplateBlockRequest(value)
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *ChatMessagePromptTemplateBlockRequest) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
 }
 
 type ChatMessageRequest struct {
@@ -3151,6 +3315,39 @@ func (f *FulfilledFunctionCall) String() string {
 	return fmt.Sprintf("%#v", f)
 }
 
+// The final resolved function call value.
+type FulfilledFunctionCallRequest struct {
+	State     FulfilledEnum          `json:"state,omitempty"`
+	Arguments map[string]interface{} `json:"arguments,omitempty"`
+	Id        *string                `json:"id,omitempty"`
+	Name      string                 `json:"name"`
+
+	_rawJSON json.RawMessage
+}
+
+func (f *FulfilledFunctionCallRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler FulfilledFunctionCallRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*f = FulfilledFunctionCallRequest(value)
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FulfilledFunctionCallRequest) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
 // The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
 type FulfilledPromptExecutionMeta struct {
 	Latency      *int              `json:"latency,omitempty"`
@@ -3444,6 +3641,144 @@ func (f *FunctionCallVariableValue) UnmarshalJSON(data []byte) error {
 }
 
 func (f *FunctionCallVariableValue) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
+type FunctionDefinitionEnum = string
+
+// A block of that represents a function definition in a prompt template.
+type FunctionDefinitionPromptTemplateBlock struct {
+	Id         string                                           `json:"id"`
+	State      *PromptTemplateBlockState                        `json:"state,omitempty"`
+	Properties *FunctionDefinitionPromptTemplateBlockProperties `json:"properties,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (f *FunctionDefinitionPromptTemplateBlock) UnmarshalJSON(data []byte) error {
+	type unmarshaler FunctionDefinitionPromptTemplateBlock
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*f = FunctionDefinitionPromptTemplateBlock(value)
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FunctionDefinitionPromptTemplateBlock) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
+type FunctionDefinitionPromptTemplateBlockProperties struct {
+	// The name identifying the function.
+	FunctionName *string `json:"function_name,omitempty"`
+	// A description to help guide the model when to invoke this function.
+	FunctionDescription *string `json:"function_description,omitempty"`
+	// An OpenAPI specification of parameters that are supported by this function.
+	FunctionParameters map[string]interface{} `json:"function_parameters,omitempty"`
+	// Set this option to true to force the model to return a function call of this function.
+	FunctionForced *bool `json:"function_forced,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (f *FunctionDefinitionPromptTemplateBlockProperties) UnmarshalJSON(data []byte) error {
+	type unmarshaler FunctionDefinitionPromptTemplateBlockProperties
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*f = FunctionDefinitionPromptTemplateBlockProperties(value)
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FunctionDefinitionPromptTemplateBlockProperties) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
+type FunctionDefinitionPromptTemplateBlockPropertiesRequest struct {
+	// The name identifying the function.
+	FunctionName *string `json:"function_name,omitempty"`
+	// A description to help guide the model when to invoke this function.
+	FunctionDescription *string `json:"function_description,omitempty"`
+	// An OpenAPI specification of parameters that are supported by this function.
+	FunctionParameters map[string]interface{} `json:"function_parameters,omitempty"`
+	// Set this option to true to force the model to return a function call of this function.
+	FunctionForced *bool `json:"function_forced,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (f *FunctionDefinitionPromptTemplateBlockPropertiesRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler FunctionDefinitionPromptTemplateBlockPropertiesRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*f = FunctionDefinitionPromptTemplateBlockPropertiesRequest(value)
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FunctionDefinitionPromptTemplateBlockPropertiesRequest) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
+// A block of that represents a function definition in a prompt template.
+type FunctionDefinitionPromptTemplateBlockRequest struct {
+	Id         string                                                  `json:"id"`
+	State      *PromptTemplateBlockState                               `json:"state,omitempty"`
+	Properties *FunctionDefinitionPromptTemplateBlockPropertiesRequest `json:"properties,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (f *FunctionDefinitionPromptTemplateBlockRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler FunctionDefinitionPromptTemplateBlockRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*f = FunctionDefinitionPromptTemplateBlockRequest(value)
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FunctionDefinitionPromptTemplateBlockRequest) String() string {
 	if len(f._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
 			return value
@@ -3994,6 +4329,132 @@ func (i *InitiatedWorkflowNodeResultEvent) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
+type JinjaEnum = string
+
+// A block of Jinja template code that is used to generate a prompt
+type JinjaPromptTemplateBlock struct {
+	Id         string                              `json:"id"`
+	State      *PromptTemplateBlockState           `json:"state,omitempty"`
+	Properties *JinjaPromptTemplateBlockProperties `json:"properties,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (j *JinjaPromptTemplateBlock) UnmarshalJSON(data []byte) error {
+	type unmarshaler JinjaPromptTemplateBlock
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*j = JinjaPromptTemplateBlock(value)
+	j._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (j *JinjaPromptTemplateBlock) String() string {
+	if len(j._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(j._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(j); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", j)
+}
+
+type JinjaPromptTemplateBlockProperties struct {
+	Template     *string             `json:"template,omitempty"`
+	TemplateType *VellumVariableType `json:"template_type,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (j *JinjaPromptTemplateBlockProperties) UnmarshalJSON(data []byte) error {
+	type unmarshaler JinjaPromptTemplateBlockProperties
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*j = JinjaPromptTemplateBlockProperties(value)
+	j._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (j *JinjaPromptTemplateBlockProperties) String() string {
+	if len(j._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(j._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(j); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", j)
+}
+
+type JinjaPromptTemplateBlockPropertiesRequest struct {
+	Template     *string             `json:"template,omitempty"`
+	TemplateType *VellumVariableType `json:"template_type,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (j *JinjaPromptTemplateBlockPropertiesRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler JinjaPromptTemplateBlockPropertiesRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*j = JinjaPromptTemplateBlockPropertiesRequest(value)
+	j._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (j *JinjaPromptTemplateBlockPropertiesRequest) String() string {
+	if len(j._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(j._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(j); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", j)
+}
+
+// A block of Jinja template code that is used to generate a prompt
+type JinjaPromptTemplateBlockRequest struct {
+	Id         string                                     `json:"id"`
+	State      *PromptTemplateBlockState                  `json:"state,omitempty"`
+	Properties *JinjaPromptTemplateBlockPropertiesRequest `json:"properties,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (j *JinjaPromptTemplateBlockRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler JinjaPromptTemplateBlockRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*j = JinjaPromptTemplateBlockRequest(value)
+	j._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (j *JinjaPromptTemplateBlockRequest) String() string {
+	if len(j._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(j._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(j); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", j)
+}
+
 type JsonEnum = string
 
 // A user input representing a JSON object
@@ -4542,6 +5003,148 @@ func (m *ModelVersionSandboxSnapshot) String() string {
 	return fmt.Sprintf("%#v", m)
 }
 
+// Named Prompt Sandbox Scenario input value that is of type CHAT_HISTORY
+type NamedScenarioInputChatHistoryVariableValueRequest struct {
+	Value []*ChatMessageRequest `json:"value,omitempty"`
+	Name  string                `json:"name"`
+
+	_rawJSON json.RawMessage
+}
+
+func (n *NamedScenarioInputChatHistoryVariableValueRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler NamedScenarioInputChatHistoryVariableValueRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*n = NamedScenarioInputChatHistoryVariableValueRequest(value)
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NamedScenarioInputChatHistoryVariableValueRequest) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
+type NamedScenarioInputRequest struct {
+	Type        string
+	String      *NamedScenarioInputStringVariableValueRequest
+	ChatHistory *NamedScenarioInputChatHistoryVariableValueRequest
+}
+
+func NewNamedScenarioInputRequestFromString(value *NamedScenarioInputStringVariableValueRequest) *NamedScenarioInputRequest {
+	return &NamedScenarioInputRequest{Type: "STRING", String: value}
+}
+
+func NewNamedScenarioInputRequestFromChatHistory(value *NamedScenarioInputChatHistoryVariableValueRequest) *NamedScenarioInputRequest {
+	return &NamedScenarioInputRequest{Type: "CHAT_HISTORY", ChatHistory: value}
+}
+
+func (n *NamedScenarioInputRequest) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	n.Type = unmarshaler.Type
+	switch unmarshaler.Type {
+	case "STRING":
+		value := new(NamedScenarioInputStringVariableValueRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.String = value
+	case "CHAT_HISTORY":
+		value := new(NamedScenarioInputChatHistoryVariableValueRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.ChatHistory = value
+	}
+	return nil
+}
+
+func (n NamedScenarioInputRequest) MarshalJSON() ([]byte, error) {
+	switch n.Type {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", n.Type, n)
+	case "STRING":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*NamedScenarioInputStringVariableValueRequest
+		}{
+			Type: n.Type,
+			NamedScenarioInputStringVariableValueRequest: n.String,
+		}
+		return json.Marshal(marshaler)
+	case "CHAT_HISTORY":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*NamedScenarioInputChatHistoryVariableValueRequest
+		}{
+			Type: n.Type,
+			NamedScenarioInputChatHistoryVariableValueRequest: n.ChatHistory,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type NamedScenarioInputRequestVisitor interface {
+	VisitString(*NamedScenarioInputStringVariableValueRequest) error
+	VisitChatHistory(*NamedScenarioInputChatHistoryVariableValueRequest) error
+}
+
+func (n *NamedScenarioInputRequest) Accept(visitor NamedScenarioInputRequestVisitor) error {
+	switch n.Type {
+	default:
+		return fmt.Errorf("invalid type %s in %T", n.Type, n)
+	case "STRING":
+		return visitor.VisitString(n.String)
+	case "CHAT_HISTORY":
+		return visitor.VisitChatHistory(n.ChatHistory)
+	}
+}
+
+// Named Prompt Sandbox Scenario input value that is of type STRING
+type NamedScenarioInputStringVariableValueRequest struct {
+	Value *string `json:"value,omitempty"`
+	Name  string  `json:"name"`
+
+	_rawJSON json.RawMessage
+}
+
+func (n *NamedScenarioInputStringVariableValueRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler NamedScenarioInputStringVariableValueRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*n = NamedScenarioInputStringVariableValueRequest(value)
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NamedScenarioInputStringVariableValueRequest) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
 // Named Test Case value that is of type CHAT_HISTORY
 type NamedTestCaseChatHistoryVariableValue struct {
 	Value []*ChatMessage `json:"value,omitempty"`
@@ -4655,6 +5258,68 @@ func (n *NamedTestCaseErrorVariableValueRequest) UnmarshalJSON(data []byte) erro
 }
 
 func (n *NamedTestCaseErrorVariableValueRequest) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
+// Named Test Case value that is of type FUNCTION_CALL
+type NamedTestCaseFunctionCallVariableValue struct {
+	Value *FulfilledFunctionCall `json:"value,omitempty"`
+	Name  string                 `json:"name"`
+
+	_rawJSON json.RawMessage
+}
+
+func (n *NamedTestCaseFunctionCallVariableValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler NamedTestCaseFunctionCallVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*n = NamedTestCaseFunctionCallVariableValue(value)
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NamedTestCaseFunctionCallVariableValue) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
+// Named Test Case value that is of type FUNCTION_CALL
+type NamedTestCaseFunctionCallVariableValueRequest struct {
+	Value *FulfilledFunctionCallRequest `json:"value,omitempty"`
+	Name  string                        `json:"name"`
+
+	_rawJSON json.RawMessage
+}
+
+func (n *NamedTestCaseFunctionCallVariableValueRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler NamedTestCaseFunctionCallVariableValueRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*n = NamedTestCaseFunctionCallVariableValueRequest(value)
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NamedTestCaseFunctionCallVariableValueRequest) String() string {
 	if len(n._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
 			return value
@@ -4922,6 +5587,7 @@ type NamedTestCaseVariableValue struct {
 	ChatHistory   *NamedTestCaseChatHistoryVariableValue
 	SearchResults *NamedTestCaseSearchResultsVariableValue
 	Error         *NamedTestCaseErrorVariableValue
+	FunctionCall  *NamedTestCaseFunctionCallVariableValue
 }
 
 func NewNamedTestCaseVariableValueFromString(value *NamedTestCaseStringVariableValue) *NamedTestCaseVariableValue {
@@ -4946,6 +5612,10 @@ func NewNamedTestCaseVariableValueFromSearchResults(value *NamedTestCaseSearchRe
 
 func NewNamedTestCaseVariableValueFromError(value *NamedTestCaseErrorVariableValue) *NamedTestCaseVariableValue {
 	return &NamedTestCaseVariableValue{Type: "ERROR", Error: value}
+}
+
+func NewNamedTestCaseVariableValueFromFunctionCall(value *NamedTestCaseFunctionCallVariableValue) *NamedTestCaseVariableValue {
+	return &NamedTestCaseVariableValue{Type: "FUNCTION_CALL", FunctionCall: value}
 }
 
 func (n *NamedTestCaseVariableValue) UnmarshalJSON(data []byte) error {
@@ -4993,6 +5663,12 @@ func (n *NamedTestCaseVariableValue) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		n.Error = value
+	case "FUNCTION_CALL":
+		value := new(NamedTestCaseFunctionCallVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.FunctionCall = value
 	}
 	return nil
 }
@@ -5055,6 +5731,15 @@ func (n NamedTestCaseVariableValue) MarshalJSON() ([]byte, error) {
 			NamedTestCaseErrorVariableValue: n.Error,
 		}
 		return json.Marshal(marshaler)
+	case "FUNCTION_CALL":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*NamedTestCaseFunctionCallVariableValue
+		}{
+			Type:                                   n.Type,
+			NamedTestCaseFunctionCallVariableValue: n.FunctionCall,
+		}
+		return json.Marshal(marshaler)
 	}
 }
 
@@ -5065,6 +5750,7 @@ type NamedTestCaseVariableValueVisitor interface {
 	VisitChatHistory(*NamedTestCaseChatHistoryVariableValue) error
 	VisitSearchResults(*NamedTestCaseSearchResultsVariableValue) error
 	VisitError(*NamedTestCaseErrorVariableValue) error
+	VisitFunctionCall(*NamedTestCaseFunctionCallVariableValue) error
 }
 
 func (n *NamedTestCaseVariableValue) Accept(visitor NamedTestCaseVariableValueVisitor) error {
@@ -5083,6 +5769,8 @@ func (n *NamedTestCaseVariableValue) Accept(visitor NamedTestCaseVariableValueVi
 		return visitor.VisitSearchResults(n.SearchResults)
 	case "ERROR":
 		return visitor.VisitError(n.Error)
+	case "FUNCTION_CALL":
+		return visitor.VisitFunctionCall(n.FunctionCall)
 	}
 }
 
@@ -5094,6 +5782,7 @@ type NamedTestCaseVariableValueRequest struct {
 	ChatHistory   *NamedTestCaseChatHistoryVariableValueRequest
 	SearchResults *NamedTestCaseSearchResultsVariableValueRequest
 	Error         *NamedTestCaseErrorVariableValueRequest
+	FunctionCall  *NamedTestCaseFunctionCallVariableValueRequest
 }
 
 func NewNamedTestCaseVariableValueRequestFromString(value *NamedTestCaseStringVariableValueRequest) *NamedTestCaseVariableValueRequest {
@@ -5118,6 +5807,10 @@ func NewNamedTestCaseVariableValueRequestFromSearchResults(value *NamedTestCaseS
 
 func NewNamedTestCaseVariableValueRequestFromError(value *NamedTestCaseErrorVariableValueRequest) *NamedTestCaseVariableValueRequest {
 	return &NamedTestCaseVariableValueRequest{Type: "ERROR", Error: value}
+}
+
+func NewNamedTestCaseVariableValueRequestFromFunctionCall(value *NamedTestCaseFunctionCallVariableValueRequest) *NamedTestCaseVariableValueRequest {
+	return &NamedTestCaseVariableValueRequest{Type: "FUNCTION_CALL", FunctionCall: value}
 }
 
 func (n *NamedTestCaseVariableValueRequest) UnmarshalJSON(data []byte) error {
@@ -5165,6 +5858,12 @@ func (n *NamedTestCaseVariableValueRequest) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		n.Error = value
+	case "FUNCTION_CALL":
+		value := new(NamedTestCaseFunctionCallVariableValueRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.FunctionCall = value
 	}
 	return nil
 }
@@ -5227,6 +5926,15 @@ func (n NamedTestCaseVariableValueRequest) MarshalJSON() ([]byte, error) {
 			NamedTestCaseErrorVariableValueRequest: n.Error,
 		}
 		return json.Marshal(marshaler)
+	case "FUNCTION_CALL":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*NamedTestCaseFunctionCallVariableValueRequest
+		}{
+			Type: n.Type,
+			NamedTestCaseFunctionCallVariableValueRequest: n.FunctionCall,
+		}
+		return json.Marshal(marshaler)
 	}
 }
 
@@ -5237,6 +5945,7 @@ type NamedTestCaseVariableValueRequestVisitor interface {
 	VisitChatHistory(*NamedTestCaseChatHistoryVariableValueRequest) error
 	VisitSearchResults(*NamedTestCaseSearchResultsVariableValueRequest) error
 	VisitError(*NamedTestCaseErrorVariableValueRequest) error
+	VisitFunctionCall(*NamedTestCaseFunctionCallVariableValueRequest) error
 }
 
 func (n *NamedTestCaseVariableValueRequest) Accept(visitor NamedTestCaseVariableValueRequestVisitor) error {
@@ -5255,6 +5964,8 @@ func (n *NamedTestCaseVariableValueRequest) Accept(visitor NamedTestCaseVariable
 		return visitor.VisitSearchResults(n.SearchResults)
 	case "ERROR":
 		return visitor.VisitError(n.Error)
+	case "FUNCTION_CALL":
+		return visitor.VisitFunctionCall(n.FunctionCall)
 	}
 }
 
@@ -6890,40 +7601,134 @@ func (p *PromptOutput) Accept(visitor PromptOutputVisitor) error {
 }
 
 type PromptTemplateBlock struct {
-	Id         string                         `json:"id"`
-	BlockType  BlockTypeEnum                  `json:"block_type,omitempty"`
-	Properties *PromptTemplateBlockProperties `json:"properties,omitempty"`
-	State      *PromptTemplateBlockState      `json:"state,omitempty"`
+	BlockType          string
+	Jinja              *JinjaPromptTemplateBlock
+	ChatHistory        *ChatHistoryPromptTemplateBlock
+	ChatMessage        *ChatMessagePromptTemplateBlock
+	FunctionDefinition *FunctionDefinitionPromptTemplateBlock
+}
 
-	_rawJSON json.RawMessage
+func NewPromptTemplateBlockFromJinja(value *JinjaPromptTemplateBlock) *PromptTemplateBlock {
+	return &PromptTemplateBlock{BlockType: "JINJA", Jinja: value}
+}
+
+func NewPromptTemplateBlockFromChatHistory(value *ChatHistoryPromptTemplateBlock) *PromptTemplateBlock {
+	return &PromptTemplateBlock{BlockType: "CHAT_HISTORY", ChatHistory: value}
+}
+
+func NewPromptTemplateBlockFromChatMessage(value *ChatMessagePromptTemplateBlock) *PromptTemplateBlock {
+	return &PromptTemplateBlock{BlockType: "CHAT_MESSAGE", ChatMessage: value}
+}
+
+func NewPromptTemplateBlockFromFunctionDefinition(value *FunctionDefinitionPromptTemplateBlock) *PromptTemplateBlock {
+	return &PromptTemplateBlock{BlockType: "FUNCTION_DEFINITION", FunctionDefinition: value}
 }
 
 func (p *PromptTemplateBlock) UnmarshalJSON(data []byte) error {
-	type unmarshaler PromptTemplateBlock
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	var unmarshaler struct {
+		BlockType string `json:"block_type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*p = PromptTemplateBlock(value)
-	p._rawJSON = json.RawMessage(data)
+	p.BlockType = unmarshaler.BlockType
+	switch unmarshaler.BlockType {
+	case "JINJA":
+		value := new(JinjaPromptTemplateBlock)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.Jinja = value
+	case "CHAT_HISTORY":
+		value := new(ChatHistoryPromptTemplateBlock)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.ChatHistory = value
+	case "CHAT_MESSAGE":
+		value := new(ChatMessagePromptTemplateBlock)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.ChatMessage = value
+	case "FUNCTION_DEFINITION":
+		value := new(FunctionDefinitionPromptTemplateBlock)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.FunctionDefinition = value
+	}
 	return nil
 }
 
-func (p *PromptTemplateBlock) String() string {
-	if len(p._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
-			return value
+func (p PromptTemplateBlock) MarshalJSON() ([]byte, error) {
+	switch p.BlockType {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", p.BlockType, p)
+	case "JINJA":
+		var marshaler = struct {
+			BlockType string `json:"block_type"`
+			*JinjaPromptTemplateBlock
+		}{
+			BlockType:                p.BlockType,
+			JinjaPromptTemplateBlock: p.Jinja,
 		}
+		return json.Marshal(marshaler)
+	case "CHAT_HISTORY":
+		var marshaler = struct {
+			BlockType string `json:"block_type"`
+			*ChatHistoryPromptTemplateBlock
+		}{
+			BlockType:                      p.BlockType,
+			ChatHistoryPromptTemplateBlock: p.ChatHistory,
+		}
+		return json.Marshal(marshaler)
+	case "CHAT_MESSAGE":
+		var marshaler = struct {
+			BlockType string `json:"block_type"`
+			*ChatMessagePromptTemplateBlock
+		}{
+			BlockType:                      p.BlockType,
+			ChatMessagePromptTemplateBlock: p.ChatMessage,
+		}
+		return json.Marshal(marshaler)
+	case "FUNCTION_DEFINITION":
+		var marshaler = struct {
+			BlockType string `json:"block_type"`
+			*FunctionDefinitionPromptTemplateBlock
+		}{
+			BlockType:                             p.BlockType,
+			FunctionDefinitionPromptTemplateBlock: p.FunctionDefinition,
+		}
+		return json.Marshal(marshaler)
 	}
-	if value, err := core.StringifyJSON(p); err == nil {
-		return value
+}
+
+type PromptTemplateBlockVisitor interface {
+	VisitJinja(*JinjaPromptTemplateBlock) error
+	VisitChatHistory(*ChatHistoryPromptTemplateBlock) error
+	VisitChatMessage(*ChatMessagePromptTemplateBlock) error
+	VisitFunctionDefinition(*FunctionDefinitionPromptTemplateBlock) error
+}
+
+func (p *PromptTemplateBlock) Accept(visitor PromptTemplateBlockVisitor) error {
+	switch p.BlockType {
+	default:
+		return fmt.Errorf("invalid type %s in %T", p.BlockType, p)
+	case "JINJA":
+		return visitor.VisitJinja(p.Jinja)
+	case "CHAT_HISTORY":
+		return visitor.VisitChatHistory(p.ChatHistory)
+	case "CHAT_MESSAGE":
+		return visitor.VisitChatMessage(p.ChatMessage)
+	case "FUNCTION_DEFINITION":
+		return visitor.VisitFunctionDefinition(p.FunctionDefinition)
 	}
-	return fmt.Sprintf("%#v", p)
 }
 
 type PromptTemplateBlockData struct {
-	Version int                    `json:"version"`
 	Blocks  []*PromptTemplateBlock `json:"blocks,omitempty"`
+	Version int                    `json:"version"`
 
 	_rawJSON json.RawMessage
 }
@@ -6952,8 +7757,8 @@ func (p *PromptTemplateBlockData) String() string {
 }
 
 type PromptTemplateBlockDataRequest struct {
-	Version int                           `json:"version"`
 	Blocks  []*PromptTemplateBlockRequest `json:"blocks,omitempty"`
+	Version int                           `json:"version"`
 
 	_rawJSON json.RawMessage
 }
@@ -6981,112 +7786,130 @@ func (p *PromptTemplateBlockDataRequest) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
-type PromptTemplateBlockProperties struct {
-	ChatRole                *ChatMessageRole       `json:"chat_role,omitempty"`
-	ChatMessageUnterminated *bool                  `json:"chat_message_unterminated,omitempty"`
-	ChatSource              *string                `json:"chat_source,omitempty"`
-	Template                *string                `json:"template,omitempty"`
-	TemplateType            *VellumVariableType    `json:"template_type,omitempty"`
-	FunctionName            *string                `json:"function_name,omitempty"`
-	FunctionDescription     *string                `json:"function_description,omitempty"`
-	FunctionParameters      map[string]interface{} `json:"function_parameters,omitempty"`
-	FunctionForced          *bool                  `json:"function_forced,omitempty"`
-	Blocks                  []*PromptTemplateBlock `json:"blocks,omitempty"`
-
-	_rawJSON json.RawMessage
-}
-
-func (p *PromptTemplateBlockProperties) UnmarshalJSON(data []byte) error {
-	type unmarshaler PromptTemplateBlockProperties
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*p = PromptTemplateBlockProperties(value)
-	p._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (p *PromptTemplateBlockProperties) String() string {
-	if len(p._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(p); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", p)
-}
-
-type PromptTemplateBlockPropertiesRequest struct {
-	ChatRole                *ChatMessageRole              `json:"chat_role,omitempty"`
-	ChatMessageUnterminated *bool                         `json:"chat_message_unterminated,omitempty"`
-	ChatSource              *string                       `json:"chat_source,omitempty"`
-	Template                *string                       `json:"template,omitempty"`
-	TemplateType            *VellumVariableType           `json:"template_type,omitempty"`
-	FunctionName            *string                       `json:"function_name,omitempty"`
-	FunctionDescription     *string                       `json:"function_description,omitempty"`
-	FunctionParameters      map[string]interface{}        `json:"function_parameters,omitempty"`
-	FunctionForced          *bool                         `json:"function_forced,omitempty"`
-	Blocks                  []*PromptTemplateBlockRequest `json:"blocks,omitempty"`
-
-	_rawJSON json.RawMessage
-}
-
-func (p *PromptTemplateBlockPropertiesRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler PromptTemplateBlockPropertiesRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*p = PromptTemplateBlockPropertiesRequest(value)
-	p._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (p *PromptTemplateBlockPropertiesRequest) String() string {
-	if len(p._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(p); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", p)
-}
-
 type PromptTemplateBlockRequest struct {
-	Id         string                                `json:"id"`
-	BlockType  BlockTypeEnum                         `json:"block_type,omitempty"`
-	Properties *PromptTemplateBlockPropertiesRequest `json:"properties,omitempty"`
-	State      *PromptTemplateBlockState             `json:"state,omitempty"`
+	BlockType          string
+	Jinja              *JinjaPromptTemplateBlockRequest
+	ChatHistory        *ChatHistoryPromptTemplateBlockRequest
+	ChatMessage        *ChatMessagePromptTemplateBlockRequest
+	FunctionDefinition *FunctionDefinitionPromptTemplateBlockRequest
+}
 
-	_rawJSON json.RawMessage
+func NewPromptTemplateBlockRequestFromJinja(value *JinjaPromptTemplateBlockRequest) *PromptTemplateBlockRequest {
+	return &PromptTemplateBlockRequest{BlockType: "JINJA", Jinja: value}
+}
+
+func NewPromptTemplateBlockRequestFromChatHistory(value *ChatHistoryPromptTemplateBlockRequest) *PromptTemplateBlockRequest {
+	return &PromptTemplateBlockRequest{BlockType: "CHAT_HISTORY", ChatHistory: value}
+}
+
+func NewPromptTemplateBlockRequestFromChatMessage(value *ChatMessagePromptTemplateBlockRequest) *PromptTemplateBlockRequest {
+	return &PromptTemplateBlockRequest{BlockType: "CHAT_MESSAGE", ChatMessage: value}
+}
+
+func NewPromptTemplateBlockRequestFromFunctionDefinition(value *FunctionDefinitionPromptTemplateBlockRequest) *PromptTemplateBlockRequest {
+	return &PromptTemplateBlockRequest{BlockType: "FUNCTION_DEFINITION", FunctionDefinition: value}
 }
 
 func (p *PromptTemplateBlockRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler PromptTemplateBlockRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	var unmarshaler struct {
+		BlockType string `json:"block_type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*p = PromptTemplateBlockRequest(value)
-	p._rawJSON = json.RawMessage(data)
+	p.BlockType = unmarshaler.BlockType
+	switch unmarshaler.BlockType {
+	case "JINJA":
+		value := new(JinjaPromptTemplateBlockRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.Jinja = value
+	case "CHAT_HISTORY":
+		value := new(ChatHistoryPromptTemplateBlockRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.ChatHistory = value
+	case "CHAT_MESSAGE":
+		value := new(ChatMessagePromptTemplateBlockRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.ChatMessage = value
+	case "FUNCTION_DEFINITION":
+		value := new(FunctionDefinitionPromptTemplateBlockRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.FunctionDefinition = value
+	}
 	return nil
 }
 
-func (p *PromptTemplateBlockRequest) String() string {
-	if len(p._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
-			return value
+func (p PromptTemplateBlockRequest) MarshalJSON() ([]byte, error) {
+	switch p.BlockType {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", p.BlockType, p)
+	case "JINJA":
+		var marshaler = struct {
+			BlockType string `json:"block_type"`
+			*JinjaPromptTemplateBlockRequest
+		}{
+			BlockType:                       p.BlockType,
+			JinjaPromptTemplateBlockRequest: p.Jinja,
 		}
+		return json.Marshal(marshaler)
+	case "CHAT_HISTORY":
+		var marshaler = struct {
+			BlockType string `json:"block_type"`
+			*ChatHistoryPromptTemplateBlockRequest
+		}{
+			BlockType:                             p.BlockType,
+			ChatHistoryPromptTemplateBlockRequest: p.ChatHistory,
+		}
+		return json.Marshal(marshaler)
+	case "CHAT_MESSAGE":
+		var marshaler = struct {
+			BlockType string `json:"block_type"`
+			*ChatMessagePromptTemplateBlockRequest
+		}{
+			BlockType:                             p.BlockType,
+			ChatMessagePromptTemplateBlockRequest: p.ChatMessage,
+		}
+		return json.Marshal(marshaler)
+	case "FUNCTION_DEFINITION":
+		var marshaler = struct {
+			BlockType string `json:"block_type"`
+			*FunctionDefinitionPromptTemplateBlockRequest
+		}{
+			BlockType: p.BlockType,
+			FunctionDefinitionPromptTemplateBlockRequest: p.FunctionDefinition,
+		}
+		return json.Marshal(marshaler)
 	}
-	if value, err := core.StringifyJSON(p); err == nil {
-		return value
+}
+
+type PromptTemplateBlockRequestVisitor interface {
+	VisitJinja(*JinjaPromptTemplateBlockRequest) error
+	VisitChatHistory(*ChatHistoryPromptTemplateBlockRequest) error
+	VisitChatMessage(*ChatMessagePromptTemplateBlockRequest) error
+	VisitFunctionDefinition(*FunctionDefinitionPromptTemplateBlockRequest) error
+}
+
+func (p *PromptTemplateBlockRequest) Accept(visitor PromptTemplateBlockRequestVisitor) error {
+	switch p.BlockType {
+	default:
+		return fmt.Errorf("invalid type %s in %T", p.BlockType, p)
+	case "JINJA":
+		return visitor.VisitJinja(p.Jinja)
+	case "CHAT_HISTORY":
+		return visitor.VisitChatHistory(p.ChatHistory)
+	case "CHAT_MESSAGE":
+		return visitor.VisitChatMessage(p.ChatMessage)
+	case "FUNCTION_DEFINITION":
+		return visitor.VisitFunctionDefinition(p.FunctionDefinition)
 	}
-	return fmt.Sprintf("%#v", p)
 }
 
 // - `ENABLED` - ENABLED
@@ -7778,58 +8601,105 @@ func (s *SandboxScenario) String() string {
 }
 
 type ScenarioInput struct {
-	Key         string                 `json:"key"`
-	Type        *ScenarioInputTypeEnum `json:"type,omitempty"`
-	Value       *string                `json:"value,omitempty"`
-	ChatHistory []*ChatMessage         `json:"chat_history,omitempty"`
+	Type        string
+	String      *ScenarioInputStringVariableValue
+	ChatHistory *ScenarioInputChatHistoryVariableValue
+}
 
-	_rawJSON json.RawMessage
+func NewScenarioInputFromString(value *ScenarioInputStringVariableValue) *ScenarioInput {
+	return &ScenarioInput{Type: "STRING", String: value}
+}
+
+func NewScenarioInputFromChatHistory(value *ScenarioInputChatHistoryVariableValue) *ScenarioInput {
+	return &ScenarioInput{Type: "CHAT_HISTORY", ChatHistory: value}
 }
 
 func (s *ScenarioInput) UnmarshalJSON(data []byte) error {
-	type unmarshaler ScenarioInput
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	var unmarshaler struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*s = ScenarioInput(value)
-	s._rawJSON = json.RawMessage(data)
+	s.Type = unmarshaler.Type
+	switch unmarshaler.Type {
+	case "STRING":
+		value := new(ScenarioInputStringVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		s.String = value
+	case "CHAT_HISTORY":
+		value := new(ScenarioInputChatHistoryVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		s.ChatHistory = value
+	}
 	return nil
 }
 
-func (s *ScenarioInput) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
-			return value
+func (s ScenarioInput) MarshalJSON() ([]byte, error) {
+	switch s.Type {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", s.Type, s)
+	case "STRING":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ScenarioInputStringVariableValue
+		}{
+			Type:                             s.Type,
+			ScenarioInputStringVariableValue: s.String,
 		}
+		return json.Marshal(marshaler)
+	case "CHAT_HISTORY":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ScenarioInputChatHistoryVariableValue
+		}{
+			Type:                                  s.Type,
+			ScenarioInputChatHistoryVariableValue: s.ChatHistory,
+		}
+		return json.Marshal(marshaler)
 	}
-	if value, err := core.StringifyJSON(s); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", s)
 }
 
-type ScenarioInputRequest struct {
-	Key         string                 `json:"key"`
-	Type        *ScenarioInputTypeEnum `json:"type,omitempty"`
-	Value       *string                `json:"value,omitempty"`
-	ChatHistory []*ChatMessageRequest  `json:"chat_history,omitempty"`
+type ScenarioInputVisitor interface {
+	VisitString(*ScenarioInputStringVariableValue) error
+	VisitChatHistory(*ScenarioInputChatHistoryVariableValue) error
+}
+
+func (s *ScenarioInput) Accept(visitor ScenarioInputVisitor) error {
+	switch s.Type {
+	default:
+		return fmt.Errorf("invalid type %s in %T", s.Type, s)
+	case "STRING":
+		return visitor.VisitString(s.String)
+	case "CHAT_HISTORY":
+		return visitor.VisitChatHistory(s.ChatHistory)
+	}
+}
+
+// Prompt Sandbox Scenario input value that is of type CHAT_HISTORY
+type ScenarioInputChatHistoryVariableValue struct {
+	Value           []*ChatMessage `json:"value,omitempty"`
+	InputVariableId string         `json:"input_variable_id"`
 
 	_rawJSON json.RawMessage
 }
 
-func (s *ScenarioInputRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler ScenarioInputRequest
+func (s *ScenarioInputChatHistoryVariableValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler ScenarioInputChatHistoryVariableValue
 	var value unmarshaler
 	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*s = ScenarioInputRequest(value)
+	*s = ScenarioInputChatHistoryVariableValue(value)
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
 
-func (s *ScenarioInputRequest) String() string {
+func (s *ScenarioInputChatHistoryVariableValue) String() string {
 	if len(s._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
 			return value
@@ -7841,28 +8711,35 @@ func (s *ScenarioInputRequest) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-// - `TEXT` - TEXT
-// - `CHAT_HISTORY` - CHAT_HISTORY
-type ScenarioInputTypeEnum string
+// Prompt Sandbox Scenario input value that is of type STRING
+type ScenarioInputStringVariableValue struct {
+	Value           *string `json:"value,omitempty"`
+	InputVariableId string  `json:"input_variable_id"`
 
-const (
-	ScenarioInputTypeEnumText        ScenarioInputTypeEnum = "TEXT"
-	ScenarioInputTypeEnumChatHistory ScenarioInputTypeEnum = "CHAT_HISTORY"
-)
-
-func NewScenarioInputTypeEnumFromString(s string) (ScenarioInputTypeEnum, error) {
-	switch s {
-	case "TEXT":
-		return ScenarioInputTypeEnumText, nil
-	case "CHAT_HISTORY":
-		return ScenarioInputTypeEnumChatHistory, nil
-	}
-	var t ScenarioInputTypeEnum
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
+	_rawJSON json.RawMessage
 }
 
-func (s ScenarioInputTypeEnum) Ptr() *ScenarioInputTypeEnum {
-	return &s
+func (s *ScenarioInputStringVariableValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler ScenarioInputStringVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = ScenarioInputStringVariableValue(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *ScenarioInputStringVariableValue) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
 }
 
 type SearchErrorResponse struct {
@@ -9984,6 +10861,38 @@ func (t *TestCaseErrorVariableValue) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+// A function call value for a variable in a Test Case.
+type TestCaseFunctionCallVariableValue struct {
+	VariableId string                 `json:"variable_id"`
+	Name       string                 `json:"name"`
+	Value      *FulfilledFunctionCall `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestCaseFunctionCallVariableValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestCaseFunctionCallVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestCaseFunctionCallVariableValue(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestCaseFunctionCallVariableValue) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
 // A JSON value for a variable in a Test Case.
 type TestCaseJsonVariableValue struct {
 	VariableId string                 `json:"variable_id"`
@@ -10120,6 +11029,7 @@ type TestCaseVariableValue struct {
 	ChatHistory   *TestCaseChatHistoryVariableValue
 	SearchResults *TestCaseSearchResultsVariableValue
 	Error         *TestCaseErrorVariableValue
+	FunctionCall  *TestCaseFunctionCallVariableValue
 }
 
 func NewTestCaseVariableValueFromString(value *TestCaseStringVariableValue) *TestCaseVariableValue {
@@ -10144,6 +11054,10 @@ func NewTestCaseVariableValueFromSearchResults(value *TestCaseSearchResultsVaria
 
 func NewTestCaseVariableValueFromError(value *TestCaseErrorVariableValue) *TestCaseVariableValue {
 	return &TestCaseVariableValue{Type: "ERROR", Error: value}
+}
+
+func NewTestCaseVariableValueFromFunctionCall(value *TestCaseFunctionCallVariableValue) *TestCaseVariableValue {
+	return &TestCaseVariableValue{Type: "FUNCTION_CALL", FunctionCall: value}
 }
 
 func (t *TestCaseVariableValue) UnmarshalJSON(data []byte) error {
@@ -10191,6 +11105,12 @@ func (t *TestCaseVariableValue) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		t.Error = value
+	case "FUNCTION_CALL":
+		value := new(TestCaseFunctionCallVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.FunctionCall = value
 	}
 	return nil
 }
@@ -10253,6 +11173,15 @@ func (t TestCaseVariableValue) MarshalJSON() ([]byte, error) {
 			TestCaseErrorVariableValue: t.Error,
 		}
 		return json.Marshal(marshaler)
+	case "FUNCTION_CALL":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TestCaseFunctionCallVariableValue
+		}{
+			Type:                              t.Type,
+			TestCaseFunctionCallVariableValue: t.FunctionCall,
+		}
+		return json.Marshal(marshaler)
 	}
 }
 
@@ -10263,6 +11192,7 @@ type TestCaseVariableValueVisitor interface {
 	VisitChatHistory(*TestCaseChatHistoryVariableValue) error
 	VisitSearchResults(*TestCaseSearchResultsVariableValue) error
 	VisitError(*TestCaseErrorVariableValue) error
+	VisitFunctionCall(*TestCaseFunctionCallVariableValue) error
 }
 
 func (t *TestCaseVariableValue) Accept(visitor TestCaseVariableValueVisitor) error {
@@ -10281,6 +11211,8 @@ func (t *TestCaseVariableValue) Accept(visitor TestCaseVariableValueVisitor) err
 		return visitor.VisitSearchResults(t.SearchResults)
 	case "ERROR":
 		return visitor.VisitError(t.Error)
+	case "FUNCTION_CALL":
+		return visitor.VisitFunctionCall(t.FunctionCall)
 	}
 }
 
@@ -10716,6 +11648,38 @@ func (t *TestSuiteRunExecutionErrorOutput) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+// Execution output of an entity evaluated during a Test Suite Run that is of type FUNCTION_CALL
+type TestSuiteRunExecutionFunctionCallOutput struct {
+	Name             string                 `json:"name"`
+	Value            *FulfilledFunctionCall `json:"value,omitempty"`
+	OutputVariableId string                 `json:"output_variable_id"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestSuiteRunExecutionFunctionCallOutput) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteRunExecutionFunctionCallOutput
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteRunExecutionFunctionCallOutput(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunExecutionFunctionCallOutput) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
 // Execution output of an entity evaluated during a Test Suite Run that is of type JSON
 type TestSuiteRunExecutionJsonOutput struct {
 	Name             string                 `json:"name"`
@@ -10851,6 +11815,7 @@ type TestSuiteRunExecutionOutput struct {
 	ChatHistory   *TestSuiteRunExecutionChatHistoryOutput
 	SearchResults *TestSuiteRunExecutionSearchResultsOutput
 	Error         *TestSuiteRunExecutionErrorOutput
+	FunctionCall  *TestSuiteRunExecutionFunctionCallOutput
 }
 
 func NewTestSuiteRunExecutionOutputFromString(value *TestSuiteRunExecutionStringOutput) *TestSuiteRunExecutionOutput {
@@ -10875,6 +11840,10 @@ func NewTestSuiteRunExecutionOutputFromSearchResults(value *TestSuiteRunExecutio
 
 func NewTestSuiteRunExecutionOutputFromError(value *TestSuiteRunExecutionErrorOutput) *TestSuiteRunExecutionOutput {
 	return &TestSuiteRunExecutionOutput{Type: "ERROR", Error: value}
+}
+
+func NewTestSuiteRunExecutionOutputFromFunctionCall(value *TestSuiteRunExecutionFunctionCallOutput) *TestSuiteRunExecutionOutput {
+	return &TestSuiteRunExecutionOutput{Type: "FUNCTION_CALL", FunctionCall: value}
 }
 
 func (t *TestSuiteRunExecutionOutput) UnmarshalJSON(data []byte) error {
@@ -10922,6 +11891,12 @@ func (t *TestSuiteRunExecutionOutput) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		t.Error = value
+	case "FUNCTION_CALL":
+		value := new(TestSuiteRunExecutionFunctionCallOutput)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.FunctionCall = value
 	}
 	return nil
 }
@@ -10984,6 +11959,15 @@ func (t TestSuiteRunExecutionOutput) MarshalJSON() ([]byte, error) {
 			TestSuiteRunExecutionErrorOutput: t.Error,
 		}
 		return json.Marshal(marshaler)
+	case "FUNCTION_CALL":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TestSuiteRunExecutionFunctionCallOutput
+		}{
+			Type:                                    t.Type,
+			TestSuiteRunExecutionFunctionCallOutput: t.FunctionCall,
+		}
+		return json.Marshal(marshaler)
 	}
 }
 
@@ -10994,6 +11978,7 @@ type TestSuiteRunExecutionOutputVisitor interface {
 	VisitChatHistory(*TestSuiteRunExecutionChatHistoryOutput) error
 	VisitSearchResults(*TestSuiteRunExecutionSearchResultsOutput) error
 	VisitError(*TestSuiteRunExecutionErrorOutput) error
+	VisitFunctionCall(*TestSuiteRunExecutionFunctionCallOutput) error
 }
 
 func (t *TestSuiteRunExecutionOutput) Accept(visitor TestSuiteRunExecutionOutputVisitor) error {
@@ -11012,6 +11997,8 @@ func (t *TestSuiteRunExecutionOutput) Accept(visitor TestSuiteRunExecutionOutput
 		return visitor.VisitSearchResults(t.SearchResults)
 	case "ERROR":
 		return visitor.VisitError(t.Error)
+	case "FUNCTION_CALL":
+		return visitor.VisitFunctionCall(t.FunctionCall)
 	}
 }
 
@@ -11928,6 +12915,7 @@ func (v *VellumVariable) String() string {
 // - `ARRAY` - ARRAY
 // - `FUNCTION_CALL` - FUNCTION_CALL
 // - `IMAGE` - IMAGE
+// - `NULL` - NULL
 type VellumVariableType string
 
 const (
@@ -11940,6 +12928,7 @@ const (
 	VellumVariableTypeArray         VellumVariableType = "ARRAY"
 	VellumVariableTypeFunctionCall  VellumVariableType = "FUNCTION_CALL"
 	VellumVariableTypeImage         VellumVariableType = "IMAGE"
+	VellumVariableTypeNull          VellumVariableType = "NULL"
 )
 
 func NewVellumVariableTypeFromString(s string) (VellumVariableType, error) {
@@ -11962,6 +12951,8 @@ func NewVellumVariableTypeFromString(s string) (VellumVariableType, error) {
 		return VellumVariableTypeFunctionCall, nil
 	case "IMAGE":
 		return VellumVariableTypeImage, nil
+	case "NULL":
+		return VellumVariableTypeNull, nil
 	}
 	var t VellumVariableType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)

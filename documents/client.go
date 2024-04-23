@@ -74,6 +74,31 @@ func (c *Client) List(ctx context.Context, request *vellumclientgo.DocumentsList
 	return response, nil
 }
 
+// Retrieve a Document via its Vellum-generated ID.
+//
+// A UUID string identifying this document.
+func (c *Client) Retrieve(ctx context.Context, id string) (*vellumclientgo.DocumentRead, error) {
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/documents/%v", id)
+
+	var response *vellumclientgo.DocumentRead
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:      endpointURL,
+			Method:   http.MethodGet,
+			Headers:  c.header,
+			Response: &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
 // A UUID string identifying this document.
 func (c *Client) Destroy(ctx context.Context, id string) error {
 	baseURL := "https://api.vellum.ai"

@@ -5,7 +5,7 @@ package api
 type UpsertSandboxScenarioRequestRequest struct {
 	Label *string `json:"label,omitempty"`
 	// The inputs for the scenario
-	Inputs []*ScenarioInputRequest `json:"inputs,omitempty"`
+	Inputs []*NamedScenarioInputRequest `json:"inputs,omitempty"`
 	// The id of the scenario to update. If none is provided, an id will be generated and a new scenario will be appended.
 	ScenarioId *string `json:"scenario_id,omitempty"`
 }
