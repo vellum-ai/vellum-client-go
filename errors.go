@@ -30,29 +30,6 @@ func (b *BadRequestError) Unwrap() error {
 	return b.APIError
 }
 
-type ConflictError struct {
-	*core.APIError
-	Body *RegisterPromptErrorResponse
-}
-
-func (c *ConflictError) UnmarshalJSON(data []byte) error {
-	var body *RegisterPromptErrorResponse
-	if err := json.Unmarshal(data, &body); err != nil {
-		return err
-	}
-	c.StatusCode = 409
-	c.Body = body
-	return nil
-}
-
-func (c *ConflictError) MarshalJSON() ([]byte, error) {
-	return json.Marshal(c.Body)
-}
-
-func (c *ConflictError) Unwrap() error {
-	return c.APIError
-}
-
 type ForbiddenError struct {
 	*core.APIError
 	Body interface{}
