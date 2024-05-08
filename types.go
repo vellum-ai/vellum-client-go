@@ -2014,6 +2014,36 @@ func (e *ErrorVariableValue) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
+// A value representing an Error.
+type ErrorVellumValue struct {
+	Value *VellumError `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (e *ErrorVellumValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler ErrorVellumValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = ErrorVellumValue(value)
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ErrorVellumValue) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
 type ExecutePromptApiErrorResponse struct {
 	// Details about why the request failed.
 	Detail string `json:"detail"`
@@ -3456,6 +3486,36 @@ func (f *FunctionCallVariableValue) String() string {
 	return fmt.Sprintf("%#v", f)
 }
 
+// A value representing a Function Call.
+type FunctionCallVellumValue struct {
+	Value *FunctionCall `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (f *FunctionCallVellumValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler FunctionCallVellumValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*f = FunctionCallVellumValue(value)
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FunctionCallVellumValue) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
 type GenerateErrorResponse struct {
 	// Details about why the request failed.
 	Detail string `json:"detail"`
@@ -4047,6 +4107,36 @@ func (j *JsonVariableValue) UnmarshalJSON(data []byte) error {
 }
 
 func (j *JsonVariableValue) String() string {
+	if len(j._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(j._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(j); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", j)
+}
+
+// A value representing a JSON object.
+type JsonVellumValue struct {
+	Value map[string]interface{} `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (j *JsonVellumValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler JsonVellumValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*j = JsonVellumValue(value)
+	j._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (j *JsonVellumValue) String() string {
 	if len(j._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(j._rawJSON); err == nil {
 			return value
@@ -5745,9 +5835,11 @@ func (n *NodeInputVariableCompiledValue) Accept(visitor NodeInputVariableCompile
 	}
 }
 
+// An output returned by a node that is of type ARRAY.
 type NodeOutputCompiledArrayValue struct {
-	NodeOutputId string                    `json:"node_output_id"`
-	Value        []*ArrayVariableValueItem `json:"value,omitempty"`
+	Value        []*ArrayVariableValueItem     `json:"value,omitempty"`
+	NodeOutputId string                        `json:"node_output_id"`
+	State        *WorkflowNodeResultEventState `json:"state,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -5775,9 +5867,11 @@ func (n *NodeOutputCompiledArrayValue) String() string {
 	return fmt.Sprintf("%#v", n)
 }
 
+// An output returned by a node that is of type CHAT_HISTORY.
 type NodeOutputCompiledChatHistoryValue struct {
-	NodeOutputId string         `json:"node_output_id"`
-	Value        []*ChatMessage `json:"value,omitempty"`
+	Value        []*ChatMessage                `json:"value,omitempty"`
+	NodeOutputId string                        `json:"node_output_id"`
+	State        *WorkflowNodeResultEventState `json:"state,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -5805,9 +5899,11 @@ func (n *NodeOutputCompiledChatHistoryValue) String() string {
 	return fmt.Sprintf("%#v", n)
 }
 
+// An output returned by a node that is of type ERROR.
 type NodeOutputCompiledErrorValue struct {
-	NodeOutputId string       `json:"node_output_id"`
-	Value        *VellumError `json:"value,omitempty"`
+	Value        *VellumError                  `json:"value,omitempty"`
+	NodeOutputId string                        `json:"node_output_id"`
+	State        *WorkflowNodeResultEventState `json:"state,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -5835,25 +5931,27 @@ func (n *NodeOutputCompiledErrorValue) String() string {
 	return fmt.Sprintf("%#v", n)
 }
 
-type NodeOutputCompiledFunctionValue struct {
-	NodeOutputId string        `json:"node_output_id"`
-	Value        *FunctionCall `json:"value,omitempty"`
+// An output returned by a node that is of type FUNCTION_CALL.
+type NodeOutputCompiledFunctionCallValue struct {
+	Value        *FunctionCall                 `json:"value,omitempty"`
+	NodeOutputId string                        `json:"node_output_id"`
+	State        *WorkflowNodeResultEventState `json:"state,omitempty"`
 
 	_rawJSON json.RawMessage
 }
 
-func (n *NodeOutputCompiledFunctionValue) UnmarshalJSON(data []byte) error {
-	type unmarshaler NodeOutputCompiledFunctionValue
+func (n *NodeOutputCompiledFunctionCallValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler NodeOutputCompiledFunctionCallValue
 	var value unmarshaler
 	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*n = NodeOutputCompiledFunctionValue(value)
+	*n = NodeOutputCompiledFunctionCallValue(value)
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
 
-func (n *NodeOutputCompiledFunctionValue) String() string {
+func (n *NodeOutputCompiledFunctionCallValue) String() string {
 	if len(n._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
 			return value
@@ -5865,9 +5963,11 @@ func (n *NodeOutputCompiledFunctionValue) String() string {
 	return fmt.Sprintf("%#v", n)
 }
 
+// An output returned by a node that is of type JSON.
 type NodeOutputCompiledJsonValue struct {
-	NodeOutputId string                 `json:"node_output_id"`
-	Value        map[string]interface{} `json:"value,omitempty"`
+	Value        map[string]interface{}        `json:"value,omitempty"`
+	NodeOutputId string                        `json:"node_output_id"`
+	State        *WorkflowNodeResultEventState `json:"state,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -5895,9 +5995,11 @@ func (n *NodeOutputCompiledJsonValue) String() string {
 	return fmt.Sprintf("%#v", n)
 }
 
+// An output returned by a node that is of type NUMBER.
 type NodeOutputCompiledNumberValue struct {
-	NodeOutputId string   `json:"node_output_id"`
-	Value        *float64 `json:"value,omitempty"`
+	Value        *float64                      `json:"value,omitempty"`
+	NodeOutputId string                        `json:"node_output_id"`
+	State        *WorkflowNodeResultEventState `json:"state,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -5925,9 +6027,11 @@ func (n *NodeOutputCompiledNumberValue) String() string {
 	return fmt.Sprintf("%#v", n)
 }
 
+// An output returned by a node that is of type SEARCH_RESULTS.
 type NodeOutputCompiledSearchResultsValue struct {
-	NodeOutputId string          `json:"node_output_id"`
-	Value        []*SearchResult `json:"value,omitempty"`
+	Value        []*SearchResult               `json:"value,omitempty"`
+	NodeOutputId string                        `json:"node_output_id"`
+	State        *WorkflowNodeResultEventState `json:"state,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -5955,9 +6059,11 @@ func (n *NodeOutputCompiledSearchResultsValue) String() string {
 	return fmt.Sprintf("%#v", n)
 }
 
+// An output returned by a node that is of type STRING.
 type NodeOutputCompiledStringValue struct {
-	NodeOutputId string  `json:"node_output_id"`
-	Value        *string `json:"value,omitempty"`
+	Value        *string                       `json:"value,omitempty"`
+	NodeOutputId string                        `json:"node_output_id"`
+	State        *WorkflowNodeResultEventState `json:"state,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -5994,7 +6100,7 @@ type NodeOutputCompiledValue struct {
 	SearchResults *NodeOutputCompiledSearchResultsValue
 	Error         *NodeOutputCompiledErrorValue
 	Array         *NodeOutputCompiledArrayValue
-	FunctionCall  *NodeOutputCompiledFunctionValue
+	FunctionCall  *NodeOutputCompiledFunctionCallValue
 }
 
 func NewNodeOutputCompiledValueFromString(value *NodeOutputCompiledStringValue) *NodeOutputCompiledValue {
@@ -6025,7 +6131,7 @@ func NewNodeOutputCompiledValueFromArray(value *NodeOutputCompiledArrayValue) *N
 	return &NodeOutputCompiledValue{Type: "ARRAY", Array: value}
 }
 
-func NewNodeOutputCompiledValueFromFunctionCall(value *NodeOutputCompiledFunctionValue) *NodeOutputCompiledValue {
+func NewNodeOutputCompiledValueFromFunctionCall(value *NodeOutputCompiledFunctionCallValue) *NodeOutputCompiledValue {
 	return &NodeOutputCompiledValue{Type: "FUNCTION_CALL", FunctionCall: value}
 }
 
@@ -6081,7 +6187,7 @@ func (n *NodeOutputCompiledValue) UnmarshalJSON(data []byte) error {
 		}
 		n.Array = value
 	case "FUNCTION_CALL":
-		value := new(NodeOutputCompiledFunctionValue)
+		value := new(NodeOutputCompiledFunctionCallValue)
 		if err := json.Unmarshal(data, &value); err != nil {
 			return err
 		}
@@ -6160,10 +6266,10 @@ func (n NodeOutputCompiledValue) MarshalJSON() ([]byte, error) {
 	case "FUNCTION_CALL":
 		var marshaler = struct {
 			Type string `json:"type"`
-			*NodeOutputCompiledFunctionValue
+			*NodeOutputCompiledFunctionCallValue
 		}{
-			Type:                            n.Type,
-			NodeOutputCompiledFunctionValue: n.FunctionCall,
+			Type:                                n.Type,
+			NodeOutputCompiledFunctionCallValue: n.FunctionCall,
 		}
 		return json.Marshal(marshaler)
 	}
@@ -6177,7 +6283,7 @@ type NodeOutputCompiledValueVisitor interface {
 	VisitSearchResults(*NodeOutputCompiledSearchResultsValue) error
 	VisitError(*NodeOutputCompiledErrorValue) error
 	VisitArray(*NodeOutputCompiledArrayValue) error
-	VisitFunctionCall(*NodeOutputCompiledFunctionValue) error
+	VisitFunctionCall(*NodeOutputCompiledFunctionCallValue) error
 }
 
 func (n *NodeOutputCompiledValue) Accept(visitor NodeOutputCompiledValueVisitor) error {
@@ -6786,25 +6892,25 @@ func (p *PromptNodeResultData) String() string {
 
 type PromptOutput struct {
 	Type         string
-	String       *StringVariableValue
-	Json         *JsonVariableValue
-	Error        *ErrorVariableValue
-	FunctionCall *FunctionCallVariableValue
+	String       *StringVellumValue
+	Json         *JsonVellumValue
+	Error        *ErrorVellumValue
+	FunctionCall *FunctionCallVellumValue
 }
 
-func NewPromptOutputFromString(value *StringVariableValue) *PromptOutput {
+func NewPromptOutputFromString(value *StringVellumValue) *PromptOutput {
 	return &PromptOutput{Type: "STRING", String: value}
 }
 
-func NewPromptOutputFromJson(value *JsonVariableValue) *PromptOutput {
+func NewPromptOutputFromJson(value *JsonVellumValue) *PromptOutput {
 	return &PromptOutput{Type: "JSON", Json: value}
 }
 
-func NewPromptOutputFromError(value *ErrorVariableValue) *PromptOutput {
+func NewPromptOutputFromError(value *ErrorVellumValue) *PromptOutput {
 	return &PromptOutput{Type: "ERROR", Error: value}
 }
 
-func NewPromptOutputFromFunctionCall(value *FunctionCallVariableValue) *PromptOutput {
+func NewPromptOutputFromFunctionCall(value *FunctionCallVellumValue) *PromptOutput {
 	return &PromptOutput{Type: "FUNCTION_CALL", FunctionCall: value}
 }
 
@@ -6818,25 +6924,25 @@ func (p *PromptOutput) UnmarshalJSON(data []byte) error {
 	p.Type = unmarshaler.Type
 	switch unmarshaler.Type {
 	case "STRING":
-		value := new(StringVariableValue)
+		value := new(StringVellumValue)
 		if err := json.Unmarshal(data, &value); err != nil {
 			return err
 		}
 		p.String = value
 	case "JSON":
-		value := new(JsonVariableValue)
+		value := new(JsonVellumValue)
 		if err := json.Unmarshal(data, &value); err != nil {
 			return err
 		}
 		p.Json = value
 	case "ERROR":
-		value := new(ErrorVariableValue)
+		value := new(ErrorVellumValue)
 		if err := json.Unmarshal(data, &value); err != nil {
 			return err
 		}
 		p.Error = value
 	case "FUNCTION_CALL":
-		value := new(FunctionCallVariableValue)
+		value := new(FunctionCallVellumValue)
 		if err := json.Unmarshal(data, &value); err != nil {
 			return err
 		}
@@ -6852,47 +6958,47 @@ func (p PromptOutput) MarshalJSON() ([]byte, error) {
 	case "STRING":
 		var marshaler = struct {
 			Type string `json:"type"`
-			*StringVariableValue
+			*StringVellumValue
 		}{
-			Type:                p.Type,
-			StringVariableValue: p.String,
+			Type:              p.Type,
+			StringVellumValue: p.String,
 		}
 		return json.Marshal(marshaler)
 	case "JSON":
 		var marshaler = struct {
 			Type string `json:"type"`
-			*JsonVariableValue
+			*JsonVellumValue
 		}{
-			Type:              p.Type,
-			JsonVariableValue: p.Json,
+			Type:            p.Type,
+			JsonVellumValue: p.Json,
 		}
 		return json.Marshal(marshaler)
 	case "ERROR":
 		var marshaler = struct {
 			Type string `json:"type"`
-			*ErrorVariableValue
+			*ErrorVellumValue
 		}{
-			Type:               p.Type,
-			ErrorVariableValue: p.Error,
+			Type:             p.Type,
+			ErrorVellumValue: p.Error,
 		}
 		return json.Marshal(marshaler)
 	case "FUNCTION_CALL":
 		var marshaler = struct {
 			Type string `json:"type"`
-			*FunctionCallVariableValue
+			*FunctionCallVellumValue
 		}{
-			Type:                      p.Type,
-			FunctionCallVariableValue: p.FunctionCall,
+			Type:                    p.Type,
+			FunctionCallVellumValue: p.FunctionCall,
 		}
 		return json.Marshal(marshaler)
 	}
 }
 
 type PromptOutputVisitor interface {
-	VisitString(*StringVariableValue) error
-	VisitJson(*JsonVariableValue) error
-	VisitError(*ErrorVariableValue) error
-	VisitFunctionCall(*FunctionCallVariableValue) error
+	VisitString(*StringVellumValue) error
+	VisitJson(*JsonVellumValue) error
+	VisitError(*ErrorVellumValue) error
+	VisitFunctionCall(*FunctionCallVellumValue) error
 }
 
 func (p *PromptOutput) Accept(visitor PromptOutputVisitor) error {
@@ -8113,6 +8219,36 @@ func (s *StringVariableValue) UnmarshalJSON(data []byte) error {
 }
 
 func (s *StringVariableValue) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// A value representing a string.
+type StringVellumValue struct {
+	Value *string `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (s *StringVellumValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler StringVellumValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = StringVellumValue(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *StringVellumValue) String() string {
 	if len(s._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
 			return value
