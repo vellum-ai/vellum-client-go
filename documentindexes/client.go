@@ -47,6 +47,9 @@ func (c *Client) List(ctx context.Context, request *vellumclientgo.DocumentIndex
 	if request.Ordering != nil {
 		queryParams.Add("ordering", fmt.Sprintf("%v", *request.Ordering))
 	}
+	if request.Search != nil {
+		queryParams.Add("search", fmt.Sprintf("%v", *request.Search))
+	}
 	if request.Status != nil {
 		queryParams.Add("status", fmt.Sprintf("%v", request.Status))
 	}

@@ -126,6 +126,9 @@ type SubmitWorkflowExecutionActualsRequest struct {
 	ExternalId *string `json:"external_id,omitempty"`
 }
 
+// - `True` - True
+type AddOpenaiApiKeyEnum = bool
+
 // A Node Result Event emitted from an API Node.
 type ApiNodeResult struct {
 	Data *ApiNodeResultData `json:"data,omitempty"`
@@ -459,15 +462,13 @@ func (a *ArrayChatMessageContentRequest) String() string {
 type ArrayEnum = string
 
 type ArrayVariableValueItem struct {
-	Type          string
-	String        *StringVariableValue
-	Number        *NumberVariableValue
-	Json          *JsonVariableValue
-	ChatHistory   *ChatHistoryVariableValue
-	SearchResults *SearchResultsVariableValue
-	Error         *ErrorVariableValue
-	FunctionCall  *FunctionCallVariableValue
-	Image         *ImageVariableValue
+	Type         string
+	String       *StringVariableValue
+	Number       *NumberVariableValue
+	Json         *JsonVariableValue
+	Error        *ErrorVariableValue
+	FunctionCall *FunctionCallVariableValue
+	Image        *ImageVariableValue
 }
 
 func NewArrayVariableValueItemFromString(value *StringVariableValue) *ArrayVariableValueItem {
@@ -480,14 +481,6 @@ func NewArrayVariableValueItemFromNumber(value *NumberVariableValue) *ArrayVaria
 
 func NewArrayVariableValueItemFromJson(value *JsonVariableValue) *ArrayVariableValueItem {
 	return &ArrayVariableValueItem{Type: "JSON", Json: value}
-}
-
-func NewArrayVariableValueItemFromChatHistory(value *ChatHistoryVariableValue) *ArrayVariableValueItem {
-	return &ArrayVariableValueItem{Type: "CHAT_HISTORY", ChatHistory: value}
-}
-
-func NewArrayVariableValueItemFromSearchResults(value *SearchResultsVariableValue) *ArrayVariableValueItem {
-	return &ArrayVariableValueItem{Type: "SEARCH_RESULTS", SearchResults: value}
 }
 
 func NewArrayVariableValueItemFromError(value *ErrorVariableValue) *ArrayVariableValueItem {
@@ -529,18 +522,6 @@ func (a *ArrayVariableValueItem) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		a.Json = value
-	case "CHAT_HISTORY":
-		value := new(ChatHistoryVariableValue)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		a.ChatHistory = value
-	case "SEARCH_RESULTS":
-		value := new(SearchResultsVariableValue)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		a.SearchResults = value
 	case "ERROR":
 		value := new(ErrorVariableValue)
 		if err := json.Unmarshal(data, &value); err != nil {
@@ -594,24 +575,6 @@ func (a ArrayVariableValueItem) MarshalJSON() ([]byte, error) {
 			JsonVariableValue: a.Json,
 		}
 		return json.Marshal(marshaler)
-	case "CHAT_HISTORY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ChatHistoryVariableValue
-		}{
-			Type:                     a.Type,
-			ChatHistoryVariableValue: a.ChatHistory,
-		}
-		return json.Marshal(marshaler)
-	case "SEARCH_RESULTS":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*SearchResultsVariableValue
-		}{
-			Type:                       a.Type,
-			SearchResultsVariableValue: a.SearchResults,
-		}
-		return json.Marshal(marshaler)
 	case "ERROR":
 		var marshaler = struct {
 			Type string `json:"type"`
@@ -646,8 +609,6 @@ type ArrayVariableValueItemVisitor interface {
 	VisitString(*StringVariableValue) error
 	VisitNumber(*NumberVariableValue) error
 	VisitJson(*JsonVariableValue) error
-	VisitChatHistory(*ChatHistoryVariableValue) error
-	VisitSearchResults(*SearchResultsVariableValue) error
 	VisitError(*ErrorVariableValue) error
 	VisitFunctionCall(*FunctionCallVariableValue) error
 	VisitImage(*ImageVariableValue) error
@@ -663,10 +624,6 @@ func (a *ArrayVariableValueItem) Accept(visitor ArrayVariableValueItemVisitor) e
 		return visitor.VisitNumber(a.Number)
 	case "JSON":
 		return visitor.VisitJson(a.Json)
-	case "CHAT_HISTORY":
-		return visitor.VisitChatHistory(a.ChatHistory)
-	case "SEARCH_RESULTS":
-		return visitor.VisitSearchResults(a.SearchResults)
 	case "ERROR":
 		return visitor.VisitError(a.Error)
 	case "FUNCTION_CALL":
@@ -674,6 +631,358 @@ func (a *ArrayVariableValueItem) Accept(visitor ArrayVariableValueItemVisitor) e
 	case "IMAGE":
 		return visitor.VisitImage(a.Image)
 	}
+}
+
+type ArrayVellumValueItem struct {
+	Type         string
+	String       *StringVellumValue
+	Number       *NumberVellumValue
+	Json         *JsonVellumValue
+	Image        *ImageVellumValue
+	FunctionCall *FunctionCallVellumValue
+	Error        *ErrorVellumValue
+}
+
+func NewArrayVellumValueItemFromString(value *StringVellumValue) *ArrayVellumValueItem {
+	return &ArrayVellumValueItem{Type: "STRING", String: value}
+}
+
+func NewArrayVellumValueItemFromNumber(value *NumberVellumValue) *ArrayVellumValueItem {
+	return &ArrayVellumValueItem{Type: "NUMBER", Number: value}
+}
+
+func NewArrayVellumValueItemFromJson(value *JsonVellumValue) *ArrayVellumValueItem {
+	return &ArrayVellumValueItem{Type: "JSON", Json: value}
+}
+
+func NewArrayVellumValueItemFromImage(value *ImageVellumValue) *ArrayVellumValueItem {
+	return &ArrayVellumValueItem{Type: "IMAGE", Image: value}
+}
+
+func NewArrayVellumValueItemFromFunctionCall(value *FunctionCallVellumValue) *ArrayVellumValueItem {
+	return &ArrayVellumValueItem{Type: "FUNCTION_CALL", FunctionCall: value}
+}
+
+func NewArrayVellumValueItemFromError(value *ErrorVellumValue) *ArrayVellumValueItem {
+	return &ArrayVellumValueItem{Type: "ERROR", Error: value}
+}
+
+func (a *ArrayVellumValueItem) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	a.Type = unmarshaler.Type
+	switch unmarshaler.Type {
+	case "STRING":
+		value := new(StringVellumValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		a.String = value
+	case "NUMBER":
+		value := new(NumberVellumValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		a.Number = value
+	case "JSON":
+		value := new(JsonVellumValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		a.Json = value
+	case "IMAGE":
+		value := new(ImageVellumValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		a.Image = value
+	case "FUNCTION_CALL":
+		value := new(FunctionCallVellumValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		a.FunctionCall = value
+	case "ERROR":
+		value := new(ErrorVellumValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		a.Error = value
+	}
+	return nil
+}
+
+func (a ArrayVellumValueItem) MarshalJSON() ([]byte, error) {
+	switch a.Type {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", a.Type, a)
+	case "STRING":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*StringVellumValue
+		}{
+			Type:              a.Type,
+			StringVellumValue: a.String,
+		}
+		return json.Marshal(marshaler)
+	case "NUMBER":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*NumberVellumValue
+		}{
+			Type:              a.Type,
+			NumberVellumValue: a.Number,
+		}
+		return json.Marshal(marshaler)
+	case "JSON":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*JsonVellumValue
+		}{
+			Type:            a.Type,
+			JsonVellumValue: a.Json,
+		}
+		return json.Marshal(marshaler)
+	case "IMAGE":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ImageVellumValue
+		}{
+			Type:             a.Type,
+			ImageVellumValue: a.Image,
+		}
+		return json.Marshal(marshaler)
+	case "FUNCTION_CALL":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*FunctionCallVellumValue
+		}{
+			Type:                    a.Type,
+			FunctionCallVellumValue: a.FunctionCall,
+		}
+		return json.Marshal(marshaler)
+	case "ERROR":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ErrorVellumValue
+		}{
+			Type:             a.Type,
+			ErrorVellumValue: a.Error,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type ArrayVellumValueItemVisitor interface {
+	VisitString(*StringVellumValue) error
+	VisitNumber(*NumberVellumValue) error
+	VisitJson(*JsonVellumValue) error
+	VisitImage(*ImageVellumValue) error
+	VisitFunctionCall(*FunctionCallVellumValue) error
+	VisitError(*ErrorVellumValue) error
+}
+
+func (a *ArrayVellumValueItem) Accept(visitor ArrayVellumValueItemVisitor) error {
+	switch a.Type {
+	default:
+		return fmt.Errorf("invalid type %s in %T", a.Type, a)
+	case "STRING":
+		return visitor.VisitString(a.String)
+	case "NUMBER":
+		return visitor.VisitNumber(a.Number)
+	case "JSON":
+		return visitor.VisitJson(a.Json)
+	case "IMAGE":
+		return visitor.VisitImage(a.Image)
+	case "FUNCTION_CALL":
+		return visitor.VisitFunctionCall(a.FunctionCall)
+	case "ERROR":
+		return visitor.VisitError(a.Error)
+	}
+}
+
+// Basic vectorizer for intfloat/multilingual-e5-large.
+type BasicVectorizerIntfloatMultilingualE5Large struct {
+	Config map[string]interface{} `json:"config,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (b *BasicVectorizerIntfloatMultilingualE5Large) UnmarshalJSON(data []byte) error {
+	type unmarshaler BasicVectorizerIntfloatMultilingualE5Large
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BasicVectorizerIntfloatMultilingualE5Large(value)
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BasicVectorizerIntfloatMultilingualE5Large) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Basic vectorizer for intfloat/multilingual-e5-large.
+type BasicVectorizerIntfloatMultilingualE5LargeRequest struct {
+	Config map[string]interface{} `json:"config,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (b *BasicVectorizerIntfloatMultilingualE5LargeRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BasicVectorizerIntfloatMultilingualE5LargeRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BasicVectorizerIntfloatMultilingualE5LargeRequest(value)
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BasicVectorizerIntfloatMultilingualE5LargeRequest) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Basic vectorizer for sentence-transformers/multi-qa-mpnet-base-cos-v1.
+type BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1 struct {
+	Config map[string]interface{} `json:"config,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1) UnmarshalJSON(data []byte) error {
+	type unmarshaler BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1(value)
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Basic vectorizer for sentence-transformers/multi-qa-mpnet-base-cos-v1.
+type BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request struct {
+	Config map[string]interface{} `json:"config,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request) UnmarshalJSON(data []byte) error {
+	type unmarshaler BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request(value)
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Basic vectorizer for sentence-transformers/multi-qa-mpnet-base-dot-v1.
+type BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1 struct {
+	Config map[string]interface{} `json:"config,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1) UnmarshalJSON(data []byte) error {
+	type unmarshaler BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1(value)
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Basic vectorizer for sentence-transformers/multi-qa-mpnet-base-dot-v1.
+type BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request struct {
+	Config map[string]interface{} `json:"config,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request) UnmarshalJSON(data []byte) error {
+	type unmarshaler BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request(value)
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
 }
 
 type ChatHistoryEnum = string
@@ -699,35 +1008,6 @@ func (c *ChatHistoryInputRequest) UnmarshalJSON(data []byte) error {
 }
 
 func (c *ChatHistoryInputRequest) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
-}
-
-type ChatHistoryVariableValue struct {
-	Value []*ChatMessage `json:"value,omitempty"`
-
-	_rawJSON json.RawMessage
-}
-
-func (c *ChatHistoryVariableValue) UnmarshalJSON(data []byte) error {
-	type unmarshaler ChatHistoryVariableValue
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*c = ChatHistoryVariableValue(value)
-	c._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (c *ChatHistoryVariableValue) String() string {
 	if len(c._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
 			return value
@@ -1784,6 +2064,272 @@ func (d *DocumentDocumentToDocumentIndex) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
+type DocumentIndexChunking struct {
+	ChunkerName                   string
+	ReductoChunker                *ReductoChunking
+	SentenceChunker               *SentenceChunking
+	TokenOverlappingWindowChunker *TokenOverlappingWindowChunking
+}
+
+func NewDocumentIndexChunkingFromReductoChunker(value *ReductoChunking) *DocumentIndexChunking {
+	return &DocumentIndexChunking{ChunkerName: "reducto-chunker", ReductoChunker: value}
+}
+
+func NewDocumentIndexChunkingFromSentenceChunker(value *SentenceChunking) *DocumentIndexChunking {
+	return &DocumentIndexChunking{ChunkerName: "sentence-chunker", SentenceChunker: value}
+}
+
+func NewDocumentIndexChunkingFromTokenOverlappingWindowChunker(value *TokenOverlappingWindowChunking) *DocumentIndexChunking {
+	return &DocumentIndexChunking{ChunkerName: "token-overlapping-window-chunker", TokenOverlappingWindowChunker: value}
+}
+
+func (d *DocumentIndexChunking) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		ChunkerName string `json:"chunker_name"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	d.ChunkerName = unmarshaler.ChunkerName
+	switch unmarshaler.ChunkerName {
+	case "reducto-chunker":
+		value := new(ReductoChunking)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		d.ReductoChunker = value
+	case "sentence-chunker":
+		value := new(SentenceChunking)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		d.SentenceChunker = value
+	case "token-overlapping-window-chunker":
+		value := new(TokenOverlappingWindowChunking)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		d.TokenOverlappingWindowChunker = value
+	}
+	return nil
+}
+
+func (d DocumentIndexChunking) MarshalJSON() ([]byte, error) {
+	switch d.ChunkerName {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", d.ChunkerName, d)
+	case "reducto-chunker":
+		var marshaler = struct {
+			ChunkerName string `json:"chunker_name"`
+			*ReductoChunking
+		}{
+			ChunkerName:     d.ChunkerName,
+			ReductoChunking: d.ReductoChunker,
+		}
+		return json.Marshal(marshaler)
+	case "sentence-chunker":
+		var marshaler = struct {
+			ChunkerName string `json:"chunker_name"`
+			*SentenceChunking
+		}{
+			ChunkerName:      d.ChunkerName,
+			SentenceChunking: d.SentenceChunker,
+		}
+		return json.Marshal(marshaler)
+	case "token-overlapping-window-chunker":
+		var marshaler = struct {
+			ChunkerName string `json:"chunker_name"`
+			*TokenOverlappingWindowChunking
+		}{
+			ChunkerName:                    d.ChunkerName,
+			TokenOverlappingWindowChunking: d.TokenOverlappingWindowChunker,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type DocumentIndexChunkingVisitor interface {
+	VisitReductoChunker(*ReductoChunking) error
+	VisitSentenceChunker(*SentenceChunking) error
+	VisitTokenOverlappingWindowChunker(*TokenOverlappingWindowChunking) error
+}
+
+func (d *DocumentIndexChunking) Accept(visitor DocumentIndexChunkingVisitor) error {
+	switch d.ChunkerName {
+	default:
+		return fmt.Errorf("invalid type %s in %T", d.ChunkerName, d)
+	case "reducto-chunker":
+		return visitor.VisitReductoChunker(d.ReductoChunker)
+	case "sentence-chunker":
+		return visitor.VisitSentenceChunker(d.SentenceChunker)
+	case "token-overlapping-window-chunker":
+		return visitor.VisitTokenOverlappingWindowChunker(d.TokenOverlappingWindowChunker)
+	}
+}
+
+type DocumentIndexChunkingRequest struct {
+	ChunkerName                   string
+	ReductoChunker                *ReductoChunkingRequest
+	SentenceChunker               *SentenceChunkingRequest
+	TokenOverlappingWindowChunker *TokenOverlappingWindowChunkingRequest
+}
+
+func NewDocumentIndexChunkingRequestFromReductoChunker(value *ReductoChunkingRequest) *DocumentIndexChunkingRequest {
+	return &DocumentIndexChunkingRequest{ChunkerName: "reducto-chunker", ReductoChunker: value}
+}
+
+func NewDocumentIndexChunkingRequestFromSentenceChunker(value *SentenceChunkingRequest) *DocumentIndexChunkingRequest {
+	return &DocumentIndexChunkingRequest{ChunkerName: "sentence-chunker", SentenceChunker: value}
+}
+
+func NewDocumentIndexChunkingRequestFromTokenOverlappingWindowChunker(value *TokenOverlappingWindowChunkingRequest) *DocumentIndexChunkingRequest {
+	return &DocumentIndexChunkingRequest{ChunkerName: "token-overlapping-window-chunker", TokenOverlappingWindowChunker: value}
+}
+
+func (d *DocumentIndexChunkingRequest) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		ChunkerName string `json:"chunker_name"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	d.ChunkerName = unmarshaler.ChunkerName
+	switch unmarshaler.ChunkerName {
+	case "reducto-chunker":
+		value := new(ReductoChunkingRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		d.ReductoChunker = value
+	case "sentence-chunker":
+		value := new(SentenceChunkingRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		d.SentenceChunker = value
+	case "token-overlapping-window-chunker":
+		value := new(TokenOverlappingWindowChunkingRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		d.TokenOverlappingWindowChunker = value
+	}
+	return nil
+}
+
+func (d DocumentIndexChunkingRequest) MarshalJSON() ([]byte, error) {
+	switch d.ChunkerName {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", d.ChunkerName, d)
+	case "reducto-chunker":
+		var marshaler = struct {
+			ChunkerName string `json:"chunker_name"`
+			*ReductoChunkingRequest
+		}{
+			ChunkerName:            d.ChunkerName,
+			ReductoChunkingRequest: d.ReductoChunker,
+		}
+		return json.Marshal(marshaler)
+	case "sentence-chunker":
+		var marshaler = struct {
+			ChunkerName string `json:"chunker_name"`
+			*SentenceChunkingRequest
+		}{
+			ChunkerName:             d.ChunkerName,
+			SentenceChunkingRequest: d.SentenceChunker,
+		}
+		return json.Marshal(marshaler)
+	case "token-overlapping-window-chunker":
+		var marshaler = struct {
+			ChunkerName string `json:"chunker_name"`
+			*TokenOverlappingWindowChunkingRequest
+		}{
+			ChunkerName:                           d.ChunkerName,
+			TokenOverlappingWindowChunkingRequest: d.TokenOverlappingWindowChunker,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type DocumentIndexChunkingRequestVisitor interface {
+	VisitReductoChunker(*ReductoChunkingRequest) error
+	VisitSentenceChunker(*SentenceChunkingRequest) error
+	VisitTokenOverlappingWindowChunker(*TokenOverlappingWindowChunkingRequest) error
+}
+
+func (d *DocumentIndexChunkingRequest) Accept(visitor DocumentIndexChunkingRequestVisitor) error {
+	switch d.ChunkerName {
+	default:
+		return fmt.Errorf("invalid type %s in %T", d.ChunkerName, d)
+	case "reducto-chunker":
+		return visitor.VisitReductoChunker(d.ReductoChunker)
+	case "sentence-chunker":
+		return visitor.VisitSentenceChunker(d.SentenceChunker)
+	case "token-overlapping-window-chunker":
+		return visitor.VisitTokenOverlappingWindowChunker(d.TokenOverlappingWindowChunker)
+	}
+}
+
+type DocumentIndexIndexingConfig struct {
+	Vectorizer *IndexingConfigVectorizer `json:"vectorizer,omitempty"`
+	Chunking   *DocumentIndexChunking    `json:"chunking,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (d *DocumentIndexIndexingConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler DocumentIndexIndexingConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DocumentIndexIndexingConfig(value)
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DocumentIndexIndexingConfig) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DocumentIndexIndexingConfigRequest struct {
+	Vectorizer *IndexingConfigVectorizerRequest `json:"vectorizer,omitempty"`
+	Chunking   *DocumentIndexChunkingRequest    `json:"chunking,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (d *DocumentIndexIndexingConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler DocumentIndexIndexingConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DocumentIndexIndexingConfigRequest(value)
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DocumentIndexIndexingConfigRequest) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
 type DocumentIndexRead struct {
 	Id      string    `json:"id"`
 	Created time.Time `json:"created"`
@@ -1801,9 +2347,8 @@ type DocumentIndexRead struct {
 	// - `DEVELOPMENT` - Development
 	// - `STAGING` - Staging
 	// - `PRODUCTION` - Production
-	Environment *EnvironmentEnum `json:"environment,omitempty"`
-	// Configuration representing how documents should be indexed
-	IndexingConfig map[string]interface{} `json:"indexing_config,omitempty"`
+	Environment    *EnvironmentEnum             `json:"environment,omitempty"`
+	IndexingConfig *DocumentIndexIndexingConfig `json:"indexing_config,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -3117,71 +3662,6 @@ func (f *FulfilledExecuteWorkflowWorkflowResultEvent) String() string {
 	return fmt.Sprintf("%#v", f)
 }
 
-// The final resolved function call value.
-type FulfilledFunctionCall struct {
-	Arguments map[string]interface{} `json:"arguments,omitempty"`
-	Id        *string                `json:"id,omitempty"`
-	Name      string                 `json:"name"`
-
-	_rawJSON json.RawMessage
-}
-
-func (f *FulfilledFunctionCall) UnmarshalJSON(data []byte) error {
-	type unmarshaler FulfilledFunctionCall
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*f = FulfilledFunctionCall(value)
-	f._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (f *FulfilledFunctionCall) String() string {
-	if len(f._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(f); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", f)
-}
-
-// The final resolved function call value.
-type FulfilledFunctionCallRequest struct {
-	State     FulfilledEnum          `json:"state,omitempty"`
-	Arguments map[string]interface{} `json:"arguments,omitempty"`
-	Id        *string                `json:"id,omitempty"`
-	Name      string                 `json:"name"`
-
-	_rawJSON json.RawMessage
-}
-
-func (f *FulfilledFunctionCallRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler FulfilledFunctionCallRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*f = FulfilledFunctionCallRequest(value)
-	f._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (f *FulfilledFunctionCallRequest) String() string {
-	if len(f._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(f); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", f)
-}
-
 // The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
 type FulfilledPromptExecutionMeta struct {
 	Latency      *int              `json:"latency,omitempty"`
@@ -3251,84 +3731,37 @@ func (f *FulfilledWorkflowNodeResultEvent) String() string {
 	return fmt.Sprintf("%#v", f)
 }
 
+// The final resolved function call value.
 type FunctionCall struct {
-	State     string
-	Fulfilled *FulfilledFunctionCall
-	Rejected  *RejectedFunctionCall
-}
+	Arguments map[string]interface{} `json:"arguments,omitempty"`
+	Id        *string                `json:"id,omitempty"`
+	Name      string                 `json:"name"`
+	State     *FulfilledEnum         `json:"state,omitempty"`
 
-func NewFunctionCallFromFulfilled(value *FulfilledFunctionCall) *FunctionCall {
-	return &FunctionCall{State: "FULFILLED", Fulfilled: value}
-}
-
-func NewFunctionCallFromRejected(value *RejectedFunctionCall) *FunctionCall {
-	return &FunctionCall{State: "REJECTED", Rejected: value}
+	_rawJSON json.RawMessage
 }
 
 func (f *FunctionCall) UnmarshalJSON(data []byte) error {
-	var unmarshaler struct {
-		State string `json:"state"`
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler FunctionCall
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	f.State = unmarshaler.State
-	switch unmarshaler.State {
-	case "FULFILLED":
-		value := new(FulfilledFunctionCall)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		f.Fulfilled = value
-	case "REJECTED":
-		value := new(RejectedFunctionCall)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		f.Rejected = value
-	}
+	*f = FunctionCall(value)
+	f._rawJSON = json.RawMessage(data)
 	return nil
 }
 
-func (f FunctionCall) MarshalJSON() ([]byte, error) {
-	switch f.State {
-	default:
-		return nil, fmt.Errorf("invalid type %s in %T", f.State, f)
-	case "FULFILLED":
-		var marshaler = struct {
-			State string `json:"state"`
-			*FulfilledFunctionCall
-		}{
-			State:                 f.State,
-			FulfilledFunctionCall: f.Fulfilled,
+func (f *FunctionCall) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
 		}
-		return json.Marshal(marshaler)
-	case "REJECTED":
-		var marshaler = struct {
-			State string `json:"state"`
-			*RejectedFunctionCall
-		}{
-			State:                f.State,
-			RejectedFunctionCall: f.Rejected,
-		}
-		return json.Marshal(marshaler)
 	}
-}
-
-type FunctionCallVisitor interface {
-	VisitFulfilled(*FulfilledFunctionCall) error
-	VisitRejected(*RejectedFunctionCall) error
-}
-
-func (f *FunctionCall) Accept(visitor FunctionCallVisitor) error {
-	switch f.State {
-	default:
-		return fmt.Errorf("invalid type %s in %T", f.State, f)
-	case "FULFILLED":
-		return visitor.VisitFulfilled(f.Fulfilled)
-	case "REJECTED":
-		return visitor.VisitRejected(f.Rejected)
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
 	}
+	return fmt.Sprintf("%#v", f)
 }
 
 // A function call value that is used in a chat message.
@@ -3456,6 +3889,39 @@ func (f *FunctionCallChatMessageContentValueRequest) String() string {
 }
 
 type FunctionCallEnum = string
+
+// The final resolved function call value.
+type FunctionCallRequest struct {
+	Arguments map[string]interface{} `json:"arguments,omitempty"`
+	Id        *string                `json:"id,omitempty"`
+	Name      string                 `json:"name"`
+	State     *FulfilledEnum         `json:"state,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (f *FunctionCallRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler FunctionCallRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*f = FunctionCallRequest(value)
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FunctionCallRequest) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
 
 type FunctionCallVariableValue struct {
 	Value *FunctionCall `json:"value,omitempty"`
@@ -3825,6 +4291,68 @@ func (g *GenerateStreamResultData) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
+type HkunlpInstructorXlEnum = string
+
+// Vectorizer for hkunlp/instructor-xl.
+type HkunlpInstructorXlVectorizer struct {
+	Config *InstructorVectorizerConfig `json:"config,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (h *HkunlpInstructorXlVectorizer) UnmarshalJSON(data []byte) error {
+	type unmarshaler HkunlpInstructorXlVectorizer
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*h = HkunlpInstructorXlVectorizer(value)
+	h._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (h *HkunlpInstructorXlVectorizer) String() string {
+	if len(h._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(h._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(h); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", h)
+}
+
+// Vectorizer for hkunlp/instructor-xl.
+type HkunlpInstructorXlVectorizerRequest struct {
+	Config *InstructorVectorizerConfigRequest `json:"config,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (h *HkunlpInstructorXlVectorizerRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler HkunlpInstructorXlVectorizerRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*h = HkunlpInstructorXlVectorizerRequest(value)
+	h._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (h *HkunlpInstructorXlVectorizerRequest) String() string {
+	if len(h._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(h._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(h); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", h)
+}
+
 // An image value that is used in a chat message.
 type ImageChatMessageContent struct {
 	Value *VellumImage `json:"value,omitempty"`
@@ -3915,6 +4443,426 @@ func (i *ImageVariableValue) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", i)
+}
+
+// A base Vellum primitive value representing an image.
+type ImageVellumValue struct {
+	Value *VellumImage `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (i *ImageVellumValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler ImageVellumValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = ImageVellumValue(value)
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *ImageVellumValue) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type IndexingConfigVectorizer struct {
+	ModelName                                 string
+	TextEmbedding3Small                       *OpenAiVectorizerTextEmbedding3Small
+	TextEmbedding3Large                       *OpenAiVectorizerTextEmbedding3Large
+	TextEmbeddingAda002                       *OpenAiVectorizerTextEmbeddingAda002
+	IntfloatMultilingualE5Large               *BasicVectorizerIntfloatMultilingualE5Large
+	SentenceTransformersMultiQaMpnetBaseCosV1 *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1
+	SentenceTransformersMultiQaMpnetBaseDotV1 *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1
+	HkunlpInstructorXl                        *HkunlpInstructorXlVectorizer
+}
+
+func NewIndexingConfigVectorizerFromTextEmbedding3Small(value *OpenAiVectorizerTextEmbedding3Small) *IndexingConfigVectorizer {
+	return &IndexingConfigVectorizer{ModelName: "text-embedding-3-small", TextEmbedding3Small: value}
+}
+
+func NewIndexingConfigVectorizerFromTextEmbedding3Large(value *OpenAiVectorizerTextEmbedding3Large) *IndexingConfigVectorizer {
+	return &IndexingConfigVectorizer{ModelName: "text-embedding-3-large", TextEmbedding3Large: value}
+}
+
+func NewIndexingConfigVectorizerFromTextEmbeddingAda002(value *OpenAiVectorizerTextEmbeddingAda002) *IndexingConfigVectorizer {
+	return &IndexingConfigVectorizer{ModelName: "text-embedding-ada-002", TextEmbeddingAda002: value}
+}
+
+func NewIndexingConfigVectorizerFromIntfloatMultilingualE5Large(value *BasicVectorizerIntfloatMultilingualE5Large) *IndexingConfigVectorizer {
+	return &IndexingConfigVectorizer{ModelName: "intfloat/multilingual-e5-large", IntfloatMultilingualE5Large: value}
+}
+
+func NewIndexingConfigVectorizerFromSentenceTransformersMultiQaMpnetBaseCosV1(value *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1) *IndexingConfigVectorizer {
+	return &IndexingConfigVectorizer{ModelName: "sentence-transformers/multi-qa-mpnet-base-cos-v1", SentenceTransformersMultiQaMpnetBaseCosV1: value}
+}
+
+func NewIndexingConfigVectorizerFromSentenceTransformersMultiQaMpnetBaseDotV1(value *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1) *IndexingConfigVectorizer {
+	return &IndexingConfigVectorizer{ModelName: "sentence-transformers/multi-qa-mpnet-base-dot-v1", SentenceTransformersMultiQaMpnetBaseDotV1: value}
+}
+
+func NewIndexingConfigVectorizerFromHkunlpInstructorXl(value *HkunlpInstructorXlVectorizer) *IndexingConfigVectorizer {
+	return &IndexingConfigVectorizer{ModelName: "hkunlp/instructor-xl", HkunlpInstructorXl: value}
+}
+
+func (i *IndexingConfigVectorizer) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		ModelName string `json:"model_name"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	i.ModelName = unmarshaler.ModelName
+	switch unmarshaler.ModelName {
+	case "text-embedding-3-small":
+		value := new(OpenAiVectorizerTextEmbedding3Small)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		i.TextEmbedding3Small = value
+	case "text-embedding-3-large":
+		value := new(OpenAiVectorizerTextEmbedding3Large)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		i.TextEmbedding3Large = value
+	case "text-embedding-ada-002":
+		value := new(OpenAiVectorizerTextEmbeddingAda002)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		i.TextEmbeddingAda002 = value
+	case "intfloat/multilingual-e5-large":
+		value := new(BasicVectorizerIntfloatMultilingualE5Large)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		i.IntfloatMultilingualE5Large = value
+	case "sentence-transformers/multi-qa-mpnet-base-cos-v1":
+		value := new(BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		i.SentenceTransformersMultiQaMpnetBaseCosV1 = value
+	case "sentence-transformers/multi-qa-mpnet-base-dot-v1":
+		value := new(BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		i.SentenceTransformersMultiQaMpnetBaseDotV1 = value
+	case "hkunlp/instructor-xl":
+		value := new(HkunlpInstructorXlVectorizer)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		i.HkunlpInstructorXl = value
+	}
+	return nil
+}
+
+func (i IndexingConfigVectorizer) MarshalJSON() ([]byte, error) {
+	switch i.ModelName {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", i.ModelName, i)
+	case "text-embedding-3-small":
+		var marshaler = struct {
+			ModelName string `json:"model_name"`
+			*OpenAiVectorizerTextEmbedding3Small
+		}{
+			ModelName:                           i.ModelName,
+			OpenAiVectorizerTextEmbedding3Small: i.TextEmbedding3Small,
+		}
+		return json.Marshal(marshaler)
+	case "text-embedding-3-large":
+		var marshaler = struct {
+			ModelName string `json:"model_name"`
+			*OpenAiVectorizerTextEmbedding3Large
+		}{
+			ModelName:                           i.ModelName,
+			OpenAiVectorizerTextEmbedding3Large: i.TextEmbedding3Large,
+		}
+		return json.Marshal(marshaler)
+	case "text-embedding-ada-002":
+		var marshaler = struct {
+			ModelName string `json:"model_name"`
+			*OpenAiVectorizerTextEmbeddingAda002
+		}{
+			ModelName:                           i.ModelName,
+			OpenAiVectorizerTextEmbeddingAda002: i.TextEmbeddingAda002,
+		}
+		return json.Marshal(marshaler)
+	case "intfloat/multilingual-e5-large":
+		var marshaler = struct {
+			ModelName string `json:"model_name"`
+			*BasicVectorizerIntfloatMultilingualE5Large
+		}{
+			ModelName: i.ModelName,
+			BasicVectorizerIntfloatMultilingualE5Large: i.IntfloatMultilingualE5Large,
+		}
+		return json.Marshal(marshaler)
+	case "sentence-transformers/multi-qa-mpnet-base-cos-v1":
+		var marshaler = struct {
+			ModelName string `json:"model_name"`
+			*BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1
+		}{
+			ModelName: i.ModelName,
+			BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1: i.SentenceTransformersMultiQaMpnetBaseCosV1,
+		}
+		return json.Marshal(marshaler)
+	case "sentence-transformers/multi-qa-mpnet-base-dot-v1":
+		var marshaler = struct {
+			ModelName string `json:"model_name"`
+			*BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1
+		}{
+			ModelName: i.ModelName,
+			BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1: i.SentenceTransformersMultiQaMpnetBaseDotV1,
+		}
+		return json.Marshal(marshaler)
+	case "hkunlp/instructor-xl":
+		var marshaler = struct {
+			ModelName string `json:"model_name"`
+			*HkunlpInstructorXlVectorizer
+		}{
+			ModelName:                    i.ModelName,
+			HkunlpInstructorXlVectorizer: i.HkunlpInstructorXl,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type IndexingConfigVectorizerVisitor interface {
+	VisitTextEmbedding3Small(*OpenAiVectorizerTextEmbedding3Small) error
+	VisitTextEmbedding3Large(*OpenAiVectorizerTextEmbedding3Large) error
+	VisitTextEmbeddingAda002(*OpenAiVectorizerTextEmbeddingAda002) error
+	VisitIntfloatMultilingualE5Large(*BasicVectorizerIntfloatMultilingualE5Large) error
+	VisitSentenceTransformersMultiQaMpnetBaseCosV1(*BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1) error
+	VisitSentenceTransformersMultiQaMpnetBaseDotV1(*BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1) error
+	VisitHkunlpInstructorXl(*HkunlpInstructorXlVectorizer) error
+}
+
+func (i *IndexingConfigVectorizer) Accept(visitor IndexingConfigVectorizerVisitor) error {
+	switch i.ModelName {
+	default:
+		return fmt.Errorf("invalid type %s in %T", i.ModelName, i)
+	case "text-embedding-3-small":
+		return visitor.VisitTextEmbedding3Small(i.TextEmbedding3Small)
+	case "text-embedding-3-large":
+		return visitor.VisitTextEmbedding3Large(i.TextEmbedding3Large)
+	case "text-embedding-ada-002":
+		return visitor.VisitTextEmbeddingAda002(i.TextEmbeddingAda002)
+	case "intfloat/multilingual-e5-large":
+		return visitor.VisitIntfloatMultilingualE5Large(i.IntfloatMultilingualE5Large)
+	case "sentence-transformers/multi-qa-mpnet-base-cos-v1":
+		return visitor.VisitSentenceTransformersMultiQaMpnetBaseCosV1(i.SentenceTransformersMultiQaMpnetBaseCosV1)
+	case "sentence-transformers/multi-qa-mpnet-base-dot-v1":
+		return visitor.VisitSentenceTransformersMultiQaMpnetBaseDotV1(i.SentenceTransformersMultiQaMpnetBaseDotV1)
+	case "hkunlp/instructor-xl":
+		return visitor.VisitHkunlpInstructorXl(i.HkunlpInstructorXl)
+	}
+}
+
+type IndexingConfigVectorizerRequest struct {
+	ModelName                                 string
+	TextEmbedding3Small                       *OpenAiVectorizerTextEmbedding3SmallRequest
+	TextEmbedding3Large                       *OpenAiVectorizerTextEmbedding3LargeRequest
+	TextEmbeddingAda002                       *OpenAiVectorizerTextEmbeddingAda002Request
+	IntfloatMultilingualE5Large               *BasicVectorizerIntfloatMultilingualE5LargeRequest
+	SentenceTransformersMultiQaMpnetBaseCosV1 *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request
+	SentenceTransformersMultiQaMpnetBaseDotV1 *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request
+	HkunlpInstructorXl                        *HkunlpInstructorXlVectorizerRequest
+}
+
+func NewIndexingConfigVectorizerRequestFromTextEmbedding3Small(value *OpenAiVectorizerTextEmbedding3SmallRequest) *IndexingConfigVectorizerRequest {
+	return &IndexingConfigVectorizerRequest{ModelName: "text-embedding-3-small", TextEmbedding3Small: value}
+}
+
+func NewIndexingConfigVectorizerRequestFromTextEmbedding3Large(value *OpenAiVectorizerTextEmbedding3LargeRequest) *IndexingConfigVectorizerRequest {
+	return &IndexingConfigVectorizerRequest{ModelName: "text-embedding-3-large", TextEmbedding3Large: value}
+}
+
+func NewIndexingConfigVectorizerRequestFromTextEmbeddingAda002(value *OpenAiVectorizerTextEmbeddingAda002Request) *IndexingConfigVectorizerRequest {
+	return &IndexingConfigVectorizerRequest{ModelName: "text-embedding-ada-002", TextEmbeddingAda002: value}
+}
+
+func NewIndexingConfigVectorizerRequestFromIntfloatMultilingualE5Large(value *BasicVectorizerIntfloatMultilingualE5LargeRequest) *IndexingConfigVectorizerRequest {
+	return &IndexingConfigVectorizerRequest{ModelName: "intfloat/multilingual-e5-large", IntfloatMultilingualE5Large: value}
+}
+
+func NewIndexingConfigVectorizerRequestFromSentenceTransformersMultiQaMpnetBaseCosV1(value *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request) *IndexingConfigVectorizerRequest {
+	return &IndexingConfigVectorizerRequest{ModelName: "sentence-transformers/multi-qa-mpnet-base-cos-v1", SentenceTransformersMultiQaMpnetBaseCosV1: value}
+}
+
+func NewIndexingConfigVectorizerRequestFromSentenceTransformersMultiQaMpnetBaseDotV1(value *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request) *IndexingConfigVectorizerRequest {
+	return &IndexingConfigVectorizerRequest{ModelName: "sentence-transformers/multi-qa-mpnet-base-dot-v1", SentenceTransformersMultiQaMpnetBaseDotV1: value}
+}
+
+func NewIndexingConfigVectorizerRequestFromHkunlpInstructorXl(value *HkunlpInstructorXlVectorizerRequest) *IndexingConfigVectorizerRequest {
+	return &IndexingConfigVectorizerRequest{ModelName: "hkunlp/instructor-xl", HkunlpInstructorXl: value}
+}
+
+func (i *IndexingConfigVectorizerRequest) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		ModelName string `json:"model_name"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	i.ModelName = unmarshaler.ModelName
+	switch unmarshaler.ModelName {
+	case "text-embedding-3-small":
+		value := new(OpenAiVectorizerTextEmbedding3SmallRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		i.TextEmbedding3Small = value
+	case "text-embedding-3-large":
+		value := new(OpenAiVectorizerTextEmbedding3LargeRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		i.TextEmbedding3Large = value
+	case "text-embedding-ada-002":
+		value := new(OpenAiVectorizerTextEmbeddingAda002Request)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		i.TextEmbeddingAda002 = value
+	case "intfloat/multilingual-e5-large":
+		value := new(BasicVectorizerIntfloatMultilingualE5LargeRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		i.IntfloatMultilingualE5Large = value
+	case "sentence-transformers/multi-qa-mpnet-base-cos-v1":
+		value := new(BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		i.SentenceTransformersMultiQaMpnetBaseCosV1 = value
+	case "sentence-transformers/multi-qa-mpnet-base-dot-v1":
+		value := new(BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		i.SentenceTransformersMultiQaMpnetBaseDotV1 = value
+	case "hkunlp/instructor-xl":
+		value := new(HkunlpInstructorXlVectorizerRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		i.HkunlpInstructorXl = value
+	}
+	return nil
+}
+
+func (i IndexingConfigVectorizerRequest) MarshalJSON() ([]byte, error) {
+	switch i.ModelName {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", i.ModelName, i)
+	case "text-embedding-3-small":
+		var marshaler = struct {
+			ModelName string `json:"model_name"`
+			*OpenAiVectorizerTextEmbedding3SmallRequest
+		}{
+			ModelName: i.ModelName,
+			OpenAiVectorizerTextEmbedding3SmallRequest: i.TextEmbedding3Small,
+		}
+		return json.Marshal(marshaler)
+	case "text-embedding-3-large":
+		var marshaler = struct {
+			ModelName string `json:"model_name"`
+			*OpenAiVectorizerTextEmbedding3LargeRequest
+		}{
+			ModelName: i.ModelName,
+			OpenAiVectorizerTextEmbedding3LargeRequest: i.TextEmbedding3Large,
+		}
+		return json.Marshal(marshaler)
+	case "text-embedding-ada-002":
+		var marshaler = struct {
+			ModelName string `json:"model_name"`
+			*OpenAiVectorizerTextEmbeddingAda002Request
+		}{
+			ModelName: i.ModelName,
+			OpenAiVectorizerTextEmbeddingAda002Request: i.TextEmbeddingAda002,
+		}
+		return json.Marshal(marshaler)
+	case "intfloat/multilingual-e5-large":
+		var marshaler = struct {
+			ModelName string `json:"model_name"`
+			*BasicVectorizerIntfloatMultilingualE5LargeRequest
+		}{
+			ModelName: i.ModelName,
+			BasicVectorizerIntfloatMultilingualE5LargeRequest: i.IntfloatMultilingualE5Large,
+		}
+		return json.Marshal(marshaler)
+	case "sentence-transformers/multi-qa-mpnet-base-cos-v1":
+		var marshaler = struct {
+			ModelName string `json:"model_name"`
+			*BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request
+		}{
+			ModelName: i.ModelName,
+			BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request: i.SentenceTransformersMultiQaMpnetBaseCosV1,
+		}
+		return json.Marshal(marshaler)
+	case "sentence-transformers/multi-qa-mpnet-base-dot-v1":
+		var marshaler = struct {
+			ModelName string `json:"model_name"`
+			*BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request
+		}{
+			ModelName: i.ModelName,
+			BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request: i.SentenceTransformersMultiQaMpnetBaseDotV1,
+		}
+		return json.Marshal(marshaler)
+	case "hkunlp/instructor-xl":
+		var marshaler = struct {
+			ModelName string `json:"model_name"`
+			*HkunlpInstructorXlVectorizerRequest
+		}{
+			ModelName:                           i.ModelName,
+			HkunlpInstructorXlVectorizerRequest: i.HkunlpInstructorXl,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type IndexingConfigVectorizerRequestVisitor interface {
+	VisitTextEmbedding3Small(*OpenAiVectorizerTextEmbedding3SmallRequest) error
+	VisitTextEmbedding3Large(*OpenAiVectorizerTextEmbedding3LargeRequest) error
+	VisitTextEmbeddingAda002(*OpenAiVectorizerTextEmbeddingAda002Request) error
+	VisitIntfloatMultilingualE5Large(*BasicVectorizerIntfloatMultilingualE5LargeRequest) error
+	VisitSentenceTransformersMultiQaMpnetBaseCosV1(*BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request) error
+	VisitSentenceTransformersMultiQaMpnetBaseDotV1(*BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request) error
+	VisitHkunlpInstructorXl(*HkunlpInstructorXlVectorizerRequest) error
+}
+
+func (i *IndexingConfigVectorizerRequest) Accept(visitor IndexingConfigVectorizerRequestVisitor) error {
+	switch i.ModelName {
+	default:
+		return fmt.Errorf("invalid type %s in %T", i.ModelName, i)
+	case "text-embedding-3-small":
+		return visitor.VisitTextEmbedding3Small(i.TextEmbedding3Small)
+	case "text-embedding-3-large":
+		return visitor.VisitTextEmbedding3Large(i.TextEmbedding3Large)
+	case "text-embedding-ada-002":
+		return visitor.VisitTextEmbeddingAda002(i.TextEmbeddingAda002)
+	case "intfloat/multilingual-e5-large":
+		return visitor.VisitIntfloatMultilingualE5Large(i.IntfloatMultilingualE5Large)
+	case "sentence-transformers/multi-qa-mpnet-base-cos-v1":
+		return visitor.VisitSentenceTransformersMultiQaMpnetBaseCosV1(i.SentenceTransformersMultiQaMpnetBaseCosV1)
+	case "sentence-transformers/multi-qa-mpnet-base-dot-v1":
+		return visitor.VisitSentenceTransformersMultiQaMpnetBaseDotV1(i.SentenceTransformersMultiQaMpnetBaseDotV1)
+	case "hkunlp/instructor-xl":
+		return visitor.VisitHkunlpInstructorXl(i.HkunlpInstructorXl)
+	}
 }
 
 // - `AWAITING_PROCESSING` - Awaiting Processing
@@ -4054,6 +5002,72 @@ func (i *InitiatedWorkflowNodeResultEvent) String() string {
 	}
 	return fmt.Sprintf("%#v", i)
 }
+
+// Configuration for using an Instructor vectorizer.
+type InstructorVectorizerConfig struct {
+	InstructionDomain           string `json:"instruction_domain"`
+	InstructionQueryTextType    string `json:"instruction_query_text_type"`
+	InstructionDocumentTextType string `json:"instruction_document_text_type"`
+
+	_rawJSON json.RawMessage
+}
+
+func (i *InstructorVectorizerConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler InstructorVectorizerConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InstructorVectorizerConfig(value)
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InstructorVectorizerConfig) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// Configuration for using an Instructor vectorizer.
+type InstructorVectorizerConfigRequest struct {
+	InstructionDomain           string `json:"instruction_domain"`
+	InstructionQueryTextType    string `json:"instruction_query_text_type"`
+	InstructionDocumentTextType string `json:"instruction_document_text_type"`
+
+	_rawJSON json.RawMessage
+}
+
+func (i *InstructorVectorizerConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler InstructorVectorizerConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InstructorVectorizerConfigRequest(value)
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InstructorVectorizerConfigRequest) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type IntfloatMultilingualE5LargeEnum = string
 
 type JsonEnum = string
 
@@ -4370,6 +5384,36 @@ func (m *MetadataFilterRuleRequest) String() string {
 	return fmt.Sprintf("%#v", m)
 }
 
+type MetricEnum = string
+
+// A Node Result Event emitted from a Metric Node.
+type MetricNodeResult struct {
+	_rawJSON json.RawMessage
+}
+
+func (m *MetricNodeResult) UnmarshalJSON(data []byte) error {
+	type unmarshaler MetricNodeResult
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MetricNodeResult(value)
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MetricNodeResult) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
 type MlModelUsage struct {
 	OutputTokenCount *int `json:"output_token_count,omitempty"`
 	InputTokenCount  *int `json:"input_token_count,omitempty"`
@@ -4671,8 +5715,8 @@ func (n *NamedTestCaseErrorVariableValueRequest) String() string {
 
 // Named Test Case value that is of type FUNCTION_CALL
 type NamedTestCaseFunctionCallVariableValue struct {
-	Value *FulfilledFunctionCall `json:"value,omitempty"`
-	Name  string                 `json:"name"`
+	Value *FunctionCall `json:"value,omitempty"`
+	Name  string        `json:"name"`
 
 	_rawJSON json.RawMessage
 }
@@ -4702,8 +5746,8 @@ func (n *NamedTestCaseFunctionCallVariableValue) String() string {
 
 // Named Test Case value that is of type FUNCTION_CALL
 type NamedTestCaseFunctionCallVariableValueRequest struct {
-	Value *FulfilledFunctionCallRequest `json:"value,omitempty"`
-	Name  string                        `json:"name"`
+	Value *FunctionCallRequest `json:"value,omitempty"`
+	Name  string               `json:"name"`
 
 	_rawJSON json.RawMessage
 }
@@ -5837,7 +6881,7 @@ func (n *NodeInputVariableCompiledValue) Accept(visitor NodeInputVariableCompile
 
 // An output returned by a node that is of type ARRAY.
 type NodeOutputCompiledArrayValue struct {
-	Value        []*ArrayVariableValueItem     `json:"value,omitempty"`
+	Value        []*ArrayVellumValueItem       `json:"value,omitempty"`
 	NodeOutputId string                        `json:"node_output_id"`
 	State        *WorkflowNodeResultEventState `json:"state,omitempty"`
 
@@ -6400,6 +7444,276 @@ func (n *NumberVariableValue) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", n)
+}
+
+// A value representing a number.
+type NumberVellumValue struct {
+	Value *float64 `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (n *NumberVellumValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler NumberVellumValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*n = NumberVellumValue(value)
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NumberVellumValue) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
+// Configuration for using an OpenAI vectorizer.
+type OpenAiVectorizerConfig struct {
+	AddOpenaiApiKey *AddOpenaiApiKeyEnum `json:"add_openai_api_key,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenAiVectorizerConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenAiVectorizerConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenAiVectorizerConfig(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenAiVectorizerConfig) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Configuration for using an OpenAI vectorizer.
+type OpenAiVectorizerConfigRequest struct {
+	AddOpenaiApiKey *AddOpenaiApiKeyEnum `json:"add_openai_api_key,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenAiVectorizerConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenAiVectorizerConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenAiVectorizerConfigRequest(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenAiVectorizerConfigRequest) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// OpenAI vectorizer for text-embedding-3-large.
+type OpenAiVectorizerTextEmbedding3Large struct {
+	Config *OpenAiVectorizerConfig `json:"config,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenAiVectorizerTextEmbedding3Large) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenAiVectorizerTextEmbedding3Large
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenAiVectorizerTextEmbedding3Large(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenAiVectorizerTextEmbedding3Large) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// OpenAI vectorizer for text-embedding-3-large.
+type OpenAiVectorizerTextEmbedding3LargeRequest struct {
+	Config *OpenAiVectorizerConfigRequest `json:"config,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenAiVectorizerTextEmbedding3LargeRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenAiVectorizerTextEmbedding3LargeRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenAiVectorizerTextEmbedding3LargeRequest(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenAiVectorizerTextEmbedding3LargeRequest) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// OpenAI vectorizer for text-embedding-3-small.
+type OpenAiVectorizerTextEmbedding3Small struct {
+	Config *OpenAiVectorizerConfig `json:"config,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenAiVectorizerTextEmbedding3Small) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenAiVectorizerTextEmbedding3Small
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenAiVectorizerTextEmbedding3Small(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenAiVectorizerTextEmbedding3Small) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// OpenAI vectorizer for text-embedding-3-small.
+type OpenAiVectorizerTextEmbedding3SmallRequest struct {
+	Config *OpenAiVectorizerConfigRequest `json:"config,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenAiVectorizerTextEmbedding3SmallRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenAiVectorizerTextEmbedding3SmallRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenAiVectorizerTextEmbedding3SmallRequest(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenAiVectorizerTextEmbedding3SmallRequest) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// OpenAI vectorizer for text-embedding-ada-002.
+type OpenAiVectorizerTextEmbeddingAda002 struct {
+	Config *OpenAiVectorizerConfig `json:"config,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenAiVectorizerTextEmbeddingAda002) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenAiVectorizerTextEmbeddingAda002
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenAiVectorizerTextEmbeddingAda002(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenAiVectorizerTextEmbeddingAda002) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// OpenAI vectorizer for text-embedding-ada-002.
+type OpenAiVectorizerTextEmbeddingAda002Request struct {
+	Config *OpenAiVectorizerConfigRequest `json:"config,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenAiVectorizerTextEmbeddingAda002Request) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenAiVectorizerTextEmbeddingAda002Request
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenAiVectorizerTextEmbeddingAda002Request(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenAiVectorizerTextEmbeddingAda002Request) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
 }
 
 type PaginatedDocumentIndexReadList struct {
@@ -7049,6 +8363,128 @@ func (r *RawPromptExecutionOverridesRequest) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
+// Configuration for Reducto chunking
+type ReductoChunkerConfig struct {
+	CharacterLimit *int `json:"character_limit,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (r *ReductoChunkerConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler ReductoChunkerConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = ReductoChunkerConfig(value)
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *ReductoChunkerConfig) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+// Configuration for Reducto chunking
+type ReductoChunkerConfigRequest struct {
+	CharacterLimit *int `json:"character_limit,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (r *ReductoChunkerConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler ReductoChunkerConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = ReductoChunkerConfigRequest(value)
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *ReductoChunkerConfigRequest) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+type ReductoChunkerEnum = string
+
+// Reducto chunking
+type ReductoChunking struct {
+	ChunkerConfig *ReductoChunkerConfig `json:"chunker_config,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (r *ReductoChunking) UnmarshalJSON(data []byte) error {
+	type unmarshaler ReductoChunking
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = ReductoChunking(value)
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *ReductoChunking) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+// Reducto chunking
+type ReductoChunkingRequest struct {
+	ChunkerConfig *ReductoChunkerConfigRequest `json:"chunker_config,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (r *ReductoChunkingRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler ReductoChunkingRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = ReductoChunkingRequest(value)
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *ReductoChunkingRequest) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
 type RejectedEnum = string
 
 // The final data returned indicating an error occurred during the stream.
@@ -7139,38 +8575,6 @@ func (r *RejectedExecuteWorkflowWorkflowResultEvent) UnmarshalJSON(data []byte) 
 }
 
 func (r *RejectedExecuteWorkflowWorkflowResultEvent) String() string {
-	if len(r._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(r); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", r)
-}
-
-// Returned if the function call failed to parse for some reason.
-type RejectedFunctionCall struct {
-	Error *VellumError `json:"error,omitempty"`
-	Id    *string      `json:"id,omitempty"`
-	Name  string       `json:"name"`
-
-	_rawJSON json.RawMessage
-}
-
-func (r *RejectedFunctionCall) UnmarshalJSON(data []byte) error {
-	type unmarshaler RejectedFunctionCall
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*r = RejectedFunctionCall(value)
-	r._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (r *RejectedFunctionCall) String() string {
 	if len(r._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
 			return value
@@ -7788,35 +9192,6 @@ func (s *SearchResultRequest) String() string {
 
 type SearchResultsEnum = string
 
-type SearchResultsVariableValue struct {
-	Value []*SearchResult `json:"value,omitempty"`
-
-	_rawJSON json.RawMessage
-}
-
-func (s *SearchResultsVariableValue) UnmarshalJSON(data []byte) error {
-	type unmarshaler SearchResultsVariableValue
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*s = SearchResultsVariableValue(value)
-	s._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (s *SearchResultsVariableValue) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(s); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", s)
-}
-
 type SearchWeightsRequest struct {
 	// The relative weight to give to semantic similarity
 	SemanticSimilarity *float64 `json:"semantic_similarity,omitempty"`
@@ -7848,6 +9223,134 @@ func (s *SearchWeightsRequest) String() string {
 	}
 	return fmt.Sprintf("%#v", s)
 }
+
+// Configuration for sentence chunking
+type SentenceChunkerConfig struct {
+	CharacterLimit  *int     `json:"character_limit,omitempty"`
+	MinOverlapRatio *float64 `json:"min_overlap_ratio,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (s *SentenceChunkerConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler SentenceChunkerConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SentenceChunkerConfig(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SentenceChunkerConfig) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// Configuration for sentence chunking
+type SentenceChunkerConfigRequest struct {
+	CharacterLimit  *int     `json:"character_limit,omitempty"`
+	MinOverlapRatio *float64 `json:"min_overlap_ratio,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (s *SentenceChunkerConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SentenceChunkerConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SentenceChunkerConfigRequest(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SentenceChunkerConfigRequest) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type SentenceChunkerEnum = string
+
+// Sentence chunking
+type SentenceChunking struct {
+	ChunkerConfig *SentenceChunkerConfig `json:"chunker_config,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (s *SentenceChunking) UnmarshalJSON(data []byte) error {
+	type unmarshaler SentenceChunking
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SentenceChunking(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SentenceChunking) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// Sentence chunking
+type SentenceChunkingRequest struct {
+	ChunkerConfig *SentenceChunkerConfigRequest `json:"chunker_config,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (s *SentenceChunkingRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SentenceChunkingRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SentenceChunkingRequest(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SentenceChunkingRequest) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type SentenceTransformersMultiQaMpnetBaseCosV1Enum = string
+
+type SentenceTransformersMultiQaMpnetBaseDotV1Enum = string
 
 type SlimDeploymentRead struct {
 	Id      string    `json:"id"`
@@ -9576,9 +11079,9 @@ func (t *TestCaseErrorVariableValue) String() string {
 
 // A function call value for a variable in a Test Case.
 type TestCaseFunctionCallVariableValue struct {
-	VariableId string                 `json:"variable_id"`
-	Name       string                 `json:"name"`
-	Value      *FulfilledFunctionCall `json:"value,omitempty"`
+	VariableId string        `json:"variable_id"`
+	Name       string        `json:"name"`
+	Value      *FunctionCall `json:"value,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -10363,9 +11866,9 @@ func (t *TestSuiteRunExecutionErrorOutput) String() string {
 
 // Execution output of an entity evaluated during a Test Suite Run that is of type FUNCTION_CALL
 type TestSuiteRunExecutionFunctionCallOutput struct {
-	Name             string                 `json:"name"`
-	Value            *FulfilledFunctionCall `json:"value,omitempty"`
-	OutputVariableId string                 `json:"output_variable_id"`
+	Name             string        `json:"name"`
+	Value            *FunctionCall `json:"value,omitempty"`
+	OutputVariableId string        `json:"output_variable_id"`
 
 	_rawJSON json.RawMessage
 }
@@ -11377,6 +12880,136 @@ func (t *TestSuiteTestCase) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+type TextEmbedding3LargeEnum = string
+
+type TextEmbedding3SmallEnum = string
+
+type TextEmbeddingAda002Enum = string
+
+// Configuration for token overlapping window chunking
+type TokenOverlappingWindowChunkerConfig struct {
+	TokenLimit   *int     `json:"token_limit,omitempty"`
+	OverlapRatio *float64 `json:"overlap_ratio,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TokenOverlappingWindowChunkerConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler TokenOverlappingWindowChunkerConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TokenOverlappingWindowChunkerConfig(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TokenOverlappingWindowChunkerConfig) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Configuration for token overlapping window chunking
+type TokenOverlappingWindowChunkerConfigRequest struct {
+	TokenLimit   *int     `json:"token_limit,omitempty"`
+	OverlapRatio *float64 `json:"overlap_ratio,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TokenOverlappingWindowChunkerConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler TokenOverlappingWindowChunkerConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TokenOverlappingWindowChunkerConfigRequest(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TokenOverlappingWindowChunkerConfigRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TokenOverlappingWindowChunkerEnum = string
+
+// Token overlapping window chunking
+type TokenOverlappingWindowChunking struct {
+	ChunkerConfig *TokenOverlappingWindowChunkerConfig `json:"chunker_config,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TokenOverlappingWindowChunking) UnmarshalJSON(data []byte) error {
+	type unmarshaler TokenOverlappingWindowChunking
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TokenOverlappingWindowChunking(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TokenOverlappingWindowChunking) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Token overlapping window chunking
+type TokenOverlappingWindowChunkingRequest struct {
+	ChunkerConfig *TokenOverlappingWindowChunkerConfigRequest `json:"chunker_config,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TokenOverlappingWindowChunkingRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler TokenOverlappingWindowChunkingRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TokenOverlappingWindowChunkingRequest(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TokenOverlappingWindowChunkingRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
 type UploadDocumentErrorResponse struct {
 	Detail string `json:"detail"`
 
@@ -11762,6 +13395,8 @@ type WorkflowExecutionActualChatHistoryRequest struct {
 	OutputKey *string `json:"output_key,omitempty"`
 	// Optionally provide a decimal number between 0.0 and 1.0 (inclusive) representing the quality of the output. 0 is the worst, 1 is the best.
 	Quality *float64 `json:"quality,omitempty"`
+	// Optionally provide additional metadata about the feedback submission.
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// Optionally provide the timestamp representing when this feedback was collected. Used for reporting purposes.
 	Timestamp *float64 `json:"timestamp,omitempty"`
 	// Optionally provide the value that the output ideally should have been.
@@ -11800,6 +13435,8 @@ type WorkflowExecutionActualJsonRequest struct {
 	OutputKey *string `json:"output_key,omitempty"`
 	// Optionally provide a decimal number between 0.0 and 1.0 (inclusive) representing the quality of the output. 0 is the worst, 1 is the best.
 	Quality *float64 `json:"quality,omitempty"`
+	// Optionally provide additional metadata about the feedback submission.
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// Optionally provide the timestamp representing when this feedback was collected. Used for reporting purposes.
 	Timestamp *float64 `json:"timestamp,omitempty"`
 	// Optionally provide the value that the output ideally should have been.
@@ -11838,6 +13475,8 @@ type WorkflowExecutionActualStringRequest struct {
 	OutputKey *string `json:"output_key,omitempty"`
 	// Optionally provide a decimal number between 0.0 and 1.0 (inclusive) representing the quality of the output. 0 is the worst, 1 is the best.
 	Quality *float64 `json:"quality,omitempty"`
+	// Optionally provide additional metadata about the feedback submission.
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// Optionally provide the timestamp representing when this feedback was collected. Used for reporting purposes.
 	Timestamp *float64 `json:"timestamp,omitempty"`
 	// Optionally provide the value that the output ideally should have been.
@@ -12017,6 +13656,7 @@ type WorkflowNodeResultData struct {
 	Api           *ApiNodeResult
 	Terminal      *TerminalNodeResult
 	Subworkflow   *SubworkflowNodeResult
+	Metric        *MetricNodeResult
 }
 
 func NewWorkflowNodeResultDataFromPrompt(value *PromptNodeResult) *WorkflowNodeResultData {
@@ -12049,6 +13689,10 @@ func NewWorkflowNodeResultDataFromTerminal(value *TerminalNodeResult) *WorkflowN
 
 func NewWorkflowNodeResultDataFromSubworkflow(value *SubworkflowNodeResult) *WorkflowNodeResultData {
 	return &WorkflowNodeResultData{Type: "SUBWORKFLOW", Subworkflow: value}
+}
+
+func NewWorkflowNodeResultDataFromMetric(value *MetricNodeResult) *WorkflowNodeResultData {
+	return &WorkflowNodeResultData{Type: "METRIC", Metric: value}
 }
 
 func (w *WorkflowNodeResultData) UnmarshalJSON(data []byte) error {
@@ -12108,6 +13752,12 @@ func (w *WorkflowNodeResultData) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		w.Subworkflow = value
+	case "METRIC":
+		value := new(MetricNodeResult)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		w.Metric = value
 	}
 	return nil
 }
@@ -12188,6 +13838,15 @@ func (w WorkflowNodeResultData) MarshalJSON() ([]byte, error) {
 			SubworkflowNodeResult: w.Subworkflow,
 		}
 		return json.Marshal(marshaler)
+	case "METRIC":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*MetricNodeResult
+		}{
+			Type:             w.Type,
+			MetricNodeResult: w.Metric,
+		}
+		return json.Marshal(marshaler)
 	}
 }
 
@@ -12200,6 +13859,7 @@ type WorkflowNodeResultDataVisitor interface {
 	VisitApi(*ApiNodeResult) error
 	VisitTerminal(*TerminalNodeResult) error
 	VisitSubworkflow(*SubworkflowNodeResult) error
+	VisitMetric(*MetricNodeResult) error
 }
 
 func (w *WorkflowNodeResultData) Accept(visitor WorkflowNodeResultDataVisitor) error {
@@ -12222,6 +13882,8 @@ func (w *WorkflowNodeResultData) Accept(visitor WorkflowNodeResultDataVisitor) e
 		return visitor.VisitTerminal(w.Terminal)
 	case "SUBWORKFLOW":
 		return visitor.VisitSubworkflow(w.Subworkflow)
+	case "METRIC":
+		return visitor.VisitMetric(w.Metric)
 	}
 }
 
@@ -12628,8 +14290,8 @@ func (w *WorkflowOutput) Accept(visitor WorkflowOutputVisitor) error {
 type WorkflowOutputArray struct {
 	Id string `json:"id"`
 	// The output's name, as defined in the workflow
-	Name  string                    `json:"name"`
-	Value []*ArrayVariableValueItem `json:"value,omitempty"`
+	Name  string                  `json:"name"`
+	Value []*ArrayVellumValueItem `json:"value,omitempty"`
 
 	_rawJSON json.RawMessage
 }

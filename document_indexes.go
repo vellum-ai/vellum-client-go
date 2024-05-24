@@ -21,9 +21,8 @@ type DocumentIndexCreateRequest struct {
 	// * `DEVELOPMENT` - Development
 	// * `STAGING` - Staging
 	// * `PRODUCTION` - Production
-	Environment *EnvironmentEnum `json:"environment,omitempty"`
-	// Configuration representing how documents should be indexed
-	IndexingConfig map[string]interface{} `json:"indexing_config,omitempty"`
+	Environment    *EnvironmentEnum                    `json:"environment,omitempty"`
+	IndexingConfig *DocumentIndexIndexingConfigRequest `json:"indexing_config,omitempty"`
 	// Optionally specify the id of a document index from which you'd like to copy and re-index its documents into this newly created index
 	CopyDocumentsFromIndexId *string `json:"copy_documents_from_index_id,omitempty"`
 }
@@ -35,7 +34,9 @@ type DocumentIndexesListRequest struct {
 	Offset *int `json:"-"`
 	// Which field to use when ordering the results.
 	Ordering *string `json:"-"`
-	// The current status of the document index
+	// Search for document indices by name or label
+	Search *string `json:"-"`
+	// Filter down to only document indices that have a status matching the status specified
 	//
 	// - `ACTIVE` - Active
 	// - `ARCHIVED` - Archived

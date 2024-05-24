@@ -74,7 +74,7 @@ func (c *Client) List(ctx context.Context, request *vellumclientgo.DocumentsList
 	return response, nil
 }
 
-// Retrieve a Document via its Vellum-generated ID.
+// Retrieve a Document, keying off of either its Vellum-generated ID or its external ID.
 //
 // A UUID string identifying this document.
 func (c *Client) Retrieve(ctx context.Context, id string) (*vellumclientgo.DocumentRead, error) {
@@ -99,6 +99,8 @@ func (c *Client) Retrieve(ctx context.Context, id string) (*vellumclientgo.Docum
 	return response, nil
 }
 
+// Delete a Document, keying off of either its Vellum-generated ID or its external ID.
+//
 // A UUID string identifying this document.
 func (c *Client) Destroy(ctx context.Context, id string) error {
 	baseURL := "https://api.vellum.ai"
@@ -120,7 +122,7 @@ func (c *Client) Destroy(ctx context.Context, id string) error {
 	return nil
 }
 
-// Update a Document, keying off of its Vellum-generated ID. Particularly useful for updating its metadata.
+// Update a Document, keying off of either its Vellum-generated ID or its external ID. Particularly useful for updating its metadata.
 //
 // A UUID string identifying this document.
 func (c *Client) PartialUpdate(ctx context.Context, id string, request *vellumclientgo.PatchedDocumentUpdateRequest) (*vellumclientgo.DocumentRead, error) {
