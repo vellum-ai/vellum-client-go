@@ -2426,6 +2426,7 @@ func (d *DocumentRead) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
+// - `ACTIVE` - Active
 type DocumentStatus = string
 
 type EnrichedNormalizedCompletion struct {
@@ -5290,6 +5291,36 @@ func NewLogprobsEnumFromString(s string) (LogprobsEnum, error) {
 
 func (l LogprobsEnum) Ptr() *LogprobsEnum {
 	return &l
+}
+
+type MergeEnum = string
+
+// A Node Result Event emitted from a Merge Node.
+type MergeNodeResult struct {
+	_rawJSON json.RawMessage
+}
+
+func (m *MergeNodeResult) UnmarshalJSON(data []byte) error {
+	type unmarshaler MergeNodeResult
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MergeNodeResult(value)
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MergeNodeResult) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
 }
 
 type MetadataFilterConfigRequest struct {
@@ -9057,7 +9088,7 @@ func (s *SearchResult) String() string {
 
 type SearchResultDocument struct {
 	// The ID of the document.
-	Id string `json:"id"`
+	Id *string `json:"id,omitempty"`
 	// The human-readable name for the document.
 	Label string `json:"label"`
 	// The unique ID of the document as represented in an external system and specified when it was originally uploaded.
@@ -9092,6 +9123,8 @@ func (s *SearchResultDocument) String() string {
 }
 
 type SearchResultDocumentRequest struct {
+	// The ID of the document.
+	Id *string `json:"id,omitempty"`
 	// The human-readable name for the document.
 	Label string `json:"label"`
 	// The unique ID of the document as represented in an external system and specified when it was originally uploaded.
@@ -9774,6 +9807,8 @@ type SubmitCompletionActualRequest struct {
 	Quality *float64 `json:"quality,omitempty"`
 	// Optionally provide the timestamp representing when this feedback was collected. Used for reporting purposes.
 	Timestamp *time.Time `json:"timestamp,omitempty"`
+	// Optionally provide additional metadata about the feedback submission.
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -11560,6 +11595,7 @@ func (t *TestSuiteRunDeploymentReleaseTagExecConfigRequest) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+// - `DEPLOYMENT_RELEASE_TAG` - DEPLOYMENT_RELEASE_TAG
 type TestSuiteRunDeploymentReleaseTagExecConfigTypeEnum = string
 
 type TestSuiteRunExecConfig struct {
@@ -12406,6 +12442,7 @@ func (t *TestSuiteRunExternalExecConfigRequest) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+// - `EXTERNAL` - EXTERNAL
 type TestSuiteRunExternalExecConfigTypeEnum = string
 
 // Output for a test suite run metric that is of type ERROR
@@ -12439,6 +12476,7 @@ func (t *TestSuiteRunMetricErrorOutput) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+// - `ERROR` - ERROR
 type TestSuiteRunMetricErrorOutputTypeEnum = string
 
 // Output for a test suite run metric that is of type NUMBER
@@ -12472,6 +12510,7 @@ func (t *TestSuiteRunMetricNumberOutput) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+// - `NUMBER` - NUMBER
 type TestSuiteRunMetricNumberOutputTypeEnum = string
 
 type TestSuiteRunMetricOutput struct {
@@ -12608,6 +12647,7 @@ func (t *TestSuiteRunMetricStringOutput) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+// - `STRING` - STRING
 type TestSuiteRunMetricStringOutputTypeEnum = string
 
 type TestSuiteRunRead struct {
@@ -12846,6 +12886,7 @@ func (t *TestSuiteRunWorkflowReleaseTagExecConfigRequest) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+// - `WORKFLOW_RELEASE_TAG` - WORKFLOW_RELEASE_TAG
 type TestSuiteRunWorkflowReleaseTagExecConfigTypeEnum = string
 
 type TestSuiteTestCase struct {
@@ -13655,6 +13696,7 @@ type WorkflowNodeResultData struct {
 	Conditional   *ConditionalNodeResult
 	Api           *ApiNodeResult
 	Terminal      *TerminalNodeResult
+	Merge         *MergeNodeResult
 	Subworkflow   *SubworkflowNodeResult
 	Metric        *MetricNodeResult
 }
@@ -13685,6 +13727,10 @@ func NewWorkflowNodeResultDataFromApi(value *ApiNodeResult) *WorkflowNodeResultD
 
 func NewWorkflowNodeResultDataFromTerminal(value *TerminalNodeResult) *WorkflowNodeResultData {
 	return &WorkflowNodeResultData{Type: "TERMINAL", Terminal: value}
+}
+
+func NewWorkflowNodeResultDataFromMerge(value *MergeNodeResult) *WorkflowNodeResultData {
+	return &WorkflowNodeResultData{Type: "MERGE", Merge: value}
 }
 
 func NewWorkflowNodeResultDataFromSubworkflow(value *SubworkflowNodeResult) *WorkflowNodeResultData {
@@ -13746,6 +13792,12 @@ func (w *WorkflowNodeResultData) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		w.Terminal = value
+	case "MERGE":
+		value := new(MergeNodeResult)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		w.Merge = value
 	case "SUBWORKFLOW":
 		value := new(SubworkflowNodeResult)
 		if err := json.Unmarshal(data, &value); err != nil {
@@ -13829,6 +13881,15 @@ func (w WorkflowNodeResultData) MarshalJSON() ([]byte, error) {
 			TerminalNodeResult: w.Terminal,
 		}
 		return json.Marshal(marshaler)
+	case "MERGE":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*MergeNodeResult
+		}{
+			Type:            w.Type,
+			MergeNodeResult: w.Merge,
+		}
+		return json.Marshal(marshaler)
 	case "SUBWORKFLOW":
 		var marshaler = struct {
 			Type string `json:"type"`
@@ -13858,6 +13919,7 @@ type WorkflowNodeResultDataVisitor interface {
 	VisitConditional(*ConditionalNodeResult) error
 	VisitApi(*ApiNodeResult) error
 	VisitTerminal(*TerminalNodeResult) error
+	VisitMerge(*MergeNodeResult) error
 	VisitSubworkflow(*SubworkflowNodeResult) error
 	VisitMetric(*MetricNodeResult) error
 }
@@ -13880,6 +13942,8 @@ func (w *WorkflowNodeResultData) Accept(visitor WorkflowNodeResultDataVisitor) e
 		return visitor.VisitApi(w.Api)
 	case "TERMINAL":
 		return visitor.VisitTerminal(w.Terminal)
+	case "MERGE":
+		return visitor.VisitMerge(w.Merge)
 	case "SUBWORKFLOW":
 		return visitor.VisitSubworkflow(w.Subworkflow)
 	case "METRIC":
