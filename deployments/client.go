@@ -213,28 +213,3 @@ func (c *Client) RetrieveProviderPayload(ctx context.Context, request *vellumcli
 	}
 	return response, nil
 }
-
-// A UUID string identifying this workflow sandbox.
-// An ID identifying the Workflow you'd like to deploy.
-func (c *Client) DeployWorkflow(ctx context.Context, id string, workflowId string, request *vellumclientgo.DeploySandboxWorkflowRequest) (*vellumclientgo.WorkflowDeploymentRead, error) {
-	baseURL := "https://api.vellum.ai"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/workflow-sandboxes/%v/workflows/%v/deploy", id, workflowId)
-
-	var response *vellumclientgo.WorkflowDeploymentRead
-	if err := c.caller.Call(
-		ctx,
-		&core.CallParams{
-			URL:      endpointURL,
-			Method:   http.MethodPost,
-			Headers:  c.header,
-			Request:  request,
-			Response: &response,
-		},
-	); err != nil {
-		return nil, err
-	}
-	return response, nil
-}
