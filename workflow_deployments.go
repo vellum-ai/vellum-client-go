@@ -38,3 +38,8 @@ func NewWorkflowDeploymentsListRequestStatusFromString(s string) (WorkflowDeploy
 func (w WorkflowDeploymentsListRequestStatus) Ptr() *WorkflowDeploymentsListRequestStatus {
 	return &w
 }
+
+type PatchedWorkflowReleaseTagUpdateRequest struct {
+	// The ID of the Workflow Deployment History Item to tag
+	HistoryItemId *string `json:"history_item_id,omitempty"`
+}

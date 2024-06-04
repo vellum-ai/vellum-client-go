@@ -6,6 +6,17 @@ import (
 	fmt "fmt"
 )
 
+type DeploySandboxWorkflowRequest struct {
+	// The Vellum-generated ID of the Workflow Deployment you'd like to update. Cannot specify both this and workflow_deployment_name. Leave null to create a new Workflow Deployment.
+	WorkflowDeploymentId *string `json:"workflow_deployment_id,omitempty"`
+	// The unique name of the Workflow Deployment you'd like to either create or update. Cannot specify both this and workflow_deployment_id. If provided and matches an existing Workflow Deployment, that Workflow Deployment will be updated. Otherwise, a new Prompt Deployment will be created.
+	WorkflowDeploymentName *string `json:"workflow_deployment_name,omitempty"`
+	// In the event that a new Workflow Deployment is created, this will be the label it's given.
+	Label *string `json:"label,omitempty"`
+	// Optionally provide the release tags that you'd like to be associated with the latest release of the created/updated Prompt Deployment.
+	ReleaseTags []string `json:"release_tags,omitempty"`
+}
+
 type DeploymentsListRequest struct {
 	// Number of results to return per page.
 	Limit *int `json:"-"`
@@ -48,4 +59,9 @@ func NewDeploymentsListRequestStatusFromString(s string) (DeploymentsListRequest
 
 func (d DeploymentsListRequestStatus) Ptr() *DeploymentsListRequestStatus {
 	return &d
+}
+
+type PatchedDeploymentReleaseTagUpdateRequest struct {
+	// The ID of the Deployment History Item to tag
+	HistoryItemId *string `json:"history_item_id,omitempty"`
 }

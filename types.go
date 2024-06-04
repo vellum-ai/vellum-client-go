@@ -2024,6 +2024,73 @@ func (d *DeploymentRead) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
+type DeploymentReleaseTagDeploymentHistoryItem struct {
+	Id        string    `json:"id"`
+	Timestamp time.Time `json:"timestamp"`
+
+	_rawJSON json.RawMessage
+}
+
+func (d *DeploymentReleaseTagDeploymentHistoryItem) UnmarshalJSON(data []byte) error {
+	type unmarshaler DeploymentReleaseTagDeploymentHistoryItem
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DeploymentReleaseTagDeploymentHistoryItem(value)
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DeploymentReleaseTagDeploymentHistoryItem) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DeploymentReleaseTagRead struct {
+	// The name of the Release Tag
+	Name string `json:"name"`
+	// The source of how the Release Tag was originally created
+	//
+	// - `SYSTEM` - System
+	// - `USER` - User
+	Source ReleaseTagSource `json:"source,omitempty"`
+	// The Deployment History Item that this Release Tag is associated with
+	HistoryItem *DeploymentReleaseTagDeploymentHistoryItem `json:"history_item,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (d *DeploymentReleaseTagRead) UnmarshalJSON(data []byte) error {
+	type unmarshaler DeploymentReleaseTagRead
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DeploymentReleaseTagRead(value)
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DeploymentReleaseTagRead) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
 type DocumentDocumentToDocumentIndex struct {
 	// Vellum-generated ID that uniquely identifies this link.
 	Id string `json:"id"`
@@ -8684,6 +8751,30 @@ func (r *RejectedWorkflowNodeResultEvent) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
+// - `SYSTEM` - System
+// - `USER` - User
+type ReleaseTagSource string
+
+const (
+	ReleaseTagSourceSystem ReleaseTagSource = "SYSTEM"
+	ReleaseTagSourceUser   ReleaseTagSource = "USER"
+)
+
+func NewReleaseTagSourceFromString(s string) (ReleaseTagSource, error) {
+	switch s {
+	case "SYSTEM":
+		return ReleaseTagSourceSystem, nil
+	case "USER":
+		return ReleaseTagSourceUser, nil
+	}
+	var t ReleaseTagSource
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (r ReleaseTagSource) Ptr() *ReleaseTagSource {
+	return &r
+}
+
 // Sandbox Scenario
 type SandboxScenario struct {
 	Label *string `json:"label,omitempty"`
@@ -9972,6 +10063,8 @@ type SubworkflowEnum = string
 
 // A Node Result Event emitted from a Subworkflow Node.
 type SubworkflowNodeResult struct {
+	Data *SubworkflowNodeResultData `json:"data,omitempty"`
+
 	_rawJSON json.RawMessage
 }
 
@@ -9987,6 +10080,35 @@ func (s *SubworkflowNodeResult) UnmarshalJSON(data []byte) error {
 }
 
 func (s *SubworkflowNodeResult) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type SubworkflowNodeResultData struct {
+	ExecutionId *string `json:"execution_id,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (s *SubworkflowNodeResultData) UnmarshalJSON(data []byte) error {
+	type unmarshaler SubworkflowNodeResultData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SubworkflowNodeResultData(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SubworkflowNodeResultData) String() string {
 	if len(s._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
 			return value
@@ -14636,6 +14758,75 @@ func (w *WorkflowOutputString) UnmarshalJSON(data []byte) error {
 }
 
 func (w *WorkflowOutputString) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
+}
+
+type WorkflowReleaseTagRead struct {
+	// The name of the Release Tag
+	Name string `json:"name"`
+	// The source of how the Release Tag was originally created
+	//
+	// - `SYSTEM` - System
+	// - `USER` - User
+	Source ReleaseTagSource `json:"source,omitempty"`
+	// The Workflow Deployment History Item that this Release Tag is associated with
+	HistoryItem *WorkflowReleaseTagWorkflowDeploymentHistoryItem `json:"history_item,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (w *WorkflowReleaseTagRead) UnmarshalJSON(data []byte) error {
+	type unmarshaler WorkflowReleaseTagRead
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*w = WorkflowReleaseTagRead(value)
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowReleaseTagRead) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
+}
+
+type WorkflowReleaseTagWorkflowDeploymentHistoryItem struct {
+	// The ID of the Workflow Deployment History Item
+	Id string `json:"id"`
+	// The timestamp representing when this History Item was created
+	Timestamp time.Time `json:"timestamp"`
+
+	_rawJSON json.RawMessage
+}
+
+func (w *WorkflowReleaseTagWorkflowDeploymentHistoryItem) UnmarshalJSON(data []byte) error {
+	type unmarshaler WorkflowReleaseTagWorkflowDeploymentHistoryItem
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*w = WorkflowReleaseTagWorkflowDeploymentHistoryItem(value)
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowReleaseTagWorkflowDeploymentHistoryItem) String() string {
 	if len(w._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
 			return value

@@ -92,3 +92,56 @@ func (c *Client) Retrieve(ctx context.Context, id string) (*vellumclientgo.Workf
 	}
 	return response, nil
 }
+
+// Retrieve a Workflow Release Tag by tag name, associated with a specified Workflow Deployment.
+//
+// A UUID string identifying this workflow deployment.
+// The name of the Release Tag associated with this Workflow Deployment that you'd like to retrieve.
+func (c *Client) RetrieveWorkflowReleaseTag(ctx context.Context, id string, name string) (*vellumclientgo.WorkflowReleaseTagRead, error) {
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/workflow-deployments/%v/release-tags/%v", id, name)
+
+	var response *vellumclientgo.WorkflowReleaseTagRead
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:      endpointURL,
+			Method:   http.MethodGet,
+			Headers:  c.header,
+			Response: &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Updates an existing Release Tag associated with the specified Workflow Deployment.
+//
+// A UUID string identifying this workflow deployment.
+// The name of the Release Tag associated with this Workflow Deployment that you'd like to update.
+func (c *Client) UpdateWorkflowReleaseTag(ctx context.Context, id string, name string, request *vellumclientgo.PatchedWorkflowReleaseTagUpdateRequest) (*vellumclientgo.WorkflowReleaseTagRead, error) {
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/workflow-deployments/%v/release-tags/%v", id, name)
+
+	var response *vellumclientgo.WorkflowReleaseTagRead
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:      endpointURL,
+			Method:   http.MethodPatch,
+			Headers:  c.header,
+			Request:  request,
+			Response: &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}

@@ -13,6 +13,7 @@ import (
 	documentindexes "github.com/vellum-ai/vellum-client-go/documentindexes"
 	documents "github.com/vellum-ai/vellum-client-go/documents"
 	folderentities "github.com/vellum-ai/vellum-client-go/folderentities"
+	promptversions "github.com/vellum-ai/vellum-client-go/promptversions"
 	sandboxes "github.com/vellum-ai/vellum-client-go/sandboxes"
 	testsuiteruns "github.com/vellum-ai/vellum-client-go/testsuiteruns"
 	testsuites "github.com/vellum-ai/vellum-client-go/testsuites"
@@ -30,6 +31,7 @@ type Client struct {
 	DocumentIndexes     *documentindexes.Client
 	Documents           *documents.Client
 	FolderEntities      *folderentities.Client
+	PromptVersions      *promptversions.Client
 	Sandboxes           *sandboxes.Client
 	TestSuiteRuns       *testsuiteruns.Client
 	TestSuites          *testsuites.Client
@@ -49,6 +51,7 @@ func NewClient(opts ...core.ClientOption) *Client {
 		DocumentIndexes:     documentindexes.NewClient(opts...),
 		Documents:           documents.NewClient(opts...),
 		FolderEntities:      folderentities.NewClient(opts...),
+		PromptVersions:      promptversions.NewClient(opts...),
 		Sandboxes:           sandboxes.NewClient(opts...),
 		TestSuiteRuns:       testsuiteruns.NewClient(opts...),
 		TestSuites:          testsuites.NewClient(opts...),

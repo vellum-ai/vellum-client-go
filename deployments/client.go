@@ -97,6 +97,59 @@ func (c *Client) Retrieve(ctx context.Context, id string) (*vellumclientgo.Deplo
 	return response, nil
 }
 
+// Retrieve a Deployment Release Tag by tag name, associated with a specified Deployment.
+//
+// A UUID string identifying this deployment.
+// The name of the Release Tag associated with this Deployment that you'd like to retrieve.
+func (c *Client) RetrieveDeploymentReleaseTag(ctx context.Context, id string, name string) (*vellumclientgo.DeploymentReleaseTagRead, error) {
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/deployments/%v/release-tags/%v", id, name)
+
+	var response *vellumclientgo.DeploymentReleaseTagRead
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:      endpointURL,
+			Method:   http.MethodGet,
+			Headers:  c.header,
+			Response: &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Updates an existing Release Tag associated with the specified Deployment.
+//
+// A UUID string identifying this deployment.
+// The name of the Release Tag associated with this Deployment that you'd like to update.
+func (c *Client) UpdateDeploymentReleaseTag(ctx context.Context, id string, name string, request *vellumclientgo.PatchedDeploymentReleaseTagUpdateRequest) (*vellumclientgo.DeploymentReleaseTagRead, error) {
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/deployments/%v/release-tags/%v", id, name)
+
+	var response *vellumclientgo.DeploymentReleaseTagRead
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:      endpointURL,
+			Method:   http.MethodPatch,
+			Headers:  c.header,
+			Request:  request,
+			Response: &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
 func (c *Client) RetrieveProviderPayload(ctx context.Context, request *vellumclientgo.DeploymentProviderPayloadRequest) (*vellumclientgo.DeploymentProviderPayloadResponse, error) {
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
@@ -154,6 +207,31 @@ func (c *Client) RetrieveProviderPayload(ctx context.Context, request *vellumcli
 			Request:      request,
 			Response:     &response,
 			ErrorDecoder: errorDecoder,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// A UUID string identifying this workflow sandbox.
+// An ID identifying the Workflow you'd like to deploy.
+func (c *Client) DeployWorkflow(ctx context.Context, id string, workflowId string, request *vellumclientgo.DeploySandboxWorkflowRequest) (*vellumclientgo.WorkflowDeploymentRead, error) {
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/workflow-sandboxes/%v/workflows/%v/deploy", id, workflowId)
+
+	var response *vellumclientgo.WorkflowDeploymentRead
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:      endpointURL,
+			Method:   http.MethodPost,
+			Headers:  c.header,
+			Request:  request,
+			Response: &response,
 		},
 	); err != nil {
 		return nil, err
