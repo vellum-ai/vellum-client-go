@@ -97,6 +97,28 @@ func (c *Client) UpsertTestSuiteTestCase(ctx context.Context, id string, request
 	return response, nil
 }
 
+// Created, replace, and delete Test Cases within the specified Test Suite in bulk
+//
+// A UUID string identifying this test suite.
+func (c *Client) TestSuiteTestCasesBulk(ctx context.Context, id string, request []*vellumclientgo.TestSuiteTestCaseBulkOperationRequest) (*core.Stream[[]*vellumclientgo.TestSuiteTestCaseBulkResult], error) {
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/test-suites/%v/test-cases-bulk", id)
+
+	streamer := core.NewStreamer[[]*vellumclientgo.TestSuiteTestCaseBulkResult](c.caller)
+	return streamer.Stream(
+		ctx,
+		&core.StreamParams{
+			URL:     endpointURL,
+			Method:  http.MethodPost,
+			Headers: c.header,
+			Request: request,
+		},
+	)
+}
+
 // Deletes an existing test case for a test suite, keying off of the test case id.
 //
 // A UUID string identifying this test suite.

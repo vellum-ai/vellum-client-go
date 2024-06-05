@@ -985,6 +985,76 @@ func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request) String
 	return fmt.Sprintf("%#v", b)
 }
 
+// Information about the Test Case to create
+type BulkCreateTestSuiteTestCaseDataRequest struct {
+	Label *string `json:"label,omitempty"`
+	// Values for each of the Test Case's input variables
+	InputValues []*NamedTestCaseVariableValueRequest `json:"input_values,omitempty"`
+	// Values for each of the Test Case's evaluation variables
+	EvaluationValues []*NamedTestCaseVariableValueRequest `json:"evaluation_values,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (b *BulkCreateTestSuiteTestCaseDataRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkCreateTestSuiteTestCaseDataRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BulkCreateTestSuiteTestCaseDataRequest(value)
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BulkCreateTestSuiteTestCaseDataRequest) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Information about the Test Case to replace
+type BulkReplaceTestSuiteTestCaseDataRequest struct {
+	// The ID of the Test Case to replace.
+	Id    string  `json:"id"`
+	Label *string `json:"label,omitempty"`
+	// Values for each of the Test Case's input variables
+	InputValues []*NamedTestCaseVariableValueRequest `json:"input_values,omitempty"`
+	// Values for each of the Test Case's evaluation variables
+	EvaluationValues []*NamedTestCaseVariableValueRequest `json:"evaluation_values,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (b *BulkReplaceTestSuiteTestCaseDataRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BulkReplaceTestSuiteTestCaseDataRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BulkReplaceTestSuiteTestCaseDataRequest(value)
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BulkReplaceTestSuiteTestCaseDataRequest) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
 type ChatHistoryEnum = string
 
 // A user input representing a list of chat messages
@@ -1945,6 +2015,14 @@ func (c *ConditionalNodeResultData) String() string {
 	}
 	return fmt.Sprintf("%#v", c)
 }
+
+type CreateEnum = string
+
+type CreatedEnum = string
+
+type DeleteEnum = string
+
+type DeletedEnum = string
 
 type DeploymentProviderPayloadResponse struct {
 	Payload map[string]interface{} `json:"payload,omitempty"`
@@ -8775,6 +8853,10 @@ func (r ReleaseTagSource) Ptr() *ReleaseTagSource {
 	return &r
 }
 
+type ReplaceEnum = string
+
+type ReplacedEnum = string
+
 // Sandbox Scenario
 type SandboxScenario struct {
 	Label *string `json:"label,omitempty"`
@@ -13032,6 +13114,579 @@ func (t *TestSuiteTestCase) UnmarshalJSON(data []byte) error {
 }
 
 func (t *TestSuiteTestCase) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestSuiteTestCaseBulkOperationRequest struct {
+	Type    string
+	Create  *TestSuiteTestCaseCreateBulkOperationRequest
+	Replace *TestSuiteTestCaseReplaceBulkOperationRequest
+	Delete  *TestSuiteTestCaseDeleteBulkOperationRequest
+}
+
+func NewTestSuiteTestCaseBulkOperationRequestFromCreate(value *TestSuiteTestCaseCreateBulkOperationRequest) *TestSuiteTestCaseBulkOperationRequest {
+	return &TestSuiteTestCaseBulkOperationRequest{Type: "CREATE", Create: value}
+}
+
+func NewTestSuiteTestCaseBulkOperationRequestFromReplace(value *TestSuiteTestCaseReplaceBulkOperationRequest) *TestSuiteTestCaseBulkOperationRequest {
+	return &TestSuiteTestCaseBulkOperationRequest{Type: "REPLACE", Replace: value}
+}
+
+func NewTestSuiteTestCaseBulkOperationRequestFromDelete(value *TestSuiteTestCaseDeleteBulkOperationRequest) *TestSuiteTestCaseBulkOperationRequest {
+	return &TestSuiteTestCaseBulkOperationRequest{Type: "DELETE", Delete: value}
+}
+
+func (t *TestSuiteTestCaseBulkOperationRequest) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	t.Type = unmarshaler.Type
+	switch unmarshaler.Type {
+	case "CREATE":
+		value := new(TestSuiteTestCaseCreateBulkOperationRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Create = value
+	case "REPLACE":
+		value := new(TestSuiteTestCaseReplaceBulkOperationRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Replace = value
+	case "DELETE":
+		value := new(TestSuiteTestCaseDeleteBulkOperationRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Delete = value
+	}
+	return nil
+}
+
+func (t TestSuiteTestCaseBulkOperationRequest) MarshalJSON() ([]byte, error) {
+	switch t.Type {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", t.Type, t)
+	case "CREATE":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TestSuiteTestCaseCreateBulkOperationRequest
+		}{
+			Type: t.Type,
+			TestSuiteTestCaseCreateBulkOperationRequest: t.Create,
+		}
+		return json.Marshal(marshaler)
+	case "REPLACE":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TestSuiteTestCaseReplaceBulkOperationRequest
+		}{
+			Type: t.Type,
+			TestSuiteTestCaseReplaceBulkOperationRequest: t.Replace,
+		}
+		return json.Marshal(marshaler)
+	case "DELETE":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TestSuiteTestCaseDeleteBulkOperationRequest
+		}{
+			Type: t.Type,
+			TestSuiteTestCaseDeleteBulkOperationRequest: t.Delete,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type TestSuiteTestCaseBulkOperationRequestVisitor interface {
+	VisitCreate(*TestSuiteTestCaseCreateBulkOperationRequest) error
+	VisitReplace(*TestSuiteTestCaseReplaceBulkOperationRequest) error
+	VisitDelete(*TestSuiteTestCaseDeleteBulkOperationRequest) error
+}
+
+func (t *TestSuiteTestCaseBulkOperationRequest) Accept(visitor TestSuiteTestCaseBulkOperationRequestVisitor) error {
+	switch t.Type {
+	default:
+		return fmt.Errorf("invalid type %s in %T", t.Type, t)
+	case "CREATE":
+		return visitor.VisitCreate(t.Create)
+	case "REPLACE":
+		return visitor.VisitReplace(t.Replace)
+	case "DELETE":
+		return visitor.VisitDelete(t.Delete)
+	}
+}
+
+type TestSuiteTestCaseBulkResult struct {
+	Type     string
+	Created  *TestSuiteTestCaseCreatedBulkResult
+	Replaced *TestSuiteTestCaseReplacedBulkResult
+	Deleted  *TestSuiteTestCaseDeletedBulkResult
+	Rejected *TestSuiteTestCaseRejectedBulkResult
+}
+
+func NewTestSuiteTestCaseBulkResultFromCreated(value *TestSuiteTestCaseCreatedBulkResult) *TestSuiteTestCaseBulkResult {
+	return &TestSuiteTestCaseBulkResult{Type: "CREATED", Created: value}
+}
+
+func NewTestSuiteTestCaseBulkResultFromReplaced(value *TestSuiteTestCaseReplacedBulkResult) *TestSuiteTestCaseBulkResult {
+	return &TestSuiteTestCaseBulkResult{Type: "REPLACED", Replaced: value}
+}
+
+func NewTestSuiteTestCaseBulkResultFromDeleted(value *TestSuiteTestCaseDeletedBulkResult) *TestSuiteTestCaseBulkResult {
+	return &TestSuiteTestCaseBulkResult{Type: "DELETED", Deleted: value}
+}
+
+func NewTestSuiteTestCaseBulkResultFromRejected(value *TestSuiteTestCaseRejectedBulkResult) *TestSuiteTestCaseBulkResult {
+	return &TestSuiteTestCaseBulkResult{Type: "REJECTED", Rejected: value}
+}
+
+func (t *TestSuiteTestCaseBulkResult) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	t.Type = unmarshaler.Type
+	switch unmarshaler.Type {
+	case "CREATED":
+		value := new(TestSuiteTestCaseCreatedBulkResult)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Created = value
+	case "REPLACED":
+		value := new(TestSuiteTestCaseReplacedBulkResult)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Replaced = value
+	case "DELETED":
+		value := new(TestSuiteTestCaseDeletedBulkResult)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Deleted = value
+	case "REJECTED":
+		value := new(TestSuiteTestCaseRejectedBulkResult)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Rejected = value
+	}
+	return nil
+}
+
+func (t TestSuiteTestCaseBulkResult) MarshalJSON() ([]byte, error) {
+	switch t.Type {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", t.Type, t)
+	case "CREATED":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TestSuiteTestCaseCreatedBulkResult
+		}{
+			Type:                               t.Type,
+			TestSuiteTestCaseCreatedBulkResult: t.Created,
+		}
+		return json.Marshal(marshaler)
+	case "REPLACED":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TestSuiteTestCaseReplacedBulkResult
+		}{
+			Type:                                t.Type,
+			TestSuiteTestCaseReplacedBulkResult: t.Replaced,
+		}
+		return json.Marshal(marshaler)
+	case "DELETED":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TestSuiteTestCaseDeletedBulkResult
+		}{
+			Type:                               t.Type,
+			TestSuiteTestCaseDeletedBulkResult: t.Deleted,
+		}
+		return json.Marshal(marshaler)
+	case "REJECTED":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TestSuiteTestCaseRejectedBulkResult
+		}{
+			Type:                                t.Type,
+			TestSuiteTestCaseRejectedBulkResult: t.Rejected,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type TestSuiteTestCaseBulkResultVisitor interface {
+	VisitCreated(*TestSuiteTestCaseCreatedBulkResult) error
+	VisitReplaced(*TestSuiteTestCaseReplacedBulkResult) error
+	VisitDeleted(*TestSuiteTestCaseDeletedBulkResult) error
+	VisitRejected(*TestSuiteTestCaseRejectedBulkResult) error
+}
+
+func (t *TestSuiteTestCaseBulkResult) Accept(visitor TestSuiteTestCaseBulkResultVisitor) error {
+	switch t.Type {
+	default:
+		return fmt.Errorf("invalid type %s in %T", t.Type, t)
+	case "CREATED":
+		return visitor.VisitCreated(t.Created)
+	case "REPLACED":
+		return visitor.VisitReplaced(t.Replaced)
+	case "DELETED":
+		return visitor.VisitDeleted(t.Deleted)
+	case "REJECTED":
+		return visitor.VisitRejected(t.Rejected)
+	}
+}
+
+// A bulk operation that represents the creation of a Test Case.
+type TestSuiteTestCaseCreateBulkOperationRequest struct {
+	// An ID representing this specific operation. Can later be used to look up information about the operation's success in the response.
+	Id   string                                  `json:"id"`
+	Data *BulkCreateTestSuiteTestCaseDataRequest `json:"data,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestSuiteTestCaseCreateBulkOperationRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteTestCaseCreateBulkOperationRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteTestCaseCreateBulkOperationRequest(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteTestCaseCreateBulkOperationRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// The result of a bulk operation that created a Test Case.
+type TestSuiteTestCaseCreatedBulkResult struct {
+	Id   string                                  `json:"id"`
+	Data *TestSuiteTestCaseCreatedBulkResultData `json:"data,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestSuiteTestCaseCreatedBulkResult) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteTestCaseCreatedBulkResult
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteTestCaseCreatedBulkResult(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteTestCaseCreatedBulkResult) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Information about the Test Case that was created.
+type TestSuiteTestCaseCreatedBulkResultData struct {
+	Id string `json:"id"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestSuiteTestCaseCreatedBulkResultData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteTestCaseCreatedBulkResultData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteTestCaseCreatedBulkResultData(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteTestCaseCreatedBulkResultData) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestSuiteTestCaseDeleteBulkOperationDataRequest struct {
+	Id string `json:"id"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestSuiteTestCaseDeleteBulkOperationDataRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteTestCaseDeleteBulkOperationDataRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteTestCaseDeleteBulkOperationDataRequest(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteTestCaseDeleteBulkOperationDataRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// A bulk operation that represents the deletion of a Test Case.
+type TestSuiteTestCaseDeleteBulkOperationRequest struct {
+	// An ID representing this specific operation. Can later be used to look up information about the operation's success in the response.
+	Id string `json:"id"`
+	// Information about the Test Case to delete
+	Data *TestSuiteTestCaseDeleteBulkOperationDataRequest `json:"data,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestSuiteTestCaseDeleteBulkOperationRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteTestCaseDeleteBulkOperationRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteTestCaseDeleteBulkOperationRequest(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteTestCaseDeleteBulkOperationRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// The result of a bulk operation that deleted a Test Case.
+type TestSuiteTestCaseDeletedBulkResult struct {
+	// An ID that maps back to one of the initially supplied operations. Can be used to determine the result of a given operation.
+	Id   string                                  `json:"id"`
+	Data *TestSuiteTestCaseDeletedBulkResultData `json:"data,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestSuiteTestCaseDeletedBulkResult) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteTestCaseDeletedBulkResult
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteTestCaseDeletedBulkResult(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteTestCaseDeletedBulkResult) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Information about the Test Case that was deleted
+type TestSuiteTestCaseDeletedBulkResultData struct {
+	Id string `json:"id"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestSuiteTestCaseDeletedBulkResultData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteTestCaseDeletedBulkResultData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteTestCaseDeletedBulkResultData(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteTestCaseDeletedBulkResultData) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// The result of a bulk operation that failed to operate on a Test Case.
+type TestSuiteTestCaseRejectedBulkResult struct {
+	// An ID that maps back to one of the initially supplied operations. Can be used to determine the result of a given operation.
+	Id string `json:"id"`
+	// Details about the error that occurred
+	Data map[string]interface{} `json:"data,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestSuiteTestCaseRejectedBulkResult) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteTestCaseRejectedBulkResult
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteTestCaseRejectedBulkResult(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteTestCaseRejectedBulkResult) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// A bulk operation that represents the replacing of a Test Case.
+type TestSuiteTestCaseReplaceBulkOperationRequest struct {
+	// An ID representing this specific operation. Can later be used to look up information about the operation's success in the response.
+	Id   string                                   `json:"id"`
+	Data *BulkReplaceTestSuiteTestCaseDataRequest `json:"data,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestSuiteTestCaseReplaceBulkOperationRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteTestCaseReplaceBulkOperationRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteTestCaseReplaceBulkOperationRequest(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteTestCaseReplaceBulkOperationRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// The result of a bulk operation that replaced a Test Case.
+type TestSuiteTestCaseReplacedBulkResult struct {
+	// An ID that maps back to one of the initially supplied operations. Can be used to determine the result of a given operation.
+	Id   string                                   `json:"id"`
+	Data *TestSuiteTestCaseReplacedBulkResultData `json:"data,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestSuiteTestCaseReplacedBulkResult) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteTestCaseReplacedBulkResult
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteTestCaseReplacedBulkResult(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteTestCaseReplacedBulkResult) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Information about the Test Case that was replaced
+type TestSuiteTestCaseReplacedBulkResultData struct {
+	Id string `json:"id"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestSuiteTestCaseReplacedBulkResultData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteTestCaseReplacedBulkResultData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteTestCaseReplacedBulkResultData(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteTestCaseReplacedBulkResultData) String() string {
 	if len(t._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
 			return value

@@ -299,7 +299,8 @@ func (c *Client) ExecuteWorkflowStream(ctx context.Context, request *vellumclien
 
 // Generate a completion using a previously defined deployment.
 //
-// **Note:** Uses a base url of `https://predict.vellum.ai`.
+// Important: This endpoint is DEPRECATED and has been superseded by
+// [execute-prompt](/api-reference/api-reference/execute-prompt).
 func (c *Client) Generate(ctx context.Context, request *vellumclientgo.GenerateBodyRequest) (*vellumclientgo.GenerateResponse, error) {
 	baseURL := "https://predict.vellum.ai"
 	if c.baseURL != "" {
@@ -366,7 +367,8 @@ func (c *Client) Generate(ctx context.Context, request *vellumclientgo.GenerateB
 
 // Generate a stream of completions using a previously defined deployment.
 //
-// **Note:** Uses a base url of `https://predict.vellum.ai`.
+// Important: This endpoint is DEPRECATED and has been superseded by
+// [execute-prompt-stream](/api-reference/api-reference/execute-prompt-stream).
 func (c *Client) GenerateStream(ctx context.Context, request *vellumclientgo.GenerateStreamBodyRequest) (*core.Stream[vellumclientgo.GenerateStreamResponse], error) {
 	baseURL := "https://predict.vellum.ai"
 	if c.baseURL != "" {
@@ -428,8 +430,6 @@ func (c *Client) GenerateStream(ctx context.Context, request *vellumclientgo.Gen
 }
 
 // Perform a search against a document index.
-//
-// **Note:** Uses a base url of `https://predict.vellum.ai`.
 func (c *Client) Search(ctx context.Context, request *vellumclientgo.SearchRequestBodyRequest) (*vellumclientgo.SearchResponse, error) {
 	baseURL := "https://predict.vellum.ai"
 	if c.baseURL != "" {
@@ -488,8 +488,6 @@ func (c *Client) Search(ctx context.Context, request *vellumclientgo.SearchReque
 }
 
 // Used to submit feedback regarding the quality of previously generated completions.
-//
-// **Note:** Uses a base url of `https://predict.vellum.ai`.
 func (c *Client) SubmitCompletionActuals(ctx context.Context, request *vellumclientgo.SubmitCompletionActualsRequest) error {
 	baseURL := "https://predict.vellum.ai"
 	if c.baseURL != "" {
