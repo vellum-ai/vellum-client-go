@@ -2075,6 +2075,8 @@ type DeploymentRead struct {
 	InputVariables []*VellumVariable `json:"input_variables,omitempty"`
 	// Deprecated. The Prompt execution endpoints return a `prompt_version_id` that could be used instead.
 	ActiveModelVersionIds []string `json:"active_model_version_ids,omitempty"`
+	// The ID of the history item associated with this Deployment's LATEST Release Tag
+	LastDeployedHistoryItemId string `json:"last_deployed_history_item_id"`
 
 	_rawJSON json.RawMessage
 }
@@ -14145,6 +14147,8 @@ type WorkflowDeploymentRead struct {
 	Environment    *EnvironmentEnum `json:"environment,omitempty"`
 	Created        time.Time        `json:"created"`
 	LastDeployedOn time.Time        `json:"last_deployed_on"`
+	// The ID of the history item associated with this Workflow Deployment's LATEST Release Tag
+	LastDeployedHistoryItemId string `json:"last_deployed_history_item_id"`
 	// The input variables this Workflow Deployment expects to receive values for when it is executed.
 	InputVariables []*VellumVariable `json:"input_variables,omitempty"`
 	// The output variables this Workflow Deployment produces values for when it's executed.
