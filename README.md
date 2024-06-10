@@ -1,6 +1,7 @@
 # Vellum Go Library
 
 [![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-SDK%20generated%20by%20Fern-brightgreen)](https://buildwithfern.com/?utm_source=vellum-ai/vellum-client-go/readme)
+![license badge](https://img.shields.io/github/license/vellum-ai/vellum-client-go)
 [![go shield](https://img.shields.io/badge/go-docs-blue)](https://pkg.go.dev/github.com/vellum-ai/vellum-client-go)
 
 The Vellum Go library provides convenient access to the Vellum API from Go.
@@ -33,15 +34,16 @@ import (
 )
 
 client := vellumclient.NewClient(vellumclient.WithApiKey("<YOUR_AUTH_TOKEN>"))
-response, err := client.Generate(
+response, err := client.ExecutePrompt(
   context.TODO(),
-  &vellum.GenerateBodyRequest{
-    DeploymentName: vellum.String("example"),
-    Requests: []*vellum.GenerateRequest{
+  &vellum.ExecutePromptRequest{
+    PromptDeploymentName: vellum.String("<your-deployment-name>"),
+    Inputs: []*vellum.PromptDeploymentInputRequest{
       {
-        InputValues: map[string]interface{}{
-          "whoami":   "John Doe",
-          "question": "What is my name?",
+        Type: "String",
+        String: &vellum.StringInputRequest{
+          Name:  "<input_a>",
+          Value: "Hello, world!",
         },
       },
     },
@@ -59,15 +61,16 @@ like the following:
 ctx, cancel := context.WithTimeout(context.TODO(), time.Second)
 defer cancel()
 
-response, err := client.Generate(
+response, err := client.ExecutePrompt(
   ctx,
-  &vellum.GenerateBodyRequest{
-    DeploymentName: vellum.String("example"),
-    Requests: []*vellum.GenerateRequest{
+  &vellum.ExecutePromptRequest{
+    PromptDeploymentName: vellum.String("<your-deployment-name>"),
+    Inputs: []*vellum.PromptDeploymentInputRequest{
       {
-        InputValues: map[string]interface{}{
-          "whoami":   "John Doe",
-          "question": "What is my name?",
+        Type: "String",
+        String: &vellum.StringInputRequest{
+          Name:  "<input_a>",
+          Value: "Hello, world!",
         },
       },
     },
@@ -102,25 +105,27 @@ Structured error types are returned from API calls that return non-success statu
 you can check if the error was due to a bad request (i.e. status code 400) with the following:
 
 ```go
-response, err := client.Generate(
+response, err := client.ExecutePrompt(
   ctx,
-  &vellum.GenerateBodyRequest{
-    DeploymentName: vellum.String("invalid"),
-    Requests: []*vellum.GenerateRequest{
+  &vellum.ExecutePromptRequest{
+    PromptDeploymentName: vellum.String("<invalid-name>"), // Updated to use an invalid deployment name
+    Inputs: []*vellum.PromptDeploymentInputRequest{
       {
-        InputValues: map[string]interface{}{
-          "whoami":   "John Doe",
-          "question": "What is my name?",
+        Type: "String",
+        String: &vellum.StringInputRequest{
+          Name:  "<input_a>",
+          Value: "Hello, world!",
         },
       },
     },
   },
 )
 if err != nil {
-  if badRequestErr, ok := err.(*vellum.BadRequestError);
-    // Do something with the bad request ...
+  if badRequestErr, ok := err.(*vellum.BadRequestError); ok {
+    // Do something with the bad request error
+    // Handle the bad request error specifically
   }
-  return err
+  return err // Ensure to return the error if present
 }
 ```
 
@@ -130,13 +135,16 @@ like so:
 ```go
 response, err := client.Generate(
   ctx,
-  &vellum.GenerateBodyRequest{
-    DeploymentName: vellum.String("invalid"),
-    Requests: []*vellum.GenerateRequest{
+  &vellum.ExecutePromptRequest{
+    PromptDeploymentName: vellum.String("<invalid-name>"), // Updated to use an invalid deployment name
+    Inputs: []*vellum.PromptDeploymentInputRequest{
+
+
       {
-        InputValues: map[string]interface{}{
-          "whoami":   "John Doe",
-          "question": "What is my name?",
+        Type: "String",
+        String: &vellum.StringInputRequest{
+          Name:  "<input_a>",
+          Value: "Hello, world!",
         },
       },
     },
@@ -157,13 +165,14 @@ with `errors.Is` and `errors.As`, you can use the `%w` directive:
 ```go
 response, err := client.Generate(
   ctx,
-  &vellum.GenerateBodyRequest{
-    DeploymentName: vellum.String("invalid"),
-    Requests: []*vellum.GenerateRequest{
+  &vellum.ExecutePromptRequest{
+    PromptDeploymentName: vellum.String("<invalid-name>"), // Updated to use an invalid deployment name
+    Inputs: []*vellum.PromptDeploymentInputRequest{
       {
-        InputValues: map[string]interface{}{
-          "whoami":   "John Doe",
-          "question": "What is my name?",
+        Type: "String",
+        String: &vellum.StringInputRequest{
+          Name:  "<input_a>",
+          Value: "Hello, world!",
         },
       },
     },
@@ -180,17 +189,20 @@ Calling any of Vellum's streaming APIs is easy. Simply create a new stream type 
 each message returned from the server until it's done:
 
 ```go
-stream, err := client.GenerateStream(
-  context.TODO(),
-  &vellum.GenerateStreamBodyRequest{
-    DeploymentName: vellum.String("example"),
-    Requests: []*vellum.GenerateRequest{
-      InputValues: map[string]interface{}{
-        "whoami":   "John Doe",
-        "question": "Could you write me a long story?",
-      },
+stream, err := client.ExecutePromptStream(
+    context.TODO(),
+    &vellum.ExecutePromptStreamRequest{
+        PromptDeploymentName: vellum.String("<your-deployment-name>>"),
+        Inputs: []*vellum.PromptDeploymentInputRequest{
+            {
+                Type: "String",
+                String: &vellum.StringInputRequest{
+                    Name:  "<input_a>",
+                    Value: "Hello, world!",
+                },
+            },
+        },
     },
-  },
 )
 if err != nil {
   return nil, err
@@ -221,18 +233,17 @@ message from the stream. The stream is complete when the `io.EOF` error is
 returned, and if a non-`io.EOF` error is returned, it should be treated just
 like any other non-`nil` error.
 
-# Beta Status
+## Contributing
 
-This SDK is in beta, and there may be breaking changes between versions without a major 
-version update. Therefore, we recommend pinning the package version to a specific version. 
-This way, you can install the same version each time without breaking changes.
+While we value open-source contributions to this SDK, most of this library is generated programmatically.
 
-# Contributing
+Please feel free to make contributions to any of the directories or files below:
+```plaintext
+tests/*
+README.md
+```
 
-While we value open-source contributions to this SDK, this library is generated programmatically. 
-Additions made directly to this library would have to be moved over to our generation code, 
-otherwise they would be overwritten upon the next generated release. Feel free to open a PR as
- a proof of concept, but know that we will not be able to merge it as-is. We suggest opening 
-an issue first to discuss with us!
-
-On the other hand, contributions to the README are always very welcome!
+Any additions made to files beyond those directories and files above would have to be moved over to our generation code
+(found in the separate [vellum-client-generator](https://github.com/vellum-ai/vellum-client-generator) repo),
+otherwise they would be overwritten upon the next generated release. Feel free to open a PR as a proof of concept,
+but know that we will not be able to merge it as-is. We suggest opening an issue first to discuss with us!
