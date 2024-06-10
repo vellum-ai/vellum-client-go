@@ -35,19 +35,19 @@ import (
 
 client := vellumclient.NewClient(vellumclient.WithApiKey("<YOUR_AUTH_TOKEN>"))
 response, err := client.ExecutePrompt(
-	context.TODO(),
-	&vellum.ExecutePromptRequest{
-		PromptDeploymentName: vellum.String("<your-deployment-name>"),
-		Inputs: []*vellum.PromptDeploymentInputRequest{
-			{
-				Type: "String",
-				String: &vellum.StringInputRequest{
-					Name:  "<input_a>",
-					Value: "Hello, world!",
-				},
-			},
-		},
-	},
+  context.TODO(),
+  &vellum.ExecutePromptRequest{
+    PromptDeploymentName: vellum.String("<your-deployment-name>"),
+    Inputs: []*vellum.PromptDeploymentInputRequest{
+      {
+        Type: "String",
+        String: &vellum.StringInputRequest{
+          Name:  "<input_a>",
+          Value: "Hello, world!",
+        },
+      },
+    },
+  },
 )
 ```
 
@@ -62,19 +62,19 @@ ctx, cancel := context.WithTimeout(context.TODO(), time.Second)
 defer cancel()
 
 response, err := client.ExecutePrompt(
-	ctx,
-	&vellum.ExecutePromptRequest{
-		PromptDeploymentName: vellum.String("<your-deployment-name>"),
-		Inputs: []*vellum.PromptDeploymentInputRequest{
-			{
-				Type: "String",
-				String: &vellum.StringInputRequest{
-					Name:  "<input_a>",
-					Value: "Hello, world!",
-				},
-			},
-		},
-	},
+  ctx,
+  &vellum.ExecutePromptRequest{
+    PromptDeploymentName: vellum.String("<your-deployment-name>"),
+    Inputs: []*vellum.PromptDeploymentInputRequest{
+      {
+        Type: "String",
+        String: &vellum.StringInputRequest{
+          Name:  "<input_a>",
+          Value: "Hello, world!",
+        },
+      },
+    },
+  },
 )
 ```
 
@@ -106,19 +106,19 @@ you can check if the error was due to a bad request (i.e. status code 400) with 
 
 ```go
 response, err := client.ExecutePrompt(
-	ctx,
-	&vellum.ExecutePromptRequest{
-		PromptDeploymentName: vellum.String("<invalid-name>"), // Updated to use an invalid deployment name
-		Inputs: []*vellum.PromptDeploymentInputRequest{
-			{
-				Type: "String",
-				String: &vellum.StringInputRequest{
-					Name:  "<input_a>",
-					Value: "Hello, world!",
-				},
-			},
-		},
-	},
+  ctx,
+  &vellum.ExecutePromptRequest{
+    PromptDeploymentName: vellum.String("<invalid-name>"), // Updated to use an invalid deployment name
+    Inputs: []*vellum.PromptDeploymentInputRequest{
+      {
+        Type: "String",
+        String: &vellum.StringInputRequest{
+          Name:  "<input_a>",
+          Value: "Hello, world!",
+        },
+      },
+    },
+  },
 )
 if err != nil {
   if badRequestErr, ok := err.(*vellum.BadRequestError); ok {
@@ -134,26 +134,28 @@ like so:
 
 ```go
 response, err := client.Generate(
-	ctx,
-	&vellum.ExecutePromptRequest{
-		PromptDeploymentName: vellum.String("<invalid-name>"), // Updated to use an invalid deployment name
-		Inputs: []*vellum.PromptDeploymentInputRequest{
-			{
-				Type: "String",
-				String: &vellum.StringInputRequest{
-					Name:  "<input_a>",
-					Value: "Hello, world!",
-				},
-			},
-		},
-	},
+  ctx,
+  &vellum.ExecutePromptRequest{
+    PromptDeploymentName: vellum.String("<invalid-name>"), // Updated to use an invalid deployment name
+    Inputs: []*vellum.PromptDeploymentInputRequest{
+
+
+      {
+        Type: "String",
+        String: &vellum.StringInputRequest{
+          Name:  "<input_a>",
+          Value: "Hello, world!",
+        },
+      },
+    },
+  },
 )
 if err != nil {
-    var badRequestErr *vellum.BadRequestError
-    if errors.As(err, badRequestErr) {
-        // Do something with the bad request ...
-    }
-    return err
+  var badRequestErr *vellum.BadRequestError
+  if errors.As(err, badRequestErr) {
+    // Do something with the bad request ...
+  }
+  return err
 }
 ```
 
@@ -162,22 +164,22 @@ with `errors.Is` and `errors.As`, you can use the `%w` directive:
 
 ```go
 response, err := client.Generate(
-	ctx,
-	&vellum.ExecutePromptRequest{
-		PromptDeploymentName: vellum.String("<invalid-name>"), // Updated to use an invalid deployment name
-		Inputs: []*vellum.PromptDeploymentInputRequest{
-			{
-				Type: "String",
-				String: &vellum.StringInputRequest{
-					Name:  "<input_a>",
-					Value: "Hello, world!",
-				},
-			},
-		},
-	},
+  ctx,
+  &vellum.ExecutePromptRequest{
+    PromptDeploymentName: vellum.String("<invalid-name>"), // Updated to use an invalid deployment name
+    Inputs: []*vellum.PromptDeploymentInputRequest{
+      {
+        Type: "String",
+        String: &vellum.StringInputRequest{
+          Name:  "<input_a>",
+          Value: "Hello, world!",
+        },
+      },
+    },
+  },
 )
 if err != nil {
-    return fmt.Errorf("failed to generate response: %w", err)
+  return fmt.Errorf("failed to generate response: %w", err)
 }
 ```
 
@@ -203,7 +205,7 @@ stream, err := client.ExecutePromptStream(
     },
 )
 if err != nil {
-    return nil, err
+  return nil, err
 }
 
 // Make sure to close the stream when you're done reading.
@@ -211,18 +213,18 @@ if err != nil {
 defer stream.Close()
 
 for {
-    message, err := stream.Recv()
-    if errors.Is(err, io.EOF) {
-        // An io.EOF error means the server is done sending messages
-        // and should be treated as a success.
-        break
-    }
-    if err != nil {
-        // The stream has encountered a non-recoverable error. Propagate the
-        // error by simply returning the error like usual.
-        return nil, err
-    }
-    // Do something with the message!
+  message, err := stream.Recv()
+  if errors.Is(err, io.EOF) {
+    // An io.EOF error means the server is done sending messages
+    // and should be treated as a success.
+    break
+  }
+  if err != nil {
+    // The stream has encountered a non-recoverable error. Propagate the
+    // error by simply returning the error like usual.
+    return nil, err
+  }
+  // Do something with the message!
 }
 ```
 
@@ -245,4 +247,3 @@ Any additions made to files beyond those directories and files above would have 
 (found in the separate [vellum-client-generator](https://github.com/vellum-ai/vellum-client-generator) repo),
 otherwise they would be overwritten upon the next generated release. Feel free to open a PR as a proof of concept,
 but know that we will not be able to merge it as-is. We suggest opening an issue first to discuss with us!
-
