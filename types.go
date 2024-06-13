@@ -8086,6 +8086,74 @@ func (p *PaginatedTestSuiteTestCaseList) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
+type PdfEnum = string
+
+// The source of a search result from a PDF document.
+type PdfSearchResultMetaSource struct {
+	// The 1-indexed page number where the chunk starts in the document. Only available for supported chunking strategies and document types.
+	StartPageNum *int `json:"start_page_num,omitempty"`
+	// The 1-indexed page number where the chunk ends in the document. Only available for supported chunking strategies and document types.
+	EndPageNum *int `json:"end_page_num,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (p *PdfSearchResultMetaSource) UnmarshalJSON(data []byte) error {
+	type unmarshaler PdfSearchResultMetaSource
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PdfSearchResultMetaSource(value)
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PdfSearchResultMetaSource) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+// The source of a search result from a PDF document.
+type PdfSearchResultMetaSourceRequest struct {
+	// The 1-indexed page number where the chunk starts in the document. Only available for supported chunking strategies and document types.
+	StartPageNum *int `json:"start_page_num,omitempty"`
+	// The 1-indexed page number where the chunk ends in the document. Only available for supported chunking strategies and document types.
+	EndPageNum *int `json:"end_page_num,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (p *PdfSearchResultMetaSourceRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler PdfSearchResultMetaSourceRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PdfSearchResultMetaSourceRequest(value)
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PdfSearchResultMetaSourceRequest) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
 // - `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit
 // - `INVALID_FILE` - Invalid File
 type ProcessingFailureReasonEnum string
@@ -9234,6 +9302,8 @@ type SearchResult struct {
 	Keywords []string `json:"keywords,omitempty"`
 	// The document that contains the chunk that matched the search query.
 	Document *SearchResultDocument `json:"document,omitempty"`
+	// Additional information about the search result.
+	Meta *SearchResultMeta `json:"meta,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -9363,6 +9433,178 @@ func (s *SearchResultMergingRequest) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
+type SearchResultMeta struct {
+	Source *SearchResultMetaSource `json:"source,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (s *SearchResultMeta) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchResultMeta
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SearchResultMeta(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SearchResultMeta) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type SearchResultMetaRequest struct {
+	Source *SearchResultMetaSourceRequest `json:"source,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (s *SearchResultMetaRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SearchResultMetaRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SearchResultMetaRequest(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SearchResultMetaRequest) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type SearchResultMetaSource struct {
+	DocumentType string
+	Pdf          *PdfSearchResultMetaSource
+}
+
+func NewSearchResultMetaSourceFromPdf(value *PdfSearchResultMetaSource) *SearchResultMetaSource {
+	return &SearchResultMetaSource{DocumentType: "PDF", Pdf: value}
+}
+
+func (s *SearchResultMetaSource) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		DocumentType string `json:"document_type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	s.DocumentType = unmarshaler.DocumentType
+	switch unmarshaler.DocumentType {
+	case "PDF":
+		value := new(PdfSearchResultMetaSource)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		s.Pdf = value
+	}
+	return nil
+}
+
+func (s SearchResultMetaSource) MarshalJSON() ([]byte, error) {
+	switch s.DocumentType {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", s.DocumentType, s)
+	case "PDF":
+		var marshaler = struct {
+			DocumentType string `json:"document_type"`
+			*PdfSearchResultMetaSource
+		}{
+			DocumentType:              s.DocumentType,
+			PdfSearchResultMetaSource: s.Pdf,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type SearchResultMetaSourceVisitor interface {
+	VisitPdf(*PdfSearchResultMetaSource) error
+}
+
+func (s *SearchResultMetaSource) Accept(visitor SearchResultMetaSourceVisitor) error {
+	switch s.DocumentType {
+	default:
+		return fmt.Errorf("invalid type %s in %T", s.DocumentType, s)
+	case "PDF":
+		return visitor.VisitPdf(s.Pdf)
+	}
+}
+
+type SearchResultMetaSourceRequest struct {
+	DocumentType string
+	Pdf          *PdfSearchResultMetaSourceRequest
+}
+
+func NewSearchResultMetaSourceRequestFromPdf(value *PdfSearchResultMetaSourceRequest) *SearchResultMetaSourceRequest {
+	return &SearchResultMetaSourceRequest{DocumentType: "PDF", Pdf: value}
+}
+
+func (s *SearchResultMetaSourceRequest) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		DocumentType string `json:"document_type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	s.DocumentType = unmarshaler.DocumentType
+	switch unmarshaler.DocumentType {
+	case "PDF":
+		value := new(PdfSearchResultMetaSourceRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		s.Pdf = value
+	}
+	return nil
+}
+
+func (s SearchResultMetaSourceRequest) MarshalJSON() ([]byte, error) {
+	switch s.DocumentType {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", s.DocumentType, s)
+	case "PDF":
+		var marshaler = struct {
+			DocumentType string `json:"document_type"`
+			*PdfSearchResultMetaSourceRequest
+		}{
+			DocumentType:                     s.DocumentType,
+			PdfSearchResultMetaSourceRequest: s.Pdf,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type SearchResultMetaSourceRequestVisitor interface {
+	VisitPdf(*PdfSearchResultMetaSourceRequest) error
+}
+
+func (s *SearchResultMetaSourceRequest) Accept(visitor SearchResultMetaSourceRequestVisitor) error {
+	switch s.DocumentType {
+	default:
+		return fmt.Errorf("invalid type %s in %T", s.DocumentType, s)
+	case "PDF":
+		return visitor.VisitPdf(s.Pdf)
+	}
+}
+
 type SearchResultRequest struct {
 	// The text of the chunk that matched the search query.
 	Text string `json:"text"`
@@ -9371,6 +9613,8 @@ type SearchResultRequest struct {
 	Keywords []string `json:"keywords,omitempty"`
 	// The document that contains the chunk that matched the search query.
 	Document *SearchResultDocumentRequest `json:"document,omitempty"`
+	// Additional information about the search result.
+	Meta *SearchResultMetaRequest `json:"meta,omitempty"`
 
 	_rawJSON json.RawMessage
 }
