@@ -985,76 +985,6 @@ func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request) String
 	return fmt.Sprintf("%#v", b)
 }
 
-// Information about the Test Case to create
-type BulkCreateTestSuiteTestCaseDataRequest struct {
-	Label *string `json:"label,omitempty"`
-	// Values for each of the Test Case's input variables
-	InputValues []*NamedTestCaseVariableValueRequest `json:"input_values,omitempty"`
-	// Values for each of the Test Case's evaluation variables
-	EvaluationValues []*NamedTestCaseVariableValueRequest `json:"evaluation_values,omitempty"`
-
-	_rawJSON json.RawMessage
-}
-
-func (b *BulkCreateTestSuiteTestCaseDataRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler BulkCreateTestSuiteTestCaseDataRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*b = BulkCreateTestSuiteTestCaseDataRequest(value)
-	b._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (b *BulkCreateTestSuiteTestCaseDataRequest) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(b); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", b)
-}
-
-// Information about the Test Case to replace
-type BulkReplaceTestSuiteTestCaseDataRequest struct {
-	// The ID of the Test Case to replace.
-	Id    string  `json:"id"`
-	Label *string `json:"label,omitempty"`
-	// Values for each of the Test Case's input variables
-	InputValues []*NamedTestCaseVariableValueRequest `json:"input_values,omitempty"`
-	// Values for each of the Test Case's evaluation variables
-	EvaluationValues []*NamedTestCaseVariableValueRequest `json:"evaluation_values,omitempty"`
-
-	_rawJSON json.RawMessage
-}
-
-func (b *BulkReplaceTestSuiteTestCaseDataRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler BulkReplaceTestSuiteTestCaseDataRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*b = BulkReplaceTestSuiteTestCaseDataRequest(value)
-	b._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (b *BulkReplaceTestSuiteTestCaseDataRequest) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(b); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", b)
-}
-
 type ChatHistoryEnum = string
 
 // A user input representing a list of chat messages
@@ -2018,6 +1948,43 @@ func (c *ConditionalNodeResultData) String() string {
 
 type CreateEnum = string
 
+// Information about the Test Case to create
+type CreateTestSuiteTestCaseRequest struct {
+	// A human-readable label used to convey the intention of this Test Case
+	Label *string `json:"label,omitempty"`
+	// Values for each of the Test Case's input variables
+	InputValues []*NamedTestCaseVariableValueRequest `json:"input_values,omitempty"`
+	// Values for each of the Test Case's evaluation variables
+	EvaluationValues []*NamedTestCaseVariableValueRequest `json:"evaluation_values,omitempty"`
+	// Optionally provide an ID that uniquely identifies this Test Case in your system. Useful for updating this Test Cases data after initial creation. Cannot be changed later.
+	ExternalId *string `json:"external_id,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (c *CreateTestSuiteTestCaseRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateTestSuiteTestCaseRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CreateTestSuiteTestCaseRequest(value)
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CreateTestSuiteTestCaseRequest) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
 type CreatedEnum = string
 
 type DeleteEnum = string
@@ -2025,7 +1992,7 @@ type DeleteEnum = string
 type DeletedEnum = string
 
 type DeploymentProviderPayloadResponse struct {
-	Payload map[string]interface{} `json:"payload,omitempty"`
+	Payload *DeploymentProviderPayloadResponsePayload `json:"payload,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -2051,6 +2018,63 @@ func (d *DeploymentProviderPayloadResponse) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", d)
+}
+
+type DeploymentProviderPayloadResponsePayload struct {
+	typeName         string
+	StringUnknownMap map[string]interface{}
+	String           string
+}
+
+func NewDeploymentProviderPayloadResponsePayloadFromStringUnknownMap(value map[string]interface{}) *DeploymentProviderPayloadResponsePayload {
+	return &DeploymentProviderPayloadResponsePayload{typeName: "stringUnknownMap", StringUnknownMap: value}
+}
+
+func NewDeploymentProviderPayloadResponsePayloadFromString(value string) *DeploymentProviderPayloadResponsePayload {
+	return &DeploymentProviderPayloadResponsePayload{typeName: "string", String: value}
+}
+
+func (d *DeploymentProviderPayloadResponsePayload) UnmarshalJSON(data []byte) error {
+	var valueStringUnknownMap map[string]interface{}
+	if err := json.Unmarshal(data, &valueStringUnknownMap); err == nil {
+		d.typeName = "stringUnknownMap"
+		d.StringUnknownMap = valueStringUnknownMap
+		return nil
+	}
+	var valueString string
+	if err := json.Unmarshal(data, &valueString); err == nil {
+		d.typeName = "string"
+		d.String = valueString
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, d)
+}
+
+func (d DeploymentProviderPayloadResponsePayload) MarshalJSON() ([]byte, error) {
+	switch d.typeName {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", d.typeName, d)
+	case "stringUnknownMap":
+		return json.Marshal(d.StringUnknownMap)
+	case "string":
+		return json.Marshal(d.String)
+	}
+}
+
+type DeploymentProviderPayloadResponsePayloadVisitor interface {
+	VisitStringUnknownMap(map[string]interface{}) error
+	VisitString(string) error
+}
+
+func (d *DeploymentProviderPayloadResponsePayload) Accept(visitor DeploymentProviderPayloadResponsePayloadVisitor) error {
+	switch d.typeName {
+	default:
+		return fmt.Errorf("invalid type %s in %T", d.typeName, d)
+	case "stringUnknownMap":
+		return visitor.VisitStringUnknownMap(d.StringUnknownMap)
+	case "string":
+		return visitor.VisitString(d.String)
+	}
 }
 
 type DeploymentRead struct {
@@ -3145,11 +3169,12 @@ func (e *ExecuteWorkflowWorkflowResultEvent) Accept(visitor ExecuteWorkflowWorkf
 	}
 }
 
+// A value representing an array of Vellum variable values.
 type ExecutionArrayVellumValue struct {
 	// The variable's uniquely identifying internal id.
-	Id    string                    `json:"id"`
-	Name  string                    `json:"name"`
-	Value []*ArrayVariableValueItem `json:"value,omitempty"`
+	Id    string                  `json:"id"`
+	Name  string                  `json:"name"`
+	Value []*ArrayVellumValueItem `json:"value,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -3177,6 +3202,7 @@ func (e *ExecutionArrayVellumValue) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
+// A value representing Chat History.
 type ExecutionChatHistoryVellumValue struct {
 	// The variable's uniquely identifying internal id.
 	Id    string         `json:"id"`
@@ -3209,6 +3235,7 @@ func (e *ExecutionChatHistoryVellumValue) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
+// A value representing an Error.
 type ExecutionErrorVellumValue struct {
 	// The variable's uniquely identifying internal id.
 	Id    string       `json:"id"`
@@ -3241,6 +3268,7 @@ func (e *ExecutionErrorVellumValue) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
+// A value representing a Function Call.
 type ExecutionFunctionCallVellumValue struct {
 	// The variable's uniquely identifying internal id.
 	Id    string        `json:"id"`
@@ -3273,6 +3301,7 @@ func (e *ExecutionFunctionCallVellumValue) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
+// A value representing a JSON object.
 type ExecutionJsonVellumValue struct {
 	// The variable's uniquely identifying internal id.
 	Id    string                 `json:"id"`
@@ -3305,6 +3334,7 @@ func (e *ExecutionJsonVellumValue) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
+// A value representing a number.
 type ExecutionNumberVellumValue struct {
 	// The variable's uniquely identifying internal id.
 	Id    string   `json:"id"`
@@ -3337,6 +3367,7 @@ func (e *ExecutionNumberVellumValue) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
+// A value representing Search Results.
 type ExecutionSearchResultsVellumValue struct {
 	// The variable's uniquely identifying internal id.
 	Id    string          `json:"id"`
@@ -3369,6 +3400,7 @@ func (e *ExecutionSearchResultsVellumValue) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
+// A value representing a string.
 type ExecutionStringVellumValue struct {
 	// The variable's uniquely identifying internal id.
 	Id    string  `json:"id"`
@@ -5438,6 +5470,67 @@ func NewLogprobsEnumFromString(s string) (LogprobsEnum, error) {
 
 func (l LogprobsEnum) Ptr() *LogprobsEnum {
 	return &l
+}
+
+type MapEnum = string
+
+// A Node Result Event emitted from a Map Node.
+type MapNodeResult struct {
+	Data *MapNodeResultData `json:"data,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (m *MapNodeResult) UnmarshalJSON(data []byte) error {
+	type unmarshaler MapNodeResult
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MapNodeResult(value)
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MapNodeResult) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+type MapNodeResultData struct {
+	ExecutionIds []string `json:"execution_ids,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (m *MapNodeResultData) UnmarshalJSON(data []byte) error {
+	type unmarshaler MapNodeResultData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MapNodeResultData(value)
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MapNodeResultData) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
 }
 
 type MergeEnum = string
@@ -8924,6 +9017,45 @@ func (r ReleaseTagSource) Ptr() *ReleaseTagSource {
 }
 
 type ReplaceEnum = string
+
+// Information about the Test Case to replace
+type ReplaceTestSuiteTestCaseRequest struct {
+	// The Vellum-generated ID of the Test Case whose data you'd like to replace. Must specify either this or external_id.
+	Id *string `json:"id,omitempty"`
+	// The ID that was originally provided upon Test Case creation that uniquely identifies the Test Case whose data you'd like to replace. Must specify either this of id.
+	ExternalId *string `json:"external_id,omitempty"`
+	// A human-readable label used to convey the intention of this Test Case
+	Label *string `json:"label,omitempty"`
+	// Values for each of the Test Case's input variables
+	InputValues []*NamedTestCaseVariableValueRequest `json:"input_values,omitempty"`
+	// Values for each of the Test Case's evaluation variables
+	EvaluationValues []*NamedTestCaseVariableValueRequest `json:"evaluation_values,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (r *ReplaceTestSuiteTestCaseRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler ReplaceTestSuiteTestCaseRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = ReplaceTestSuiteTestCaseRequest(value)
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *ReplaceTestSuiteTestCaseRequest) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
 
 type ReplacedEnum = string
 
@@ -13341,6 +13473,7 @@ type TestSuiteRunWorkflowReleaseTagExecConfigTypeEnum = string
 
 type TestSuiteTestCase struct {
 	Id               *string                  `json:"id,omitempty"`
+	ExternalId       *string                  `json:"external_id,omitempty"`
 	Label            *string                  `json:"label,omitempty"`
 	InputValues      []*TestCaseVariableValue `json:"input_values,omitempty"`
 	EvaluationValues []*TestCaseVariableValue `json:"evaluation_values,omitempty"`
@@ -13603,8 +13736,8 @@ func (t *TestSuiteTestCaseBulkResult) Accept(visitor TestSuiteTestCaseBulkResult
 // A bulk operation that represents the creation of a Test Case.
 type TestSuiteTestCaseCreateBulkOperationRequest struct {
 	// An ID representing this specific operation. Can later be used to look up information about the operation's success in the response.
-	Id   string                                  `json:"id"`
-	Data *BulkCreateTestSuiteTestCaseDataRequest `json:"data,omitempty"`
+	Id   string                          `json:"id"`
+	Data *CreateTestSuiteTestCaseRequest `json:"data,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -13853,8 +13986,8 @@ func (t *TestSuiteTestCaseRejectedBulkResult) String() string {
 // A bulk operation that represents the replacing of a Test Case.
 type TestSuiteTestCaseReplaceBulkOperationRequest struct {
 	// An ID representing this specific operation. Can later be used to look up information about the operation's success in the response.
-	Id   string                                   `json:"id"`
-	Data *BulkReplaceTestSuiteTestCaseDataRequest `json:"data,omitempty"`
+	Id   string                           `json:"id"`
+	Data *ReplaceTestSuiteTestCaseRequest `json:"data,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -14724,6 +14857,7 @@ type WorkflowNodeResultData struct {
 	Merge         *MergeNodeResult
 	Subworkflow   *SubworkflowNodeResult
 	Metric        *MetricNodeResult
+	Map           *MapNodeResult
 }
 
 func NewWorkflowNodeResultDataFromPrompt(value *PromptNodeResult) *WorkflowNodeResultData {
@@ -14764,6 +14898,10 @@ func NewWorkflowNodeResultDataFromSubworkflow(value *SubworkflowNodeResult) *Wor
 
 func NewWorkflowNodeResultDataFromMetric(value *MetricNodeResult) *WorkflowNodeResultData {
 	return &WorkflowNodeResultData{Type: "METRIC", Metric: value}
+}
+
+func NewWorkflowNodeResultDataFromMap(value *MapNodeResult) *WorkflowNodeResultData {
+	return &WorkflowNodeResultData{Type: "MAP", Map: value}
 }
 
 func (w *WorkflowNodeResultData) UnmarshalJSON(data []byte) error {
@@ -14835,6 +14973,12 @@ func (w *WorkflowNodeResultData) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		w.Metric = value
+	case "MAP":
+		value := new(MapNodeResult)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		w.Map = value
 	}
 	return nil
 }
@@ -14933,6 +15077,15 @@ func (w WorkflowNodeResultData) MarshalJSON() ([]byte, error) {
 			MetricNodeResult: w.Metric,
 		}
 		return json.Marshal(marshaler)
+	case "MAP":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*MapNodeResult
+		}{
+			Type:          w.Type,
+			MapNodeResult: w.Map,
+		}
+		return json.Marshal(marshaler)
 	}
 }
 
@@ -14947,6 +15100,7 @@ type WorkflowNodeResultDataVisitor interface {
 	VisitMerge(*MergeNodeResult) error
 	VisitSubworkflow(*SubworkflowNodeResult) error
 	VisitMetric(*MetricNodeResult) error
+	VisitMap(*MapNodeResult) error
 }
 
 func (w *WorkflowNodeResultData) Accept(visitor WorkflowNodeResultDataVisitor) error {
@@ -14973,6 +15127,8 @@ func (w *WorkflowNodeResultData) Accept(visitor WorkflowNodeResultDataVisitor) e
 		return visitor.VisitSubworkflow(w.Subworkflow)
 	case "METRIC":
 		return visitor.VisitMetric(w.Metric)
+	case "MAP":
+		return visitor.VisitMap(w.Map)
 	}
 }
 
