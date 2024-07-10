@@ -5249,6 +5249,30 @@ func (i *InstructorVectorizerConfigRequest) String() string {
 
 type IntfloatMultilingualE5LargeEnum = string
 
+// - `INITIATED` - INITIATED
+// - `FULFILLED` - FULFILLED
+type IterationStateEnum string
+
+const (
+	IterationStateEnumInitiated IterationStateEnum = "INITIATED"
+	IterationStateEnumFulfilled IterationStateEnum = "FULFILLED"
+)
+
+func NewIterationStateEnumFromString(s string) (IterationStateEnum, error) {
+	switch s {
+	case "INITIATED":
+		return IterationStateEnumInitiated, nil
+	case "FULFILLED":
+		return IterationStateEnumFulfilled, nil
+	}
+	var t IterationStateEnum
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (i IterationStateEnum) Ptr() *IterationStateEnum {
+	return &i
+}
+
 type JsonEnum = string
 
 // A user input representing a JSON object
@@ -5505,7 +5529,8 @@ func (m *MapNodeResult) String() string {
 }
 
 type MapNodeResultData struct {
-	ExecutionIds []string `json:"execution_ids,omitempty"`
+	ExecutionIds   []string            `json:"execution_ids,omitempty"`
+	IterationState *IterationStateEnum `json:"iteration_state,omitempty"`
 
 	_rawJSON json.RawMessage
 }
