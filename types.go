@@ -10,41 +10,45 @@ import (
 )
 
 type ExecutePromptRequest struct {
-	// The list of inputs defined in the Prompt's deployment with their corresponding values.
+	// A list consisting of the Prompt Deployment's input variables and their values.
 	Inputs []*PromptDeploymentInputRequest `json:"inputs,omitempty"`
 	// The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
 	PromptDeploymentId *string `json:"prompt_deployment_id,omitempty"`
-	// The name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
+	// The unique name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
 	PromptDeploymentName *string `json:"prompt_deployment_name,omitempty"`
 	// Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
 	ReleaseTag *string `json:"release_tag,omitempty"`
-	// "Optionally include a unique identifier for tracking purposes. Must be unique for a given prompt deployment.
+	// Optionally include a unique identifier for tracking purposes. Must be unique within a given Prompt Deployment.
 	ExternalId *string `json:"external_id,omitempty"`
-	// The name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
-	ExpandMeta   *PromptDeploymentExpandMetaRequestRequest `json:"expand_meta,omitempty"`
-	RawOverrides *RawPromptExecutionOverridesRequest       `json:"raw_overrides,omitempty"`
-	// Returns the raw API response data sent from the model host. Combined with `raw_overrides`, it can be used to access new features from models.
-	ExpandRaw []string               `json:"expand_raw,omitempty"`
-	Metadata  map[string]interface{} `json:"metadata,omitempty"`
+	// An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
+	ExpandMeta *PromptDeploymentExpandMetaRequestRequest `json:"expand_meta,omitempty"`
+	// Overrides for the raw API request sent to the model host. Combined with `expand_raw`, it can be used to access new features from models.
+	RawOverrides *RawPromptExecutionOverridesRequest `json:"raw_overrides,omitempty"`
+	// A list of keys whose values you'd like to directly return from the JSON response of the model provider. Useful if you need lower-level info returned by model providers that Vellum would otherwise omit. Corresponding key/value pairs will be returned under the `raw` key of the API response.
+	ExpandRaw []string `json:"expand_raw,omitempty"`
+	// Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
 }
 
 type ExecutePromptStreamRequest struct {
-	// The list of inputs defined in the Prompt's deployment with their corresponding values.
+	// A list consisting of the Prompt Deployment's input variables and their values.
 	Inputs []*PromptDeploymentInputRequest `json:"inputs,omitempty"`
 	// The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
 	PromptDeploymentId *string `json:"prompt_deployment_id,omitempty"`
-	// The name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
+	// The unique name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
 	PromptDeploymentName *string `json:"prompt_deployment_name,omitempty"`
 	// Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
 	ReleaseTag *string `json:"release_tag,omitempty"`
-	// "Optionally include a unique identifier for tracking purposes. Must be unique for a given prompt deployment.
+	// Optionally include a unique identifier for tracking purposes. Must be unique within a given Prompt Deployment.
 	ExternalId *string `json:"external_id,omitempty"`
-	// The name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
-	ExpandMeta   *PromptDeploymentExpandMetaRequestRequest `json:"expand_meta,omitempty"`
-	RawOverrides *RawPromptExecutionOverridesRequest       `json:"raw_overrides,omitempty"`
-	// Returns the raw API response data sent from the model host. Combined with `raw_overrides`, it can be used to access new features from models.
-	ExpandRaw []string               `json:"expand_raw,omitempty"`
-	Metadata  map[string]interface{} `json:"metadata,omitempty"`
+	// An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
+	ExpandMeta *PromptDeploymentExpandMetaRequestRequest `json:"expand_meta,omitempty"`
+	// Overrides for the raw API request sent to the model host. Combined with `expand_raw`, it can be used to access new features from models.
+	RawOverrides *RawPromptExecutionOverridesRequest `json:"raw_overrides,omitempty"`
+	// A list of keys whose values you'd like to directly return from the JSON response of the model provider. Useful if you need lower-level info returned by model providers that Vellum would otherwise omit. Corresponding key/value pairs will be returned under the `raw` key of the API response.
+	ExpandRaw []string `json:"expand_raw,omitempty"`
+	// Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
 }
 
 type ExecuteWorkflowRequest struct {
@@ -8539,6 +8543,7 @@ func (p *PromptNodeResult) String() string {
 type PromptNodeResultData struct {
 	OutputId      string  `json:"output_id"`
 	ArrayOutputId *string `json:"array_output_id,omitempty"`
+	ExecutionId   *string `json:"execution_id,omitempty"`
 	Text          *string `json:"text,omitempty"`
 	Delta         *string `json:"delta,omitempty"`
 
@@ -13088,8 +13093,8 @@ type TestSuiteRunMetricErrorOutputTypeEnum = string
 
 // Output for a test suite run metric that is of type NUMBER
 type TestSuiteRunMetricNumberOutput struct {
-	Value float64 `json:"value"`
-	Name  string  `json:"name"`
+	Value *float64 `json:"value,omitempty"`
+	Name  string   `json:"name"`
 
 	_rawJSON json.RawMessage
 }
@@ -13225,8 +13230,8 @@ func (t *TestSuiteRunMetricOutput) Accept(visitor TestSuiteRunMetricOutputVisito
 
 // Output for a test suite run metric that is of type STRING
 type TestSuiteRunMetricStringOutput struct {
-	Value string `json:"value"`
-	Name  string `json:"name"`
+	Value *string `json:"value,omitempty"`
+	Name  string  `json:"name"`
 
 	_rawJSON json.RawMessage
 }
@@ -13978,7 +13983,7 @@ func (t *TestSuiteTestCaseDeletedBulkResultData) String() string {
 // The result of a bulk operation that failed to operate on a Test Case.
 type TestSuiteTestCaseRejectedBulkResult struct {
 	// An ID that maps back to one of the initially supplied operations. Can be used to determine the result of a given operation.
-	Id string `json:"id"`
+	Id *string `json:"id,omitempty"`
 	// Details about the error that occurred
 	Data map[string]interface{} `json:"data,omitempty"`
 

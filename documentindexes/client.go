@@ -196,6 +196,30 @@ func (c *Client) PartialUpdate(ctx context.Context, id string, request *vellumcl
 	return response, nil
 }
 
+// Adds a previously uploaded Document to the specified Document Index.
+//
+// Either the Vellum-generated ID or the originally supplied external_id that uniquely identifies the Document you'd like to add.
+// Either the Vellum-generated ID or the originally specified name that uniquely identifies the Document Index to which you'd like to add the Document.
+func (c *Client) AddDocument(ctx context.Context, documentId string, id string) error {
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/document-indexes/%v/documents/%v", documentId, id)
+
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:     endpointURL,
+			Method:  http.MethodPost,
+			Headers: c.header,
+		},
+	); err != nil {
+		return err
+	}
+	return nil
+}
+
 // Removes a Document from a Document Index without deleting the Document itself.
 //
 // Either the Vellum-generated ID or the originally supplied external_id that uniquely identifies the Document you'd like to remove.
