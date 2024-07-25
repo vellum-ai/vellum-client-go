@@ -54,6 +54,8 @@ type ExecutePromptStreamRequest struct {
 type ExecuteWorkflowRequest struct {
 	// The list of inputs defined in the Workflow's Deployment with their corresponding values.
 	Inputs []*WorkflowRequestInputRequest `json:"inputs,omitempty"`
+	// An optionally specified configuration used to opt in to including additional metadata about this workflow execution in the API response. Corresponding values will be returned under the `execution_meta` key within NODE events in the response stream.
+	ExpandMeta *WorkflowExpandMetaRequest `json:"expand_meta,omitempty"`
 	// The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
 	WorkflowDeploymentId *string `json:"workflow_deployment_id,omitempty"`
 	// The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
@@ -67,6 +69,8 @@ type ExecuteWorkflowRequest struct {
 type ExecuteWorkflowStreamRequest struct {
 	// The list of inputs defined in the Workflow's Deployment with their corresponding values.
 	Inputs []*WorkflowRequestInputRequest `json:"inputs,omitempty"`
+	// An optionally specified configuration used to opt in to including additional metadata about this workflow execution in the API response. Corresponding values will be returned under the `execution_meta` key within NODE events in the response stream.
+	ExpandMeta *WorkflowExpandMetaRequest `json:"expand_meta,omitempty"`
 	// The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
 	WorkflowDeploymentId *string `json:"workflow_deployment_id,omitempty"`
 	// The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
@@ -791,6 +795,178 @@ type ArrayVellumValueItemVisitor interface {
 }
 
 func (a *ArrayVellumValueItem) Accept(visitor ArrayVellumValueItemVisitor) error {
+	switch a.Type {
+	default:
+		return fmt.Errorf("invalid type %s in %T", a.Type, a)
+	case "STRING":
+		return visitor.VisitString(a.String)
+	case "NUMBER":
+		return visitor.VisitNumber(a.Number)
+	case "JSON":
+		return visitor.VisitJson(a.Json)
+	case "IMAGE":
+		return visitor.VisitImage(a.Image)
+	case "FUNCTION_CALL":
+		return visitor.VisitFunctionCall(a.FunctionCall)
+	case "ERROR":
+		return visitor.VisitError(a.Error)
+	}
+}
+
+type ArrayVellumValueItemRequest struct {
+	Type         string
+	String       *StringVellumValueRequest
+	Number       *NumberVellumValueRequest
+	Json         *JsonVellumValueRequest
+	Image        *ImageVellumValueRequest
+	FunctionCall *FunctionCallVellumValueRequest
+	Error        *ErrorVellumValueRequest
+}
+
+func NewArrayVellumValueItemRequestFromString(value *StringVellumValueRequest) *ArrayVellumValueItemRequest {
+	return &ArrayVellumValueItemRequest{Type: "STRING", String: value}
+}
+
+func NewArrayVellumValueItemRequestFromNumber(value *NumberVellumValueRequest) *ArrayVellumValueItemRequest {
+	return &ArrayVellumValueItemRequest{Type: "NUMBER", Number: value}
+}
+
+func NewArrayVellumValueItemRequestFromJson(value *JsonVellumValueRequest) *ArrayVellumValueItemRequest {
+	return &ArrayVellumValueItemRequest{Type: "JSON", Json: value}
+}
+
+func NewArrayVellumValueItemRequestFromImage(value *ImageVellumValueRequest) *ArrayVellumValueItemRequest {
+	return &ArrayVellumValueItemRequest{Type: "IMAGE", Image: value}
+}
+
+func NewArrayVellumValueItemRequestFromFunctionCall(value *FunctionCallVellumValueRequest) *ArrayVellumValueItemRequest {
+	return &ArrayVellumValueItemRequest{Type: "FUNCTION_CALL", FunctionCall: value}
+}
+
+func NewArrayVellumValueItemRequestFromError(value *ErrorVellumValueRequest) *ArrayVellumValueItemRequest {
+	return &ArrayVellumValueItemRequest{Type: "ERROR", Error: value}
+}
+
+func (a *ArrayVellumValueItemRequest) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	a.Type = unmarshaler.Type
+	switch unmarshaler.Type {
+	case "STRING":
+		value := new(StringVellumValueRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		a.String = value
+	case "NUMBER":
+		value := new(NumberVellumValueRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		a.Number = value
+	case "JSON":
+		value := new(JsonVellumValueRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		a.Json = value
+	case "IMAGE":
+		value := new(ImageVellumValueRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		a.Image = value
+	case "FUNCTION_CALL":
+		value := new(FunctionCallVellumValueRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		a.FunctionCall = value
+	case "ERROR":
+		value := new(ErrorVellumValueRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		a.Error = value
+	}
+	return nil
+}
+
+func (a ArrayVellumValueItemRequest) MarshalJSON() ([]byte, error) {
+	switch a.Type {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", a.Type, a)
+	case "STRING":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*StringVellumValueRequest
+		}{
+			Type:                     a.Type,
+			StringVellumValueRequest: a.String,
+		}
+		return json.Marshal(marshaler)
+	case "NUMBER":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*NumberVellumValueRequest
+		}{
+			Type:                     a.Type,
+			NumberVellumValueRequest: a.Number,
+		}
+		return json.Marshal(marshaler)
+	case "JSON":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*JsonVellumValueRequest
+		}{
+			Type:                   a.Type,
+			JsonVellumValueRequest: a.Json,
+		}
+		return json.Marshal(marshaler)
+	case "IMAGE":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ImageVellumValueRequest
+		}{
+			Type:                    a.Type,
+			ImageVellumValueRequest: a.Image,
+		}
+		return json.Marshal(marshaler)
+	case "FUNCTION_CALL":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*FunctionCallVellumValueRequest
+		}{
+			Type:                           a.Type,
+			FunctionCallVellumValueRequest: a.FunctionCall,
+		}
+		return json.Marshal(marshaler)
+	case "ERROR":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ErrorVellumValueRequest
+		}{
+			Type:                    a.Type,
+			ErrorVellumValueRequest: a.Error,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type ArrayVellumValueItemRequestVisitor interface {
+	VisitString(*StringVellumValueRequest) error
+	VisitNumber(*NumberVellumValueRequest) error
+	VisitJson(*JsonVellumValueRequest) error
+	VisitImage(*ImageVellumValueRequest) error
+	VisitFunctionCall(*FunctionCallVellumValueRequest) error
+	VisitError(*ErrorVellumValueRequest) error
+}
+
+func (a *ArrayVellumValueItemRequest) Accept(visitor ArrayVellumValueItemRequestVisitor) error {
 	switch a.Type {
 	default:
 		return fmt.Errorf("invalid type %s in %T", a.Type, a)
@@ -2765,6 +2941,36 @@ func (e *ErrorVellumValue) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
+// A value representing an Error.
+type ErrorVellumValueRequest struct {
+	Value *VellumErrorRequest `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (e *ErrorVellumValueRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler ErrorVellumValueRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = ErrorVellumValueRequest(value)
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ErrorVellumValueRequest) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
 type ExecutePromptApiErrorResponse struct {
 	// Details about why the request failed.
 	Detail string `json:"detail"`
@@ -4166,6 +4372,36 @@ func (f *FunctionCallVellumValue) String() string {
 	return fmt.Sprintf("%#v", f)
 }
 
+// A value representing a Function Call.
+type FunctionCallVellumValueRequest struct {
+	Value *FunctionCallRequest `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (f *FunctionCallVellumValueRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler FunctionCallVellumValueRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*f = FunctionCallVellumValueRequest(value)
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FunctionCallVellumValueRequest) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
 type GenerateErrorResponse struct {
 	// Details about why the request failed.
 	Detail string `json:"detail"`
@@ -4648,6 +4884,36 @@ func (i *ImageVellumValue) UnmarshalJSON(data []byte) error {
 }
 
 func (i *ImageVellumValue) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// A base Vellum primitive value representing an image.
+type ImageVellumValueRequest struct {
+	Value *VellumImageRequest `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (i *ImageVellumValueRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler ImageVellumValueRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = ImageVellumValueRequest(value)
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *ImageVellumValueRequest) String() string {
 	if len(i._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
 			return value
@@ -5370,6 +5636,36 @@ func (j *JsonVellumValue) String() string {
 	return fmt.Sprintf("%#v", j)
 }
 
+// A value representing a JSON object.
+type JsonVellumValueRequest struct {
+	Value interface{} `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (j *JsonVellumValueRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler JsonVellumValueRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*j = JsonVellumValueRequest(value)
+	j._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (j *JsonVellumValueRequest) String() string {
+	if len(j._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(j._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(j); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", j)
+}
+
 // - `=` - EQUALS
 // - `!=` - DOES_NOT_EQUAL
 // - `<` - LESS_THAN
@@ -5920,6 +6216,68 @@ func (n *NamedScenarioInputStringVariableValueRequest) String() string {
 	return fmt.Sprintf("%#v", n)
 }
 
+// Named Test Case value that is of type ARRAY
+type NamedTestCaseArrayVariableValue struct {
+	Value []*ArrayVellumValueItem `json:"value,omitempty"`
+	Name  string                  `json:"name"`
+
+	_rawJSON json.RawMessage
+}
+
+func (n *NamedTestCaseArrayVariableValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler NamedTestCaseArrayVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*n = NamedTestCaseArrayVariableValue(value)
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NamedTestCaseArrayVariableValue) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
+// Named Test Case value that is of type ARRAY
+type NamedTestCaseArrayVariableValueRequest struct {
+	Value []*ArrayVellumValueItemRequest `json:"value,omitempty"`
+	Name  string                         `json:"name"`
+
+	_rawJSON json.RawMessage
+}
+
+func (n *NamedTestCaseArrayVariableValueRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler NamedTestCaseArrayVariableValueRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*n = NamedTestCaseArrayVariableValueRequest(value)
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NamedTestCaseArrayVariableValueRequest) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
 // Named Test Case value that is of type CHAT_HISTORY
 type NamedTestCaseChatHistoryVariableValue struct {
 	Value []*ChatMessage `json:"value,omitempty"`
@@ -6363,6 +6721,7 @@ type NamedTestCaseVariableValue struct {
 	SearchResults *NamedTestCaseSearchResultsVariableValue
 	Error         *NamedTestCaseErrorVariableValue
 	FunctionCall  *NamedTestCaseFunctionCallVariableValue
+	Array         *NamedTestCaseArrayVariableValue
 }
 
 func NewNamedTestCaseVariableValueFromString(value *NamedTestCaseStringVariableValue) *NamedTestCaseVariableValue {
@@ -6391,6 +6750,10 @@ func NewNamedTestCaseVariableValueFromError(value *NamedTestCaseErrorVariableVal
 
 func NewNamedTestCaseVariableValueFromFunctionCall(value *NamedTestCaseFunctionCallVariableValue) *NamedTestCaseVariableValue {
 	return &NamedTestCaseVariableValue{Type: "FUNCTION_CALL", FunctionCall: value}
+}
+
+func NewNamedTestCaseVariableValueFromArray(value *NamedTestCaseArrayVariableValue) *NamedTestCaseVariableValue {
+	return &NamedTestCaseVariableValue{Type: "ARRAY", Array: value}
 }
 
 func (n *NamedTestCaseVariableValue) UnmarshalJSON(data []byte) error {
@@ -6444,6 +6807,12 @@ func (n *NamedTestCaseVariableValue) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		n.FunctionCall = value
+	case "ARRAY":
+		value := new(NamedTestCaseArrayVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.Array = value
 	}
 	return nil
 }
@@ -6515,6 +6884,15 @@ func (n NamedTestCaseVariableValue) MarshalJSON() ([]byte, error) {
 			NamedTestCaseFunctionCallVariableValue: n.FunctionCall,
 		}
 		return json.Marshal(marshaler)
+	case "ARRAY":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*NamedTestCaseArrayVariableValue
+		}{
+			Type:                            n.Type,
+			NamedTestCaseArrayVariableValue: n.Array,
+		}
+		return json.Marshal(marshaler)
 	}
 }
 
@@ -6526,6 +6904,7 @@ type NamedTestCaseVariableValueVisitor interface {
 	VisitSearchResults(*NamedTestCaseSearchResultsVariableValue) error
 	VisitError(*NamedTestCaseErrorVariableValue) error
 	VisitFunctionCall(*NamedTestCaseFunctionCallVariableValue) error
+	VisitArray(*NamedTestCaseArrayVariableValue) error
 }
 
 func (n *NamedTestCaseVariableValue) Accept(visitor NamedTestCaseVariableValueVisitor) error {
@@ -6546,6 +6925,8 @@ func (n *NamedTestCaseVariableValue) Accept(visitor NamedTestCaseVariableValueVi
 		return visitor.VisitError(n.Error)
 	case "FUNCTION_CALL":
 		return visitor.VisitFunctionCall(n.FunctionCall)
+	case "ARRAY":
+		return visitor.VisitArray(n.Array)
 	}
 }
 
@@ -6558,6 +6939,7 @@ type NamedTestCaseVariableValueRequest struct {
 	SearchResults *NamedTestCaseSearchResultsVariableValueRequest
 	Error         *NamedTestCaseErrorVariableValueRequest
 	FunctionCall  *NamedTestCaseFunctionCallVariableValueRequest
+	Array         *NamedTestCaseArrayVariableValueRequest
 }
 
 func NewNamedTestCaseVariableValueRequestFromString(value *NamedTestCaseStringVariableValueRequest) *NamedTestCaseVariableValueRequest {
@@ -6586,6 +6968,10 @@ func NewNamedTestCaseVariableValueRequestFromError(value *NamedTestCaseErrorVari
 
 func NewNamedTestCaseVariableValueRequestFromFunctionCall(value *NamedTestCaseFunctionCallVariableValueRequest) *NamedTestCaseVariableValueRequest {
 	return &NamedTestCaseVariableValueRequest{Type: "FUNCTION_CALL", FunctionCall: value}
+}
+
+func NewNamedTestCaseVariableValueRequestFromArray(value *NamedTestCaseArrayVariableValueRequest) *NamedTestCaseVariableValueRequest {
+	return &NamedTestCaseVariableValueRequest{Type: "ARRAY", Array: value}
 }
 
 func (n *NamedTestCaseVariableValueRequest) UnmarshalJSON(data []byte) error {
@@ -6639,6 +7025,12 @@ func (n *NamedTestCaseVariableValueRequest) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		n.FunctionCall = value
+	case "ARRAY":
+		value := new(NamedTestCaseArrayVariableValueRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.Array = value
 	}
 	return nil
 }
@@ -6710,6 +7102,15 @@ func (n NamedTestCaseVariableValueRequest) MarshalJSON() ([]byte, error) {
 			NamedTestCaseFunctionCallVariableValueRequest: n.FunctionCall,
 		}
 		return json.Marshal(marshaler)
+	case "ARRAY":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*NamedTestCaseArrayVariableValueRequest
+		}{
+			Type:                                   n.Type,
+			NamedTestCaseArrayVariableValueRequest: n.Array,
+		}
+		return json.Marshal(marshaler)
 	}
 }
 
@@ -6721,6 +7122,7 @@ type NamedTestCaseVariableValueRequestVisitor interface {
 	VisitSearchResults(*NamedTestCaseSearchResultsVariableValueRequest) error
 	VisitError(*NamedTestCaseErrorVariableValueRequest) error
 	VisitFunctionCall(*NamedTestCaseFunctionCallVariableValueRequest) error
+	VisitArray(*NamedTestCaseArrayVariableValueRequest) error
 }
 
 func (n *NamedTestCaseVariableValueRequest) Accept(visitor NamedTestCaseVariableValueRequestVisitor) error {
@@ -6741,6 +7143,8 @@ func (n *NamedTestCaseVariableValueRequest) Accept(visitor NamedTestCaseVariable
 		return visitor.VisitError(n.Error)
 	case "FUNCTION_CALL":
 		return visitor.VisitFunctionCall(n.FunctionCall)
+	case "ARRAY":
+		return visitor.VisitArray(n.Array)
 	}
 }
 
@@ -7807,6 +8211,36 @@ func (n *NumberVellumValue) String() string {
 	return fmt.Sprintf("%#v", n)
 }
 
+// A value representing a number.
+type NumberVellumValueRequest struct {
+	Value *float64 `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (n *NumberVellumValueRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler NumberVellumValueRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*n = NumberVellumValueRequest(value)
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NumberVellumValueRequest) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
 // Configuration for using an OpenAI vectorizer.
 type OpenAiVectorizerConfig struct {
 	AddOpenaiApiKey *AddOpenaiApiKeyEnum `json:"add_openai_api_key,omitempty"`
@@ -8364,18 +8798,18 @@ func (p ProcessingStateEnum) Ptr() *ProcessingStateEnum {
 }
 
 type PromptDeploymentExpandMetaRequestRequest struct {
-	// If enabled, the response will include the model identifier representing the ML Model invoked by the Prompt Deployment.
+	// If enabled, the response will include the model identifier representing the ML Model invoked by the Prompt.
 	ModelName *bool `json:"model_name,omitempty"`
+	// If enabled, the response will include model host usage tracking. This may increase latency for some model hosts.
+	Usage *bool `json:"usage,omitempty"`
+	// If enabled, the response will include the reason provided by the model for why the execution finished.
+	FinishReason *bool `json:"finish_reason,omitempty"`
 	// If enabled, the response will include the time in nanoseconds it took to execute the Prompt Deployment.
 	Latency *bool `json:"latency,omitempty"`
 	// If enabled, the response will include the release tag of the Prompt Deployment.
 	DeploymentReleaseTag *bool `json:"deployment_release_tag,omitempty"`
 	// If enabled, the response will include the ID of the Prompt Version backing the deployment.
 	PromptVersionId *bool `json:"prompt_version_id,omitempty"`
-	// If enabled, the response will include the reason provided by the model for why the execution finished.
-	FinishReason *bool `json:"finish_reason,omitempty"`
-	// If enabled, the response will include model host usage tracking. This may increase latency for some model hosts.
-	Usage *bool `json:"usage,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -8508,12 +8942,12 @@ func (p *PromptDeploymentInputRequest) Accept(visitor PromptDeploymentInputReque
 
 // The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
 type PromptExecutionMeta struct {
-	Usage                *MlModelUsage     `json:"usage,omitempty"`
 	ModelName            *string           `json:"model_name,omitempty"`
 	Latency              *int              `json:"latency,omitempty"`
 	DeploymentReleaseTag *string           `json:"deployment_release_tag,omitempty"`
 	PromptVersionId      *string           `json:"prompt_version_id,omitempty"`
 	FinishReason         *FinishReasonEnum `json:"finish_reason,omitempty"`
+	Usage                *MlModelUsage     `json:"usage,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -8530,6 +8964,36 @@ func (p *PromptExecutionMeta) UnmarshalJSON(data []byte) error {
 }
 
 func (p *PromptExecutionMeta) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+// The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
+type PromptNodeExecutionMeta struct {
+	Usage *MlModelUsage `json:"usage,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (p *PromptNodeExecutionMeta) UnmarshalJSON(data []byte) error {
+	type unmarshaler PromptNodeExecutionMeta
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PromptNodeExecutionMeta(value)
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PromptNodeExecutionMeta) String() string {
 	if len(p._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
 			return value
@@ -8572,11 +9036,12 @@ func (p *PromptNodeResult) String() string {
 }
 
 type PromptNodeResultData struct {
-	OutputId      string  `json:"output_id"`
-	ArrayOutputId *string `json:"array_output_id,omitempty"`
-	ExecutionId   *string `json:"execution_id,omitempty"`
-	Text          *string `json:"text,omitempty"`
-	Delta         *string `json:"delta,omitempty"`
+	ExecutionMeta *PromptNodeExecutionMeta `json:"execution_meta,omitempty"`
+	OutputId      string                   `json:"output_id"`
+	ArrayOutputId *string                  `json:"array_output_id,omitempty"`
+	ExecutionId   *string                  `json:"execution_id,omitempty"`
+	Text          *string                  `json:"text,omitempty"`
+	Delta         *string                  `json:"delta,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -10408,6 +10873,36 @@ func (s *StringVellumValue) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
+// A value representing a string.
+type StringVellumValueRequest struct {
+	Value *string `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (s *StringVellumValueRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler StringVellumValueRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = StringVellumValueRequest(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *StringVellumValueRequest) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
 type SubmitCompletionActualRequest struct {
 	// The Vellum-generated ID of a previously generated completion. Must provide either this or external_id.
 	Id *string `json:"id,omitempty"`
@@ -11691,6 +12186,38 @@ func (t *TerminalNodeStringResult) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+// An Array value for a variable in a Test Case.
+type TestCaseArrayVariableValue struct {
+	VariableId string                  `json:"variable_id"`
+	Name       string                  `json:"name"`
+	Value      []*ArrayVellumValueItem `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TestCaseArrayVariableValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestCaseArrayVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestCaseArrayVariableValue(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestCaseArrayVariableValue) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
 // A chat history value for a variable in a Test Case.
 type TestCaseChatHistoryVariableValue struct {
 	VariableId string         `json:"variable_id"`
@@ -11924,6 +12451,7 @@ type TestCaseVariableValue struct {
 	SearchResults *TestCaseSearchResultsVariableValue
 	Error         *TestCaseErrorVariableValue
 	FunctionCall  *TestCaseFunctionCallVariableValue
+	Array         *TestCaseArrayVariableValue
 }
 
 func NewTestCaseVariableValueFromString(value *TestCaseStringVariableValue) *TestCaseVariableValue {
@@ -11952,6 +12480,10 @@ func NewTestCaseVariableValueFromError(value *TestCaseErrorVariableValue) *TestC
 
 func NewTestCaseVariableValueFromFunctionCall(value *TestCaseFunctionCallVariableValue) *TestCaseVariableValue {
 	return &TestCaseVariableValue{Type: "FUNCTION_CALL", FunctionCall: value}
+}
+
+func NewTestCaseVariableValueFromArray(value *TestCaseArrayVariableValue) *TestCaseVariableValue {
+	return &TestCaseVariableValue{Type: "ARRAY", Array: value}
 }
 
 func (t *TestCaseVariableValue) UnmarshalJSON(data []byte) error {
@@ -12005,6 +12537,12 @@ func (t *TestCaseVariableValue) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		t.FunctionCall = value
+	case "ARRAY":
+		value := new(TestCaseArrayVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Array = value
 	}
 	return nil
 }
@@ -12076,6 +12614,15 @@ func (t TestCaseVariableValue) MarshalJSON() ([]byte, error) {
 			TestCaseFunctionCallVariableValue: t.FunctionCall,
 		}
 		return json.Marshal(marshaler)
+	case "ARRAY":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TestCaseArrayVariableValue
+		}{
+			Type:                       t.Type,
+			TestCaseArrayVariableValue: t.Array,
+		}
+		return json.Marshal(marshaler)
 	}
 }
 
@@ -12087,6 +12634,7 @@ type TestCaseVariableValueVisitor interface {
 	VisitSearchResults(*TestCaseSearchResultsVariableValue) error
 	VisitError(*TestCaseErrorVariableValue) error
 	VisitFunctionCall(*TestCaseFunctionCallVariableValue) error
+	VisitArray(*TestCaseArrayVariableValue) error
 }
 
 func (t *TestCaseVariableValue) Accept(visitor TestCaseVariableValueVisitor) error {
@@ -12107,6 +12655,8 @@ func (t *TestCaseVariableValue) Accept(visitor TestCaseVariableValueVisitor) err
 		return visitor.VisitError(t.Error)
 	case "FUNCTION_CALL":
 		return visitor.VisitFunctionCall(t.FunctionCall)
+	case "ARRAY":
+		return visitor.VisitArray(t.Array)
 	}
 }
 
@@ -15045,6 +15595,36 @@ func (w *WorkflowExecutionWorkflowResultEvent) UnmarshalJSON(data []byte) error 
 }
 
 func (w *WorkflowExecutionWorkflowResultEvent) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
+}
+
+type WorkflowExpandMetaRequest struct {
+	// If enabled, the Prompt Node FULFILLED events will include model host usage tracking. This may increase latency for some model hosts.
+	Usage *bool `json:"usage,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (w *WorkflowExpandMetaRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler WorkflowExpandMetaRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*w = WorkflowExpandMetaRequest(value)
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowExpandMetaRequest) String() string {
 	if len(w._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
 			return value
