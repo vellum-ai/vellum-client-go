@@ -2067,6 +2067,72 @@ func (c *CodeExecutionNodeStringResult) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+type CompilePromptDeploymentExpandMetaRequest struct {
+	// If enabled, the response will include the model identifier representing the ML Model invoked by the Prompt.
+	ModelName *bool `json:"model_name,omitempty"`
+	// If enabled, the response will include the release tag of the Prompt Deployment.
+	DeploymentReleaseTag *bool `json:"deployment_release_tag,omitempty"`
+	// If enabled, the response will include the ID of the Prompt Version backing the deployment.
+	PromptVersionId *bool `json:"prompt_version_id,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (c *CompilePromptDeploymentExpandMetaRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CompilePromptDeploymentExpandMetaRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CompilePromptDeploymentExpandMetaRequest(value)
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CompilePromptDeploymentExpandMetaRequest) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The subset of the metadata tracked by Vellum during Prompt Deployment compilation that the request opted into with `expand_meta`.
+type CompilePromptMeta struct {
+	ModelName            *string `json:"model_name,omitempty"`
+	DeploymentReleaseTag *string `json:"deployment_release_tag,omitempty"`
+	PromptVersionId      *string `json:"prompt_version_id,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (c *CompilePromptMeta) UnmarshalJSON(data []byte) error {
+	type unmarshaler CompilePromptMeta
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CompilePromptMeta(value)
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CompilePromptMeta) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
 // A Node Result Event emitted from a Conditional Node.
 type ConditionalNodeResult struct {
 	Data *ConditionalNodeResultData `json:"data,omitempty"`
@@ -2173,6 +2239,7 @@ type DeletedEnum = string
 
 type DeploymentProviderPayloadResponse struct {
 	Payload *DeploymentProviderPayloadResponsePayload `json:"payload,omitempty"`
+	Meta    *CompilePromptMeta                        `json:"meta,omitempty"`
 
 	_rawJSON json.RawMessage
 }

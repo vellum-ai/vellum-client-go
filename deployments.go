@@ -25,7 +25,8 @@ type DeploymentProviderPayloadRequest struct {
 	// The list of inputs defined in the Prompt's deployment with their corresponding values.
 	Inputs []*PromptDeploymentInputRequest `json:"inputs,omitempty"`
 	// Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
-	ReleaseTag *string `json:"release_tag,omitempty"`
+	ReleaseTag *string                                   `json:"release_tag,omitempty"`
+	ExpandMeta *CompilePromptDeploymentExpandMetaRequest `json:"expand_meta,omitempty"`
 }
 
 type DeploymentsListRequestStatus string
