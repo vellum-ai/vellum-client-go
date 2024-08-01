@@ -30,12 +30,12 @@ func NewClient(opts ...core.ClientOption) *Client {
 
 // A UUID string identifying this sandbox.
 // An ID identifying the Prompt you'd like to deploy.
-func (c *Client) DeployPrompt(ctx context.Context, id string, promptId string, request *vellumclientgo.DeploySandboxPromptRequest) (*vellumclientgo.DeploymentRead, error) {
+func (c *Client) DeployPrompt(ctx context.Context, id string, promptVariantId string, request *vellumclientgo.DeploySandboxPromptRequest) (*vellumclientgo.DeploymentRead, error) {
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/sandboxes/%v/prompts/%v/deploy", id, promptId)
+	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/sandboxes/%v/prompts/%v/deploy", id, promptVariantId)
 
 	var response *vellumclientgo.DeploymentRead
 	if err := c.caller.Call(

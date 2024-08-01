@@ -467,7 +467,85 @@ func (a *ArrayChatMessageContentRequest) String() string {
 	return fmt.Sprintf("%#v", a)
 }
 
-type ArrayEnum = string
+// An OpenAPI specification of a parameter with type 'array'
+type ArrayParameterConfig struct {
+	MinItems    *int               `json:"min_items,omitempty"`
+	MaxItems    *int               `json:"max_items,omitempty"`
+	UniqueItems *bool              `json:"unique_items,omitempty"`
+	Items       *ParameterConfig   `json:"items,omitempty"`
+	PrefixItems []*ParameterConfig `json:"prefix_items,omitempty"`
+	Contains    *ParameterConfig   `json:"contains,omitempty"`
+	MinContains *int               `json:"min_contains,omitempty"`
+	MaxContains *int               `json:"max_contains,omitempty"`
+	Default     []interface{}      `json:"default,omitempty"`
+	Title       *string            `json:"title,omitempty"`
+	Description *string            `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (a *ArrayParameterConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler ArrayParameterConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*a = ArrayParameterConfig(value)
+	a._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *ArrayParameterConfig) String() string {
+	if len(a._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(a._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
+
+// An OpenAPI specification of a parameter with type 'array'
+type ArrayParameterConfigRequest struct {
+	MinItems    *int                      `json:"min_items,omitempty"`
+	MaxItems    *int                      `json:"max_items,omitempty"`
+	UniqueItems *bool                     `json:"unique_items,omitempty"`
+	Items       *ParameterConfigRequest   `json:"items,omitempty"`
+	PrefixItems []*ParameterConfigRequest `json:"prefix_items,omitempty"`
+	Contains    *ParameterConfigRequest   `json:"contains,omitempty"`
+	MinContains *int                      `json:"min_contains,omitempty"`
+	MaxContains *int                      `json:"max_contains,omitempty"`
+	Default     []interface{}             `json:"default,omitempty"`
+	Title       *string                   `json:"title,omitempty"`
+	Description *string                   `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (a *ArrayParameterConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler ArrayParameterConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*a = ArrayParameterConfigRequest(value)
+	a._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *ArrayParameterConfigRequest) String() string {
+	if len(a._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(a._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
 
 type ArrayVariableValueItem struct {
 	Type         string
@@ -1165,7 +1243,69 @@ func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request) String
 	return fmt.Sprintf("%#v", b)
 }
 
-type ChatHistoryEnum = string
+// An OpenAPI specification of a parameter with type 'boolean'
+type BooleanParameterConfig struct {
+	Default     *bool   `json:"default,omitempty"`
+	Title       *string `json:"title,omitempty"`
+	Description *string `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (b *BooleanParameterConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler BooleanParameterConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BooleanParameterConfig(value)
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BooleanParameterConfig) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// An OpenAPI specification of a parameter with type 'boolean'
+type BooleanParameterConfigRequest struct {
+	Default     *bool   `json:"default,omitempty"`
+	Title       *string `json:"title,omitempty"`
+	Description *string `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (b *BooleanParameterConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler BooleanParameterConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*b = BooleanParameterConfigRequest(value)
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BooleanParameterConfigRequest) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
 
 // A user input representing a list of chat messages
 type ChatHistoryInputRequest struct {
@@ -2192,7 +2332,69 @@ func (c *ConditionalNodeResultData) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-type CreateEnum = string
+// An OpenAPI specification of a parameter with type 'const'
+type ConstParameterConfig struct {
+	Title       *string `json:"title,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Const       string  `json:"const"`
+
+	_rawJSON json.RawMessage
+}
+
+func (c *ConstParameterConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler ConstParameterConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = ConstParameterConfig(value)
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *ConstParameterConfig) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// An OpenAPI specification of a parameter with type 'const'
+type ConstParameterConfigRequest struct {
+	Title       *string `json:"title,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Const       string  `json:"const"`
+
+	_rawJSON json.RawMessage
+}
+
+func (c *ConstParameterConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler ConstParameterConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = ConstParameterConfigRequest(value)
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *ConstParameterConfigRequest) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
 
 // Information about the Test Case to create
 type CreateTestSuiteTestCaseRequest struct {
@@ -2230,12 +2432,6 @@ func (c *CreateTestSuiteTestCaseRequest) String() string {
 	}
 	return fmt.Sprintf("%#v", c)
 }
-
-type CreatedEnum = string
-
-type DeleteEnum = string
-
-type DeletedEnum = string
 
 type DeploymentProviderPayloadResponse struct {
 	Payload *DeploymentProviderPayloadResponsePayload `json:"payload,omitempty"`
@@ -2344,6 +2540,8 @@ type DeploymentRead struct {
 	Environment    *EnvironmentEnum  `json:"environment,omitempty"`
 	LastDeployedOn time.Time         `json:"last_deployed_on"`
 	InputVariables []*VellumVariable `json:"input_variables,omitempty"`
+	// A human-readable description of the deployment
+	Description *string `json:"description,omitempty"`
 	// Deprecated. The Prompt execution endpoints return a `prompt_version_id` that could be used instead.
 	ActiveModelVersionIds []string `json:"active_model_version_ids,omitempty"`
 	// The ID of the history item associated with this Deployment's LATEST Release Tag
@@ -2947,8 +3145,6 @@ func (e EnvironmentEnum) Ptr() *EnvironmentEnum {
 	return &e
 }
 
-type ErrorEnum = string
-
 type ErrorVariableValue struct {
 	Value *VellumError `json:"value,omitempty"`
 
@@ -3027,36 +3223,6 @@ func (e *ErrorVellumValueRequest) UnmarshalJSON(data []byte) error {
 }
 
 func (e *ErrorVellumValueRequest) String() string {
-	if len(e._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(e); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", e)
-}
-
-type ExecutePromptApiErrorResponse struct {
-	// Details about why the request failed.
-	Detail string `json:"detail"`
-
-	_rawJSON json.RawMessage
-}
-
-func (e *ExecutePromptApiErrorResponse) UnmarshalJSON(data []byte) error {
-	type unmarshaler ExecutePromptApiErrorResponse
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*e = ExecutePromptApiErrorResponse(value)
-	e._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (e *ExecutePromptApiErrorResponse) String() string {
 	if len(e._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
 			return value
@@ -3274,36 +3440,6 @@ func (e *ExecutePromptResponse) Accept(visitor ExecutePromptResponseVisitor) err
 	}
 }
 
-type ExecuteWorkflowErrorResponse struct {
-	// Details about why the request failed.
-	Detail string `json:"detail"`
-
-	_rawJSON json.RawMessage
-}
-
-func (e *ExecuteWorkflowErrorResponse) UnmarshalJSON(data []byte) error {
-	type unmarshaler ExecuteWorkflowErrorResponse
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*e = ExecuteWorkflowErrorResponse(value)
-	e._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (e *ExecuteWorkflowErrorResponse) String() string {
-	if len(e._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(e); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", e)
-}
-
 type ExecuteWorkflowResponse struct {
 	ExecutionId string                              `json:"execution_id"`
 	RunId       *string                             `json:"run_id,omitempty"`
@@ -3325,36 +3461,6 @@ func (e *ExecuteWorkflowResponse) UnmarshalJSON(data []byte) error {
 }
 
 func (e *ExecuteWorkflowResponse) String() string {
-	if len(e._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(e); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", e)
-}
-
-type ExecuteWorkflowStreamErrorResponse struct {
-	// Details about why the request failed.
-	Detail string `json:"detail"`
-
-	_rawJSON json.RawMessage
-}
-
-func (e *ExecuteWorkflowStreamErrorResponse) UnmarshalJSON(data []byte) error {
-	type unmarshaler ExecuteWorkflowStreamErrorResponse
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*e = ExecuteWorkflowStreamErrorResponse(value)
-	e._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (e *ExecuteWorkflowStreamErrorResponse) String() string {
 	if len(e._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
 			return value
@@ -4345,8 +4451,6 @@ func (f *FunctionCallChatMessageContentValueRequest) String() string {
 	return fmt.Sprintf("%#v", f)
 }
 
-type FunctionCallEnum = string
-
 // The final resolved function call value.
 type FunctionCallRequest struct {
 	Arguments map[string]interface{} `json:"arguments,omitempty"`
@@ -4467,36 +4571,6 @@ func (f *FunctionCallVellumValueRequest) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", f)
-}
-
-type GenerateErrorResponse struct {
-	// Details about why the request failed.
-	Detail string `json:"detail"`
-
-	_rawJSON json.RawMessage
-}
-
-func (g *GenerateErrorResponse) UnmarshalJSON(data []byte) error {
-	type unmarshaler GenerateErrorResponse
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*g = GenerateErrorResponse(value)
-	g._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (g *GenerateErrorResponse) String() string {
-	if len(g._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(g); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", g)
 }
 
 type GenerateOptionsRequest struct {
@@ -4778,8 +4852,6 @@ func (g *GenerateStreamResultData) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
-type HkunlpInstructorXlEnum = string
-
 // Vectorizer for hkunlp/instructor-xl.
 type HkunlpInstructorXlVectorizer struct {
 	Config *InstructorVectorizerConfig `json:"config,omitempty"`
@@ -4829,6 +4901,152 @@ func (h *HkunlpInstructorXlVectorizerRequest) UnmarshalJSON(data []byte) error {
 }
 
 func (h *HkunlpInstructorXlVectorizerRequest) String() string {
+	if len(h._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(h._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(h); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", h)
+}
+
+// - `ANTHROPIC` - ANTHROPIC
+// - `AWS_BEDROCK` - AWS_BEDROCK
+// - `AZURE_OPENAI` - AZURE_OPENAI
+// - `COHERE` - COHERE
+// - `CUSTOM` - CUSTOM
+// - `FIREWORKS_AI` - FIREWORKS_AI
+// - `GOOGLE` - GOOGLE
+// - `GOOGLE_VERTEX_AI` - GOOGLE_VERTEX_AI
+// - `GROQ` - GROQ
+// - `HUGGINGFACE` - HUGGINGFACE
+// - `IBM_WATSONX` - IBM_WATSONX
+// - `MOSAICML` - MOSAICML
+// - `MYSTIC` - MYSTIC
+// - `OPENAI` - OPENAI
+// - `OPENPIPE` - OPENPIPE
+// - `PYQ` - PYQ
+// - `REPLICATE` - REPLICATE
+type HostedByEnum string
+
+const (
+	HostedByEnumAnthropic      HostedByEnum = "ANTHROPIC"
+	HostedByEnumAwsBedrock     HostedByEnum = "AWS_BEDROCK"
+	HostedByEnumAzureOpenai    HostedByEnum = "AZURE_OPENAI"
+	HostedByEnumCohere         HostedByEnum = "COHERE"
+	HostedByEnumCustom         HostedByEnum = "CUSTOM"
+	HostedByEnumFireworksAi    HostedByEnum = "FIREWORKS_AI"
+	HostedByEnumGoogle         HostedByEnum = "GOOGLE"
+	HostedByEnumGoogleVertexAi HostedByEnum = "GOOGLE_VERTEX_AI"
+	HostedByEnumGroq           HostedByEnum = "GROQ"
+	HostedByEnumHuggingface    HostedByEnum = "HUGGINGFACE"
+	HostedByEnumIbmWatsonx     HostedByEnum = "IBM_WATSONX"
+	HostedByEnumMosaicml       HostedByEnum = "MOSAICML"
+	HostedByEnumMystic         HostedByEnum = "MYSTIC"
+	HostedByEnumOpenai         HostedByEnum = "OPENAI"
+	HostedByEnumOpenpipe       HostedByEnum = "OPENPIPE"
+	HostedByEnumPyq            HostedByEnum = "PYQ"
+	HostedByEnumReplicate      HostedByEnum = "REPLICATE"
+)
+
+func NewHostedByEnumFromString(s string) (HostedByEnum, error) {
+	switch s {
+	case "ANTHROPIC":
+		return HostedByEnumAnthropic, nil
+	case "AWS_BEDROCK":
+		return HostedByEnumAwsBedrock, nil
+	case "AZURE_OPENAI":
+		return HostedByEnumAzureOpenai, nil
+	case "COHERE":
+		return HostedByEnumCohere, nil
+	case "CUSTOM":
+		return HostedByEnumCustom, nil
+	case "FIREWORKS_AI":
+		return HostedByEnumFireworksAi, nil
+	case "GOOGLE":
+		return HostedByEnumGoogle, nil
+	case "GOOGLE_VERTEX_AI":
+		return HostedByEnumGoogleVertexAi, nil
+	case "GROQ":
+		return HostedByEnumGroq, nil
+	case "HUGGINGFACE":
+		return HostedByEnumHuggingface, nil
+	case "IBM_WATSONX":
+		return HostedByEnumIbmWatsonx, nil
+	case "MOSAICML":
+		return HostedByEnumMosaicml, nil
+	case "MYSTIC":
+		return HostedByEnumMystic, nil
+	case "OPENAI":
+		return HostedByEnumOpenai, nil
+	case "OPENPIPE":
+		return HostedByEnumOpenpipe, nil
+	case "PYQ":
+		return HostedByEnumPyq, nil
+	case "REPLICATE":
+		return HostedByEnumReplicate, nil
+	}
+	var t HostedByEnum
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (h HostedByEnum) Ptr() *HostedByEnum {
+	return &h
+}
+
+// Tokenizer config for Hugging Face type tokenizers.
+type HuggingFaceTokenizerConfig struct {
+	Name string  `json:"name"`
+	Path *string `json:"path,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (h *HuggingFaceTokenizerConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler HuggingFaceTokenizerConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*h = HuggingFaceTokenizerConfig(value)
+	h._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (h *HuggingFaceTokenizerConfig) String() string {
+	if len(h._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(h._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(h); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", h)
+}
+
+// Tokenizer config for Hugging Face type tokenizers.
+type HuggingFaceTokenizerConfigRequest struct {
+	Name string  `json:"name"`
+	Path *string `json:"path,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (h *HuggingFaceTokenizerConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler HuggingFaceTokenizerConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*h = HuggingFaceTokenizerConfigRequest(value)
+	h._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (h *HuggingFaceTokenizerConfigRequest) String() string {
 	if len(h._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(h._rawJSON); err == nil {
 			return value
@@ -4899,8 +5117,6 @@ func (i *ImageChatMessageContentRequest) String() string {
 	}
 	return fmt.Sprintf("%#v", i)
 }
-
-type ImageEnum = string
 
 // A base Vellum primitive value representing an image.
 type ImageVariableValue struct {
@@ -5418,8 +5634,6 @@ func (i IndexingStateEnum) Ptr() *IndexingStateEnum {
 	return &i
 }
 
-type InitiatedEnum = string
-
 // The initial data returned indicating that the response from the model has returned and begun streaming.
 type InitiatedExecutePromptEvent struct {
 	Meta        *InitiatedPromptExecutionMeta `json:"meta,omitempty"`
@@ -5584,7 +5798,77 @@ func (i *InstructorVectorizerConfigRequest) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-type IntfloatMultilingualE5LargeEnum = string
+// An OpenAPI specification of a parameter with type 'integer'
+type IntegerParameterConfig struct {
+	Minimum          *int    `json:"minimum,omitempty"`
+	Maximum          *int    `json:"maximum,omitempty"`
+	ExclusiveMinimum *bool   `json:"exclusive_minimum,omitempty"`
+	ExclusiveMaximum *bool   `json:"exclusive_maximum,omitempty"`
+	Default          *int    `json:"default,omitempty"`
+	Title            *string `json:"title,omitempty"`
+	Description      *string `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (i *IntegerParameterConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler IntegerParameterConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = IntegerParameterConfig(value)
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *IntegerParameterConfig) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// An OpenAPI specification of a parameter with type 'integer'
+type IntegerParameterConfigRequest struct {
+	Minimum          *int    `json:"minimum,omitempty"`
+	Maximum          *int    `json:"maximum,omitempty"`
+	ExclusiveMinimum *bool   `json:"exclusive_minimum,omitempty"`
+	ExclusiveMaximum *bool   `json:"exclusive_maximum,omitempty"`
+	Default          *int    `json:"default,omitempty"`
+	Title            *string `json:"title,omitempty"`
+	Description      *string `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (i *IntegerParameterConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler IntegerParameterConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = IntegerParameterConfigRequest(value)
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *IntegerParameterConfigRequest) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
 
 // - `INITIATED` - INITIATED
 // - `FULFILLED` - FULFILLED
@@ -5609,8 +5893,6 @@ func NewIterationStateEnumFromString(s string) (IterationStateEnum, error) {
 func (i IterationStateEnum) Ptr() *IterationStateEnum {
 	return &i
 }
-
-type JsonEnum = string
 
 // A user input representing a JSON object
 type JsonInputRequest struct {
@@ -5863,8 +6145,6 @@ func (l LogprobsEnum) Ptr() *LogprobsEnum {
 	return &l
 }
 
-type MapEnum = string
-
 // A Node Result Event emitted from a Map Node.
 type MapNodeResult struct {
 	Data *MapNodeResultData `json:"data,omitempty"`
@@ -5924,8 +6204,6 @@ func (m *MapNodeResultData) String() string {
 	}
 	return fmt.Sprintf("%#v", m)
 }
-
-type MergeEnum = string
 
 // A Node Result Event emitted from a Merge Node.
 type MergeNodeResult struct {
@@ -6078,8 +6356,6 @@ func (m *MetadataFilterRuleRequest) String() string {
 	return fmt.Sprintf("%#v", m)
 }
 
-type MetricEnum = string
-
 // A Node Result Event emitted from a Metric Node.
 type MetricNodeResult struct {
 	_rawJSON json.RawMessage
@@ -6106,6 +6382,1085 @@ func (m *MetricNodeResult) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", m)
+}
+
+type MlModelBuildConfig struct {
+	FinetuneData map[string]interface{} `json:"finetune_data,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (m *MlModelBuildConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler MlModelBuildConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MlModelBuildConfig(value)
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MlModelBuildConfig) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+type MlModelBuildConfigRequest struct {
+	FinetuneData map[string]interface{} `json:"finetune_data,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (m *MlModelBuildConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler MlModelBuildConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MlModelBuildConfigRequest(value)
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MlModelBuildConfigRequest) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// - `01_AI` - 01_AI
+// - `AMAZON` - AMAZON
+// - `ANTHROPIC` - ANTHROPIC
+// - `COHERE` - COHERE
+// - `ELUTHERAI` - ELUTHERAI
+// - `FIREWORKS_AI` - FIREWORKS_AI
+// - `GOOGLE` - GOOGLE
+// - `HUGGINGFACE` - HUGGINGFACE
+// - `IBM` - IBM
+// - `META` - META
+// - `MISTRAL_AI` - MISTRAL_AI
+// - `MOSAICML` - MOSAICML
+// - `NOUS_RESEARCH` - NOUS_RESEARCH
+// - `OPENAI` - OPENAI
+// - `OPENCHAT` - OPENCHAT
+// - `OPENPIPE` - OPENPIPE
+// - `TII` - TII
+// - `WIZARDLM` - WIZARDLM
+type MlModelDeveloper string
+
+const (
+	MlModelDeveloperOneAi        MlModelDeveloper = "01_AI"
+	MlModelDeveloperAmazon       MlModelDeveloper = "AMAZON"
+	MlModelDeveloperAnthropic    MlModelDeveloper = "ANTHROPIC"
+	MlModelDeveloperCohere       MlModelDeveloper = "COHERE"
+	MlModelDeveloperElutherai    MlModelDeveloper = "ELUTHERAI"
+	MlModelDeveloperFireworksAi  MlModelDeveloper = "FIREWORKS_AI"
+	MlModelDeveloperGoogle       MlModelDeveloper = "GOOGLE"
+	MlModelDeveloperHuggingface  MlModelDeveloper = "HUGGINGFACE"
+	MlModelDeveloperIbm          MlModelDeveloper = "IBM"
+	MlModelDeveloperMeta         MlModelDeveloper = "META"
+	MlModelDeveloperMistralAi    MlModelDeveloper = "MISTRAL_AI"
+	MlModelDeveloperMosaicml     MlModelDeveloper = "MOSAICML"
+	MlModelDeveloperNousResearch MlModelDeveloper = "NOUS_RESEARCH"
+	MlModelDeveloperOpenai       MlModelDeveloper = "OPENAI"
+	MlModelDeveloperOpenchat     MlModelDeveloper = "OPENCHAT"
+	MlModelDeveloperOpenpipe     MlModelDeveloper = "OPENPIPE"
+	MlModelDeveloperTii          MlModelDeveloper = "TII"
+	MlModelDeveloperWizardlm     MlModelDeveloper = "WIZARDLM"
+)
+
+func NewMlModelDeveloperFromString(s string) (MlModelDeveloper, error) {
+	switch s {
+	case "01_AI":
+		return MlModelDeveloperOneAi, nil
+	case "AMAZON":
+		return MlModelDeveloperAmazon, nil
+	case "ANTHROPIC":
+		return MlModelDeveloperAnthropic, nil
+	case "COHERE":
+		return MlModelDeveloperCohere, nil
+	case "ELUTHERAI":
+		return MlModelDeveloperElutherai, nil
+	case "FIREWORKS_AI":
+		return MlModelDeveloperFireworksAi, nil
+	case "GOOGLE":
+		return MlModelDeveloperGoogle, nil
+	case "HUGGINGFACE":
+		return MlModelDeveloperHuggingface, nil
+	case "IBM":
+		return MlModelDeveloperIbm, nil
+	case "META":
+		return MlModelDeveloperMeta, nil
+	case "MISTRAL_AI":
+		return MlModelDeveloperMistralAi, nil
+	case "MOSAICML":
+		return MlModelDeveloperMosaicml, nil
+	case "NOUS_RESEARCH":
+		return MlModelDeveloperNousResearch, nil
+	case "OPENAI":
+		return MlModelDeveloperOpenai, nil
+	case "OPENCHAT":
+		return MlModelDeveloperOpenchat, nil
+	case "OPENPIPE":
+		return MlModelDeveloperOpenpipe, nil
+	case "TII":
+		return MlModelDeveloperTii, nil
+	case "WIZARDLM":
+		return MlModelDeveloperWizardlm, nil
+	}
+	var t MlModelDeveloper
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (m MlModelDeveloper) Ptr() *MlModelDeveloper {
+	return &m
+}
+
+type MlModelDeveloperEnumValueLabel struct {
+	Label string           `json:"label"`
+	Value MlModelDeveloper `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (m *MlModelDeveloperEnumValueLabel) UnmarshalJSON(data []byte) error {
+	type unmarshaler MlModelDeveloperEnumValueLabel
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MlModelDeveloperEnumValueLabel(value)
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MlModelDeveloperEnumValueLabel) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+type MlModelDisplayConfigLabelled struct {
+	Label                  string                             `json:"label"`
+	Description            string                             `json:"description"`
+	Tags                   []*MlModelDisplayTagEnumValueLabel `json:"tags,omitempty"`
+	DefaultDisplayPriority float64                            `json:"default_display_priority"`
+
+	_rawJSON json.RawMessage
+}
+
+func (m *MlModelDisplayConfigLabelled) UnmarshalJSON(data []byte) error {
+	type unmarshaler MlModelDisplayConfigLabelled
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MlModelDisplayConfigLabelled(value)
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MlModelDisplayConfigLabelled) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+type MlModelDisplayConfigRequest struct {
+	Label                  string              `json:"label"`
+	Description            string              `json:"description"`
+	Tags                   []MlModelDisplayTag `json:"tags,omitempty"`
+	DefaultDisplayPriority float64             `json:"default_display_priority"`
+
+	_rawJSON json.RawMessage
+}
+
+func (m *MlModelDisplayConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler MlModelDisplayConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MlModelDisplayConfigRequest(value)
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MlModelDisplayConfigRequest) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// - `TEXT` - TEXT
+// - `CHAT` - CHAT
+// - `OPEN_SOURCE` - OPEN_SOURCE
+// - `FINETUNED` - FINETUNED
+// - `NEW` - NEW
+// - `ALPHA` - ALPHA
+// - `BETA` - BETA
+// - `DEPRECATED` - DEPRECATED
+type MlModelDisplayTag string
+
+const (
+	MlModelDisplayTagText       MlModelDisplayTag = "TEXT"
+	MlModelDisplayTagChat       MlModelDisplayTag = "CHAT"
+	MlModelDisplayTagOpenSource MlModelDisplayTag = "OPEN_SOURCE"
+	MlModelDisplayTagFinetuned  MlModelDisplayTag = "FINETUNED"
+	MlModelDisplayTagNew        MlModelDisplayTag = "NEW"
+	MlModelDisplayTagAlpha      MlModelDisplayTag = "ALPHA"
+	MlModelDisplayTagBeta       MlModelDisplayTag = "BETA"
+	MlModelDisplayTagDeprecated MlModelDisplayTag = "DEPRECATED"
+)
+
+func NewMlModelDisplayTagFromString(s string) (MlModelDisplayTag, error) {
+	switch s {
+	case "TEXT":
+		return MlModelDisplayTagText, nil
+	case "CHAT":
+		return MlModelDisplayTagChat, nil
+	case "OPEN_SOURCE":
+		return MlModelDisplayTagOpenSource, nil
+	case "FINETUNED":
+		return MlModelDisplayTagFinetuned, nil
+	case "NEW":
+		return MlModelDisplayTagNew, nil
+	case "ALPHA":
+		return MlModelDisplayTagAlpha, nil
+	case "BETA":
+		return MlModelDisplayTagBeta, nil
+	case "DEPRECATED":
+		return MlModelDisplayTagDeprecated, nil
+	}
+	var t MlModelDisplayTag
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (m MlModelDisplayTag) Ptr() *MlModelDisplayTag {
+	return &m
+}
+
+type MlModelDisplayTagEnumValueLabel struct {
+	Label string            `json:"label"`
+	Value MlModelDisplayTag `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (m *MlModelDisplayTagEnumValueLabel) UnmarshalJSON(data []byte) error {
+	type unmarshaler MlModelDisplayTagEnumValueLabel
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MlModelDisplayTagEnumValueLabel(value)
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MlModelDisplayTagEnumValueLabel) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+type MlModelExecConfig struct {
+	ModelIdentifier        string                  `json:"model_identifier"`
+	BaseUrl                string                  `json:"base_url"`
+	Metadata               map[string]interface{}  `json:"metadata,omitempty"`
+	Features               []MlModelFeature        `json:"features,omitempty"`
+	ForceSystemCredentials *bool                   `json:"force_system_credentials,omitempty"`
+	TokenizerConfig        *MlModelTokenizerConfig `json:"tokenizer_config,omitempty"`
+	RequestConfig          *MlModelRequestConfig   `json:"request_config,omitempty"`
+	ResponseConfig         *MlModelResponseConfig  `json:"response_config,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (m *MlModelExecConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler MlModelExecConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MlModelExecConfig(value)
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MlModelExecConfig) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+type MlModelExecConfigRequest struct {
+	ModelIdentifier        string                         `json:"model_identifier"`
+	BaseUrl                string                         `json:"base_url"`
+	Metadata               map[string]interface{}         `json:"metadata,omitempty"`
+	Features               []MlModelFeature               `json:"features,omitempty"`
+	ForceSystemCredentials *bool                          `json:"force_system_credentials,omitempty"`
+	TokenizerConfig        *MlModelTokenizerConfigRequest `json:"tokenizer_config,omitempty"`
+	RequestConfig          *MlModelRequestConfigRequest   `json:"request_config,omitempty"`
+	ResponseConfig         *MlModelResponseConfigRequest  `json:"response_config,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (m *MlModelExecConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler MlModelExecConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MlModelExecConfigRequest(value)
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MlModelExecConfigRequest) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// - `CAPYBARA` - Capybara
+// - `CHAT_GPT` - Chat GPT
+// - `CLAUDE` - Claude
+// - `COHERE` - Cohere
+// - `FALCON` - Falcon
+// - `GEMINI` - Gemini
+// - `GRANITE` - Granite
+// - `GPT3` - GPT-3
+// - `FIREWORKS` - Fireworks
+// - `LLAMA2` - Llama2
+// - `LLAMA3` - Llama3
+// - `MISTRAL` - Mistral
+// - `MPT` - MPT
+// - `OPENCHAT` - OpenChat
+// - `PALM` - PaLM
+// - `SOLAR` - Solar
+// - `TITAN` - Titan
+// - `WIZARD` - Wizard
+// - `YI` - Yi
+// - `ZEPHYR` - Zephyr
+type MlModelFamily string
+
+const (
+	MlModelFamilyCapybara  MlModelFamily = "CAPYBARA"
+	MlModelFamilyChatGpt   MlModelFamily = "CHAT_GPT"
+	MlModelFamilyClaude    MlModelFamily = "CLAUDE"
+	MlModelFamilyCohere    MlModelFamily = "COHERE"
+	MlModelFamilyFalcon    MlModelFamily = "FALCON"
+	MlModelFamilyGemini    MlModelFamily = "GEMINI"
+	MlModelFamilyGranite   MlModelFamily = "GRANITE"
+	MlModelFamilyGpt3      MlModelFamily = "GPT3"
+	MlModelFamilyFireworks MlModelFamily = "FIREWORKS"
+	MlModelFamilyLlama2    MlModelFamily = "LLAMA2"
+	MlModelFamilyLlama3    MlModelFamily = "LLAMA3"
+	MlModelFamilyMistral   MlModelFamily = "MISTRAL"
+	MlModelFamilyMpt       MlModelFamily = "MPT"
+	MlModelFamilyOpenchat  MlModelFamily = "OPENCHAT"
+	MlModelFamilyPalm      MlModelFamily = "PALM"
+	MlModelFamilySolar     MlModelFamily = "SOLAR"
+	MlModelFamilyTitan     MlModelFamily = "TITAN"
+	MlModelFamilyWizard    MlModelFamily = "WIZARD"
+	MlModelFamilyYi        MlModelFamily = "YI"
+	MlModelFamilyZephyr    MlModelFamily = "ZEPHYR"
+)
+
+func NewMlModelFamilyFromString(s string) (MlModelFamily, error) {
+	switch s {
+	case "CAPYBARA":
+		return MlModelFamilyCapybara, nil
+	case "CHAT_GPT":
+		return MlModelFamilyChatGpt, nil
+	case "CLAUDE":
+		return MlModelFamilyClaude, nil
+	case "COHERE":
+		return MlModelFamilyCohere, nil
+	case "FALCON":
+		return MlModelFamilyFalcon, nil
+	case "GEMINI":
+		return MlModelFamilyGemini, nil
+	case "GRANITE":
+		return MlModelFamilyGranite, nil
+	case "GPT3":
+		return MlModelFamilyGpt3, nil
+	case "FIREWORKS":
+		return MlModelFamilyFireworks, nil
+	case "LLAMA2":
+		return MlModelFamilyLlama2, nil
+	case "LLAMA3":
+		return MlModelFamilyLlama3, nil
+	case "MISTRAL":
+		return MlModelFamilyMistral, nil
+	case "MPT":
+		return MlModelFamilyMpt, nil
+	case "OPENCHAT":
+		return MlModelFamilyOpenchat, nil
+	case "PALM":
+		return MlModelFamilyPalm, nil
+	case "SOLAR":
+		return MlModelFamilySolar, nil
+	case "TITAN":
+		return MlModelFamilyTitan, nil
+	case "WIZARD":
+		return MlModelFamilyWizard, nil
+	case "YI":
+		return MlModelFamilyYi, nil
+	case "ZEPHYR":
+		return MlModelFamilyZephyr, nil
+	}
+	var t MlModelFamily
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (m MlModelFamily) Ptr() *MlModelFamily {
+	return &m
+}
+
+type MlModelFamilyEnumValueLabel struct {
+	Label string        `json:"label"`
+	Value MlModelFamily `json:"value,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (m *MlModelFamilyEnumValueLabel) UnmarshalJSON(data []byte) error {
+	type unmarshaler MlModelFamilyEnumValueLabel
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MlModelFamilyEnumValueLabel(value)
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MlModelFamilyEnumValueLabel) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// - `TEXT` - Text
+// - `CHAT_MESSAGE_SYSTEM` - Chat Message System
+// - `CHAT_MESSAGE_USER` - Chat Message User
+// - `CHAT_MESSAGE_ASSISTANT` - Chat Message Assistant
+// - `CHAT_MESSAGE_ASSISTANT_UNTERMINATED` - Chat Message Assistant Unterminated
+// - `CHAT_MESSAGE_FUNCTION_CALL` - Chat Message Function Call
+// - `CHAT_MESSAGE_IMAGE` - Chat Message Image
+// - `FUNCTION_DEFINITION` - Function Definition
+// - `STREAMING_SUPPORT` - Streaming Support
+type MlModelFeature string
+
+const (
+	MlModelFeatureText                             MlModelFeature = "TEXT"
+	MlModelFeatureChatMessageSystem                MlModelFeature = "CHAT_MESSAGE_SYSTEM"
+	MlModelFeatureChatMessageUser                  MlModelFeature = "CHAT_MESSAGE_USER"
+	MlModelFeatureChatMessageAssistant             MlModelFeature = "CHAT_MESSAGE_ASSISTANT"
+	MlModelFeatureChatMessageAssistantUnterminated MlModelFeature = "CHAT_MESSAGE_ASSISTANT_UNTERMINATED"
+	MlModelFeatureChatMessageFunctionCall          MlModelFeature = "CHAT_MESSAGE_FUNCTION_CALL"
+	MlModelFeatureChatMessageImage                 MlModelFeature = "CHAT_MESSAGE_IMAGE"
+	MlModelFeatureFunctionDefinition               MlModelFeature = "FUNCTION_DEFINITION"
+	MlModelFeatureStreamingSupport                 MlModelFeature = "STREAMING_SUPPORT"
+)
+
+func NewMlModelFeatureFromString(s string) (MlModelFeature, error) {
+	switch s {
+	case "TEXT":
+		return MlModelFeatureText, nil
+	case "CHAT_MESSAGE_SYSTEM":
+		return MlModelFeatureChatMessageSystem, nil
+	case "CHAT_MESSAGE_USER":
+		return MlModelFeatureChatMessageUser, nil
+	case "CHAT_MESSAGE_ASSISTANT":
+		return MlModelFeatureChatMessageAssistant, nil
+	case "CHAT_MESSAGE_ASSISTANT_UNTERMINATED":
+		return MlModelFeatureChatMessageAssistantUnterminated, nil
+	case "CHAT_MESSAGE_FUNCTION_CALL":
+		return MlModelFeatureChatMessageFunctionCall, nil
+	case "CHAT_MESSAGE_IMAGE":
+		return MlModelFeatureChatMessageImage, nil
+	case "FUNCTION_DEFINITION":
+		return MlModelFeatureFunctionDefinition, nil
+	case "STREAMING_SUPPORT":
+		return MlModelFeatureStreamingSupport, nil
+	}
+	var t MlModelFeature
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (m MlModelFeature) Ptr() *MlModelFeature {
+	return &m
+}
+
+type MlModelParameterConfig struct {
+	Temperature      *NumberParameterConfig      `json:"temperature,omitempty"`
+	MaxTokens        *IntegerParameterConfig     `json:"max_tokens,omitempty"`
+	Stop             *ArrayParameterConfig       `json:"stop,omitempty"`
+	TopP             *NumberParameterConfig      `json:"top_p,omitempty"`
+	TopK             *IntegerParameterConfig     `json:"top_k,omitempty"`
+	FrequencyPenalty *NumberParameterConfig      `json:"frequency_penalty,omitempty"`
+	PresencePenalty  *NumberParameterConfig      `json:"presence_penalty,omitempty"`
+	LogitBias        *ObjectParameterConfig      `json:"logit_bias,omitempty"`
+	CustomParameters map[string]*ParameterConfig `json:"custom_parameters,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (m *MlModelParameterConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler MlModelParameterConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MlModelParameterConfig(value)
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MlModelParameterConfig) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+type MlModelParameterConfigRequest struct {
+	Temperature      *NumberParameterConfigRequest      `json:"temperature,omitempty"`
+	MaxTokens        *IntegerParameterConfigRequest     `json:"max_tokens,omitempty"`
+	Stop             *ArrayParameterConfigRequest       `json:"stop,omitempty"`
+	TopP             *NumberParameterConfigRequest      `json:"top_p,omitempty"`
+	TopK             *IntegerParameterConfigRequest     `json:"top_k,omitempty"`
+	FrequencyPenalty *NumberParameterConfigRequest      `json:"frequency_penalty,omitempty"`
+	PresencePenalty  *NumberParameterConfigRequest      `json:"presence_penalty,omitempty"`
+	LogitBias        *ObjectParameterConfigRequest      `json:"logit_bias,omitempty"`
+	CustomParameters map[string]*ParameterConfigRequest `json:"custom_parameters,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (m *MlModelParameterConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler MlModelParameterConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MlModelParameterConfigRequest(value)
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MlModelParameterConfigRequest) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// An ML Model that your Workspace has access to.
+type MlModelRead struct {
+	Id string `json:"id"`
+	// The unique name of the ML Model.
+	Name string `json:"name"`
+	// The family of the ML Model.
+	Family *MlModelFamilyEnumValueLabel `json:"family,omitempty"`
+	// The organization hosting the ML Model.
+	//
+	// - `ANTHROPIC` - Anthropic
+	// - `AWS_BEDROCK` - AWS Bedrock
+	// - `AZURE_OPENAI` - Azure OpenAI
+	// - `COHERE` - Cohere
+	// - `CUSTOM` - Custom
+	// - `FIREWORKS_AI` - Fireworks AI
+	// - `GOOGLE` - Google
+	// - `GOOGLE_VERTEX_AI` - Google Vertex AI
+	// - `GROQ` - Groq
+	// - `HUGGINGFACE` - HuggingFace
+	// - `IBM_WATSONX` - IBM WatsonX
+	// - `MOSAICML` - MosaicML
+	// - `MYSTIC` - Mystic
+	// - `OPENAI` - OpenAI
+	// - `OPENPIPE` - OpenPipe
+	// - `PYQ` - Pyq
+	// - `REPLICATE` - Replicate
+	HostedBy HostedByEnum `json:"hosted_by,omitempty"`
+	// The organization that developed the ML Model.
+	DevelopedBy *MlModelDeveloperEnumValueLabel `json:"developed_by,omitempty"`
+	// The visibility of the ML Model.
+	//
+	// - `DEFAULT` - Default
+	// - `PUBLIC` - Public
+	// - `PRIVATE` - Private
+	// - `DISABLED` - Disabled
+	Visibility *VisibilityEnum `json:"visibility,omitempty"`
+	// Configuration for how the ML Model was built.
+	BuildConfig *MlModelBuildConfig `json:"build_config,omitempty"`
+	// Configuration for how to execute the ML Model.
+	ExecConfig *MlModelExecConfig `json:"exec_config,omitempty"`
+	// Configuration for the ML Model's parameters.
+	ParameterConfig *MlModelParameterConfig `json:"parameter_config,omitempty"`
+	// Configuration for how to display the ML Model.
+	DisplayConfig *MlModelDisplayConfigLabelled `json:"display_config,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (m *MlModelRead) UnmarshalJSON(data []byte) error {
+	type unmarshaler MlModelRead
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MlModelRead(value)
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MlModelRead) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+type MlModelRequestAuthorizationConfig struct {
+	Type MlModelRequestAuthorizationConfigTypeEnum `json:"type,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (m *MlModelRequestAuthorizationConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler MlModelRequestAuthorizationConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MlModelRequestAuthorizationConfig(value)
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MlModelRequestAuthorizationConfig) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+type MlModelRequestAuthorizationConfigRequest struct {
+	Type MlModelRequestAuthorizationConfigTypeEnum `json:"type,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (m *MlModelRequestAuthorizationConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler MlModelRequestAuthorizationConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MlModelRequestAuthorizationConfigRequest(value)
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MlModelRequestAuthorizationConfigRequest) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// - `BEARER_TOKEN` - Bearer Token
+// - `API_KEY` - API Key
+type MlModelRequestAuthorizationConfigTypeEnum string
+
+const (
+	MlModelRequestAuthorizationConfigTypeEnumBearerToken MlModelRequestAuthorizationConfigTypeEnum = "BEARER_TOKEN"
+	MlModelRequestAuthorizationConfigTypeEnumApiKey      MlModelRequestAuthorizationConfigTypeEnum = "API_KEY"
+)
+
+func NewMlModelRequestAuthorizationConfigTypeEnumFromString(s string) (MlModelRequestAuthorizationConfigTypeEnum, error) {
+	switch s {
+	case "BEARER_TOKEN":
+		return MlModelRequestAuthorizationConfigTypeEnumBearerToken, nil
+	case "API_KEY":
+		return MlModelRequestAuthorizationConfigTypeEnumApiKey, nil
+	}
+	var t MlModelRequestAuthorizationConfigTypeEnum
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (m MlModelRequestAuthorizationConfigTypeEnum) Ptr() *MlModelRequestAuthorizationConfigTypeEnum {
+	return &m
+}
+
+type MlModelRequestConfig struct {
+	Headers       map[string]*string                 `json:"headers,omitempty"`
+	Authorization *MlModelRequestAuthorizationConfig `json:"authorization,omitempty"`
+	BodyTemplate  *string                            `json:"body_template,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (m *MlModelRequestConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler MlModelRequestConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MlModelRequestConfig(value)
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MlModelRequestConfig) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+type MlModelRequestConfigRequest struct {
+	Headers       map[string]*string                        `json:"headers,omitempty"`
+	Authorization *MlModelRequestAuthorizationConfigRequest `json:"authorization,omitempty"`
+	BodyTemplate  *string                                   `json:"body_template,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (m *MlModelRequestConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler MlModelRequestConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MlModelRequestConfigRequest(value)
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MlModelRequestConfigRequest) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+type MlModelResponseConfig struct {
+	ResultPath                *string            `json:"result_path,omitempty"`
+	ResultExtractionRegex     *string            `json:"result_extraction_regex,omitempty"`
+	ResultSubstitutionRegexes map[string]*string `json:"result_substitution_regexes,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (m *MlModelResponseConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler MlModelResponseConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MlModelResponseConfig(value)
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MlModelResponseConfig) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+type MlModelResponseConfigRequest struct {
+	ResultPath                *string            `json:"result_path,omitempty"`
+	ResultExtractionRegex     *string            `json:"result_extraction_regex,omitempty"`
+	ResultSubstitutionRegexes map[string]*string `json:"result_substitution_regexes,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (m *MlModelResponseConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler MlModelResponseConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MlModelResponseConfigRequest(value)
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MlModelResponseConfigRequest) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+type MlModelTokenizerConfig struct {
+	Type        string
+	HuggingFace *HuggingFaceTokenizerConfig
+	Tiktoken    *TikTokenTokenizerConfig
+}
+
+func NewMlModelTokenizerConfigFromHuggingFace(value *HuggingFaceTokenizerConfig) *MlModelTokenizerConfig {
+	return &MlModelTokenizerConfig{Type: "HUGGING_FACE", HuggingFace: value}
+}
+
+func NewMlModelTokenizerConfigFromTiktoken(value *TikTokenTokenizerConfig) *MlModelTokenizerConfig {
+	return &MlModelTokenizerConfig{Type: "TIKTOKEN", Tiktoken: value}
+}
+
+func (m *MlModelTokenizerConfig) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	m.Type = unmarshaler.Type
+	switch unmarshaler.Type {
+	case "HUGGING_FACE":
+		value := new(HuggingFaceTokenizerConfig)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		m.HuggingFace = value
+	case "TIKTOKEN":
+		value := new(TikTokenTokenizerConfig)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		m.Tiktoken = value
+	}
+	return nil
+}
+
+func (m MlModelTokenizerConfig) MarshalJSON() ([]byte, error) {
+	switch m.Type {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", m.Type, m)
+	case "HUGGING_FACE":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*HuggingFaceTokenizerConfig
+		}{
+			Type:                       m.Type,
+			HuggingFaceTokenizerConfig: m.HuggingFace,
+		}
+		return json.Marshal(marshaler)
+	case "TIKTOKEN":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TikTokenTokenizerConfig
+		}{
+			Type:                    m.Type,
+			TikTokenTokenizerConfig: m.Tiktoken,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type MlModelTokenizerConfigVisitor interface {
+	VisitHuggingFace(*HuggingFaceTokenizerConfig) error
+	VisitTiktoken(*TikTokenTokenizerConfig) error
+}
+
+func (m *MlModelTokenizerConfig) Accept(visitor MlModelTokenizerConfigVisitor) error {
+	switch m.Type {
+	default:
+		return fmt.Errorf("invalid type %s in %T", m.Type, m)
+	case "HUGGING_FACE":
+		return visitor.VisitHuggingFace(m.HuggingFace)
+	case "TIKTOKEN":
+		return visitor.VisitTiktoken(m.Tiktoken)
+	}
+}
+
+type MlModelTokenizerConfigRequest struct {
+	Type        string
+	HuggingFace *HuggingFaceTokenizerConfigRequest
+	Tiktoken    *TikTokenTokenizerConfigRequest
+}
+
+func NewMlModelTokenizerConfigRequestFromHuggingFace(value *HuggingFaceTokenizerConfigRequest) *MlModelTokenizerConfigRequest {
+	return &MlModelTokenizerConfigRequest{Type: "HUGGING_FACE", HuggingFace: value}
+}
+
+func NewMlModelTokenizerConfigRequestFromTiktoken(value *TikTokenTokenizerConfigRequest) *MlModelTokenizerConfigRequest {
+	return &MlModelTokenizerConfigRequest{Type: "TIKTOKEN", Tiktoken: value}
+}
+
+func (m *MlModelTokenizerConfigRequest) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	m.Type = unmarshaler.Type
+	switch unmarshaler.Type {
+	case "HUGGING_FACE":
+		value := new(HuggingFaceTokenizerConfigRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		m.HuggingFace = value
+	case "TIKTOKEN":
+		value := new(TikTokenTokenizerConfigRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		m.Tiktoken = value
+	}
+	return nil
+}
+
+func (m MlModelTokenizerConfigRequest) MarshalJSON() ([]byte, error) {
+	switch m.Type {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", m.Type, m)
+	case "HUGGING_FACE":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*HuggingFaceTokenizerConfigRequest
+		}{
+			Type:                              m.Type,
+			HuggingFaceTokenizerConfigRequest: m.HuggingFace,
+		}
+		return json.Marshal(marshaler)
+	case "TIKTOKEN":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*TikTokenTokenizerConfigRequest
+		}{
+			Type:                           m.Type,
+			TikTokenTokenizerConfigRequest: m.Tiktoken,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type MlModelTokenizerConfigRequestVisitor interface {
+	VisitHuggingFace(*HuggingFaceTokenizerConfigRequest) error
+	VisitTiktoken(*TikTokenTokenizerConfigRequest) error
+}
+
+func (m *MlModelTokenizerConfigRequest) Accept(visitor MlModelTokenizerConfigRequestVisitor) error {
+	switch m.Type {
+	default:
+		return fmt.Errorf("invalid type %s in %T", m.Type, m)
+	case "HUGGING_FACE":
+		return visitor.VisitHuggingFace(m.HuggingFace)
+	case "TIKTOKEN":
+		return visitor.VisitTiktoken(m.Tiktoken)
+	}
 }
 
 type MlModelUsage struct {
@@ -8217,7 +9572,79 @@ func (n *NormalizedTokenLogProbs) String() string {
 	return fmt.Sprintf("%#v", n)
 }
 
-type NumberEnum = string
+// An OpenAPI specification of a parameter with type 'number'
+type NumberParameterConfig struct {
+	Minimum          *float64 `json:"minimum,omitempty"`
+	Maximum          *float64 `json:"maximum,omitempty"`
+	Format           *string  `json:"format,omitempty"`
+	ExclusiveMinimum *bool    `json:"exclusive_minimum,omitempty"`
+	ExclusiveMaximum *bool    `json:"exclusive_maximum,omitempty"`
+	Default          *float64 `json:"default,omitempty"`
+	Title            *string  `json:"title,omitempty"`
+	Description      *string  `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (n *NumberParameterConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler NumberParameterConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*n = NumberParameterConfig(value)
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NumberParameterConfig) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
+// An OpenAPI specification of a parameter with type 'number'
+type NumberParameterConfigRequest struct {
+	Minimum          *float64 `json:"minimum,omitempty"`
+	Maximum          *float64 `json:"maximum,omitempty"`
+	Format           *string  `json:"format,omitempty"`
+	ExclusiveMinimum *bool    `json:"exclusive_minimum,omitempty"`
+	ExclusiveMaximum *bool    `json:"exclusive_maximum,omitempty"`
+	Default          *float64 `json:"default,omitempty"`
+	Title            *string  `json:"title,omitempty"`
+	Description      *string  `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (n *NumberParameterConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler NumberParameterConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*n = NumberParameterConfigRequest(value)
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NumberParameterConfigRequest) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
 
 type NumberVariableValue struct {
 	Value *float64 `json:"value,omitempty"`
@@ -8306,6 +9733,148 @@ func (n *NumberVellumValueRequest) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", n)
+}
+
+// An OpenAPI specification of a parameter with type 'object'
+type ObjectParameterConfig struct {
+	Properties           map[string]*ParameterConfig `json:"properties,omitempty"`
+	Required             []string                    `json:"required,omitempty"`
+	MinProperties        *int                        `json:"min_properties,omitempty"`
+	MaxProperties        *int                        `json:"max_properties,omitempty"`
+	PropertyNames        *ParameterConfig            `json:"property_names,omitempty"`
+	AdditionalProperties *ParameterConfig            `json:"additional_properties,omitempty"`
+	PatternProperties    map[string]*ParameterConfig `json:"pattern_properties,omitempty"`
+	Default              map[string]interface{}      `json:"default,omitempty"`
+	Title                *string                     `json:"title,omitempty"`
+	Description          *string                     `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *ObjectParameterConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler ObjectParameterConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = ObjectParameterConfig(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *ObjectParameterConfig) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// An OpenAPI specification of a parameter with type 'object'
+type ObjectParameterConfigRequest struct {
+	Properties           map[string]*ParameterConfigRequest `json:"properties,omitempty"`
+	Required             []string                           `json:"required,omitempty"`
+	MinProperties        *int                               `json:"min_properties,omitempty"`
+	MaxProperties        *int                               `json:"max_properties,omitempty"`
+	PropertyNames        *ParameterConfigRequest            `json:"property_names,omitempty"`
+	AdditionalProperties *ParameterConfigRequest            `json:"additional_properties,omitempty"`
+	PatternProperties    map[string]*ParameterConfigRequest `json:"pattern_properties,omitempty"`
+	Default              map[string]interface{}             `json:"default,omitempty"`
+	Title                *string                            `json:"title,omitempty"`
+	Description          *string                            `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *ObjectParameterConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler ObjectParameterConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = ObjectParameterConfigRequest(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *ObjectParameterConfigRequest) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// An OpenAPI specification of a parameter with type 'oneOf'
+type OneOfParameterConfig struct {
+	OneOf       []*ParameterConfig `json:"oneOf,omitempty"`
+	Title       *string            `json:"title,omitempty"`
+	Description *string            `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OneOfParameterConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler OneOfParameterConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OneOfParameterConfig(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OneOfParameterConfig) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// An OpenAPI specification of a parameter with type 'oneOf'
+type OneOfParameterConfigRequest struct {
+	OneOf       []*ParameterConfigRequest `json:"oneOf,omitempty"`
+	Title       *string                   `json:"title,omitempty"`
+	Description *string                   `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OneOfParameterConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler OneOfParameterConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OneOfParameterConfigRequest(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OneOfParameterConfigRequest) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
 }
 
 // Configuration for using an OpenAI vectorizer.
@@ -8580,6 +10149,38 @@ func (p *PaginatedDocumentIndexReadList) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
+type PaginatedMlModelReadList struct {
+	Count    *int           `json:"count,omitempty"`
+	Next     *string        `json:"next,omitempty"`
+	Previous *string        `json:"previous,omitempty"`
+	Results  []*MlModelRead `json:"results,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (p *PaginatedMlModelReadList) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaginatedMlModelReadList
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaginatedMlModelReadList(value)
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaginatedMlModelReadList) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
 type PaginatedSlimDeploymentReadList struct {
 	Count    *int                  `json:"count,omitempty"`
 	Next     *string               `json:"next,omitempty"`
@@ -8740,7 +10341,441 @@ func (p *PaginatedTestSuiteTestCaseList) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
-type PdfEnum = string
+type ParameterConfig struct {
+	Type    string
+	Array   *ArrayParameterConfig
+	Object  *ObjectParameterConfig
+	Integer *IntegerParameterConfig
+	Number  *NumberParameterConfig
+	String  *StringParameterConfig
+	Boolean *BooleanParameterConfig
+	OneOf   *OneOfParameterConfig
+	Const   *ConstParameterConfig
+}
+
+func NewParameterConfigFromArray(value *ArrayParameterConfig) *ParameterConfig {
+	return &ParameterConfig{Type: "array", Array: value}
+}
+
+func NewParameterConfigFromObject(value *ObjectParameterConfig) *ParameterConfig {
+	return &ParameterConfig{Type: "object", Object: value}
+}
+
+func NewParameterConfigFromInteger(value *IntegerParameterConfig) *ParameterConfig {
+	return &ParameterConfig{Type: "integer", Integer: value}
+}
+
+func NewParameterConfigFromNumber(value *NumberParameterConfig) *ParameterConfig {
+	return &ParameterConfig{Type: "number", Number: value}
+}
+
+func NewParameterConfigFromString(value *StringParameterConfig) *ParameterConfig {
+	return &ParameterConfig{Type: "string", String: value}
+}
+
+func NewParameterConfigFromBoolean(value *BooleanParameterConfig) *ParameterConfig {
+	return &ParameterConfig{Type: "boolean", Boolean: value}
+}
+
+func NewParameterConfigFromOneOf(value *OneOfParameterConfig) *ParameterConfig {
+	return &ParameterConfig{Type: "oneOf", OneOf: value}
+}
+
+func NewParameterConfigFromConst(value *ConstParameterConfig) *ParameterConfig {
+	return &ParameterConfig{Type: "const", Const: value}
+}
+
+func (p *ParameterConfig) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	p.Type = unmarshaler.Type
+	switch unmarshaler.Type {
+	case "array":
+		value := new(ArrayParameterConfig)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.Array = value
+	case "object":
+		value := new(ObjectParameterConfig)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.Object = value
+	case "integer":
+		value := new(IntegerParameterConfig)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.Integer = value
+	case "number":
+		value := new(NumberParameterConfig)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.Number = value
+	case "string":
+		value := new(StringParameterConfig)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.String = value
+	case "boolean":
+		value := new(BooleanParameterConfig)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.Boolean = value
+	case "oneOf":
+		value := new(OneOfParameterConfig)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.OneOf = value
+	case "const":
+		value := new(ConstParameterConfig)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.Const = value
+	}
+	return nil
+}
+
+func (p ParameterConfig) MarshalJSON() ([]byte, error) {
+	switch p.Type {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", p.Type, p)
+	case "array":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ArrayParameterConfig
+		}{
+			Type:                 p.Type,
+			ArrayParameterConfig: p.Array,
+		}
+		return json.Marshal(marshaler)
+	case "object":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ObjectParameterConfig
+		}{
+			Type:                  p.Type,
+			ObjectParameterConfig: p.Object,
+		}
+		return json.Marshal(marshaler)
+	case "integer":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*IntegerParameterConfig
+		}{
+			Type:                   p.Type,
+			IntegerParameterConfig: p.Integer,
+		}
+		return json.Marshal(marshaler)
+	case "number":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*NumberParameterConfig
+		}{
+			Type:                  p.Type,
+			NumberParameterConfig: p.Number,
+		}
+		return json.Marshal(marshaler)
+	case "string":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*StringParameterConfig
+		}{
+			Type:                  p.Type,
+			StringParameterConfig: p.String,
+		}
+		return json.Marshal(marshaler)
+	case "boolean":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*BooleanParameterConfig
+		}{
+			Type:                   p.Type,
+			BooleanParameterConfig: p.Boolean,
+		}
+		return json.Marshal(marshaler)
+	case "oneOf":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*OneOfParameterConfig
+		}{
+			Type:                 p.Type,
+			OneOfParameterConfig: p.OneOf,
+		}
+		return json.Marshal(marshaler)
+	case "const":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ConstParameterConfig
+		}{
+			Type:                 p.Type,
+			ConstParameterConfig: p.Const,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type ParameterConfigVisitor interface {
+	VisitArray(*ArrayParameterConfig) error
+	VisitObject(*ObjectParameterConfig) error
+	VisitInteger(*IntegerParameterConfig) error
+	VisitNumber(*NumberParameterConfig) error
+	VisitString(*StringParameterConfig) error
+	VisitBoolean(*BooleanParameterConfig) error
+	VisitOneOf(*OneOfParameterConfig) error
+	VisitConst(*ConstParameterConfig) error
+}
+
+func (p *ParameterConfig) Accept(visitor ParameterConfigVisitor) error {
+	switch p.Type {
+	default:
+		return fmt.Errorf("invalid type %s in %T", p.Type, p)
+	case "array":
+		return visitor.VisitArray(p.Array)
+	case "object":
+		return visitor.VisitObject(p.Object)
+	case "integer":
+		return visitor.VisitInteger(p.Integer)
+	case "number":
+		return visitor.VisitNumber(p.Number)
+	case "string":
+		return visitor.VisitString(p.String)
+	case "boolean":
+		return visitor.VisitBoolean(p.Boolean)
+	case "oneOf":
+		return visitor.VisitOneOf(p.OneOf)
+	case "const":
+		return visitor.VisitConst(p.Const)
+	}
+}
+
+type ParameterConfigRequest struct {
+	Type    string
+	Array   *ArrayParameterConfigRequest
+	Object  *ObjectParameterConfigRequest
+	Integer *IntegerParameterConfigRequest
+	Number  *NumberParameterConfigRequest
+	String  *StringParameterConfigRequest
+	Boolean *BooleanParameterConfigRequest
+	OneOf   *OneOfParameterConfigRequest
+	Const   *ConstParameterConfigRequest
+}
+
+func NewParameterConfigRequestFromArray(value *ArrayParameterConfigRequest) *ParameterConfigRequest {
+	return &ParameterConfigRequest{Type: "array", Array: value}
+}
+
+func NewParameterConfigRequestFromObject(value *ObjectParameterConfigRequest) *ParameterConfigRequest {
+	return &ParameterConfigRequest{Type: "object", Object: value}
+}
+
+func NewParameterConfigRequestFromInteger(value *IntegerParameterConfigRequest) *ParameterConfigRequest {
+	return &ParameterConfigRequest{Type: "integer", Integer: value}
+}
+
+func NewParameterConfigRequestFromNumber(value *NumberParameterConfigRequest) *ParameterConfigRequest {
+	return &ParameterConfigRequest{Type: "number", Number: value}
+}
+
+func NewParameterConfigRequestFromString(value *StringParameterConfigRequest) *ParameterConfigRequest {
+	return &ParameterConfigRequest{Type: "string", String: value}
+}
+
+func NewParameterConfigRequestFromBoolean(value *BooleanParameterConfigRequest) *ParameterConfigRequest {
+	return &ParameterConfigRequest{Type: "boolean", Boolean: value}
+}
+
+func NewParameterConfigRequestFromOneOf(value *OneOfParameterConfigRequest) *ParameterConfigRequest {
+	return &ParameterConfigRequest{Type: "oneOf", OneOf: value}
+}
+
+func NewParameterConfigRequestFromConst(value *ConstParameterConfigRequest) *ParameterConfigRequest {
+	return &ParameterConfigRequest{Type: "const", Const: value}
+}
+
+func (p *ParameterConfigRequest) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	p.Type = unmarshaler.Type
+	switch unmarshaler.Type {
+	case "array":
+		value := new(ArrayParameterConfigRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.Array = value
+	case "object":
+		value := new(ObjectParameterConfigRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.Object = value
+	case "integer":
+		value := new(IntegerParameterConfigRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.Integer = value
+	case "number":
+		value := new(NumberParameterConfigRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.Number = value
+	case "string":
+		value := new(StringParameterConfigRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.String = value
+	case "boolean":
+		value := new(BooleanParameterConfigRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.Boolean = value
+	case "oneOf":
+		value := new(OneOfParameterConfigRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.OneOf = value
+	case "const":
+		value := new(ConstParameterConfigRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		p.Const = value
+	}
+	return nil
+}
+
+func (p ParameterConfigRequest) MarshalJSON() ([]byte, error) {
+	switch p.Type {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", p.Type, p)
+	case "array":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ArrayParameterConfigRequest
+		}{
+			Type:                        p.Type,
+			ArrayParameterConfigRequest: p.Array,
+		}
+		return json.Marshal(marshaler)
+	case "object":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ObjectParameterConfigRequest
+		}{
+			Type:                         p.Type,
+			ObjectParameterConfigRequest: p.Object,
+		}
+		return json.Marshal(marshaler)
+	case "integer":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*IntegerParameterConfigRequest
+		}{
+			Type:                          p.Type,
+			IntegerParameterConfigRequest: p.Integer,
+		}
+		return json.Marshal(marshaler)
+	case "number":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*NumberParameterConfigRequest
+		}{
+			Type:                         p.Type,
+			NumberParameterConfigRequest: p.Number,
+		}
+		return json.Marshal(marshaler)
+	case "string":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*StringParameterConfigRequest
+		}{
+			Type:                         p.Type,
+			StringParameterConfigRequest: p.String,
+		}
+		return json.Marshal(marshaler)
+	case "boolean":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*BooleanParameterConfigRequest
+		}{
+			Type:                          p.Type,
+			BooleanParameterConfigRequest: p.Boolean,
+		}
+		return json.Marshal(marshaler)
+	case "oneOf":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*OneOfParameterConfigRequest
+		}{
+			Type:                        p.Type,
+			OneOfParameterConfigRequest: p.OneOf,
+		}
+		return json.Marshal(marshaler)
+	case "const":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ConstParameterConfigRequest
+		}{
+			Type:                        p.Type,
+			ConstParameterConfigRequest: p.Const,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type ParameterConfigRequestVisitor interface {
+	VisitArray(*ArrayParameterConfigRequest) error
+	VisitObject(*ObjectParameterConfigRequest) error
+	VisitInteger(*IntegerParameterConfigRequest) error
+	VisitNumber(*NumberParameterConfigRequest) error
+	VisitString(*StringParameterConfigRequest) error
+	VisitBoolean(*BooleanParameterConfigRequest) error
+	VisitOneOf(*OneOfParameterConfigRequest) error
+	VisitConst(*ConstParameterConfigRequest) error
+}
+
+func (p *ParameterConfigRequest) Accept(visitor ParameterConfigRequestVisitor) error {
+	switch p.Type {
+	default:
+		return fmt.Errorf("invalid type %s in %T", p.Type, p)
+	case "array":
+		return visitor.VisitArray(p.Array)
+	case "object":
+		return visitor.VisitObject(p.Object)
+	case "integer":
+		return visitor.VisitInteger(p.Integer)
+	case "number":
+		return visitor.VisitNumber(p.Number)
+	case "string":
+		return visitor.VisitString(p.String)
+	case "boolean":
+		return visitor.VisitBoolean(p.Boolean)
+	case "oneOf":
+		return visitor.VisitOneOf(p.OneOf)
+	case "const":
+		return visitor.VisitConst(p.Const)
+	}
+}
 
 // The source of a search result from a PDF document.
 type PdfSearchResultMetaSource struct {
@@ -9355,8 +11390,6 @@ func (r *ReductoChunkerConfigRequest) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-type ReductoChunkerEnum = string
-
 // Reducto chunking
 type ReductoChunking struct {
 	ChunkerConfig *ReductoChunkerConfig `json:"chunker_config,omitempty"`
@@ -9416,8 +11449,6 @@ func (r *ReductoChunkingRequest) String() string {
 	}
 	return fmt.Sprintf("%#v", r)
 }
-
-type RejectedEnum = string
 
 // The final data returned indicating an error occurred during the stream.
 type RejectedExecutePromptEvent struct {
@@ -9609,8 +11640,6 @@ func (r ReleaseTagSource) Ptr() *ReleaseTagSource {
 	return &r
 }
 
-type ReplaceEnum = string
-
 // Information about the Test Case to replace
 type ReplaceTestSuiteTestCaseRequest struct {
 	// The Vellum-generated ID of the Test Case whose data you'd like to replace. Must specify either this or external_id.
@@ -9649,8 +11678,6 @@ func (r *ReplaceTestSuiteTestCaseRequest) String() string {
 	}
 	return fmt.Sprintf("%#v", r)
 }
-
-type ReplacedEnum = string
 
 // Sandbox Scenario
 type SandboxScenario struct {
@@ -9817,36 +11844,6 @@ func (s *ScenarioInputStringVariableValue) UnmarshalJSON(data []byte) error {
 }
 
 func (s *ScenarioInputStringVariableValue) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(s); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", s)
-}
-
-type SearchErrorResponse struct {
-	// Details about why the request failed.
-	Detail string `json:"detail"`
-
-	_rawJSON json.RawMessage
-}
-
-func (s *SearchErrorResponse) UnmarshalJSON(data []byte) error {
-	type unmarshaler SearchErrorResponse
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*s = SearchErrorResponse(value)
-	s._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (s *SearchErrorResponse) String() string {
 	if len(s._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
 			return value
@@ -10367,8 +12364,6 @@ func (s *SearchResultRequest) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-type SearchResultsEnum = string
-
 type SearchWeightsRequest struct {
 	// The relative weight to give to semantic similarity
 	SemanticSimilarity *float64 `json:"semantic_similarity,omitempty"`
@@ -10463,8 +12458,6 @@ func (s *SentenceChunkerConfigRequest) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-type SentenceChunkerEnum = string
-
 // Sentence chunking
 type SentenceChunking struct {
 	ChunkerConfig *SentenceChunkerConfig `json:"chunker_config,omitempty"`
@@ -10525,10 +12518,6 @@ func (s *SentenceChunkingRequest) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-type SentenceTransformersMultiQaMpnetBaseCosV1Enum = string
-
-type SentenceTransformersMultiQaMpnetBaseDotV1Enum = string
-
 type SlimDeploymentRead struct {
 	Id      string    `json:"id"`
 	Created time.Time `json:"created"`
@@ -10549,6 +12538,8 @@ type SlimDeploymentRead struct {
 	Environment    *EnvironmentEnum  `json:"environment,omitempty"`
 	LastDeployedOn time.Time         `json:"last_deployed_on"`
 	InputVariables []*VellumVariable `json:"input_variables,omitempty"`
+	// A human-readable description of the deployment
+	Description *string `json:"description,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -10656,6 +12647,8 @@ type SlimWorkflowDeployment struct {
 	InputVariables []*VellumVariable `json:"input_variables,omitempty"`
 	// The output variables this Workflow Deployment will produce when it is executed.
 	OutputVariables []*VellumVariable `json:"output_variables,omitempty"`
+	// A human-readable description of the workflow deployment
+	Description *string `json:"description,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -10682,8 +12675,6 @@ func (s *SlimWorkflowDeployment) String() string {
 	}
 	return fmt.Sprintf("%#v", s)
 }
-
-type StreamingEnum = string
 
 // The data returned for each delta during the prompt execution stream.
 type StreamingExecutePromptEvent struct {
@@ -10847,8 +12838,6 @@ func (s *StringChatMessageContentRequest) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-type StringEnum = string
-
 // A user input representing a string value
 type StringInputRequest struct {
 	// The variable's name, as defined in the deployment.
@@ -10870,6 +12859,78 @@ func (s *StringInputRequest) UnmarshalJSON(data []byte) error {
 }
 
 func (s *StringInputRequest) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// An OpenAPI specification of a parameter with type 'string'
+type StringParameterConfig struct {
+	MinLength   *int    `json:"min_length,omitempty"`
+	MaxLength   *int    `json:"max_length,omitempty"`
+	Pattern     *string `json:"pattern,omitempty"`
+	Format      *string `json:"format,omitempty"`
+	Default     *string `json:"default,omitempty"`
+	Title       *string `json:"title,omitempty"`
+	Description *string `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (s *StringParameterConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler StringParameterConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = StringParameterConfig(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *StringParameterConfig) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// An OpenAPI specification of a parameter with type 'string'
+type StringParameterConfigRequest struct {
+	MinLength   *int    `json:"min_length,omitempty"`
+	MaxLength   *int    `json:"max_length,omitempty"`
+	Pattern     *string `json:"pattern,omitempty"`
+	Format      *string `json:"format,omitempty"`
+	Default     *string `json:"default,omitempty"`
+	Title       *string `json:"title,omitempty"`
+	Description *string `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (s *StringParameterConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler StringParameterConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = StringParameterConfigRequest(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *StringParameterConfigRequest) String() string {
 	if len(s._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
 			return value
@@ -11010,35 +13071,6 @@ func (s *SubmitCompletionActualRequest) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
-type SubmitCompletionActualsErrorResponse struct {
-	Detail string `json:"detail"`
-
-	_rawJSON json.RawMessage
-}
-
-func (s *SubmitCompletionActualsErrorResponse) UnmarshalJSON(data []byte) error {
-	type unmarshaler SubmitCompletionActualsErrorResponse
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*s = SubmitCompletionActualsErrorResponse(value)
-	s._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (s *SubmitCompletionActualsErrorResponse) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(s); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", s)
-}
-
 type SubmitWorkflowExecutionActualRequest struct {
 	OutputType  string
 	String      *WorkflowExecutionActualStringRequest
@@ -11141,8 +13173,6 @@ func (s *SubmitWorkflowExecutionActualRequest) Accept(visitor SubmitWorkflowExec
 		return visitor.VisitChatHistory(s.ChatHistory)
 	}
 }
-
-type SubworkflowEnum = string
 
 // A Node Result Event emitted from a Subworkflow Node.
 type SubworkflowNodeResult struct {
@@ -12383,9 +14413,9 @@ func (t *TestCaseFunctionCallVariableValue) String() string {
 
 // A JSON value for a variable in a Test Case.
 type TestCaseJsonVariableValue struct {
-	VariableId string                 `json:"variable_id"`
-	Name       string                 `json:"name"`
-	Value      map[string]interface{} `json:"value,omitempty"`
+	VariableId string      `json:"variable_id"`
+	Name       string      `json:"name"`
+	Value      interface{} `json:"value,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -12854,9 +14884,6 @@ func (t *TestSuiteRunDeploymentReleaseTagExecConfigRequest) String() string {
 	}
 	return fmt.Sprintf("%#v", t)
 }
-
-// - `DEPLOYMENT_RELEASE_TAG` - DEPLOYMENT_RELEASE_TAG
-type TestSuiteRunDeploymentReleaseTagExecConfigTypeEnum = string
 
 type TestSuiteRunExecConfig struct {
 	Type                 string
@@ -13757,9 +15784,6 @@ func (t *TestSuiteRunExternalExecConfigRequest) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
-// - `EXTERNAL` - EXTERNAL
-type TestSuiteRunExternalExecConfigTypeEnum = string
-
 // Output for a test suite run metric that is of type ERROR
 type TestSuiteRunMetricErrorOutput struct {
 	Value *VellumError `json:"value,omitempty"`
@@ -13791,9 +15815,6 @@ func (t *TestSuiteRunMetricErrorOutput) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
-// - `ERROR` - ERROR
-type TestSuiteRunMetricErrorOutputTypeEnum = string
-
 // Output for a test suite run metric that is of type NUMBER
 type TestSuiteRunMetricNumberOutput struct {
 	Value *float64 `json:"value,omitempty"`
@@ -13824,9 +15845,6 @@ func (t *TestSuiteRunMetricNumberOutput) String() string {
 	}
 	return fmt.Sprintf("%#v", t)
 }
-
-// - `NUMBER` - NUMBER
-type TestSuiteRunMetricNumberOutputTypeEnum = string
 
 type TestSuiteRunMetricOutput struct {
 	Type   string
@@ -13961,9 +15979,6 @@ func (t *TestSuiteRunMetricStringOutput) String() string {
 	}
 	return fmt.Sprintf("%#v", t)
 }
-
-// - `STRING` - STRING
-type TestSuiteRunMetricStringOutputTypeEnum = string
 
 type TestSuiteRunRead struct {
 	Id        string                 `json:"id"`
@@ -14200,9 +16215,6 @@ func (t *TestSuiteRunWorkflowReleaseTagExecConfigRequest) String() string {
 	}
 	return fmt.Sprintf("%#v", t)
 }
-
-// - `WORKFLOW_RELEASE_TAG` - WORKFLOW_RELEASE_TAG
-type TestSuiteRunWorkflowReleaseTagExecConfigTypeEnum = string
 
 type TestSuiteTestCase struct {
 	Id               *string                  `json:"id,omitempty"`
@@ -14865,11 +16877,65 @@ func (t *TestSuiteTestCaseUpsertBulkOperationRequest) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
-type TextEmbedding3LargeEnum = string
+// Tokenizer config for OpenAI's TikToken type tokenizers.
+type TikTokenTokenizerConfig struct {
+	Name string `json:"name"`
 
-type TextEmbedding3SmallEnum = string
+	_rawJSON json.RawMessage
+}
 
-type TextEmbeddingAda002Enum = string
+func (t *TikTokenTokenizerConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler TikTokenTokenizerConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TikTokenTokenizerConfig(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TikTokenTokenizerConfig) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Tokenizer config for OpenAI's TikToken type tokenizers.
+type TikTokenTokenizerConfigRequest struct {
+	Name string `json:"name"`
+
+	_rawJSON json.RawMessage
+}
+
+func (t *TikTokenTokenizerConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler TikTokenTokenizerConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TikTokenTokenizerConfigRequest(value)
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TikTokenTokenizerConfigRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
 
 // Configuration for token overlapping window chunking
 type TokenOverlappingWindowChunkerConfig struct {
@@ -14933,8 +16999,6 @@ func (t *TokenOverlappingWindowChunkerConfigRequest) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
-type TokenOverlappingWindowChunkerEnum = string
-
 // Token overlapping window chunking
 type TokenOverlappingWindowChunking struct {
 	ChunkerConfig *TokenOverlappingWindowChunkerConfig `json:"chunker_config,omitempty"`
@@ -14995,35 +17059,6 @@ func (t *TokenOverlappingWindowChunkingRequest) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
-type UploadDocumentErrorResponse struct {
-	Detail string `json:"detail"`
-
-	_rawJSON json.RawMessage
-}
-
-func (u *UploadDocumentErrorResponse) UnmarshalJSON(data []byte) error {
-	type unmarshaler UploadDocumentErrorResponse
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*u = UploadDocumentErrorResponse(value)
-	u._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (u *UploadDocumentErrorResponse) String() string {
-	if len(u._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(u._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(u); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", u)
-}
-
 type UploadDocumentResponse struct {
 	// The ID of the newly created document.
 	DocumentId string `json:"document_id"`
@@ -15053,8 +17088,6 @@ func (u *UploadDocumentResponse) String() string {
 	}
 	return fmt.Sprintf("%#v", u)
 }
-
-type UpsertEnum = string
 
 type UpsertTestSuiteTestCaseRequest struct {
 	// The Vellum-generated ID of an existing Test Case whose data you'd like to replace. If specified and no Test Case exists with this ID, a 404 will be returned.
@@ -15333,6 +17366,38 @@ func (v VellumVariableType) Ptr() *VellumVariableType {
 	return &v
 }
 
+// - `DEFAULT` - DEFAULT
+// - `PUBLIC` - PUBLIC
+// - `PRIVATE` - PRIVATE
+// - `DISABLED` - DISABLED
+type VisibilityEnum string
+
+const (
+	VisibilityEnumDefault  VisibilityEnum = "DEFAULT"
+	VisibilityEnumPublic   VisibilityEnum = "PUBLIC"
+	VisibilityEnumPrivate  VisibilityEnum = "PRIVATE"
+	VisibilityEnumDisabled VisibilityEnum = "DISABLED"
+)
+
+func NewVisibilityEnumFromString(s string) (VisibilityEnum, error) {
+	switch s {
+	case "DEFAULT":
+		return VisibilityEnumDefault, nil
+	case "PUBLIC":
+		return VisibilityEnumPublic, nil
+	case "PRIVATE":
+		return VisibilityEnumPrivate, nil
+	case "DISABLED":
+		return VisibilityEnumDisabled, nil
+	}
+	var t VisibilityEnum
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (v VisibilityEnum) Ptr() *VisibilityEnum {
+	return &v
+}
+
 type WorkflowDeploymentRead struct {
 	Id string `json:"id"`
 	// A name that uniquely identifies this workflow deployment within its workspace
@@ -15358,6 +17423,8 @@ type WorkflowDeploymentRead struct {
 	InputVariables []*VellumVariable `json:"input_variables,omitempty"`
 	// The output variables this Workflow Deployment produces values for when it's executed.
 	OutputVariables []*VellumVariable `json:"output_variables,omitempty"`
+	// A human-readable description of the workflow deployment
+	Description *string `json:"description,omitempty"`
 
 	_rawJSON json.RawMessage
 }
