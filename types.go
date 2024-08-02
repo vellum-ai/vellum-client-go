@@ -467,86 +467,6 @@ func (a *ArrayChatMessageContentRequest) String() string {
 	return fmt.Sprintf("%#v", a)
 }
 
-// An OpenAPI specification of a parameter with type 'array'
-type ArrayParameterConfig struct {
-	MinItems    *int               `json:"min_items,omitempty"`
-	MaxItems    *int               `json:"max_items,omitempty"`
-	UniqueItems *bool              `json:"unique_items,omitempty"`
-	Items       *ParameterConfig   `json:"items,omitempty"`
-	PrefixItems []*ParameterConfig `json:"prefix_items,omitempty"`
-	Contains    *ParameterConfig   `json:"contains,omitempty"`
-	MinContains *int               `json:"min_contains,omitempty"`
-	MaxContains *int               `json:"max_contains,omitempty"`
-	Default     []interface{}      `json:"default,omitempty"`
-	Title       *string            `json:"title,omitempty"`
-	Description *string            `json:"description,omitempty"`
-
-	_rawJSON json.RawMessage
-}
-
-func (a *ArrayParameterConfig) UnmarshalJSON(data []byte) error {
-	type unmarshaler ArrayParameterConfig
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*a = ArrayParameterConfig(value)
-	a._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (a *ArrayParameterConfig) String() string {
-	if len(a._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(a._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(a); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", a)
-}
-
-// An OpenAPI specification of a parameter with type 'array'
-type ArrayParameterConfigRequest struct {
-	MinItems    *int                      `json:"min_items,omitempty"`
-	MaxItems    *int                      `json:"max_items,omitempty"`
-	UniqueItems *bool                     `json:"unique_items,omitempty"`
-	Items       *ParameterConfigRequest   `json:"items,omitempty"`
-	PrefixItems []*ParameterConfigRequest `json:"prefix_items,omitempty"`
-	Contains    *ParameterConfigRequest   `json:"contains,omitempty"`
-	MinContains *int                      `json:"min_contains,omitempty"`
-	MaxContains *int                      `json:"max_contains,omitempty"`
-	Default     []interface{}             `json:"default,omitempty"`
-	Title       *string                   `json:"title,omitempty"`
-	Description *string                   `json:"description,omitempty"`
-
-	_rawJSON json.RawMessage
-}
-
-func (a *ArrayParameterConfigRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler ArrayParameterConfigRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*a = ArrayParameterConfigRequest(value)
-	a._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (a *ArrayParameterConfigRequest) String() string {
-	if len(a._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(a._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(a); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", a)
-}
-
 type ArrayVariableValueItem struct {
 	Type         string
 	String       *StringVariableValue
@@ -1232,70 +1152,6 @@ func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request) Unmars
 }
 
 func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(b); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", b)
-}
-
-// An OpenAPI specification of a parameter with type 'boolean'
-type BooleanParameterConfig struct {
-	Default     *bool   `json:"default,omitempty"`
-	Title       *string `json:"title,omitempty"`
-	Description *string `json:"description,omitempty"`
-
-	_rawJSON json.RawMessage
-}
-
-func (b *BooleanParameterConfig) UnmarshalJSON(data []byte) error {
-	type unmarshaler BooleanParameterConfig
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*b = BooleanParameterConfig(value)
-	b._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (b *BooleanParameterConfig) String() string {
-	if len(b._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(b); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", b)
-}
-
-// An OpenAPI specification of a parameter with type 'boolean'
-type BooleanParameterConfigRequest struct {
-	Default     *bool   `json:"default,omitempty"`
-	Title       *string `json:"title,omitempty"`
-	Description *string `json:"description,omitempty"`
-
-	_rawJSON json.RawMessage
-}
-
-func (b *BooleanParameterConfigRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler BooleanParameterConfigRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*b = BooleanParameterConfigRequest(value)
-	b._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (b *BooleanParameterConfigRequest) String() string {
 	if len(b._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
 			return value
@@ -2321,70 +2177,6 @@ func (c *ConditionalNodeResultData) UnmarshalJSON(data []byte) error {
 }
 
 func (c *ConditionalNodeResultData) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
-}
-
-// An OpenAPI specification of a parameter with type 'const'
-type ConstParameterConfig struct {
-	Title       *string `json:"title,omitempty"`
-	Description *string `json:"description,omitempty"`
-	Const       string  `json:"const"`
-
-	_rawJSON json.RawMessage
-}
-
-func (c *ConstParameterConfig) UnmarshalJSON(data []byte) error {
-	type unmarshaler ConstParameterConfig
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*c = ConstParameterConfig(value)
-	c._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (c *ConstParameterConfig) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
-}
-
-// An OpenAPI specification of a parameter with type 'const'
-type ConstParameterConfigRequest struct {
-	Title       *string `json:"title,omitempty"`
-	Description *string `json:"description,omitempty"`
-	Const       string  `json:"const"`
-
-	_rawJSON json.RawMessage
-}
-
-func (c *ConstParameterConfigRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler ConstParameterConfigRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*c = ConstParameterConfigRequest(value)
-	c._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (c *ConstParameterConfigRequest) String() string {
 	if len(c._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
 			return value
@@ -5798,78 +5590,6 @@ func (i *InstructorVectorizerConfigRequest) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// An OpenAPI specification of a parameter with type 'integer'
-type IntegerParameterConfig struct {
-	Minimum          *int    `json:"minimum,omitempty"`
-	Maximum          *int    `json:"maximum,omitempty"`
-	ExclusiveMinimum *bool   `json:"exclusive_minimum,omitempty"`
-	ExclusiveMaximum *bool   `json:"exclusive_maximum,omitempty"`
-	Default          *int    `json:"default,omitempty"`
-	Title            *string `json:"title,omitempty"`
-	Description      *string `json:"description,omitempty"`
-
-	_rawJSON json.RawMessage
-}
-
-func (i *IntegerParameterConfig) UnmarshalJSON(data []byte) error {
-	type unmarshaler IntegerParameterConfig
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*i = IntegerParameterConfig(value)
-	i._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (i *IntegerParameterConfig) String() string {
-	if len(i._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(i); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", i)
-}
-
-// An OpenAPI specification of a parameter with type 'integer'
-type IntegerParameterConfigRequest struct {
-	Minimum          *int    `json:"minimum,omitempty"`
-	Maximum          *int    `json:"maximum,omitempty"`
-	ExclusiveMinimum *bool   `json:"exclusive_minimum,omitempty"`
-	ExclusiveMaximum *bool   `json:"exclusive_maximum,omitempty"`
-	Default          *int    `json:"default,omitempty"`
-	Title            *string `json:"title,omitempty"`
-	Description      *string `json:"description,omitempty"`
-
-	_rawJSON json.RawMessage
-}
-
-func (i *IntegerParameterConfigRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler IntegerParameterConfigRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*i = IntegerParameterConfigRequest(value)
-	i._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (i *IntegerParameterConfigRequest) String() string {
-	if len(i._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(i); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", i)
-}
-
 // - `INITIATED` - INITIATED
 // - `FULFILLED` - FULFILLED
 type IterationStateEnum string
@@ -6384,64 +6104,6 @@ func (m *MetricNodeResult) String() string {
 	return fmt.Sprintf("%#v", m)
 }
 
-type MlModelBuildConfig struct {
-	FinetuneData map[string]interface{} `json:"finetune_data,omitempty"`
-
-	_rawJSON json.RawMessage
-}
-
-func (m *MlModelBuildConfig) UnmarshalJSON(data []byte) error {
-	type unmarshaler MlModelBuildConfig
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*m = MlModelBuildConfig(value)
-	m._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (m *MlModelBuildConfig) String() string {
-	if len(m._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(m); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", m)
-}
-
-type MlModelBuildConfigRequest struct {
-	FinetuneData map[string]interface{} `json:"finetune_data,omitempty"`
-
-	_rawJSON json.RawMessage
-}
-
-func (m *MlModelBuildConfigRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler MlModelBuildConfigRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*m = MlModelBuildConfigRequest(value)
-	m._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (m *MlModelBuildConfigRequest) String() string {
-	if len(m._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(m); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", m)
-}
-
 // - `01_AI` - 01_AI
 // - `AMAZON` - AMAZON
 // - `ANTHROPIC` - ANTHROPIC
@@ -6561,10 +6223,9 @@ func (m *MlModelDeveloperEnumValueLabel) String() string {
 }
 
 type MlModelDisplayConfigLabelled struct {
-	Label                  string                             `json:"label"`
-	Description            string                             `json:"description"`
-	Tags                   []*MlModelDisplayTagEnumValueLabel `json:"tags,omitempty"`
-	DefaultDisplayPriority float64                            `json:"default_display_priority"`
+	Label       string                             `json:"label"`
+	Description string                             `json:"description"`
+	Tags        []*MlModelDisplayTagEnumValueLabel `json:"tags,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -6593,10 +6254,9 @@ func (m *MlModelDisplayConfigLabelled) String() string {
 }
 
 type MlModelDisplayConfigRequest struct {
-	Label                  string              `json:"label"`
-	Description            string              `json:"description"`
-	Tags                   []MlModelDisplayTag `json:"tags,omitempty"`
-	DefaultDisplayPriority float64             `json:"default_display_priority"`
+	Label       string              `json:"label"`
+	Description string              `json:"description"`
+	Tags        []MlModelDisplayTag `json:"tags,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -6953,15 +6613,15 @@ func (m MlModelFeature) Ptr() *MlModelFeature {
 }
 
 type MlModelParameterConfig struct {
-	Temperature      *NumberParameterConfig      `json:"temperature,omitempty"`
-	MaxTokens        *IntegerParameterConfig     `json:"max_tokens,omitempty"`
-	Stop             *ArrayParameterConfig       `json:"stop,omitempty"`
-	TopP             *NumberParameterConfig      `json:"top_p,omitempty"`
-	TopK             *IntegerParameterConfig     `json:"top_k,omitempty"`
-	FrequencyPenalty *NumberParameterConfig      `json:"frequency_penalty,omitempty"`
-	PresencePenalty  *NumberParameterConfig      `json:"presence_penalty,omitempty"`
-	LogitBias        *ObjectParameterConfig      `json:"logit_bias,omitempty"`
-	CustomParameters map[string]*ParameterConfig `json:"custom_parameters,omitempty"`
+	Temperature      *OpenApiNumberProperty      `json:"temperature,omitempty"`
+	MaxTokens        *OpenApiIntegerProperty     `json:"max_tokens,omitempty"`
+	Stop             *OpenApiArrayProperty       `json:"stop,omitempty"`
+	TopP             *OpenApiNumberProperty      `json:"top_p,omitempty"`
+	TopK             *OpenApiIntegerProperty     `json:"top_k,omitempty"`
+	FrequencyPenalty *OpenApiNumberProperty      `json:"frequency_penalty,omitempty"`
+	PresencePenalty  *OpenApiNumberProperty      `json:"presence_penalty,omitempty"`
+	LogitBias        *OpenApiObjectProperty      `json:"logit_bias,omitempty"`
+	CustomParameters map[string]*OpenApiProperty `json:"custom_parameters,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -6990,15 +6650,15 @@ func (m *MlModelParameterConfig) String() string {
 }
 
 type MlModelParameterConfigRequest struct {
-	Temperature      *NumberParameterConfigRequest      `json:"temperature,omitempty"`
-	MaxTokens        *IntegerParameterConfigRequest     `json:"max_tokens,omitempty"`
-	Stop             *ArrayParameterConfigRequest       `json:"stop,omitempty"`
-	TopP             *NumberParameterConfigRequest      `json:"top_p,omitempty"`
-	TopK             *IntegerParameterConfigRequest     `json:"top_k,omitempty"`
-	FrequencyPenalty *NumberParameterConfigRequest      `json:"frequency_penalty,omitempty"`
-	PresencePenalty  *NumberParameterConfigRequest      `json:"presence_penalty,omitempty"`
-	LogitBias        *ObjectParameterConfigRequest      `json:"logit_bias,omitempty"`
-	CustomParameters map[string]*ParameterConfigRequest `json:"custom_parameters,omitempty"`
+	Temperature      *OpenApiNumberPropertyRequest      `json:"temperature,omitempty"`
+	MaxTokens        *OpenApiIntegerPropertyRequest     `json:"max_tokens,omitempty"`
+	Stop             *OpenApiArrayPropertyRequest       `json:"stop,omitempty"`
+	TopP             *OpenApiNumberPropertyRequest      `json:"top_p,omitempty"`
+	TopK             *OpenApiIntegerPropertyRequest     `json:"top_k,omitempty"`
+	FrequencyPenalty *OpenApiNumberPropertyRequest      `json:"frequency_penalty,omitempty"`
+	PresencePenalty  *OpenApiNumberPropertyRequest      `json:"presence_penalty,omitempty"`
+	LogitBias        *OpenApiObjectPropertyRequest      `json:"logit_bias,omitempty"`
+	CustomParameters map[string]*OpenApiPropertyRequest `json:"custom_parameters,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -7062,8 +6722,6 @@ type MlModelRead struct {
 	// - `PRIVATE` - Private
 	// - `DISABLED` - Disabled
 	Visibility *VisibilityEnum `json:"visibility,omitempty"`
-	// Configuration for how the ML Model was built.
-	BuildConfig *MlModelBuildConfig `json:"build_config,omitempty"`
 	// Configuration for how to execute the ML Model.
 	ExecConfig *MlModelExecConfig `json:"exec_config,omitempty"`
 	// Configuration for the ML Model's parameters.
@@ -9572,80 +9230,6 @@ func (n *NormalizedTokenLogProbs) String() string {
 	return fmt.Sprintf("%#v", n)
 }
 
-// An OpenAPI specification of a parameter with type 'number'
-type NumberParameterConfig struct {
-	Minimum          *float64 `json:"minimum,omitempty"`
-	Maximum          *float64 `json:"maximum,omitempty"`
-	Format           *string  `json:"format,omitempty"`
-	ExclusiveMinimum *bool    `json:"exclusive_minimum,omitempty"`
-	ExclusiveMaximum *bool    `json:"exclusive_maximum,omitempty"`
-	Default          *float64 `json:"default,omitempty"`
-	Title            *string  `json:"title,omitempty"`
-	Description      *string  `json:"description,omitempty"`
-
-	_rawJSON json.RawMessage
-}
-
-func (n *NumberParameterConfig) UnmarshalJSON(data []byte) error {
-	type unmarshaler NumberParameterConfig
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*n = NumberParameterConfig(value)
-	n._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (n *NumberParameterConfig) String() string {
-	if len(n._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(n); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", n)
-}
-
-// An OpenAPI specification of a parameter with type 'number'
-type NumberParameterConfigRequest struct {
-	Minimum          *float64 `json:"minimum,omitempty"`
-	Maximum          *float64 `json:"maximum,omitempty"`
-	Format           *string  `json:"format,omitempty"`
-	ExclusiveMinimum *bool    `json:"exclusive_minimum,omitempty"`
-	ExclusiveMaximum *bool    `json:"exclusive_maximum,omitempty"`
-	Default          *float64 `json:"default,omitempty"`
-	Title            *string  `json:"title,omitempty"`
-	Description      *string  `json:"description,omitempty"`
-
-	_rawJSON json.RawMessage
-}
-
-func (n *NumberParameterConfigRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler NumberParameterConfigRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*n = NumberParameterConfigRequest(value)
-	n._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (n *NumberParameterConfigRequest) String() string {
-	if len(n._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(n); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", n)
-}
-
 type NumberVariableValue struct {
 	Value *float64 `json:"value,omitempty"`
 
@@ -9733,148 +9317,6 @@ func (n *NumberVellumValueRequest) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", n)
-}
-
-// An OpenAPI specification of a parameter with type 'object'
-type ObjectParameterConfig struct {
-	Properties           map[string]*ParameterConfig `json:"properties,omitempty"`
-	Required             []string                    `json:"required,omitempty"`
-	MinProperties        *int                        `json:"min_properties,omitempty"`
-	MaxProperties        *int                        `json:"max_properties,omitempty"`
-	PropertyNames        *ParameterConfig            `json:"property_names,omitempty"`
-	AdditionalProperties *ParameterConfig            `json:"additional_properties,omitempty"`
-	PatternProperties    map[string]*ParameterConfig `json:"pattern_properties,omitempty"`
-	Default              map[string]interface{}      `json:"default,omitempty"`
-	Title                *string                     `json:"title,omitempty"`
-	Description          *string                     `json:"description,omitempty"`
-
-	_rawJSON json.RawMessage
-}
-
-func (o *ObjectParameterConfig) UnmarshalJSON(data []byte) error {
-	type unmarshaler ObjectParameterConfig
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*o = ObjectParameterConfig(value)
-	o._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (o *ObjectParameterConfig) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(o); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", o)
-}
-
-// An OpenAPI specification of a parameter with type 'object'
-type ObjectParameterConfigRequest struct {
-	Properties           map[string]*ParameterConfigRequest `json:"properties,omitempty"`
-	Required             []string                           `json:"required,omitempty"`
-	MinProperties        *int                               `json:"min_properties,omitempty"`
-	MaxProperties        *int                               `json:"max_properties,omitempty"`
-	PropertyNames        *ParameterConfigRequest            `json:"property_names,omitempty"`
-	AdditionalProperties *ParameterConfigRequest            `json:"additional_properties,omitempty"`
-	PatternProperties    map[string]*ParameterConfigRequest `json:"pattern_properties,omitempty"`
-	Default              map[string]interface{}             `json:"default,omitempty"`
-	Title                *string                            `json:"title,omitempty"`
-	Description          *string                            `json:"description,omitempty"`
-
-	_rawJSON json.RawMessage
-}
-
-func (o *ObjectParameterConfigRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler ObjectParameterConfigRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*o = ObjectParameterConfigRequest(value)
-	o._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (o *ObjectParameterConfigRequest) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(o); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", o)
-}
-
-// An OpenAPI specification of a parameter with type 'oneOf'
-type OneOfParameterConfig struct {
-	OneOf       []*ParameterConfig `json:"oneOf,omitempty"`
-	Title       *string            `json:"title,omitempty"`
-	Description *string            `json:"description,omitempty"`
-
-	_rawJSON json.RawMessage
-}
-
-func (o *OneOfParameterConfig) UnmarshalJSON(data []byte) error {
-	type unmarshaler OneOfParameterConfig
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*o = OneOfParameterConfig(value)
-	o._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (o *OneOfParameterConfig) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(o); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", o)
-}
-
-// An OpenAPI specification of a parameter with type 'oneOf'
-type OneOfParameterConfigRequest struct {
-	OneOf       []*ParameterConfigRequest `json:"oneOf,omitempty"`
-	Title       *string                   `json:"title,omitempty"`
-	Description *string                   `json:"description,omitempty"`
-
-	_rawJSON json.RawMessage
-}
-
-func (o *OneOfParameterConfigRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler OneOfParameterConfigRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*o = OneOfParameterConfigRequest(value)
-	o._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (o *OneOfParameterConfigRequest) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(o); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", o)
 }
 
 // Configuration for using an OpenAI vectorizer.
@@ -10117,6 +9559,1010 @@ func (o *OpenAiVectorizerTextEmbeddingAda002Request) String() string {
 	return fmt.Sprintf("%#v", o)
 }
 
+// An OpenAPI specification of a parameter with type 'array'
+type OpenApiArrayProperty struct {
+	MinItems    *int               `json:"min_items,omitempty"`
+	MaxItems    *int               `json:"max_items,omitempty"`
+	UniqueItems *bool              `json:"unique_items,omitempty"`
+	Items       *OpenApiProperty   `json:"items,omitempty"`
+	PrefixItems []*OpenApiProperty `json:"prefix_items,omitempty"`
+	Contains    *OpenApiProperty   `json:"contains,omitempty"`
+	MinContains *int               `json:"min_contains,omitempty"`
+	MaxContains *int               `json:"max_contains,omitempty"`
+	Default     []interface{}      `json:"default,omitempty"`
+	Title       *string            `json:"title,omitempty"`
+	Description *string            `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenApiArrayProperty) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenApiArrayProperty
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenApiArrayProperty(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenApiArrayProperty) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// An OpenAPI specification of a parameter with type 'array'
+type OpenApiArrayPropertyRequest struct {
+	MinItems    *int                      `json:"min_items,omitempty"`
+	MaxItems    *int                      `json:"max_items,omitempty"`
+	UniqueItems *bool                     `json:"unique_items,omitempty"`
+	Items       *OpenApiPropertyRequest   `json:"items,omitempty"`
+	PrefixItems []*OpenApiPropertyRequest `json:"prefix_items,omitempty"`
+	Contains    *OpenApiPropertyRequest   `json:"contains,omitempty"`
+	MinContains *int                      `json:"min_contains,omitempty"`
+	MaxContains *int                      `json:"max_contains,omitempty"`
+	Default     []interface{}             `json:"default,omitempty"`
+	Title       *string                   `json:"title,omitempty"`
+	Description *string                   `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenApiArrayPropertyRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenApiArrayPropertyRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenApiArrayPropertyRequest(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenApiArrayPropertyRequest) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// An OpenAPI specification of a parameter with type 'boolean'
+type OpenApiBooleanProperty struct {
+	Default     *bool   `json:"default,omitempty"`
+	Title       *string `json:"title,omitempty"`
+	Description *string `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenApiBooleanProperty) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenApiBooleanProperty
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenApiBooleanProperty(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenApiBooleanProperty) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// An OpenAPI specification of a parameter with type 'boolean'
+type OpenApiBooleanPropertyRequest struct {
+	Default     *bool   `json:"default,omitempty"`
+	Title       *string `json:"title,omitempty"`
+	Description *string `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenApiBooleanPropertyRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenApiBooleanPropertyRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenApiBooleanPropertyRequest(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenApiBooleanPropertyRequest) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// An OpenAPI specification of a parameter with type 'const'
+type OpenApiConstProperty struct {
+	Title       *string `json:"title,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Const       string  `json:"const"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenApiConstProperty) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenApiConstProperty
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenApiConstProperty(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenApiConstProperty) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// An OpenAPI specification of a parameter with type 'const'
+type OpenApiConstPropertyRequest struct {
+	Title       *string `json:"title,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Const       string  `json:"const"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenApiConstPropertyRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenApiConstPropertyRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenApiConstPropertyRequest(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenApiConstPropertyRequest) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// An OpenAPI specification of a parameter with type 'integer'
+type OpenApiIntegerProperty struct {
+	Minimum          *int    `json:"minimum,omitempty"`
+	Maximum          *int    `json:"maximum,omitempty"`
+	ExclusiveMinimum *bool   `json:"exclusive_minimum,omitempty"`
+	ExclusiveMaximum *bool   `json:"exclusive_maximum,omitempty"`
+	Default          *int    `json:"default,omitempty"`
+	Title            *string `json:"title,omitempty"`
+	Description      *string `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenApiIntegerProperty) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenApiIntegerProperty
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenApiIntegerProperty(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenApiIntegerProperty) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// An OpenAPI specification of a parameter with type 'integer'
+type OpenApiIntegerPropertyRequest struct {
+	Minimum          *int    `json:"minimum,omitempty"`
+	Maximum          *int    `json:"maximum,omitempty"`
+	ExclusiveMinimum *bool   `json:"exclusive_minimum,omitempty"`
+	ExclusiveMaximum *bool   `json:"exclusive_maximum,omitempty"`
+	Default          *int    `json:"default,omitempty"`
+	Title            *string `json:"title,omitempty"`
+	Description      *string `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenApiIntegerPropertyRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenApiIntegerPropertyRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenApiIntegerPropertyRequest(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenApiIntegerPropertyRequest) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// An OpenAPI specification of a parameter with type 'number'
+type OpenApiNumberProperty struct {
+	Minimum          *float64 `json:"minimum,omitempty"`
+	Maximum          *float64 `json:"maximum,omitempty"`
+	Format           *string  `json:"format,omitempty"`
+	ExclusiveMinimum *bool    `json:"exclusive_minimum,omitempty"`
+	ExclusiveMaximum *bool    `json:"exclusive_maximum,omitempty"`
+	Default          *float64 `json:"default,omitempty"`
+	Title            *string  `json:"title,omitempty"`
+	Description      *string  `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenApiNumberProperty) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenApiNumberProperty
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenApiNumberProperty(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenApiNumberProperty) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// An OpenAPI specification of a parameter with type 'number'
+type OpenApiNumberPropertyRequest struct {
+	Minimum          *float64 `json:"minimum,omitempty"`
+	Maximum          *float64 `json:"maximum,omitempty"`
+	Format           *string  `json:"format,omitempty"`
+	ExclusiveMinimum *bool    `json:"exclusive_minimum,omitempty"`
+	ExclusiveMaximum *bool    `json:"exclusive_maximum,omitempty"`
+	Default          *float64 `json:"default,omitempty"`
+	Title            *string  `json:"title,omitempty"`
+	Description      *string  `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenApiNumberPropertyRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenApiNumberPropertyRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenApiNumberPropertyRequest(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenApiNumberPropertyRequest) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// An OpenAPI specification of a parameter with type 'object'
+type OpenApiObjectProperty struct {
+	Properties           map[string]*OpenApiProperty `json:"properties,omitempty"`
+	Required             []string                    `json:"required,omitempty"`
+	MinProperties        *int                        `json:"min_properties,omitempty"`
+	MaxProperties        *int                        `json:"max_properties,omitempty"`
+	PropertyNames        *OpenApiProperty            `json:"property_names,omitempty"`
+	AdditionalProperties *OpenApiProperty            `json:"additional_properties,omitempty"`
+	PatternProperties    map[string]*OpenApiProperty `json:"pattern_properties,omitempty"`
+	Default              map[string]interface{}      `json:"default,omitempty"`
+	Title                *string                     `json:"title,omitempty"`
+	Description          *string                     `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenApiObjectProperty) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenApiObjectProperty
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenApiObjectProperty(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenApiObjectProperty) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// An OpenAPI specification of a parameter with type 'object'
+type OpenApiObjectPropertyRequest struct {
+	Properties           map[string]*OpenApiPropertyRequest `json:"properties,omitempty"`
+	Required             []string                           `json:"required,omitempty"`
+	MinProperties        *int                               `json:"min_properties,omitempty"`
+	MaxProperties        *int                               `json:"max_properties,omitempty"`
+	PropertyNames        *OpenApiPropertyRequest            `json:"property_names,omitempty"`
+	AdditionalProperties *OpenApiPropertyRequest            `json:"additional_properties,omitempty"`
+	PatternProperties    map[string]*OpenApiPropertyRequest `json:"pattern_properties,omitempty"`
+	Default              map[string]interface{}             `json:"default,omitempty"`
+	Title                *string                            `json:"title,omitempty"`
+	Description          *string                            `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenApiObjectPropertyRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenApiObjectPropertyRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenApiObjectPropertyRequest(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenApiObjectPropertyRequest) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// An OpenAPI specification of a parameter with type 'oneOf'
+type OpenApiOneOfProperty struct {
+	OneOf       []*OpenApiProperty `json:"oneOf,omitempty"`
+	Title       *string            `json:"title,omitempty"`
+	Description *string            `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenApiOneOfProperty) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenApiOneOfProperty
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenApiOneOfProperty(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenApiOneOfProperty) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// An OpenAPI specification of a parameter with type 'oneOf'
+type OpenApiOneOfPropertyRequest struct {
+	OneOf       []*OpenApiPropertyRequest `json:"oneOf,omitempty"`
+	Title       *string                   `json:"title,omitempty"`
+	Description *string                   `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenApiOneOfPropertyRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenApiOneOfPropertyRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenApiOneOfPropertyRequest(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenApiOneOfPropertyRequest) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+type OpenApiProperty struct {
+	Type    string
+	Array   *OpenApiArrayProperty
+	Object  *OpenApiObjectProperty
+	Integer *OpenApiIntegerProperty
+	Number  *OpenApiNumberProperty
+	String  *OpenApiStringProperty
+	Boolean *OpenApiBooleanProperty
+	OneOf   *OpenApiOneOfProperty
+	Const   *OpenApiConstProperty
+}
+
+func NewOpenApiPropertyFromArray(value *OpenApiArrayProperty) *OpenApiProperty {
+	return &OpenApiProperty{Type: "array", Array: value}
+}
+
+func NewOpenApiPropertyFromObject(value *OpenApiObjectProperty) *OpenApiProperty {
+	return &OpenApiProperty{Type: "object", Object: value}
+}
+
+func NewOpenApiPropertyFromInteger(value *OpenApiIntegerProperty) *OpenApiProperty {
+	return &OpenApiProperty{Type: "integer", Integer: value}
+}
+
+func NewOpenApiPropertyFromNumber(value *OpenApiNumberProperty) *OpenApiProperty {
+	return &OpenApiProperty{Type: "number", Number: value}
+}
+
+func NewOpenApiPropertyFromString(value *OpenApiStringProperty) *OpenApiProperty {
+	return &OpenApiProperty{Type: "string", String: value}
+}
+
+func NewOpenApiPropertyFromBoolean(value *OpenApiBooleanProperty) *OpenApiProperty {
+	return &OpenApiProperty{Type: "boolean", Boolean: value}
+}
+
+func NewOpenApiPropertyFromOneOf(value *OpenApiOneOfProperty) *OpenApiProperty {
+	return &OpenApiProperty{Type: "oneOf", OneOf: value}
+}
+
+func NewOpenApiPropertyFromConst(value *OpenApiConstProperty) *OpenApiProperty {
+	return &OpenApiProperty{Type: "const", Const: value}
+}
+
+func (o *OpenApiProperty) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	o.Type = unmarshaler.Type
+	switch unmarshaler.Type {
+	case "array":
+		value := new(OpenApiArrayProperty)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		o.Array = value
+	case "object":
+		value := new(OpenApiObjectProperty)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		o.Object = value
+	case "integer":
+		value := new(OpenApiIntegerProperty)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		o.Integer = value
+	case "number":
+		value := new(OpenApiNumberProperty)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		o.Number = value
+	case "string":
+		value := new(OpenApiStringProperty)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		o.String = value
+	case "boolean":
+		value := new(OpenApiBooleanProperty)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		o.Boolean = value
+	case "oneOf":
+		value := new(OpenApiOneOfProperty)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		o.OneOf = value
+	case "const":
+		value := new(OpenApiConstProperty)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		o.Const = value
+	}
+	return nil
+}
+
+func (o OpenApiProperty) MarshalJSON() ([]byte, error) {
+	switch o.Type {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", o.Type, o)
+	case "array":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*OpenApiArrayProperty
+		}{
+			Type:                 o.Type,
+			OpenApiArrayProperty: o.Array,
+		}
+		return json.Marshal(marshaler)
+	case "object":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*OpenApiObjectProperty
+		}{
+			Type:                  o.Type,
+			OpenApiObjectProperty: o.Object,
+		}
+		return json.Marshal(marshaler)
+	case "integer":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*OpenApiIntegerProperty
+		}{
+			Type:                   o.Type,
+			OpenApiIntegerProperty: o.Integer,
+		}
+		return json.Marshal(marshaler)
+	case "number":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*OpenApiNumberProperty
+		}{
+			Type:                  o.Type,
+			OpenApiNumberProperty: o.Number,
+		}
+		return json.Marshal(marshaler)
+	case "string":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*OpenApiStringProperty
+		}{
+			Type:                  o.Type,
+			OpenApiStringProperty: o.String,
+		}
+		return json.Marshal(marshaler)
+	case "boolean":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*OpenApiBooleanProperty
+		}{
+			Type:                   o.Type,
+			OpenApiBooleanProperty: o.Boolean,
+		}
+		return json.Marshal(marshaler)
+	case "oneOf":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*OpenApiOneOfProperty
+		}{
+			Type:                 o.Type,
+			OpenApiOneOfProperty: o.OneOf,
+		}
+		return json.Marshal(marshaler)
+	case "const":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*OpenApiConstProperty
+		}{
+			Type:                 o.Type,
+			OpenApiConstProperty: o.Const,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type OpenApiPropertyVisitor interface {
+	VisitArray(*OpenApiArrayProperty) error
+	VisitObject(*OpenApiObjectProperty) error
+	VisitInteger(*OpenApiIntegerProperty) error
+	VisitNumber(*OpenApiNumberProperty) error
+	VisitString(*OpenApiStringProperty) error
+	VisitBoolean(*OpenApiBooleanProperty) error
+	VisitOneOf(*OpenApiOneOfProperty) error
+	VisitConst(*OpenApiConstProperty) error
+}
+
+func (o *OpenApiProperty) Accept(visitor OpenApiPropertyVisitor) error {
+	switch o.Type {
+	default:
+		return fmt.Errorf("invalid type %s in %T", o.Type, o)
+	case "array":
+		return visitor.VisitArray(o.Array)
+	case "object":
+		return visitor.VisitObject(o.Object)
+	case "integer":
+		return visitor.VisitInteger(o.Integer)
+	case "number":
+		return visitor.VisitNumber(o.Number)
+	case "string":
+		return visitor.VisitString(o.String)
+	case "boolean":
+		return visitor.VisitBoolean(o.Boolean)
+	case "oneOf":
+		return visitor.VisitOneOf(o.OneOf)
+	case "const":
+		return visitor.VisitConst(o.Const)
+	}
+}
+
+type OpenApiPropertyRequest struct {
+	Type    string
+	Array   *OpenApiArrayPropertyRequest
+	Object  *OpenApiObjectPropertyRequest
+	Integer *OpenApiIntegerPropertyRequest
+	Number  *OpenApiNumberPropertyRequest
+	String  *OpenApiStringPropertyRequest
+	Boolean *OpenApiBooleanPropertyRequest
+	OneOf   *OpenApiOneOfPropertyRequest
+	Const   *OpenApiConstPropertyRequest
+}
+
+func NewOpenApiPropertyRequestFromArray(value *OpenApiArrayPropertyRequest) *OpenApiPropertyRequest {
+	return &OpenApiPropertyRequest{Type: "array", Array: value}
+}
+
+func NewOpenApiPropertyRequestFromObject(value *OpenApiObjectPropertyRequest) *OpenApiPropertyRequest {
+	return &OpenApiPropertyRequest{Type: "object", Object: value}
+}
+
+func NewOpenApiPropertyRequestFromInteger(value *OpenApiIntegerPropertyRequest) *OpenApiPropertyRequest {
+	return &OpenApiPropertyRequest{Type: "integer", Integer: value}
+}
+
+func NewOpenApiPropertyRequestFromNumber(value *OpenApiNumberPropertyRequest) *OpenApiPropertyRequest {
+	return &OpenApiPropertyRequest{Type: "number", Number: value}
+}
+
+func NewOpenApiPropertyRequestFromString(value *OpenApiStringPropertyRequest) *OpenApiPropertyRequest {
+	return &OpenApiPropertyRequest{Type: "string", String: value}
+}
+
+func NewOpenApiPropertyRequestFromBoolean(value *OpenApiBooleanPropertyRequest) *OpenApiPropertyRequest {
+	return &OpenApiPropertyRequest{Type: "boolean", Boolean: value}
+}
+
+func NewOpenApiPropertyRequestFromOneOf(value *OpenApiOneOfPropertyRequest) *OpenApiPropertyRequest {
+	return &OpenApiPropertyRequest{Type: "oneOf", OneOf: value}
+}
+
+func NewOpenApiPropertyRequestFromConst(value *OpenApiConstPropertyRequest) *OpenApiPropertyRequest {
+	return &OpenApiPropertyRequest{Type: "const", Const: value}
+}
+
+func (o *OpenApiPropertyRequest) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	o.Type = unmarshaler.Type
+	switch unmarshaler.Type {
+	case "array":
+		value := new(OpenApiArrayPropertyRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		o.Array = value
+	case "object":
+		value := new(OpenApiObjectPropertyRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		o.Object = value
+	case "integer":
+		value := new(OpenApiIntegerPropertyRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		o.Integer = value
+	case "number":
+		value := new(OpenApiNumberPropertyRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		o.Number = value
+	case "string":
+		value := new(OpenApiStringPropertyRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		o.String = value
+	case "boolean":
+		value := new(OpenApiBooleanPropertyRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		o.Boolean = value
+	case "oneOf":
+		value := new(OpenApiOneOfPropertyRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		o.OneOf = value
+	case "const":
+		value := new(OpenApiConstPropertyRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		o.Const = value
+	}
+	return nil
+}
+
+func (o OpenApiPropertyRequest) MarshalJSON() ([]byte, error) {
+	switch o.Type {
+	default:
+		return nil, fmt.Errorf("invalid type %s in %T", o.Type, o)
+	case "array":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*OpenApiArrayPropertyRequest
+		}{
+			Type:                        o.Type,
+			OpenApiArrayPropertyRequest: o.Array,
+		}
+		return json.Marshal(marshaler)
+	case "object":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*OpenApiObjectPropertyRequest
+		}{
+			Type:                         o.Type,
+			OpenApiObjectPropertyRequest: o.Object,
+		}
+		return json.Marshal(marshaler)
+	case "integer":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*OpenApiIntegerPropertyRequest
+		}{
+			Type:                          o.Type,
+			OpenApiIntegerPropertyRequest: o.Integer,
+		}
+		return json.Marshal(marshaler)
+	case "number":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*OpenApiNumberPropertyRequest
+		}{
+			Type:                         o.Type,
+			OpenApiNumberPropertyRequest: o.Number,
+		}
+		return json.Marshal(marshaler)
+	case "string":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*OpenApiStringPropertyRequest
+		}{
+			Type:                         o.Type,
+			OpenApiStringPropertyRequest: o.String,
+		}
+		return json.Marshal(marshaler)
+	case "boolean":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*OpenApiBooleanPropertyRequest
+		}{
+			Type:                          o.Type,
+			OpenApiBooleanPropertyRequest: o.Boolean,
+		}
+		return json.Marshal(marshaler)
+	case "oneOf":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*OpenApiOneOfPropertyRequest
+		}{
+			Type:                        o.Type,
+			OpenApiOneOfPropertyRequest: o.OneOf,
+		}
+		return json.Marshal(marshaler)
+	case "const":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*OpenApiConstPropertyRequest
+		}{
+			Type:                        o.Type,
+			OpenApiConstPropertyRequest: o.Const,
+		}
+		return json.Marshal(marshaler)
+	}
+}
+
+type OpenApiPropertyRequestVisitor interface {
+	VisitArray(*OpenApiArrayPropertyRequest) error
+	VisitObject(*OpenApiObjectPropertyRequest) error
+	VisitInteger(*OpenApiIntegerPropertyRequest) error
+	VisitNumber(*OpenApiNumberPropertyRequest) error
+	VisitString(*OpenApiStringPropertyRequest) error
+	VisitBoolean(*OpenApiBooleanPropertyRequest) error
+	VisitOneOf(*OpenApiOneOfPropertyRequest) error
+	VisitConst(*OpenApiConstPropertyRequest) error
+}
+
+func (o *OpenApiPropertyRequest) Accept(visitor OpenApiPropertyRequestVisitor) error {
+	switch o.Type {
+	default:
+		return fmt.Errorf("invalid type %s in %T", o.Type, o)
+	case "array":
+		return visitor.VisitArray(o.Array)
+	case "object":
+		return visitor.VisitObject(o.Object)
+	case "integer":
+		return visitor.VisitInteger(o.Integer)
+	case "number":
+		return visitor.VisitNumber(o.Number)
+	case "string":
+		return visitor.VisitString(o.String)
+	case "boolean":
+		return visitor.VisitBoolean(o.Boolean)
+	case "oneOf":
+		return visitor.VisitOneOf(o.OneOf)
+	case "const":
+		return visitor.VisitConst(o.Const)
+	}
+}
+
+// An OpenAPI specification of a parameter with type 'string'
+type OpenApiStringProperty struct {
+	MinLength   *int    `json:"min_length,omitempty"`
+	MaxLength   *int    `json:"max_length,omitempty"`
+	Pattern     *string `json:"pattern,omitempty"`
+	Format      *string `json:"format,omitempty"`
+	Default     *string `json:"default,omitempty"`
+	Title       *string `json:"title,omitempty"`
+	Description *string `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenApiStringProperty) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenApiStringProperty
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenApiStringProperty(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenApiStringProperty) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// An OpenAPI specification of a parameter with type 'string'
+type OpenApiStringPropertyRequest struct {
+	MinLength   *int    `json:"min_length,omitempty"`
+	MaxLength   *int    `json:"max_length,omitempty"`
+	Pattern     *string `json:"pattern,omitempty"`
+	Format      *string `json:"format,omitempty"`
+	Default     *string `json:"default,omitempty"`
+	Title       *string `json:"title,omitempty"`
+	Description *string `json:"description,omitempty"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenApiStringPropertyRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenApiStringPropertyRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenApiStringPropertyRequest(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenApiStringPropertyRequest) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
 type PaginatedDocumentIndexReadList struct {
 	Count    *int                 `json:"count,omitempty"`
 	Next     *string              `json:"next,omitempty"`
@@ -10339,442 +10785,6 @@ func (p *PaginatedTestSuiteTestCaseList) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", p)
-}
-
-type ParameterConfig struct {
-	Type    string
-	Array   *ArrayParameterConfig
-	Object  *ObjectParameterConfig
-	Integer *IntegerParameterConfig
-	Number  *NumberParameterConfig
-	String  *StringParameterConfig
-	Boolean *BooleanParameterConfig
-	OneOf   *OneOfParameterConfig
-	Const   *ConstParameterConfig
-}
-
-func NewParameterConfigFromArray(value *ArrayParameterConfig) *ParameterConfig {
-	return &ParameterConfig{Type: "array", Array: value}
-}
-
-func NewParameterConfigFromObject(value *ObjectParameterConfig) *ParameterConfig {
-	return &ParameterConfig{Type: "object", Object: value}
-}
-
-func NewParameterConfigFromInteger(value *IntegerParameterConfig) *ParameterConfig {
-	return &ParameterConfig{Type: "integer", Integer: value}
-}
-
-func NewParameterConfigFromNumber(value *NumberParameterConfig) *ParameterConfig {
-	return &ParameterConfig{Type: "number", Number: value}
-}
-
-func NewParameterConfigFromString(value *StringParameterConfig) *ParameterConfig {
-	return &ParameterConfig{Type: "string", String: value}
-}
-
-func NewParameterConfigFromBoolean(value *BooleanParameterConfig) *ParameterConfig {
-	return &ParameterConfig{Type: "boolean", Boolean: value}
-}
-
-func NewParameterConfigFromOneOf(value *OneOfParameterConfig) *ParameterConfig {
-	return &ParameterConfig{Type: "oneOf", OneOf: value}
-}
-
-func NewParameterConfigFromConst(value *ConstParameterConfig) *ParameterConfig {
-	return &ParameterConfig{Type: "const", Const: value}
-}
-
-func (p *ParameterConfig) UnmarshalJSON(data []byte) error {
-	var unmarshaler struct {
-		Type string `json:"type"`
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	p.Type = unmarshaler.Type
-	switch unmarshaler.Type {
-	case "array":
-		value := new(ArrayParameterConfig)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		p.Array = value
-	case "object":
-		value := new(ObjectParameterConfig)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		p.Object = value
-	case "integer":
-		value := new(IntegerParameterConfig)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		p.Integer = value
-	case "number":
-		value := new(NumberParameterConfig)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		p.Number = value
-	case "string":
-		value := new(StringParameterConfig)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		p.String = value
-	case "boolean":
-		value := new(BooleanParameterConfig)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		p.Boolean = value
-	case "oneOf":
-		value := new(OneOfParameterConfig)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		p.OneOf = value
-	case "const":
-		value := new(ConstParameterConfig)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		p.Const = value
-	}
-	return nil
-}
-
-func (p ParameterConfig) MarshalJSON() ([]byte, error) {
-	switch p.Type {
-	default:
-		return nil, fmt.Errorf("invalid type %s in %T", p.Type, p)
-	case "array":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ArrayParameterConfig
-		}{
-			Type:                 p.Type,
-			ArrayParameterConfig: p.Array,
-		}
-		return json.Marshal(marshaler)
-	case "object":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ObjectParameterConfig
-		}{
-			Type:                  p.Type,
-			ObjectParameterConfig: p.Object,
-		}
-		return json.Marshal(marshaler)
-	case "integer":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*IntegerParameterConfig
-		}{
-			Type:                   p.Type,
-			IntegerParameterConfig: p.Integer,
-		}
-		return json.Marshal(marshaler)
-	case "number":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NumberParameterConfig
-		}{
-			Type:                  p.Type,
-			NumberParameterConfig: p.Number,
-		}
-		return json.Marshal(marshaler)
-	case "string":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*StringParameterConfig
-		}{
-			Type:                  p.Type,
-			StringParameterConfig: p.String,
-		}
-		return json.Marshal(marshaler)
-	case "boolean":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*BooleanParameterConfig
-		}{
-			Type:                   p.Type,
-			BooleanParameterConfig: p.Boolean,
-		}
-		return json.Marshal(marshaler)
-	case "oneOf":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*OneOfParameterConfig
-		}{
-			Type:                 p.Type,
-			OneOfParameterConfig: p.OneOf,
-		}
-		return json.Marshal(marshaler)
-	case "const":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ConstParameterConfig
-		}{
-			Type:                 p.Type,
-			ConstParameterConfig: p.Const,
-		}
-		return json.Marshal(marshaler)
-	}
-}
-
-type ParameterConfigVisitor interface {
-	VisitArray(*ArrayParameterConfig) error
-	VisitObject(*ObjectParameterConfig) error
-	VisitInteger(*IntegerParameterConfig) error
-	VisitNumber(*NumberParameterConfig) error
-	VisitString(*StringParameterConfig) error
-	VisitBoolean(*BooleanParameterConfig) error
-	VisitOneOf(*OneOfParameterConfig) error
-	VisitConst(*ConstParameterConfig) error
-}
-
-func (p *ParameterConfig) Accept(visitor ParameterConfigVisitor) error {
-	switch p.Type {
-	default:
-		return fmt.Errorf("invalid type %s in %T", p.Type, p)
-	case "array":
-		return visitor.VisitArray(p.Array)
-	case "object":
-		return visitor.VisitObject(p.Object)
-	case "integer":
-		return visitor.VisitInteger(p.Integer)
-	case "number":
-		return visitor.VisitNumber(p.Number)
-	case "string":
-		return visitor.VisitString(p.String)
-	case "boolean":
-		return visitor.VisitBoolean(p.Boolean)
-	case "oneOf":
-		return visitor.VisitOneOf(p.OneOf)
-	case "const":
-		return visitor.VisitConst(p.Const)
-	}
-}
-
-type ParameterConfigRequest struct {
-	Type    string
-	Array   *ArrayParameterConfigRequest
-	Object  *ObjectParameterConfigRequest
-	Integer *IntegerParameterConfigRequest
-	Number  *NumberParameterConfigRequest
-	String  *StringParameterConfigRequest
-	Boolean *BooleanParameterConfigRequest
-	OneOf   *OneOfParameterConfigRequest
-	Const   *ConstParameterConfigRequest
-}
-
-func NewParameterConfigRequestFromArray(value *ArrayParameterConfigRequest) *ParameterConfigRequest {
-	return &ParameterConfigRequest{Type: "array", Array: value}
-}
-
-func NewParameterConfigRequestFromObject(value *ObjectParameterConfigRequest) *ParameterConfigRequest {
-	return &ParameterConfigRequest{Type: "object", Object: value}
-}
-
-func NewParameterConfigRequestFromInteger(value *IntegerParameterConfigRequest) *ParameterConfigRequest {
-	return &ParameterConfigRequest{Type: "integer", Integer: value}
-}
-
-func NewParameterConfigRequestFromNumber(value *NumberParameterConfigRequest) *ParameterConfigRequest {
-	return &ParameterConfigRequest{Type: "number", Number: value}
-}
-
-func NewParameterConfigRequestFromString(value *StringParameterConfigRequest) *ParameterConfigRequest {
-	return &ParameterConfigRequest{Type: "string", String: value}
-}
-
-func NewParameterConfigRequestFromBoolean(value *BooleanParameterConfigRequest) *ParameterConfigRequest {
-	return &ParameterConfigRequest{Type: "boolean", Boolean: value}
-}
-
-func NewParameterConfigRequestFromOneOf(value *OneOfParameterConfigRequest) *ParameterConfigRequest {
-	return &ParameterConfigRequest{Type: "oneOf", OneOf: value}
-}
-
-func NewParameterConfigRequestFromConst(value *ConstParameterConfigRequest) *ParameterConfigRequest {
-	return &ParameterConfigRequest{Type: "const", Const: value}
-}
-
-func (p *ParameterConfigRequest) UnmarshalJSON(data []byte) error {
-	var unmarshaler struct {
-		Type string `json:"type"`
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	p.Type = unmarshaler.Type
-	switch unmarshaler.Type {
-	case "array":
-		value := new(ArrayParameterConfigRequest)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		p.Array = value
-	case "object":
-		value := new(ObjectParameterConfigRequest)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		p.Object = value
-	case "integer":
-		value := new(IntegerParameterConfigRequest)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		p.Integer = value
-	case "number":
-		value := new(NumberParameterConfigRequest)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		p.Number = value
-	case "string":
-		value := new(StringParameterConfigRequest)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		p.String = value
-	case "boolean":
-		value := new(BooleanParameterConfigRequest)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		p.Boolean = value
-	case "oneOf":
-		value := new(OneOfParameterConfigRequest)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		p.OneOf = value
-	case "const":
-		value := new(ConstParameterConfigRequest)
-		if err := json.Unmarshal(data, &value); err != nil {
-			return err
-		}
-		p.Const = value
-	}
-	return nil
-}
-
-func (p ParameterConfigRequest) MarshalJSON() ([]byte, error) {
-	switch p.Type {
-	default:
-		return nil, fmt.Errorf("invalid type %s in %T", p.Type, p)
-	case "array":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ArrayParameterConfigRequest
-		}{
-			Type:                        p.Type,
-			ArrayParameterConfigRequest: p.Array,
-		}
-		return json.Marshal(marshaler)
-	case "object":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ObjectParameterConfigRequest
-		}{
-			Type:                         p.Type,
-			ObjectParameterConfigRequest: p.Object,
-		}
-		return json.Marshal(marshaler)
-	case "integer":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*IntegerParameterConfigRequest
-		}{
-			Type:                          p.Type,
-			IntegerParameterConfigRequest: p.Integer,
-		}
-		return json.Marshal(marshaler)
-	case "number":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NumberParameterConfigRequest
-		}{
-			Type:                         p.Type,
-			NumberParameterConfigRequest: p.Number,
-		}
-		return json.Marshal(marshaler)
-	case "string":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*StringParameterConfigRequest
-		}{
-			Type:                         p.Type,
-			StringParameterConfigRequest: p.String,
-		}
-		return json.Marshal(marshaler)
-	case "boolean":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*BooleanParameterConfigRequest
-		}{
-			Type:                          p.Type,
-			BooleanParameterConfigRequest: p.Boolean,
-		}
-		return json.Marshal(marshaler)
-	case "oneOf":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*OneOfParameterConfigRequest
-		}{
-			Type:                        p.Type,
-			OneOfParameterConfigRequest: p.OneOf,
-		}
-		return json.Marshal(marshaler)
-	case "const":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ConstParameterConfigRequest
-		}{
-			Type:                        p.Type,
-			ConstParameterConfigRequest: p.Const,
-		}
-		return json.Marshal(marshaler)
-	}
-}
-
-type ParameterConfigRequestVisitor interface {
-	VisitArray(*ArrayParameterConfigRequest) error
-	VisitObject(*ObjectParameterConfigRequest) error
-	VisitInteger(*IntegerParameterConfigRequest) error
-	VisitNumber(*NumberParameterConfigRequest) error
-	VisitString(*StringParameterConfigRequest) error
-	VisitBoolean(*BooleanParameterConfigRequest) error
-	VisitOneOf(*OneOfParameterConfigRequest) error
-	VisitConst(*ConstParameterConfigRequest) error
-}
-
-func (p *ParameterConfigRequest) Accept(visitor ParameterConfigRequestVisitor) error {
-	switch p.Type {
-	default:
-		return fmt.Errorf("invalid type %s in %T", p.Type, p)
-	case "array":
-		return visitor.VisitArray(p.Array)
-	case "object":
-		return visitor.VisitObject(p.Object)
-	case "integer":
-		return visitor.VisitInteger(p.Integer)
-	case "number":
-		return visitor.VisitNumber(p.Number)
-	case "string":
-		return visitor.VisitString(p.String)
-	case "boolean":
-		return visitor.VisitBoolean(p.Boolean)
-	case "oneOf":
-		return visitor.VisitOneOf(p.OneOf)
-	case "const":
-		return visitor.VisitConst(p.Const)
-	}
 }
 
 // The source of a search result from a PDF document.
@@ -12859,78 +12869,6 @@ func (s *StringInputRequest) UnmarshalJSON(data []byte) error {
 }
 
 func (s *StringInputRequest) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(s); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", s)
-}
-
-// An OpenAPI specification of a parameter with type 'string'
-type StringParameterConfig struct {
-	MinLength   *int    `json:"min_length,omitempty"`
-	MaxLength   *int    `json:"max_length,omitempty"`
-	Pattern     *string `json:"pattern,omitempty"`
-	Format      *string `json:"format,omitempty"`
-	Default     *string `json:"default,omitempty"`
-	Title       *string `json:"title,omitempty"`
-	Description *string `json:"description,omitempty"`
-
-	_rawJSON json.RawMessage
-}
-
-func (s *StringParameterConfig) UnmarshalJSON(data []byte) error {
-	type unmarshaler StringParameterConfig
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*s = StringParameterConfig(value)
-	s._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (s *StringParameterConfig) String() string {
-	if len(s._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(s); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", s)
-}
-
-// An OpenAPI specification of a parameter with type 'string'
-type StringParameterConfigRequest struct {
-	MinLength   *int    `json:"min_length,omitempty"`
-	MaxLength   *int    `json:"max_length,omitempty"`
-	Pattern     *string `json:"pattern,omitempty"`
-	Format      *string `json:"format,omitempty"`
-	Default     *string `json:"default,omitempty"`
-	Title       *string `json:"title,omitempty"`
-	Description *string `json:"description,omitempty"`
-
-	_rawJSON json.RawMessage
-}
-
-func (s *StringParameterConfigRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler StringParameterConfigRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*s = StringParameterConfigRequest(value)
-	s._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (s *StringParameterConfigRequest) String() string {
 	if len(s._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
 			return value

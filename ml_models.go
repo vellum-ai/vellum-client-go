@@ -69,8 +69,6 @@ type MlModelCreateRequest struct {
 	// * `TII` - TII
 	// * `WIZARDLM` - WIZARDLM
 	DevelopedBy *MlModelDeveloper `json:"developed_by,omitempty"`
-	// Configuration for how the ML Model was built.
-	BuildConfig *MlModelBuildConfigRequest `json:"build_config,omitempty"`
 	// Configuration for how to execute the ML Model.
 	ExecConfig *MlModelExecConfigRequest `json:"exec_config,omitempty"`
 	// Configuration for the ML Model's parameters.
