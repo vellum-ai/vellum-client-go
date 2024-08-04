@@ -92,7 +92,7 @@ func (c *Client) Create(ctx context.Context, request *vellumclientgo.MlModelCrea
 
 // Retrieve an ML Model by its UUID.
 //
-// A UUID string identifying this ml model.
+// Either the ML Model's ID or its unique name
 func (c *Client) Retrieve(ctx context.Context, id string) (*vellumclientgo.MlModelRead, error) {
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
@@ -117,7 +117,7 @@ func (c *Client) Retrieve(ctx context.Context, id string) (*vellumclientgo.MlMod
 
 // Replace an ML Model with a new representation, keying off of its UUID.
 //
-// A UUID string identifying this ml model.
+// Either the ML Model's ID or its unique name
 func (c *Client) Update(ctx context.Context, id string, request *vellumclientgo.MlModelUpdateRequest) (*vellumclientgo.MlModelRead, error) {
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
@@ -143,7 +143,7 @@ func (c *Client) Update(ctx context.Context, id string, request *vellumclientgo.
 
 // Partially update an ML Model, keying off of its UUID.
 //
-// A UUID string identifying this ml model.
+// Either the ML Model's ID or its unique name
 func (c *Client) PartialUpdate(ctx context.Context, id string, request *vellumclientgo.PatchedMlModelUpdateRequest) (*vellumclientgo.MlModelRead, error) {
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {

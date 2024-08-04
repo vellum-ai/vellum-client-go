@@ -7185,14 +7185,50 @@ func (n *NamedScenarioInputChatHistoryVariableValueRequest) String() string {
 	return fmt.Sprintf("%#v", n)
 }
 
+// Named Prompt Sandbox Scenario input value that is of type JSON
+type NamedScenarioInputJsonVariableValueRequest struct {
+	Value interface{} `json:"value,omitempty"`
+	Name  string      `json:"name"`
+
+	_rawJSON json.RawMessage
+}
+
+func (n *NamedScenarioInputJsonVariableValueRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler NamedScenarioInputJsonVariableValueRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*n = NamedScenarioInputJsonVariableValueRequest(value)
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NamedScenarioInputJsonVariableValueRequest) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
 type NamedScenarioInputRequest struct {
 	Type        string
 	String      *NamedScenarioInputStringVariableValueRequest
+	Json        *NamedScenarioInputJsonVariableValueRequest
 	ChatHistory *NamedScenarioInputChatHistoryVariableValueRequest
 }
 
 func NewNamedScenarioInputRequestFromString(value *NamedScenarioInputStringVariableValueRequest) *NamedScenarioInputRequest {
 	return &NamedScenarioInputRequest{Type: "STRING", String: value}
+}
+
+func NewNamedScenarioInputRequestFromJson(value *NamedScenarioInputJsonVariableValueRequest) *NamedScenarioInputRequest {
+	return &NamedScenarioInputRequest{Type: "JSON", Json: value}
 }
 
 func NewNamedScenarioInputRequestFromChatHistory(value *NamedScenarioInputChatHistoryVariableValueRequest) *NamedScenarioInputRequest {
@@ -7214,6 +7250,12 @@ func (n *NamedScenarioInputRequest) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		n.String = value
+	case "JSON":
+		value := new(NamedScenarioInputJsonVariableValueRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.Json = value
 	case "CHAT_HISTORY":
 		value := new(NamedScenarioInputChatHistoryVariableValueRequest)
 		if err := json.Unmarshal(data, &value); err != nil {
@@ -7237,6 +7279,15 @@ func (n NamedScenarioInputRequest) MarshalJSON() ([]byte, error) {
 			NamedScenarioInputStringVariableValueRequest: n.String,
 		}
 		return json.Marshal(marshaler)
+	case "JSON":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*NamedScenarioInputJsonVariableValueRequest
+		}{
+			Type: n.Type,
+			NamedScenarioInputJsonVariableValueRequest: n.Json,
+		}
+		return json.Marshal(marshaler)
 	case "CHAT_HISTORY":
 		var marshaler = struct {
 			Type string `json:"type"`
@@ -7251,6 +7302,7 @@ func (n NamedScenarioInputRequest) MarshalJSON() ([]byte, error) {
 
 type NamedScenarioInputRequestVisitor interface {
 	VisitString(*NamedScenarioInputStringVariableValueRequest) error
+	VisitJson(*NamedScenarioInputJsonVariableValueRequest) error
 	VisitChatHistory(*NamedScenarioInputChatHistoryVariableValueRequest) error
 }
 
@@ -7260,6 +7312,8 @@ func (n *NamedScenarioInputRequest) Accept(visitor NamedScenarioInputRequestVisi
 		return fmt.Errorf("invalid type %s in %T", n.Type, n)
 	case "STRING":
 		return visitor.VisitString(n.String)
+	case "JSON":
+		return visitor.VisitJson(n.Json)
 	case "CHAT_HISTORY":
 		return visitor.VisitChatHistory(n.ChatHistory)
 	}
@@ -11726,11 +11780,16 @@ func (s *SandboxScenario) String() string {
 type ScenarioInput struct {
 	Type        string
 	String      *ScenarioInputStringVariableValue
+	Json        *ScenarioInputJsonVariableValue
 	ChatHistory *ScenarioInputChatHistoryVariableValue
 }
 
 func NewScenarioInputFromString(value *ScenarioInputStringVariableValue) *ScenarioInput {
 	return &ScenarioInput{Type: "STRING", String: value}
+}
+
+func NewScenarioInputFromJson(value *ScenarioInputJsonVariableValue) *ScenarioInput {
+	return &ScenarioInput{Type: "JSON", Json: value}
 }
 
 func NewScenarioInputFromChatHistory(value *ScenarioInputChatHistoryVariableValue) *ScenarioInput {
@@ -11752,6 +11811,12 @@ func (s *ScenarioInput) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		s.String = value
+	case "JSON":
+		value := new(ScenarioInputJsonVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		s.Json = value
 	case "CHAT_HISTORY":
 		value := new(ScenarioInputChatHistoryVariableValue)
 		if err := json.Unmarshal(data, &value); err != nil {
@@ -11775,6 +11840,15 @@ func (s ScenarioInput) MarshalJSON() ([]byte, error) {
 			ScenarioInputStringVariableValue: s.String,
 		}
 		return json.Marshal(marshaler)
+	case "JSON":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*ScenarioInputJsonVariableValue
+		}{
+			Type:                           s.Type,
+			ScenarioInputJsonVariableValue: s.Json,
+		}
+		return json.Marshal(marshaler)
 	case "CHAT_HISTORY":
 		var marshaler = struct {
 			Type string `json:"type"`
@@ -11789,6 +11863,7 @@ func (s ScenarioInput) MarshalJSON() ([]byte, error) {
 
 type ScenarioInputVisitor interface {
 	VisitString(*ScenarioInputStringVariableValue) error
+	VisitJson(*ScenarioInputJsonVariableValue) error
 	VisitChatHistory(*ScenarioInputChatHistoryVariableValue) error
 }
 
@@ -11798,6 +11873,8 @@ func (s *ScenarioInput) Accept(visitor ScenarioInputVisitor) error {
 		return fmt.Errorf("invalid type %s in %T", s.Type, s)
 	case "STRING":
 		return visitor.VisitString(s.String)
+	case "JSON":
+		return visitor.VisitJson(s.Json)
 	case "CHAT_HISTORY":
 		return visitor.VisitChatHistory(s.ChatHistory)
 	}
@@ -11823,6 +11900,37 @@ func (s *ScenarioInputChatHistoryVariableValue) UnmarshalJSON(data []byte) error
 }
 
 func (s *ScenarioInputChatHistoryVariableValue) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// Prompt Sandbox Scenario input value that is of type JSON
+type ScenarioInputJsonVariableValue struct {
+	Value           interface{} `json:"value,omitempty"`
+	InputVariableId string      `json:"input_variable_id"`
+
+	_rawJSON json.RawMessage
+}
+
+func (s *ScenarioInputJsonVariableValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler ScenarioInputJsonVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = ScenarioInputJsonVariableValue(value)
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *ScenarioInputJsonVariableValue) String() string {
 	if len(s._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
 			return value
