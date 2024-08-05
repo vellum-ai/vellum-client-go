@@ -47,7 +47,7 @@ type MlModelCreateRequest struct {
 	// * `OPENPIPE` - OPENPIPE
 	// * `PYQ` - PYQ
 	// * `REPLICATE` - REPLICATE
-	HostedBy *HostedByEnum `json:"hosted_by,omitempty"`
+	HostedBy HostedByEnum `json:"hosted_by,omitempty"`
 	// The organization that developed the ML Model.
 	//
 	// * `01_AI` - 01_AI
@@ -68,7 +68,7 @@ type MlModelCreateRequest struct {
 	// * `OPENPIPE` - OPENPIPE
 	// * `TII` - TII
 	// * `WIZARDLM` - WIZARDLM
-	DevelopedBy *MlModelDeveloper `json:"developed_by,omitempty"`
+	DevelopedBy MlModelDeveloper `json:"developed_by,omitempty"`
 	// Configuration for how to execute the ML Model.
 	ExecConfig *MlModelExecConfigRequest `json:"exec_config,omitempty"`
 	// Configuration for the ML Model's parameters.

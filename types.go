@@ -6363,14 +6363,13 @@ func (m *MlModelDisplayTagEnumValueLabel) String() string {
 }
 
 type MlModelExecConfig struct {
-	ModelIdentifier        string                  `json:"model_identifier"`
-	BaseUrl                string                  `json:"base_url"`
-	Metadata               map[string]interface{}  `json:"metadata,omitempty"`
-	Features               []MlModelFeature        `json:"features,omitempty"`
-	ForceSystemCredentials *bool                   `json:"force_system_credentials,omitempty"`
-	TokenizerConfig        *MlModelTokenizerConfig `json:"tokenizer_config,omitempty"`
-	RequestConfig          *MlModelRequestConfig   `json:"request_config,omitempty"`
-	ResponseConfig         *MlModelResponseConfig  `json:"response_config,omitempty"`
+	ModelIdentifier string                  `json:"model_identifier"`
+	BaseUrl         string                  `json:"base_url"`
+	Metadata        map[string]interface{}  `json:"metadata,omitempty"`
+	Features        []MlModelFeature        `json:"features,omitempty"`
+	TokenizerConfig *MlModelTokenizerConfig `json:"tokenizer_config,omitempty"`
+	RequestConfig   *MlModelRequestConfig   `json:"request_config,omitempty"`
+	ResponseConfig  *MlModelResponseConfig  `json:"response_config,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -6399,14 +6398,13 @@ func (m *MlModelExecConfig) String() string {
 }
 
 type MlModelExecConfigRequest struct {
-	ModelIdentifier        string                         `json:"model_identifier"`
-	BaseUrl                string                         `json:"base_url"`
-	Metadata               map[string]interface{}         `json:"metadata,omitempty"`
-	Features               []MlModelFeature               `json:"features,omitempty"`
-	ForceSystemCredentials *bool                          `json:"force_system_credentials,omitempty"`
-	TokenizerConfig        *MlModelTokenizerConfigRequest `json:"tokenizer_config,omitempty"`
-	RequestConfig          *MlModelRequestConfigRequest   `json:"request_config,omitempty"`
-	ResponseConfig         *MlModelResponseConfigRequest  `json:"response_config,omitempty"`
+	ModelIdentifier string                         `json:"model_identifier"`
+	BaseUrl         string                         `json:"base_url"`
+	Metadata        map[string]interface{}         `json:"metadata,omitempty"`
+	Features        []MlModelFeature               `json:"features,omitempty"`
+	TokenizerConfig *MlModelTokenizerConfigRequest `json:"tokenizer_config,omitempty"`
+	RequestConfig   *MlModelRequestConfigRequest   `json:"request_config,omitempty"`
+	ResponseConfig  *MlModelResponseConfigRequest  `json:"response_config,omitempty"`
 
 	_rawJSON json.RawMessage
 }
