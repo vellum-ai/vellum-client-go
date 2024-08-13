@@ -94,6 +94,10 @@ type MlModelsListRequest struct {
 }
 
 type PatchedMlModelUpdateRequest struct {
+	// Configuration for how to execute the ML Model.
+	ExecConfig *MlModelExecConfigRequest `json:"exec_config,omitempty"`
+	// Configuration for the ML Model's parameters.
+	ParameterConfig *MlModelParameterConfigRequest `json:"parameter_config,omitempty"`
 	// Configuration for how to display the ML Model.
 	DisplayConfig *MlModelDisplayConfigRequest `json:"display_config,omitempty"`
 	// The visibility of the ML Model.
@@ -106,6 +110,10 @@ type PatchedMlModelUpdateRequest struct {
 }
 
 type MlModelUpdateRequest struct {
+	// Configuration for how to execute the ML Model.
+	ExecConfig *MlModelExecConfigRequest `json:"exec_config,omitempty"`
+	// Configuration for the ML Model's parameters.
+	ParameterConfig *MlModelParameterConfigRequest `json:"parameter_config,omitempty"`
 	// Configuration for how to display the ML Model.
 	DisplayConfig *MlModelDisplayConfigRequest `json:"display_config,omitempty"`
 	// The visibility of the ML Model.

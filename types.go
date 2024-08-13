@@ -6226,6 +6226,8 @@ type MlModelDisplayConfigLabelled struct {
 	Label       string                             `json:"label"`
 	Description string                             `json:"description"`
 	Tags        []*MlModelDisplayTagEnumValueLabel `json:"tags,omitempty"`
+	// Can only be set when using an internal service token.
+	DefaultDisplayPriority *float64 `json:"default_display_priority,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -6257,6 +6259,8 @@ type MlModelDisplayConfigRequest struct {
 	Label       string              `json:"label"`
 	Description string              `json:"description"`
 	Tags        []MlModelDisplayTag `json:"tags,omitempty"`
+	// Can only be set when using an internal service token.
+	DefaultDisplayPriority *float64 `json:"default_display_priority,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -6363,13 +6367,15 @@ func (m *MlModelDisplayTagEnumValueLabel) String() string {
 }
 
 type MlModelExecConfig struct {
-	ModelIdentifier string                  `json:"model_identifier"`
-	BaseUrl         string                  `json:"base_url"`
-	Metadata        map[string]interface{}  `json:"metadata,omitempty"`
-	Features        []MlModelFeature        `json:"features,omitempty"`
-	TokenizerConfig *MlModelTokenizerConfig `json:"tokenizer_config,omitempty"`
-	RequestConfig   *MlModelRequestConfig   `json:"request_config,omitempty"`
-	ResponseConfig  *MlModelResponseConfig  `json:"response_config,omitempty"`
+	ModelIdentifier string                 `json:"model_identifier"`
+	BaseUrl         string                 `json:"base_url"`
+	Metadata        map[string]interface{} `json:"metadata,omitempty"`
+	Features        []MlModelFeature       `json:"features,omitempty"`
+	// Can only be set when using an internal service token.
+	ForceSystemCredentials *bool                   `json:"force_system_credentials,omitempty"`
+	TokenizerConfig        *MlModelTokenizerConfig `json:"tokenizer_config,omitempty"`
+	RequestConfig          *MlModelRequestConfig   `json:"request_config,omitempty"`
+	ResponseConfig         *MlModelResponseConfig  `json:"response_config,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -6398,13 +6404,15 @@ func (m *MlModelExecConfig) String() string {
 }
 
 type MlModelExecConfigRequest struct {
-	ModelIdentifier string                         `json:"model_identifier"`
-	BaseUrl         string                         `json:"base_url"`
-	Metadata        map[string]interface{}         `json:"metadata,omitempty"`
-	Features        []MlModelFeature               `json:"features,omitempty"`
-	TokenizerConfig *MlModelTokenizerConfigRequest `json:"tokenizer_config,omitempty"`
-	RequestConfig   *MlModelRequestConfigRequest   `json:"request_config,omitempty"`
-	ResponseConfig  *MlModelResponseConfigRequest  `json:"response_config,omitempty"`
+	ModelIdentifier string                 `json:"model_identifier"`
+	BaseUrl         string                 `json:"base_url"`
+	Metadata        map[string]interface{} `json:"metadata,omitempty"`
+	Features        []MlModelFeature       `json:"features,omitempty"`
+	// Can only be set when using an internal service token.
+	ForceSystemCredentials *bool                          `json:"force_system_credentials,omitempty"`
+	TokenizerConfig        *MlModelTokenizerConfigRequest `json:"tokenizer_config,omitempty"`
+	RequestConfig          *MlModelRequestConfigRequest   `json:"request_config,omitempty"`
+	ResponseConfig         *MlModelResponseConfigRequest  `json:"response_config,omitempty"`
 
 	_rawJSON json.RawMessage
 }
@@ -9611,7 +9619,7 @@ func (o *OpenAiVectorizerTextEmbeddingAda002Request) String() string {
 	return fmt.Sprintf("%#v", o)
 }
 
-// An OpenAPI specification of a parameter with type 'array'
+// An OpenAPI specification of a property with type 'array'
 type OpenApiArrayProperty struct {
 	MinItems    *int               `json:"min_items,omitempty"`
 	MaxItems    *int               `json:"max_items,omitempty"`
@@ -9651,7 +9659,7 @@ func (o *OpenApiArrayProperty) String() string {
 	return fmt.Sprintf("%#v", o)
 }
 
-// An OpenAPI specification of a parameter with type 'array'
+// An OpenAPI specification of a property with type 'array'
 type OpenApiArrayPropertyRequest struct {
 	MinItems    *int                      `json:"min_items,omitempty"`
 	MaxItems    *int                      `json:"max_items,omitempty"`
@@ -9691,7 +9699,7 @@ func (o *OpenApiArrayPropertyRequest) String() string {
 	return fmt.Sprintf("%#v", o)
 }
 
-// An OpenAPI specification of a parameter with type 'boolean'
+// An OpenAPI specification of a property with type 'boolean'
 type OpenApiBooleanProperty struct {
 	Default     *bool   `json:"default,omitempty"`
 	Title       *string `json:"title,omitempty"`
@@ -9723,7 +9731,7 @@ func (o *OpenApiBooleanProperty) String() string {
 	return fmt.Sprintf("%#v", o)
 }
 
-// An OpenAPI specification of a parameter with type 'boolean'
+// An OpenAPI specification of a property with type 'boolean'
 type OpenApiBooleanPropertyRequest struct {
 	Default     *bool   `json:"default,omitempty"`
 	Title       *string `json:"title,omitempty"`
@@ -9755,7 +9763,7 @@ func (o *OpenApiBooleanPropertyRequest) String() string {
 	return fmt.Sprintf("%#v", o)
 }
 
-// An OpenAPI specification of a parameter with type 'const'
+// An OpenAPI specification of a property with type 'const'
 type OpenApiConstProperty struct {
 	Title       *string `json:"title,omitempty"`
 	Description *string `json:"description,omitempty"`
@@ -9787,7 +9795,7 @@ func (o *OpenApiConstProperty) String() string {
 	return fmt.Sprintf("%#v", o)
 }
 
-// An OpenAPI specification of a parameter with type 'const'
+// An OpenAPI specification of a property with type 'const'
 type OpenApiConstPropertyRequest struct {
 	Title       *string `json:"title,omitempty"`
 	Description *string `json:"description,omitempty"`
@@ -9819,7 +9827,7 @@ func (o *OpenApiConstPropertyRequest) String() string {
 	return fmt.Sprintf("%#v", o)
 }
 
-// An OpenAPI specification of a parameter with type 'integer'
+// An OpenAPI specification of a property with type 'integer'
 type OpenApiIntegerProperty struct {
 	Minimum          *int    `json:"minimum,omitempty"`
 	Maximum          *int    `json:"maximum,omitempty"`
@@ -9855,7 +9863,7 @@ func (o *OpenApiIntegerProperty) String() string {
 	return fmt.Sprintf("%#v", o)
 }
 
-// An OpenAPI specification of a parameter with type 'integer'
+// An OpenAPI specification of a property with type 'integer'
 type OpenApiIntegerPropertyRequest struct {
 	Minimum          *int    `json:"minimum,omitempty"`
 	Maximum          *int    `json:"maximum,omitempty"`
@@ -9891,7 +9899,7 @@ func (o *OpenApiIntegerPropertyRequest) String() string {
 	return fmt.Sprintf("%#v", o)
 }
 
-// An OpenAPI specification of a parameter with type 'number'
+// An OpenAPI specification of a property with type 'number'
 type OpenApiNumberProperty struct {
 	Minimum          *float64 `json:"minimum,omitempty"`
 	Maximum          *float64 `json:"maximum,omitempty"`
@@ -9928,7 +9936,7 @@ func (o *OpenApiNumberProperty) String() string {
 	return fmt.Sprintf("%#v", o)
 }
 
-// An OpenAPI specification of a parameter with type 'number'
+// An OpenAPI specification of a property with type 'number'
 type OpenApiNumberPropertyRequest struct {
 	Minimum          *float64 `json:"minimum,omitempty"`
 	Maximum          *float64 `json:"maximum,omitempty"`
@@ -9965,7 +9973,7 @@ func (o *OpenApiNumberPropertyRequest) String() string {
 	return fmt.Sprintf("%#v", o)
 }
 
-// An OpenAPI specification of a parameter with type 'object'
+// An OpenAPI specification of a property with type 'object'
 type OpenApiObjectProperty struct {
 	Properties           map[string]*OpenApiProperty `json:"properties,omitempty"`
 	Required             []string                    `json:"required,omitempty"`
@@ -10004,7 +10012,7 @@ func (o *OpenApiObjectProperty) String() string {
 	return fmt.Sprintf("%#v", o)
 }
 
-// An OpenAPI specification of a parameter with type 'object'
+// An OpenAPI specification of a property with type 'object'
 type OpenApiObjectPropertyRequest struct {
 	Properties           map[string]*OpenApiPropertyRequest `json:"properties,omitempty"`
 	Required             []string                           `json:"required,omitempty"`
@@ -10043,7 +10051,7 @@ func (o *OpenApiObjectPropertyRequest) String() string {
 	return fmt.Sprintf("%#v", o)
 }
 
-// An OpenAPI specification of a parameter with type 'oneOf'
+// An OpenAPI specification of a property with type 'oneOf'
 type OpenApiOneOfProperty struct {
 	OneOf       []*OpenApiProperty `json:"oneOf,omitempty"`
 	Title       *string            `json:"title,omitempty"`
@@ -10075,7 +10083,7 @@ func (o *OpenApiOneOfProperty) String() string {
 	return fmt.Sprintf("%#v", o)
 }
 
-// An OpenAPI specification of a parameter with type 'oneOf'
+// An OpenAPI specification of a property with type 'oneOf'
 type OpenApiOneOfPropertyRequest struct {
 	OneOf       []*OpenApiPropertyRequest `json:"oneOf,omitempty"`
 	Title       *string                   `json:"title,omitempty"`
@@ -10117,6 +10125,7 @@ type OpenApiProperty struct {
 	Boolean *OpenApiBooleanProperty
 	OneOf   *OpenApiOneOfProperty
 	Const   *OpenApiConstProperty
+	Ref     *OpenApiRefProperty
 }
 
 func NewOpenApiPropertyFromArray(value *OpenApiArrayProperty) *OpenApiProperty {
@@ -10149,6 +10158,10 @@ func NewOpenApiPropertyFromOneOf(value *OpenApiOneOfProperty) *OpenApiProperty {
 
 func NewOpenApiPropertyFromConst(value *OpenApiConstProperty) *OpenApiProperty {
 	return &OpenApiProperty{Type: "const", Const: value}
+}
+
+func NewOpenApiPropertyFromRef(value *OpenApiRefProperty) *OpenApiProperty {
+	return &OpenApiProperty{Type: "ref", Ref: value}
 }
 
 func (o *OpenApiProperty) UnmarshalJSON(data []byte) error {
@@ -10208,6 +10221,12 @@ func (o *OpenApiProperty) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		o.Const = value
+	case "ref":
+		value := new(OpenApiRefProperty)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		o.Ref = value
 	}
 	return nil
 }
@@ -10288,6 +10307,15 @@ func (o OpenApiProperty) MarshalJSON() ([]byte, error) {
 			OpenApiConstProperty: o.Const,
 		}
 		return json.Marshal(marshaler)
+	case "ref":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*OpenApiRefProperty
+		}{
+			Type:               o.Type,
+			OpenApiRefProperty: o.Ref,
+		}
+		return json.Marshal(marshaler)
 	}
 }
 
@@ -10300,6 +10328,7 @@ type OpenApiPropertyVisitor interface {
 	VisitBoolean(*OpenApiBooleanProperty) error
 	VisitOneOf(*OpenApiOneOfProperty) error
 	VisitConst(*OpenApiConstProperty) error
+	VisitRef(*OpenApiRefProperty) error
 }
 
 func (o *OpenApiProperty) Accept(visitor OpenApiPropertyVisitor) error {
@@ -10322,6 +10351,8 @@ func (o *OpenApiProperty) Accept(visitor OpenApiPropertyVisitor) error {
 		return visitor.VisitOneOf(o.OneOf)
 	case "const":
 		return visitor.VisitConst(o.Const)
+	case "ref":
+		return visitor.VisitRef(o.Ref)
 	}
 }
 
@@ -10335,6 +10366,7 @@ type OpenApiPropertyRequest struct {
 	Boolean *OpenApiBooleanPropertyRequest
 	OneOf   *OpenApiOneOfPropertyRequest
 	Const   *OpenApiConstPropertyRequest
+	Ref     *OpenApiRefPropertyRequest
 }
 
 func NewOpenApiPropertyRequestFromArray(value *OpenApiArrayPropertyRequest) *OpenApiPropertyRequest {
@@ -10367,6 +10399,10 @@ func NewOpenApiPropertyRequestFromOneOf(value *OpenApiOneOfPropertyRequest) *Ope
 
 func NewOpenApiPropertyRequestFromConst(value *OpenApiConstPropertyRequest) *OpenApiPropertyRequest {
 	return &OpenApiPropertyRequest{Type: "const", Const: value}
+}
+
+func NewOpenApiPropertyRequestFromRef(value *OpenApiRefPropertyRequest) *OpenApiPropertyRequest {
+	return &OpenApiPropertyRequest{Type: "ref", Ref: value}
 }
 
 func (o *OpenApiPropertyRequest) UnmarshalJSON(data []byte) error {
@@ -10426,6 +10462,12 @@ func (o *OpenApiPropertyRequest) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		o.Const = value
+	case "ref":
+		value := new(OpenApiRefPropertyRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		o.Ref = value
 	}
 	return nil
 }
@@ -10506,6 +10548,15 @@ func (o OpenApiPropertyRequest) MarshalJSON() ([]byte, error) {
 			OpenApiConstPropertyRequest: o.Const,
 		}
 		return json.Marshal(marshaler)
+	case "ref":
+		var marshaler = struct {
+			Type string `json:"type"`
+			*OpenApiRefPropertyRequest
+		}{
+			Type:                      o.Type,
+			OpenApiRefPropertyRequest: o.Ref,
+		}
+		return json.Marshal(marshaler)
 	}
 }
 
@@ -10518,6 +10569,7 @@ type OpenApiPropertyRequestVisitor interface {
 	VisitBoolean(*OpenApiBooleanPropertyRequest) error
 	VisitOneOf(*OpenApiOneOfPropertyRequest) error
 	VisitConst(*OpenApiConstPropertyRequest) error
+	VisitRef(*OpenApiRefPropertyRequest) error
 }
 
 func (o *OpenApiPropertyRequest) Accept(visitor OpenApiPropertyRequestVisitor) error {
@@ -10540,10 +10592,76 @@ func (o *OpenApiPropertyRequest) Accept(visitor OpenApiPropertyRequestVisitor) e
 		return visitor.VisitOneOf(o.OneOf)
 	case "const":
 		return visitor.VisitConst(o.Const)
+	case "ref":
+		return visitor.VisitRef(o.Ref)
 	}
 }
 
-// An OpenAPI specification of a parameter with type 'string'
+// An OpenAPI specification of a property that is a URI-reference to another schema
+type OpenApiRefProperty struct {
+	Title       *string `json:"title,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Ref         string  `json:"ref"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenApiRefProperty) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenApiRefProperty
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenApiRefProperty(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenApiRefProperty) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// An OpenAPI specification of a property that is a URI-reference to another schema
+type OpenApiRefPropertyRequest struct {
+	Title       *string `json:"title,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Ref         string  `json:"ref"`
+
+	_rawJSON json.RawMessage
+}
+
+func (o *OpenApiRefPropertyRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenApiRefPropertyRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenApiRefPropertyRequest(value)
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenApiRefPropertyRequest) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// An OpenAPI specification of a property with type 'string'
 type OpenApiStringProperty struct {
 	MinLength   *int    `json:"min_length,omitempty"`
 	MaxLength   *int    `json:"max_length,omitempty"`
@@ -10579,7 +10697,7 @@ func (o *OpenApiStringProperty) String() string {
 	return fmt.Sprintf("%#v", o)
 }
 
-// An OpenAPI specification of a parameter with type 'string'
+// An OpenAPI specification of a property with type 'string'
 type OpenApiStringPropertyRequest struct {
 	MinLength   *int    `json:"min_length,omitempty"`
 	MaxLength   *int    `json:"max_length,omitempty"`
