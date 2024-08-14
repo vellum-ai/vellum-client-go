@@ -4,7 +4,7 @@ package api
 
 type ListTestSuiteTestCasesRequest struct {
 	// Number of results to return per page.
-	Limit *int `json:"-"`
+	Limit *int `json:"-" url:"limit,omitempty"`
 	// The initial index from which to return the results.
-	Offset *int `json:"-"`
+	Offset *int `json:"-" url:"offset,omitempty"`
 }

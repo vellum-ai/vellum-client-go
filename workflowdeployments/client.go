@@ -4,11 +4,10 @@ package workflowdeployments
 
 import (
 	context "context"
-	fmt "fmt"
 	vellumclientgo "github.com/vellum-ai/vellum-client-go"
 	core "github.com/vellum-ai/vellum-client-go/core"
+	option "github.com/vellum-ai/vellum-client-go/option"
 	http "net/http"
-	url "net/url"
 )
 
 type Client struct {
@@ -17,51 +16,57 @@ type Client struct {
 	header  http.Header
 }
 
-func NewClient(opts ...core.ClientOption) *Client {
-	options := core.NewClientOptions()
-	for _, opt := range opts {
-		opt(options)
-	}
+func NewClient(opts ...option.RequestOption) *Client {
+	options := core.NewRequestOptions(opts...)
 	return &Client{
 		baseURL: options.BaseURL,
-		caller:  core.NewCaller(options.HTTPClient),
-		header:  options.ToHeader(),
+		caller: core.NewCaller(
+			&core.CallerParams{
+				Client:      options.HTTPClient,
+				MaxAttempts: options.MaxAttempts,
+			},
+		),
+		header: options.ToHeader(),
 	}
 }
 
 // Used to list all Workflow Deployments.
-func (c *Client) List(ctx context.Context, request *vellumclientgo.WorkflowDeploymentsListRequest) (*vellumclientgo.PaginatedSlimWorkflowDeploymentList, error) {
+func (c *Client) List(
+	ctx context.Context,
+	request *vellumclientgo.WorkflowDeploymentsListRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.PaginatedSlimWorkflowDeploymentList, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := baseURL + "/" + "v1/workflow-deployments"
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := baseURL + "/v1/workflow-deployments"
 
-	queryParams := make(url.Values)
-	if request.Limit != nil {
-		queryParams.Add("limit", fmt.Sprintf("%v", *request.Limit))
-	}
-	if request.Offset != nil {
-		queryParams.Add("offset", fmt.Sprintf("%v", *request.Offset))
-	}
-	if request.Ordering != nil {
-		queryParams.Add("ordering", fmt.Sprintf("%v", *request.Ordering))
-	}
-	if request.Status != nil {
-		queryParams.Add("status", fmt.Sprintf("%v", request.Status))
+	queryParams, err := core.QueryValues(request)
+	if err != nil {
+		return nil, err
 	}
 	if len(queryParams) > 0 {
 		endpointURL += "?" + queryParams.Encode()
 	}
 
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
 	var response *vellumclientgo.PaginatedSlimWorkflowDeploymentList
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
-			URL:      endpointURL,
-			Method:   http.MethodGet,
-			Headers:  c.header,
-			Response: &response,
+			URL:         endpointURL,
+			Method:      http.MethodGet,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
+			Response:    &response,
 		},
 	); err != nil {
 		return nil, err
@@ -70,23 +75,35 @@ func (c *Client) List(ctx context.Context, request *vellumclientgo.WorkflowDeplo
 }
 
 // Used to retrieve a workflow deployment given its ID or name.
-//
-// Either the Workflow Deployment's ID or its unique name
-func (c *Client) Retrieve(ctx context.Context, id string) (*vellumclientgo.WorkflowDeploymentRead, error) {
+func (c *Client) Retrieve(
+	ctx context.Context,
+	// Either the Workflow Deployment's ID or its unique name
+	id string,
+	opts ...option.RequestOption,
+) (*vellumclientgo.WorkflowDeploymentRead, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/workflow-deployments/%v", id)
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(baseURL+"/v1/workflow-deployments/%v", id)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *vellumclientgo.WorkflowDeploymentRead
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
-			URL:      endpointURL,
-			Method:   http.MethodGet,
-			Headers:  c.header,
-			Response: &response,
+			URL:         endpointURL,
+			Method:      http.MethodGet,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
+			Response:    &response,
 		},
 	); err != nil {
 		return nil, err
@@ -95,24 +112,41 @@ func (c *Client) Retrieve(ctx context.Context, id string) (*vellumclientgo.Workf
 }
 
 // Retrieve a Workflow Release Tag by tag name, associated with a specified Workflow Deployment.
-//
-// A UUID string identifying this workflow deployment.
-// The name of the Release Tag associated with this Workflow Deployment that you'd like to retrieve.
-func (c *Client) RetrieveWorkflowReleaseTag(ctx context.Context, id string, name string) (*vellumclientgo.WorkflowReleaseTagRead, error) {
+func (c *Client) RetrieveWorkflowReleaseTag(
+	ctx context.Context,
+	// A UUID string identifying this workflow deployment.
+	id string,
+	// The name of the Release Tag associated with this Workflow Deployment that you'd like to retrieve.
+	name string,
+	opts ...option.RequestOption,
+) (*vellumclientgo.WorkflowReleaseTagRead, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/workflow-deployments/%v/release-tags/%v", id, name)
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(
+		baseURL+"/v1/workflow-deployments/%v/release-tags/%v",
+		id,
+		name,
+	)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *vellumclientgo.WorkflowReleaseTagRead
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
-			URL:      endpointURL,
-			Method:   http.MethodGet,
-			Headers:  c.header,
-			Response: &response,
+			URL:         endpointURL,
+			Method:      http.MethodGet,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
+			Response:    &response,
 		},
 	); err != nil {
 		return nil, err
@@ -121,25 +155,43 @@ func (c *Client) RetrieveWorkflowReleaseTag(ctx context.Context, id string, name
 }
 
 // Updates an existing Release Tag associated with the specified Workflow Deployment.
-//
-// A UUID string identifying this workflow deployment.
-// The name of the Release Tag associated with this Workflow Deployment that you'd like to update.
-func (c *Client) UpdateWorkflowReleaseTag(ctx context.Context, id string, name string, request *vellumclientgo.PatchedWorkflowReleaseTagUpdateRequest) (*vellumclientgo.WorkflowReleaseTagRead, error) {
+func (c *Client) UpdateWorkflowReleaseTag(
+	ctx context.Context,
+	// A UUID string identifying this workflow deployment.
+	id string,
+	// The name of the Release Tag associated with this Workflow Deployment that you'd like to update.
+	name string,
+	request *vellumclientgo.PatchedWorkflowReleaseTagUpdateRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.WorkflowReleaseTagRead, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/workflow-deployments/%v/release-tags/%v", id, name)
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(
+		baseURL+"/v1/workflow-deployments/%v/release-tags/%v",
+		id,
+		name,
+	)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *vellumclientgo.WorkflowReleaseTagRead
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
-			URL:      endpointURL,
-			Method:   http.MethodPatch,
-			Headers:  c.header,
-			Request:  request,
-			Response: &response,
+			URL:         endpointURL,
+			Method:      http.MethodPatch,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
+			Request:     request,
+			Response:    &response,
 		},
 	); err != nil {
 		return nil, err

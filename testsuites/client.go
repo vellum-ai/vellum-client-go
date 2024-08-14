@@ -4,11 +4,10 @@ package testsuites
 
 import (
 	context "context"
-	fmt "fmt"
 	vellumclientgo "github.com/vellum-ai/vellum-client-go"
 	core "github.com/vellum-ai/vellum-client-go/core"
+	option "github.com/vellum-ai/vellum-client-go/option"
 	http "net/http"
-	url "net/url"
 )
 
 type Client struct {
@@ -17,47 +16,59 @@ type Client struct {
 	header  http.Header
 }
 
-func NewClient(opts ...core.ClientOption) *Client {
-	options := core.NewClientOptions()
-	for _, opt := range opts {
-		opt(options)
-	}
+func NewClient(opts ...option.RequestOption) *Client {
+	options := core.NewRequestOptions(opts...)
 	return &Client{
 		baseURL: options.BaseURL,
-		caller:  core.NewCaller(options.HTTPClient),
-		header:  options.ToHeader(),
+		caller: core.NewCaller(
+			&core.CallerParams{
+				Client:      options.HTTPClient,
+				MaxAttempts: options.MaxAttempts,
+			},
+		),
+		header: options.ToHeader(),
 	}
 }
 
 // List the Test Cases associated with a Test Suite
-//
-// A UUID string identifying this test suite.
-func (c *Client) ListTestSuiteTestCases(ctx context.Context, id string, request *vellumclientgo.ListTestSuiteTestCasesRequest) (*vellumclientgo.PaginatedTestSuiteTestCaseList, error) {
+func (c *Client) ListTestSuiteTestCases(
+	ctx context.Context,
+	// A UUID string identifying this test suite.
+	id string,
+	request *vellumclientgo.ListTestSuiteTestCasesRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.PaginatedTestSuiteTestCaseList, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/test-suites/%v/test-cases", id)
-
-	queryParams := make(url.Values)
-	if request.Limit != nil {
-		queryParams.Add("limit", fmt.Sprintf("%v", *request.Limit))
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
 	}
-	if request.Offset != nil {
-		queryParams.Add("offset", fmt.Sprintf("%v", *request.Offset))
+	endpointURL := core.EncodeURL(baseURL+"/v1/test-suites/%v/test-cases", id)
+
+	queryParams, err := core.QueryValues(request)
+	if err != nil {
+		return nil, err
 	}
 	if len(queryParams) > 0 {
 		endpointURL += "?" + queryParams.Encode()
 	}
 
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
 	var response *vellumclientgo.PaginatedTestSuiteTestCaseList
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
-			URL:      endpointURL,
-			Method:   http.MethodGet,
-			Headers:  c.header,
-			Response: &response,
+			URL:         endpointURL,
+			Method:      http.MethodGet,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
+			Response:    &response,
 		},
 	); err != nil {
 		return nil, err
@@ -72,24 +83,37 @@ func (c *Client) ListTestSuiteTestCases(ctx context.Context, id string, request 
 //
 // Note that a full replacement of the test case is performed, so any fields not provided will be removed
 // or overwritten with default values.
-//
-// A UUID string identifying this test suite.
-func (c *Client) UpsertTestSuiteTestCase(ctx context.Context, id string, request *vellumclientgo.UpsertTestSuiteTestCaseRequest) (*vellumclientgo.TestSuiteTestCase, error) {
+func (c *Client) UpsertTestSuiteTestCase(
+	ctx context.Context,
+	// A UUID string identifying this test suite.
+	id string,
+	request *vellumclientgo.UpsertTestSuiteTestCaseRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.TestSuiteTestCase, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/test-suites/%v/test-cases", id)
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(baseURL+"/v1/test-suites/%v/test-cases", id)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *vellumclientgo.TestSuiteTestCase
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
-			URL:      endpointURL,
-			Method:   http.MethodPost,
-			Headers:  c.header,
-			Request:  request,
-			Response: &response,
+			URL:         endpointURL,
+			Method:      http.MethodPost,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
+			Request:     request,
+			Response:    &response,
 		},
 	); err != nil {
 		return nil, err
@@ -98,44 +122,74 @@ func (c *Client) UpsertTestSuiteTestCase(ctx context.Context, id string, request
 }
 
 // Created, replace, and delete Test Cases within the specified Test Suite in bulk
-//
-// A UUID string identifying this test suite.
-func (c *Client) TestSuiteTestCasesBulk(ctx context.Context, id string, request []*vellumclientgo.TestSuiteTestCaseBulkOperationRequest) (*core.Stream[[]*vellumclientgo.TestSuiteTestCaseBulkResult], error) {
+func (c *Client) TestSuiteTestCasesBulk(
+	ctx context.Context,
+	// A UUID string identifying this test suite.
+	id string,
+	request []*vellumclientgo.TestSuiteTestCaseBulkOperationRequest,
+	opts ...option.RequestOption,
+) (*core.Stream[[]*vellumclientgo.TestSuiteTestCaseBulkResult], error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/test-suites/%v/test-cases-bulk", id)
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(baseURL+"/v1/test-suites/%v/test-cases-bulk", id)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	streamer := core.NewStreamer[[]*vellumclientgo.TestSuiteTestCaseBulkResult](c.caller)
 	return streamer.Stream(
 		ctx,
 		&core.StreamParams{
-			URL:     endpointURL,
-			Method:  http.MethodPost,
-			Headers: c.header,
-			Request: request,
+			URL:         endpointURL,
+			Method:      http.MethodPost,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
+			Request:     request,
 		},
 	)
 }
 
 // Deletes an existing test case for a test suite, keying off of the test case id.
-//
-// A UUID string identifying this test suite.
-// An id identifying the test case that you'd like to delete
-func (c *Client) DeleteTestSuiteTestCase(ctx context.Context, id string, testCaseId string) error {
+func (c *Client) DeleteTestSuiteTestCase(
+	ctx context.Context,
+	// A UUID string identifying this test suite.
+	id string,
+	// An id identifying the test case that you'd like to delete
+	testCaseId string,
+	opts ...option.RequestOption,
+) error {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/test-suites/%v/test-cases/%v", id, testCaseId)
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(
+		baseURL+"/v1/test-suites/%v/test-cases/%v",
+		id,
+		testCaseId,
+	)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
-			URL:     endpointURL,
-			Method:  http.MethodDelete,
-			Headers: c.header,
+			URL:         endpointURL,
+			Method:      http.MethodDelete,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
 		},
 	); err != nil {
 		return err

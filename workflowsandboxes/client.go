@@ -4,9 +4,9 @@ package workflowsandboxes
 
 import (
 	context "context"
-	fmt "fmt"
 	vellumclientgo "github.com/vellum-ai/vellum-client-go"
 	core "github.com/vellum-ai/vellum-client-go/core"
+	option "github.com/vellum-ai/vellum-client-go/option"
 	http "net/http"
 )
 
@@ -16,36 +16,57 @@ type Client struct {
 	header  http.Header
 }
 
-func NewClient(opts ...core.ClientOption) *Client {
-	options := core.NewClientOptions()
-	for _, opt := range opts {
-		opt(options)
-	}
+func NewClient(opts ...option.RequestOption) *Client {
+	options := core.NewRequestOptions(opts...)
 	return &Client{
 		baseURL: options.BaseURL,
-		caller:  core.NewCaller(options.HTTPClient),
-		header:  options.ToHeader(),
+		caller: core.NewCaller(
+			&core.CallerParams{
+				Client:      options.HTTPClient,
+				MaxAttempts: options.MaxAttempts,
+			},
+		),
+		header: options.ToHeader(),
 	}
 }
 
-// A UUID string identifying this workflow sandbox.
-// An ID identifying the Workflow you'd like to deploy.
-func (c *Client) DeployWorkflow(ctx context.Context, id string, workflowId string, request *vellumclientgo.DeploySandboxWorkflowRequest) (*vellumclientgo.WorkflowDeploymentRead, error) {
+func (c *Client) DeployWorkflow(
+	ctx context.Context,
+	// A UUID string identifying this workflow sandbox.
+	id string,
+	// An ID identifying the Workflow you'd like to deploy.
+	workflowId string,
+	request *vellumclientgo.DeploySandboxWorkflowRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.WorkflowDeploymentRead, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/workflow-sandboxes/%v/workflows/%v/deploy", id, workflowId)
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(
+		baseURL+"/v1/workflow-sandboxes/%v/workflows/%v/deploy",
+		id,
+		workflowId,
+	)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *vellumclientgo.WorkflowDeploymentRead
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
-			URL:      endpointURL,
-			Method:   http.MethodPost,
-			Headers:  c.header,
-			Request:  request,
-			Response: &response,
+			URL:         endpointURL,
+			Method:      http.MethodPost,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
+			Request:     request,
+			Response:    &response,
 		},
 	); err != nil {
 		return nil, err

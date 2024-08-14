@@ -8,55 +8,55 @@ import (
 
 type DocumentIndexCreateRequest struct {
 	// A human-readable label for the document index
-	Label string `json:"label"`
+	Label string `json:"label" url:"-"`
 	// A name that uniquely identifies this index within its workspace
-	Name string `json:"name"`
+	Name string `json:"name" url:"-"`
 	// The current status of the document index
 	//
 	// * `ACTIVE` - Active
 	// * `ARCHIVED` - Archived
-	Status *EntityStatus `json:"status,omitempty"`
+	Status *EntityStatus `json:"status,omitempty" url:"-"`
 	// The environment this document index is used in
 	//
 	// * `DEVELOPMENT` - Development
 	// * `STAGING` - Staging
 	// * `PRODUCTION` - Production
-	Environment    *EnvironmentEnum                    `json:"environment,omitempty"`
-	IndexingConfig *DocumentIndexIndexingConfigRequest `json:"indexing_config,omitempty"`
+	Environment    *EnvironmentEnum                    `json:"environment,omitempty" url:"-"`
+	IndexingConfig *DocumentIndexIndexingConfigRequest `json:"indexing_config,omitempty" url:"-"`
 	// Optionally specify the id of a document index from which you'd like to copy and re-index its documents into this newly created index
-	CopyDocumentsFromIndexId *string `json:"copy_documents_from_index_id,omitempty"`
+	CopyDocumentsFromIndexId *string `json:"copy_documents_from_index_id,omitempty" url:"-"`
 }
 
 type DocumentIndexesListRequest struct {
 	// Number of results to return per page.
-	Limit *int `json:"-"`
+	Limit *int `json:"-" url:"limit,omitempty"`
 	// The initial index from which to return the results.
-	Offset *int `json:"-"`
+	Offset *int `json:"-" url:"offset,omitempty"`
 	// Which field to use when ordering the results.
-	Ordering *string `json:"-"`
+	Ordering *string `json:"-" url:"ordering,omitempty"`
 	// Search for document indices by name or label
-	Search *string `json:"-"`
+	Search *string `json:"-" url:"search,omitempty"`
 	// Filter down to only document indices that have a status matching the status specified
 	//
 	// - `ACTIVE` - Active
 	// - `ARCHIVED` - Archived
-	Status *DocumentIndexesListRequestStatus `json:"-"`
+	Status *DocumentIndexesListRequestStatus `json:"-" url:"status,omitempty"`
 }
 
 type PatchedDocumentIndexUpdateRequest struct {
 	// A human-readable label for the document index
-	Label *string `json:"label,omitempty"`
+	Label *string `json:"label,omitempty" url:"-"`
 	// The current status of the document index
 	//
 	// * `ACTIVE` - Active
 	// * `ARCHIVED` - Archived
-	Status *EntityStatus `json:"status,omitempty"`
+	Status *EntityStatus `json:"status,omitempty" url:"-"`
 	// The environment this document index is used in
 	//
 	// * `DEVELOPMENT` - Development
 	// * `STAGING` - Staging
 	// * `PRODUCTION` - Production
-	Environment *EnvironmentEnum `json:"environment,omitempty"`
+	Environment *EnvironmentEnum `json:"environment,omitempty" url:"-"`
 }
 
 type DocumentIndexesListRequestStatus string
@@ -83,16 +83,16 @@ func (d DocumentIndexesListRequestStatus) Ptr() *DocumentIndexesListRequestStatu
 
 type DocumentIndexUpdateRequest struct {
 	// A human-readable label for the document index
-	Label string `json:"label"`
+	Label string `json:"label" url:"-"`
 	// The current status of the document index
 	//
 	// * `ACTIVE` - Active
 	// * `ARCHIVED` - Archived
-	Status *EntityStatus `json:"status,omitempty"`
+	Status *EntityStatus `json:"status,omitempty" url:"-"`
 	// The environment this document index is used in
 	//
 	// * `DEVELOPMENT` - Development
 	// * `STAGING` - Staging
 	// * `PRODUCTION` - Production
-	Environment *EnvironmentEnum `json:"environment,omitempty"`
+	Environment *EnvironmentEnum `json:"environment,omitempty" url:"-"`
 }

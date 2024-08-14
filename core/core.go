@@ -9,6 +9,8 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
+	"net/url"
+	"reflect"
 )
 
 const (
@@ -20,6 +22,31 @@ const (
 // HTTPClient is an interface for a subset of the *http.Client.
 type HTTPClient interface {
 	Do(*http.Request) (*http.Response, error)
+}
+
+// EncodeURL encodes the given arguments into the URL, escaping
+// values as needed.
+func EncodeURL(urlFormat string, args ...interface{}) string {
+	escapedArgs := make([]interface{}, 0, len(args))
+	for _, arg := range args {
+		escapedArgs = append(escapedArgs, url.PathEscape(fmt.Sprintf("%v", arg)))
+	}
+	return fmt.Sprintf(urlFormat, escapedArgs...)
+}
+
+// MergeHeaders merges the given headers together, where the right
+// takes precedence over the left.
+func MergeHeaders(left, right http.Header) http.Header {
+	for key, values := range right {
+		if len(values) > 1 {
+			left[key] = values
+			continue
+		}
+		if value := right.Get(key); value != "" {
+			left.Set(key, value)
+		}
+	}
+	return left
 }
 
 // WriteMultipartJSON writes the given value as a JSON part.
@@ -78,13 +105,29 @@ type ErrorDecoder func(statusCode int, body io.Reader) error
 
 // Caller calls APIs and deserializes their response, if any.
 type Caller struct {
-	client HTTPClient
+	client  HTTPClient
+	retrier *Retrier
 }
 
-// NewCaller returns a new *Caller backed by the given HTTP client.
-func NewCaller(client HTTPClient) *Caller {
+// CallerParams represents the parameters used to constrcut a new *Caller.
+type CallerParams struct {
+	Client      HTTPClient
+	MaxAttempts uint
+}
+
+// NewCaller returns a new *Caller backed by the given parameters.
+func NewCaller(params *CallerParams) *Caller {
+	var httpClient HTTPClient = http.DefaultClient
+	if params.Client != nil {
+		httpClient = params.Client
+	}
+	var retryOptions []RetryOption
+	if params.MaxAttempts > 0 {
+		retryOptions = append(retryOptions, WithMaxAttempts(params.MaxAttempts))
+	}
 	return &Caller{
-		client: client,
+		client:  httpClient,
+		retrier: NewRetrier(retryOptions...),
 	}
 }
 
@@ -92,7 +135,9 @@ func NewCaller(client HTTPClient) *Caller {
 type CallParams struct {
 	URL                string
 	Method             string
+	MaxAttempts        uint
 	Headers            http.Header
+	Client             HTTPClient
 	Request            interface{}
 	Response           interface{}
 	ResponseIsOptional bool
@@ -111,7 +156,23 @@ func (c *Caller) Call(ctx context.Context, params *CallParams) error {
 		return err
 	}
 
-	resp, err := c.client.Do(req)
+	client := c.client
+	if params.Client != nil {
+		// Use the HTTP client scoped to the request.
+		client = params.Client
+	}
+
+	var retryOptions []RetryOption
+	if params.MaxAttempts > 0 {
+		retryOptions = append(retryOptions, WithMaxAttempts(params.MaxAttempts))
+	}
+
+	resp, err := c.retrier.Run(
+		client.Do,
+		req,
+		params.ErrorDecoder,
+		retryOptions...,
+	)
 	if err != nil {
 		return err
 	}
@@ -180,7 +241,7 @@ func newRequest(
 // newRequestBody returns a new io.Reader that represents the HTTP request body.
 func newRequestBody(request interface{}) (io.Reader, error) {
 	var requestBody io.Reader
-	if request != nil {
+	if !isNil(request) {
 		if body, ok := request.(io.Reader); ok {
 			requestBody = body
 		} else {
@@ -217,4 +278,10 @@ func decodeError(response *http.Response, errorDecoder ErrorDecoder) error {
 		return NewAPIError(response.StatusCode, nil)
 	}
 	return NewAPIError(response.StatusCode, errors.New(string(bytes)))
+}
+
+// isNil is used to determine if the request value is equal to nil (i.e. an interface
+// value that holds a nil concrete value is itself non-nil).
+func isNil(value interface{}) bool {
+	return value == nil || reflect.ValueOf(value).IsNil()
 }

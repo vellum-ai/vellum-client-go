@@ -8,13 +8,13 @@ import (
 
 type WorkflowDeploymentsListRequest struct {
 	// Number of results to return per page.
-	Limit *int `json:"-"`
+	Limit *int `json:"-" url:"limit,omitempty"`
 	// The initial index from which to return the results.
-	Offset *int `json:"-"`
+	Offset *int `json:"-" url:"offset,omitempty"`
 	// Which field to use when ordering the results.
-	Ordering *string `json:"-"`
+	Ordering *string `json:"-" url:"ordering,omitempty"`
 	// status
-	Status *WorkflowDeploymentsListRequestStatus `json:"-"`
+	Status *WorkflowDeploymentsListRequestStatus `json:"-" url:"status,omitempty"`
 }
 
 type WorkflowDeploymentsListRequestStatus string
@@ -41,5 +41,5 @@ func (w WorkflowDeploymentsListRequestStatus) Ptr() *WorkflowDeploymentsListRequ
 
 type PatchedWorkflowReleaseTagUpdateRequest struct {
 	// The ID of the Workflow Deployment History Item to tag
-	HistoryItemId *string `json:"history_item_id,omitempty"`
+	HistoryItemId *string `json:"history_item_id,omitempty" url:"-"`
 }

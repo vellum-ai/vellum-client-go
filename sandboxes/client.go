@@ -4,9 +4,9 @@ package sandboxes
 
 import (
 	context "context"
-	fmt "fmt"
 	vellumclientgo "github.com/vellum-ai/vellum-client-go"
 	core "github.com/vellum-ai/vellum-client-go/core"
+	option "github.com/vellum-ai/vellum-client-go/option"
 	http "net/http"
 )
 
@@ -16,36 +16,57 @@ type Client struct {
 	header  http.Header
 }
 
-func NewClient(opts ...core.ClientOption) *Client {
-	options := core.NewClientOptions()
-	for _, opt := range opts {
-		opt(options)
-	}
+func NewClient(opts ...option.RequestOption) *Client {
+	options := core.NewRequestOptions(opts...)
 	return &Client{
 		baseURL: options.BaseURL,
-		caller:  core.NewCaller(options.HTTPClient),
-		header:  options.ToHeader(),
+		caller: core.NewCaller(
+			&core.CallerParams{
+				Client:      options.HTTPClient,
+				MaxAttempts: options.MaxAttempts,
+			},
+		),
+		header: options.ToHeader(),
 	}
 }
 
-// A UUID string identifying this sandbox.
-// An ID identifying the Prompt you'd like to deploy.
-func (c *Client) DeployPrompt(ctx context.Context, id string, promptVariantId string, request *vellumclientgo.DeploySandboxPromptRequest) (*vellumclientgo.DeploymentRead, error) {
+func (c *Client) DeployPrompt(
+	ctx context.Context,
+	// A UUID string identifying this sandbox.
+	id string,
+	// An ID identifying the Prompt you'd like to deploy.
+	promptVariantId string,
+	request *vellumclientgo.DeploySandboxPromptRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.DeploymentRead, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/sandboxes/%v/prompts/%v/deploy", id, promptVariantId)
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(
+		baseURL+"/v1/sandboxes/%v/prompts/%v/deploy",
+		id,
+		promptVariantId,
+	)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *vellumclientgo.DeploymentRead
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
-			URL:      endpointURL,
-			Method:   http.MethodPost,
-			Headers:  c.header,
-			Request:  request,
-			Response: &response,
+			URL:         endpointURL,
+			Method:      http.MethodPost,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
+			Request:     request,
+			Response:    &response,
 		},
 	); err != nil {
 		return nil, err
@@ -60,24 +81,37 @@ func (c *Client) DeployPrompt(ctx context.Context, id string, promptVariantId st
 //
 // Note that a full replacement of the scenario is performed, so any fields not provided will be removed
 // or overwritten with default values.
-//
-// A UUID string identifying this sandbox.
-func (c *Client) UpsertSandboxScenario(ctx context.Context, id string, request *vellumclientgo.UpsertSandboxScenarioRequestRequest) (*vellumclientgo.SandboxScenario, error) {
+func (c *Client) UpsertSandboxScenario(
+	ctx context.Context,
+	// A UUID string identifying this sandbox.
+	id string,
+	request *vellumclientgo.UpsertSandboxScenarioRequestRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.SandboxScenario, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/sandboxes/%v/scenarios", id)
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(baseURL+"/v1/sandboxes/%v/scenarios", id)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *vellumclientgo.SandboxScenario
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
-			URL:      endpointURL,
-			Method:   http.MethodPost,
-			Headers:  c.header,
-			Request:  request,
-			Response: &response,
+			URL:         endpointURL,
+			Method:      http.MethodPost,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
+			Request:     request,
+			Response:    &response,
 		},
 	); err != nil {
 		return nil, err
@@ -86,22 +120,39 @@ func (c *Client) UpsertSandboxScenario(ctx context.Context, id string, request *
 }
 
 // Deletes an existing scenario from a sandbox, keying off of the provided scenario id.
-//
-// A UUID string identifying this sandbox.
-// An id identifying the scenario that you'd like to delete
-func (c *Client) DeleteSandboxScenario(ctx context.Context, id string, scenarioId string) error {
+func (c *Client) DeleteSandboxScenario(
+	ctx context.Context,
+	// A UUID string identifying this sandbox.
+	id string,
+	// An id identifying the scenario that you'd like to delete
+	scenarioId string,
+	opts ...option.RequestOption,
+) error {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/sandboxes/%v/scenarios/%v", id, scenarioId)
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(
+		baseURL+"/v1/sandboxes/%v/scenarios/%v",
+		id,
+		scenarioId,
+	)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
-			URL:     endpointURL,
-			Method:  http.MethodDelete,
-			Headers: c.header,
+			URL:         endpointURL,
+			Method:      http.MethodDelete,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
 		},
 	); err != nil {
 		return err

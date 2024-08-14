@@ -4,9 +4,9 @@ package api
 
 type TestSuiteRunCreateRequest struct {
 	// The ID of the Test Suite to run
-	TestSuiteId string `json:"test_suite_id"`
+	TestSuiteId string `json:"test_suite_id" url:"-"`
 	// Configuration that defines how the Test Suite should be run
-	ExecConfig *TestSuiteRunExecConfigRequest `json:"exec_config,omitempty"`
+	ExecConfig *TestSuiteRunExecConfigRequest `json:"exec_config,omitempty" url:"-"`
 }
 
 type TestSuiteRunsListExecutionsRequest struct {
@@ -15,9 +15,9 @@ type TestSuiteRunsListExecutionsRequest struct {
 	// - 'results.metric_results.metric_label' expands the metric label for each metric result.
 	// - 'results.metric_results.metric_definition' expands the metric definition for each metric result.
 	// - 'results.metric_results.metric_definition.name' expands the metric definition name for each metric result.
-	Expand []*string `json:"-"`
+	Expand []*string `json:"-" url:"expand,omitempty"`
 	// Number of results to return per page.
-	Limit *int `json:"-"`
+	Limit *int `json:"-" url:"limit,omitempty"`
 	// The initial index from which to return the results.
-	Offset *int `json:"-"`
+	Offset *int `json:"-" url:"offset,omitempty"`
 }

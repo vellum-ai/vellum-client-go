@@ -4,11 +4,10 @@ package mlmodels
 
 import (
 	context "context"
-	fmt "fmt"
 	vellumclientgo "github.com/vellum-ai/vellum-client-go"
 	core "github.com/vellum-ai/vellum-client-go/core"
+	option "github.com/vellum-ai/vellum-client-go/option"
 	http "net/http"
-	url "net/url"
 )
 
 type Client struct {
@@ -17,48 +16,57 @@ type Client struct {
 	header  http.Header
 }
 
-func NewClient(opts ...core.ClientOption) *Client {
-	options := core.NewClientOptions()
-	for _, opt := range opts {
-		opt(options)
-	}
+func NewClient(opts ...option.RequestOption) *Client {
+	options := core.NewRequestOptions(opts...)
 	return &Client{
 		baseURL: options.BaseURL,
-		caller:  core.NewCaller(options.HTTPClient),
-		header:  options.ToHeader(),
+		caller: core.NewCaller(
+			&core.CallerParams{
+				Client:      options.HTTPClient,
+				MaxAttempts: options.MaxAttempts,
+			},
+		),
+		header: options.ToHeader(),
 	}
 }
 
 // List all ML Models that your Workspace has access to.
-func (c *Client) List(ctx context.Context, request *vellumclientgo.MlModelsListRequest) (*vellumclientgo.PaginatedMlModelReadList, error) {
+func (c *Client) List(
+	ctx context.Context,
+	request *vellumclientgo.MlModelsListRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.PaginatedMlModelReadList, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := baseURL + "/" + "v1/ml-models"
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := baseURL + "/v1/ml-models"
 
-	queryParams := make(url.Values)
-	if request.Limit != nil {
-		queryParams.Add("limit", fmt.Sprintf("%v", *request.Limit))
-	}
-	if request.Offset != nil {
-		queryParams.Add("offset", fmt.Sprintf("%v", *request.Offset))
-	}
-	if request.Ordering != nil {
-		queryParams.Add("ordering", fmt.Sprintf("%v", *request.Ordering))
+	queryParams, err := core.QueryValues(request)
+	if err != nil {
+		return nil, err
 	}
 	if len(queryParams) > 0 {
 		endpointURL += "?" + queryParams.Encode()
 	}
 
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
 	var response *vellumclientgo.PaginatedMlModelReadList
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
-			URL:      endpointURL,
-			Method:   http.MethodGet,
-			Headers:  c.header,
-			Response: &response,
+			URL:         endpointURL,
+			Method:      http.MethodGet,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
+			Response:    &response,
 		},
 	); err != nil {
 		return nil, err
@@ -67,22 +75,35 @@ func (c *Client) List(ctx context.Context, request *vellumclientgo.MlModelsListR
 }
 
 // Creates a new ML Model.
-func (c *Client) Create(ctx context.Context, request *vellumclientgo.MlModelCreateRequest) (*vellumclientgo.MlModelRead, error) {
+func (c *Client) Create(
+	ctx context.Context,
+	request *vellumclientgo.MlModelCreateRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.MlModelRead, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := baseURL + "/" + "v1/ml-models"
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := baseURL + "/v1/ml-models"
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *vellumclientgo.MlModelRead
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
-			URL:      endpointURL,
-			Method:   http.MethodPost,
-			Headers:  c.header,
-			Request:  request,
-			Response: &response,
+			URL:         endpointURL,
+			Method:      http.MethodPost,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
+			Request:     request,
+			Response:    &response,
 		},
 	); err != nil {
 		return nil, err
@@ -91,23 +112,35 @@ func (c *Client) Create(ctx context.Context, request *vellumclientgo.MlModelCrea
 }
 
 // Retrieve an ML Model by its UUID.
-//
-// Either the ML Model's ID or its unique name
-func (c *Client) Retrieve(ctx context.Context, id string) (*vellumclientgo.MlModelRead, error) {
+func (c *Client) Retrieve(
+	ctx context.Context,
+	// Either the ML Model's ID or its unique name
+	id string,
+	opts ...option.RequestOption,
+) (*vellumclientgo.MlModelRead, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/ml-models/%v", id)
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(baseURL+"/v1/ml-models/%v", id)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *vellumclientgo.MlModelRead
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
-			URL:      endpointURL,
-			Method:   http.MethodGet,
-			Headers:  c.header,
-			Response: &response,
+			URL:         endpointURL,
+			Method:      http.MethodGet,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
+			Response:    &response,
 		},
 	); err != nil {
 		return nil, err
@@ -116,24 +149,37 @@ func (c *Client) Retrieve(ctx context.Context, id string) (*vellumclientgo.MlMod
 }
 
 // Replace an ML Model with a new representation, keying off of its UUID.
-//
-// Either the ML Model's ID or its unique name
-func (c *Client) Update(ctx context.Context, id string, request *vellumclientgo.MlModelUpdateRequest) (*vellumclientgo.MlModelRead, error) {
+func (c *Client) Update(
+	ctx context.Context,
+	// Either the ML Model's ID or its unique name
+	id string,
+	request *vellumclientgo.MlModelUpdateRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.MlModelRead, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/ml-models/%v", id)
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(baseURL+"/v1/ml-models/%v", id)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *vellumclientgo.MlModelRead
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
-			URL:      endpointURL,
-			Method:   http.MethodPut,
-			Headers:  c.header,
-			Request:  request,
-			Response: &response,
+			URL:         endpointURL,
+			Method:      http.MethodPut,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
+			Request:     request,
+			Response:    &response,
 		},
 	); err != nil {
 		return nil, err
@@ -142,24 +188,37 @@ func (c *Client) Update(ctx context.Context, id string, request *vellumclientgo.
 }
 
 // Partially update an ML Model, keying off of its UUID.
-//
-// Either the ML Model's ID or its unique name
-func (c *Client) PartialUpdate(ctx context.Context, id string, request *vellumclientgo.PatchedMlModelUpdateRequest) (*vellumclientgo.MlModelRead, error) {
+func (c *Client) PartialUpdate(
+	ctx context.Context,
+	// Either the ML Model's ID or its unique name
+	id string,
+	request *vellumclientgo.PatchedMlModelUpdateRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.MlModelRead, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/ml-models/%v", id)
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(baseURL+"/v1/ml-models/%v", id)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *vellumclientgo.MlModelRead
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
-			URL:      endpointURL,
-			Method:   http.MethodPatch,
-			Headers:  c.header,
-			Request:  request,
-			Response: &response,
+			URL:         endpointURL,
+			Method:      http.MethodPatch,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
+			Request:     request,
+			Response:    &response,
 		},
 	); err != nil {
 		return nil, err

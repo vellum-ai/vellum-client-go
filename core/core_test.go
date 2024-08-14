@@ -82,6 +82,18 @@ func TestCall(t *testing.T) {
 			},
 		},
 		{
+			description: "POST empty body",
+			giveMethod:  http.MethodPost,
+			giveHeader: http.Header{
+				"X-API-Status": []string{"fail"},
+			},
+			giveRequest: nil,
+			wantError: NewAPIError(
+				http.StatusBadRequest,
+				errors.New("invalid request"),
+			),
+		},
+		{
 			description: "POST optional response",
 			giveMethod:  http.MethodPost,
 			giveHeader: http.Header{
@@ -113,7 +125,11 @@ func TestCall(t *testing.T) {
 				server = newTestServer(t, test)
 				client = server.Client()
 			)
-			caller := NewCaller(client)
+			caller := NewCaller(
+				&CallerParams{
+					Client: client,
+				},
+			)
 			var response *Response
 			err := caller.Call(
 				context.Background(),
@@ -137,6 +153,68 @@ func TestCall(t *testing.T) {
 	}
 }
 
+func TestMergeHeaders(t *testing.T) {
+	t.Run("both empty", func(t *testing.T) {
+		merged := MergeHeaders(make(http.Header), make(http.Header))
+		assert.Empty(t, merged)
+	})
+
+	t.Run("empty left", func(t *testing.T) {
+		left := make(http.Header)
+
+		right := make(http.Header)
+		right.Set("X-API-Version", "0.0.1")
+
+		merged := MergeHeaders(left, right)
+		assert.Equal(t, "0.0.1", merged.Get("X-API-Version"))
+	})
+
+	t.Run("empty right", func(t *testing.T) {
+		left := make(http.Header)
+		left.Set("X-API-Version", "0.0.1")
+
+		right := make(http.Header)
+
+		merged := MergeHeaders(left, right)
+		assert.Equal(t, "0.0.1", merged.Get("X-API-Version"))
+	})
+
+	t.Run("single value override", func(t *testing.T) {
+		left := make(http.Header)
+		left.Set("X-API-Version", "0.0.0")
+
+		right := make(http.Header)
+		right.Set("X-API-Version", "0.0.1")
+
+		merged := MergeHeaders(left, right)
+		assert.Equal(t, []string{"0.0.1"}, merged.Values("X-API-Version"))
+	})
+
+	t.Run("multiple value override", func(t *testing.T) {
+		left := make(http.Header)
+		left.Set("X-API-Versions", "0.0.0")
+
+		right := make(http.Header)
+		right.Add("X-API-Versions", "0.0.1")
+		right.Add("X-API-Versions", "0.0.2")
+
+		merged := MergeHeaders(left, right)
+		assert.Equal(t, []string{"0.0.1", "0.0.2"}, merged.Values("X-API-Versions"))
+	})
+
+	t.Run("disjoint merge", func(t *testing.T) {
+		left := make(http.Header)
+		left.Set("X-API-Tenancy", "test")
+
+		right := make(http.Header)
+		right.Set("X-API-Version", "0.0.1")
+
+		merged := MergeHeaders(left, right)
+		assert.Equal(t, []string{"test"}, merged.Values("X-API-Tenancy"))
+		assert.Equal(t, []string{"0.0.1"}, merged.Values("X-API-Version"))
+	})
+}
+
 // newTestServer returns a new *httptest.Server configured with the
 // given test parameters.
 func newTestServer(t *testing.T, tc *TestCase) *httptest.Server {
@@ -149,10 +227,17 @@ func newTestServer(t *testing.T, tc *TestCase) *httptest.Server {
 					assert.Equal(t, value, r.Header.Values(header))
 				}
 
-				bytes, err := io.ReadAll(r.Body)
-				require.NoError(t, err)
-
 				request := new(Request)
+
+				bytes, err := io.ReadAll(r.Body)
+				if tc.giveRequest == nil {
+					require.Empty(t, bytes)
+					w.WriteHeader(http.StatusBadRequest)
+					_, err = w.Write([]byte("invalid request"))
+					require.NoError(t, err)
+					return
+				}
+				require.NoError(t, err)
 				require.NoError(t, json.Unmarshal(bytes, request))
 
 				switch request.Id {
@@ -206,8 +291,7 @@ func newTestErrorDecoder(t *testing.T) func(int, io.Reader) error {
 			apiError = NewAPIError(statusCode, errors.New(string(raw)))
 			decoder  = json.NewDecoder(bytes.NewReader(raw))
 		)
-		switch statusCode {
-		case 404:
+		if statusCode == http.StatusNotFound {
 			value := new(NotFoundError)
 			value.APIError = apiError
 			require.NoError(t, decoder.Decode(value))

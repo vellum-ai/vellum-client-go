@@ -10,10 +10,10 @@ import (
 	fmt "fmt"
 	vellumclientgo "github.com/vellum-ai/vellum-client-go"
 	core "github.com/vellum-ai/vellum-client-go/core"
+	option "github.com/vellum-ai/vellum-client-go/option"
 	io "io"
 	multipart "mime/multipart"
 	http "net/http"
-	url "net/url"
 )
 
 type Client struct {
@@ -22,51 +22,57 @@ type Client struct {
 	header  http.Header
 }
 
-func NewClient(opts ...core.ClientOption) *Client {
-	options := core.NewClientOptions()
-	for _, opt := range opts {
-		opt(options)
-	}
+func NewClient(opts ...option.RequestOption) *Client {
+	options := core.NewRequestOptions(opts...)
 	return &Client{
 		baseURL: options.BaseURL,
-		caller:  core.NewCaller(options.HTTPClient),
-		header:  options.ToHeader(),
+		caller: core.NewCaller(
+			&core.CallerParams{
+				Client:      options.HTTPClient,
+				MaxAttempts: options.MaxAttempts,
+			},
+		),
+		header: options.ToHeader(),
 	}
 }
 
 // Used to list documents. Optionally filter on supported fields.
-func (c *Client) List(ctx context.Context, request *vellumclientgo.DocumentsListRequest) (*vellumclientgo.PaginatedSlimDocumentList, error) {
+func (c *Client) List(
+	ctx context.Context,
+	request *vellumclientgo.DocumentsListRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.PaginatedSlimDocumentList, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := baseURL + "/" + "v1/documents"
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := baseURL + "/v1/documents"
 
-	queryParams := make(url.Values)
-	if request.DocumentIndexId != nil {
-		queryParams.Add("document_index_id", fmt.Sprintf("%v", *request.DocumentIndexId))
-	}
-	if request.Limit != nil {
-		queryParams.Add("limit", fmt.Sprintf("%v", *request.Limit))
-	}
-	if request.Offset != nil {
-		queryParams.Add("offset", fmt.Sprintf("%v", *request.Offset))
-	}
-	if request.Ordering != nil {
-		queryParams.Add("ordering", fmt.Sprintf("%v", *request.Ordering))
+	queryParams, err := core.QueryValues(request)
+	if err != nil {
+		return nil, err
 	}
 	if len(queryParams) > 0 {
 		endpointURL += "?" + queryParams.Encode()
 	}
 
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
 	var response *vellumclientgo.PaginatedSlimDocumentList
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
-			URL:      endpointURL,
-			Method:   http.MethodGet,
-			Headers:  c.header,
-			Response: &response,
+			URL:         endpointURL,
+			Method:      http.MethodGet,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
+			Response:    &response,
 		},
 	); err != nil {
 		return nil, err
@@ -75,23 +81,35 @@ func (c *Client) List(ctx context.Context, request *vellumclientgo.DocumentsList
 }
 
 // Retrieve a Document, keying off of either its Vellum-generated ID or its external ID.
-//
-// A UUID string identifying this document.
-func (c *Client) Retrieve(ctx context.Context, id string) (*vellumclientgo.DocumentRead, error) {
+func (c *Client) Retrieve(
+	ctx context.Context,
+	// A UUID string identifying this document.
+	id string,
+	opts ...option.RequestOption,
+) (*vellumclientgo.DocumentRead, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/documents/%v", id)
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(baseURL+"/v1/documents/%v", id)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *vellumclientgo.DocumentRead
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
-			URL:      endpointURL,
-			Method:   http.MethodGet,
-			Headers:  c.header,
-			Response: &response,
+			URL:         endpointURL,
+			Method:      http.MethodGet,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
+			Response:    &response,
 		},
 	); err != nil {
 		return nil, err
@@ -100,21 +118,33 @@ func (c *Client) Retrieve(ctx context.Context, id string) (*vellumclientgo.Docum
 }
 
 // Delete a Document, keying off of either its Vellum-generated ID or its external ID.
-//
-// A UUID string identifying this document.
-func (c *Client) Destroy(ctx context.Context, id string) error {
+func (c *Client) Destroy(
+	ctx context.Context,
+	// A UUID string identifying this document.
+	id string,
+	opts ...option.RequestOption,
+) error {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/documents/%v", id)
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(baseURL+"/v1/documents/%v", id)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
-			URL:     endpointURL,
-			Method:  http.MethodDelete,
-			Headers: c.header,
+			URL:         endpointURL,
+			Method:      http.MethodDelete,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
 		},
 	); err != nil {
 		return err
@@ -123,24 +153,37 @@ func (c *Client) Destroy(ctx context.Context, id string) error {
 }
 
 // Update a Document, keying off of either its Vellum-generated ID or its external ID. Particularly useful for updating its metadata.
-//
-// A UUID string identifying this document.
-func (c *Client) PartialUpdate(ctx context.Context, id string, request *vellumclientgo.PatchedDocumentUpdateRequest) (*vellumclientgo.DocumentRead, error) {
+func (c *Client) PartialUpdate(
+	ctx context.Context,
+	// A UUID string identifying this document.
+	id string,
+	request *vellumclientgo.PatchedDocumentUpdateRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.DocumentRead, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/documents/%v", id)
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(baseURL+"/v1/documents/%v", id)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *vellumclientgo.DocumentRead
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
-			URL:      endpointURL,
-			Method:   http.MethodPatch,
-			Headers:  c.header,
-			Request:  request,
-			Response: &response,
+			URL:         endpointURL,
+			Method:      http.MethodPatch,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
+			Request:     request,
+			Response:    &response,
 		},
 	); err != nil {
 		return nil, err
@@ -159,12 +202,24 @@ func (c *Client) PartialUpdate(ctx context.Context, id string, request *vellumcl
 // - `label: str` - A human-friendly name for this document. Typically the filename.
 // - `keywords: list[str] | None` - Optionally include a list of keywords that'll be associated with this document. Used when performing keyword searches.
 // - `metadata: dict[str, Any]` - A stringified JSON object containing any metadata associated with the document that you'd like to filter upon later.
-func (c *Client) Upload(ctx context.Context, contents io.Reader, request *vellumclientgo.UploadDocumentBodyRequest) (*vellumclientgo.UploadDocumentResponse, error) {
+func (c *Client) Upload(
+	ctx context.Context,
+	contents io.Reader,
+	request *vellumclientgo.UploadDocumentBodyRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.UploadDocumentResponse, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://documents.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := baseURL + "/" + "v1/upload-document"
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := baseURL + "/v1/upload-document"
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	errorDecoder := func(statusCode int, body io.Reader) error {
 		raw, err := io.ReadAll(body)
@@ -239,14 +294,16 @@ func (c *Client) Upload(ctx context.Context, contents io.Reader, request *vellum
 	if err := writer.Close(); err != nil {
 		return nil, err
 	}
-	c.header.Set("Content-Type", writer.FormDataContentType())
+	headers.Set("Content-Type", writer.FormDataContentType())
 
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
 			URL:          endpointURL,
 			Method:       http.MethodPost,
-			Headers:      c.header,
+			MaxAttempts:  options.MaxAttempts,
+			Headers:      headers,
+			Client:       options.HTTPClient,
 			Request:      requestBuffer,
 			Response:     &response,
 			ErrorDecoder: errorDecoder,

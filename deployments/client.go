@@ -7,12 +7,11 @@ import (
 	context "context"
 	json "encoding/json"
 	errors "errors"
-	fmt "fmt"
 	vellumclientgo "github.com/vellum-ai/vellum-client-go"
 	core "github.com/vellum-ai/vellum-client-go/core"
+	option "github.com/vellum-ai/vellum-client-go/option"
 	io "io"
 	http "net/http"
-	url "net/url"
 )
 
 type Client struct {
@@ -21,51 +20,57 @@ type Client struct {
 	header  http.Header
 }
 
-func NewClient(opts ...core.ClientOption) *Client {
-	options := core.NewClientOptions()
-	for _, opt := range opts {
-		opt(options)
-	}
+func NewClient(opts ...option.RequestOption) *Client {
+	options := core.NewRequestOptions(opts...)
 	return &Client{
 		baseURL: options.BaseURL,
-		caller:  core.NewCaller(options.HTTPClient),
-		header:  options.ToHeader(),
+		caller: core.NewCaller(
+			&core.CallerParams{
+				Client:      options.HTTPClient,
+				MaxAttempts: options.MaxAttempts,
+			},
+		),
+		header: options.ToHeader(),
 	}
 }
 
 // Used to list all Prompt Deployments.
-func (c *Client) List(ctx context.Context, request *vellumclientgo.DeploymentsListRequest) (*vellumclientgo.PaginatedSlimDeploymentReadList, error) {
+func (c *Client) List(
+	ctx context.Context,
+	request *vellumclientgo.DeploymentsListRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.PaginatedSlimDeploymentReadList, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := baseURL + "/" + "v1/deployments"
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := baseURL + "/v1/deployments"
 
-	queryParams := make(url.Values)
-	if request.Limit != nil {
-		queryParams.Add("limit", fmt.Sprintf("%v", *request.Limit))
-	}
-	if request.Offset != nil {
-		queryParams.Add("offset", fmt.Sprintf("%v", *request.Offset))
-	}
-	if request.Ordering != nil {
-		queryParams.Add("ordering", fmt.Sprintf("%v", *request.Ordering))
-	}
-	if request.Status != nil {
-		queryParams.Add("status", fmt.Sprintf("%v", request.Status))
+	queryParams, err := core.QueryValues(request)
+	if err != nil {
+		return nil, err
 	}
 	if len(queryParams) > 0 {
 		endpointURL += "?" + queryParams.Encode()
 	}
 
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
 	var response *vellumclientgo.PaginatedSlimDeploymentReadList
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
-			URL:      endpointURL,
-			Method:   http.MethodGet,
-			Headers:  c.header,
-			Response: &response,
+			URL:         endpointURL,
+			Method:      http.MethodGet,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
+			Response:    &response,
 		},
 	); err != nil {
 		return nil, err
@@ -74,23 +79,35 @@ func (c *Client) List(ctx context.Context, request *vellumclientgo.DeploymentsLi
 }
 
 // Used to retrieve a Prompt Deployment given its ID or name.
-//
-// Either the Deployment's ID or its unique name
-func (c *Client) Retrieve(ctx context.Context, id string) (*vellumclientgo.DeploymentRead, error) {
+func (c *Client) Retrieve(
+	ctx context.Context,
+	// Either the Deployment's ID or its unique name
+	id string,
+	opts ...option.RequestOption,
+) (*vellumclientgo.DeploymentRead, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/deployments/%v", id)
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(baseURL+"/v1/deployments/%v", id)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *vellumclientgo.DeploymentRead
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
-			URL:      endpointURL,
-			Method:   http.MethodGet,
-			Headers:  c.header,
-			Response: &response,
+			URL:         endpointURL,
+			Method:      http.MethodGet,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
+			Response:    &response,
 		},
 	); err != nil {
 		return nil, err
@@ -99,24 +116,41 @@ func (c *Client) Retrieve(ctx context.Context, id string) (*vellumclientgo.Deplo
 }
 
 // Retrieve a Deployment Release Tag by tag name, associated with a specified Deployment.
-//
-// A UUID string identifying this deployment.
-// The name of the Release Tag associated with this Deployment that you'd like to retrieve.
-func (c *Client) RetrieveDeploymentReleaseTag(ctx context.Context, id string, name string) (*vellumclientgo.DeploymentReleaseTagRead, error) {
+func (c *Client) RetrieveDeploymentReleaseTag(
+	ctx context.Context,
+	// A UUID string identifying this deployment.
+	id string,
+	// The name of the Release Tag associated with this Deployment that you'd like to retrieve.
+	name string,
+	opts ...option.RequestOption,
+) (*vellumclientgo.DeploymentReleaseTagRead, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/deployments/%v/release-tags/%v", id, name)
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(
+		baseURL+"/v1/deployments/%v/release-tags/%v",
+		id,
+		name,
+	)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *vellumclientgo.DeploymentReleaseTagRead
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
-			URL:      endpointURL,
-			Method:   http.MethodGet,
-			Headers:  c.header,
-			Response: &response,
+			URL:         endpointURL,
+			Method:      http.MethodGet,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
+			Response:    &response,
 		},
 	); err != nil {
 		return nil, err
@@ -125,25 +159,43 @@ func (c *Client) RetrieveDeploymentReleaseTag(ctx context.Context, id string, na
 }
 
 // Updates an existing Release Tag associated with the specified Deployment.
-//
-// A UUID string identifying this deployment.
-// The name of the Release Tag associated with this Deployment that you'd like to update.
-func (c *Client) UpdateDeploymentReleaseTag(ctx context.Context, id string, name string, request *vellumclientgo.PatchedDeploymentReleaseTagUpdateRequest) (*vellumclientgo.DeploymentReleaseTagRead, error) {
+func (c *Client) UpdateDeploymentReleaseTag(
+	ctx context.Context,
+	// A UUID string identifying this deployment.
+	id string,
+	// The name of the Release Tag associated with this Deployment that you'd like to update.
+	name string,
+	request *vellumclientgo.PatchedDeploymentReleaseTagUpdateRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.DeploymentReleaseTagRead, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := fmt.Sprintf(baseURL+"/"+"v1/deployments/%v/release-tags/%v", id, name)
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(
+		baseURL+"/v1/deployments/%v/release-tags/%v",
+		id,
+		name,
+	)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *vellumclientgo.DeploymentReleaseTagRead
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
-			URL:      endpointURL,
-			Method:   http.MethodPatch,
-			Headers:  c.header,
-			Request:  request,
-			Response: &response,
+			URL:         endpointURL,
+			Method:      http.MethodPatch,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
+			Request:     request,
+			Response:    &response,
 		},
 	); err != nil {
 		return nil, err
@@ -161,12 +213,23 @@ func (c *Client) UpdateDeploymentReleaseTag(ctx context.Context, id string, name
 // derive meaning from the response body and instead, should simply pass it directly to the model provider as is.
 //
 // We encourage you to seek advise from Vellum Support before integrating with this API for production use.
-func (c *Client) RetrieveProviderPayload(ctx context.Context, request *vellumclientgo.DeploymentProviderPayloadRequest) (*vellumclientgo.DeploymentProviderPayloadResponse, error) {
+func (c *Client) RetrieveProviderPayload(
+	ctx context.Context,
+	request *vellumclientgo.DeploymentProviderPayloadRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.DeploymentProviderPayloadResponse, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := baseURL + "/" + "v1/deployments/provider-payload"
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := baseURL + "/v1/deployments/provider-payload"
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	errorDecoder := func(statusCode int, body io.Reader) error {
 		raw, err := io.ReadAll(body)
@@ -214,7 +277,9 @@ func (c *Client) RetrieveProviderPayload(ctx context.Context, request *vellumcli
 		&core.CallParams{
 			URL:          endpointURL,
 			Method:       http.MethodPost,
-			Headers:      c.header,
+			MaxAttempts:  options.MaxAttempts,
+			Headers:      headers,
+			Client:       options.HTTPClient,
 			Request:      request,
 			Response:     &response,
 			ErrorDecoder: errorDecoder,

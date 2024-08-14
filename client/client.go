@@ -14,6 +14,7 @@ import (
 	documents "github.com/vellum-ai/vellum-client-go/documents"
 	folderentities "github.com/vellum-ai/vellum-client-go/folderentities"
 	mlmodels "github.com/vellum-ai/vellum-client-go/mlmodels"
+	option "github.com/vellum-ai/vellum-client-go/option"
 	sandboxes "github.com/vellum-ai/vellum-client-go/sandboxes"
 	testsuiteruns "github.com/vellum-ai/vellum-client-go/testsuiteruns"
 	testsuites "github.com/vellum-ai/vellum-client-go/testsuites"
@@ -40,14 +41,16 @@ type Client struct {
 	WorkflowSandboxes   *workflowsandboxes.Client
 }
 
-func NewClient(opts ...core.ClientOption) *Client {
-	options := core.NewClientOptions()
-	for _, opt := range opts {
-		opt(options)
-	}
+func NewClient(opts ...option.RequestOption) *Client {
+	options := core.NewRequestOptions(opts...)
 	return &Client{
-		baseURL:             options.BaseURL,
-		caller:              core.NewCaller(options.HTTPClient),
+		baseURL: options.BaseURL,
+		caller: core.NewCaller(
+			&core.CallerParams{
+				Client:      options.HTTPClient,
+				MaxAttempts: options.MaxAttempts,
+			},
+		),
 		header:              options.ToHeader(),
 		Deployments:         deployments.NewClient(opts...),
 		DocumentIndexes:     documentindexes.NewClient(opts...),
@@ -63,12 +66,23 @@ func NewClient(opts ...core.ClientOption) *Client {
 }
 
 // Executes a deployed Prompt and returns the result.
-func (c *Client) ExecutePrompt(ctx context.Context, request *vellumclientgo.ExecutePromptRequest) (*vellumclientgo.ExecutePromptResponse, error) {
+func (c *Client) ExecutePrompt(
+	ctx context.Context,
+	request *vellumclientgo.ExecutePromptRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.ExecutePromptResponse, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://predict.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := baseURL + "/" + "v1/execute-prompt"
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := baseURL + "/v1/execute-prompt"
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	errorDecoder := func(statusCode int, body io.Reader) error {
 		raw, err := io.ReadAll(body)
@@ -116,7 +130,9 @@ func (c *Client) ExecutePrompt(ctx context.Context, request *vellumclientgo.Exec
 		&core.CallParams{
 			URL:          endpointURL,
 			Method:       http.MethodPost,
-			Headers:      c.header,
+			MaxAttempts:  options.MaxAttempts,
+			Headers:      headers,
+			Client:       options.HTTPClient,
 			Request:      request,
 			Response:     &response,
 			ErrorDecoder: errorDecoder,
@@ -128,12 +144,23 @@ func (c *Client) ExecutePrompt(ctx context.Context, request *vellumclientgo.Exec
 }
 
 // Executes a deployed Prompt and streams back the results.
-func (c *Client) ExecutePromptStream(ctx context.Context, request *vellumclientgo.ExecutePromptStreamRequest) (*core.Stream[vellumclientgo.ExecutePromptEvent], error) {
+func (c *Client) ExecutePromptStream(
+	ctx context.Context,
+	request *vellumclientgo.ExecutePromptStreamRequest,
+	opts ...option.RequestOption,
+) (*core.Stream[vellumclientgo.ExecutePromptEvent], error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://predict.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := baseURL + "/" + "v1/execute-prompt-stream"
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := baseURL + "/v1/execute-prompt-stream"
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	errorDecoder := func(statusCode int, body io.Reader) error {
 		raw, err := io.ReadAll(body)
@@ -181,7 +208,9 @@ func (c *Client) ExecutePromptStream(ctx context.Context, request *vellumclientg
 		&core.StreamParams{
 			URL:          endpointURL,
 			Method:       http.MethodPost,
-			Headers:      c.header,
+			MaxAttempts:  options.MaxAttempts,
+			Headers:      headers,
+			Client:       options.HTTPClient,
 			Request:      request,
 			ErrorDecoder: errorDecoder,
 		},
@@ -189,12 +218,23 @@ func (c *Client) ExecutePromptStream(ctx context.Context, request *vellumclientg
 }
 
 // Executes a deployed Workflow and returns its outputs.
-func (c *Client) ExecuteWorkflow(ctx context.Context, request *vellumclientgo.ExecuteWorkflowRequest) (*vellumclientgo.ExecuteWorkflowResponse, error) {
+func (c *Client) ExecuteWorkflow(
+	ctx context.Context,
+	request *vellumclientgo.ExecuteWorkflowRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.ExecuteWorkflowResponse, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://predict.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := baseURL + "/" + "v1/execute-workflow"
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := baseURL + "/v1/execute-workflow"
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	errorDecoder := func(statusCode int, body io.Reader) error {
 		raw, err := io.ReadAll(body)
@@ -235,7 +275,9 @@ func (c *Client) ExecuteWorkflow(ctx context.Context, request *vellumclientgo.Ex
 		&core.CallParams{
 			URL:          endpointURL,
 			Method:       http.MethodPost,
-			Headers:      c.header,
+			MaxAttempts:  options.MaxAttempts,
+			Headers:      headers,
+			Client:       options.HTTPClient,
 			Request:      request,
 			Response:     &response,
 			ErrorDecoder: errorDecoder,
@@ -247,12 +289,23 @@ func (c *Client) ExecuteWorkflow(ctx context.Context, request *vellumclientgo.Ex
 }
 
 // Executes a deployed Workflow and streams back its results.
-func (c *Client) ExecuteWorkflowStream(ctx context.Context, request *vellumclientgo.ExecuteWorkflowStreamRequest) (*core.Stream[vellumclientgo.WorkflowStreamEvent], error) {
+func (c *Client) ExecuteWorkflowStream(
+	ctx context.Context,
+	request *vellumclientgo.ExecuteWorkflowStreamRequest,
+	opts ...option.RequestOption,
+) (*core.Stream[vellumclientgo.WorkflowStreamEvent], error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://predict.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := baseURL + "/" + "v1/execute-workflow-stream"
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := baseURL + "/v1/execute-workflow-stream"
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	errorDecoder := func(statusCode int, body io.Reader) error {
 		raw, err := io.ReadAll(body)
@@ -293,7 +346,9 @@ func (c *Client) ExecuteWorkflowStream(ctx context.Context, request *vellumclien
 		&core.StreamParams{
 			URL:          endpointURL,
 			Method:       http.MethodPost,
-			Headers:      c.header,
+			MaxAttempts:  options.MaxAttempts,
+			Headers:      headers,
+			Client:       options.HTTPClient,
 			Request:      request,
 			ErrorDecoder: errorDecoder,
 		},
@@ -304,12 +359,23 @@ func (c *Client) ExecuteWorkflowStream(ctx context.Context, request *vellumclien
 //
 // Important: This endpoint is DEPRECATED and has been superseded by
 // [execute-prompt](/api-reference/api-reference/execute-prompt).
-func (c *Client) Generate(ctx context.Context, request *vellumclientgo.GenerateBodyRequest) (*vellumclientgo.GenerateResponse, error) {
+func (c *Client) Generate(
+	ctx context.Context,
+	request *vellumclientgo.GenerateBodyRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.GenerateResponse, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://predict.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := baseURL + "/" + "v1/generate"
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := baseURL + "/v1/generate"
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	errorDecoder := func(statusCode int, body io.Reader) error {
 		raw, err := io.ReadAll(body)
@@ -357,7 +423,9 @@ func (c *Client) Generate(ctx context.Context, request *vellumclientgo.GenerateB
 		&core.CallParams{
 			URL:          endpointURL,
 			Method:       http.MethodPost,
-			Headers:      c.header,
+			MaxAttempts:  options.MaxAttempts,
+			Headers:      headers,
+			Client:       options.HTTPClient,
 			Request:      request,
 			Response:     &response,
 			ErrorDecoder: errorDecoder,
@@ -372,12 +440,23 @@ func (c *Client) Generate(ctx context.Context, request *vellumclientgo.GenerateB
 //
 // Important: This endpoint is DEPRECATED and has been superseded by
 // [execute-prompt-stream](/api-reference/api-reference/execute-prompt-stream).
-func (c *Client) GenerateStream(ctx context.Context, request *vellumclientgo.GenerateStreamBodyRequest) (*core.Stream[vellumclientgo.GenerateStreamResponse], error) {
+func (c *Client) GenerateStream(
+	ctx context.Context,
+	request *vellumclientgo.GenerateStreamBodyRequest,
+	opts ...option.RequestOption,
+) (*core.Stream[vellumclientgo.GenerateStreamResponse], error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://predict.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := baseURL + "/" + "v1/generate-stream"
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := baseURL + "/v1/generate-stream"
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	errorDecoder := func(statusCode int, body io.Reader) error {
 		raw, err := io.ReadAll(body)
@@ -425,7 +504,9 @@ func (c *Client) GenerateStream(ctx context.Context, request *vellumclientgo.Gen
 		&core.StreamParams{
 			URL:          endpointURL,
 			Method:       http.MethodPost,
-			Headers:      c.header,
+			MaxAttempts:  options.MaxAttempts,
+			Headers:      headers,
+			Client:       options.HTTPClient,
 			Request:      request,
 			ErrorDecoder: errorDecoder,
 		},
@@ -433,12 +514,23 @@ func (c *Client) GenerateStream(ctx context.Context, request *vellumclientgo.Gen
 }
 
 // Perform a search against a document index.
-func (c *Client) Search(ctx context.Context, request *vellumclientgo.SearchRequestBodyRequest) (*vellumclientgo.SearchResponse, error) {
+func (c *Client) Search(
+	ctx context.Context,
+	request *vellumclientgo.SearchRequestBodyRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.SearchResponse, error) {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://predict.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := baseURL + "/" + "v1/search"
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := baseURL + "/v1/search"
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	errorDecoder := func(statusCode int, body io.Reader) error {
 		raw, err := io.ReadAll(body)
@@ -479,7 +571,9 @@ func (c *Client) Search(ctx context.Context, request *vellumclientgo.SearchReque
 		&core.CallParams{
 			URL:          endpointURL,
 			Method:       http.MethodPost,
-			Headers:      c.header,
+			MaxAttempts:  options.MaxAttempts,
+			Headers:      headers,
+			Client:       options.HTTPClient,
 			Request:      request,
 			Response:     &response,
 			ErrorDecoder: errorDecoder,
@@ -491,12 +585,23 @@ func (c *Client) Search(ctx context.Context, request *vellumclientgo.SearchReque
 }
 
 // Used to submit feedback regarding the quality of previously generated completions.
-func (c *Client) SubmitCompletionActuals(ctx context.Context, request *vellumclientgo.SubmitCompletionActualsRequest) error {
+func (c *Client) SubmitCompletionActuals(
+	ctx context.Context,
+	request *vellumclientgo.SubmitCompletionActualsRequest,
+	opts ...option.RequestOption,
+) error {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://predict.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := baseURL + "/" + "v1/submit-completion-actuals"
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := baseURL + "/v1/submit-completion-actuals"
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	errorDecoder := func(statusCode int, body io.Reader) error {
 		raw, err := io.ReadAll(body)
@@ -536,7 +641,9 @@ func (c *Client) SubmitCompletionActuals(ctx context.Context, request *vellumcli
 		&core.CallParams{
 			URL:          endpointURL,
 			Method:       http.MethodPost,
-			Headers:      c.header,
+			MaxAttempts:  options.MaxAttempts,
+			Headers:      headers,
+			Client:       options.HTTPClient,
 			Request:      request,
 			ErrorDecoder: errorDecoder,
 		},
@@ -549,20 +656,33 @@ func (c *Client) SubmitCompletionActuals(ctx context.Context, request *vellumcli
 // Used to submit feedback regarding the quality of previous workflow execution and its outputs.
 //
 // **Note:** Uses a base url of `https://predict.vellum.ai`.
-func (c *Client) SubmitWorkflowExecutionActuals(ctx context.Context, request *vellumclientgo.SubmitWorkflowExecutionActualsRequest) error {
+func (c *Client) SubmitWorkflowExecutionActuals(
+	ctx context.Context,
+	request *vellumclientgo.SubmitWorkflowExecutionActualsRequest,
+	opts ...option.RequestOption,
+) error {
+	options := core.NewRequestOptions(opts...)
+
 	baseURL := "https://predict.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
-	endpointURL := baseURL + "/" + "v1/submit-workflow-execution-actuals"
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := baseURL + "/v1/submit-workflow-execution-actuals"
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
-			URL:     endpointURL,
-			Method:  http.MethodPost,
-			Headers: c.header,
-			Request: request,
+			URL:         endpointURL,
+			Method:      http.MethodPost,
+			MaxAttempts: options.MaxAttempts,
+			Headers:     headers,
+			Client:      options.HTTPClient,
+			Request:     request,
 		},
 	); err != nil {
 		return err

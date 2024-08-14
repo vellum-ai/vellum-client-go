@@ -8,25 +8,25 @@ import (
 
 type DeploymentsListRequest struct {
 	// Number of results to return per page.
-	Limit *int `json:"-"`
+	Limit *int `json:"-" url:"limit,omitempty"`
 	// The initial index from which to return the results.
-	Offset *int `json:"-"`
+	Offset *int `json:"-" url:"offset,omitempty"`
 	// Which field to use when ordering the results.
-	Ordering *string `json:"-"`
+	Ordering *string `json:"-" url:"ordering,omitempty"`
 	// status
-	Status *DeploymentsListRequestStatus `json:"-"`
+	Status *DeploymentsListRequestStatus `json:"-" url:"status,omitempty"`
 }
 
 type DeploymentProviderPayloadRequest struct {
 	// The ID of the deployment. Must provide either this or deployment_name.
-	DeploymentId *string `json:"deployment_id,omitempty"`
+	DeploymentId *string `json:"deployment_id,omitempty" url:"-"`
 	// The name of the deployment. Must provide either this or deployment_id.
-	DeploymentName *string `json:"deployment_name,omitempty"`
+	DeploymentName *string `json:"deployment_name,omitempty" url:"-"`
 	// The list of inputs defined in the Prompt's deployment with their corresponding values.
-	Inputs []*PromptDeploymentInputRequest `json:"inputs,omitempty"`
+	Inputs []*PromptDeploymentInputRequest `json:"inputs,omitempty" url:"-"`
 	// Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
-	ReleaseTag *string                                   `json:"release_tag,omitempty"`
-	ExpandMeta *CompilePromptDeploymentExpandMetaRequest `json:"expand_meta,omitempty"`
+	ReleaseTag *string                                   `json:"release_tag,omitempty" url:"-"`
+	ExpandMeta *CompilePromptDeploymentExpandMetaRequest `json:"expand_meta,omitempty" url:"-"`
 }
 
 type DeploymentsListRequestStatus string
@@ -53,5 +53,5 @@ func (d DeploymentsListRequestStatus) Ptr() *DeploymentsListRequestStatus {
 
 type PatchedDeploymentReleaseTagUpdateRequest struct {
 	// The ID of the Deployment History Item to tag
-	HistoryItemId *string `json:"history_item_id,omitempty"`
+	HistoryItemId *string `json:"history_item_id,omitempty" url:"-"`
 }

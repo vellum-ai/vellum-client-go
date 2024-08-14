@@ -11,127 +11,127 @@ import (
 
 type ExecutePromptRequest struct {
 	// A list consisting of the Prompt Deployment's input variables and their values.
-	Inputs []*PromptDeploymentInputRequest `json:"inputs,omitempty"`
+	Inputs []*PromptDeploymentInputRequest `json:"inputs,omitempty" url:"-"`
 	// The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
-	PromptDeploymentId *string `json:"prompt_deployment_id,omitempty"`
+	PromptDeploymentId *string `json:"prompt_deployment_id,omitempty" url:"-"`
 	// The unique name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
-	PromptDeploymentName *string `json:"prompt_deployment_name,omitempty"`
+	PromptDeploymentName *string `json:"prompt_deployment_name,omitempty" url:"-"`
 	// Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
-	ReleaseTag *string `json:"release_tag,omitempty"`
+	ReleaseTag *string `json:"release_tag,omitempty" url:"-"`
 	// Optionally include a unique identifier for tracking purposes. Must be unique within a given Prompt Deployment.
-	ExternalId *string `json:"external_id,omitempty"`
+	ExternalId *string `json:"external_id,omitempty" url:"-"`
 	// An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
-	ExpandMeta *PromptDeploymentExpandMetaRequestRequest `json:"expand_meta,omitempty"`
+	ExpandMeta *PromptDeploymentExpandMetaRequestRequest `json:"expand_meta,omitempty" url:"-"`
 	// Overrides for the raw API request sent to the model host. Combined with `expand_raw`, it can be used to access new features from models.
-	RawOverrides *RawPromptExecutionOverridesRequest `json:"raw_overrides,omitempty"`
+	RawOverrides *RawPromptExecutionOverridesRequest `json:"raw_overrides,omitempty" url:"-"`
 	// A list of keys whose values you'd like to directly return from the JSON response of the model provider. Useful if you need lower-level info returned by model providers that Vellum would otherwise omit. Corresponding key/value pairs will be returned under the `raw` key of the API response.
-	ExpandRaw []string `json:"expand_raw,omitempty"`
+	ExpandRaw []string `json:"expand_raw,omitempty" url:"-"`
 	// Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
-	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	Metadata map[string]interface{} `json:"metadata,omitempty" url:"-"`
 }
 
 type ExecutePromptStreamRequest struct {
 	// A list consisting of the Prompt Deployment's input variables and their values.
-	Inputs []*PromptDeploymentInputRequest `json:"inputs,omitempty"`
+	Inputs []*PromptDeploymentInputRequest `json:"inputs,omitempty" url:"-"`
 	// The ID of the Prompt Deployment. Must provide either this or prompt_deployment_name.
-	PromptDeploymentId *string `json:"prompt_deployment_id,omitempty"`
+	PromptDeploymentId *string `json:"prompt_deployment_id,omitempty" url:"-"`
 	// The unique name of the Prompt Deployment. Must provide either this or prompt_deployment_id.
-	PromptDeploymentName *string `json:"prompt_deployment_name,omitempty"`
+	PromptDeploymentName *string `json:"prompt_deployment_name,omitempty" url:"-"`
 	// Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
-	ReleaseTag *string `json:"release_tag,omitempty"`
+	ReleaseTag *string `json:"release_tag,omitempty" url:"-"`
 	// Optionally include a unique identifier for tracking purposes. Must be unique within a given Prompt Deployment.
-	ExternalId *string `json:"external_id,omitempty"`
+	ExternalId *string `json:"external_id,omitempty" url:"-"`
 	// An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
-	ExpandMeta *PromptDeploymentExpandMetaRequestRequest `json:"expand_meta,omitempty"`
+	ExpandMeta *PromptDeploymentExpandMetaRequestRequest `json:"expand_meta,omitempty" url:"-"`
 	// Overrides for the raw API request sent to the model host. Combined with `expand_raw`, it can be used to access new features from models.
-	RawOverrides *RawPromptExecutionOverridesRequest `json:"raw_overrides,omitempty"`
+	RawOverrides *RawPromptExecutionOverridesRequest `json:"raw_overrides,omitempty" url:"-"`
 	// A list of keys whose values you'd like to directly return from the JSON response of the model provider. Useful if you need lower-level info returned by model providers that Vellum would otherwise omit. Corresponding key/value pairs will be returned under the `raw` key of the API response.
-	ExpandRaw []string `json:"expand_raw,omitempty"`
+	ExpandRaw []string `json:"expand_raw,omitempty" url:"-"`
 	// Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
-	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	Metadata map[string]interface{} `json:"metadata,omitempty" url:"-"`
 }
 
 type ExecuteWorkflowRequest struct {
 	// The list of inputs defined in the Workflow's Deployment with their corresponding values.
-	Inputs []*WorkflowRequestInputRequest `json:"inputs,omitempty"`
+	Inputs []*WorkflowRequestInputRequest `json:"inputs,omitempty" url:"-"`
 	// An optionally specified configuration used to opt in to including additional metadata about this workflow execution in the API response. Corresponding values will be returned under the `execution_meta` key within NODE events in the response stream.
-	ExpandMeta *WorkflowExpandMetaRequest `json:"expand_meta,omitempty"`
+	ExpandMeta *WorkflowExpandMetaRequest `json:"expand_meta,omitempty" url:"-"`
 	// The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
-	WorkflowDeploymentId *string `json:"workflow_deployment_id,omitempty"`
+	WorkflowDeploymentId *string `json:"workflow_deployment_id,omitempty" url:"-"`
 	// The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
-	WorkflowDeploymentName *string `json:"workflow_deployment_name,omitempty"`
+	WorkflowDeploymentName *string `json:"workflow_deployment_name,omitempty" url:"-"`
 	// Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
-	ReleaseTag *string `json:"release_tag,omitempty"`
+	ReleaseTag *string `json:"release_tag,omitempty" url:"-"`
 	// Optionally include a unique identifier for tracking purposes. Must be unique for a given workflow deployment.
-	ExternalId *string `json:"external_id,omitempty"`
+	ExternalId *string `json:"external_id,omitempty" url:"-"`
 }
 
 type ExecuteWorkflowStreamRequest struct {
 	// The list of inputs defined in the Workflow's Deployment with their corresponding values.
-	Inputs []*WorkflowRequestInputRequest `json:"inputs,omitempty"`
+	Inputs []*WorkflowRequestInputRequest `json:"inputs,omitempty" url:"-"`
 	// An optionally specified configuration used to opt in to including additional metadata about this workflow execution in the API response. Corresponding values will be returned under the `execution_meta` key within NODE events in the response stream.
-	ExpandMeta *WorkflowExpandMetaRequest `json:"expand_meta,omitempty"`
+	ExpandMeta *WorkflowExpandMetaRequest `json:"expand_meta,omitempty" url:"-"`
 	// The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
-	WorkflowDeploymentId *string `json:"workflow_deployment_id,omitempty"`
+	WorkflowDeploymentId *string `json:"workflow_deployment_id,omitempty" url:"-"`
 	// The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
-	WorkflowDeploymentName *string `json:"workflow_deployment_name,omitempty"`
+	WorkflowDeploymentName *string `json:"workflow_deployment_name,omitempty" url:"-"`
 	// Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
-	ReleaseTag *string `json:"release_tag,omitempty"`
+	ReleaseTag *string `json:"release_tag,omitempty" url:"-"`
 	// Optionally include a unique identifier for tracking purposes. Must be unique for a given workflow deployment.
-	ExternalId *string `json:"external_id,omitempty"`
+	ExternalId *string `json:"external_id,omitempty" url:"-"`
 	// Optionally specify which events you want to receive. Defaults to only WORKFLOW events. Note that the schema of non-WORKFLOW events is unstable and should be used with caution.
-	EventTypes []WorkflowExecutionEventType `json:"event_types,omitempty"`
+	EventTypes []WorkflowExecutionEventType `json:"event_types,omitempty" url:"-"`
 }
 
 type GenerateBodyRequest struct {
 	// The ID of the deployment. Must provide either this or deployment_name.
-	DeploymentId *string `json:"deployment_id,omitempty"`
+	DeploymentId *string `json:"deployment_id,omitempty" url:"-"`
 	// The name of the deployment. Must provide either this or deployment_id.
-	DeploymentName *string `json:"deployment_name,omitempty"`
+	DeploymentName *string `json:"deployment_name,omitempty" url:"-"`
 	// The generation request to make. Bulk requests are no longer supported, this field must be an array of length 1.
-	Requests []*GenerateRequest `json:"requests,omitempty"`
+	Requests []*GenerateRequest `json:"requests,omitempty" url:"-"`
 	// Additional configuration that can be used to control what's included in the response.
-	Options *GenerateOptionsRequest `json:"options,omitempty"`
+	Options *GenerateOptionsRequest `json:"options,omitempty" url:"-"`
 }
 
 type GenerateStreamBodyRequest struct {
 	// The ID of the deployment. Must provide either this or deployment_name.
-	DeploymentId *string `json:"deployment_id,omitempty"`
+	DeploymentId *string `json:"deployment_id,omitempty" url:"-"`
 	// The name of the deployment. Must provide either this or deployment_id.
-	DeploymentName *string `json:"deployment_name,omitempty"`
+	DeploymentName *string `json:"deployment_name,omitempty" url:"-"`
 	// The generation request to make. Bulk requests are no longer supported, this field must be an array of length 1.
-	Requests []*GenerateRequest `json:"requests,omitempty"`
+	Requests []*GenerateRequest `json:"requests,omitempty" url:"-"`
 	// Additional configuration that can be used to control what's included in the response.
-	Options *GenerateOptionsRequest `json:"options,omitempty"`
+	Options *GenerateOptionsRequest `json:"options,omitempty" url:"-"`
 }
 
 type SearchRequestBodyRequest struct {
 	// The ID of the index to search against. Must provide either this or index_name.
-	IndexId *string `json:"index_id,omitempty"`
+	IndexId *string `json:"index_id,omitempty" url:"-"`
 	// The name of the index to search against. Must provide either this or index_id.
-	IndexName *string `json:"index_name,omitempty"`
+	IndexName *string `json:"index_name,omitempty" url:"-"`
 	// The query to search for.
-	Query string `json:"query"`
+	Query string `json:"query" url:"-"`
 	// Configuration options for the search.
-	Options *SearchRequestOptionsRequest `json:"options,omitempty"`
+	Options *SearchRequestOptionsRequest `json:"options,omitempty" url:"-"`
 }
 
 type SubmitCompletionActualsRequest struct {
 	// The ID of the deployment. Must provide either this or deployment_name.
-	DeploymentId *string `json:"deployment_id,omitempty"`
+	DeploymentId *string `json:"deployment_id,omitempty" url:"-"`
 	// The name of the deployment. Must provide either this or deployment_id.
-	DeploymentName *string `json:"deployment_name,omitempty"`
+	DeploymentName *string `json:"deployment_name,omitempty" url:"-"`
 	// Feedback regarding the quality of previously generated completions
-	Actuals []*SubmitCompletionActualRequest `json:"actuals,omitempty"`
+	Actuals []*SubmitCompletionActualRequest `json:"actuals,omitempty" url:"-"`
 }
 
 type SubmitWorkflowExecutionActualsRequest struct {
 	// Feedback regarding the quality of an output on a previously executed workflow.
-	Actuals []*SubmitWorkflowExecutionActualRequest `json:"actuals,omitempty"`
+	Actuals []*SubmitWorkflowExecutionActualRequest `json:"actuals,omitempty" url:"-"`
 	// The Vellum-generated ID of a previously executed workflow. Must provide either this or external_id.
-	ExecutionId *string `json:"execution_id,omitempty"`
+	ExecutionId *string `json:"execution_id,omitempty" url:"-"`
 	// The external ID that was originally provided by when executing the workflow, if applicable, that you'd now like to submit actuals for. Must provide either this or execution_id.
-	ExternalId *string `json:"external_id,omitempty"`
+	ExternalId *string `json:"external_id,omitempty" url:"-"`
 }
 
 // - `True` - True
@@ -139,9 +139,14 @@ type AddOpenaiApiKeyEnum = bool
 
 // A Node Result Event emitted from an API Node.
 type ApiNodeResult struct {
-	Data *ApiNodeResultData `json:"data,omitempty"`
+	Data *ApiNodeResultData `json:"data" url:"data"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (a *ApiNodeResult) GetExtraProperties() map[string]interface{} {
+	return a.extraProperties
 }
 
 func (a *ApiNodeResult) UnmarshalJSON(data []byte) error {
@@ -151,6 +156,13 @@ func (a *ApiNodeResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*a = ApiNodeResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *a)
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+
 	a._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -168,14 +180,19 @@ func (a *ApiNodeResult) String() string {
 }
 
 type ApiNodeResultData struct {
-	TextOutputId       string                 `json:"text_output_id"`
-	Text               *string                `json:"text,omitempty"`
-	JsonOutputId       string                 `json:"json_output_id"`
-	Json               map[string]interface{} `json:"json,omitempty"`
-	StatusCodeOutputId string                 `json:"status_code_output_id"`
-	StatusCode         int                    `json:"status_code"`
+	TextOutputId       string                 `json:"text_output_id" url:"text_output_id"`
+	Text               *string                `json:"text,omitempty" url:"text,omitempty"`
+	JsonOutputId       string                 `json:"json_output_id" url:"json_output_id"`
+	Json               map[string]interface{} `json:"json,omitempty" url:"json,omitempty"`
+	StatusCodeOutputId string                 `json:"status_code_output_id" url:"status_code_output_id"`
+	StatusCode         int                    `json:"status_code" url:"status_code"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (a *ApiNodeResultData) GetExtraProperties() map[string]interface{} {
+	return a.extraProperties
 }
 
 func (a *ApiNodeResultData) UnmarshalJSON(data []byte) error {
@@ -185,6 +202,13 @@ func (a *ApiNodeResultData) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*a = ApiNodeResultData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *a)
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+
 	a._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -203,9 +227,14 @@ func (a *ApiNodeResultData) String() string {
 
 // A list of chat message content items.
 type ArrayChatMessageContent struct {
-	Value []*ArrayChatMessageContentItem `json:"value,omitempty"`
+	Value []*ArrayChatMessageContentItem `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (a *ArrayChatMessageContent) GetExtraProperties() map[string]interface{} {
+	return a.extraProperties
 }
 
 func (a *ArrayChatMessageContent) UnmarshalJSON(data []byte) error {
@@ -215,6 +244,13 @@ func (a *ArrayChatMessageContent) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*a = ArrayChatMessageContent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *a)
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+
 	a._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -286,32 +322,11 @@ func (a ArrayChatMessageContentItem) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", a.Type, a)
 	case "STRING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*StringChatMessageContent
-		}{
-			Type:                     a.Type,
-			StringChatMessageContent: a.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(a.String, "type", "STRING")
 	case "FUNCTION_CALL":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*FunctionCallChatMessageContent
-		}{
-			Type:                           a.Type,
-			FunctionCallChatMessageContent: a.FunctionCall,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(a.FunctionCall, "type", "FUNCTION_CALL")
 	case "IMAGE":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ImageChatMessageContent
-		}{
-			Type:                    a.Type,
-			ImageChatMessageContent: a.Image,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(a.Image, "type", "IMAGE")
 	}
 }
 
@@ -389,32 +404,11 @@ func (a ArrayChatMessageContentItemRequest) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", a.Type, a)
 	case "STRING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*StringChatMessageContentRequest
-		}{
-			Type:                            a.Type,
-			StringChatMessageContentRequest: a.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(a.String, "type", "STRING")
 	case "FUNCTION_CALL":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*FunctionCallChatMessageContentRequest
-		}{
-			Type:                                  a.Type,
-			FunctionCallChatMessageContentRequest: a.FunctionCall,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(a.FunctionCall, "type", "FUNCTION_CALL")
 	case "IMAGE":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ImageChatMessageContentRequest
-		}{
-			Type:                           a.Type,
-			ImageChatMessageContentRequest: a.Image,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(a.Image, "type", "IMAGE")
 	}
 }
 
@@ -439,9 +433,14 @@ func (a *ArrayChatMessageContentItemRequest) Accept(visitor ArrayChatMessageCont
 
 // A list of chat message content items.
 type ArrayChatMessageContentRequest struct {
-	Value []*ArrayChatMessageContentItemRequest `json:"value,omitempty"`
+	Value []*ArrayChatMessageContentItemRequest `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (a *ArrayChatMessageContentRequest) GetExtraProperties() map[string]interface{} {
+	return a.extraProperties
 }
 
 func (a *ArrayChatMessageContentRequest) UnmarshalJSON(data []byte) error {
@@ -451,6 +450,13 @@ func (a *ArrayChatMessageContentRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*a = ArrayChatMessageContentRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *a)
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+
 	a._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -555,59 +561,17 @@ func (a ArrayVariableValueItem) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", a.Type, a)
 	case "STRING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*StringVariableValue
-		}{
-			Type:                a.Type,
-			StringVariableValue: a.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(a.String, "type", "STRING")
 	case "NUMBER":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NumberVariableValue
-		}{
-			Type:                a.Type,
-			NumberVariableValue: a.Number,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(a.Number, "type", "NUMBER")
 	case "JSON":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*JsonVariableValue
-		}{
-			Type:              a.Type,
-			JsonVariableValue: a.Json,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(a.Json, "type", "JSON")
 	case "ERROR":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ErrorVariableValue
-		}{
-			Type:               a.Type,
-			ErrorVariableValue: a.Error,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(a.Error, "type", "ERROR")
 	case "FUNCTION_CALL":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*FunctionCallVariableValue
-		}{
-			Type:                      a.Type,
-			FunctionCallVariableValue: a.FunctionCall,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(a.FunctionCall, "type", "FUNCTION_CALL")
 	case "IMAGE":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ImageVariableValue
-		}{
-			Type:               a.Type,
-			ImageVariableValue: a.Image,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(a.Image, "type", "IMAGE")
 	}
 }
 
@@ -727,59 +691,17 @@ func (a ArrayVellumValueItem) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", a.Type, a)
 	case "STRING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*StringVellumValue
-		}{
-			Type:              a.Type,
-			StringVellumValue: a.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(a.String, "type", "STRING")
 	case "NUMBER":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NumberVellumValue
-		}{
-			Type:              a.Type,
-			NumberVellumValue: a.Number,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(a.Number, "type", "NUMBER")
 	case "JSON":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*JsonVellumValue
-		}{
-			Type:            a.Type,
-			JsonVellumValue: a.Json,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(a.Json, "type", "JSON")
 	case "IMAGE":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ImageVellumValue
-		}{
-			Type:             a.Type,
-			ImageVellumValue: a.Image,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(a.Image, "type", "IMAGE")
 	case "FUNCTION_CALL":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*FunctionCallVellumValue
-		}{
-			Type:                    a.Type,
-			FunctionCallVellumValue: a.FunctionCall,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(a.FunctionCall, "type", "FUNCTION_CALL")
 	case "ERROR":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ErrorVellumValue
-		}{
-			Type:             a.Type,
-			ErrorVellumValue: a.Error,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(a.Error, "type", "ERROR")
 	}
 }
 
@@ -899,59 +821,17 @@ func (a ArrayVellumValueItemRequest) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", a.Type, a)
 	case "STRING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*StringVellumValueRequest
-		}{
-			Type:                     a.Type,
-			StringVellumValueRequest: a.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(a.String, "type", "STRING")
 	case "NUMBER":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NumberVellumValueRequest
-		}{
-			Type:                     a.Type,
-			NumberVellumValueRequest: a.Number,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(a.Number, "type", "NUMBER")
 	case "JSON":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*JsonVellumValueRequest
-		}{
-			Type:                   a.Type,
-			JsonVellumValueRequest: a.Json,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(a.Json, "type", "JSON")
 	case "IMAGE":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ImageVellumValueRequest
-		}{
-			Type:                    a.Type,
-			ImageVellumValueRequest: a.Image,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(a.Image, "type", "IMAGE")
 	case "FUNCTION_CALL":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*FunctionCallVellumValueRequest
-		}{
-			Type:                           a.Type,
-			FunctionCallVellumValueRequest: a.FunctionCall,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(a.FunctionCall, "type", "FUNCTION_CALL")
 	case "ERROR":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ErrorVellumValueRequest
-		}{
-			Type:                    a.Type,
-			ErrorVellumValueRequest: a.Error,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(a.Error, "type", "ERROR")
 	}
 }
 
@@ -985,9 +865,14 @@ func (a *ArrayVellumValueItemRequest) Accept(visitor ArrayVellumValueItemRequest
 
 // Basic vectorizer for intfloat/multilingual-e5-large.
 type BasicVectorizerIntfloatMultilingualE5Large struct {
-	Config map[string]interface{} `json:"config,omitempty"`
+	Config map[string]interface{} `json:"config,omitempty" url:"config,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BasicVectorizerIntfloatMultilingualE5Large) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
 }
 
 func (b *BasicVectorizerIntfloatMultilingualE5Large) UnmarshalJSON(data []byte) error {
@@ -997,6 +882,13 @@ func (b *BasicVectorizerIntfloatMultilingualE5Large) UnmarshalJSON(data []byte) 
 		return err
 	}
 	*b = BasicVectorizerIntfloatMultilingualE5Large(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
 	b._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1015,9 +907,14 @@ func (b *BasicVectorizerIntfloatMultilingualE5Large) String() string {
 
 // Basic vectorizer for intfloat/multilingual-e5-large.
 type BasicVectorizerIntfloatMultilingualE5LargeRequest struct {
-	Config map[string]interface{} `json:"config,omitempty"`
+	Config map[string]interface{} `json:"config,omitempty" url:"config,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BasicVectorizerIntfloatMultilingualE5LargeRequest) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
 }
 
 func (b *BasicVectorizerIntfloatMultilingualE5LargeRequest) UnmarshalJSON(data []byte) error {
@@ -1027,6 +924,13 @@ func (b *BasicVectorizerIntfloatMultilingualE5LargeRequest) UnmarshalJSON(data [
 		return err
 	}
 	*b = BasicVectorizerIntfloatMultilingualE5LargeRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
 	b._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1045,9 +949,14 @@ func (b *BasicVectorizerIntfloatMultilingualE5LargeRequest) String() string {
 
 // Basic vectorizer for sentence-transformers/multi-qa-mpnet-base-cos-v1.
 type BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1 struct {
-	Config map[string]interface{} `json:"config,omitempty"`
+	Config map[string]interface{} `json:"config,omitempty" url:"config,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
 }
 
 func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1) UnmarshalJSON(data []byte) error {
@@ -1057,6 +966,13 @@ func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1) UnmarshalJSON
 		return err
 	}
 	*b = BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
 	b._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1075,9 +991,14 @@ func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1) String() stri
 
 // Basic vectorizer for sentence-transformers/multi-qa-mpnet-base-cos-v1.
 type BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request struct {
-	Config map[string]interface{} `json:"config,omitempty"`
+	Config map[string]interface{} `json:"config,omitempty" url:"config,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
 }
 
 func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request) UnmarshalJSON(data []byte) error {
@@ -1087,6 +1008,13 @@ func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request) Unmars
 		return err
 	}
 	*b = BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
 	b._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1105,9 +1033,14 @@ func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request) String
 
 // Basic vectorizer for sentence-transformers/multi-qa-mpnet-base-dot-v1.
 type BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1 struct {
-	Config map[string]interface{} `json:"config,omitempty"`
+	Config map[string]interface{} `json:"config,omitempty" url:"config,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
 }
 
 func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1) UnmarshalJSON(data []byte) error {
@@ -1117,6 +1050,13 @@ func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1) UnmarshalJSON
 		return err
 	}
 	*b = BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
 	b._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1135,9 +1075,14 @@ func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1) String() stri
 
 // Basic vectorizer for sentence-transformers/multi-qa-mpnet-base-dot-v1.
 type BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request struct {
-	Config map[string]interface{} `json:"config,omitempty"`
+	Config map[string]interface{} `json:"config,omitempty" url:"config,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
 }
 
 func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request) UnmarshalJSON(data []byte) error {
@@ -1147,6 +1092,13 @@ func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request) Unmars
 		return err
 	}
 	*b = BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b)
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
 	b._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1166,10 +1118,15 @@ func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request) String
 // A user input representing a list of chat messages
 type ChatHistoryInputRequest struct {
 	// The variable's name, as defined in the deployment.
-	Name  string                `json:"name"`
-	Value []*ChatMessageRequest `json:"value,omitempty"`
+	Name  string                `json:"name" url:"name"`
+	Value []*ChatMessageRequest `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *ChatHistoryInputRequest) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
 }
 
 func (c *ChatHistoryInputRequest) UnmarshalJSON(data []byte) error {
@@ -1179,6 +1136,13 @@ func (c *ChatHistoryInputRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = ChatHistoryInputRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
 	c._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1196,13 +1160,18 @@ func (c *ChatHistoryInputRequest) String() string {
 }
 
 type ChatMessage struct {
-	Text    *string             `json:"text,omitempty"`
-	Role    ChatMessageRole     `json:"role,omitempty"`
-	Content *ChatMessageContent `json:"content,omitempty"`
+	Text    *string             `json:"text,omitempty" url:"text,omitempty"`
+	Role    ChatMessageRole     `json:"role" url:"role"`
+	Content *ChatMessageContent `json:"content,omitempty" url:"content,omitempty"`
 	// An optional identifier representing who or what generated this message.
-	Source *string `json:"source,omitempty"`
+	Source *string `json:"source,omitempty" url:"source,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *ChatMessage) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
 }
 
 func (c *ChatMessage) UnmarshalJSON(data []byte) error {
@@ -1212,6 +1181,13 @@ func (c *ChatMessage) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = ChatMessage(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
 	c._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1294,41 +1270,13 @@ func (c ChatMessageContent) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", c.Type, c)
 	case "STRING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*StringChatMessageContent
-		}{
-			Type:                     c.Type,
-			StringChatMessageContent: c.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(c.String, "type", "STRING")
 	case "FUNCTION_CALL":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*FunctionCallChatMessageContent
-		}{
-			Type:                           c.Type,
-			FunctionCallChatMessageContent: c.FunctionCall,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(c.FunctionCall, "type", "FUNCTION_CALL")
 	case "ARRAY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ArrayChatMessageContent
-		}{
-			Type:                    c.Type,
-			ArrayChatMessageContent: c.Array,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(c.Array, "type", "ARRAY")
 	case "IMAGE":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ImageChatMessageContent
-		}{
-			Type:                    c.Type,
-			ImageChatMessageContent: c.Image,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(c.Image, "type", "IMAGE")
 	}
 }
 
@@ -1420,41 +1368,13 @@ func (c ChatMessageContentRequest) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", c.Type, c)
 	case "STRING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*StringChatMessageContentRequest
-		}{
-			Type:                            c.Type,
-			StringChatMessageContentRequest: c.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(c.String, "type", "STRING")
 	case "FUNCTION_CALL":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*FunctionCallChatMessageContentRequest
-		}{
-			Type:                                  c.Type,
-			FunctionCallChatMessageContentRequest: c.FunctionCall,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(c.FunctionCall, "type", "FUNCTION_CALL")
 	case "ARRAY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ArrayChatMessageContentRequest
-		}{
-			Type:                           c.Type,
-			ArrayChatMessageContentRequest: c.Array,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(c.Array, "type", "ARRAY")
 	case "IMAGE":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ImageChatMessageContentRequest
-		}{
-			Type:                           c.Type,
-			ImageChatMessageContentRequest: c.Image,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(c.Image, "type", "IMAGE")
 	}
 }
 
@@ -1481,13 +1401,18 @@ func (c *ChatMessageContentRequest) Accept(visitor ChatMessageContentRequestVisi
 }
 
 type ChatMessageRequest struct {
-	Text    *string                    `json:"text,omitempty"`
-	Role    ChatMessageRole            `json:"role,omitempty"`
-	Content *ChatMessageContentRequest `json:"content,omitempty"`
+	Text    *string                    `json:"text,omitempty" url:"text,omitempty"`
+	Role    ChatMessageRole            `json:"role" url:"role"`
+	Content *ChatMessageContentRequest `json:"content,omitempty" url:"content,omitempty"`
 	// An optional identifier representing who or what generated this message.
-	Source *string `json:"source,omitempty"`
+	Source *string `json:"source,omitempty" url:"source,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *ChatMessageRequest) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
 }
 
 func (c *ChatMessageRequest) UnmarshalJSON(data []byte) error {
@@ -1497,6 +1422,13 @@ func (c *ChatMessageRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = ChatMessageRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
 	c._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1546,10 +1478,15 @@ func (c ChatMessageRole) Ptr() *ChatMessageRole {
 }
 
 type CodeExecutionNodeArrayResult struct {
-	Id    string                    `json:"id"`
-	Value []*ArrayVariableValueItem `json:"value,omitempty"`
+	Id    string                    `json:"id" url:"id"`
+	Value []*ArrayVariableValueItem `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CodeExecutionNodeArrayResult) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
 }
 
 func (c *CodeExecutionNodeArrayResult) UnmarshalJSON(data []byte) error {
@@ -1559,6 +1496,13 @@ func (c *CodeExecutionNodeArrayResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CodeExecutionNodeArrayResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
 	c._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1576,10 +1520,15 @@ func (c *CodeExecutionNodeArrayResult) String() string {
 }
 
 type CodeExecutionNodeChatHistoryResult struct {
-	Id    string         `json:"id"`
-	Value []*ChatMessage `json:"value,omitempty"`
+	Id    string         `json:"id" url:"id"`
+	Value []*ChatMessage `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CodeExecutionNodeChatHistoryResult) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
 }
 
 func (c *CodeExecutionNodeChatHistoryResult) UnmarshalJSON(data []byte) error {
@@ -1589,6 +1538,13 @@ func (c *CodeExecutionNodeChatHistoryResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CodeExecutionNodeChatHistoryResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
 	c._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1606,10 +1562,15 @@ func (c *CodeExecutionNodeChatHistoryResult) String() string {
 }
 
 type CodeExecutionNodeErrorResult struct {
-	Id    string       `json:"id"`
-	Value *VellumError `json:"value,omitempty"`
+	Id    string       `json:"id" url:"id"`
+	Value *VellumError `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CodeExecutionNodeErrorResult) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
 }
 
 func (c *CodeExecutionNodeErrorResult) UnmarshalJSON(data []byte) error {
@@ -1619,6 +1580,13 @@ func (c *CodeExecutionNodeErrorResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CodeExecutionNodeErrorResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
 	c._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1636,10 +1604,15 @@ func (c *CodeExecutionNodeErrorResult) String() string {
 }
 
 type CodeExecutionNodeFunctionCallResult struct {
-	Id    string        `json:"id"`
-	Value *FunctionCall `json:"value,omitempty"`
+	Id    string        `json:"id" url:"id"`
+	Value *FunctionCall `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CodeExecutionNodeFunctionCallResult) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
 }
 
 func (c *CodeExecutionNodeFunctionCallResult) UnmarshalJSON(data []byte) error {
@@ -1649,6 +1622,13 @@ func (c *CodeExecutionNodeFunctionCallResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CodeExecutionNodeFunctionCallResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
 	c._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1666,10 +1646,15 @@ func (c *CodeExecutionNodeFunctionCallResult) String() string {
 }
 
 type CodeExecutionNodeJsonResult struct {
-	Id    string      `json:"id"`
-	Value interface{} `json:"value,omitempty"`
+	Id    string      `json:"id" url:"id"`
+	Value interface{} `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CodeExecutionNodeJsonResult) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
 }
 
 func (c *CodeExecutionNodeJsonResult) UnmarshalJSON(data []byte) error {
@@ -1679,6 +1664,13 @@ func (c *CodeExecutionNodeJsonResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CodeExecutionNodeJsonResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
 	c._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1696,10 +1688,15 @@ func (c *CodeExecutionNodeJsonResult) String() string {
 }
 
 type CodeExecutionNodeNumberResult struct {
-	Id    string   `json:"id"`
-	Value *float64 `json:"value,omitempty"`
+	Id    string   `json:"id" url:"id"`
+	Value *float64 `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CodeExecutionNodeNumberResult) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
 }
 
 func (c *CodeExecutionNodeNumberResult) UnmarshalJSON(data []byte) error {
@@ -1709,6 +1706,13 @@ func (c *CodeExecutionNodeNumberResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CodeExecutionNodeNumberResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
 	c._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1727,9 +1731,14 @@ func (c *CodeExecutionNodeNumberResult) String() string {
 
 // A Node Result Event emitted from a Code Execution Node.
 type CodeExecutionNodeResult struct {
-	Data *CodeExecutionNodeResultData `json:"data,omitempty"`
+	Data *CodeExecutionNodeResultData `json:"data" url:"data"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CodeExecutionNodeResult) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
 }
 
 func (c *CodeExecutionNodeResult) UnmarshalJSON(data []byte) error {
@@ -1739,6 +1748,13 @@ func (c *CodeExecutionNodeResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CodeExecutionNodeResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
 	c._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1756,10 +1772,15 @@ func (c *CodeExecutionNodeResult) String() string {
 }
 
 type CodeExecutionNodeResultData struct {
-	Output      *CodeExecutionNodeResultOutput `json:"output,omitempty"`
-	LogOutputId *string                        `json:"log_output_id,omitempty"`
+	Output      *CodeExecutionNodeResultOutput `json:"output" url:"output"`
+	LogOutputId *string                        `json:"log_output_id,omitempty" url:"log_output_id,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CodeExecutionNodeResultData) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
 }
 
 func (c *CodeExecutionNodeResultData) UnmarshalJSON(data []byte) error {
@@ -1769,6 +1790,13 @@ func (c *CodeExecutionNodeResultData) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CodeExecutionNodeResultData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
 	c._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -1895,77 +1923,21 @@ func (c CodeExecutionNodeResultOutput) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", c.Type, c)
 	case "STRING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*CodeExecutionNodeStringResult
-		}{
-			Type:                          c.Type,
-			CodeExecutionNodeStringResult: c.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(c.String, "type", "STRING")
 	case "NUMBER":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*CodeExecutionNodeNumberResult
-		}{
-			Type:                          c.Type,
-			CodeExecutionNodeNumberResult: c.Number,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(c.Number, "type", "NUMBER")
 	case "JSON":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*CodeExecutionNodeJsonResult
-		}{
-			Type:                        c.Type,
-			CodeExecutionNodeJsonResult: c.Json,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(c.Json, "type", "JSON")
 	case "CHAT_HISTORY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*CodeExecutionNodeChatHistoryResult
-		}{
-			Type:                               c.Type,
-			CodeExecutionNodeChatHistoryResult: c.ChatHistory,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(c.ChatHistory, "type", "CHAT_HISTORY")
 	case "SEARCH_RESULTS":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*CodeExecutionNodeSearchResultsResult
-		}{
-			Type:                                 c.Type,
-			CodeExecutionNodeSearchResultsResult: c.SearchResults,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(c.SearchResults, "type", "SEARCH_RESULTS")
 	case "ERROR":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*CodeExecutionNodeErrorResult
-		}{
-			Type:                         c.Type,
-			CodeExecutionNodeErrorResult: c.Error,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(c.Error, "type", "ERROR")
 	case "ARRAY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*CodeExecutionNodeArrayResult
-		}{
-			Type:                         c.Type,
-			CodeExecutionNodeArrayResult: c.Array,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(c.Array, "type", "ARRAY")
 	case "FUNCTION_CALL":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*CodeExecutionNodeFunctionCallResult
-		}{
-			Type:                                c.Type,
-			CodeExecutionNodeFunctionCallResult: c.FunctionCall,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(c.FunctionCall, "type", "FUNCTION_CALL")
 	}
 }
 
@@ -2004,10 +1976,15 @@ func (c *CodeExecutionNodeResultOutput) Accept(visitor CodeExecutionNodeResultOu
 }
 
 type CodeExecutionNodeSearchResultsResult struct {
-	Id    string          `json:"id"`
-	Value []*SearchResult `json:"value,omitempty"`
+	Id    string          `json:"id" url:"id"`
+	Value []*SearchResult `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CodeExecutionNodeSearchResultsResult) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
 }
 
 func (c *CodeExecutionNodeSearchResultsResult) UnmarshalJSON(data []byte) error {
@@ -2017,6 +1994,13 @@ func (c *CodeExecutionNodeSearchResultsResult) UnmarshalJSON(data []byte) error 
 		return err
 	}
 	*c = CodeExecutionNodeSearchResultsResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
 	c._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2034,10 +2018,15 @@ func (c *CodeExecutionNodeSearchResultsResult) String() string {
 }
 
 type CodeExecutionNodeStringResult struct {
-	Id    string  `json:"id"`
-	Value *string `json:"value,omitempty"`
+	Id    string  `json:"id" url:"id"`
+	Value *string `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CodeExecutionNodeStringResult) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
 }
 
 func (c *CodeExecutionNodeStringResult) UnmarshalJSON(data []byte) error {
@@ -2047,6 +2036,13 @@ func (c *CodeExecutionNodeStringResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CodeExecutionNodeStringResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
 	c._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2065,13 +2061,18 @@ func (c *CodeExecutionNodeStringResult) String() string {
 
 type CompilePromptDeploymentExpandMetaRequest struct {
 	// If enabled, the response will include the model identifier representing the ML Model invoked by the Prompt.
-	ModelName *bool `json:"model_name,omitempty"`
+	ModelName *bool `json:"model_name,omitempty" url:"model_name,omitempty"`
 	// If enabled, the response will include the release tag of the Prompt Deployment.
-	DeploymentReleaseTag *bool `json:"deployment_release_tag,omitempty"`
+	DeploymentReleaseTag *bool `json:"deployment_release_tag,omitempty" url:"deployment_release_tag,omitempty"`
 	// If enabled, the response will include the ID of the Prompt Version backing the deployment.
-	PromptVersionId *bool `json:"prompt_version_id,omitempty"`
+	PromptVersionId *bool `json:"prompt_version_id,omitempty" url:"prompt_version_id,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CompilePromptDeploymentExpandMetaRequest) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
 }
 
 func (c *CompilePromptDeploymentExpandMetaRequest) UnmarshalJSON(data []byte) error {
@@ -2081,6 +2082,13 @@ func (c *CompilePromptDeploymentExpandMetaRequest) UnmarshalJSON(data []byte) er
 		return err
 	}
 	*c = CompilePromptDeploymentExpandMetaRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
 	c._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2099,11 +2107,16 @@ func (c *CompilePromptDeploymentExpandMetaRequest) String() string {
 
 // The subset of the metadata tracked by Vellum during Prompt Deployment compilation that the request opted into with `expand_meta`.
 type CompilePromptMeta struct {
-	ModelName            *string `json:"model_name,omitempty"`
-	DeploymentReleaseTag *string `json:"deployment_release_tag,omitempty"`
-	PromptVersionId      *string `json:"prompt_version_id,omitempty"`
+	ModelName            *string `json:"model_name,omitempty" url:"model_name,omitempty"`
+	DeploymentReleaseTag *string `json:"deployment_release_tag,omitempty" url:"deployment_release_tag,omitempty"`
+	PromptVersionId      *string `json:"prompt_version_id,omitempty" url:"prompt_version_id,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CompilePromptMeta) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
 }
 
 func (c *CompilePromptMeta) UnmarshalJSON(data []byte) error {
@@ -2113,6 +2126,13 @@ func (c *CompilePromptMeta) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CompilePromptMeta(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
 	c._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2131,9 +2151,14 @@ func (c *CompilePromptMeta) String() string {
 
 // A Node Result Event emitted from a Conditional Node.
 type ConditionalNodeResult struct {
-	Data *ConditionalNodeResultData `json:"data,omitempty"`
+	Data *ConditionalNodeResultData `json:"data" url:"data"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *ConditionalNodeResult) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
 }
 
 func (c *ConditionalNodeResult) UnmarshalJSON(data []byte) error {
@@ -2143,6 +2168,13 @@ func (c *ConditionalNodeResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = ConditionalNodeResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
 	c._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2160,9 +2192,14 @@ func (c *ConditionalNodeResult) String() string {
 }
 
 type ConditionalNodeResultData struct {
-	SourceHandleId *string `json:"source_handle_id,omitempty"`
+	SourceHandleId *string `json:"source_handle_id,omitempty" url:"source_handle_id,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *ConditionalNodeResultData) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
 }
 
 func (c *ConditionalNodeResultData) UnmarshalJSON(data []byte) error {
@@ -2172,6 +2209,13 @@ func (c *ConditionalNodeResultData) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = ConditionalNodeResultData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
 	c._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2191,15 +2235,20 @@ func (c *ConditionalNodeResultData) String() string {
 // Information about the Test Case to create
 type CreateTestSuiteTestCaseRequest struct {
 	// A human-readable label used to convey the intention of this Test Case
-	Label *string `json:"label,omitempty"`
+	Label *string `json:"label,omitempty" url:"label,omitempty"`
 	// Values for each of the Test Case's input variables
-	InputValues []*NamedTestCaseVariableValueRequest `json:"input_values,omitempty"`
+	InputValues []*NamedTestCaseVariableValueRequest `json:"input_values" url:"input_values"`
 	// Values for each of the Test Case's evaluation variables
-	EvaluationValues []*NamedTestCaseVariableValueRequest `json:"evaluation_values,omitempty"`
+	EvaluationValues []*NamedTestCaseVariableValueRequest `json:"evaluation_values" url:"evaluation_values"`
 	// Optionally provide an ID that uniquely identifies this Test Case in your system. Useful for updating this Test Cases data after initial creation. Cannot be changed later.
-	ExternalId *string `json:"external_id,omitempty"`
+	ExternalId *string `json:"external_id,omitempty" url:"external_id,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CreateTestSuiteTestCaseRequest) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
 }
 
 func (c *CreateTestSuiteTestCaseRequest) UnmarshalJSON(data []byte) error {
@@ -2209,6 +2258,13 @@ func (c *CreateTestSuiteTestCaseRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CreateTestSuiteTestCaseRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
 	c._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2226,10 +2282,15 @@ func (c *CreateTestSuiteTestCaseRequest) String() string {
 }
 
 type DeploymentProviderPayloadResponse struct {
-	Payload *DeploymentProviderPayloadResponsePayload `json:"payload,omitempty"`
-	Meta    *CompilePromptMeta                        `json:"meta,omitempty"`
+	Payload *DeploymentProviderPayloadResponsePayload `json:"payload" url:"payload"`
+	Meta    *CompilePromptMeta                        `json:"meta,omitempty" url:"meta,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DeploymentProviderPayloadResponse) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
 }
 
 func (d *DeploymentProviderPayloadResponse) UnmarshalJSON(data []byte) error {
@@ -2239,6 +2300,13 @@ func (d *DeploymentProviderPayloadResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = DeploymentProviderPayloadResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
 	d._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2256,29 +2324,26 @@ func (d *DeploymentProviderPayloadResponse) String() string {
 }
 
 type DeploymentProviderPayloadResponsePayload struct {
-	typeName         string
 	StringUnknownMap map[string]interface{}
 	String           string
 }
 
 func NewDeploymentProviderPayloadResponsePayloadFromStringUnknownMap(value map[string]interface{}) *DeploymentProviderPayloadResponsePayload {
-	return &DeploymentProviderPayloadResponsePayload{typeName: "stringUnknownMap", StringUnknownMap: value}
+	return &DeploymentProviderPayloadResponsePayload{StringUnknownMap: value}
 }
 
 func NewDeploymentProviderPayloadResponsePayloadFromString(value string) *DeploymentProviderPayloadResponsePayload {
-	return &DeploymentProviderPayloadResponsePayload{typeName: "string", String: value}
+	return &DeploymentProviderPayloadResponsePayload{String: value}
 }
 
 func (d *DeploymentProviderPayloadResponsePayload) UnmarshalJSON(data []byte) error {
 	var valueStringUnknownMap map[string]interface{}
 	if err := json.Unmarshal(data, &valueStringUnknownMap); err == nil {
-		d.typeName = "stringUnknownMap"
 		d.StringUnknownMap = valueStringUnknownMap
 		return nil
 	}
 	var valueString string
 	if err := json.Unmarshal(data, &valueString); err == nil {
-		d.typeName = "string"
 		d.String = valueString
 		return nil
 	}
@@ -2286,14 +2351,13 @@ func (d *DeploymentProviderPayloadResponsePayload) UnmarshalJSON(data []byte) er
 }
 
 func (d DeploymentProviderPayloadResponsePayload) MarshalJSON() ([]byte, error) {
-	switch d.typeName {
-	default:
-		return nil, fmt.Errorf("invalid type %s in %T", d.typeName, d)
-	case "stringUnknownMap":
+	if d.StringUnknownMap != nil {
 		return json.Marshal(d.StringUnknownMap)
-	case "string":
+	}
+	if d.String != "" {
 		return json.Marshal(d.String)
 	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", d)
 }
 
 type DeploymentProviderPayloadResponsePayloadVisitor interface {
@@ -2302,55 +2366,88 @@ type DeploymentProviderPayloadResponsePayloadVisitor interface {
 }
 
 func (d *DeploymentProviderPayloadResponsePayload) Accept(visitor DeploymentProviderPayloadResponsePayloadVisitor) error {
-	switch d.typeName {
-	default:
-		return fmt.Errorf("invalid type %s in %T", d.typeName, d)
-	case "stringUnknownMap":
+	if d.StringUnknownMap != nil {
 		return visitor.VisitStringUnknownMap(d.StringUnknownMap)
-	case "string":
+	}
+	if d.String != "" {
 		return visitor.VisitString(d.String)
 	}
+	return fmt.Errorf("type %T does not include a non-empty union type", d)
 }
 
 type DeploymentRead struct {
-	Id      string    `json:"id"`
-	Created time.Time `json:"created"`
+	Id      string    `json:"id" url:"id"`
+	Created time.Time `json:"created" url:"created"`
 	// A human-readable label for the deployment
-	Label string `json:"label"`
+	Label string `json:"label" url:"label"`
 	// A name that uniquely identifies this deployment within its workspace
-	Name string `json:"name"`
+	Name string `json:"name" url:"name"`
 	// The current status of the deployment
 	//
 	// - `ACTIVE` - Active
 	// - `ARCHIVED` - Archived
-	Status *EntityStatus `json:"status,omitempty"`
+	Status *EntityStatus `json:"status,omitempty" url:"status,omitempty"`
 	// The environment this deployment is used in
 	//
 	// - `DEVELOPMENT` - Development
 	// - `STAGING` - Staging
 	// - `PRODUCTION` - Production
-	Environment    *EnvironmentEnum  `json:"environment,omitempty"`
-	LastDeployedOn time.Time         `json:"last_deployed_on"`
-	InputVariables []*VellumVariable `json:"input_variables,omitempty"`
+	Environment    *EnvironmentEnum  `json:"environment,omitempty" url:"environment,omitempty"`
+	LastDeployedOn time.Time         `json:"last_deployed_on" url:"last_deployed_on"`
+	InputVariables []*VellumVariable `json:"input_variables" url:"input_variables"`
 	// A human-readable description of the deployment
-	Description *string `json:"description,omitempty"`
+	Description *string `json:"description,omitempty" url:"description,omitempty"`
 	// Deprecated. The Prompt execution endpoints return a `prompt_version_id` that could be used instead.
-	ActiveModelVersionIds []string `json:"active_model_version_ids,omitempty"`
+	ActiveModelVersionIds []string `json:"active_model_version_ids" url:"active_model_version_ids"`
 	// The ID of the history item associated with this Deployment's LATEST Release Tag
-	LastDeployedHistoryItemId string `json:"last_deployed_history_item_id"`
+	LastDeployedHistoryItemId string `json:"last_deployed_history_item_id" url:"last_deployed_history_item_id"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DeploymentRead) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
 }
 
 func (d *DeploymentRead) UnmarshalJSON(data []byte) error {
-	type unmarshaler DeploymentRead
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed DeploymentRead
+	var unmarshaler = struct {
+		embed
+		Created        *core.DateTime `json:"created"`
+		LastDeployedOn *core.DateTime `json:"last_deployed_on"`
+	}{
+		embed: embed(*d),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*d = DeploymentRead(value)
+	*d = DeploymentRead(unmarshaler.embed)
+	d.Created = unmarshaler.Created.Time()
+	d.LastDeployedOn = unmarshaler.LastDeployedOn.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
 	d._rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (d *DeploymentRead) MarshalJSON() ([]byte, error) {
+	type embed DeploymentRead
+	var marshaler = struct {
+		embed
+		Created        *core.DateTime `json:"created"`
+		LastDeployedOn *core.DateTime `json:"last_deployed_on"`
+	}{
+		embed:          embed(*d),
+		Created:        core.NewDateTime(d.Created),
+		LastDeployedOn: core.NewDateTime(d.LastDeployedOn),
+	}
+	return json.Marshal(marshaler)
 }
 
 func (d *DeploymentRead) String() string {
@@ -2366,21 +2463,51 @@ func (d *DeploymentRead) String() string {
 }
 
 type DeploymentReleaseTagDeploymentHistoryItem struct {
-	Id        string    `json:"id"`
-	Timestamp time.Time `json:"timestamp"`
+	Id        string    `json:"id" url:"id"`
+	Timestamp time.Time `json:"timestamp" url:"timestamp"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DeploymentReleaseTagDeploymentHistoryItem) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
 }
 
 func (d *DeploymentReleaseTagDeploymentHistoryItem) UnmarshalJSON(data []byte) error {
-	type unmarshaler DeploymentReleaseTagDeploymentHistoryItem
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed DeploymentReleaseTagDeploymentHistoryItem
+	var unmarshaler = struct {
+		embed
+		Timestamp *core.DateTime `json:"timestamp"`
+	}{
+		embed: embed(*d),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*d = DeploymentReleaseTagDeploymentHistoryItem(value)
+	*d = DeploymentReleaseTagDeploymentHistoryItem(unmarshaler.embed)
+	d.Timestamp = unmarshaler.Timestamp.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
 	d._rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (d *DeploymentReleaseTagDeploymentHistoryItem) MarshalJSON() ([]byte, error) {
+	type embed DeploymentReleaseTagDeploymentHistoryItem
+	var marshaler = struct {
+		embed
+		Timestamp *core.DateTime `json:"timestamp"`
+	}{
+		embed:     embed(*d),
+		Timestamp: core.NewDateTime(d.Timestamp),
+	}
+	return json.Marshal(marshaler)
 }
 
 func (d *DeploymentReleaseTagDeploymentHistoryItem) String() string {
@@ -2397,16 +2524,21 @@ func (d *DeploymentReleaseTagDeploymentHistoryItem) String() string {
 
 type DeploymentReleaseTagRead struct {
 	// The name of the Release Tag
-	Name string `json:"name"`
+	Name string `json:"name" url:"name"`
 	// The source of how the Release Tag was originally created
 	//
 	// - `SYSTEM` - System
 	// - `USER` - User
-	Source ReleaseTagSource `json:"source,omitempty"`
+	Source ReleaseTagSource `json:"source" url:"source"`
 	// The Deployment History Item that this Release Tag is associated with
-	HistoryItem *DeploymentReleaseTagDeploymentHistoryItem `json:"history_item,omitempty"`
+	HistoryItem *DeploymentReleaseTagDeploymentHistoryItem `json:"history_item" url:"history_item"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DeploymentReleaseTagRead) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
 }
 
 func (d *DeploymentReleaseTagRead) UnmarshalJSON(data []byte) error {
@@ -2416,6 +2548,13 @@ func (d *DeploymentReleaseTagRead) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = DeploymentReleaseTagRead(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
 	d._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2434,9 +2573,9 @@ func (d *DeploymentReleaseTagRead) String() string {
 
 type DocumentDocumentToDocumentIndex struct {
 	// Vellum-generated ID that uniquely identifies this link.
-	Id string `json:"id"`
+	Id string `json:"id" url:"id"`
 	// Vellum-generated ID that uniquely identifies the index this document is included in.
-	DocumentIndexId string `json:"document_index_id"`
+	DocumentIndexId string `json:"document_index_id" url:"document_index_id"`
 	// An enum value representing where this document is along its indexing lifecycle for this index.
 	//
 	// - `AWAITING_PROCESSING` - Awaiting Processing
@@ -2444,9 +2583,14 @@ type DocumentDocumentToDocumentIndex struct {
 	// - `INDEXING` - Indexing
 	// - `INDEXED` - Indexed
 	// - `FAILED` - Failed
-	IndexingState *IndexingStateEnum `json:"indexing_state,omitempty"`
+	IndexingState *IndexingStateEnum `json:"indexing_state,omitempty" url:"indexing_state,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DocumentDocumentToDocumentIndex) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
 }
 
 func (d *DocumentDocumentToDocumentIndex) UnmarshalJSON(data []byte) error {
@@ -2456,6 +2600,13 @@ func (d *DocumentDocumentToDocumentIndex) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = DocumentDocumentToDocumentIndex(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
 	d._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2527,32 +2678,11 @@ func (d DocumentIndexChunking) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", d.ChunkerName, d)
 	case "reducto-chunker":
-		var marshaler = struct {
-			ChunkerName string `json:"chunker_name"`
-			*ReductoChunking
-		}{
-			ChunkerName:     d.ChunkerName,
-			ReductoChunking: d.ReductoChunker,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(d.ReductoChunker, "chunker_name", "reducto-chunker")
 	case "sentence-chunker":
-		var marshaler = struct {
-			ChunkerName string `json:"chunker_name"`
-			*SentenceChunking
-		}{
-			ChunkerName:      d.ChunkerName,
-			SentenceChunking: d.SentenceChunker,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(d.SentenceChunker, "chunker_name", "sentence-chunker")
 	case "token-overlapping-window-chunker":
-		var marshaler = struct {
-			ChunkerName string `json:"chunker_name"`
-			*TokenOverlappingWindowChunking
-		}{
-			ChunkerName:                    d.ChunkerName,
-			TokenOverlappingWindowChunking: d.TokenOverlappingWindowChunker,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(d.TokenOverlappingWindowChunker, "chunker_name", "token-overlapping-window-chunker")
 	}
 }
 
@@ -2630,32 +2760,11 @@ func (d DocumentIndexChunkingRequest) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", d.ChunkerName, d)
 	case "reducto-chunker":
-		var marshaler = struct {
-			ChunkerName string `json:"chunker_name"`
-			*ReductoChunkingRequest
-		}{
-			ChunkerName:            d.ChunkerName,
-			ReductoChunkingRequest: d.ReductoChunker,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(d.ReductoChunker, "chunker_name", "reducto-chunker")
 	case "sentence-chunker":
-		var marshaler = struct {
-			ChunkerName string `json:"chunker_name"`
-			*SentenceChunkingRequest
-		}{
-			ChunkerName:             d.ChunkerName,
-			SentenceChunkingRequest: d.SentenceChunker,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(d.SentenceChunker, "chunker_name", "sentence-chunker")
 	case "token-overlapping-window-chunker":
-		var marshaler = struct {
-			ChunkerName string `json:"chunker_name"`
-			*TokenOverlappingWindowChunkingRequest
-		}{
-			ChunkerName:                           d.ChunkerName,
-			TokenOverlappingWindowChunkingRequest: d.TokenOverlappingWindowChunker,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(d.TokenOverlappingWindowChunker, "chunker_name", "token-overlapping-window-chunker")
 	}
 }
 
@@ -2679,10 +2788,15 @@ func (d *DocumentIndexChunkingRequest) Accept(visitor DocumentIndexChunkingReque
 }
 
 type DocumentIndexIndexingConfig struct {
-	Vectorizer *IndexingConfigVectorizer `json:"vectorizer,omitempty"`
-	Chunking   *DocumentIndexChunking    `json:"chunking,omitempty"`
+	Vectorizer *IndexingConfigVectorizer `json:"vectorizer" url:"vectorizer"`
+	Chunking   *DocumentIndexChunking    `json:"chunking,omitempty" url:"chunking,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DocumentIndexIndexingConfig) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
 }
 
 func (d *DocumentIndexIndexingConfig) UnmarshalJSON(data []byte) error {
@@ -2692,6 +2806,13 @@ func (d *DocumentIndexIndexingConfig) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = DocumentIndexIndexingConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
 	d._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2709,10 +2830,15 @@ func (d *DocumentIndexIndexingConfig) String() string {
 }
 
 type DocumentIndexIndexingConfigRequest struct {
-	Vectorizer *IndexingConfigVectorizerRequest `json:"vectorizer,omitempty"`
-	Chunking   *DocumentIndexChunkingRequest    `json:"chunking,omitempty"`
+	Vectorizer *IndexingConfigVectorizerRequest `json:"vectorizer" url:"vectorizer"`
+	Chunking   *DocumentIndexChunkingRequest    `json:"chunking,omitempty" url:"chunking,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DocumentIndexIndexingConfigRequest) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
 }
 
 func (d *DocumentIndexIndexingConfigRequest) UnmarshalJSON(data []byte) error {
@@ -2722,6 +2848,13 @@ func (d *DocumentIndexIndexingConfigRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = DocumentIndexIndexingConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
 	d._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2739,37 +2872,67 @@ func (d *DocumentIndexIndexingConfigRequest) String() string {
 }
 
 type DocumentIndexRead struct {
-	Id      string    `json:"id"`
-	Created time.Time `json:"created"`
+	Id      string    `json:"id" url:"id"`
+	Created time.Time `json:"created" url:"created"`
 	// A human-readable label for the document index
-	Label string `json:"label"`
+	Label string `json:"label" url:"label"`
 	// A name that uniquely identifies this index within its workspace
-	Name string `json:"name"`
+	Name string `json:"name" url:"name"`
 	// The current status of the document index
 	//
 	// - `ACTIVE` - Active
 	// - `ARCHIVED` - Archived
-	Status *EntityStatus `json:"status,omitempty"`
+	Status *EntityStatus `json:"status,omitempty" url:"status,omitempty"`
 	// The environment this document index is used in
 	//
 	// - `DEVELOPMENT` - Development
 	// - `STAGING` - Staging
 	// - `PRODUCTION` - Production
-	Environment    *EnvironmentEnum             `json:"environment,omitempty"`
-	IndexingConfig *DocumentIndexIndexingConfig `json:"indexing_config,omitempty"`
+	Environment    *EnvironmentEnum             `json:"environment,omitempty" url:"environment,omitempty"`
+	IndexingConfig *DocumentIndexIndexingConfig `json:"indexing_config" url:"indexing_config"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DocumentIndexRead) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
 }
 
 func (d *DocumentIndexRead) UnmarshalJSON(data []byte) error {
-	type unmarshaler DocumentIndexRead
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed DocumentIndexRead
+	var unmarshaler = struct {
+		embed
+		Created *core.DateTime `json:"created"`
+	}{
+		embed: embed(*d),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*d = DocumentIndexRead(value)
+	*d = DocumentIndexRead(unmarshaler.embed)
+	d.Created = unmarshaler.Created.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
 	d._rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (d *DocumentIndexRead) MarshalJSON() ([]byte, error) {
+	type embed DocumentIndexRead
+	var marshaler = struct {
+		embed
+		Created *core.DateTime `json:"created"`
+	}{
+		embed:   embed(*d),
+		Created: core.NewDateTime(d.Created),
+	}
+	return json.Marshal(marshaler)
 }
 
 func (d *DocumentIndexRead) String() string {
@@ -2785,41 +2948,71 @@ func (d *DocumentIndexRead) String() string {
 }
 
 type DocumentRead struct {
-	Id string `json:"id"`
+	Id string `json:"id" url:"id"`
 	// The unique id of this document as it exists in the user's system.
-	ExternalId     *string   `json:"external_id,omitempty"`
-	LastUploadedAt time.Time `json:"last_uploaded_at"`
+	ExternalId     *string   `json:"external_id,omitempty" url:"external_id,omitempty"`
+	LastUploadedAt time.Time `json:"last_uploaded_at" url:"last_uploaded_at"`
 	// A human-readable label for the document. Defaults to the originally uploaded file's file name.
-	Label string `json:"label"`
+	Label string `json:"label" url:"label"`
 	// The current processing state of the document
 	//
 	// - `QUEUED` - Queued
 	// - `PROCESSING` - Processing
 	// - `PROCESSED` - Processed
 	// - `FAILED` - Failed
-	ProcessingState *ProcessingStateEnum `json:"processing_state,omitempty"`
+	ProcessingState *ProcessingStateEnum `json:"processing_state,omitempty" url:"processing_state,omitempty"`
 	// The current status of the document
 	//
 	// - `ACTIVE` - Active
-	Status                    *DocumentStatus                    `json:"status,omitempty"`
-	OriginalFileUrl           *string                            `json:"original_file_url,omitempty"`
-	ProcessedFileUrl          *string                            `json:"processed_file_url,omitempty"`
-	DocumentToDocumentIndexes []*DocumentDocumentToDocumentIndex `json:"document_to_document_indexes,omitempty"`
+	Status                    *DocumentStatus                    `json:"status,omitempty" url:"status,omitempty"`
+	OriginalFileUrl           *string                            `json:"original_file_url,omitempty" url:"original_file_url,omitempty"`
+	ProcessedFileUrl          *string                            `json:"processed_file_url,omitempty" url:"processed_file_url,omitempty"`
+	DocumentToDocumentIndexes []*DocumentDocumentToDocumentIndex `json:"document_to_document_indexes" url:"document_to_document_indexes"`
 	// A previously supplied JSON object containing metadata that can be filtered on when searching.
-	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DocumentRead) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
 }
 
 func (d *DocumentRead) UnmarshalJSON(data []byte) error {
-	type unmarshaler DocumentRead
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed DocumentRead
+	var unmarshaler = struct {
+		embed
+		LastUploadedAt *core.DateTime `json:"last_uploaded_at"`
+	}{
+		embed: embed(*d),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*d = DocumentRead(value)
+	*d = DocumentRead(unmarshaler.embed)
+	d.LastUploadedAt = unmarshaler.LastUploadedAt.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
 	d._rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (d *DocumentRead) MarshalJSON() ([]byte, error) {
+	type embed DocumentRead
+	var marshaler = struct {
+		embed
+		LastUploadedAt *core.DateTime `json:"last_uploaded_at"`
+	}{
+		embed:          embed(*d),
+		LastUploadedAt: core.NewDateTime(d.LastUploadedAt),
+	}
+	return json.Marshal(marshaler)
 }
 
 func (d *DocumentRead) String() string {
@@ -2839,27 +3032,32 @@ type DocumentStatus = string
 
 type EnrichedNormalizedCompletion struct {
 	// The Vellum-generated ID of the completion.
-	Id string `json:"id"`
+	Id string `json:"id" url:"id"`
 	// The external ID that was originally provided along with the generation request, which uniquely identifies this generation in an external system.
-	ExternalId *string `json:"external_id,omitempty"`
+	ExternalId *string `json:"external_id,omitempty" url:"external_id,omitempty"`
 	// The text generated by the LLM.
-	Text string `json:"text"`
+	Text string `json:"text" url:"text"`
 	// The reason the generation finished.
 	//
 	// - `LENGTH` - LENGTH
 	// - `STOP` - STOP
 	// - `UNKNOWN` - UNKNOWN
-	FinishReason *FinishReasonEnum `json:"finish_reason,omitempty"`
+	FinishReason *FinishReasonEnum `json:"finish_reason,omitempty" url:"finish_reason,omitempty"`
 	// The logprobs of the completion. Only present if specified in the original request options.
-	Logprobs *NormalizedLogProbs `json:"logprobs,omitempty"`
+	Logprobs *NormalizedLogProbs `json:"logprobs,omitempty" url:"logprobs,omitempty"`
 	// The ID of the model version used to generate this completion.
-	ModelVersionId       string              `json:"model_version_id"`
-	PromptVersionId      string              `json:"prompt_version_id"`
-	Type                 *VellumVariableType `json:"type,omitempty"`
-	DeploymentReleaseTag string              `json:"deployment_release_tag"`
-	ModelName            string              `json:"model_name"`
+	ModelVersionId       string              `json:"model_version_id" url:"model_version_id"`
+	PromptVersionId      string              `json:"prompt_version_id" url:"prompt_version_id"`
+	Type                 *VellumVariableType `json:"type,omitempty" url:"type,omitempty"`
+	DeploymentReleaseTag string              `json:"deployment_release_tag" url:"deployment_release_tag"`
+	ModelName            string              `json:"model_name" url:"model_name"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *EnrichedNormalizedCompletion) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
 }
 
 func (e *EnrichedNormalizedCompletion) UnmarshalJSON(data []byte) error {
@@ -2869,6 +3067,13 @@ func (e *EnrichedNormalizedCompletion) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = EnrichedNormalizedCompletion(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
 	e._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2938,9 +3143,14 @@ func (e EnvironmentEnum) Ptr() *EnvironmentEnum {
 }
 
 type ErrorVariableValue struct {
-	Value *VellumError `json:"value,omitempty"`
+	Value *VellumError `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ErrorVariableValue) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
 }
 
 func (e *ErrorVariableValue) UnmarshalJSON(data []byte) error {
@@ -2950,6 +3160,13 @@ func (e *ErrorVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ErrorVariableValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
 	e._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2968,9 +3185,14 @@ func (e *ErrorVariableValue) String() string {
 
 // A value representing an Error.
 type ErrorVellumValue struct {
-	Value *VellumError `json:"value,omitempty"`
+	Value *VellumError `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ErrorVellumValue) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
 }
 
 func (e *ErrorVellumValue) UnmarshalJSON(data []byte) error {
@@ -2980,6 +3202,13 @@ func (e *ErrorVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ErrorVellumValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
 	e._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -2998,9 +3227,14 @@ func (e *ErrorVellumValue) String() string {
 
 // A value representing an Error.
 type ErrorVellumValueRequest struct {
-	Value *VellumErrorRequest `json:"value,omitempty"`
+	Value *VellumErrorRequest `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ErrorVellumValueRequest) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
 }
 
 func (e *ErrorVellumValueRequest) UnmarshalJSON(data []byte) error {
@@ -3010,6 +3244,13 @@ func (e *ErrorVellumValueRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ErrorVellumValueRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
 	e._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3092,41 +3333,13 @@ func (e ExecutePromptEvent) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", e.State, e)
 	case "INITIATED":
-		var marshaler = struct {
-			State string `json:"state"`
-			*InitiatedExecutePromptEvent
-		}{
-			State:                       e.State,
-			InitiatedExecutePromptEvent: e.Initiated,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(e.Initiated, "state", "INITIATED")
 	case "STREAMING":
-		var marshaler = struct {
-			State string `json:"state"`
-			*StreamingExecutePromptEvent
-		}{
-			State:                       e.State,
-			StreamingExecutePromptEvent: e.Streaming,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(e.Streaming, "state", "STREAMING")
 	case "FULFILLED":
-		var marshaler = struct {
-			State string `json:"state"`
-			*FulfilledExecutePromptEvent
-		}{
-			State:                       e.State,
-			FulfilledExecutePromptEvent: e.Fulfilled,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(e.Fulfilled, "state", "FULFILLED")
 	case "REJECTED":
-		var marshaler = struct {
-			State string `json:"state"`
-			*RejectedExecutePromptEvent
-		}{
-			State:                      e.State,
-			RejectedExecutePromptEvent: e.Rejected,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(e.Rejected, "state", "REJECTED")
 	}
 }
 
@@ -3196,23 +3409,9 @@ func (e ExecutePromptResponse) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", e.State, e)
 	case "FULFILLED":
-		var marshaler = struct {
-			State string `json:"state"`
-			*FulfilledExecutePromptResponse
-		}{
-			State:                          e.State,
-			FulfilledExecutePromptResponse: e.Fulfilled,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(e.Fulfilled, "state", "FULFILLED")
 	case "REJECTED":
-		var marshaler = struct {
-			State string `json:"state"`
-			*RejectedExecutePromptResponse
-		}{
-			State:                         e.State,
-			RejectedExecutePromptResponse: e.Rejected,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(e.Rejected, "state", "REJECTED")
 	}
 }
 
@@ -3233,12 +3432,17 @@ func (e *ExecutePromptResponse) Accept(visitor ExecutePromptResponseVisitor) err
 }
 
 type ExecuteWorkflowResponse struct {
-	ExecutionId string                              `json:"execution_id"`
-	RunId       *string                             `json:"run_id,omitempty"`
-	ExternalId  *string                             `json:"external_id,omitempty"`
-	Data        *ExecuteWorkflowWorkflowResultEvent `json:"data,omitempty"`
+	ExecutionId string                              `json:"execution_id" url:"execution_id"`
+	RunId       *string                             `json:"run_id,omitempty" url:"run_id,omitempty"`
+	ExternalId  *string                             `json:"external_id,omitempty" url:"external_id,omitempty"`
+	Data        *ExecuteWorkflowWorkflowResultEvent `json:"data" url:"data"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ExecuteWorkflowResponse) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
 }
 
 func (e *ExecuteWorkflowResponse) UnmarshalJSON(data []byte) error {
@@ -3248,6 +3452,13 @@ func (e *ExecuteWorkflowResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ExecuteWorkflowResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
 	e._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3308,23 +3519,9 @@ func (e ExecuteWorkflowWorkflowResultEvent) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", e.State, e)
 	case "FULFILLED":
-		var marshaler = struct {
-			State string `json:"state"`
-			*FulfilledExecuteWorkflowWorkflowResultEvent
-		}{
-			State: e.State,
-			FulfilledExecuteWorkflowWorkflowResultEvent: e.Fulfilled,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(e.Fulfilled, "state", "FULFILLED")
 	case "REJECTED":
-		var marshaler = struct {
-			State string `json:"state"`
-			*RejectedExecuteWorkflowWorkflowResultEvent
-		}{
-			State: e.State,
-			RejectedExecuteWorkflowWorkflowResultEvent: e.Rejected,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(e.Rejected, "state", "REJECTED")
 	}
 }
 
@@ -3347,11 +3544,16 @@ func (e *ExecuteWorkflowWorkflowResultEvent) Accept(visitor ExecuteWorkflowWorkf
 // A value representing an array of Vellum variable values.
 type ExecutionArrayVellumValue struct {
 	// The variable's uniquely identifying internal id.
-	Id    string                  `json:"id"`
-	Name  string                  `json:"name"`
-	Value []*ArrayVellumValueItem `json:"value,omitempty"`
+	Id    string                  `json:"id" url:"id"`
+	Name  string                  `json:"name" url:"name"`
+	Value []*ArrayVellumValueItem `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ExecutionArrayVellumValue) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
 }
 
 func (e *ExecutionArrayVellumValue) UnmarshalJSON(data []byte) error {
@@ -3361,6 +3563,13 @@ func (e *ExecutionArrayVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ExecutionArrayVellumValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
 	e._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3380,11 +3589,16 @@ func (e *ExecutionArrayVellumValue) String() string {
 // A value representing Chat History.
 type ExecutionChatHistoryVellumValue struct {
 	// The variable's uniquely identifying internal id.
-	Id    string         `json:"id"`
-	Name  string         `json:"name"`
-	Value []*ChatMessage `json:"value,omitempty"`
+	Id    string         `json:"id" url:"id"`
+	Name  string         `json:"name" url:"name"`
+	Value []*ChatMessage `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ExecutionChatHistoryVellumValue) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
 }
 
 func (e *ExecutionChatHistoryVellumValue) UnmarshalJSON(data []byte) error {
@@ -3394,6 +3608,13 @@ func (e *ExecutionChatHistoryVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ExecutionChatHistoryVellumValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
 	e._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3413,11 +3634,16 @@ func (e *ExecutionChatHistoryVellumValue) String() string {
 // A value representing an Error.
 type ExecutionErrorVellumValue struct {
 	// The variable's uniquely identifying internal id.
-	Id    string       `json:"id"`
-	Name  string       `json:"name"`
-	Value *VellumError `json:"value,omitempty"`
+	Id    string       `json:"id" url:"id"`
+	Name  string       `json:"name" url:"name"`
+	Value *VellumError `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ExecutionErrorVellumValue) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
 }
 
 func (e *ExecutionErrorVellumValue) UnmarshalJSON(data []byte) error {
@@ -3427,6 +3653,13 @@ func (e *ExecutionErrorVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ExecutionErrorVellumValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
 	e._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3446,11 +3679,16 @@ func (e *ExecutionErrorVellumValue) String() string {
 // A value representing a Function Call.
 type ExecutionFunctionCallVellumValue struct {
 	// The variable's uniquely identifying internal id.
-	Id    string        `json:"id"`
-	Name  string        `json:"name"`
-	Value *FunctionCall `json:"value,omitempty"`
+	Id    string        `json:"id" url:"id"`
+	Name  string        `json:"name" url:"name"`
+	Value *FunctionCall `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ExecutionFunctionCallVellumValue) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
 }
 
 func (e *ExecutionFunctionCallVellumValue) UnmarshalJSON(data []byte) error {
@@ -3460,6 +3698,13 @@ func (e *ExecutionFunctionCallVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ExecutionFunctionCallVellumValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
 	e._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3479,11 +3724,16 @@ func (e *ExecutionFunctionCallVellumValue) String() string {
 // A value representing a JSON object.
 type ExecutionJsonVellumValue struct {
 	// The variable's uniquely identifying internal id.
-	Id    string      `json:"id"`
-	Name  string      `json:"name"`
-	Value interface{} `json:"value,omitempty"`
+	Id    string      `json:"id" url:"id"`
+	Name  string      `json:"name" url:"name"`
+	Value interface{} `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ExecutionJsonVellumValue) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
 }
 
 func (e *ExecutionJsonVellumValue) UnmarshalJSON(data []byte) error {
@@ -3493,6 +3743,13 @@ func (e *ExecutionJsonVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ExecutionJsonVellumValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
 	e._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3512,11 +3769,16 @@ func (e *ExecutionJsonVellumValue) String() string {
 // A value representing a number.
 type ExecutionNumberVellumValue struct {
 	// The variable's uniquely identifying internal id.
-	Id    string   `json:"id"`
-	Name  string   `json:"name"`
-	Value *float64 `json:"value,omitempty"`
+	Id    string   `json:"id" url:"id"`
+	Name  string   `json:"name" url:"name"`
+	Value *float64 `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ExecutionNumberVellumValue) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
 }
 
 func (e *ExecutionNumberVellumValue) UnmarshalJSON(data []byte) error {
@@ -3526,6 +3788,13 @@ func (e *ExecutionNumberVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ExecutionNumberVellumValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
 	e._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3545,11 +3814,16 @@ func (e *ExecutionNumberVellumValue) String() string {
 // A value representing Search Results.
 type ExecutionSearchResultsVellumValue struct {
 	// The variable's uniquely identifying internal id.
-	Id    string          `json:"id"`
-	Name  string          `json:"name"`
-	Value []*SearchResult `json:"value,omitempty"`
+	Id    string          `json:"id" url:"id"`
+	Name  string          `json:"name" url:"name"`
+	Value []*SearchResult `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ExecutionSearchResultsVellumValue) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
 }
 
 func (e *ExecutionSearchResultsVellumValue) UnmarshalJSON(data []byte) error {
@@ -3559,6 +3833,13 @@ func (e *ExecutionSearchResultsVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ExecutionSearchResultsVellumValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
 	e._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3578,11 +3859,16 @@ func (e *ExecutionSearchResultsVellumValue) String() string {
 // A value representing a string.
 type ExecutionStringVellumValue struct {
 	// The variable's uniquely identifying internal id.
-	Id    string  `json:"id"`
-	Name  string  `json:"name"`
-	Value *string `json:"value,omitempty"`
+	Id    string  `json:"id" url:"id"`
+	Name  string  `json:"name" url:"name"`
+	Value *string `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ExecutionStringVellumValue) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
 }
 
 func (e *ExecutionStringVellumValue) UnmarshalJSON(data []byte) error {
@@ -3592,6 +3878,13 @@ func (e *ExecutionStringVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ExecutionStringVellumValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
 	e._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3718,77 +4011,21 @@ func (e ExecutionVellumValue) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", e.Type, e)
 	case "STRING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ExecutionStringVellumValue
-		}{
-			Type:                       e.Type,
-			ExecutionStringVellumValue: e.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(e.String, "type", "STRING")
 	case "NUMBER":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ExecutionNumberVellumValue
-		}{
-			Type:                       e.Type,
-			ExecutionNumberVellumValue: e.Number,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(e.Number, "type", "NUMBER")
 	case "JSON":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ExecutionJsonVellumValue
-		}{
-			Type:                     e.Type,
-			ExecutionJsonVellumValue: e.Json,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(e.Json, "type", "JSON")
 	case "CHAT_HISTORY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ExecutionChatHistoryVellumValue
-		}{
-			Type:                            e.Type,
-			ExecutionChatHistoryVellumValue: e.ChatHistory,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(e.ChatHistory, "type", "CHAT_HISTORY")
 	case "SEARCH_RESULTS":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ExecutionSearchResultsVellumValue
-		}{
-			Type:                              e.Type,
-			ExecutionSearchResultsVellumValue: e.SearchResults,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(e.SearchResults, "type", "SEARCH_RESULTS")
 	case "ERROR":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ExecutionErrorVellumValue
-		}{
-			Type:                      e.Type,
-			ExecutionErrorVellumValue: e.Error,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(e.Error, "type", "ERROR")
 	case "ARRAY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ExecutionArrayVellumValue
-		}{
-			Type:                      e.Type,
-			ExecutionArrayVellumValue: e.Array,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(e.Array, "type", "ARRAY")
 	case "FUNCTION_CALL":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ExecutionFunctionCallVellumValue
-		}{
-			Type:                             e.Type,
-			ExecutionFunctionCallVellumValue: e.FunctionCall,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(e.FunctionCall, "type", "FUNCTION_CALL")
 	}
 }
 
@@ -3828,10 +4065,15 @@ func (e *ExecutionVellumValue) Accept(visitor ExecutionVellumValueVisitor) error
 
 type ExternalTestCaseExecution struct {
 	// The output values of a callable that was executed against a Test Case outside of Vellum
-	Outputs    []*NamedTestCaseVariableValue `json:"outputs,omitempty"`
-	TestCaseId string                        `json:"test_case_id"`
+	Outputs    []*NamedTestCaseVariableValue `json:"outputs" url:"outputs"`
+	TestCaseId string                        `json:"test_case_id" url:"test_case_id"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ExternalTestCaseExecution) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
 }
 
 func (e *ExternalTestCaseExecution) UnmarshalJSON(data []byte) error {
@@ -3841,6 +4083,13 @@ func (e *ExternalTestCaseExecution) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ExternalTestCaseExecution(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
 	e._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3859,10 +4108,15 @@ func (e *ExternalTestCaseExecution) String() string {
 
 type ExternalTestCaseExecutionRequest struct {
 	// The output values of a callable that was executed against a Test Case outside of Vellum
-	Outputs    []*NamedTestCaseVariableValueRequest `json:"outputs,omitempty"`
-	TestCaseId string                               `json:"test_case_id"`
+	Outputs    []*NamedTestCaseVariableValueRequest `json:"outputs" url:"outputs"`
+	TestCaseId string                               `json:"test_case_id" url:"test_case_id"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ExternalTestCaseExecutionRequest) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
 }
 
 func (e *ExternalTestCaseExecutionRequest) UnmarshalJSON(data []byte) error {
@@ -3872,6 +4126,13 @@ func (e *ExternalTestCaseExecutionRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ExternalTestCaseExecutionRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
 	e._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3920,11 +4181,16 @@ type FulfilledEnum = string
 
 // The final data event returned indicating that the stream has ended and all final resolved values from the model can be found.
 type FulfilledExecutePromptEvent struct {
-	Outputs     []*PromptOutput               `json:"outputs,omitempty"`
-	ExecutionId string                        `json:"execution_id"`
-	Meta        *FulfilledPromptExecutionMeta `json:"meta,omitempty"`
+	Outputs     []*PromptOutput               `json:"outputs" url:"outputs"`
+	ExecutionId string                        `json:"execution_id" url:"execution_id"`
+	Meta        *FulfilledPromptExecutionMeta `json:"meta,omitempty" url:"meta,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FulfilledExecutePromptEvent) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
 }
 
 func (f *FulfilledExecutePromptEvent) UnmarshalJSON(data []byte) error {
@@ -3934,6 +4200,13 @@ func (f *FulfilledExecutePromptEvent) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*f = FulfilledExecutePromptEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
 	f._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3952,14 +4225,19 @@ func (f *FulfilledExecutePromptEvent) String() string {
 
 // The successful response from the model containing all of the resolved values generated by the prompt.
 type FulfilledExecutePromptResponse struct {
-	Meta *PromptExecutionMeta `json:"meta,omitempty"`
+	Meta *PromptExecutionMeta `json:"meta,omitempty" url:"meta,omitempty"`
 	// The subset of the raw response from the model that the request opted into with `expand_raw`.
-	Raw map[string]interface{} `json:"raw,omitempty"`
+	Raw map[string]interface{} `json:"raw,omitempty" url:"raw,omitempty"`
 	// The ID of the execution.
-	ExecutionId string          `json:"execution_id"`
-	Outputs     []*PromptOutput `json:"outputs,omitempty"`
+	ExecutionId string          `json:"execution_id" url:"execution_id"`
+	Outputs     []*PromptOutput `json:"outputs" url:"outputs"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FulfilledExecutePromptResponse) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
 }
 
 func (f *FulfilledExecutePromptResponse) UnmarshalJSON(data []byte) error {
@@ -3969,6 +4247,13 @@ func (f *FulfilledExecutePromptResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*f = FulfilledExecutePromptResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
 	f._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -3987,22 +4272,52 @@ func (f *FulfilledExecutePromptResponse) String() string {
 
 // The successful response from the Workflow execution containing the produced outputs.
 type FulfilledExecuteWorkflowWorkflowResultEvent struct {
-	Id      string            `json:"id"`
-	Ts      time.Time         `json:"ts"`
-	Outputs []*WorkflowOutput `json:"outputs,omitempty"`
+	Id      string            `json:"id" url:"id"`
+	Ts      time.Time         `json:"ts" url:"ts"`
+	Outputs []*WorkflowOutput `json:"outputs" url:"outputs"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FulfilledExecuteWorkflowWorkflowResultEvent) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
 }
 
 func (f *FulfilledExecuteWorkflowWorkflowResultEvent) UnmarshalJSON(data []byte) error {
-	type unmarshaler FulfilledExecuteWorkflowWorkflowResultEvent
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed FulfilledExecuteWorkflowWorkflowResultEvent
+	var unmarshaler = struct {
+		embed
+		Ts *core.DateTime `json:"ts"`
+	}{
+		embed: embed(*f),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*f = FulfilledExecuteWorkflowWorkflowResultEvent(value)
+	*f = FulfilledExecuteWorkflowWorkflowResultEvent(unmarshaler.embed)
+	f.Ts = unmarshaler.Ts.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
 	f._rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (f *FulfilledExecuteWorkflowWorkflowResultEvent) MarshalJSON() ([]byte, error) {
+	type embed FulfilledExecuteWorkflowWorkflowResultEvent
+	var marshaler = struct {
+		embed
+		Ts *core.DateTime `json:"ts"`
+	}{
+		embed: embed(*f),
+		Ts:    core.NewDateTime(f.Ts),
+	}
+	return json.Marshal(marshaler)
 }
 
 func (f *FulfilledExecuteWorkflowWorkflowResultEvent) String() string {
@@ -4019,11 +4334,16 @@ func (f *FulfilledExecuteWorkflowWorkflowResultEvent) String() string {
 
 // The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
 type FulfilledPromptExecutionMeta struct {
-	Latency      *int              `json:"latency,omitempty"`
-	FinishReason *FinishReasonEnum `json:"finish_reason,omitempty"`
-	Usage        *MlModelUsage     `json:"usage,omitempty"`
+	Latency      *int              `json:"latency,omitempty" url:"latency,omitempty"`
+	FinishReason *FinishReasonEnum `json:"finish_reason,omitempty" url:"finish_reason,omitempty"`
+	Usage        *MlModelUsage     `json:"usage,omitempty" url:"usage,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FulfilledPromptExecutionMeta) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
 }
 
 func (f *FulfilledPromptExecutionMeta) UnmarshalJSON(data []byte) error {
@@ -4033,6 +4353,13 @@ func (f *FulfilledPromptExecutionMeta) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*f = FulfilledPromptExecutionMeta(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
 	f._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4051,27 +4378,57 @@ func (f *FulfilledPromptExecutionMeta) String() string {
 
 // An event that indicates that the node has fulfilled its execution.
 type FulfilledWorkflowNodeResultEvent struct {
-	Id                string                     `json:"id"`
-	NodeId            string                     `json:"node_id"`
-	NodeResultId      string                     `json:"node_result_id"`
-	Ts                *time.Time                 `json:"ts,omitempty"`
-	Data              *WorkflowNodeResultData    `json:"data,omitempty"`
-	SourceExecutionId *string                    `json:"source_execution_id,omitempty"`
-	OutputValues      []*NodeOutputCompiledValue `json:"output_values,omitempty"`
-	Mocked            *bool                      `json:"mocked,omitempty"`
+	Id                string                     `json:"id" url:"id"`
+	NodeId            string                     `json:"node_id" url:"node_id"`
+	NodeResultId      string                     `json:"node_result_id" url:"node_result_id"`
+	Ts                *time.Time                 `json:"ts,omitempty" url:"ts,omitempty"`
+	Data              *WorkflowNodeResultData    `json:"data,omitempty" url:"data,omitempty"`
+	SourceExecutionId *string                    `json:"source_execution_id,omitempty" url:"source_execution_id,omitempty"`
+	OutputValues      []*NodeOutputCompiledValue `json:"output_values" url:"output_values"`
+	Mocked            *bool                      `json:"mocked,omitempty" url:"mocked,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FulfilledWorkflowNodeResultEvent) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
 }
 
 func (f *FulfilledWorkflowNodeResultEvent) UnmarshalJSON(data []byte) error {
-	type unmarshaler FulfilledWorkflowNodeResultEvent
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed FulfilledWorkflowNodeResultEvent
+	var unmarshaler = struct {
+		embed
+		Ts *core.DateTime `json:"ts,omitempty"`
+	}{
+		embed: embed(*f),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*f = FulfilledWorkflowNodeResultEvent(value)
+	*f = FulfilledWorkflowNodeResultEvent(unmarshaler.embed)
+	f.Ts = unmarshaler.Ts.TimePtr()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
 	f._rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (f *FulfilledWorkflowNodeResultEvent) MarshalJSON() ([]byte, error) {
+	type embed FulfilledWorkflowNodeResultEvent
+	var marshaler = struct {
+		embed
+		Ts *core.DateTime `json:"ts,omitempty"`
+	}{
+		embed: embed(*f),
+		Ts:    core.NewOptionalDateTime(f.Ts),
+	}
+	return json.Marshal(marshaler)
 }
 
 func (f *FulfilledWorkflowNodeResultEvent) String() string {
@@ -4088,12 +4445,17 @@ func (f *FulfilledWorkflowNodeResultEvent) String() string {
 
 // The final resolved function call value.
 type FunctionCall struct {
-	Arguments map[string]interface{} `json:"arguments,omitempty"`
-	Id        *string                `json:"id,omitempty"`
-	Name      string                 `json:"name"`
-	State     *FulfilledEnum         `json:"state,omitempty"`
+	Arguments map[string]interface{} `json:"arguments" url:"arguments"`
+	Id        *string                `json:"id,omitempty" url:"id,omitempty"`
+	Name      string                 `json:"name" url:"name"`
+	State     *FulfilledEnum         `json:"state,omitempty" url:"state,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FunctionCall) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
 }
 
 func (f *FunctionCall) UnmarshalJSON(data []byte) error {
@@ -4103,6 +4465,13 @@ func (f *FunctionCall) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*f = FunctionCall(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
 	f._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4121,9 +4490,14 @@ func (f *FunctionCall) String() string {
 
 // A function call value that is used in a chat message.
 type FunctionCallChatMessageContent struct {
-	Value *FunctionCallChatMessageContentValue `json:"value,omitempty"`
+	Value *FunctionCallChatMessageContentValue `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FunctionCallChatMessageContent) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
 }
 
 func (f *FunctionCallChatMessageContent) UnmarshalJSON(data []byte) error {
@@ -4133,6 +4507,13 @@ func (f *FunctionCallChatMessageContent) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*f = FunctionCallChatMessageContent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
 	f._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4151,9 +4532,14 @@ func (f *FunctionCallChatMessageContent) String() string {
 
 // A function call value that is used in a chat message.
 type FunctionCallChatMessageContentRequest struct {
-	Value *FunctionCallChatMessageContentValueRequest `json:"value,omitempty"`
+	Value *FunctionCallChatMessageContentValueRequest `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FunctionCallChatMessageContentRequest) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
 }
 
 func (f *FunctionCallChatMessageContentRequest) UnmarshalJSON(data []byte) error {
@@ -4163,6 +4549,13 @@ func (f *FunctionCallChatMessageContentRequest) UnmarshalJSON(data []byte) error
 		return err
 	}
 	*f = FunctionCallChatMessageContentRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
 	f._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4181,11 +4574,16 @@ func (f *FunctionCallChatMessageContentRequest) String() string {
 
 // The final resolved function call value.
 type FunctionCallChatMessageContentValue struct {
-	Name      string                 `json:"name"`
-	Arguments map[string]interface{} `json:"arguments,omitempty"`
-	Id        *string                `json:"id,omitempty"`
+	Name      string                 `json:"name" url:"name"`
+	Arguments map[string]interface{} `json:"arguments" url:"arguments"`
+	Id        *string                `json:"id,omitempty" url:"id,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FunctionCallChatMessageContentValue) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
 }
 
 func (f *FunctionCallChatMessageContentValue) UnmarshalJSON(data []byte) error {
@@ -4195,6 +4593,13 @@ func (f *FunctionCallChatMessageContentValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*f = FunctionCallChatMessageContentValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
 	f._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4213,11 +4618,16 @@ func (f *FunctionCallChatMessageContentValue) String() string {
 
 // The final resolved function call value.
 type FunctionCallChatMessageContentValueRequest struct {
-	Name      string                 `json:"name"`
-	Arguments map[string]interface{} `json:"arguments,omitempty"`
-	Id        *string                `json:"id,omitempty"`
+	Name      string                 `json:"name" url:"name"`
+	Arguments map[string]interface{} `json:"arguments" url:"arguments"`
+	Id        *string                `json:"id,omitempty" url:"id,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FunctionCallChatMessageContentValueRequest) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
 }
 
 func (f *FunctionCallChatMessageContentValueRequest) UnmarshalJSON(data []byte) error {
@@ -4227,6 +4637,13 @@ func (f *FunctionCallChatMessageContentValueRequest) UnmarshalJSON(data []byte) 
 		return err
 	}
 	*f = FunctionCallChatMessageContentValueRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
 	f._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4245,12 +4662,17 @@ func (f *FunctionCallChatMessageContentValueRequest) String() string {
 
 // The final resolved function call value.
 type FunctionCallRequest struct {
-	Arguments map[string]interface{} `json:"arguments,omitempty"`
-	Id        *string                `json:"id,omitempty"`
-	Name      string                 `json:"name"`
-	State     *FulfilledEnum         `json:"state,omitempty"`
+	Arguments map[string]interface{} `json:"arguments" url:"arguments"`
+	Id        *string                `json:"id,omitempty" url:"id,omitempty"`
+	Name      string                 `json:"name" url:"name"`
+	State     *FulfilledEnum         `json:"state,omitempty" url:"state,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FunctionCallRequest) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
 }
 
 func (f *FunctionCallRequest) UnmarshalJSON(data []byte) error {
@@ -4260,6 +4682,13 @@ func (f *FunctionCallRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*f = FunctionCallRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
 	f._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4277,9 +4706,14 @@ func (f *FunctionCallRequest) String() string {
 }
 
 type FunctionCallVariableValue struct {
-	Value *FunctionCall `json:"value,omitempty"`
+	Value *FunctionCall `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FunctionCallVariableValue) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
 }
 
 func (f *FunctionCallVariableValue) UnmarshalJSON(data []byte) error {
@@ -4289,6 +4723,13 @@ func (f *FunctionCallVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*f = FunctionCallVariableValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
 	f._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4307,9 +4748,14 @@ func (f *FunctionCallVariableValue) String() string {
 
 // A value representing a Function Call.
 type FunctionCallVellumValue struct {
-	Value *FunctionCall `json:"value,omitempty"`
+	Value *FunctionCall `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FunctionCallVellumValue) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
 }
 
 func (f *FunctionCallVellumValue) UnmarshalJSON(data []byte) error {
@@ -4319,6 +4765,13 @@ func (f *FunctionCallVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*f = FunctionCallVellumValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
 	f._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4337,9 +4790,14 @@ func (f *FunctionCallVellumValue) String() string {
 
 // A value representing a Function Call.
 type FunctionCallVellumValueRequest struct {
-	Value *FunctionCallRequest `json:"value,omitempty"`
+	Value *FunctionCallRequest `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FunctionCallVellumValueRequest) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
 }
 
 func (f *FunctionCallVellumValueRequest) UnmarshalJSON(data []byte) error {
@@ -4349,6 +4807,13 @@ func (f *FunctionCallVellumValueRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*f = FunctionCallVellumValueRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
 	f._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4370,9 +4835,14 @@ type GenerateOptionsRequest struct {
 	//
 	// - `ALL` - ALL
 	// - `NONE` - NONE
-	Logprobs *LogprobsEnum `json:"logprobs,omitempty"`
+	Logprobs *LogprobsEnum `json:"logprobs,omitempty" url:"logprobs,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GenerateOptionsRequest) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
 }
 
 func (g *GenerateOptionsRequest) UnmarshalJSON(data []byte) error {
@@ -4382,6 +4852,13 @@ func (g *GenerateOptionsRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GenerateOptionsRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
 	g._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4400,13 +4877,18 @@ func (g *GenerateOptionsRequest) String() string {
 
 type GenerateRequest struct {
 	// Key/value pairs for each template variable defined in the deployment's prompt.
-	InputValues map[string]interface{} `json:"input_values,omitempty"`
+	InputValues map[string]interface{} `json:"input_values" url:"input_values"`
 	// Optionally provide a list of chat messages that'll be used in place of the special chat_history variable, if included in the prompt.
-	ChatHistory []*ChatMessageRequest `json:"chat_history,omitempty"`
+	ChatHistory []*ChatMessageRequest `json:"chat_history,omitempty" url:"chat_history,omitempty"`
 	// Optionally include a unique identifier for each generation, as represented outside of Vellum. Note that this should generally be a list of length one.
-	ExternalIds []string `json:"external_ids,omitempty"`
+	ExternalIds []string `json:"external_ids,omitempty" url:"external_ids,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GenerateRequest) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
 }
 
 func (g *GenerateRequest) UnmarshalJSON(data []byte) error {
@@ -4416,6 +4898,13 @@ func (g *GenerateRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GenerateRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
 	g._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4434,9 +4923,14 @@ func (g *GenerateRequest) String() string {
 
 type GenerateResponse struct {
 	// The results of each generation request.
-	Results []*GenerateResult `json:"results,omitempty"`
+	Results []*GenerateResult `json:"results" url:"results"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GenerateResponse) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
 }
 
 func (g *GenerateResponse) UnmarshalJSON(data []byte) error {
@@ -4446,6 +4940,13 @@ func (g *GenerateResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GenerateResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
 	g._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4464,11 +4965,16 @@ func (g *GenerateResponse) String() string {
 
 type GenerateResult struct {
 	// An object containing the resulting generation. This key will be absent if the LLM provider experienced an error.
-	Data *GenerateResultData `json:"data,omitempty"`
+	Data *GenerateResultData `json:"data,omitempty" url:"data,omitempty"`
 	// An object containing details about the error that occurred. This key will be absent if the LLM provider did not experience an error.
-	Error *GenerateResultError `json:"error,omitempty"`
+	Error *GenerateResultError `json:"error,omitempty" url:"error,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GenerateResult) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
 }
 
 func (g *GenerateResult) UnmarshalJSON(data []byte) error {
@@ -4478,6 +4984,13 @@ func (g *GenerateResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GenerateResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
 	g._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4496,9 +5009,14 @@ func (g *GenerateResult) String() string {
 
 type GenerateResultData struct {
 	// The generated completions. This will generally be a list of length one.
-	Completions []*EnrichedNormalizedCompletion `json:"completions,omitempty"`
+	Completions []*EnrichedNormalizedCompletion `json:"completions" url:"completions"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GenerateResultData) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
 }
 
 func (g *GenerateResultData) UnmarshalJSON(data []byte) error {
@@ -4508,6 +5026,13 @@ func (g *GenerateResultData) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GenerateResultData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
 	g._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4526,9 +5051,14 @@ func (g *GenerateResultData) String() string {
 
 type GenerateResultError struct {
 	// The error message returned by the LLM provider.
-	Message string `json:"message"`
+	Message string `json:"message" url:"message"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GenerateResultError) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
 }
 
 func (g *GenerateResultError) UnmarshalJSON(data []byte) error {
@@ -4538,6 +5068,13 @@ func (g *GenerateResultError) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GenerateResultError(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
 	g._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4555,9 +5092,14 @@ func (g *GenerateResultError) String() string {
 }
 
 type GenerateStreamResponse struct {
-	Delta *GenerateStreamResult `json:"delta,omitempty"`
+	Delta *GenerateStreamResult `json:"delta" url:"delta"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GenerateStreamResponse) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
 }
 
 func (g *GenerateStreamResponse) UnmarshalJSON(data []byte) error {
@@ -4567,6 +5109,13 @@ func (g *GenerateStreamResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GenerateStreamResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
 	g._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4584,11 +5133,16 @@ func (g *GenerateStreamResponse) String() string {
 }
 
 type GenerateStreamResult struct {
-	RequestIndex int                       `json:"request_index"`
-	Data         *GenerateStreamResultData `json:"data,omitempty"`
-	Error        *GenerateResultError      `json:"error,omitempty"`
+	RequestIndex int                       `json:"request_index" url:"request_index"`
+	Data         *GenerateStreamResultData `json:"data,omitempty" url:"data,omitempty"`
+	Error        *GenerateResultError      `json:"error,omitempty" url:"error,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GenerateStreamResult) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
 }
 
 func (g *GenerateStreamResult) UnmarshalJSON(data []byte) error {
@@ -4598,6 +5152,13 @@ func (g *GenerateStreamResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GenerateStreamResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
 	g._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4615,10 +5176,15 @@ func (g *GenerateStreamResult) String() string {
 }
 
 type GenerateStreamResultData struct {
-	CompletionIndex int                           `json:"completion_index"`
-	Completion      *EnrichedNormalizedCompletion `json:"completion,omitempty"`
+	CompletionIndex int                           `json:"completion_index" url:"completion_index"`
+	Completion      *EnrichedNormalizedCompletion `json:"completion" url:"completion"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GenerateStreamResultData) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
 }
 
 func (g *GenerateStreamResultData) UnmarshalJSON(data []byte) error {
@@ -4628,6 +5194,13 @@ func (g *GenerateStreamResultData) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*g = GenerateStreamResultData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
 	g._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4646,9 +5219,14 @@ func (g *GenerateStreamResultData) String() string {
 
 // Vectorizer for hkunlp/instructor-xl.
 type HkunlpInstructorXlVectorizer struct {
-	Config *InstructorVectorizerConfig `json:"config,omitempty"`
+	Config *InstructorVectorizerConfig `json:"config" url:"config"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (h *HkunlpInstructorXlVectorizer) GetExtraProperties() map[string]interface{} {
+	return h.extraProperties
 }
 
 func (h *HkunlpInstructorXlVectorizer) UnmarshalJSON(data []byte) error {
@@ -4658,6 +5236,13 @@ func (h *HkunlpInstructorXlVectorizer) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*h = HkunlpInstructorXlVectorizer(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *h)
+	if err != nil {
+		return err
+	}
+	h.extraProperties = extraProperties
+
 	h._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4676,9 +5261,14 @@ func (h *HkunlpInstructorXlVectorizer) String() string {
 
 // Vectorizer for hkunlp/instructor-xl.
 type HkunlpInstructorXlVectorizerRequest struct {
-	Config *InstructorVectorizerConfigRequest `json:"config,omitempty"`
+	Config *InstructorVectorizerConfigRequest `json:"config" url:"config"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (h *HkunlpInstructorXlVectorizerRequest) GetExtraProperties() map[string]interface{} {
+	return h.extraProperties
 }
 
 func (h *HkunlpInstructorXlVectorizerRequest) UnmarshalJSON(data []byte) error {
@@ -4688,6 +5278,13 @@ func (h *HkunlpInstructorXlVectorizerRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*h = HkunlpInstructorXlVectorizerRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *h)
+	if err != nil {
+		return err
+	}
+	h.extraProperties = extraProperties
+
 	h._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4790,10 +5387,15 @@ func (h HostedByEnum) Ptr() *HostedByEnum {
 
 // Tokenizer config for Hugging Face type tokenizers.
 type HuggingFaceTokenizerConfig struct {
-	Name string  `json:"name"`
-	Path *string `json:"path,omitempty"`
+	Name string  `json:"name" url:"name"`
+	Path *string `json:"path,omitempty" url:"path,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (h *HuggingFaceTokenizerConfig) GetExtraProperties() map[string]interface{} {
+	return h.extraProperties
 }
 
 func (h *HuggingFaceTokenizerConfig) UnmarshalJSON(data []byte) error {
@@ -4803,6 +5405,13 @@ func (h *HuggingFaceTokenizerConfig) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*h = HuggingFaceTokenizerConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *h)
+	if err != nil {
+		return err
+	}
+	h.extraProperties = extraProperties
+
 	h._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4821,10 +5430,15 @@ func (h *HuggingFaceTokenizerConfig) String() string {
 
 // Tokenizer config for Hugging Face type tokenizers.
 type HuggingFaceTokenizerConfigRequest struct {
-	Name string  `json:"name"`
-	Path *string `json:"path,omitempty"`
+	Name string  `json:"name" url:"name"`
+	Path *string `json:"path,omitempty" url:"path,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (h *HuggingFaceTokenizerConfigRequest) GetExtraProperties() map[string]interface{} {
+	return h.extraProperties
 }
 
 func (h *HuggingFaceTokenizerConfigRequest) UnmarshalJSON(data []byte) error {
@@ -4834,6 +5448,13 @@ func (h *HuggingFaceTokenizerConfigRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*h = HuggingFaceTokenizerConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *h)
+	if err != nil {
+		return err
+	}
+	h.extraProperties = extraProperties
+
 	h._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4852,9 +5473,14 @@ func (h *HuggingFaceTokenizerConfigRequest) String() string {
 
 // An image value that is used in a chat message.
 type ImageChatMessageContent struct {
-	Value *VellumImage `json:"value,omitempty"`
+	Value *VellumImage `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *ImageChatMessageContent) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
 }
 
 func (i *ImageChatMessageContent) UnmarshalJSON(data []byte) error {
@@ -4864,6 +5490,13 @@ func (i *ImageChatMessageContent) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = ImageChatMessageContent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
 	i._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4882,9 +5515,14 @@ func (i *ImageChatMessageContent) String() string {
 
 // An image value that is used in a chat message.
 type ImageChatMessageContentRequest struct {
-	Value *VellumImageRequest `json:"value,omitempty"`
+	Value *VellumImageRequest `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *ImageChatMessageContentRequest) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
 }
 
 func (i *ImageChatMessageContentRequest) UnmarshalJSON(data []byte) error {
@@ -4894,6 +5532,13 @@ func (i *ImageChatMessageContentRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = ImageChatMessageContentRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
 	i._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4912,9 +5557,14 @@ func (i *ImageChatMessageContentRequest) String() string {
 
 // A base Vellum primitive value representing an image.
 type ImageVariableValue struct {
-	Value *VellumImage `json:"value,omitempty"`
+	Value *VellumImage `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *ImageVariableValue) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
 }
 
 func (i *ImageVariableValue) UnmarshalJSON(data []byte) error {
@@ -4924,6 +5574,13 @@ func (i *ImageVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = ImageVariableValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
 	i._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4942,9 +5599,14 @@ func (i *ImageVariableValue) String() string {
 
 // A base Vellum primitive value representing an image.
 type ImageVellumValue struct {
-	Value *VellumImage `json:"value,omitempty"`
+	Value *VellumImage `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *ImageVellumValue) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
 }
 
 func (i *ImageVellumValue) UnmarshalJSON(data []byte) error {
@@ -4954,6 +5616,13 @@ func (i *ImageVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = ImageVellumValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
 	i._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -4972,9 +5641,14 @@ func (i *ImageVellumValue) String() string {
 
 // A base Vellum primitive value representing an image.
 type ImageVellumValueRequest struct {
-	Value *VellumImageRequest `json:"value,omitempty"`
+	Value *VellumImageRequest `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *ImageVellumValueRequest) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
 }
 
 func (i *ImageVellumValueRequest) UnmarshalJSON(data []byte) error {
@@ -4984,6 +5658,13 @@ func (i *ImageVellumValueRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = ImageVellumValueRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
 	i._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -5099,68 +5780,19 @@ func (i IndexingConfigVectorizer) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", i.ModelName, i)
 	case "text-embedding-3-small":
-		var marshaler = struct {
-			ModelName string `json:"model_name"`
-			*OpenAiVectorizerTextEmbedding3Small
-		}{
-			ModelName:                           i.ModelName,
-			OpenAiVectorizerTextEmbedding3Small: i.TextEmbedding3Small,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(i.TextEmbedding3Small, "model_name", "text-embedding-3-small")
 	case "text-embedding-3-large":
-		var marshaler = struct {
-			ModelName string `json:"model_name"`
-			*OpenAiVectorizerTextEmbedding3Large
-		}{
-			ModelName:                           i.ModelName,
-			OpenAiVectorizerTextEmbedding3Large: i.TextEmbedding3Large,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(i.TextEmbedding3Large, "model_name", "text-embedding-3-large")
 	case "text-embedding-ada-002":
-		var marshaler = struct {
-			ModelName string `json:"model_name"`
-			*OpenAiVectorizerTextEmbeddingAda002
-		}{
-			ModelName:                           i.ModelName,
-			OpenAiVectorizerTextEmbeddingAda002: i.TextEmbeddingAda002,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(i.TextEmbeddingAda002, "model_name", "text-embedding-ada-002")
 	case "intfloat/multilingual-e5-large":
-		var marshaler = struct {
-			ModelName string `json:"model_name"`
-			*BasicVectorizerIntfloatMultilingualE5Large
-		}{
-			ModelName: i.ModelName,
-			BasicVectorizerIntfloatMultilingualE5Large: i.IntfloatMultilingualE5Large,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(i.IntfloatMultilingualE5Large, "model_name", "intfloat/multilingual-e5-large")
 	case "sentence-transformers/multi-qa-mpnet-base-cos-v1":
-		var marshaler = struct {
-			ModelName string `json:"model_name"`
-			*BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1
-		}{
-			ModelName: i.ModelName,
-			BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1: i.SentenceTransformersMultiQaMpnetBaseCosV1,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(i.SentenceTransformersMultiQaMpnetBaseCosV1, "model_name", "sentence-transformers/multi-qa-mpnet-base-cos-v1")
 	case "sentence-transformers/multi-qa-mpnet-base-dot-v1":
-		var marshaler = struct {
-			ModelName string `json:"model_name"`
-			*BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1
-		}{
-			ModelName: i.ModelName,
-			BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1: i.SentenceTransformersMultiQaMpnetBaseDotV1,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(i.SentenceTransformersMultiQaMpnetBaseDotV1, "model_name", "sentence-transformers/multi-qa-mpnet-base-dot-v1")
 	case "hkunlp/instructor-xl":
-		var marshaler = struct {
-			ModelName string `json:"model_name"`
-			*HkunlpInstructorXlVectorizer
-		}{
-			ModelName:                    i.ModelName,
-			HkunlpInstructorXlVectorizer: i.HkunlpInstructorXl,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(i.HkunlpInstructorXl, "model_name", "hkunlp/instructor-xl")
 	}
 }
 
@@ -5294,68 +5926,19 @@ func (i IndexingConfigVectorizerRequest) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", i.ModelName, i)
 	case "text-embedding-3-small":
-		var marshaler = struct {
-			ModelName string `json:"model_name"`
-			*OpenAiVectorizerTextEmbedding3SmallRequest
-		}{
-			ModelName: i.ModelName,
-			OpenAiVectorizerTextEmbedding3SmallRequest: i.TextEmbedding3Small,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(i.TextEmbedding3Small, "model_name", "text-embedding-3-small")
 	case "text-embedding-3-large":
-		var marshaler = struct {
-			ModelName string `json:"model_name"`
-			*OpenAiVectorizerTextEmbedding3LargeRequest
-		}{
-			ModelName: i.ModelName,
-			OpenAiVectorizerTextEmbedding3LargeRequest: i.TextEmbedding3Large,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(i.TextEmbedding3Large, "model_name", "text-embedding-3-large")
 	case "text-embedding-ada-002":
-		var marshaler = struct {
-			ModelName string `json:"model_name"`
-			*OpenAiVectorizerTextEmbeddingAda002Request
-		}{
-			ModelName: i.ModelName,
-			OpenAiVectorizerTextEmbeddingAda002Request: i.TextEmbeddingAda002,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(i.TextEmbeddingAda002, "model_name", "text-embedding-ada-002")
 	case "intfloat/multilingual-e5-large":
-		var marshaler = struct {
-			ModelName string `json:"model_name"`
-			*BasicVectorizerIntfloatMultilingualE5LargeRequest
-		}{
-			ModelName: i.ModelName,
-			BasicVectorizerIntfloatMultilingualE5LargeRequest: i.IntfloatMultilingualE5Large,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(i.IntfloatMultilingualE5Large, "model_name", "intfloat/multilingual-e5-large")
 	case "sentence-transformers/multi-qa-mpnet-base-cos-v1":
-		var marshaler = struct {
-			ModelName string `json:"model_name"`
-			*BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request
-		}{
-			ModelName: i.ModelName,
-			BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request: i.SentenceTransformersMultiQaMpnetBaseCosV1,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(i.SentenceTransformersMultiQaMpnetBaseCosV1, "model_name", "sentence-transformers/multi-qa-mpnet-base-cos-v1")
 	case "sentence-transformers/multi-qa-mpnet-base-dot-v1":
-		var marshaler = struct {
-			ModelName string `json:"model_name"`
-			*BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request
-		}{
-			ModelName: i.ModelName,
-			BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request: i.SentenceTransformersMultiQaMpnetBaseDotV1,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(i.SentenceTransformersMultiQaMpnetBaseDotV1, "model_name", "sentence-transformers/multi-qa-mpnet-base-dot-v1")
 	case "hkunlp/instructor-xl":
-		var marshaler = struct {
-			ModelName string `json:"model_name"`
-			*HkunlpInstructorXlVectorizerRequest
-		}{
-			ModelName:                           i.ModelName,
-			HkunlpInstructorXlVectorizerRequest: i.HkunlpInstructorXl,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(i.HkunlpInstructorXl, "model_name", "hkunlp/instructor-xl")
 	}
 }
 
@@ -5428,10 +6011,15 @@ func (i IndexingStateEnum) Ptr() *IndexingStateEnum {
 
 // The initial data returned indicating that the response from the model has returned and begun streaming.
 type InitiatedExecutePromptEvent struct {
-	Meta        *InitiatedPromptExecutionMeta `json:"meta,omitempty"`
-	ExecutionId string                        `json:"execution_id"`
+	Meta        *InitiatedPromptExecutionMeta `json:"meta,omitempty" url:"meta,omitempty"`
+	ExecutionId string                        `json:"execution_id" url:"execution_id"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InitiatedExecutePromptEvent) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
 }
 
 func (i *InitiatedExecutePromptEvent) UnmarshalJSON(data []byte) error {
@@ -5441,6 +6029,13 @@ func (i *InitiatedExecutePromptEvent) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = InitiatedExecutePromptEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
 	i._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -5459,12 +6054,17 @@ func (i *InitiatedExecutePromptEvent) String() string {
 
 // The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
 type InitiatedPromptExecutionMeta struct {
-	ModelName            *string `json:"model_name,omitempty"`
-	Latency              *int    `json:"latency,omitempty"`
-	DeploymentReleaseTag *string `json:"deployment_release_tag,omitempty"`
-	PromptVersionId      *string `json:"prompt_version_id,omitempty"`
+	ModelName            *string `json:"model_name,omitempty" url:"model_name,omitempty"`
+	Latency              *int    `json:"latency,omitempty" url:"latency,omitempty"`
+	DeploymentReleaseTag *string `json:"deployment_release_tag,omitempty" url:"deployment_release_tag,omitempty"`
+	PromptVersionId      *string `json:"prompt_version_id,omitempty" url:"prompt_version_id,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InitiatedPromptExecutionMeta) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
 }
 
 func (i *InitiatedPromptExecutionMeta) UnmarshalJSON(data []byte) error {
@@ -5474,6 +6074,13 @@ func (i *InitiatedPromptExecutionMeta) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = InitiatedPromptExecutionMeta(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
 	i._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -5492,26 +6099,56 @@ func (i *InitiatedPromptExecutionMeta) String() string {
 
 // An event that indicates that the node has initiated its execution.
 type InitiatedWorkflowNodeResultEvent struct {
-	Id                string                            `json:"id"`
-	NodeId            string                            `json:"node_id"`
-	NodeResultId      string                            `json:"node_result_id"`
-	Ts                *time.Time                        `json:"ts,omitempty"`
-	Data              *WorkflowNodeResultData           `json:"data,omitempty"`
-	SourceExecutionId *string                           `json:"source_execution_id,omitempty"`
-	InputValues       []*NodeInputVariableCompiledValue `json:"input_values,omitempty"`
+	Id                string                            `json:"id" url:"id"`
+	NodeId            string                            `json:"node_id" url:"node_id"`
+	NodeResultId      string                            `json:"node_result_id" url:"node_result_id"`
+	Ts                *time.Time                        `json:"ts,omitempty" url:"ts,omitempty"`
+	Data              *WorkflowNodeResultData           `json:"data,omitempty" url:"data,omitempty"`
+	SourceExecutionId *string                           `json:"source_execution_id,omitempty" url:"source_execution_id,omitempty"`
+	InputValues       []*NodeInputVariableCompiledValue `json:"input_values,omitempty" url:"input_values,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InitiatedWorkflowNodeResultEvent) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
 }
 
 func (i *InitiatedWorkflowNodeResultEvent) UnmarshalJSON(data []byte) error {
-	type unmarshaler InitiatedWorkflowNodeResultEvent
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed InitiatedWorkflowNodeResultEvent
+	var unmarshaler = struct {
+		embed
+		Ts *core.DateTime `json:"ts,omitempty"`
+	}{
+		embed: embed(*i),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*i = InitiatedWorkflowNodeResultEvent(value)
+	*i = InitiatedWorkflowNodeResultEvent(unmarshaler.embed)
+	i.Ts = unmarshaler.Ts.TimePtr()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
 	i._rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (i *InitiatedWorkflowNodeResultEvent) MarshalJSON() ([]byte, error) {
+	type embed InitiatedWorkflowNodeResultEvent
+	var marshaler = struct {
+		embed
+		Ts *core.DateTime `json:"ts,omitempty"`
+	}{
+		embed: embed(*i),
+		Ts:    core.NewOptionalDateTime(i.Ts),
+	}
+	return json.Marshal(marshaler)
 }
 
 func (i *InitiatedWorkflowNodeResultEvent) String() string {
@@ -5528,11 +6165,16 @@ func (i *InitiatedWorkflowNodeResultEvent) String() string {
 
 // Configuration for using an Instructor vectorizer.
 type InstructorVectorizerConfig struct {
-	InstructionDomain           string `json:"instruction_domain"`
-	InstructionQueryTextType    string `json:"instruction_query_text_type"`
-	InstructionDocumentTextType string `json:"instruction_document_text_type"`
+	InstructionDomain           string `json:"instruction_domain" url:"instruction_domain"`
+	InstructionQueryTextType    string `json:"instruction_query_text_type" url:"instruction_query_text_type"`
+	InstructionDocumentTextType string `json:"instruction_document_text_type" url:"instruction_document_text_type"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InstructorVectorizerConfig) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
 }
 
 func (i *InstructorVectorizerConfig) UnmarshalJSON(data []byte) error {
@@ -5542,6 +6184,13 @@ func (i *InstructorVectorizerConfig) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = InstructorVectorizerConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
 	i._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -5560,11 +6209,16 @@ func (i *InstructorVectorizerConfig) String() string {
 
 // Configuration for using an Instructor vectorizer.
 type InstructorVectorizerConfigRequest struct {
-	InstructionDomain           string `json:"instruction_domain"`
-	InstructionQueryTextType    string `json:"instruction_query_text_type"`
-	InstructionDocumentTextType string `json:"instruction_document_text_type"`
+	InstructionDomain           string `json:"instruction_domain" url:"instruction_domain"`
+	InstructionQueryTextType    string `json:"instruction_query_text_type" url:"instruction_query_text_type"`
+	InstructionDocumentTextType string `json:"instruction_document_text_type" url:"instruction_document_text_type"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InstructorVectorizerConfigRequest) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
 }
 
 func (i *InstructorVectorizerConfigRequest) UnmarshalJSON(data []byte) error {
@@ -5574,6 +6228,13 @@ func (i *InstructorVectorizerConfigRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = InstructorVectorizerConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
 	i._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -5617,10 +6278,15 @@ func (i IterationStateEnum) Ptr() *IterationStateEnum {
 // A user input representing a JSON object
 type JsonInputRequest struct {
 	// The variable's name, as defined in the deployment.
-	Name  string                 `json:"name"`
-	Value map[string]interface{} `json:"value,omitempty"`
+	Name  string                 `json:"name" url:"name"`
+	Value map[string]interface{} `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (j *JsonInputRequest) GetExtraProperties() map[string]interface{} {
+	return j.extraProperties
 }
 
 func (j *JsonInputRequest) UnmarshalJSON(data []byte) error {
@@ -5630,6 +6296,13 @@ func (j *JsonInputRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*j = JsonInputRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *j)
+	if err != nil {
+		return err
+	}
+	j.extraProperties = extraProperties
+
 	j._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -5647,9 +6320,14 @@ func (j *JsonInputRequest) String() string {
 }
 
 type JsonVariableValue struct {
-	Value interface{} `json:"value,omitempty"`
+	Value interface{} `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (j *JsonVariableValue) GetExtraProperties() map[string]interface{} {
+	return j.extraProperties
 }
 
 func (j *JsonVariableValue) UnmarshalJSON(data []byte) error {
@@ -5659,6 +6337,13 @@ func (j *JsonVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*j = JsonVariableValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *j)
+	if err != nil {
+		return err
+	}
+	j.extraProperties = extraProperties
+
 	j._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -5677,9 +6362,14 @@ func (j *JsonVariableValue) String() string {
 
 // A value representing a JSON object.
 type JsonVellumValue struct {
-	Value interface{} `json:"value,omitempty"`
+	Value interface{} `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (j *JsonVellumValue) GetExtraProperties() map[string]interface{} {
+	return j.extraProperties
 }
 
 func (j *JsonVellumValue) UnmarshalJSON(data []byte) error {
@@ -5689,6 +6379,13 @@ func (j *JsonVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*j = JsonVellumValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *j)
+	if err != nil {
+		return err
+	}
+	j.extraProperties = extraProperties
+
 	j._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -5707,9 +6404,14 @@ func (j *JsonVellumValue) String() string {
 
 // A value representing a JSON object.
 type JsonVellumValueRequest struct {
-	Value interface{} `json:"value,omitempty"`
+	Value interface{} `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (j *JsonVellumValueRequest) GetExtraProperties() map[string]interface{} {
+	return j.extraProperties
 }
 
 func (j *JsonVellumValueRequest) UnmarshalJSON(data []byte) error {
@@ -5719,6 +6421,13 @@ func (j *JsonVellumValueRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*j = JsonVellumValueRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *j)
+	if err != nil {
+		return err
+	}
+	j.extraProperties = extraProperties
+
 	j._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -5867,9 +6576,14 @@ func (l LogprobsEnum) Ptr() *LogprobsEnum {
 
 // A Node Result Event emitted from a Map Node.
 type MapNodeResult struct {
-	Data *MapNodeResultData `json:"data,omitempty"`
+	Data *MapNodeResultData `json:"data,omitempty" url:"data,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MapNodeResult) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
 }
 
 func (m *MapNodeResult) UnmarshalJSON(data []byte) error {
@@ -5879,6 +6593,13 @@ func (m *MapNodeResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MapNodeResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
 	m._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -5896,10 +6617,15 @@ func (m *MapNodeResult) String() string {
 }
 
 type MapNodeResultData struct {
-	ExecutionIds   []string            `json:"execution_ids,omitempty"`
-	IterationState *IterationStateEnum `json:"iteration_state,omitempty"`
+	ExecutionIds   []string            `json:"execution_ids" url:"execution_ids"`
+	IterationState *IterationStateEnum `json:"iteration_state,omitempty" url:"iteration_state,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MapNodeResultData) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
 }
 
 func (m *MapNodeResultData) UnmarshalJSON(data []byte) error {
@@ -5909,6 +6635,13 @@ func (m *MapNodeResultData) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MapNodeResultData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
 	m._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -5927,9 +6660,14 @@ func (m *MapNodeResultData) String() string {
 
 // A Node Result Event emitted from a Merge Node.
 type MergeNodeResult struct {
-	Data *MergeNodeResultData `json:"data,omitempty"`
+	Data *MergeNodeResultData `json:"data" url:"data"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MergeNodeResult) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
 }
 
 func (m *MergeNodeResult) UnmarshalJSON(data []byte) error {
@@ -5939,6 +6677,13 @@ func (m *MergeNodeResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MergeNodeResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
 	m._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -5956,9 +6701,14 @@ func (m *MergeNodeResult) String() string {
 }
 
 type MergeNodeResultData struct {
-	PausedNodeData map[string]interface{} `json:"paused_node_data,omitempty"`
+	PausedNodeData map[string]interface{} `json:"paused_node_data,omitempty" url:"paused_node_data,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MergeNodeResultData) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
 }
 
 func (m *MergeNodeResultData) UnmarshalJSON(data []byte) error {
@@ -5968,6 +6718,13 @@ func (m *MergeNodeResultData) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MergeNodeResultData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
 	m._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -5985,14 +6742,19 @@ func (m *MergeNodeResultData) String() string {
 }
 
 type MetadataFilterConfigRequest struct {
-	Combinator *MetadataFilterRuleCombinator `json:"combinator,omitempty"`
-	Negated    *bool                         `json:"negated,omitempty"`
-	Rules      []*MetadataFilterRuleRequest  `json:"rules,omitempty"`
-	Field      *string                       `json:"field,omitempty"`
-	Operator   *LogicalOperator              `json:"operator,omitempty"`
-	Value      *string                       `json:"value,omitempty"`
+	Combinator *MetadataFilterRuleCombinator `json:"combinator,omitempty" url:"combinator,omitempty"`
+	Negated    *bool                         `json:"negated,omitempty" url:"negated,omitempty"`
+	Rules      []*MetadataFilterRuleRequest  `json:"rules,omitempty" url:"rules,omitempty"`
+	Field      *string                       `json:"field,omitempty" url:"field,omitempty"`
+	Operator   *LogicalOperator              `json:"operator,omitempty" url:"operator,omitempty"`
+	Value      *string                       `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MetadataFilterConfigRequest) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
 }
 
 func (m *MetadataFilterConfigRequest) UnmarshalJSON(data []byte) error {
@@ -6002,6 +6764,13 @@ func (m *MetadataFilterConfigRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MetadataFilterConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
 	m._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -6043,14 +6812,19 @@ func (m MetadataFilterRuleCombinator) Ptr() *MetadataFilterRuleCombinator {
 }
 
 type MetadataFilterRuleRequest struct {
-	Combinator *MetadataFilterRuleCombinator `json:"combinator,omitempty"`
-	Negated    *bool                         `json:"negated,omitempty"`
-	Rules      []*MetadataFilterRuleRequest  `json:"rules,omitempty"`
-	Field      *string                       `json:"field,omitempty"`
-	Operator   *LogicalOperator              `json:"operator,omitempty"`
-	Value      *string                       `json:"value,omitempty"`
+	Combinator *MetadataFilterRuleCombinator `json:"combinator,omitempty" url:"combinator,omitempty"`
+	Negated    *bool                         `json:"negated,omitempty" url:"negated,omitempty"`
+	Rules      []*MetadataFilterRuleRequest  `json:"rules,omitempty" url:"rules,omitempty"`
+	Field      *string                       `json:"field,omitempty" url:"field,omitempty"`
+	Operator   *LogicalOperator              `json:"operator,omitempty" url:"operator,omitempty"`
+	Value      *string                       `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MetadataFilterRuleRequest) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
 }
 
 func (m *MetadataFilterRuleRequest) UnmarshalJSON(data []byte) error {
@@ -6060,6 +6834,13 @@ func (m *MetadataFilterRuleRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MetadataFilterRuleRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
 	m._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -6078,7 +6859,12 @@ func (m *MetadataFilterRuleRequest) String() string {
 
 // A Node Result Event emitted from a Metric Node.
 type MetricNodeResult struct {
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MetricNodeResult) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
 }
 
 func (m *MetricNodeResult) UnmarshalJSON(data []byte) error {
@@ -6088,6 +6874,13 @@ func (m *MetricNodeResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MetricNodeResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
 	m._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -6193,10 +6986,15 @@ func (m MlModelDeveloper) Ptr() *MlModelDeveloper {
 }
 
 type MlModelDeveloperEnumValueLabel struct {
-	Label string           `json:"label"`
-	Value MlModelDeveloper `json:"value,omitempty"`
+	Label string           `json:"label" url:"label"`
+	Value MlModelDeveloper `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MlModelDeveloperEnumValueLabel) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
 }
 
 func (m *MlModelDeveloperEnumValueLabel) UnmarshalJSON(data []byte) error {
@@ -6206,6 +7004,13 @@ func (m *MlModelDeveloperEnumValueLabel) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MlModelDeveloperEnumValueLabel(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
 	m._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -6223,13 +7028,18 @@ func (m *MlModelDeveloperEnumValueLabel) String() string {
 }
 
 type MlModelDisplayConfigLabelled struct {
-	Label       string                             `json:"label"`
-	Description string                             `json:"description"`
-	Tags        []*MlModelDisplayTagEnumValueLabel `json:"tags,omitempty"`
+	Label       string                             `json:"label" url:"label"`
+	Description string                             `json:"description" url:"description"`
+	Tags        []*MlModelDisplayTagEnumValueLabel `json:"tags" url:"tags"`
 	// Can only be set when using an internal service token.
-	DefaultDisplayPriority *float64 `json:"default_display_priority,omitempty"`
+	DefaultDisplayPriority *float64 `json:"default_display_priority,omitempty" url:"default_display_priority,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MlModelDisplayConfigLabelled) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
 }
 
 func (m *MlModelDisplayConfigLabelled) UnmarshalJSON(data []byte) error {
@@ -6239,6 +7049,13 @@ func (m *MlModelDisplayConfigLabelled) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MlModelDisplayConfigLabelled(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
 	m._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -6256,13 +7073,18 @@ func (m *MlModelDisplayConfigLabelled) String() string {
 }
 
 type MlModelDisplayConfigRequest struct {
-	Label       string              `json:"label"`
-	Description string              `json:"description"`
-	Tags        []MlModelDisplayTag `json:"tags,omitempty"`
+	Label       string              `json:"label" url:"label"`
+	Description string              `json:"description" url:"description"`
+	Tags        []MlModelDisplayTag `json:"tags" url:"tags"`
 	// Can only be set when using an internal service token.
-	DefaultDisplayPriority *float64 `json:"default_display_priority,omitempty"`
+	DefaultDisplayPriority *float64 `json:"default_display_priority,omitempty" url:"default_display_priority,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MlModelDisplayConfigRequest) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
 }
 
 func (m *MlModelDisplayConfigRequest) UnmarshalJSON(data []byte) error {
@@ -6272,6 +7094,13 @@ func (m *MlModelDisplayConfigRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MlModelDisplayConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
 	m._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -6337,10 +7166,15 @@ func (m MlModelDisplayTag) Ptr() *MlModelDisplayTag {
 }
 
 type MlModelDisplayTagEnumValueLabel struct {
-	Label string            `json:"label"`
-	Value MlModelDisplayTag `json:"value,omitempty"`
+	Label string            `json:"label" url:"label"`
+	Value MlModelDisplayTag `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MlModelDisplayTagEnumValueLabel) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
 }
 
 func (m *MlModelDisplayTagEnumValueLabel) UnmarshalJSON(data []byte) error {
@@ -6350,6 +7184,13 @@ func (m *MlModelDisplayTagEnumValueLabel) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MlModelDisplayTagEnumValueLabel(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
 	m._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -6367,17 +7208,22 @@ func (m *MlModelDisplayTagEnumValueLabel) String() string {
 }
 
 type MlModelExecConfig struct {
-	ModelIdentifier string                 `json:"model_identifier"`
-	BaseUrl         string                 `json:"base_url"`
-	Metadata        map[string]interface{} `json:"metadata,omitempty"`
-	Features        []MlModelFeature       `json:"features,omitempty"`
+	ModelIdentifier string                 `json:"model_identifier" url:"model_identifier"`
+	BaseUrl         string                 `json:"base_url" url:"base_url"`
+	Metadata        map[string]interface{} `json:"metadata" url:"metadata"`
+	Features        []MlModelFeature       `json:"features" url:"features"`
 	// Can only be set when using an internal service token.
-	ForceSystemCredentials *bool                   `json:"force_system_credentials,omitempty"`
-	TokenizerConfig        *MlModelTokenizerConfig `json:"tokenizer_config,omitempty"`
-	RequestConfig          *MlModelRequestConfig   `json:"request_config,omitempty"`
-	ResponseConfig         *MlModelResponseConfig  `json:"response_config,omitempty"`
+	ForceSystemCredentials *bool                   `json:"force_system_credentials,omitempty" url:"force_system_credentials,omitempty"`
+	TokenizerConfig        *MlModelTokenizerConfig `json:"tokenizer_config,omitempty" url:"tokenizer_config,omitempty"`
+	RequestConfig          *MlModelRequestConfig   `json:"request_config,omitempty" url:"request_config,omitempty"`
+	ResponseConfig         *MlModelResponseConfig  `json:"response_config,omitempty" url:"response_config,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MlModelExecConfig) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
 }
 
 func (m *MlModelExecConfig) UnmarshalJSON(data []byte) error {
@@ -6387,6 +7233,13 @@ func (m *MlModelExecConfig) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MlModelExecConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
 	m._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -6404,17 +7257,22 @@ func (m *MlModelExecConfig) String() string {
 }
 
 type MlModelExecConfigRequest struct {
-	ModelIdentifier string                 `json:"model_identifier"`
-	BaseUrl         string                 `json:"base_url"`
-	Metadata        map[string]interface{} `json:"metadata,omitempty"`
-	Features        []MlModelFeature       `json:"features,omitempty"`
+	ModelIdentifier string                 `json:"model_identifier" url:"model_identifier"`
+	BaseUrl         string                 `json:"base_url" url:"base_url"`
+	Metadata        map[string]interface{} `json:"metadata" url:"metadata"`
+	Features        []MlModelFeature       `json:"features" url:"features"`
 	// Can only be set when using an internal service token.
-	ForceSystemCredentials *bool                          `json:"force_system_credentials,omitempty"`
-	TokenizerConfig        *MlModelTokenizerConfigRequest `json:"tokenizer_config,omitempty"`
-	RequestConfig          *MlModelRequestConfigRequest   `json:"request_config,omitempty"`
-	ResponseConfig         *MlModelResponseConfigRequest  `json:"response_config,omitempty"`
+	ForceSystemCredentials *bool                          `json:"force_system_credentials,omitempty" url:"force_system_credentials,omitempty"`
+	TokenizerConfig        *MlModelTokenizerConfigRequest `json:"tokenizer_config,omitempty" url:"tokenizer_config,omitempty"`
+	RequestConfig          *MlModelRequestConfigRequest   `json:"request_config,omitempty" url:"request_config,omitempty"`
+	ResponseConfig         *MlModelResponseConfigRequest  `json:"response_config,omitempty" url:"response_config,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MlModelExecConfigRequest) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
 }
 
 func (m *MlModelExecConfigRequest) UnmarshalJSON(data []byte) error {
@@ -6424,6 +7282,13 @@ func (m *MlModelExecConfigRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MlModelExecConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
 	m._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -6537,10 +7402,15 @@ func (m MlModelFamily) Ptr() *MlModelFamily {
 }
 
 type MlModelFamilyEnumValueLabel struct {
-	Label string        `json:"label"`
-	Value MlModelFamily `json:"value,omitempty"`
+	Label string        `json:"label" url:"label"`
+	Value MlModelFamily `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MlModelFamilyEnumValueLabel) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
 }
 
 func (m *MlModelFamilyEnumValueLabel) UnmarshalJSON(data []byte) error {
@@ -6550,6 +7420,13 @@ func (m *MlModelFamilyEnumValueLabel) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MlModelFamilyEnumValueLabel(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
 	m._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -6619,17 +7496,22 @@ func (m MlModelFeature) Ptr() *MlModelFeature {
 }
 
 type MlModelParameterConfig struct {
-	Temperature      *OpenApiNumberProperty      `json:"temperature,omitempty"`
-	MaxTokens        *OpenApiIntegerProperty     `json:"max_tokens,omitempty"`
-	Stop             *OpenApiArrayProperty       `json:"stop,omitempty"`
-	TopP             *OpenApiNumberProperty      `json:"top_p,omitempty"`
-	TopK             *OpenApiIntegerProperty     `json:"top_k,omitempty"`
-	FrequencyPenalty *OpenApiNumberProperty      `json:"frequency_penalty,omitempty"`
-	PresencePenalty  *OpenApiNumberProperty      `json:"presence_penalty,omitempty"`
-	LogitBias        *OpenApiObjectProperty      `json:"logit_bias,omitempty"`
-	CustomParameters map[string]*OpenApiProperty `json:"custom_parameters,omitempty"`
+	Temperature      *OpenApiNumberProperty      `json:"temperature,omitempty" url:"temperature,omitempty"`
+	MaxTokens        *OpenApiIntegerProperty     `json:"max_tokens,omitempty" url:"max_tokens,omitempty"`
+	Stop             *OpenApiArrayProperty       `json:"stop,omitempty" url:"stop,omitempty"`
+	TopP             *OpenApiNumberProperty      `json:"top_p,omitempty" url:"top_p,omitempty"`
+	TopK             *OpenApiIntegerProperty     `json:"top_k,omitempty" url:"top_k,omitempty"`
+	FrequencyPenalty *OpenApiNumberProperty      `json:"frequency_penalty,omitempty" url:"frequency_penalty,omitempty"`
+	PresencePenalty  *OpenApiNumberProperty      `json:"presence_penalty,omitempty" url:"presence_penalty,omitempty"`
+	LogitBias        *OpenApiObjectProperty      `json:"logit_bias,omitempty" url:"logit_bias,omitempty"`
+	CustomParameters map[string]*OpenApiProperty `json:"custom_parameters,omitempty" url:"custom_parameters,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MlModelParameterConfig) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
 }
 
 func (m *MlModelParameterConfig) UnmarshalJSON(data []byte) error {
@@ -6639,6 +7521,13 @@ func (m *MlModelParameterConfig) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MlModelParameterConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
 	m._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -6656,17 +7545,22 @@ func (m *MlModelParameterConfig) String() string {
 }
 
 type MlModelParameterConfigRequest struct {
-	Temperature      *OpenApiNumberPropertyRequest      `json:"temperature,omitempty"`
-	MaxTokens        *OpenApiIntegerPropertyRequest     `json:"max_tokens,omitempty"`
-	Stop             *OpenApiArrayPropertyRequest       `json:"stop,omitempty"`
-	TopP             *OpenApiNumberPropertyRequest      `json:"top_p,omitempty"`
-	TopK             *OpenApiIntegerPropertyRequest     `json:"top_k,omitempty"`
-	FrequencyPenalty *OpenApiNumberPropertyRequest      `json:"frequency_penalty,omitempty"`
-	PresencePenalty  *OpenApiNumberPropertyRequest      `json:"presence_penalty,omitempty"`
-	LogitBias        *OpenApiObjectPropertyRequest      `json:"logit_bias,omitempty"`
-	CustomParameters map[string]*OpenApiPropertyRequest `json:"custom_parameters,omitempty"`
+	Temperature      *OpenApiNumberPropertyRequest      `json:"temperature,omitempty" url:"temperature,omitempty"`
+	MaxTokens        *OpenApiIntegerPropertyRequest     `json:"max_tokens,omitempty" url:"max_tokens,omitempty"`
+	Stop             *OpenApiArrayPropertyRequest       `json:"stop,omitempty" url:"stop,omitempty"`
+	TopP             *OpenApiNumberPropertyRequest      `json:"top_p,omitempty" url:"top_p,omitempty"`
+	TopK             *OpenApiIntegerPropertyRequest     `json:"top_k,omitempty" url:"top_k,omitempty"`
+	FrequencyPenalty *OpenApiNumberPropertyRequest      `json:"frequency_penalty,omitempty" url:"frequency_penalty,omitempty"`
+	PresencePenalty  *OpenApiNumberPropertyRequest      `json:"presence_penalty,omitempty" url:"presence_penalty,omitempty"`
+	LogitBias        *OpenApiObjectPropertyRequest      `json:"logit_bias,omitempty" url:"logit_bias,omitempty"`
+	CustomParameters map[string]*OpenApiPropertyRequest `json:"custom_parameters,omitempty" url:"custom_parameters,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MlModelParameterConfigRequest) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
 }
 
 func (m *MlModelParameterConfigRequest) UnmarshalJSON(data []byte) error {
@@ -6676,6 +7570,13 @@ func (m *MlModelParameterConfigRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MlModelParameterConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
 	m._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -6694,11 +7595,11 @@ func (m *MlModelParameterConfigRequest) String() string {
 
 // An ML Model that your Workspace has access to.
 type MlModelRead struct {
-	Id string `json:"id"`
+	Id string `json:"id" url:"id"`
 	// The unique name of the ML Model.
-	Name string `json:"name"`
+	Name string `json:"name" url:"name"`
 	// The family of the ML Model.
-	Family *MlModelFamilyEnumValueLabel `json:"family,omitempty"`
+	Family *MlModelFamilyEnumValueLabel `json:"family" url:"family"`
 	// The organization hosting the ML Model.
 	//
 	// - `ANTHROPIC` - Anthropic
@@ -6718,24 +7619,29 @@ type MlModelRead struct {
 	// - `OPENPIPE` - OpenPipe
 	// - `PYQ` - Pyq
 	// - `REPLICATE` - Replicate
-	HostedBy HostedByEnum `json:"hosted_by,omitempty"`
+	HostedBy HostedByEnum `json:"hosted_by" url:"hosted_by"`
 	// The organization that developed the ML Model.
-	DevelopedBy *MlModelDeveloperEnumValueLabel `json:"developed_by,omitempty"`
+	DevelopedBy *MlModelDeveloperEnumValueLabel `json:"developed_by" url:"developed_by"`
 	// The visibility of the ML Model.
 	//
 	// - `DEFAULT` - Default
 	// - `PUBLIC` - Public
 	// - `PRIVATE` - Private
 	// - `DISABLED` - Disabled
-	Visibility *VisibilityEnum `json:"visibility,omitempty"`
+	Visibility *VisibilityEnum `json:"visibility,omitempty" url:"visibility,omitempty"`
 	// Configuration for how to execute the ML Model.
-	ExecConfig *MlModelExecConfig `json:"exec_config,omitempty"`
+	ExecConfig *MlModelExecConfig `json:"exec_config" url:"exec_config"`
 	// Configuration for the ML Model's parameters.
-	ParameterConfig *MlModelParameterConfig `json:"parameter_config,omitempty"`
+	ParameterConfig *MlModelParameterConfig `json:"parameter_config" url:"parameter_config"`
 	// Configuration for how to display the ML Model.
-	DisplayConfig *MlModelDisplayConfigLabelled `json:"display_config,omitempty"`
+	DisplayConfig *MlModelDisplayConfigLabelled `json:"display_config" url:"display_config"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MlModelRead) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
 }
 
 func (m *MlModelRead) UnmarshalJSON(data []byte) error {
@@ -6745,6 +7651,13 @@ func (m *MlModelRead) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MlModelRead(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
 	m._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -6762,9 +7675,14 @@ func (m *MlModelRead) String() string {
 }
 
 type MlModelRequestAuthorizationConfig struct {
-	Type MlModelRequestAuthorizationConfigTypeEnum `json:"type,omitempty"`
+	Type MlModelRequestAuthorizationConfigTypeEnum `json:"type" url:"type"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MlModelRequestAuthorizationConfig) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
 }
 
 func (m *MlModelRequestAuthorizationConfig) UnmarshalJSON(data []byte) error {
@@ -6774,6 +7692,13 @@ func (m *MlModelRequestAuthorizationConfig) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MlModelRequestAuthorizationConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
 	m._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -6791,9 +7716,14 @@ func (m *MlModelRequestAuthorizationConfig) String() string {
 }
 
 type MlModelRequestAuthorizationConfigRequest struct {
-	Type MlModelRequestAuthorizationConfigTypeEnum `json:"type,omitempty"`
+	Type MlModelRequestAuthorizationConfigTypeEnum `json:"type" url:"type"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MlModelRequestAuthorizationConfigRequest) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
 }
 
 func (m *MlModelRequestAuthorizationConfigRequest) UnmarshalJSON(data []byte) error {
@@ -6803,6 +7733,13 @@ func (m *MlModelRequestAuthorizationConfigRequest) UnmarshalJSON(data []byte) er
 		return err
 	}
 	*m = MlModelRequestAuthorizationConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
 	m._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -6844,11 +7781,16 @@ func (m MlModelRequestAuthorizationConfigTypeEnum) Ptr() *MlModelRequestAuthoriz
 }
 
 type MlModelRequestConfig struct {
-	Headers       map[string]*string                 `json:"headers,omitempty"`
-	Authorization *MlModelRequestAuthorizationConfig `json:"authorization,omitempty"`
-	BodyTemplate  *string                            `json:"body_template,omitempty"`
+	Headers       map[string]*string                 `json:"headers,omitempty" url:"headers,omitempty"`
+	Authorization *MlModelRequestAuthorizationConfig `json:"authorization,omitempty" url:"authorization,omitempty"`
+	BodyTemplate  *string                            `json:"body_template,omitempty" url:"body_template,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MlModelRequestConfig) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
 }
 
 func (m *MlModelRequestConfig) UnmarshalJSON(data []byte) error {
@@ -6858,6 +7800,13 @@ func (m *MlModelRequestConfig) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MlModelRequestConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
 	m._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -6875,11 +7824,16 @@ func (m *MlModelRequestConfig) String() string {
 }
 
 type MlModelRequestConfigRequest struct {
-	Headers       map[string]*string                        `json:"headers,omitempty"`
-	Authorization *MlModelRequestAuthorizationConfigRequest `json:"authorization,omitempty"`
-	BodyTemplate  *string                                   `json:"body_template,omitempty"`
+	Headers       map[string]*string                        `json:"headers,omitempty" url:"headers,omitempty"`
+	Authorization *MlModelRequestAuthorizationConfigRequest `json:"authorization,omitempty" url:"authorization,omitempty"`
+	BodyTemplate  *string                                   `json:"body_template,omitempty" url:"body_template,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MlModelRequestConfigRequest) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
 }
 
 func (m *MlModelRequestConfigRequest) UnmarshalJSON(data []byte) error {
@@ -6889,6 +7843,13 @@ func (m *MlModelRequestConfigRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MlModelRequestConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
 	m._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -6906,11 +7867,16 @@ func (m *MlModelRequestConfigRequest) String() string {
 }
 
 type MlModelResponseConfig struct {
-	ResultPath                *string            `json:"result_path,omitempty"`
-	ResultExtractionRegex     *string            `json:"result_extraction_regex,omitempty"`
-	ResultSubstitutionRegexes map[string]*string `json:"result_substitution_regexes,omitempty"`
+	ResultPath                *string            `json:"result_path,omitempty" url:"result_path,omitempty"`
+	ResultExtractionRegex     *string            `json:"result_extraction_regex,omitempty" url:"result_extraction_regex,omitempty"`
+	ResultSubstitutionRegexes map[string]*string `json:"result_substitution_regexes,omitempty" url:"result_substitution_regexes,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MlModelResponseConfig) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
 }
 
 func (m *MlModelResponseConfig) UnmarshalJSON(data []byte) error {
@@ -6920,6 +7886,13 @@ func (m *MlModelResponseConfig) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MlModelResponseConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
 	m._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -6937,11 +7910,16 @@ func (m *MlModelResponseConfig) String() string {
 }
 
 type MlModelResponseConfigRequest struct {
-	ResultPath                *string            `json:"result_path,omitempty"`
-	ResultExtractionRegex     *string            `json:"result_extraction_regex,omitempty"`
-	ResultSubstitutionRegexes map[string]*string `json:"result_substitution_regexes,omitempty"`
+	ResultPath                *string            `json:"result_path,omitempty" url:"result_path,omitempty"`
+	ResultExtractionRegex     *string            `json:"result_extraction_regex,omitempty" url:"result_extraction_regex,omitempty"`
+	ResultSubstitutionRegexes map[string]*string `json:"result_substitution_regexes,omitempty" url:"result_substitution_regexes,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MlModelResponseConfigRequest) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
 }
 
 func (m *MlModelResponseConfigRequest) UnmarshalJSON(data []byte) error {
@@ -6951,6 +7929,13 @@ func (m *MlModelResponseConfigRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MlModelResponseConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
 	m._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -7011,23 +7996,9 @@ func (m MlModelTokenizerConfig) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", m.Type, m)
 	case "HUGGING_FACE":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*HuggingFaceTokenizerConfig
-		}{
-			Type:                       m.Type,
-			HuggingFaceTokenizerConfig: m.HuggingFace,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(m.HuggingFace, "type", "HUGGING_FACE")
 	case "TIKTOKEN":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TikTokenTokenizerConfig
-		}{
-			Type:                    m.Type,
-			TikTokenTokenizerConfig: m.Tiktoken,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(m.Tiktoken, "type", "TIKTOKEN")
 	}
 }
 
@@ -7091,23 +8062,9 @@ func (m MlModelTokenizerConfigRequest) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", m.Type, m)
 	case "HUGGING_FACE":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*HuggingFaceTokenizerConfigRequest
-		}{
-			Type:                              m.Type,
-			HuggingFaceTokenizerConfigRequest: m.HuggingFace,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(m.HuggingFace, "type", "HUGGING_FACE")
 	case "TIKTOKEN":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TikTokenTokenizerConfigRequest
-		}{
-			Type:                           m.Type,
-			TikTokenTokenizerConfigRequest: m.Tiktoken,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(m.Tiktoken, "type", "TIKTOKEN")
 	}
 }
 
@@ -7128,13 +8085,18 @@ func (m *MlModelTokenizerConfigRequest) Accept(visitor MlModelTokenizerConfigReq
 }
 
 type MlModelUsage struct {
-	OutputTokenCount *int `json:"output_token_count,omitempty"`
-	InputTokenCount  *int `json:"input_token_count,omitempty"`
-	InputCharCount   *int `json:"input_char_count,omitempty"`
-	OutputCharCount  *int `json:"output_char_count,omitempty"`
-	ComputeNanos     *int `json:"compute_nanos,omitempty"`
+	OutputTokenCount *int `json:"output_token_count,omitempty" url:"output_token_count,omitempty"`
+	InputTokenCount  *int `json:"input_token_count,omitempty" url:"input_token_count,omitempty"`
+	InputCharCount   *int `json:"input_char_count,omitempty" url:"input_char_count,omitempty"`
+	OutputCharCount  *int `json:"output_char_count,omitempty" url:"output_char_count,omitempty"`
+	ComputeNanos     *int `json:"compute_nanos,omitempty" url:"compute_nanos,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MlModelUsage) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
 }
 
 func (m *MlModelUsage) UnmarshalJSON(data []byte) error {
@@ -7144,6 +8106,13 @@ func (m *MlModelUsage) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MlModelUsage(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
 	m._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -7162,10 +8131,15 @@ func (m *MlModelUsage) String() string {
 
 // Named Prompt Sandbox Scenario input value that is of type CHAT_HISTORY
 type NamedScenarioInputChatHistoryVariableValueRequest struct {
-	Value []*ChatMessageRequest `json:"value,omitempty"`
-	Name  string                `json:"name"`
+	Value []*ChatMessageRequest `json:"value,omitempty" url:"value,omitempty"`
+	Name  string                `json:"name" url:"name"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedScenarioInputChatHistoryVariableValueRequest) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NamedScenarioInputChatHistoryVariableValueRequest) UnmarshalJSON(data []byte) error {
@@ -7175,6 +8149,13 @@ func (n *NamedScenarioInputChatHistoryVariableValueRequest) UnmarshalJSON(data [
 		return err
 	}
 	*n = NamedScenarioInputChatHistoryVariableValueRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -7193,10 +8174,15 @@ func (n *NamedScenarioInputChatHistoryVariableValueRequest) String() string {
 
 // Named Prompt Sandbox Scenario input value that is of type JSON
 type NamedScenarioInputJsonVariableValueRequest struct {
-	Value interface{} `json:"value,omitempty"`
-	Name  string      `json:"name"`
+	Value interface{} `json:"value" url:"value"`
+	Name  string      `json:"name" url:"name"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedScenarioInputJsonVariableValueRequest) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NamedScenarioInputJsonVariableValueRequest) UnmarshalJSON(data []byte) error {
@@ -7206,6 +8192,13 @@ func (n *NamedScenarioInputJsonVariableValueRequest) UnmarshalJSON(data []byte) 
 		return err
 	}
 	*n = NamedScenarioInputJsonVariableValueRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -7277,32 +8270,11 @@ func (n NamedScenarioInputRequest) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", n.Type, n)
 	case "STRING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NamedScenarioInputStringVariableValueRequest
-		}{
-			Type: n.Type,
-			NamedScenarioInputStringVariableValueRequest: n.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.String, "type", "STRING")
 	case "JSON":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NamedScenarioInputJsonVariableValueRequest
-		}{
-			Type: n.Type,
-			NamedScenarioInputJsonVariableValueRequest: n.Json,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.Json, "type", "JSON")
 	case "CHAT_HISTORY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NamedScenarioInputChatHistoryVariableValueRequest
-		}{
-			Type: n.Type,
-			NamedScenarioInputChatHistoryVariableValueRequest: n.ChatHistory,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.ChatHistory, "type", "CHAT_HISTORY")
 	}
 }
 
@@ -7327,10 +8299,15 @@ func (n *NamedScenarioInputRequest) Accept(visitor NamedScenarioInputRequestVisi
 
 // Named Prompt Sandbox Scenario input value that is of type STRING
 type NamedScenarioInputStringVariableValueRequest struct {
-	Value *string `json:"value,omitempty"`
-	Name  string  `json:"name"`
+	Value *string `json:"value,omitempty" url:"value,omitempty"`
+	Name  string  `json:"name" url:"name"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedScenarioInputStringVariableValueRequest) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NamedScenarioInputStringVariableValueRequest) UnmarshalJSON(data []byte) error {
@@ -7340,6 +8317,13 @@ func (n *NamedScenarioInputStringVariableValueRequest) UnmarshalJSON(data []byte
 		return err
 	}
 	*n = NamedScenarioInputStringVariableValueRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -7358,10 +8342,15 @@ func (n *NamedScenarioInputStringVariableValueRequest) String() string {
 
 // Named Test Case value that is of type ARRAY
 type NamedTestCaseArrayVariableValue struct {
-	Value []*ArrayVellumValueItem `json:"value,omitempty"`
-	Name  string                  `json:"name"`
+	Value []*ArrayVellumValueItem `json:"value,omitempty" url:"value,omitempty"`
+	Name  string                  `json:"name" url:"name"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedTestCaseArrayVariableValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NamedTestCaseArrayVariableValue) UnmarshalJSON(data []byte) error {
@@ -7371,6 +8360,13 @@ func (n *NamedTestCaseArrayVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NamedTestCaseArrayVariableValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -7389,10 +8385,15 @@ func (n *NamedTestCaseArrayVariableValue) String() string {
 
 // Named Test Case value that is of type ARRAY
 type NamedTestCaseArrayVariableValueRequest struct {
-	Value []*ArrayVellumValueItemRequest `json:"value,omitempty"`
-	Name  string                         `json:"name"`
+	Value []*ArrayVellumValueItemRequest `json:"value,omitempty" url:"value,omitempty"`
+	Name  string                         `json:"name" url:"name"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedTestCaseArrayVariableValueRequest) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NamedTestCaseArrayVariableValueRequest) UnmarshalJSON(data []byte) error {
@@ -7402,6 +8403,13 @@ func (n *NamedTestCaseArrayVariableValueRequest) UnmarshalJSON(data []byte) erro
 		return err
 	}
 	*n = NamedTestCaseArrayVariableValueRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -7420,10 +8428,15 @@ func (n *NamedTestCaseArrayVariableValueRequest) String() string {
 
 // Named Test Case value that is of type CHAT_HISTORY
 type NamedTestCaseChatHistoryVariableValue struct {
-	Value []*ChatMessage `json:"value,omitempty"`
-	Name  string         `json:"name"`
+	Value []*ChatMessage `json:"value,omitempty" url:"value,omitempty"`
+	Name  string         `json:"name" url:"name"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedTestCaseChatHistoryVariableValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NamedTestCaseChatHistoryVariableValue) UnmarshalJSON(data []byte) error {
@@ -7433,6 +8446,13 @@ func (n *NamedTestCaseChatHistoryVariableValue) UnmarshalJSON(data []byte) error
 		return err
 	}
 	*n = NamedTestCaseChatHistoryVariableValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -7451,10 +8471,15 @@ func (n *NamedTestCaseChatHistoryVariableValue) String() string {
 
 // Named Test Case value that is of type CHAT_HISTORY
 type NamedTestCaseChatHistoryVariableValueRequest struct {
-	Value []*ChatMessageRequest `json:"value,omitempty"`
-	Name  string                `json:"name"`
+	Value []*ChatMessageRequest `json:"value,omitempty" url:"value,omitempty"`
+	Name  string                `json:"name" url:"name"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedTestCaseChatHistoryVariableValueRequest) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NamedTestCaseChatHistoryVariableValueRequest) UnmarshalJSON(data []byte) error {
@@ -7464,6 +8489,13 @@ func (n *NamedTestCaseChatHistoryVariableValueRequest) UnmarshalJSON(data []byte
 		return err
 	}
 	*n = NamedTestCaseChatHistoryVariableValueRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -7482,10 +8514,15 @@ func (n *NamedTestCaseChatHistoryVariableValueRequest) String() string {
 
 // Named Test Case value that is of type ERROR
 type NamedTestCaseErrorVariableValue struct {
-	Value *VellumError `json:"value,omitempty"`
-	Name  string       `json:"name"`
+	Value *VellumError `json:"value,omitempty" url:"value,omitempty"`
+	Name  string       `json:"name" url:"name"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedTestCaseErrorVariableValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NamedTestCaseErrorVariableValue) UnmarshalJSON(data []byte) error {
@@ -7495,6 +8532,13 @@ func (n *NamedTestCaseErrorVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NamedTestCaseErrorVariableValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -7513,10 +8557,15 @@ func (n *NamedTestCaseErrorVariableValue) String() string {
 
 // Named Test Case value that is of type ERROR
 type NamedTestCaseErrorVariableValueRequest struct {
-	Value *VellumErrorRequest `json:"value,omitempty"`
-	Name  string              `json:"name"`
+	Value *VellumErrorRequest `json:"value,omitempty" url:"value,omitempty"`
+	Name  string              `json:"name" url:"name"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedTestCaseErrorVariableValueRequest) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NamedTestCaseErrorVariableValueRequest) UnmarshalJSON(data []byte) error {
@@ -7526,6 +8575,13 @@ func (n *NamedTestCaseErrorVariableValueRequest) UnmarshalJSON(data []byte) erro
 		return err
 	}
 	*n = NamedTestCaseErrorVariableValueRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -7544,10 +8600,15 @@ func (n *NamedTestCaseErrorVariableValueRequest) String() string {
 
 // Named Test Case value that is of type FUNCTION_CALL
 type NamedTestCaseFunctionCallVariableValue struct {
-	Value *FunctionCall `json:"value,omitempty"`
-	Name  string        `json:"name"`
+	Value *FunctionCall `json:"value,omitempty" url:"value,omitempty"`
+	Name  string        `json:"name" url:"name"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedTestCaseFunctionCallVariableValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NamedTestCaseFunctionCallVariableValue) UnmarshalJSON(data []byte) error {
@@ -7557,6 +8618,13 @@ func (n *NamedTestCaseFunctionCallVariableValue) UnmarshalJSON(data []byte) erro
 		return err
 	}
 	*n = NamedTestCaseFunctionCallVariableValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -7575,10 +8643,15 @@ func (n *NamedTestCaseFunctionCallVariableValue) String() string {
 
 // Named Test Case value that is of type FUNCTION_CALL
 type NamedTestCaseFunctionCallVariableValueRequest struct {
-	Value *FunctionCallRequest `json:"value,omitempty"`
-	Name  string               `json:"name"`
+	Value *FunctionCallRequest `json:"value,omitempty" url:"value,omitempty"`
+	Name  string               `json:"name" url:"name"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedTestCaseFunctionCallVariableValueRequest) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NamedTestCaseFunctionCallVariableValueRequest) UnmarshalJSON(data []byte) error {
@@ -7588,6 +8661,13 @@ func (n *NamedTestCaseFunctionCallVariableValueRequest) UnmarshalJSON(data []byt
 		return err
 	}
 	*n = NamedTestCaseFunctionCallVariableValueRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -7606,10 +8686,15 @@ func (n *NamedTestCaseFunctionCallVariableValueRequest) String() string {
 
 // Named Test Case value that is of type JSON
 type NamedTestCaseJsonVariableValue struct {
-	Value interface{} `json:"value,omitempty"`
-	Name  string      `json:"name"`
+	Value interface{} `json:"value" url:"value"`
+	Name  string      `json:"name" url:"name"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedTestCaseJsonVariableValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NamedTestCaseJsonVariableValue) UnmarshalJSON(data []byte) error {
@@ -7619,6 +8704,13 @@ func (n *NamedTestCaseJsonVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NamedTestCaseJsonVariableValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -7637,10 +8729,15 @@ func (n *NamedTestCaseJsonVariableValue) String() string {
 
 // Named Test Case value that is of type JSON
 type NamedTestCaseJsonVariableValueRequest struct {
-	Value interface{} `json:"value,omitempty"`
-	Name  string      `json:"name"`
+	Value interface{} `json:"value" url:"value"`
+	Name  string      `json:"name" url:"name"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedTestCaseJsonVariableValueRequest) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NamedTestCaseJsonVariableValueRequest) UnmarshalJSON(data []byte) error {
@@ -7650,6 +8747,13 @@ func (n *NamedTestCaseJsonVariableValueRequest) UnmarshalJSON(data []byte) error
 		return err
 	}
 	*n = NamedTestCaseJsonVariableValueRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -7668,10 +8772,15 @@ func (n *NamedTestCaseJsonVariableValueRequest) String() string {
 
 // Named Test Case value that is of type NUMBER
 type NamedTestCaseNumberVariableValue struct {
-	Value *float64 `json:"value,omitempty"`
-	Name  string   `json:"name"`
+	Value *float64 `json:"value,omitempty" url:"value,omitempty"`
+	Name  string   `json:"name" url:"name"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedTestCaseNumberVariableValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NamedTestCaseNumberVariableValue) UnmarshalJSON(data []byte) error {
@@ -7681,6 +8790,13 @@ func (n *NamedTestCaseNumberVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NamedTestCaseNumberVariableValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -7699,10 +8815,15 @@ func (n *NamedTestCaseNumberVariableValue) String() string {
 
 // Named Test Case value that is of type NUMBER
 type NamedTestCaseNumberVariableValueRequest struct {
-	Value *float64 `json:"value,omitempty"`
-	Name  string   `json:"name"`
+	Value *float64 `json:"value,omitempty" url:"value,omitempty"`
+	Name  string   `json:"name" url:"name"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedTestCaseNumberVariableValueRequest) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NamedTestCaseNumberVariableValueRequest) UnmarshalJSON(data []byte) error {
@@ -7712,6 +8833,13 @@ func (n *NamedTestCaseNumberVariableValueRequest) UnmarshalJSON(data []byte) err
 		return err
 	}
 	*n = NamedTestCaseNumberVariableValueRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -7730,10 +8858,15 @@ func (n *NamedTestCaseNumberVariableValueRequest) String() string {
 
 // Named Test Case value that is of type SEARCH_RESULTS
 type NamedTestCaseSearchResultsVariableValue struct {
-	Value []*SearchResult `json:"value,omitempty"`
-	Name  string          `json:"name"`
+	Value []*SearchResult `json:"value,omitempty" url:"value,omitempty"`
+	Name  string          `json:"name" url:"name"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedTestCaseSearchResultsVariableValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NamedTestCaseSearchResultsVariableValue) UnmarshalJSON(data []byte) error {
@@ -7743,6 +8876,13 @@ func (n *NamedTestCaseSearchResultsVariableValue) UnmarshalJSON(data []byte) err
 		return err
 	}
 	*n = NamedTestCaseSearchResultsVariableValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -7761,10 +8901,15 @@ func (n *NamedTestCaseSearchResultsVariableValue) String() string {
 
 // Named Test Case value that is of type SEARCH_RESULTS
 type NamedTestCaseSearchResultsVariableValueRequest struct {
-	Value []*SearchResultRequest `json:"value,omitempty"`
-	Name  string                 `json:"name"`
+	Value []*SearchResultRequest `json:"value,omitempty" url:"value,omitempty"`
+	Name  string                 `json:"name" url:"name"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedTestCaseSearchResultsVariableValueRequest) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NamedTestCaseSearchResultsVariableValueRequest) UnmarshalJSON(data []byte) error {
@@ -7774,6 +8919,13 @@ func (n *NamedTestCaseSearchResultsVariableValueRequest) UnmarshalJSON(data []by
 		return err
 	}
 	*n = NamedTestCaseSearchResultsVariableValueRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -7792,10 +8944,15 @@ func (n *NamedTestCaseSearchResultsVariableValueRequest) String() string {
 
 // Named Test Case value that is of type STRING
 type NamedTestCaseStringVariableValue struct {
-	Value *string `json:"value,omitempty"`
-	Name  string  `json:"name"`
+	Value *string `json:"value,omitempty" url:"value,omitempty"`
+	Name  string  `json:"name" url:"name"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedTestCaseStringVariableValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NamedTestCaseStringVariableValue) UnmarshalJSON(data []byte) error {
@@ -7805,6 +8962,13 @@ func (n *NamedTestCaseStringVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NamedTestCaseStringVariableValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -7823,10 +8987,15 @@ func (n *NamedTestCaseStringVariableValue) String() string {
 
 // Named Test Case value that is of type STRING
 type NamedTestCaseStringVariableValueRequest struct {
-	Value *string `json:"value,omitempty"`
-	Name  string  `json:"name"`
+	Value *string `json:"value,omitempty" url:"value,omitempty"`
+	Name  string  `json:"name" url:"name"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedTestCaseStringVariableValueRequest) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NamedTestCaseStringVariableValueRequest) UnmarshalJSON(data []byte) error {
@@ -7836,6 +9005,13 @@ func (n *NamedTestCaseStringVariableValueRequest) UnmarshalJSON(data []byte) err
 		return err
 	}
 	*n = NamedTestCaseStringVariableValueRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -7962,77 +9138,21 @@ func (n NamedTestCaseVariableValue) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", n.Type, n)
 	case "STRING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NamedTestCaseStringVariableValue
-		}{
-			Type:                             n.Type,
-			NamedTestCaseStringVariableValue: n.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.String, "type", "STRING")
 	case "NUMBER":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NamedTestCaseNumberVariableValue
-		}{
-			Type:                             n.Type,
-			NamedTestCaseNumberVariableValue: n.Number,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.Number, "type", "NUMBER")
 	case "JSON":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NamedTestCaseJsonVariableValue
-		}{
-			Type:                           n.Type,
-			NamedTestCaseJsonVariableValue: n.Json,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.Json, "type", "JSON")
 	case "CHAT_HISTORY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NamedTestCaseChatHistoryVariableValue
-		}{
-			Type:                                  n.Type,
-			NamedTestCaseChatHistoryVariableValue: n.ChatHistory,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.ChatHistory, "type", "CHAT_HISTORY")
 	case "SEARCH_RESULTS":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NamedTestCaseSearchResultsVariableValue
-		}{
-			Type:                                    n.Type,
-			NamedTestCaseSearchResultsVariableValue: n.SearchResults,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.SearchResults, "type", "SEARCH_RESULTS")
 	case "ERROR":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NamedTestCaseErrorVariableValue
-		}{
-			Type:                            n.Type,
-			NamedTestCaseErrorVariableValue: n.Error,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.Error, "type", "ERROR")
 	case "FUNCTION_CALL":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NamedTestCaseFunctionCallVariableValue
-		}{
-			Type:                                   n.Type,
-			NamedTestCaseFunctionCallVariableValue: n.FunctionCall,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.FunctionCall, "type", "FUNCTION_CALL")
 	case "ARRAY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NamedTestCaseArrayVariableValue
-		}{
-			Type:                            n.Type,
-			NamedTestCaseArrayVariableValue: n.Array,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.Array, "type", "ARRAY")
 	}
 }
 
@@ -8180,77 +9300,21 @@ func (n NamedTestCaseVariableValueRequest) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", n.Type, n)
 	case "STRING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NamedTestCaseStringVariableValueRequest
-		}{
-			Type:                                    n.Type,
-			NamedTestCaseStringVariableValueRequest: n.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.String, "type", "STRING")
 	case "NUMBER":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NamedTestCaseNumberVariableValueRequest
-		}{
-			Type:                                    n.Type,
-			NamedTestCaseNumberVariableValueRequest: n.Number,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.Number, "type", "NUMBER")
 	case "JSON":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NamedTestCaseJsonVariableValueRequest
-		}{
-			Type:                                  n.Type,
-			NamedTestCaseJsonVariableValueRequest: n.Json,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.Json, "type", "JSON")
 	case "CHAT_HISTORY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NamedTestCaseChatHistoryVariableValueRequest
-		}{
-			Type: n.Type,
-			NamedTestCaseChatHistoryVariableValueRequest: n.ChatHistory,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.ChatHistory, "type", "CHAT_HISTORY")
 	case "SEARCH_RESULTS":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NamedTestCaseSearchResultsVariableValueRequest
-		}{
-			Type: n.Type,
-			NamedTestCaseSearchResultsVariableValueRequest: n.SearchResults,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.SearchResults, "type", "SEARCH_RESULTS")
 	case "ERROR":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NamedTestCaseErrorVariableValueRequest
-		}{
-			Type:                                   n.Type,
-			NamedTestCaseErrorVariableValueRequest: n.Error,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.Error, "type", "ERROR")
 	case "FUNCTION_CALL":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NamedTestCaseFunctionCallVariableValueRequest
-		}{
-			Type: n.Type,
-			NamedTestCaseFunctionCallVariableValueRequest: n.FunctionCall,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.FunctionCall, "type", "FUNCTION_CALL")
 	case "ARRAY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NamedTestCaseArrayVariableValueRequest
-		}{
-			Type:                                   n.Type,
-			NamedTestCaseArrayVariableValueRequest: n.Array,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.Array, "type", "ARRAY")
 	}
 }
 
@@ -8289,11 +9353,16 @@ func (n *NamedTestCaseVariableValueRequest) Accept(visitor NamedTestCaseVariable
 }
 
 type NodeInputCompiledArrayValue struct {
-	NodeInputId string                    `json:"node_input_id"`
-	Key         string                    `json:"key"`
-	Value       []*ArrayVariableValueItem `json:"value,omitempty"`
+	NodeInputId string                    `json:"node_input_id" url:"node_input_id"`
+	Key         string                    `json:"key" url:"key"`
+	Value       []*ArrayVariableValueItem `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NodeInputCompiledArrayValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NodeInputCompiledArrayValue) UnmarshalJSON(data []byte) error {
@@ -8303,6 +9372,13 @@ func (n *NodeInputCompiledArrayValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeInputCompiledArrayValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -8320,11 +9396,16 @@ func (n *NodeInputCompiledArrayValue) String() string {
 }
 
 type NodeInputCompiledChatHistoryValue struct {
-	NodeInputId string         `json:"node_input_id"`
-	Key         string         `json:"key"`
-	Value       []*ChatMessage `json:"value,omitempty"`
+	NodeInputId string         `json:"node_input_id" url:"node_input_id"`
+	Key         string         `json:"key" url:"key"`
+	Value       []*ChatMessage `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NodeInputCompiledChatHistoryValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NodeInputCompiledChatHistoryValue) UnmarshalJSON(data []byte) error {
@@ -8334,6 +9415,13 @@ func (n *NodeInputCompiledChatHistoryValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeInputCompiledChatHistoryValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -8351,11 +9439,16 @@ func (n *NodeInputCompiledChatHistoryValue) String() string {
 }
 
 type NodeInputCompiledErrorValue struct {
-	NodeInputId string       `json:"node_input_id"`
-	Key         string       `json:"key"`
-	Value       *VellumError `json:"value,omitempty"`
+	NodeInputId string       `json:"node_input_id" url:"node_input_id"`
+	Key         string       `json:"key" url:"key"`
+	Value       *VellumError `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NodeInputCompiledErrorValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NodeInputCompiledErrorValue) UnmarshalJSON(data []byte) error {
@@ -8365,6 +9458,13 @@ func (n *NodeInputCompiledErrorValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeInputCompiledErrorValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -8382,11 +9482,16 @@ func (n *NodeInputCompiledErrorValue) String() string {
 }
 
 type NodeInputCompiledFunctionCall struct {
-	NodeInputId string        `json:"node_input_id"`
-	Key         string        `json:"key"`
-	Value       *FunctionCall `json:"value,omitempty"`
+	NodeInputId string        `json:"node_input_id" url:"node_input_id"`
+	Key         string        `json:"key" url:"key"`
+	Value       *FunctionCall `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NodeInputCompiledFunctionCall) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NodeInputCompiledFunctionCall) UnmarshalJSON(data []byte) error {
@@ -8396,6 +9501,13 @@ func (n *NodeInputCompiledFunctionCall) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeInputCompiledFunctionCall(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -8413,11 +9525,16 @@ func (n *NodeInputCompiledFunctionCall) String() string {
 }
 
 type NodeInputCompiledJsonValue struct {
-	NodeInputId string      `json:"node_input_id"`
-	Key         string      `json:"key"`
-	Value       interface{} `json:"value,omitempty"`
+	NodeInputId string      `json:"node_input_id" url:"node_input_id"`
+	Key         string      `json:"key" url:"key"`
+	Value       interface{} `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NodeInputCompiledJsonValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NodeInputCompiledJsonValue) UnmarshalJSON(data []byte) error {
@@ -8427,6 +9544,13 @@ func (n *NodeInputCompiledJsonValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeInputCompiledJsonValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -8444,11 +9568,16 @@ func (n *NodeInputCompiledJsonValue) String() string {
 }
 
 type NodeInputCompiledNumberValue struct {
-	NodeInputId string   `json:"node_input_id"`
-	Key         string   `json:"key"`
-	Value       *float64 `json:"value,omitempty"`
+	NodeInputId string   `json:"node_input_id" url:"node_input_id"`
+	Key         string   `json:"key" url:"key"`
+	Value       *float64 `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NodeInputCompiledNumberValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NodeInputCompiledNumberValue) UnmarshalJSON(data []byte) error {
@@ -8458,6 +9587,13 @@ func (n *NodeInputCompiledNumberValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeInputCompiledNumberValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -8475,11 +9611,16 @@ func (n *NodeInputCompiledNumberValue) String() string {
 }
 
 type NodeInputCompiledSearchResultsValue struct {
-	NodeInputId string          `json:"node_input_id"`
-	Key         string          `json:"key"`
-	Value       []*SearchResult `json:"value,omitempty"`
+	NodeInputId string          `json:"node_input_id" url:"node_input_id"`
+	Key         string          `json:"key" url:"key"`
+	Value       []*SearchResult `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NodeInputCompiledSearchResultsValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NodeInputCompiledSearchResultsValue) UnmarshalJSON(data []byte) error {
@@ -8489,6 +9630,13 @@ func (n *NodeInputCompiledSearchResultsValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeInputCompiledSearchResultsValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -8506,11 +9654,16 @@ func (n *NodeInputCompiledSearchResultsValue) String() string {
 }
 
 type NodeInputCompiledStringValue struct {
-	NodeInputId string  `json:"node_input_id"`
-	Key         string  `json:"key"`
-	Value       *string `json:"value,omitempty"`
+	NodeInputId string  `json:"node_input_id" url:"node_input_id"`
+	Key         string  `json:"key" url:"key"`
+	Value       *string `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NodeInputCompiledStringValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NodeInputCompiledStringValue) UnmarshalJSON(data []byte) error {
@@ -8520,6 +9673,13 @@ func (n *NodeInputCompiledStringValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeInputCompiledStringValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -8646,77 +9806,21 @@ func (n NodeInputVariableCompiledValue) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", n.Type, n)
 	case "STRING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NodeInputCompiledStringValue
-		}{
-			Type:                         n.Type,
-			NodeInputCompiledStringValue: n.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.String, "type", "STRING")
 	case "NUMBER":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NodeInputCompiledNumberValue
-		}{
-			Type:                         n.Type,
-			NodeInputCompiledNumberValue: n.Number,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.Number, "type", "NUMBER")
 	case "JSON":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NodeInputCompiledJsonValue
-		}{
-			Type:                       n.Type,
-			NodeInputCompiledJsonValue: n.Json,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.Json, "type", "JSON")
 	case "CHAT_HISTORY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NodeInputCompiledChatHistoryValue
-		}{
-			Type:                              n.Type,
-			NodeInputCompiledChatHistoryValue: n.ChatHistory,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.ChatHistory, "type", "CHAT_HISTORY")
 	case "SEARCH_RESULTS":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NodeInputCompiledSearchResultsValue
-		}{
-			Type:                                n.Type,
-			NodeInputCompiledSearchResultsValue: n.SearchResults,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.SearchResults, "type", "SEARCH_RESULTS")
 	case "ERROR":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NodeInputCompiledErrorValue
-		}{
-			Type:                        n.Type,
-			NodeInputCompiledErrorValue: n.Error,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.Error, "type", "ERROR")
 	case "ARRAY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NodeInputCompiledArrayValue
-		}{
-			Type:                        n.Type,
-			NodeInputCompiledArrayValue: n.Array,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.Array, "type", "ARRAY")
 	case "FUNCTION_CALL":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NodeInputCompiledFunctionCall
-		}{
-			Type:                          n.Type,
-			NodeInputCompiledFunctionCall: n.FunctionCall,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.FunctionCall, "type", "FUNCTION_CALL")
 	}
 }
 
@@ -8756,11 +9860,16 @@ func (n *NodeInputVariableCompiledValue) Accept(visitor NodeInputVariableCompile
 
 // An output returned by a node that is of type ARRAY.
 type NodeOutputCompiledArrayValue struct {
-	Value        []*ArrayVellumValueItem       `json:"value,omitempty"`
-	NodeOutputId string                        `json:"node_output_id"`
-	State        *WorkflowNodeResultEventState `json:"state,omitempty"`
+	Value        []*ArrayVellumValueItem       `json:"value,omitempty" url:"value,omitempty"`
+	NodeOutputId string                        `json:"node_output_id" url:"node_output_id"`
+	State        *WorkflowNodeResultEventState `json:"state,omitempty" url:"state,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NodeOutputCompiledArrayValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NodeOutputCompiledArrayValue) UnmarshalJSON(data []byte) error {
@@ -8770,6 +9879,13 @@ func (n *NodeOutputCompiledArrayValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeOutputCompiledArrayValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -8788,11 +9904,16 @@ func (n *NodeOutputCompiledArrayValue) String() string {
 
 // An output returned by a node that is of type CHAT_HISTORY.
 type NodeOutputCompiledChatHistoryValue struct {
-	Value        []*ChatMessage                `json:"value,omitempty"`
-	NodeOutputId string                        `json:"node_output_id"`
-	State        *WorkflowNodeResultEventState `json:"state,omitempty"`
+	Value        []*ChatMessage                `json:"value,omitempty" url:"value,omitempty"`
+	NodeOutputId string                        `json:"node_output_id" url:"node_output_id"`
+	State        *WorkflowNodeResultEventState `json:"state,omitempty" url:"state,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NodeOutputCompiledChatHistoryValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NodeOutputCompiledChatHistoryValue) UnmarshalJSON(data []byte) error {
@@ -8802,6 +9923,13 @@ func (n *NodeOutputCompiledChatHistoryValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeOutputCompiledChatHistoryValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -8820,11 +9948,16 @@ func (n *NodeOutputCompiledChatHistoryValue) String() string {
 
 // An output returned by a node that is of type ERROR.
 type NodeOutputCompiledErrorValue struct {
-	Value        *VellumError                  `json:"value,omitempty"`
-	NodeOutputId string                        `json:"node_output_id"`
-	State        *WorkflowNodeResultEventState `json:"state,omitempty"`
+	Value        *VellumError                  `json:"value,omitempty" url:"value,omitempty"`
+	NodeOutputId string                        `json:"node_output_id" url:"node_output_id"`
+	State        *WorkflowNodeResultEventState `json:"state,omitempty" url:"state,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NodeOutputCompiledErrorValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NodeOutputCompiledErrorValue) UnmarshalJSON(data []byte) error {
@@ -8834,6 +9967,13 @@ func (n *NodeOutputCompiledErrorValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeOutputCompiledErrorValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -8852,11 +9992,16 @@ func (n *NodeOutputCompiledErrorValue) String() string {
 
 // An output returned by a node that is of type FUNCTION_CALL.
 type NodeOutputCompiledFunctionCallValue struct {
-	Value        *FunctionCall                 `json:"value,omitempty"`
-	NodeOutputId string                        `json:"node_output_id"`
-	State        *WorkflowNodeResultEventState `json:"state,omitempty"`
+	Value        *FunctionCall                 `json:"value,omitempty" url:"value,omitempty"`
+	NodeOutputId string                        `json:"node_output_id" url:"node_output_id"`
+	State        *WorkflowNodeResultEventState `json:"state,omitempty" url:"state,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NodeOutputCompiledFunctionCallValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NodeOutputCompiledFunctionCallValue) UnmarshalJSON(data []byte) error {
@@ -8866,6 +10011,13 @@ func (n *NodeOutputCompiledFunctionCallValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeOutputCompiledFunctionCallValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -8884,11 +10036,16 @@ func (n *NodeOutputCompiledFunctionCallValue) String() string {
 
 // An output returned by a node that is of type JSON.
 type NodeOutputCompiledJsonValue struct {
-	Value        interface{}                   `json:"value,omitempty"`
-	NodeOutputId string                        `json:"node_output_id"`
-	State        *WorkflowNodeResultEventState `json:"state,omitempty"`
+	Value        interface{}                   `json:"value" url:"value"`
+	NodeOutputId string                        `json:"node_output_id" url:"node_output_id"`
+	State        *WorkflowNodeResultEventState `json:"state,omitempty" url:"state,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NodeOutputCompiledJsonValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NodeOutputCompiledJsonValue) UnmarshalJSON(data []byte) error {
@@ -8898,6 +10055,13 @@ func (n *NodeOutputCompiledJsonValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeOutputCompiledJsonValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -8916,11 +10080,16 @@ func (n *NodeOutputCompiledJsonValue) String() string {
 
 // An output returned by a node that is of type NUMBER.
 type NodeOutputCompiledNumberValue struct {
-	Value        *float64                      `json:"value,omitempty"`
-	NodeOutputId string                        `json:"node_output_id"`
-	State        *WorkflowNodeResultEventState `json:"state,omitempty"`
+	Value        *float64                      `json:"value,omitempty" url:"value,omitempty"`
+	NodeOutputId string                        `json:"node_output_id" url:"node_output_id"`
+	State        *WorkflowNodeResultEventState `json:"state,omitempty" url:"state,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NodeOutputCompiledNumberValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NodeOutputCompiledNumberValue) UnmarshalJSON(data []byte) error {
@@ -8930,6 +10099,13 @@ func (n *NodeOutputCompiledNumberValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeOutputCompiledNumberValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -8948,11 +10124,16 @@ func (n *NodeOutputCompiledNumberValue) String() string {
 
 // An output returned by a node that is of type SEARCH_RESULTS.
 type NodeOutputCompiledSearchResultsValue struct {
-	Value        []*SearchResult               `json:"value,omitempty"`
-	NodeOutputId string                        `json:"node_output_id"`
-	State        *WorkflowNodeResultEventState `json:"state,omitempty"`
+	Value        []*SearchResult               `json:"value,omitempty" url:"value,omitempty"`
+	NodeOutputId string                        `json:"node_output_id" url:"node_output_id"`
+	State        *WorkflowNodeResultEventState `json:"state,omitempty" url:"state,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NodeOutputCompiledSearchResultsValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NodeOutputCompiledSearchResultsValue) UnmarshalJSON(data []byte) error {
@@ -8962,6 +10143,13 @@ func (n *NodeOutputCompiledSearchResultsValue) UnmarshalJSON(data []byte) error 
 		return err
 	}
 	*n = NodeOutputCompiledSearchResultsValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -8980,11 +10168,16 @@ func (n *NodeOutputCompiledSearchResultsValue) String() string {
 
 // An output returned by a node that is of type STRING.
 type NodeOutputCompiledStringValue struct {
-	Value        *string                       `json:"value,omitempty"`
-	NodeOutputId string                        `json:"node_output_id"`
-	State        *WorkflowNodeResultEventState `json:"state,omitempty"`
+	Value        *string                       `json:"value,omitempty" url:"value,omitempty"`
+	NodeOutputId string                        `json:"node_output_id" url:"node_output_id"`
+	State        *WorkflowNodeResultEventState `json:"state,omitempty" url:"state,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NodeOutputCompiledStringValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NodeOutputCompiledStringValue) UnmarshalJSON(data []byte) error {
@@ -8994,6 +10187,13 @@ func (n *NodeOutputCompiledStringValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeOutputCompiledStringValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -9120,77 +10320,21 @@ func (n NodeOutputCompiledValue) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", n.Type, n)
 	case "STRING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NodeOutputCompiledStringValue
-		}{
-			Type:                          n.Type,
-			NodeOutputCompiledStringValue: n.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.String, "type", "STRING")
 	case "NUMBER":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NodeOutputCompiledNumberValue
-		}{
-			Type:                          n.Type,
-			NodeOutputCompiledNumberValue: n.Number,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.Number, "type", "NUMBER")
 	case "JSON":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NodeOutputCompiledJsonValue
-		}{
-			Type:                        n.Type,
-			NodeOutputCompiledJsonValue: n.Json,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.Json, "type", "JSON")
 	case "CHAT_HISTORY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NodeOutputCompiledChatHistoryValue
-		}{
-			Type:                               n.Type,
-			NodeOutputCompiledChatHistoryValue: n.ChatHistory,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.ChatHistory, "type", "CHAT_HISTORY")
 	case "SEARCH_RESULTS":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NodeOutputCompiledSearchResultsValue
-		}{
-			Type:                                 n.Type,
-			NodeOutputCompiledSearchResultsValue: n.SearchResults,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.SearchResults, "type", "SEARCH_RESULTS")
 	case "ERROR":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NodeOutputCompiledErrorValue
-		}{
-			Type:                         n.Type,
-			NodeOutputCompiledErrorValue: n.Error,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.Error, "type", "ERROR")
 	case "ARRAY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NodeOutputCompiledArrayValue
-		}{
-			Type:                         n.Type,
-			NodeOutputCompiledArrayValue: n.Array,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.Array, "type", "ARRAY")
 	case "FUNCTION_CALL":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*NodeOutputCompiledFunctionCallValue
-		}{
-			Type:                                n.Type,
-			NodeOutputCompiledFunctionCallValue: n.FunctionCall,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(n.FunctionCall, "type", "FUNCTION_CALL")
 	}
 }
 
@@ -9229,10 +10373,15 @@ func (n *NodeOutputCompiledValue) Accept(visitor NodeOutputCompiledValueVisitor)
 }
 
 type NormalizedLogProbs struct {
-	Tokens     []*NormalizedTokenLogProbs `json:"tokens,omitempty"`
-	Likelihood *float64                   `json:"likelihood,omitempty"`
+	Tokens     []*NormalizedTokenLogProbs `json:"tokens" url:"tokens"`
+	Likelihood *float64                   `json:"likelihood,omitempty" url:"likelihood,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NormalizedLogProbs) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NormalizedLogProbs) UnmarshalJSON(data []byte) error {
@@ -9242,6 +10391,13 @@ func (n *NormalizedLogProbs) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NormalizedLogProbs(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -9259,12 +10415,17 @@ func (n *NormalizedLogProbs) String() string {
 }
 
 type NormalizedTokenLogProbs struct {
-	Token       string              `json:"token"`
-	Logprob     *float64            `json:"logprob,omitempty"`
-	TopLogprobs map[string]*float64 `json:"top_logprobs,omitempty"`
-	TextOffset  int                 `json:"text_offset"`
+	Token       string              `json:"token" url:"token"`
+	Logprob     *float64            `json:"logprob,omitempty" url:"logprob,omitempty"`
+	TopLogprobs map[string]*float64 `json:"top_logprobs,omitempty" url:"top_logprobs,omitempty"`
+	TextOffset  int                 `json:"text_offset" url:"text_offset"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NormalizedTokenLogProbs) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NormalizedTokenLogProbs) UnmarshalJSON(data []byte) error {
@@ -9274,6 +10435,13 @@ func (n *NormalizedTokenLogProbs) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NormalizedTokenLogProbs(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -9291,9 +10459,14 @@ func (n *NormalizedTokenLogProbs) String() string {
 }
 
 type NumberVariableValue struct {
-	Value *float64 `json:"value,omitempty"`
+	Value *float64 `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NumberVariableValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NumberVariableValue) UnmarshalJSON(data []byte) error {
@@ -9303,6 +10476,13 @@ func (n *NumberVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NumberVariableValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -9321,9 +10501,14 @@ func (n *NumberVariableValue) String() string {
 
 // A value representing a number.
 type NumberVellumValue struct {
-	Value *float64 `json:"value,omitempty"`
+	Value *float64 `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NumberVellumValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NumberVellumValue) UnmarshalJSON(data []byte) error {
@@ -9333,6 +10518,13 @@ func (n *NumberVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NumberVellumValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -9351,9 +10543,14 @@ func (n *NumberVellumValue) String() string {
 
 // A value representing a number.
 type NumberVellumValueRequest struct {
-	Value *float64 `json:"value,omitempty"`
+	Value *float64 `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NumberVellumValueRequest) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
 }
 
 func (n *NumberVellumValueRequest) UnmarshalJSON(data []byte) error {
@@ -9363,6 +10560,13 @@ func (n *NumberVellumValueRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NumberVellumValueRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
 	n._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -9381,9 +10585,14 @@ func (n *NumberVellumValueRequest) String() string {
 
 // Configuration for using an OpenAI vectorizer.
 type OpenAiVectorizerConfig struct {
-	AddOpenaiApiKey *AddOpenaiApiKeyEnum `json:"add_openai_api_key,omitempty"`
+	AddOpenaiApiKey *AddOpenaiApiKeyEnum `json:"add_openai_api_key,omitempty" url:"add_openai_api_key,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenAiVectorizerConfig) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenAiVectorizerConfig) UnmarshalJSON(data []byte) error {
@@ -9393,6 +10602,13 @@ func (o *OpenAiVectorizerConfig) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenAiVectorizerConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -9411,9 +10627,14 @@ func (o *OpenAiVectorizerConfig) String() string {
 
 // Configuration for using an OpenAI vectorizer.
 type OpenAiVectorizerConfigRequest struct {
-	AddOpenaiApiKey *AddOpenaiApiKeyEnum `json:"add_openai_api_key,omitempty"`
+	AddOpenaiApiKey *AddOpenaiApiKeyEnum `json:"add_openai_api_key,omitempty" url:"add_openai_api_key,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenAiVectorizerConfigRequest) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenAiVectorizerConfigRequest) UnmarshalJSON(data []byte) error {
@@ -9423,6 +10644,13 @@ func (o *OpenAiVectorizerConfigRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenAiVectorizerConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -9441,9 +10669,14 @@ func (o *OpenAiVectorizerConfigRequest) String() string {
 
 // OpenAI vectorizer for text-embedding-3-large.
 type OpenAiVectorizerTextEmbedding3Large struct {
-	Config *OpenAiVectorizerConfig `json:"config,omitempty"`
+	Config *OpenAiVectorizerConfig `json:"config" url:"config"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenAiVectorizerTextEmbedding3Large) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenAiVectorizerTextEmbedding3Large) UnmarshalJSON(data []byte) error {
@@ -9453,6 +10686,13 @@ func (o *OpenAiVectorizerTextEmbedding3Large) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenAiVectorizerTextEmbedding3Large(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -9471,9 +10711,14 @@ func (o *OpenAiVectorizerTextEmbedding3Large) String() string {
 
 // OpenAI vectorizer for text-embedding-3-large.
 type OpenAiVectorizerTextEmbedding3LargeRequest struct {
-	Config *OpenAiVectorizerConfigRequest `json:"config,omitempty"`
+	Config *OpenAiVectorizerConfigRequest `json:"config" url:"config"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenAiVectorizerTextEmbedding3LargeRequest) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenAiVectorizerTextEmbedding3LargeRequest) UnmarshalJSON(data []byte) error {
@@ -9483,6 +10728,13 @@ func (o *OpenAiVectorizerTextEmbedding3LargeRequest) UnmarshalJSON(data []byte) 
 		return err
 	}
 	*o = OpenAiVectorizerTextEmbedding3LargeRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -9501,9 +10753,14 @@ func (o *OpenAiVectorizerTextEmbedding3LargeRequest) String() string {
 
 // OpenAI vectorizer for text-embedding-3-small.
 type OpenAiVectorizerTextEmbedding3Small struct {
-	Config *OpenAiVectorizerConfig `json:"config,omitempty"`
+	Config *OpenAiVectorizerConfig `json:"config" url:"config"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenAiVectorizerTextEmbedding3Small) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenAiVectorizerTextEmbedding3Small) UnmarshalJSON(data []byte) error {
@@ -9513,6 +10770,13 @@ func (o *OpenAiVectorizerTextEmbedding3Small) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenAiVectorizerTextEmbedding3Small(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -9531,9 +10795,14 @@ func (o *OpenAiVectorizerTextEmbedding3Small) String() string {
 
 // OpenAI vectorizer for text-embedding-3-small.
 type OpenAiVectorizerTextEmbedding3SmallRequest struct {
-	Config *OpenAiVectorizerConfigRequest `json:"config,omitempty"`
+	Config *OpenAiVectorizerConfigRequest `json:"config" url:"config"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenAiVectorizerTextEmbedding3SmallRequest) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenAiVectorizerTextEmbedding3SmallRequest) UnmarshalJSON(data []byte) error {
@@ -9543,6 +10812,13 @@ func (o *OpenAiVectorizerTextEmbedding3SmallRequest) UnmarshalJSON(data []byte) 
 		return err
 	}
 	*o = OpenAiVectorizerTextEmbedding3SmallRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -9561,9 +10837,14 @@ func (o *OpenAiVectorizerTextEmbedding3SmallRequest) String() string {
 
 // OpenAI vectorizer for text-embedding-ada-002.
 type OpenAiVectorizerTextEmbeddingAda002 struct {
-	Config *OpenAiVectorizerConfig `json:"config,omitempty"`
+	Config *OpenAiVectorizerConfig `json:"config" url:"config"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenAiVectorizerTextEmbeddingAda002) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenAiVectorizerTextEmbeddingAda002) UnmarshalJSON(data []byte) error {
@@ -9573,6 +10854,13 @@ func (o *OpenAiVectorizerTextEmbeddingAda002) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenAiVectorizerTextEmbeddingAda002(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -9591,9 +10879,14 @@ func (o *OpenAiVectorizerTextEmbeddingAda002) String() string {
 
 // OpenAI vectorizer for text-embedding-ada-002.
 type OpenAiVectorizerTextEmbeddingAda002Request struct {
-	Config *OpenAiVectorizerConfigRequest `json:"config,omitempty"`
+	Config *OpenAiVectorizerConfigRequest `json:"config" url:"config"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenAiVectorizerTextEmbeddingAda002Request) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenAiVectorizerTextEmbeddingAda002Request) UnmarshalJSON(data []byte) error {
@@ -9603,6 +10896,13 @@ func (o *OpenAiVectorizerTextEmbeddingAda002Request) UnmarshalJSON(data []byte) 
 		return err
 	}
 	*o = OpenAiVectorizerTextEmbeddingAda002Request(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -9621,19 +10921,24 @@ func (o *OpenAiVectorizerTextEmbeddingAda002Request) String() string {
 
 // An OpenAPI specification of a property with type 'array'
 type OpenApiArrayProperty struct {
-	MinItems    *int               `json:"min_items,omitempty"`
-	MaxItems    *int               `json:"max_items,omitempty"`
-	UniqueItems *bool              `json:"unique_items,omitempty"`
-	Items       *OpenApiProperty   `json:"items,omitempty"`
-	PrefixItems []*OpenApiProperty `json:"prefix_items,omitempty"`
-	Contains    *OpenApiProperty   `json:"contains,omitempty"`
-	MinContains *int               `json:"min_contains,omitempty"`
-	MaxContains *int               `json:"max_contains,omitempty"`
-	Default     []interface{}      `json:"default,omitempty"`
-	Title       *string            `json:"title,omitempty"`
-	Description *string            `json:"description,omitempty"`
+	MinItems    *int               `json:"min_items,omitempty" url:"min_items,omitempty"`
+	MaxItems    *int               `json:"max_items,omitempty" url:"max_items,omitempty"`
+	UniqueItems *bool              `json:"unique_items,omitempty" url:"unique_items,omitempty"`
+	Items       *OpenApiProperty   `json:"items" url:"items"`
+	PrefixItems []*OpenApiProperty `json:"prefix_items,omitempty" url:"prefix_items,omitempty"`
+	Contains    *OpenApiProperty   `json:"contains,omitempty" url:"contains,omitempty"`
+	MinContains *int               `json:"min_contains,omitempty" url:"min_contains,omitempty"`
+	MaxContains *int               `json:"max_contains,omitempty" url:"max_contains,omitempty"`
+	Default     []interface{}      `json:"default,omitempty" url:"default,omitempty"`
+	Title       *string            `json:"title,omitempty" url:"title,omitempty"`
+	Description *string            `json:"description,omitempty" url:"description,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenApiArrayProperty) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenApiArrayProperty) UnmarshalJSON(data []byte) error {
@@ -9643,6 +10948,13 @@ func (o *OpenApiArrayProperty) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiArrayProperty(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -9661,19 +10973,24 @@ func (o *OpenApiArrayProperty) String() string {
 
 // An OpenAPI specification of a property with type 'array'
 type OpenApiArrayPropertyRequest struct {
-	MinItems    *int                      `json:"min_items,omitempty"`
-	MaxItems    *int                      `json:"max_items,omitempty"`
-	UniqueItems *bool                     `json:"unique_items,omitempty"`
-	Items       *OpenApiPropertyRequest   `json:"items,omitempty"`
-	PrefixItems []*OpenApiPropertyRequest `json:"prefix_items,omitempty"`
-	Contains    *OpenApiPropertyRequest   `json:"contains,omitempty"`
-	MinContains *int                      `json:"min_contains,omitempty"`
-	MaxContains *int                      `json:"max_contains,omitempty"`
-	Default     []interface{}             `json:"default,omitempty"`
-	Title       *string                   `json:"title,omitempty"`
-	Description *string                   `json:"description,omitempty"`
+	MinItems    *int                      `json:"min_items,omitempty" url:"min_items,omitempty"`
+	MaxItems    *int                      `json:"max_items,omitempty" url:"max_items,omitempty"`
+	UniqueItems *bool                     `json:"unique_items,omitempty" url:"unique_items,omitempty"`
+	Items       *OpenApiPropertyRequest   `json:"items" url:"items"`
+	PrefixItems []*OpenApiPropertyRequest `json:"prefix_items,omitempty" url:"prefix_items,omitempty"`
+	Contains    *OpenApiPropertyRequest   `json:"contains,omitempty" url:"contains,omitempty"`
+	MinContains *int                      `json:"min_contains,omitempty" url:"min_contains,omitempty"`
+	MaxContains *int                      `json:"max_contains,omitempty" url:"max_contains,omitempty"`
+	Default     []interface{}             `json:"default,omitempty" url:"default,omitempty"`
+	Title       *string                   `json:"title,omitempty" url:"title,omitempty"`
+	Description *string                   `json:"description,omitempty" url:"description,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenApiArrayPropertyRequest) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenApiArrayPropertyRequest) UnmarshalJSON(data []byte) error {
@@ -9683,6 +11000,13 @@ func (o *OpenApiArrayPropertyRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiArrayPropertyRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -9701,11 +11025,16 @@ func (o *OpenApiArrayPropertyRequest) String() string {
 
 // An OpenAPI specification of a property with type 'boolean'
 type OpenApiBooleanProperty struct {
-	Default     *bool   `json:"default,omitempty"`
-	Title       *string `json:"title,omitempty"`
-	Description *string `json:"description,omitempty"`
+	Default     *bool   `json:"default,omitempty" url:"default,omitempty"`
+	Title       *string `json:"title,omitempty" url:"title,omitempty"`
+	Description *string `json:"description,omitempty" url:"description,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenApiBooleanProperty) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenApiBooleanProperty) UnmarshalJSON(data []byte) error {
@@ -9715,6 +11044,13 @@ func (o *OpenApiBooleanProperty) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiBooleanProperty(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -9733,11 +11069,16 @@ func (o *OpenApiBooleanProperty) String() string {
 
 // An OpenAPI specification of a property with type 'boolean'
 type OpenApiBooleanPropertyRequest struct {
-	Default     *bool   `json:"default,omitempty"`
-	Title       *string `json:"title,omitempty"`
-	Description *string `json:"description,omitempty"`
+	Default     *bool   `json:"default,omitempty" url:"default,omitempty"`
+	Title       *string `json:"title,omitempty" url:"title,omitempty"`
+	Description *string `json:"description,omitempty" url:"description,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenApiBooleanPropertyRequest) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenApiBooleanPropertyRequest) UnmarshalJSON(data []byte) error {
@@ -9747,6 +11088,13 @@ func (o *OpenApiBooleanPropertyRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiBooleanPropertyRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -9765,11 +11113,16 @@ func (o *OpenApiBooleanPropertyRequest) String() string {
 
 // An OpenAPI specification of a property with type 'const'
 type OpenApiConstProperty struct {
-	Title       *string `json:"title,omitempty"`
-	Description *string `json:"description,omitempty"`
-	Const       string  `json:"const"`
+	Title       *string `json:"title,omitempty" url:"title,omitempty"`
+	Description *string `json:"description,omitempty" url:"description,omitempty"`
+	Const       string  `json:"const" url:"const"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenApiConstProperty) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenApiConstProperty) UnmarshalJSON(data []byte) error {
@@ -9779,6 +11132,13 @@ func (o *OpenApiConstProperty) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiConstProperty(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -9797,11 +11157,16 @@ func (o *OpenApiConstProperty) String() string {
 
 // An OpenAPI specification of a property with type 'const'
 type OpenApiConstPropertyRequest struct {
-	Title       *string `json:"title,omitempty"`
-	Description *string `json:"description,omitempty"`
-	Const       string  `json:"const"`
+	Title       *string `json:"title,omitempty" url:"title,omitempty"`
+	Description *string `json:"description,omitempty" url:"description,omitempty"`
+	Const       string  `json:"const" url:"const"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenApiConstPropertyRequest) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenApiConstPropertyRequest) UnmarshalJSON(data []byte) error {
@@ -9811,6 +11176,13 @@ func (o *OpenApiConstPropertyRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiConstPropertyRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -9829,15 +11201,20 @@ func (o *OpenApiConstPropertyRequest) String() string {
 
 // An OpenAPI specification of a property with type 'integer'
 type OpenApiIntegerProperty struct {
-	Minimum          *int    `json:"minimum,omitempty"`
-	Maximum          *int    `json:"maximum,omitempty"`
-	ExclusiveMinimum *bool   `json:"exclusive_minimum,omitempty"`
-	ExclusiveMaximum *bool   `json:"exclusive_maximum,omitempty"`
-	Default          *int    `json:"default,omitempty"`
-	Title            *string `json:"title,omitempty"`
-	Description      *string `json:"description,omitempty"`
+	Minimum          *int    `json:"minimum,omitempty" url:"minimum,omitempty"`
+	Maximum          *int    `json:"maximum,omitempty" url:"maximum,omitempty"`
+	ExclusiveMinimum *bool   `json:"exclusive_minimum,omitempty" url:"exclusive_minimum,omitempty"`
+	ExclusiveMaximum *bool   `json:"exclusive_maximum,omitempty" url:"exclusive_maximum,omitempty"`
+	Default          *int    `json:"default,omitempty" url:"default,omitempty"`
+	Title            *string `json:"title,omitempty" url:"title,omitempty"`
+	Description      *string `json:"description,omitempty" url:"description,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenApiIntegerProperty) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenApiIntegerProperty) UnmarshalJSON(data []byte) error {
@@ -9847,6 +11224,13 @@ func (o *OpenApiIntegerProperty) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiIntegerProperty(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -9865,15 +11249,20 @@ func (o *OpenApiIntegerProperty) String() string {
 
 // An OpenAPI specification of a property with type 'integer'
 type OpenApiIntegerPropertyRequest struct {
-	Minimum          *int    `json:"minimum,omitempty"`
-	Maximum          *int    `json:"maximum,omitempty"`
-	ExclusiveMinimum *bool   `json:"exclusive_minimum,omitempty"`
-	ExclusiveMaximum *bool   `json:"exclusive_maximum,omitempty"`
-	Default          *int    `json:"default,omitempty"`
-	Title            *string `json:"title,omitempty"`
-	Description      *string `json:"description,omitempty"`
+	Minimum          *int    `json:"minimum,omitempty" url:"minimum,omitempty"`
+	Maximum          *int    `json:"maximum,omitempty" url:"maximum,omitempty"`
+	ExclusiveMinimum *bool   `json:"exclusive_minimum,omitempty" url:"exclusive_minimum,omitempty"`
+	ExclusiveMaximum *bool   `json:"exclusive_maximum,omitempty" url:"exclusive_maximum,omitempty"`
+	Default          *int    `json:"default,omitempty" url:"default,omitempty"`
+	Title            *string `json:"title,omitempty" url:"title,omitempty"`
+	Description      *string `json:"description,omitempty" url:"description,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenApiIntegerPropertyRequest) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenApiIntegerPropertyRequest) UnmarshalJSON(data []byte) error {
@@ -9883,6 +11272,13 @@ func (o *OpenApiIntegerPropertyRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiIntegerPropertyRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -9901,16 +11297,21 @@ func (o *OpenApiIntegerPropertyRequest) String() string {
 
 // An OpenAPI specification of a property with type 'number'
 type OpenApiNumberProperty struct {
-	Minimum          *float64 `json:"minimum,omitempty"`
-	Maximum          *float64 `json:"maximum,omitempty"`
-	Format           *string  `json:"format,omitempty"`
-	ExclusiveMinimum *bool    `json:"exclusive_minimum,omitempty"`
-	ExclusiveMaximum *bool    `json:"exclusive_maximum,omitempty"`
-	Default          *float64 `json:"default,omitempty"`
-	Title            *string  `json:"title,omitempty"`
-	Description      *string  `json:"description,omitempty"`
+	Minimum          *float64 `json:"minimum,omitempty" url:"minimum,omitempty"`
+	Maximum          *float64 `json:"maximum,omitempty" url:"maximum,omitempty"`
+	Format           *string  `json:"format,omitempty" url:"format,omitempty"`
+	ExclusiveMinimum *bool    `json:"exclusive_minimum,omitempty" url:"exclusive_minimum,omitempty"`
+	ExclusiveMaximum *bool    `json:"exclusive_maximum,omitempty" url:"exclusive_maximum,omitempty"`
+	Default          *float64 `json:"default,omitempty" url:"default,omitempty"`
+	Title            *string  `json:"title,omitempty" url:"title,omitempty"`
+	Description      *string  `json:"description,omitempty" url:"description,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenApiNumberProperty) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenApiNumberProperty) UnmarshalJSON(data []byte) error {
@@ -9920,6 +11321,13 @@ func (o *OpenApiNumberProperty) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiNumberProperty(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -9938,16 +11346,21 @@ func (o *OpenApiNumberProperty) String() string {
 
 // An OpenAPI specification of a property with type 'number'
 type OpenApiNumberPropertyRequest struct {
-	Minimum          *float64 `json:"minimum,omitempty"`
-	Maximum          *float64 `json:"maximum,omitempty"`
-	Format           *string  `json:"format,omitempty"`
-	ExclusiveMinimum *bool    `json:"exclusive_minimum,omitempty"`
-	ExclusiveMaximum *bool    `json:"exclusive_maximum,omitempty"`
-	Default          *float64 `json:"default,omitempty"`
-	Title            *string  `json:"title,omitempty"`
-	Description      *string  `json:"description,omitempty"`
+	Minimum          *float64 `json:"minimum,omitempty" url:"minimum,omitempty"`
+	Maximum          *float64 `json:"maximum,omitempty" url:"maximum,omitempty"`
+	Format           *string  `json:"format,omitempty" url:"format,omitempty"`
+	ExclusiveMinimum *bool    `json:"exclusive_minimum,omitempty" url:"exclusive_minimum,omitempty"`
+	ExclusiveMaximum *bool    `json:"exclusive_maximum,omitempty" url:"exclusive_maximum,omitempty"`
+	Default          *float64 `json:"default,omitempty" url:"default,omitempty"`
+	Title            *string  `json:"title,omitempty" url:"title,omitempty"`
+	Description      *string  `json:"description,omitempty" url:"description,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenApiNumberPropertyRequest) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenApiNumberPropertyRequest) UnmarshalJSON(data []byte) error {
@@ -9957,6 +11370,13 @@ func (o *OpenApiNumberPropertyRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiNumberPropertyRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -9975,18 +11395,23 @@ func (o *OpenApiNumberPropertyRequest) String() string {
 
 // An OpenAPI specification of a property with type 'object'
 type OpenApiObjectProperty struct {
-	Properties           map[string]*OpenApiProperty `json:"properties,omitempty"`
-	Required             []string                    `json:"required,omitempty"`
-	MinProperties        *int                        `json:"min_properties,omitempty"`
-	MaxProperties        *int                        `json:"max_properties,omitempty"`
-	PropertyNames        *OpenApiProperty            `json:"property_names,omitempty"`
-	AdditionalProperties *OpenApiProperty            `json:"additional_properties,omitempty"`
-	PatternProperties    map[string]*OpenApiProperty `json:"pattern_properties,omitempty"`
-	Default              map[string]interface{}      `json:"default,omitempty"`
-	Title                *string                     `json:"title,omitempty"`
-	Description          *string                     `json:"description,omitempty"`
+	Properties           map[string]*OpenApiProperty `json:"properties,omitempty" url:"properties,omitempty"`
+	Required             []string                    `json:"required,omitempty" url:"required,omitempty"`
+	MinProperties        *int                        `json:"min_properties,omitempty" url:"min_properties,omitempty"`
+	MaxProperties        *int                        `json:"max_properties,omitempty" url:"max_properties,omitempty"`
+	PropertyNames        *OpenApiProperty            `json:"property_names,omitempty" url:"property_names,omitempty"`
+	AdditionalProperties *OpenApiProperty            `json:"additional_properties,omitempty" url:"additional_properties,omitempty"`
+	PatternProperties    map[string]*OpenApiProperty `json:"pattern_properties,omitempty" url:"pattern_properties,omitempty"`
+	Default              map[string]interface{}      `json:"default,omitempty" url:"default,omitempty"`
+	Title                *string                     `json:"title,omitempty" url:"title,omitempty"`
+	Description          *string                     `json:"description,omitempty" url:"description,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenApiObjectProperty) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenApiObjectProperty) UnmarshalJSON(data []byte) error {
@@ -9996,6 +11421,13 @@ func (o *OpenApiObjectProperty) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiObjectProperty(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -10014,18 +11446,23 @@ func (o *OpenApiObjectProperty) String() string {
 
 // An OpenAPI specification of a property with type 'object'
 type OpenApiObjectPropertyRequest struct {
-	Properties           map[string]*OpenApiPropertyRequest `json:"properties,omitempty"`
-	Required             []string                           `json:"required,omitempty"`
-	MinProperties        *int                               `json:"min_properties,omitempty"`
-	MaxProperties        *int                               `json:"max_properties,omitempty"`
-	PropertyNames        *OpenApiPropertyRequest            `json:"property_names,omitempty"`
-	AdditionalProperties *OpenApiPropertyRequest            `json:"additional_properties,omitempty"`
-	PatternProperties    map[string]*OpenApiPropertyRequest `json:"pattern_properties,omitempty"`
-	Default              map[string]interface{}             `json:"default,omitempty"`
-	Title                *string                            `json:"title,omitempty"`
-	Description          *string                            `json:"description,omitempty"`
+	Properties           map[string]*OpenApiPropertyRequest `json:"properties,omitempty" url:"properties,omitempty"`
+	Required             []string                           `json:"required,omitempty" url:"required,omitempty"`
+	MinProperties        *int                               `json:"min_properties,omitempty" url:"min_properties,omitempty"`
+	MaxProperties        *int                               `json:"max_properties,omitempty" url:"max_properties,omitempty"`
+	PropertyNames        *OpenApiPropertyRequest            `json:"property_names,omitempty" url:"property_names,omitempty"`
+	AdditionalProperties *OpenApiPropertyRequest            `json:"additional_properties,omitempty" url:"additional_properties,omitempty"`
+	PatternProperties    map[string]*OpenApiPropertyRequest `json:"pattern_properties,omitempty" url:"pattern_properties,omitempty"`
+	Default              map[string]interface{}             `json:"default,omitempty" url:"default,omitempty"`
+	Title                *string                            `json:"title,omitempty" url:"title,omitempty"`
+	Description          *string                            `json:"description,omitempty" url:"description,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenApiObjectPropertyRequest) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenApiObjectPropertyRequest) UnmarshalJSON(data []byte) error {
@@ -10035,6 +11472,13 @@ func (o *OpenApiObjectPropertyRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiObjectPropertyRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -10053,11 +11497,16 @@ func (o *OpenApiObjectPropertyRequest) String() string {
 
 // An OpenAPI specification of a property with type 'oneOf'
 type OpenApiOneOfProperty struct {
-	OneOf       []*OpenApiProperty `json:"oneOf,omitempty"`
-	Title       *string            `json:"title,omitempty"`
-	Description *string            `json:"description,omitempty"`
+	OneOf       []*OpenApiProperty `json:"oneOf" url:"oneOf"`
+	Title       *string            `json:"title,omitempty" url:"title,omitempty"`
+	Description *string            `json:"description,omitempty" url:"description,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenApiOneOfProperty) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenApiOneOfProperty) UnmarshalJSON(data []byte) error {
@@ -10067,6 +11516,13 @@ func (o *OpenApiOneOfProperty) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiOneOfProperty(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -10085,11 +11541,16 @@ func (o *OpenApiOneOfProperty) String() string {
 
 // An OpenAPI specification of a property with type 'oneOf'
 type OpenApiOneOfPropertyRequest struct {
-	OneOf       []*OpenApiPropertyRequest `json:"oneOf,omitempty"`
-	Title       *string                   `json:"title,omitempty"`
-	Description *string                   `json:"description,omitempty"`
+	OneOf       []*OpenApiPropertyRequest `json:"oneOf" url:"oneOf"`
+	Title       *string                   `json:"title,omitempty" url:"title,omitempty"`
+	Description *string                   `json:"description,omitempty" url:"description,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenApiOneOfPropertyRequest) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenApiOneOfPropertyRequest) UnmarshalJSON(data []byte) error {
@@ -10099,6 +11560,13 @@ func (o *OpenApiOneOfPropertyRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiOneOfPropertyRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -10236,86 +11704,23 @@ func (o OpenApiProperty) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", o.Type, o)
 	case "array":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*OpenApiArrayProperty
-		}{
-			Type:                 o.Type,
-			OpenApiArrayProperty: o.Array,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(o.Array, "type", "array")
 	case "object":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*OpenApiObjectProperty
-		}{
-			Type:                  o.Type,
-			OpenApiObjectProperty: o.Object,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(o.Object, "type", "object")
 	case "integer":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*OpenApiIntegerProperty
-		}{
-			Type:                   o.Type,
-			OpenApiIntegerProperty: o.Integer,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(o.Integer, "type", "integer")
 	case "number":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*OpenApiNumberProperty
-		}{
-			Type:                  o.Type,
-			OpenApiNumberProperty: o.Number,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(o.Number, "type", "number")
 	case "string":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*OpenApiStringProperty
-		}{
-			Type:                  o.Type,
-			OpenApiStringProperty: o.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(o.String, "type", "string")
 	case "boolean":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*OpenApiBooleanProperty
-		}{
-			Type:                   o.Type,
-			OpenApiBooleanProperty: o.Boolean,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(o.Boolean, "type", "boolean")
 	case "oneOf":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*OpenApiOneOfProperty
-		}{
-			Type:                 o.Type,
-			OpenApiOneOfProperty: o.OneOf,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(o.OneOf, "type", "oneOf")
 	case "const":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*OpenApiConstProperty
-		}{
-			Type:                 o.Type,
-			OpenApiConstProperty: o.Const,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(o.Const, "type", "const")
 	case "ref":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*OpenApiRefProperty
-		}{
-			Type:               o.Type,
-			OpenApiRefProperty: o.Ref,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(o.Ref, "type", "ref")
 	}
 }
 
@@ -10477,86 +11882,23 @@ func (o OpenApiPropertyRequest) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", o.Type, o)
 	case "array":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*OpenApiArrayPropertyRequest
-		}{
-			Type:                        o.Type,
-			OpenApiArrayPropertyRequest: o.Array,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(o.Array, "type", "array")
 	case "object":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*OpenApiObjectPropertyRequest
-		}{
-			Type:                         o.Type,
-			OpenApiObjectPropertyRequest: o.Object,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(o.Object, "type", "object")
 	case "integer":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*OpenApiIntegerPropertyRequest
-		}{
-			Type:                          o.Type,
-			OpenApiIntegerPropertyRequest: o.Integer,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(o.Integer, "type", "integer")
 	case "number":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*OpenApiNumberPropertyRequest
-		}{
-			Type:                         o.Type,
-			OpenApiNumberPropertyRequest: o.Number,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(o.Number, "type", "number")
 	case "string":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*OpenApiStringPropertyRequest
-		}{
-			Type:                         o.Type,
-			OpenApiStringPropertyRequest: o.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(o.String, "type", "string")
 	case "boolean":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*OpenApiBooleanPropertyRequest
-		}{
-			Type:                          o.Type,
-			OpenApiBooleanPropertyRequest: o.Boolean,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(o.Boolean, "type", "boolean")
 	case "oneOf":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*OpenApiOneOfPropertyRequest
-		}{
-			Type:                        o.Type,
-			OpenApiOneOfPropertyRequest: o.OneOf,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(o.OneOf, "type", "oneOf")
 	case "const":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*OpenApiConstPropertyRequest
-		}{
-			Type:                        o.Type,
-			OpenApiConstPropertyRequest: o.Const,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(o.Const, "type", "const")
 	case "ref":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*OpenApiRefPropertyRequest
-		}{
-			Type:                      o.Type,
-			OpenApiRefPropertyRequest: o.Ref,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(o.Ref, "type", "ref")
 	}
 }
 
@@ -10599,11 +11941,16 @@ func (o *OpenApiPropertyRequest) Accept(visitor OpenApiPropertyRequestVisitor) e
 
 // An OpenAPI specification of a property that is a URI-reference to another schema
 type OpenApiRefProperty struct {
-	Title       *string `json:"title,omitempty"`
-	Description *string `json:"description,omitempty"`
-	Ref         string  `json:"ref"`
+	Title       *string `json:"title,omitempty" url:"title,omitempty"`
+	Description *string `json:"description,omitempty" url:"description,omitempty"`
+	Ref         string  `json:"ref" url:"ref"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenApiRefProperty) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenApiRefProperty) UnmarshalJSON(data []byte) error {
@@ -10613,6 +11960,13 @@ func (o *OpenApiRefProperty) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiRefProperty(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -10631,11 +11985,16 @@ func (o *OpenApiRefProperty) String() string {
 
 // An OpenAPI specification of a property that is a URI-reference to another schema
 type OpenApiRefPropertyRequest struct {
-	Title       *string `json:"title,omitempty"`
-	Description *string `json:"description,omitempty"`
-	Ref         string  `json:"ref"`
+	Title       *string `json:"title,omitempty" url:"title,omitempty"`
+	Description *string `json:"description,omitempty" url:"description,omitempty"`
+	Ref         string  `json:"ref" url:"ref"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenApiRefPropertyRequest) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenApiRefPropertyRequest) UnmarshalJSON(data []byte) error {
@@ -10645,6 +12004,13 @@ func (o *OpenApiRefPropertyRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiRefPropertyRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -10663,15 +12029,20 @@ func (o *OpenApiRefPropertyRequest) String() string {
 
 // An OpenAPI specification of a property with type 'string'
 type OpenApiStringProperty struct {
-	MinLength   *int    `json:"min_length,omitempty"`
-	MaxLength   *int    `json:"max_length,omitempty"`
-	Pattern     *string `json:"pattern,omitempty"`
-	Format      *string `json:"format,omitempty"`
-	Default     *string `json:"default,omitempty"`
-	Title       *string `json:"title,omitempty"`
-	Description *string `json:"description,omitempty"`
+	MinLength   *int    `json:"min_length,omitempty" url:"min_length,omitempty"`
+	MaxLength   *int    `json:"max_length,omitempty" url:"max_length,omitempty"`
+	Pattern     *string `json:"pattern,omitempty" url:"pattern,omitempty"`
+	Format      *string `json:"format,omitempty" url:"format,omitempty"`
+	Default     *string `json:"default,omitempty" url:"default,omitempty"`
+	Title       *string `json:"title,omitempty" url:"title,omitempty"`
+	Description *string `json:"description,omitempty" url:"description,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenApiStringProperty) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenApiStringProperty) UnmarshalJSON(data []byte) error {
@@ -10681,6 +12052,13 @@ func (o *OpenApiStringProperty) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiStringProperty(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -10699,15 +12077,20 @@ func (o *OpenApiStringProperty) String() string {
 
 // An OpenAPI specification of a property with type 'string'
 type OpenApiStringPropertyRequest struct {
-	MinLength   *int    `json:"min_length,omitempty"`
-	MaxLength   *int    `json:"max_length,omitempty"`
-	Pattern     *string `json:"pattern,omitempty"`
-	Format      *string `json:"format,omitempty"`
-	Default     *string `json:"default,omitempty"`
-	Title       *string `json:"title,omitempty"`
-	Description *string `json:"description,omitempty"`
+	MinLength   *int    `json:"min_length,omitempty" url:"min_length,omitempty"`
+	MaxLength   *int    `json:"max_length,omitempty" url:"max_length,omitempty"`
+	Pattern     *string `json:"pattern,omitempty" url:"pattern,omitempty"`
+	Format      *string `json:"format,omitempty" url:"format,omitempty"`
+	Default     *string `json:"default,omitempty" url:"default,omitempty"`
+	Title       *string `json:"title,omitempty" url:"title,omitempty"`
+	Description *string `json:"description,omitempty" url:"description,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenApiStringPropertyRequest) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
 }
 
 func (o *OpenApiStringPropertyRequest) UnmarshalJSON(data []byte) error {
@@ -10717,6 +12100,13 @@ func (o *OpenApiStringPropertyRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiStringPropertyRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
 	o._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -10734,12 +12124,17 @@ func (o *OpenApiStringPropertyRequest) String() string {
 }
 
 type PaginatedDocumentIndexReadList struct {
-	Count    *int                 `json:"count,omitempty"`
-	Next     *string              `json:"next,omitempty"`
-	Previous *string              `json:"previous,omitempty"`
-	Results  []*DocumentIndexRead `json:"results,omitempty"`
+	Count    *int                 `json:"count,omitempty" url:"count,omitempty"`
+	Next     *string              `json:"next,omitempty" url:"next,omitempty"`
+	Previous *string              `json:"previous,omitempty" url:"previous,omitempty"`
+	Results  []*DocumentIndexRead `json:"results,omitempty" url:"results,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaginatedDocumentIndexReadList) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
 }
 
 func (p *PaginatedDocumentIndexReadList) UnmarshalJSON(data []byte) error {
@@ -10749,6 +12144,13 @@ func (p *PaginatedDocumentIndexReadList) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*p = PaginatedDocumentIndexReadList(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
 	p._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -10766,12 +12168,17 @@ func (p *PaginatedDocumentIndexReadList) String() string {
 }
 
 type PaginatedMlModelReadList struct {
-	Count    *int           `json:"count,omitempty"`
-	Next     *string        `json:"next,omitempty"`
-	Previous *string        `json:"previous,omitempty"`
-	Results  []*MlModelRead `json:"results,omitempty"`
+	Count    *int           `json:"count,omitempty" url:"count,omitempty"`
+	Next     *string        `json:"next,omitempty" url:"next,omitempty"`
+	Previous *string        `json:"previous,omitempty" url:"previous,omitempty"`
+	Results  []*MlModelRead `json:"results,omitempty" url:"results,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaginatedMlModelReadList) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
 }
 
 func (p *PaginatedMlModelReadList) UnmarshalJSON(data []byte) error {
@@ -10781,6 +12188,13 @@ func (p *PaginatedMlModelReadList) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*p = PaginatedMlModelReadList(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
 	p._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -10798,12 +12212,17 @@ func (p *PaginatedMlModelReadList) String() string {
 }
 
 type PaginatedSlimDeploymentReadList struct {
-	Count    *int                  `json:"count,omitempty"`
-	Next     *string               `json:"next,omitempty"`
-	Previous *string               `json:"previous,omitempty"`
-	Results  []*SlimDeploymentRead `json:"results,omitempty"`
+	Count    *int                  `json:"count,omitempty" url:"count,omitempty"`
+	Next     *string               `json:"next,omitempty" url:"next,omitempty"`
+	Previous *string               `json:"previous,omitempty" url:"previous,omitempty"`
+	Results  []*SlimDeploymentRead `json:"results,omitempty" url:"results,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaginatedSlimDeploymentReadList) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
 }
 
 func (p *PaginatedSlimDeploymentReadList) UnmarshalJSON(data []byte) error {
@@ -10813,6 +12232,13 @@ func (p *PaginatedSlimDeploymentReadList) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*p = PaginatedSlimDeploymentReadList(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
 	p._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -10830,12 +12256,17 @@ func (p *PaginatedSlimDeploymentReadList) String() string {
 }
 
 type PaginatedSlimDocumentList struct {
-	Count    *int            `json:"count,omitempty"`
-	Next     *string         `json:"next,omitempty"`
-	Previous *string         `json:"previous,omitempty"`
-	Results  []*SlimDocument `json:"results,omitempty"`
+	Count    *int            `json:"count,omitempty" url:"count,omitempty"`
+	Next     *string         `json:"next,omitempty" url:"next,omitempty"`
+	Previous *string         `json:"previous,omitempty" url:"previous,omitempty"`
+	Results  []*SlimDocument `json:"results,omitempty" url:"results,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaginatedSlimDocumentList) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
 }
 
 func (p *PaginatedSlimDocumentList) UnmarshalJSON(data []byte) error {
@@ -10845,6 +12276,13 @@ func (p *PaginatedSlimDocumentList) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*p = PaginatedSlimDocumentList(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
 	p._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -10862,12 +12300,17 @@ func (p *PaginatedSlimDocumentList) String() string {
 }
 
 type PaginatedSlimWorkflowDeploymentList struct {
-	Count    *int                      `json:"count,omitempty"`
-	Next     *string                   `json:"next,omitempty"`
-	Previous *string                   `json:"previous,omitempty"`
-	Results  []*SlimWorkflowDeployment `json:"results,omitempty"`
+	Count    *int                      `json:"count,omitempty" url:"count,omitempty"`
+	Next     *string                   `json:"next,omitempty" url:"next,omitempty"`
+	Previous *string                   `json:"previous,omitempty" url:"previous,omitempty"`
+	Results  []*SlimWorkflowDeployment `json:"results,omitempty" url:"results,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaginatedSlimWorkflowDeploymentList) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
 }
 
 func (p *PaginatedSlimWorkflowDeploymentList) UnmarshalJSON(data []byte) error {
@@ -10877,6 +12320,13 @@ func (p *PaginatedSlimWorkflowDeploymentList) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*p = PaginatedSlimWorkflowDeploymentList(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
 	p._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -10894,12 +12344,17 @@ func (p *PaginatedSlimWorkflowDeploymentList) String() string {
 }
 
 type PaginatedTestSuiteRunExecutionList struct {
-	Count    int                      `json:"count"`
-	Next     *string                  `json:"next,omitempty"`
-	Previous *string                  `json:"previous,omitempty"`
-	Results  []*TestSuiteRunExecution `json:"results,omitempty"`
+	Count    int                      `json:"count" url:"count"`
+	Next     *string                  `json:"next,omitempty" url:"next,omitempty"`
+	Previous *string                  `json:"previous,omitempty" url:"previous,omitempty"`
+	Results  []*TestSuiteRunExecution `json:"results" url:"results"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaginatedTestSuiteRunExecutionList) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
 }
 
 func (p *PaginatedTestSuiteRunExecutionList) UnmarshalJSON(data []byte) error {
@@ -10909,6 +12364,13 @@ func (p *PaginatedTestSuiteRunExecutionList) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*p = PaginatedTestSuiteRunExecutionList(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
 	p._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -10926,12 +12388,17 @@ func (p *PaginatedTestSuiteRunExecutionList) String() string {
 }
 
 type PaginatedTestSuiteTestCaseList struct {
-	Count    int                  `json:"count"`
-	Next     *string              `json:"next,omitempty"`
-	Previous *string              `json:"previous,omitempty"`
-	Results  []*TestSuiteTestCase `json:"results,omitempty"`
+	Count    int                  `json:"count" url:"count"`
+	Next     *string              `json:"next,omitempty" url:"next,omitempty"`
+	Previous *string              `json:"previous,omitempty" url:"previous,omitempty"`
+	Results  []*TestSuiteTestCase `json:"results" url:"results"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaginatedTestSuiteTestCaseList) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
 }
 
 func (p *PaginatedTestSuiteTestCaseList) UnmarshalJSON(data []byte) error {
@@ -10941,6 +12408,13 @@ func (p *PaginatedTestSuiteTestCaseList) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*p = PaginatedTestSuiteTestCaseList(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
 	p._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -10960,11 +12434,16 @@ func (p *PaginatedTestSuiteTestCaseList) String() string {
 // The source of a search result from a PDF document.
 type PdfSearchResultMetaSource struct {
 	// The 1-indexed page number where the chunk starts in the document. Only available for supported chunking strategies and document types.
-	StartPageNum *int `json:"start_page_num,omitempty"`
+	StartPageNum *int `json:"start_page_num,omitempty" url:"start_page_num,omitempty"`
 	// The 1-indexed page number where the chunk ends in the document. Only available for supported chunking strategies and document types.
-	EndPageNum *int `json:"end_page_num,omitempty"`
+	EndPageNum *int `json:"end_page_num,omitempty" url:"end_page_num,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PdfSearchResultMetaSource) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
 }
 
 func (p *PdfSearchResultMetaSource) UnmarshalJSON(data []byte) error {
@@ -10974,6 +12453,13 @@ func (p *PdfSearchResultMetaSource) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*p = PdfSearchResultMetaSource(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
 	p._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -10993,11 +12479,16 @@ func (p *PdfSearchResultMetaSource) String() string {
 // The source of a search result from a PDF document.
 type PdfSearchResultMetaSourceRequest struct {
 	// The 1-indexed page number where the chunk starts in the document. Only available for supported chunking strategies and document types.
-	StartPageNum *int `json:"start_page_num,omitempty"`
+	StartPageNum *int `json:"start_page_num,omitempty" url:"start_page_num,omitempty"`
 	// The 1-indexed page number where the chunk ends in the document. Only available for supported chunking strategies and document types.
-	EndPageNum *int `json:"end_page_num,omitempty"`
+	EndPageNum *int `json:"end_page_num,omitempty" url:"end_page_num,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PdfSearchResultMetaSourceRequest) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
 }
 
 func (p *PdfSearchResultMetaSourceRequest) UnmarshalJSON(data []byte) error {
@@ -11007,6 +12498,13 @@ func (p *PdfSearchResultMetaSourceRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*p = PdfSearchResultMetaSourceRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
 	p._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -11081,19 +12579,24 @@ func (p ProcessingStateEnum) Ptr() *ProcessingStateEnum {
 
 type PromptDeploymentExpandMetaRequestRequest struct {
 	// If enabled, the response will include the model identifier representing the ML Model invoked by the Prompt.
-	ModelName *bool `json:"model_name,omitempty"`
+	ModelName *bool `json:"model_name,omitempty" url:"model_name,omitempty"`
 	// If enabled, the response will include model host usage tracking. This may increase latency for some model hosts.
-	Usage *bool `json:"usage,omitempty"`
+	Usage *bool `json:"usage,omitempty" url:"usage,omitempty"`
 	// If enabled, the response will include the reason provided by the model for why the execution finished.
-	FinishReason *bool `json:"finish_reason,omitempty"`
+	FinishReason *bool `json:"finish_reason,omitempty" url:"finish_reason,omitempty"`
 	// If enabled, the response will include the time in nanoseconds it took to execute the Prompt Deployment.
-	Latency *bool `json:"latency,omitempty"`
+	Latency *bool `json:"latency,omitempty" url:"latency,omitempty"`
 	// If enabled, the response will include the release tag of the Prompt Deployment.
-	DeploymentReleaseTag *bool `json:"deployment_release_tag,omitempty"`
+	DeploymentReleaseTag *bool `json:"deployment_release_tag,omitempty" url:"deployment_release_tag,omitempty"`
 	// If enabled, the response will include the ID of the Prompt Version backing the deployment.
-	PromptVersionId *bool `json:"prompt_version_id,omitempty"`
+	PromptVersionId *bool `json:"prompt_version_id,omitempty" url:"prompt_version_id,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PromptDeploymentExpandMetaRequestRequest) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
 }
 
 func (p *PromptDeploymentExpandMetaRequestRequest) UnmarshalJSON(data []byte) error {
@@ -11103,6 +12606,13 @@ func (p *PromptDeploymentExpandMetaRequestRequest) UnmarshalJSON(data []byte) er
 		return err
 	}
 	*p = PromptDeploymentExpandMetaRequestRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
 	p._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -11174,32 +12684,11 @@ func (p PromptDeploymentInputRequest) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", p.Type, p)
 	case "STRING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*StringInputRequest
-		}{
-			Type:               p.Type,
-			StringInputRequest: p.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(p.String, "type", "STRING")
 	case "JSON":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*JsonInputRequest
-		}{
-			Type:             p.Type,
-			JsonInputRequest: p.Json,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(p.Json, "type", "JSON")
 	case "CHAT_HISTORY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ChatHistoryInputRequest
-		}{
-			Type:                    p.Type,
-			ChatHistoryInputRequest: p.ChatHistory,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(p.ChatHistory, "type", "CHAT_HISTORY")
 	}
 }
 
@@ -11224,14 +12713,19 @@ func (p *PromptDeploymentInputRequest) Accept(visitor PromptDeploymentInputReque
 
 // The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
 type PromptExecutionMeta struct {
-	ModelName            *string           `json:"model_name,omitempty"`
-	Latency              *int              `json:"latency,omitempty"`
-	DeploymentReleaseTag *string           `json:"deployment_release_tag,omitempty"`
-	PromptVersionId      *string           `json:"prompt_version_id,omitempty"`
-	FinishReason         *FinishReasonEnum `json:"finish_reason,omitempty"`
-	Usage                *MlModelUsage     `json:"usage,omitempty"`
+	ModelName            *string           `json:"model_name,omitempty" url:"model_name,omitempty"`
+	Latency              *int              `json:"latency,omitempty" url:"latency,omitempty"`
+	DeploymentReleaseTag *string           `json:"deployment_release_tag,omitempty" url:"deployment_release_tag,omitempty"`
+	PromptVersionId      *string           `json:"prompt_version_id,omitempty" url:"prompt_version_id,omitempty"`
+	FinishReason         *FinishReasonEnum `json:"finish_reason,omitempty" url:"finish_reason,omitempty"`
+	Usage                *MlModelUsage     `json:"usage,omitempty" url:"usage,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PromptExecutionMeta) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
 }
 
 func (p *PromptExecutionMeta) UnmarshalJSON(data []byte) error {
@@ -11241,6 +12735,13 @@ func (p *PromptExecutionMeta) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*p = PromptExecutionMeta(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
 	p._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -11259,9 +12760,14 @@ func (p *PromptExecutionMeta) String() string {
 
 // The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
 type PromptNodeExecutionMeta struct {
-	Usage *MlModelUsage `json:"usage,omitempty"`
+	Usage *MlModelUsage `json:"usage,omitempty" url:"usage,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PromptNodeExecutionMeta) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
 }
 
 func (p *PromptNodeExecutionMeta) UnmarshalJSON(data []byte) error {
@@ -11271,6 +12777,13 @@ func (p *PromptNodeExecutionMeta) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*p = PromptNodeExecutionMeta(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
 	p._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -11289,9 +12802,14 @@ func (p *PromptNodeExecutionMeta) String() string {
 
 // A Node Result Event emitted from a Prompt Node.
 type PromptNodeResult struct {
-	Data *PromptNodeResultData `json:"data,omitempty"`
+	Data *PromptNodeResultData `json:"data" url:"data"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PromptNodeResult) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
 }
 
 func (p *PromptNodeResult) UnmarshalJSON(data []byte) error {
@@ -11301,6 +12819,13 @@ func (p *PromptNodeResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*p = PromptNodeResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
 	p._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -11318,14 +12843,19 @@ func (p *PromptNodeResult) String() string {
 }
 
 type PromptNodeResultData struct {
-	ExecutionMeta *PromptNodeExecutionMeta `json:"execution_meta,omitempty"`
-	OutputId      string                   `json:"output_id"`
-	ArrayOutputId *string                  `json:"array_output_id,omitempty"`
-	ExecutionId   *string                  `json:"execution_id,omitempty"`
-	Text          *string                  `json:"text,omitempty"`
-	Delta         *string                  `json:"delta,omitempty"`
+	ExecutionMeta *PromptNodeExecutionMeta `json:"execution_meta,omitempty" url:"execution_meta,omitempty"`
+	OutputId      string                   `json:"output_id" url:"output_id"`
+	ArrayOutputId *string                  `json:"array_output_id,omitempty" url:"array_output_id,omitempty"`
+	ExecutionId   *string                  `json:"execution_id,omitempty" url:"execution_id,omitempty"`
+	Text          *string                  `json:"text,omitempty" url:"text,omitempty"`
+	Delta         *string                  `json:"delta,omitempty" url:"delta,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PromptNodeResultData) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
 }
 
 func (p *PromptNodeResultData) UnmarshalJSON(data []byte) error {
@@ -11335,6 +12865,13 @@ func (p *PromptNodeResultData) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*p = PromptNodeResultData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
 	p._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -11417,41 +12954,13 @@ func (p PromptOutput) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", p.Type, p)
 	case "STRING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*StringVellumValue
-		}{
-			Type:              p.Type,
-			StringVellumValue: p.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(p.String, "type", "STRING")
 	case "JSON":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*JsonVellumValue
-		}{
-			Type:            p.Type,
-			JsonVellumValue: p.Json,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(p.Json, "type", "JSON")
 	case "ERROR":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ErrorVellumValue
-		}{
-			Type:             p.Type,
-			ErrorVellumValue: p.Error,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(p.Error, "type", "ERROR")
 	case "FUNCTION_CALL":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*FunctionCallVellumValue
-		}{
-			Type:                    p.Type,
-			FunctionCallVellumValue: p.FunctionCall,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(p.FunctionCall, "type", "FUNCTION_CALL")
 	}
 }
 
@@ -11478,13 +12987,18 @@ func (p *PromptOutput) Accept(visitor PromptOutputVisitor) error {
 }
 
 type RawPromptExecutionOverridesRequest struct {
-	Body map[string]interface{} `json:"body,omitempty"`
+	Body map[string]interface{} `json:"body,omitempty" url:"body,omitempty"`
 	// The raw headers to send to the model host.
-	Headers map[string]*string `json:"headers,omitempty"`
+	Headers map[string]*string `json:"headers,omitempty" url:"headers,omitempty"`
 	// The raw URL to send to the model host.
-	Url *string `json:"url,omitempty"`
+	Url *string `json:"url,omitempty" url:"url,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RawPromptExecutionOverridesRequest) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
 }
 
 func (r *RawPromptExecutionOverridesRequest) UnmarshalJSON(data []byte) error {
@@ -11494,6 +13008,13 @@ func (r *RawPromptExecutionOverridesRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*r = RawPromptExecutionOverridesRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
 	r._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -11512,9 +13033,14 @@ func (r *RawPromptExecutionOverridesRequest) String() string {
 
 // Configuration for Reducto chunking
 type ReductoChunkerConfig struct {
-	CharacterLimit *int `json:"character_limit,omitempty"`
+	CharacterLimit *int `json:"character_limit,omitempty" url:"character_limit,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *ReductoChunkerConfig) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
 }
 
 func (r *ReductoChunkerConfig) UnmarshalJSON(data []byte) error {
@@ -11524,6 +13050,13 @@ func (r *ReductoChunkerConfig) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*r = ReductoChunkerConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
 	r._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -11542,9 +13075,14 @@ func (r *ReductoChunkerConfig) String() string {
 
 // Configuration for Reducto chunking
 type ReductoChunkerConfigRequest struct {
-	CharacterLimit *int `json:"character_limit,omitempty"`
+	CharacterLimit *int `json:"character_limit,omitempty" url:"character_limit,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *ReductoChunkerConfigRequest) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
 }
 
 func (r *ReductoChunkerConfigRequest) UnmarshalJSON(data []byte) error {
@@ -11554,6 +13092,13 @@ func (r *ReductoChunkerConfigRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*r = ReductoChunkerConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
 	r._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -11572,9 +13117,14 @@ func (r *ReductoChunkerConfigRequest) String() string {
 
 // Reducto chunking
 type ReductoChunking struct {
-	ChunkerConfig *ReductoChunkerConfig `json:"chunker_config,omitempty"`
+	ChunkerConfig *ReductoChunkerConfig `json:"chunker_config,omitempty" url:"chunker_config,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *ReductoChunking) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
 }
 
 func (r *ReductoChunking) UnmarshalJSON(data []byte) error {
@@ -11584,6 +13134,13 @@ func (r *ReductoChunking) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*r = ReductoChunking(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
 	r._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -11602,9 +13159,14 @@ func (r *ReductoChunking) String() string {
 
 // Reducto chunking
 type ReductoChunkingRequest struct {
-	ChunkerConfig *ReductoChunkerConfigRequest `json:"chunker_config,omitempty"`
+	ChunkerConfig *ReductoChunkerConfigRequest `json:"chunker_config,omitempty" url:"chunker_config,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *ReductoChunkingRequest) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
 }
 
 func (r *ReductoChunkingRequest) UnmarshalJSON(data []byte) error {
@@ -11614,6 +13176,13 @@ func (r *ReductoChunkingRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*r = ReductoChunkingRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
 	r._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -11632,11 +13201,16 @@ func (r *ReductoChunkingRequest) String() string {
 
 // The final data returned indicating an error occurred during the stream.
 type RejectedExecutePromptEvent struct {
-	Error       *VellumError                 `json:"error,omitempty"`
-	ExecutionId string                       `json:"execution_id"`
-	Meta        *RejectedPromptExecutionMeta `json:"meta,omitempty"`
+	Error       *VellumError                 `json:"error" url:"error"`
+	ExecutionId string                       `json:"execution_id" url:"execution_id"`
+	Meta        *RejectedPromptExecutionMeta `json:"meta,omitempty" url:"meta,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RejectedExecutePromptEvent) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
 }
 
 func (r *RejectedExecutePromptEvent) UnmarshalJSON(data []byte) error {
@@ -11646,6 +13220,13 @@ func (r *RejectedExecutePromptEvent) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*r = RejectedExecutePromptEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
 	r._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -11664,14 +13245,19 @@ func (r *RejectedExecutePromptEvent) String() string {
 
 // The unsuccessful response from the model containing an error of what went wrong.
 type RejectedExecutePromptResponse struct {
-	Meta *PromptExecutionMeta `json:"meta,omitempty"`
+	Meta *PromptExecutionMeta `json:"meta,omitempty" url:"meta,omitempty"`
 	// The subset of the raw response from the model that the request opted into with `expand_raw`.
-	Raw map[string]interface{} `json:"raw,omitempty"`
+	Raw map[string]interface{} `json:"raw,omitempty" url:"raw,omitempty"`
 	// The ID of the execution.
-	ExecutionId string       `json:"execution_id"`
-	Error       *VellumError `json:"error,omitempty"`
+	ExecutionId string       `json:"execution_id" url:"execution_id"`
+	Error       *VellumError `json:"error" url:"error"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RejectedExecutePromptResponse) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
 }
 
 func (r *RejectedExecutePromptResponse) UnmarshalJSON(data []byte) error {
@@ -11681,6 +13267,13 @@ func (r *RejectedExecutePromptResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*r = RejectedExecutePromptResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
 	r._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -11699,22 +13292,52 @@ func (r *RejectedExecutePromptResponse) String() string {
 
 // The unsuccessful response from the Workflow execution containing an error specifying what went wrong.
 type RejectedExecuteWorkflowWorkflowResultEvent struct {
-	Id    string              `json:"id"`
-	Ts    time.Time           `json:"ts"`
-	Error *WorkflowEventError `json:"error,omitempty"`
+	Id    string              `json:"id" url:"id"`
+	Ts    time.Time           `json:"ts" url:"ts"`
+	Error *WorkflowEventError `json:"error" url:"error"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RejectedExecuteWorkflowWorkflowResultEvent) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
 }
 
 func (r *RejectedExecuteWorkflowWorkflowResultEvent) UnmarshalJSON(data []byte) error {
-	type unmarshaler RejectedExecuteWorkflowWorkflowResultEvent
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed RejectedExecuteWorkflowWorkflowResultEvent
+	var unmarshaler = struct {
+		embed
+		Ts *core.DateTime `json:"ts"`
+	}{
+		embed: embed(*r),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*r = RejectedExecuteWorkflowWorkflowResultEvent(value)
+	*r = RejectedExecuteWorkflowWorkflowResultEvent(unmarshaler.embed)
+	r.Ts = unmarshaler.Ts.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
 	r._rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (r *RejectedExecuteWorkflowWorkflowResultEvent) MarshalJSON() ([]byte, error) {
+	type embed RejectedExecuteWorkflowWorkflowResultEvent
+	var marshaler = struct {
+		embed
+		Ts *core.DateTime `json:"ts"`
+	}{
+		embed: embed(*r),
+		Ts:    core.NewDateTime(r.Ts),
+	}
+	return json.Marshal(marshaler)
 }
 
 func (r *RejectedExecuteWorkflowWorkflowResultEvent) String() string {
@@ -11731,10 +13354,15 @@ func (r *RejectedExecuteWorkflowWorkflowResultEvent) String() string {
 
 // The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
 type RejectedPromptExecutionMeta struct {
-	Latency      *int              `json:"latency,omitempty"`
-	FinishReason *FinishReasonEnum `json:"finish_reason,omitempty"`
+	Latency      *int              `json:"latency,omitempty" url:"latency,omitempty"`
+	FinishReason *FinishReasonEnum `json:"finish_reason,omitempty" url:"finish_reason,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RejectedPromptExecutionMeta) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
 }
 
 func (r *RejectedPromptExecutionMeta) UnmarshalJSON(data []byte) error {
@@ -11744,6 +13372,13 @@ func (r *RejectedPromptExecutionMeta) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*r = RejectedPromptExecutionMeta(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
 	r._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -11762,26 +13397,56 @@ func (r *RejectedPromptExecutionMeta) String() string {
 
 // An event that indicates that the node has rejected its execution.
 type RejectedWorkflowNodeResultEvent struct {
-	Id                string                  `json:"id"`
-	NodeId            string                  `json:"node_id"`
-	NodeResultId      string                  `json:"node_result_id"`
-	Ts                *time.Time              `json:"ts,omitempty"`
-	Data              *WorkflowNodeResultData `json:"data,omitempty"`
-	SourceExecutionId *string                 `json:"source_execution_id,omitempty"`
-	Error             *WorkflowEventError     `json:"error,omitempty"`
+	Id                string                  `json:"id" url:"id"`
+	NodeId            string                  `json:"node_id" url:"node_id"`
+	NodeResultId      string                  `json:"node_result_id" url:"node_result_id"`
+	Ts                *time.Time              `json:"ts,omitempty" url:"ts,omitempty"`
+	Data              *WorkflowNodeResultData `json:"data,omitempty" url:"data,omitempty"`
+	SourceExecutionId *string                 `json:"source_execution_id,omitempty" url:"source_execution_id,omitempty"`
+	Error             *WorkflowEventError     `json:"error" url:"error"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RejectedWorkflowNodeResultEvent) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
 }
 
 func (r *RejectedWorkflowNodeResultEvent) UnmarshalJSON(data []byte) error {
-	type unmarshaler RejectedWorkflowNodeResultEvent
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed RejectedWorkflowNodeResultEvent
+	var unmarshaler = struct {
+		embed
+		Ts *core.DateTime `json:"ts,omitempty"`
+	}{
+		embed: embed(*r),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*r = RejectedWorkflowNodeResultEvent(value)
+	*r = RejectedWorkflowNodeResultEvent(unmarshaler.embed)
+	r.Ts = unmarshaler.Ts.TimePtr()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
 	r._rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (r *RejectedWorkflowNodeResultEvent) MarshalJSON() ([]byte, error) {
+	type embed RejectedWorkflowNodeResultEvent
+	var marshaler = struct {
+		embed
+		Ts *core.DateTime `json:"ts,omitempty"`
+	}{
+		embed: embed(*r),
+		Ts:    core.NewOptionalDateTime(r.Ts),
+	}
+	return json.Marshal(marshaler)
 }
 
 func (r *RejectedWorkflowNodeResultEvent) String() string {
@@ -11823,17 +13488,22 @@ func (r ReleaseTagSource) Ptr() *ReleaseTagSource {
 // Information about the Test Case to replace
 type ReplaceTestSuiteTestCaseRequest struct {
 	// The Vellum-generated ID of the Test Case whose data you'd like to replace. Must specify either this or external_id.
-	Id *string `json:"id,omitempty"`
+	Id *string `json:"id,omitempty" url:"id,omitempty"`
 	// The ID that was originally provided upon Test Case creation that uniquely identifies the Test Case whose data you'd like to replace. Must specify either this of id.
-	ExternalId *string `json:"external_id,omitempty"`
+	ExternalId *string `json:"external_id,omitempty" url:"external_id,omitempty"`
 	// A human-readable label used to convey the intention of this Test Case
-	Label *string `json:"label,omitempty"`
+	Label *string `json:"label,omitempty" url:"label,omitempty"`
 	// Values for each of the Test Case's input variables
-	InputValues []*NamedTestCaseVariableValueRequest `json:"input_values,omitempty"`
+	InputValues []*NamedTestCaseVariableValueRequest `json:"input_values" url:"input_values"`
 	// Values for each of the Test Case's evaluation variables
-	EvaluationValues []*NamedTestCaseVariableValueRequest `json:"evaluation_values,omitempty"`
+	EvaluationValues []*NamedTestCaseVariableValueRequest `json:"evaluation_values" url:"evaluation_values"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *ReplaceTestSuiteTestCaseRequest) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
 }
 
 func (r *ReplaceTestSuiteTestCaseRequest) UnmarshalJSON(data []byte) error {
@@ -11843,6 +13513,13 @@ func (r *ReplaceTestSuiteTestCaseRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*r = ReplaceTestSuiteTestCaseRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
 	r._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -11861,13 +13538,18 @@ func (r *ReplaceTestSuiteTestCaseRequest) String() string {
 
 // Sandbox Scenario
 type SandboxScenario struct {
-	Label *string `json:"label,omitempty"`
+	Label *string `json:"label,omitempty" url:"label,omitempty"`
 	// The inputs for the scenario
-	Inputs []*ScenarioInput `json:"inputs,omitempty"`
+	Inputs []*ScenarioInput `json:"inputs" url:"inputs"`
 	// The id of the scenario
-	Id string `json:"id"`
+	Id string `json:"id" url:"id"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SandboxScenario) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *SandboxScenario) UnmarshalJSON(data []byte) error {
@@ -11877,6 +13559,13 @@ func (s *SandboxScenario) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SandboxScenario(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -11948,32 +13637,11 @@ func (s ScenarioInput) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", s.Type, s)
 	case "STRING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ScenarioInputStringVariableValue
-		}{
-			Type:                             s.Type,
-			ScenarioInputStringVariableValue: s.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(s.String, "type", "STRING")
 	case "JSON":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ScenarioInputJsonVariableValue
-		}{
-			Type:                           s.Type,
-			ScenarioInputJsonVariableValue: s.Json,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(s.Json, "type", "JSON")
 	case "CHAT_HISTORY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ScenarioInputChatHistoryVariableValue
-		}{
-			Type:                                  s.Type,
-			ScenarioInputChatHistoryVariableValue: s.ChatHistory,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(s.ChatHistory, "type", "CHAT_HISTORY")
 	}
 }
 
@@ -11998,10 +13666,15 @@ func (s *ScenarioInput) Accept(visitor ScenarioInputVisitor) error {
 
 // Prompt Sandbox Scenario input value that is of type CHAT_HISTORY
 type ScenarioInputChatHistoryVariableValue struct {
-	Value           []*ChatMessage `json:"value,omitempty"`
-	InputVariableId string         `json:"input_variable_id"`
+	Value           []*ChatMessage `json:"value,omitempty" url:"value,omitempty"`
+	InputVariableId string         `json:"input_variable_id" url:"input_variable_id"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *ScenarioInputChatHistoryVariableValue) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *ScenarioInputChatHistoryVariableValue) UnmarshalJSON(data []byte) error {
@@ -12011,6 +13684,13 @@ func (s *ScenarioInputChatHistoryVariableValue) UnmarshalJSON(data []byte) error
 		return err
 	}
 	*s = ScenarioInputChatHistoryVariableValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -12029,10 +13709,15 @@ func (s *ScenarioInputChatHistoryVariableValue) String() string {
 
 // Prompt Sandbox Scenario input value that is of type JSON
 type ScenarioInputJsonVariableValue struct {
-	Value           interface{} `json:"value,omitempty"`
-	InputVariableId string      `json:"input_variable_id"`
+	Value           interface{} `json:"value" url:"value"`
+	InputVariableId string      `json:"input_variable_id" url:"input_variable_id"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *ScenarioInputJsonVariableValue) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *ScenarioInputJsonVariableValue) UnmarshalJSON(data []byte) error {
@@ -12042,6 +13727,13 @@ func (s *ScenarioInputJsonVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = ScenarioInputJsonVariableValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -12060,10 +13752,15 @@ func (s *ScenarioInputJsonVariableValue) String() string {
 
 // Prompt Sandbox Scenario input value that is of type STRING
 type ScenarioInputStringVariableValue struct {
-	Value           *string `json:"value,omitempty"`
-	InputVariableId string  `json:"input_variable_id"`
+	Value           *string `json:"value,omitempty" url:"value,omitempty"`
+	InputVariableId string  `json:"input_variable_id" url:"input_variable_id"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *ScenarioInputStringVariableValue) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *ScenarioInputStringVariableValue) UnmarshalJSON(data []byte) error {
@@ -12073,6 +13770,13 @@ func (s *ScenarioInputStringVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = ScenarioInputStringVariableValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -12091,11 +13795,16 @@ func (s *ScenarioInputStringVariableValue) String() string {
 
 type SearchFiltersRequest struct {
 	// The document external IDs to filter by
-	ExternalIds []string `json:"external_ids,omitempty"`
+	ExternalIds []string `json:"external_ids,omitempty" url:"external_ids,omitempty"`
 	// The metadata filters to apply to the search
-	Metadata *MetadataFilterConfigRequest `json:"metadata,omitempty"`
+	Metadata *MetadataFilterConfigRequest `json:"metadata,omitempty" url:"metadata,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SearchFiltersRequest) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *SearchFiltersRequest) UnmarshalJSON(data []byte) error {
@@ -12105,6 +13814,13 @@ func (s *SearchFiltersRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchFiltersRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -12123,9 +13839,14 @@ func (s *SearchFiltersRequest) String() string {
 
 // A Node Result Event emitted from a Search Node.
 type SearchNodeResult struct {
-	Data *SearchNodeResultData `json:"data,omitempty"`
+	Data *SearchNodeResultData `json:"data" url:"data"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SearchNodeResult) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *SearchNodeResult) UnmarshalJSON(data []byte) error {
@@ -12135,6 +13856,13 @@ func (s *SearchNodeResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchNodeResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -12152,13 +13880,18 @@ func (s *SearchNodeResult) String() string {
 }
 
 type SearchNodeResultData struct {
-	ResultsOutputId string `json:"results_output_id"`
+	ResultsOutputId string `json:"results_output_id" url:"results_output_id"`
 	// The results of the search. Each result represents a chunk that matches the search query.
-	Results      []*SearchResult `json:"results,omitempty"`
-	TextOutputId string          `json:"text_output_id"`
-	Text         *string         `json:"text,omitempty"`
+	Results      []*SearchResult `json:"results" url:"results"`
+	TextOutputId string          `json:"text_output_id" url:"text_output_id"`
+	Text         *string         `json:"text,omitempty" url:"text,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SearchNodeResultData) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *SearchNodeResultData) UnmarshalJSON(data []byte) error {
@@ -12168,6 +13901,13 @@ func (s *SearchNodeResultData) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchNodeResultData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -12186,15 +13926,20 @@ func (s *SearchNodeResultData) String() string {
 
 type SearchRequestOptionsRequest struct {
 	// The maximum number of results to return.
-	Limit *int `json:"limit,omitempty"`
+	Limit *int `json:"limit,omitempty" url:"limit,omitempty"`
 	// The weights to use for the search. Must add up to 1.0.
-	Weights *SearchWeightsRequest `json:"weights,omitempty"`
+	Weights *SearchWeightsRequest `json:"weights,omitempty" url:"weights,omitempty"`
 	// The configuration for merging results.
-	ResultMerging *SearchResultMergingRequest `json:"result_merging,omitempty"`
+	ResultMerging *SearchResultMergingRequest `json:"result_merging,omitempty" url:"result_merging,omitempty"`
 	// The filters to apply to the search.
-	Filters *SearchFiltersRequest `json:"filters,omitempty"`
+	Filters *SearchFiltersRequest `json:"filters,omitempty" url:"filters,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SearchRequestOptionsRequest) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *SearchRequestOptionsRequest) UnmarshalJSON(data []byte) error {
@@ -12204,6 +13949,13 @@ func (s *SearchRequestOptionsRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchRequestOptionsRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -12222,9 +13974,14 @@ func (s *SearchRequestOptionsRequest) String() string {
 
 type SearchResponse struct {
 	// The results of the search. Each result represents a chunk that matches the search query.
-	Results []*SearchResult `json:"results,omitempty"`
+	Results []*SearchResult `json:"results" url:"results"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SearchResponse) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *SearchResponse) UnmarshalJSON(data []byte) error {
@@ -12234,6 +13991,13 @@ func (s *SearchResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -12252,16 +14016,21 @@ func (s *SearchResponse) String() string {
 
 type SearchResult struct {
 	// The text of the chunk that matched the search query.
-	Text string `json:"text"`
+	Text string `json:"text" url:"text"`
 	// A score representing how well the chunk matches the search query.
-	Score    float64  `json:"score"`
-	Keywords []string `json:"keywords,omitempty"`
+	Score    float64  `json:"score" url:"score"`
+	Keywords []string `json:"keywords" url:"keywords"`
 	// The document that contains the chunk that matched the search query.
-	Document *SearchResultDocument `json:"document,omitempty"`
+	Document *SearchResultDocument `json:"document" url:"document"`
 	// Additional information about the search result.
-	Meta *SearchResultMeta `json:"meta,omitempty"`
+	Meta *SearchResultMeta `json:"meta,omitempty" url:"meta,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SearchResult) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *SearchResult) UnmarshalJSON(data []byte) error {
@@ -12271,6 +14040,13 @@ func (s *SearchResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -12289,15 +14065,20 @@ func (s *SearchResult) String() string {
 
 type SearchResultDocument struct {
 	// The ID of the document.
-	Id *string `json:"id,omitempty"`
+	Id *string `json:"id,omitempty" url:"id,omitempty"`
 	// The human-readable name for the document.
-	Label string `json:"label"`
+	Label string `json:"label" url:"label"`
 	// The unique ID of the document as represented in an external system and specified when it was originally uploaded.
-	ExternalId *string `json:"external_id,omitempty"`
+	ExternalId *string `json:"external_id,omitempty" url:"external_id,omitempty"`
 	// A previously supplied JSON object containing metadata that can be filtered on when searching.
-	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SearchResultDocument) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *SearchResultDocument) UnmarshalJSON(data []byte) error {
@@ -12307,6 +14088,13 @@ func (s *SearchResultDocument) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchResultDocument(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -12325,15 +14113,20 @@ func (s *SearchResultDocument) String() string {
 
 type SearchResultDocumentRequest struct {
 	// The ID of the document.
-	Id *string `json:"id,omitempty"`
+	Id *string `json:"id,omitempty" url:"id,omitempty"`
 	// The human-readable name for the document.
-	Label string `json:"label"`
+	Label string `json:"label" url:"label"`
 	// The unique ID of the document as represented in an external system and specified when it was originally uploaded.
-	ExternalId *string `json:"external_id,omitempty"`
+	ExternalId *string `json:"external_id,omitempty" url:"external_id,omitempty"`
 	// A previously supplied JSON object containing metadata that can be filtered on when searching.
-	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SearchResultDocumentRequest) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *SearchResultDocumentRequest) UnmarshalJSON(data []byte) error {
@@ -12343,6 +14136,13 @@ func (s *SearchResultDocumentRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchResultDocumentRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -12361,9 +14161,14 @@ func (s *SearchResultDocumentRequest) String() string {
 
 type SearchResultMergingRequest struct {
 	// Whether to enable merging results
-	Enabled *bool `json:"enabled,omitempty"`
+	Enabled *bool `json:"enabled,omitempty" url:"enabled,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SearchResultMergingRequest) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *SearchResultMergingRequest) UnmarshalJSON(data []byte) error {
@@ -12373,6 +14178,13 @@ func (s *SearchResultMergingRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchResultMergingRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -12390,9 +14202,14 @@ func (s *SearchResultMergingRequest) String() string {
 }
 
 type SearchResultMeta struct {
-	Source *SearchResultMetaSource `json:"source,omitempty"`
+	Source *SearchResultMetaSource `json:"source,omitempty" url:"source,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SearchResultMeta) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *SearchResultMeta) UnmarshalJSON(data []byte) error {
@@ -12402,6 +14219,13 @@ func (s *SearchResultMeta) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchResultMeta(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -12419,9 +14243,14 @@ func (s *SearchResultMeta) String() string {
 }
 
 type SearchResultMetaRequest struct {
-	Source *SearchResultMetaSourceRequest `json:"source,omitempty"`
+	Source *SearchResultMetaSourceRequest `json:"source,omitempty" url:"source,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SearchResultMetaRequest) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *SearchResultMetaRequest) UnmarshalJSON(data []byte) error {
@@ -12431,6 +14260,13 @@ func (s *SearchResultMetaRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchResultMetaRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -12480,14 +14316,7 @@ func (s SearchResultMetaSource) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", s.DocumentType, s)
 	case "PDF":
-		var marshaler = struct {
-			DocumentType string `json:"document_type"`
-			*PdfSearchResultMetaSource
-		}{
-			DocumentType:              s.DocumentType,
-			PdfSearchResultMetaSource: s.Pdf,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(s.Pdf, "document_type", "PDF")
 	}
 }
 
@@ -12537,14 +14366,7 @@ func (s SearchResultMetaSourceRequest) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", s.DocumentType, s)
 	case "PDF":
-		var marshaler = struct {
-			DocumentType string `json:"document_type"`
-			*PdfSearchResultMetaSourceRequest
-		}{
-			DocumentType:                     s.DocumentType,
-			PdfSearchResultMetaSourceRequest: s.Pdf,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(s.Pdf, "document_type", "PDF")
 	}
 }
 
@@ -12563,16 +14385,21 @@ func (s *SearchResultMetaSourceRequest) Accept(visitor SearchResultMetaSourceReq
 
 type SearchResultRequest struct {
 	// The text of the chunk that matched the search query.
-	Text string `json:"text"`
+	Text string `json:"text" url:"text"`
 	// A score representing how well the chunk matches the search query.
-	Score    float64  `json:"score"`
-	Keywords []string `json:"keywords,omitempty"`
+	Score    float64  `json:"score" url:"score"`
+	Keywords []string `json:"keywords" url:"keywords"`
 	// The document that contains the chunk that matched the search query.
-	Document *SearchResultDocumentRequest `json:"document,omitempty"`
+	Document *SearchResultDocumentRequest `json:"document" url:"document"`
 	// Additional information about the search result.
-	Meta *SearchResultMetaRequest `json:"meta,omitempty"`
+	Meta *SearchResultMetaRequest `json:"meta,omitempty" url:"meta,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SearchResultRequest) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *SearchResultRequest) UnmarshalJSON(data []byte) error {
@@ -12582,6 +14409,13 @@ func (s *SearchResultRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchResultRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -12600,11 +14434,16 @@ func (s *SearchResultRequest) String() string {
 
 type SearchWeightsRequest struct {
 	// The relative weight to give to semantic similarity
-	SemanticSimilarity *float64 `json:"semantic_similarity,omitempty"`
+	SemanticSimilarity *float64 `json:"semantic_similarity,omitempty" url:"semantic_similarity,omitempty"`
 	// The relative weight to give to keywords
-	Keywords *float64 `json:"keywords,omitempty"`
+	Keywords *float64 `json:"keywords,omitempty" url:"keywords,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SearchWeightsRequest) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *SearchWeightsRequest) UnmarshalJSON(data []byte) error {
@@ -12614,6 +14453,13 @@ func (s *SearchWeightsRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchWeightsRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -12632,10 +14478,15 @@ func (s *SearchWeightsRequest) String() string {
 
 // Configuration for sentence chunking
 type SentenceChunkerConfig struct {
-	CharacterLimit  *int     `json:"character_limit,omitempty"`
-	MinOverlapRatio *float64 `json:"min_overlap_ratio,omitempty"`
+	CharacterLimit  *int     `json:"character_limit,omitempty" url:"character_limit,omitempty"`
+	MinOverlapRatio *float64 `json:"min_overlap_ratio,omitempty" url:"min_overlap_ratio,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SentenceChunkerConfig) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *SentenceChunkerConfig) UnmarshalJSON(data []byte) error {
@@ -12645,6 +14496,13 @@ func (s *SentenceChunkerConfig) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SentenceChunkerConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -12663,10 +14521,15 @@ func (s *SentenceChunkerConfig) String() string {
 
 // Configuration for sentence chunking
 type SentenceChunkerConfigRequest struct {
-	CharacterLimit  *int     `json:"character_limit,omitempty"`
-	MinOverlapRatio *float64 `json:"min_overlap_ratio,omitempty"`
+	CharacterLimit  *int     `json:"character_limit,omitempty" url:"character_limit,omitempty"`
+	MinOverlapRatio *float64 `json:"min_overlap_ratio,omitempty" url:"min_overlap_ratio,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SentenceChunkerConfigRequest) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *SentenceChunkerConfigRequest) UnmarshalJSON(data []byte) error {
@@ -12676,6 +14539,13 @@ func (s *SentenceChunkerConfigRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SentenceChunkerConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -12694,9 +14564,14 @@ func (s *SentenceChunkerConfigRequest) String() string {
 
 // Sentence chunking
 type SentenceChunking struct {
-	ChunkerConfig *SentenceChunkerConfig `json:"chunker_config,omitempty"`
+	ChunkerConfig *SentenceChunkerConfig `json:"chunker_config,omitempty" url:"chunker_config,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SentenceChunking) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *SentenceChunking) UnmarshalJSON(data []byte) error {
@@ -12706,6 +14581,13 @@ func (s *SentenceChunking) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SentenceChunking(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -12724,9 +14606,14 @@ func (s *SentenceChunking) String() string {
 
 // Sentence chunking
 type SentenceChunkingRequest struct {
-	ChunkerConfig *SentenceChunkerConfigRequest `json:"chunker_config,omitempty"`
+	ChunkerConfig *SentenceChunkerConfigRequest `json:"chunker_config,omitempty" url:"chunker_config,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SentenceChunkingRequest) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *SentenceChunkingRequest) UnmarshalJSON(data []byte) error {
@@ -12736,6 +14623,13 @@ func (s *SentenceChunkingRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SentenceChunkingRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -12753,40 +14647,74 @@ func (s *SentenceChunkingRequest) String() string {
 }
 
 type SlimDeploymentRead struct {
-	Id      string    `json:"id"`
-	Created time.Time `json:"created"`
+	Id      string    `json:"id" url:"id"`
+	Created time.Time `json:"created" url:"created"`
 	// A human-readable label for the deployment
-	Label string `json:"label"`
+	Label string `json:"label" url:"label"`
 	// A name that uniquely identifies this deployment within its workspace
-	Name string `json:"name"`
+	Name string `json:"name" url:"name"`
 	// The current status of the deployment
 	//
 	// - `ACTIVE` - Active
 	// - `ARCHIVED` - Archived
-	Status *EntityStatus `json:"status,omitempty"`
+	Status *EntityStatus `json:"status,omitempty" url:"status,omitempty"`
 	// The environment this deployment is used in
 	//
 	// - `DEVELOPMENT` - Development
 	// - `STAGING` - Staging
 	// - `PRODUCTION` - Production
-	Environment    *EnvironmentEnum  `json:"environment,omitempty"`
-	LastDeployedOn time.Time         `json:"last_deployed_on"`
-	InputVariables []*VellumVariable `json:"input_variables,omitempty"`
+	Environment    *EnvironmentEnum  `json:"environment,omitempty" url:"environment,omitempty"`
+	LastDeployedOn time.Time         `json:"last_deployed_on" url:"last_deployed_on"`
+	InputVariables []*VellumVariable `json:"input_variables" url:"input_variables"`
 	// A human-readable description of the deployment
-	Description *string `json:"description,omitempty"`
+	Description *string `json:"description,omitempty" url:"description,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SlimDeploymentRead) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *SlimDeploymentRead) UnmarshalJSON(data []byte) error {
-	type unmarshaler SlimDeploymentRead
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed SlimDeploymentRead
+	var unmarshaler = struct {
+		embed
+		Created        *core.DateTime `json:"created"`
+		LastDeployedOn *core.DateTime `json:"last_deployed_on"`
+	}{
+		embed: embed(*s),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*s = SlimDeploymentRead(value)
+	*s = SlimDeploymentRead(unmarshaler.embed)
+	s.Created = unmarshaler.Created.Time()
+	s.LastDeployedOn = unmarshaler.LastDeployedOn.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (s *SlimDeploymentRead) MarshalJSON() ([]byte, error) {
+	type embed SlimDeploymentRead
+	var marshaler = struct {
+		embed
+		Created        *core.DateTime `json:"created"`
+		LastDeployedOn *core.DateTime `json:"last_deployed_on"`
+	}{
+		embed:          embed(*s),
+		Created:        core.NewDateTime(s.Created),
+		LastDeployedOn: core.NewDateTime(s.LastDeployedOn),
+	}
+	return json.Marshal(marshaler)
 }
 
 func (s *SlimDeploymentRead) String() string {
@@ -12803,47 +14731,77 @@ func (s *SlimDeploymentRead) String() string {
 
 type SlimDocument struct {
 	// Vellum-generated ID that uniquely identifies this document.
-	Id string `json:"id"`
+	Id string `json:"id" url:"id"`
 	// The external ID that was originally provided when uploading the document.
-	ExternalId *string `json:"external_id,omitempty"`
+	ExternalId *string `json:"external_id,omitempty" url:"external_id,omitempty"`
 	// A timestamp representing when this document was most recently uploaded.
-	LastUploadedAt time.Time `json:"last_uploaded_at"`
+	LastUploadedAt time.Time `json:"last_uploaded_at" url:"last_uploaded_at"`
 	// Human-friendly name for this document.
-	Label string `json:"label"`
+	Label string `json:"label" url:"label"`
 	// An enum value representing where this document is along its processing lifecycle. Note that this is different than its indexing lifecycle.
 	//
 	// - `QUEUED` - Queued
 	// - `PROCESSING` - Processing
 	// - `PROCESSED` - Processed
 	// - `FAILED` - Failed
-	ProcessingState *ProcessingStateEnum `json:"processing_state,omitempty"`
+	ProcessingState *ProcessingStateEnum `json:"processing_state,omitempty" url:"processing_state,omitempty"`
 	// An enum value representing why the document could not be processed. Is null unless processing_state is FAILED.
 	//
 	// - `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit
 	// - `INVALID_FILE` - Invalid File
-	ProcessingFailureReason *ProcessingFailureReasonEnum `json:"processing_failure_reason,omitempty"`
+	ProcessingFailureReason *ProcessingFailureReasonEnum `json:"processing_failure_reason,omitempty" url:"processing_failure_reason,omitempty"`
 	// The document's current status.
 	//
 	// - `ACTIVE` - Active
-	Status *DocumentStatus `json:"status,omitempty"`
+	Status *DocumentStatus `json:"status,omitempty" url:"status,omitempty"`
 	// A list of keywords associated with this document. Originally provided when uploading the document.
-	Keywords []string `json:"keywords,omitempty"`
+	Keywords []string `json:"keywords,omitempty" url:"keywords,omitempty"`
 	// A previously supplied JSON object containing metadata that can be filtered on when searching.
-	Metadata                  map[string]interface{}             `json:"metadata,omitempty"`
-	DocumentToDocumentIndexes []*DocumentDocumentToDocumentIndex `json:"document_to_document_indexes,omitempty"`
+	Metadata                  map[string]interface{}             `json:"metadata,omitempty" url:"metadata,omitempty"`
+	DocumentToDocumentIndexes []*DocumentDocumentToDocumentIndex `json:"document_to_document_indexes" url:"document_to_document_indexes"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SlimDocument) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *SlimDocument) UnmarshalJSON(data []byte) error {
-	type unmarshaler SlimDocument
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed SlimDocument
+	var unmarshaler = struct {
+		embed
+		LastUploadedAt *core.DateTime `json:"last_uploaded_at"`
+	}{
+		embed: embed(*s),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*s = SlimDocument(value)
+	*s = SlimDocument(unmarshaler.embed)
+	s.LastUploadedAt = unmarshaler.LastUploadedAt.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (s *SlimDocument) MarshalJSON() ([]byte, error) {
+	type embed SlimDocument
+	var marshaler = struct {
+		embed
+		LastUploadedAt *core.DateTime `json:"last_uploaded_at"`
+	}{
+		embed:          embed(*s),
+		LastUploadedAt: core.NewDateTime(s.LastUploadedAt),
+	}
+	return json.Marshal(marshaler)
 }
 
 func (s *SlimDocument) String() string {
@@ -12859,43 +14817,77 @@ func (s *SlimDocument) String() string {
 }
 
 type SlimWorkflowDeployment struct {
-	Id string `json:"id"`
+	Id string `json:"id" url:"id"`
 	// A name that uniquely identifies this workflow deployment within its workspace
-	Name string `json:"name"`
+	Name string `json:"name" url:"name"`
 	// A human-readable label for the workflow deployment
-	Label string `json:"label"`
+	Label string `json:"label" url:"label"`
 	// The current status of the workflow deployment
 	//
 	// - `ACTIVE` - Active
 	// - `ARCHIVED` - Archived
-	Status *EntityStatus `json:"status,omitempty"`
+	Status *EntityStatus `json:"status,omitempty" url:"status,omitempty"`
 	// The environment this workflow deployment is used in
 	//
 	// - `DEVELOPMENT` - Development
 	// - `STAGING` - Staging
 	// - `PRODUCTION` - Production
-	Environment    *EnvironmentEnum `json:"environment,omitempty"`
-	Created        time.Time        `json:"created"`
-	LastDeployedOn time.Time        `json:"last_deployed_on"`
+	Environment    *EnvironmentEnum `json:"environment,omitempty" url:"environment,omitempty"`
+	Created        time.Time        `json:"created" url:"created"`
+	LastDeployedOn time.Time        `json:"last_deployed_on" url:"last_deployed_on"`
 	// The input variables this Workflow Deployment expects to receive values for when it is executed.
-	InputVariables []*VellumVariable `json:"input_variables,omitempty"`
+	InputVariables []*VellumVariable `json:"input_variables" url:"input_variables"`
 	// The output variables this Workflow Deployment will produce when it is executed.
-	OutputVariables []*VellumVariable `json:"output_variables,omitempty"`
+	OutputVariables []*VellumVariable `json:"output_variables" url:"output_variables"`
 	// A human-readable description of the workflow deployment
-	Description *string `json:"description,omitempty"`
+	Description *string `json:"description,omitempty" url:"description,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SlimWorkflowDeployment) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *SlimWorkflowDeployment) UnmarshalJSON(data []byte) error {
-	type unmarshaler SlimWorkflowDeployment
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed SlimWorkflowDeployment
+	var unmarshaler = struct {
+		embed
+		Created        *core.DateTime `json:"created"`
+		LastDeployedOn *core.DateTime `json:"last_deployed_on"`
+	}{
+		embed: embed(*s),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*s = SlimWorkflowDeployment(value)
+	*s = SlimWorkflowDeployment(unmarshaler.embed)
+	s.Created = unmarshaler.Created.Time()
+	s.LastDeployedOn = unmarshaler.LastDeployedOn.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (s *SlimWorkflowDeployment) MarshalJSON() ([]byte, error) {
+	type embed SlimWorkflowDeployment
+	var marshaler = struct {
+		embed
+		Created        *core.DateTime `json:"created"`
+		LastDeployedOn *core.DateTime `json:"last_deployed_on"`
+	}{
+		embed:          embed(*s),
+		Created:        core.NewDateTime(s.Created),
+		LastDeployedOn: core.NewDateTime(s.LastDeployedOn),
+	}
+	return json.Marshal(marshaler)
 }
 
 func (s *SlimWorkflowDeployment) String() string {
@@ -12912,14 +14904,19 @@ func (s *SlimWorkflowDeployment) String() string {
 
 // The data returned for each delta during the prompt execution stream.
 type StreamingExecutePromptEvent struct {
-	Output      *PromptOutput                 `json:"output,omitempty"`
-	OutputIndex int                           `json:"output_index"`
-	ExecutionId string                        `json:"execution_id"`
-	Meta        *StreamingPromptExecutionMeta `json:"meta,omitempty"`
+	Output      *PromptOutput                 `json:"output" url:"output"`
+	OutputIndex int                           `json:"output_index" url:"output_index"`
+	ExecutionId string                        `json:"execution_id" url:"execution_id"`
+	Meta        *StreamingPromptExecutionMeta `json:"meta,omitempty" url:"meta,omitempty"`
 	// The subset of the raw response from the model that the request opted into with `expand_raw`.
-	Raw map[string]interface{} `json:"raw,omitempty"`
+	Raw map[string]interface{} `json:"raw,omitempty" url:"raw,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *StreamingExecutePromptEvent) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *StreamingExecutePromptEvent) UnmarshalJSON(data []byte) error {
@@ -12929,6 +14926,13 @@ func (s *StreamingExecutePromptEvent) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = StreamingExecutePromptEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -12947,9 +14951,14 @@ func (s *StreamingExecutePromptEvent) String() string {
 
 // The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
 type StreamingPromptExecutionMeta struct {
-	Latency *int `json:"latency,omitempty"`
+	Latency *int `json:"latency,omitempty" url:"latency,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *StreamingPromptExecutionMeta) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *StreamingPromptExecutionMeta) UnmarshalJSON(data []byte) error {
@@ -12959,6 +14968,13 @@ func (s *StreamingPromptExecutionMeta) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = StreamingPromptExecutionMeta(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -12977,27 +14993,57 @@ func (s *StreamingPromptExecutionMeta) String() string {
 
 // An event that indicates that the node has execution is in progress.
 type StreamingWorkflowNodeResultEvent struct {
-	Id                string                   `json:"id"`
-	NodeId            string                   `json:"node_id"`
-	NodeResultId      string                   `json:"node_result_id"`
-	Ts                *time.Time               `json:"ts,omitempty"`
-	Data              *WorkflowNodeResultData  `json:"data,omitempty"`
-	SourceExecutionId *string                  `json:"source_execution_id,omitempty"`
-	Output            *NodeOutputCompiledValue `json:"output,omitempty"`
-	OutputIndex       *int                     `json:"output_index,omitempty"`
+	Id                string                   `json:"id" url:"id"`
+	NodeId            string                   `json:"node_id" url:"node_id"`
+	NodeResultId      string                   `json:"node_result_id" url:"node_result_id"`
+	Ts                *time.Time               `json:"ts,omitempty" url:"ts,omitempty"`
+	Data              *WorkflowNodeResultData  `json:"data,omitempty" url:"data,omitempty"`
+	SourceExecutionId *string                  `json:"source_execution_id,omitempty" url:"source_execution_id,omitempty"`
+	Output            *NodeOutputCompiledValue `json:"output,omitempty" url:"output,omitempty"`
+	OutputIndex       *int                     `json:"output_index,omitempty" url:"output_index,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *StreamingWorkflowNodeResultEvent) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *StreamingWorkflowNodeResultEvent) UnmarshalJSON(data []byte) error {
-	type unmarshaler StreamingWorkflowNodeResultEvent
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed StreamingWorkflowNodeResultEvent
+	var unmarshaler = struct {
+		embed
+		Ts *core.DateTime `json:"ts,omitempty"`
+	}{
+		embed: embed(*s),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*s = StreamingWorkflowNodeResultEvent(value)
+	*s = StreamingWorkflowNodeResultEvent(unmarshaler.embed)
+	s.Ts = unmarshaler.Ts.TimePtr()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (s *StreamingWorkflowNodeResultEvent) MarshalJSON() ([]byte, error) {
+	type embed StreamingWorkflowNodeResultEvent
+	var marshaler = struct {
+		embed
+		Ts *core.DateTime `json:"ts,omitempty"`
+	}{
+		embed: embed(*s),
+		Ts:    core.NewOptionalDateTime(s.Ts),
+	}
+	return json.Marshal(marshaler)
 }
 
 func (s *StreamingWorkflowNodeResultEvent) String() string {
@@ -13014,9 +15060,14 @@ func (s *StreamingWorkflowNodeResultEvent) String() string {
 
 // A string value that is used in a chat message.
 type StringChatMessageContent struct {
-	Value string `json:"value"`
+	Value string `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *StringChatMessageContent) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *StringChatMessageContent) UnmarshalJSON(data []byte) error {
@@ -13026,6 +15077,13 @@ func (s *StringChatMessageContent) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = StringChatMessageContent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -13044,9 +15102,14 @@ func (s *StringChatMessageContent) String() string {
 
 // A string value that is used in a chat message.
 type StringChatMessageContentRequest struct {
-	Value string `json:"value"`
+	Value string `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *StringChatMessageContentRequest) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *StringChatMessageContentRequest) UnmarshalJSON(data []byte) error {
@@ -13056,6 +15119,13 @@ func (s *StringChatMessageContentRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = StringChatMessageContentRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -13075,10 +15145,15 @@ func (s *StringChatMessageContentRequest) String() string {
 // A user input representing a string value
 type StringInputRequest struct {
 	// The variable's name, as defined in the deployment.
-	Name  string `json:"name"`
-	Value string `json:"value"`
+	Name  string `json:"name" url:"name"`
+	Value string `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *StringInputRequest) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *StringInputRequest) UnmarshalJSON(data []byte) error {
@@ -13088,6 +15163,13 @@ func (s *StringInputRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = StringInputRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -13105,9 +15187,14 @@ func (s *StringInputRequest) String() string {
 }
 
 type StringVariableValue struct {
-	Value *string `json:"value,omitempty"`
+	Value *string `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *StringVariableValue) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *StringVariableValue) UnmarshalJSON(data []byte) error {
@@ -13117,6 +15204,13 @@ func (s *StringVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = StringVariableValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -13135,9 +15229,14 @@ func (s *StringVariableValue) String() string {
 
 // A value representing a string.
 type StringVellumValue struct {
-	Value *string `json:"value,omitempty"`
+	Value *string `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *StringVellumValue) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *StringVellumValue) UnmarshalJSON(data []byte) error {
@@ -13147,6 +15246,13 @@ func (s *StringVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = StringVellumValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -13165,9 +15271,14 @@ func (s *StringVellumValue) String() string {
 
 // A value representing a string.
 type StringVellumValueRequest struct {
-	Value *string `json:"value,omitempty"`
+	Value *string `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *StringVellumValueRequest) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *StringVellumValueRequest) UnmarshalJSON(data []byte) error {
@@ -13177,6 +15288,13 @@ func (s *StringVellumValueRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = StringVellumValueRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -13195,30 +15313,60 @@ func (s *StringVellumValueRequest) String() string {
 
 type SubmitCompletionActualRequest struct {
 	// The Vellum-generated ID of a previously generated completion. Must provide either this or external_id.
-	Id *string `json:"id,omitempty"`
+	Id *string `json:"id,omitempty" url:"id,omitempty"`
 	// The external ID that was originally provided when generating the completion that you'd now like to submit actuals for. Must provide either this or id.
-	ExternalId *string `json:"external_id,omitempty"`
+	ExternalId *string `json:"external_id,omitempty" url:"external_id,omitempty"`
 	// Text representing what the completion _should_ have been.
-	Text *string `json:"text,omitempty"`
+	Text *string `json:"text,omitempty" url:"text,omitempty"`
 	// A number between 0 and 1 representing the quality of the completion. 0 is the worst, 1 is the best.
-	Quality *float64 `json:"quality,omitempty"`
+	Quality *float64 `json:"quality,omitempty" url:"quality,omitempty"`
 	// Optionally provide the timestamp representing when this feedback was collected. Used for reporting purposes.
-	Timestamp *time.Time `json:"timestamp,omitempty"`
+	Timestamp *time.Time `json:"timestamp,omitempty" url:"timestamp,omitempty"`
 	// Optionally provide additional metadata about the feedback submission.
-	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SubmitCompletionActualRequest) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *SubmitCompletionActualRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler SubmitCompletionActualRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed SubmitCompletionActualRequest
+	var unmarshaler = struct {
+		embed
+		Timestamp *core.DateTime `json:"timestamp,omitempty"`
+	}{
+		embed: embed(*s),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*s = SubmitCompletionActualRequest(value)
+	*s = SubmitCompletionActualRequest(unmarshaler.embed)
+	s.Timestamp = unmarshaler.Timestamp.TimePtr()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (s *SubmitCompletionActualRequest) MarshalJSON() ([]byte, error) {
+	type embed SubmitCompletionActualRequest
+	var marshaler = struct {
+		embed
+		Timestamp *core.DateTime `json:"timestamp,omitempty"`
+	}{
+		embed:     embed(*s),
+		Timestamp: core.NewOptionalDateTime(s.Timestamp),
+	}
+	return json.Marshal(marshaler)
 }
 
 func (s *SubmitCompletionActualRequest) String() string {
@@ -13288,32 +15436,11 @@ func (s SubmitWorkflowExecutionActualRequest) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", s.OutputType, s)
 	case "STRING":
-		var marshaler = struct {
-			OutputType string `json:"output_type"`
-			*WorkflowExecutionActualStringRequest
-		}{
-			OutputType:                           s.OutputType,
-			WorkflowExecutionActualStringRequest: s.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(s.String, "output_type", "STRING")
 	case "JSON":
-		var marshaler = struct {
-			OutputType string `json:"output_type"`
-			*WorkflowExecutionActualJsonRequest
-		}{
-			OutputType:                         s.OutputType,
-			WorkflowExecutionActualJsonRequest: s.Json,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(s.Json, "output_type", "JSON")
 	case "CHAT_HISTORY":
-		var marshaler = struct {
-			OutputType string `json:"output_type"`
-			*WorkflowExecutionActualChatHistoryRequest
-		}{
-			OutputType: s.OutputType,
-			WorkflowExecutionActualChatHistoryRequest: s.ChatHistory,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(s.ChatHistory, "output_type", "CHAT_HISTORY")
 	}
 }
 
@@ -13338,9 +15465,14 @@ func (s *SubmitWorkflowExecutionActualRequest) Accept(visitor SubmitWorkflowExec
 
 // A Node Result Event emitted from a Subworkflow Node.
 type SubworkflowNodeResult struct {
-	Data *SubworkflowNodeResultData `json:"data,omitempty"`
+	Data *SubworkflowNodeResultData `json:"data,omitempty" url:"data,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SubworkflowNodeResult) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *SubworkflowNodeResult) UnmarshalJSON(data []byte) error {
@@ -13350,6 +15482,13 @@ func (s *SubworkflowNodeResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SubworkflowNodeResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -13367,9 +15506,14 @@ func (s *SubworkflowNodeResult) String() string {
 }
 
 type SubworkflowNodeResultData struct {
-	ExecutionId *string `json:"execution_id,omitempty"`
+	ExecutionId *string `json:"execution_id,omitempty" url:"execution_id,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SubworkflowNodeResultData) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
 }
 
 func (s *SubworkflowNodeResultData) UnmarshalJSON(data []byte) error {
@@ -13379,6 +15523,13 @@ func (s *SubworkflowNodeResultData) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SubworkflowNodeResultData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
 	s._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -13396,10 +15547,15 @@ func (s *SubworkflowNodeResultData) String() string {
 }
 
 type TemplatingNodeArrayResult struct {
-	Id    string                    `json:"id"`
-	Value []*ArrayVariableValueItem `json:"value,omitempty"`
+	Id    string                    `json:"id" url:"id"`
+	Value []*ArrayVariableValueItem `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TemplatingNodeArrayResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TemplatingNodeArrayResult) UnmarshalJSON(data []byte) error {
@@ -13409,6 +15565,13 @@ func (t *TemplatingNodeArrayResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TemplatingNodeArrayResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -13426,10 +15589,15 @@ func (t *TemplatingNodeArrayResult) String() string {
 }
 
 type TemplatingNodeChatHistoryResult struct {
-	Id    string         `json:"id"`
-	Value []*ChatMessage `json:"value,omitempty"`
+	Id    string         `json:"id" url:"id"`
+	Value []*ChatMessage `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TemplatingNodeChatHistoryResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TemplatingNodeChatHistoryResult) UnmarshalJSON(data []byte) error {
@@ -13439,6 +15607,13 @@ func (t *TemplatingNodeChatHistoryResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TemplatingNodeChatHistoryResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -13456,10 +15631,15 @@ func (t *TemplatingNodeChatHistoryResult) String() string {
 }
 
 type TemplatingNodeErrorResult struct {
-	Id    string       `json:"id"`
-	Value *VellumError `json:"value,omitempty"`
+	Id    string       `json:"id" url:"id"`
+	Value *VellumError `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TemplatingNodeErrorResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TemplatingNodeErrorResult) UnmarshalJSON(data []byte) error {
@@ -13469,6 +15649,13 @@ func (t *TemplatingNodeErrorResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TemplatingNodeErrorResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -13486,10 +15673,15 @@ func (t *TemplatingNodeErrorResult) String() string {
 }
 
 type TemplatingNodeFunctionCallResult struct {
-	Id    string        `json:"id"`
-	Value *FunctionCall `json:"value,omitempty"`
+	Id    string        `json:"id" url:"id"`
+	Value *FunctionCall `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TemplatingNodeFunctionCallResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TemplatingNodeFunctionCallResult) UnmarshalJSON(data []byte) error {
@@ -13499,6 +15691,13 @@ func (t *TemplatingNodeFunctionCallResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TemplatingNodeFunctionCallResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -13516,10 +15715,15 @@ func (t *TemplatingNodeFunctionCallResult) String() string {
 }
 
 type TemplatingNodeJsonResult struct {
-	Id    string      `json:"id"`
-	Value interface{} `json:"value,omitempty"`
+	Id    string      `json:"id" url:"id"`
+	Value interface{} `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TemplatingNodeJsonResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TemplatingNodeJsonResult) UnmarshalJSON(data []byte) error {
@@ -13529,6 +15733,13 @@ func (t *TemplatingNodeJsonResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TemplatingNodeJsonResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -13546,10 +15757,15 @@ func (t *TemplatingNodeJsonResult) String() string {
 }
 
 type TemplatingNodeNumberResult struct {
-	Id    string   `json:"id"`
-	Value *float64 `json:"value,omitempty"`
+	Id    string   `json:"id" url:"id"`
+	Value *float64 `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TemplatingNodeNumberResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TemplatingNodeNumberResult) UnmarshalJSON(data []byte) error {
@@ -13559,6 +15775,13 @@ func (t *TemplatingNodeNumberResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TemplatingNodeNumberResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -13577,9 +15800,14 @@ func (t *TemplatingNodeNumberResult) String() string {
 
 // A Node Result Event emitted from a Templating Node.
 type TemplatingNodeResult struct {
-	Data *TemplatingNodeResultData `json:"data,omitempty"`
+	Data *TemplatingNodeResultData `json:"data" url:"data"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TemplatingNodeResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TemplatingNodeResult) UnmarshalJSON(data []byte) error {
@@ -13589,6 +15817,13 @@ func (t *TemplatingNodeResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TemplatingNodeResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -13606,9 +15841,14 @@ func (t *TemplatingNodeResult) String() string {
 }
 
 type TemplatingNodeResultData struct {
-	Output *TemplatingNodeResultOutput `json:"output,omitempty"`
+	Output *TemplatingNodeResultOutput `json:"output" url:"output"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TemplatingNodeResultData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TemplatingNodeResultData) UnmarshalJSON(data []byte) error {
@@ -13618,6 +15858,13 @@ func (t *TemplatingNodeResultData) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TemplatingNodeResultData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -13744,77 +15991,21 @@ func (t TemplatingNodeResultOutput) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", t.Type, t)
 	case "STRING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TemplatingNodeStringResult
-		}{
-			Type:                       t.Type,
-			TemplatingNodeStringResult: t.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.String, "type", "STRING")
 	case "NUMBER":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TemplatingNodeNumberResult
-		}{
-			Type:                       t.Type,
-			TemplatingNodeNumberResult: t.Number,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Number, "type", "NUMBER")
 	case "JSON":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TemplatingNodeJsonResult
-		}{
-			Type:                     t.Type,
-			TemplatingNodeJsonResult: t.Json,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Json, "type", "JSON")
 	case "CHAT_HISTORY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TemplatingNodeChatHistoryResult
-		}{
-			Type:                            t.Type,
-			TemplatingNodeChatHistoryResult: t.ChatHistory,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.ChatHistory, "type", "CHAT_HISTORY")
 	case "SEARCH_RESULTS":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TemplatingNodeSearchResultsResult
-		}{
-			Type:                              t.Type,
-			TemplatingNodeSearchResultsResult: t.SearchResults,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.SearchResults, "type", "SEARCH_RESULTS")
 	case "ERROR":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TemplatingNodeErrorResult
-		}{
-			Type:                      t.Type,
-			TemplatingNodeErrorResult: t.Error,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Error, "type", "ERROR")
 	case "ARRAY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TemplatingNodeArrayResult
-		}{
-			Type:                      t.Type,
-			TemplatingNodeArrayResult: t.Array,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Array, "type", "ARRAY")
 	case "FUNCTION_CALL":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TemplatingNodeFunctionCallResult
-		}{
-			Type:                             t.Type,
-			TemplatingNodeFunctionCallResult: t.FunctionCall,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.FunctionCall, "type", "FUNCTION_CALL")
 	}
 }
 
@@ -13853,10 +16044,15 @@ func (t *TemplatingNodeResultOutput) Accept(visitor TemplatingNodeResultOutputVi
 }
 
 type TemplatingNodeSearchResultsResult struct {
-	Id    string          `json:"id"`
-	Value []*SearchResult `json:"value,omitempty"`
+	Id    string          `json:"id" url:"id"`
+	Value []*SearchResult `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TemplatingNodeSearchResultsResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TemplatingNodeSearchResultsResult) UnmarshalJSON(data []byte) error {
@@ -13866,6 +16062,13 @@ func (t *TemplatingNodeSearchResultsResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TemplatingNodeSearchResultsResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -13883,10 +16086,15 @@ func (t *TemplatingNodeSearchResultsResult) String() string {
 }
 
 type TemplatingNodeStringResult struct {
-	Id    string  `json:"id"`
-	Value *string `json:"value,omitempty"`
+	Id    string  `json:"id" url:"id"`
+	Value *string `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TemplatingNodeStringResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TemplatingNodeStringResult) UnmarshalJSON(data []byte) error {
@@ -13896,6 +16104,13 @@ func (t *TemplatingNodeStringResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TemplatingNodeStringResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -13913,12 +16128,17 @@ func (t *TemplatingNodeStringResult) String() string {
 }
 
 type TerminalNodeArrayResult struct {
-	Id *string `json:"id,omitempty"`
+	Id *string `json:"id,omitempty" url:"id,omitempty"`
 	// The unique name given to the terminal node that produced this output.
-	Name  string                    `json:"name"`
-	Value []*ArrayVariableValueItem `json:"value,omitempty"`
+	Name  string                    `json:"name" url:"name"`
+	Value []*ArrayVariableValueItem `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalNodeArrayResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TerminalNodeArrayResult) UnmarshalJSON(data []byte) error {
@@ -13928,6 +16148,13 @@ func (t *TerminalNodeArrayResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TerminalNodeArrayResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -13945,12 +16172,17 @@ func (t *TerminalNodeArrayResult) String() string {
 }
 
 type TerminalNodeChatHistoryResult struct {
-	Id *string `json:"id,omitempty"`
+	Id *string `json:"id,omitempty" url:"id,omitempty"`
 	// The unique name given to the terminal node that produced this output.
-	Name  string         `json:"name"`
-	Value []*ChatMessage `json:"value,omitempty"`
+	Name  string         `json:"name" url:"name"`
+	Value []*ChatMessage `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalNodeChatHistoryResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TerminalNodeChatHistoryResult) UnmarshalJSON(data []byte) error {
@@ -13960,6 +16192,13 @@ func (t *TerminalNodeChatHistoryResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TerminalNodeChatHistoryResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -13977,12 +16216,17 @@ func (t *TerminalNodeChatHistoryResult) String() string {
 }
 
 type TerminalNodeErrorResult struct {
-	Id *string `json:"id,omitempty"`
+	Id *string `json:"id,omitempty" url:"id,omitempty"`
 	// The unique name given to the terminal node that produced this output.
-	Name  string       `json:"name"`
-	Value *VellumError `json:"value,omitempty"`
+	Name  string       `json:"name" url:"name"`
+	Value *VellumError `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalNodeErrorResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TerminalNodeErrorResult) UnmarshalJSON(data []byte) error {
@@ -13992,6 +16236,13 @@ func (t *TerminalNodeErrorResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TerminalNodeErrorResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -14009,12 +16260,17 @@ func (t *TerminalNodeErrorResult) String() string {
 }
 
 type TerminalNodeFunctionCallResult struct {
-	Id *string `json:"id,omitempty"`
+	Id *string `json:"id,omitempty" url:"id,omitempty"`
 	// The unique name given to the terminal node that produced this output.
-	Name  string        `json:"name"`
-	Value *FunctionCall `json:"value,omitempty"`
+	Name  string        `json:"name" url:"name"`
+	Value *FunctionCall `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalNodeFunctionCallResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TerminalNodeFunctionCallResult) UnmarshalJSON(data []byte) error {
@@ -14024,6 +16280,13 @@ func (t *TerminalNodeFunctionCallResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TerminalNodeFunctionCallResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -14041,12 +16304,17 @@ func (t *TerminalNodeFunctionCallResult) String() string {
 }
 
 type TerminalNodeJsonResult struct {
-	Id *string `json:"id,omitempty"`
+	Id *string `json:"id,omitempty" url:"id,omitempty"`
 	// The unique name given to the terminal node that produced this output.
-	Name  string      `json:"name"`
-	Value interface{} `json:"value,omitempty"`
+	Name  string      `json:"name" url:"name"`
+	Value interface{} `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalNodeJsonResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TerminalNodeJsonResult) UnmarshalJSON(data []byte) error {
@@ -14056,6 +16324,13 @@ func (t *TerminalNodeJsonResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TerminalNodeJsonResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -14073,12 +16348,17 @@ func (t *TerminalNodeJsonResult) String() string {
 }
 
 type TerminalNodeNumberResult struct {
-	Id *string `json:"id,omitempty"`
+	Id *string `json:"id,omitempty" url:"id,omitempty"`
 	// The unique name given to the terminal node that produced this output.
-	Name  string   `json:"name"`
-	Value *float64 `json:"value,omitempty"`
+	Name  string   `json:"name" url:"name"`
+	Value *float64 `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalNodeNumberResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TerminalNodeNumberResult) UnmarshalJSON(data []byte) error {
@@ -14088,6 +16368,13 @@ func (t *TerminalNodeNumberResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TerminalNodeNumberResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -14106,9 +16393,14 @@ func (t *TerminalNodeNumberResult) String() string {
 
 // A Node Result Event emitted from a Terminal Node.
 type TerminalNodeResult struct {
-	Data *TerminalNodeResultData `json:"data,omitempty"`
+	Data *TerminalNodeResultData `json:"data" url:"data"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalNodeResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TerminalNodeResult) UnmarshalJSON(data []byte) error {
@@ -14118,6 +16410,13 @@ func (t *TerminalNodeResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TerminalNodeResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -14135,9 +16434,14 @@ func (t *TerminalNodeResult) String() string {
 }
 
 type TerminalNodeResultData struct {
-	Output *TerminalNodeResultOutput `json:"output,omitempty"`
+	Output *TerminalNodeResultOutput `json:"output" url:"output"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalNodeResultData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TerminalNodeResultData) UnmarshalJSON(data []byte) error {
@@ -14147,6 +16451,13 @@ func (t *TerminalNodeResultData) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TerminalNodeResultData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -14273,77 +16584,21 @@ func (t TerminalNodeResultOutput) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", t.Type, t)
 	case "STRING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TerminalNodeStringResult
-		}{
-			Type:                     t.Type,
-			TerminalNodeStringResult: t.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.String, "type", "STRING")
 	case "NUMBER":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TerminalNodeNumberResult
-		}{
-			Type:                     t.Type,
-			TerminalNodeNumberResult: t.Number,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Number, "type", "NUMBER")
 	case "JSON":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TerminalNodeJsonResult
-		}{
-			Type:                   t.Type,
-			TerminalNodeJsonResult: t.Json,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Json, "type", "JSON")
 	case "CHAT_HISTORY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TerminalNodeChatHistoryResult
-		}{
-			Type:                          t.Type,
-			TerminalNodeChatHistoryResult: t.ChatHistory,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.ChatHistory, "type", "CHAT_HISTORY")
 	case "SEARCH_RESULTS":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TerminalNodeSearchResultsResult
-		}{
-			Type:                            t.Type,
-			TerminalNodeSearchResultsResult: t.SearchResults,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.SearchResults, "type", "SEARCH_RESULTS")
 	case "ARRAY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TerminalNodeArrayResult
-		}{
-			Type:                    t.Type,
-			TerminalNodeArrayResult: t.Array,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Array, "type", "ARRAY")
 	case "FUNCTION_CALL":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TerminalNodeFunctionCallResult
-		}{
-			Type:                           t.Type,
-			TerminalNodeFunctionCallResult: t.FunctionCall,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.FunctionCall, "type", "FUNCTION_CALL")
 	case "ERROR":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TerminalNodeErrorResult
-		}{
-			Type:                    t.Type,
-			TerminalNodeErrorResult: t.Error,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Error, "type", "ERROR")
 	}
 }
 
@@ -14382,12 +16637,17 @@ func (t *TerminalNodeResultOutput) Accept(visitor TerminalNodeResultOutputVisito
 }
 
 type TerminalNodeSearchResultsResult struct {
-	Id *string `json:"id,omitempty"`
+	Id *string `json:"id,omitempty" url:"id,omitempty"`
 	// The unique name given to the terminal node that produced this output.
-	Name  string          `json:"name"`
-	Value []*SearchResult `json:"value,omitempty"`
+	Name  string          `json:"name" url:"name"`
+	Value []*SearchResult `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalNodeSearchResultsResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TerminalNodeSearchResultsResult) UnmarshalJSON(data []byte) error {
@@ -14397,6 +16657,13 @@ func (t *TerminalNodeSearchResultsResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TerminalNodeSearchResultsResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -14414,12 +16681,17 @@ func (t *TerminalNodeSearchResultsResult) String() string {
 }
 
 type TerminalNodeStringResult struct {
-	Id *string `json:"id,omitempty"`
+	Id *string `json:"id,omitempty" url:"id,omitempty"`
 	// The unique name given to the terminal node that produced this output.
-	Name  string  `json:"name"`
-	Value *string `json:"value,omitempty"`
+	Name  string  `json:"name" url:"name"`
+	Value *string `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TerminalNodeStringResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TerminalNodeStringResult) UnmarshalJSON(data []byte) error {
@@ -14429,6 +16701,13 @@ func (t *TerminalNodeStringResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TerminalNodeStringResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -14447,11 +16726,16 @@ func (t *TerminalNodeStringResult) String() string {
 
 // An Array value for a variable in a Test Case.
 type TestCaseArrayVariableValue struct {
-	VariableId string                  `json:"variable_id"`
-	Name       string                  `json:"name"`
-	Value      []*ArrayVellumValueItem `json:"value,omitempty"`
+	VariableId string                  `json:"variable_id" url:"variable_id"`
+	Name       string                  `json:"name" url:"name"`
+	Value      []*ArrayVellumValueItem `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestCaseArrayVariableValue) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestCaseArrayVariableValue) UnmarshalJSON(data []byte) error {
@@ -14461,6 +16745,13 @@ func (t *TestCaseArrayVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestCaseArrayVariableValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -14479,11 +16770,16 @@ func (t *TestCaseArrayVariableValue) String() string {
 
 // A chat history value for a variable in a Test Case.
 type TestCaseChatHistoryVariableValue struct {
-	VariableId string         `json:"variable_id"`
-	Name       string         `json:"name"`
-	Value      []*ChatMessage `json:"value,omitempty"`
+	VariableId string         `json:"variable_id" url:"variable_id"`
+	Name       string         `json:"name" url:"name"`
+	Value      []*ChatMessage `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestCaseChatHistoryVariableValue) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestCaseChatHistoryVariableValue) UnmarshalJSON(data []byte) error {
@@ -14493,6 +16789,13 @@ func (t *TestCaseChatHistoryVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestCaseChatHistoryVariableValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -14511,11 +16814,16 @@ func (t *TestCaseChatHistoryVariableValue) String() string {
 
 // An error value for a variable in a Test Case.
 type TestCaseErrorVariableValue struct {
-	VariableId string       `json:"variable_id"`
-	Name       string       `json:"name"`
-	Value      *VellumError `json:"value,omitempty"`
+	VariableId string       `json:"variable_id" url:"variable_id"`
+	Name       string       `json:"name" url:"name"`
+	Value      *VellumError `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestCaseErrorVariableValue) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestCaseErrorVariableValue) UnmarshalJSON(data []byte) error {
@@ -14525,6 +16833,13 @@ func (t *TestCaseErrorVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestCaseErrorVariableValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -14543,11 +16858,16 @@ func (t *TestCaseErrorVariableValue) String() string {
 
 // A function call value for a variable in a Test Case.
 type TestCaseFunctionCallVariableValue struct {
-	VariableId string        `json:"variable_id"`
-	Name       string        `json:"name"`
-	Value      *FunctionCall `json:"value,omitempty"`
+	VariableId string        `json:"variable_id" url:"variable_id"`
+	Name       string        `json:"name" url:"name"`
+	Value      *FunctionCall `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestCaseFunctionCallVariableValue) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestCaseFunctionCallVariableValue) UnmarshalJSON(data []byte) error {
@@ -14557,6 +16877,13 @@ func (t *TestCaseFunctionCallVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestCaseFunctionCallVariableValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -14575,11 +16902,16 @@ func (t *TestCaseFunctionCallVariableValue) String() string {
 
 // A JSON value for a variable in a Test Case.
 type TestCaseJsonVariableValue struct {
-	VariableId string      `json:"variable_id"`
-	Name       string      `json:"name"`
-	Value      interface{} `json:"value,omitempty"`
+	VariableId string      `json:"variable_id" url:"variable_id"`
+	Name       string      `json:"name" url:"name"`
+	Value      interface{} `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestCaseJsonVariableValue) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestCaseJsonVariableValue) UnmarshalJSON(data []byte) error {
@@ -14589,6 +16921,13 @@ func (t *TestCaseJsonVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestCaseJsonVariableValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -14607,11 +16946,16 @@ func (t *TestCaseJsonVariableValue) String() string {
 
 // A numerical value for a variable in a Test Case.
 type TestCaseNumberVariableValue struct {
-	VariableId string   `json:"variable_id"`
-	Name       string   `json:"name"`
-	Value      *float64 `json:"value,omitempty"`
+	VariableId string   `json:"variable_id" url:"variable_id"`
+	Name       string   `json:"name" url:"name"`
+	Value      *float64 `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestCaseNumberVariableValue) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestCaseNumberVariableValue) UnmarshalJSON(data []byte) error {
@@ -14621,6 +16965,13 @@ func (t *TestCaseNumberVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestCaseNumberVariableValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -14639,11 +16990,16 @@ func (t *TestCaseNumberVariableValue) String() string {
 
 // A search results value for a variable in a Test Case.
 type TestCaseSearchResultsVariableValue struct {
-	VariableId string          `json:"variable_id"`
-	Name       string          `json:"name"`
-	Value      []*SearchResult `json:"value,omitempty"`
+	VariableId string          `json:"variable_id" url:"variable_id"`
+	Name       string          `json:"name" url:"name"`
+	Value      []*SearchResult `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestCaseSearchResultsVariableValue) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestCaseSearchResultsVariableValue) UnmarshalJSON(data []byte) error {
@@ -14653,6 +17009,13 @@ func (t *TestCaseSearchResultsVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestCaseSearchResultsVariableValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -14671,11 +17034,16 @@ func (t *TestCaseSearchResultsVariableValue) String() string {
 
 // A string value for a variable in a Test Case.
 type TestCaseStringVariableValue struct {
-	VariableId string  `json:"variable_id"`
-	Name       string  `json:"name"`
-	Value      *string `json:"value,omitempty"`
+	VariableId string  `json:"variable_id" url:"variable_id"`
+	Name       string  `json:"name" url:"name"`
+	Value      *string `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestCaseStringVariableValue) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestCaseStringVariableValue) UnmarshalJSON(data []byte) error {
@@ -14685,6 +17053,13 @@ func (t *TestCaseStringVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestCaseStringVariableValue(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -14811,77 +17186,21 @@ func (t TestCaseVariableValue) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", t.Type, t)
 	case "STRING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestCaseStringVariableValue
-		}{
-			Type:                        t.Type,
-			TestCaseStringVariableValue: t.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.String, "type", "STRING")
 	case "NUMBER":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestCaseNumberVariableValue
-		}{
-			Type:                        t.Type,
-			TestCaseNumberVariableValue: t.Number,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Number, "type", "NUMBER")
 	case "JSON":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestCaseJsonVariableValue
-		}{
-			Type:                      t.Type,
-			TestCaseJsonVariableValue: t.Json,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Json, "type", "JSON")
 	case "CHAT_HISTORY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestCaseChatHistoryVariableValue
-		}{
-			Type:                             t.Type,
-			TestCaseChatHistoryVariableValue: t.ChatHistory,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.ChatHistory, "type", "CHAT_HISTORY")
 	case "SEARCH_RESULTS":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestCaseSearchResultsVariableValue
-		}{
-			Type:                               t.Type,
-			TestCaseSearchResultsVariableValue: t.SearchResults,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.SearchResults, "type", "SEARCH_RESULTS")
 	case "ERROR":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestCaseErrorVariableValue
-		}{
-			Type:                       t.Type,
-			TestCaseErrorVariableValue: t.Error,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Error, "type", "ERROR")
 	case "FUNCTION_CALL":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestCaseFunctionCallVariableValue
-		}{
-			Type:                              t.Type,
-			TestCaseFunctionCallVariableValue: t.FunctionCall,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.FunctionCall, "type", "FUNCTION_CALL")
 	case "ARRAY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestCaseArrayVariableValue
-		}{
-			Type:                       t.Type,
-			TestCaseArrayVariableValue: t.Array,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Array, "type", "ARRAY")
 	}
 }
 
@@ -14921,11 +17240,16 @@ func (t *TestCaseVariableValue) Accept(visitor TestCaseVariableValueVisitor) err
 
 // Execution configuration for running a Test Suite against a Prompt Deployment
 type TestSuiteRunDeploymentReleaseTagExecConfig struct {
-	Data *TestSuiteRunDeploymentReleaseTagExecConfigData `json:"data,omitempty"`
+	Data *TestSuiteRunDeploymentReleaseTagExecConfigData `json:"data" url:"data"`
 	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
-	TestCaseIds []string `json:"test_case_ids,omitempty"`
+	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunDeploymentReleaseTagExecConfig) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunDeploymentReleaseTagExecConfig) UnmarshalJSON(data []byte) error {
@@ -14935,6 +17259,13 @@ func (t *TestSuiteRunDeploymentReleaseTagExecConfig) UnmarshalJSON(data []byte) 
 		return err
 	}
 	*t = TestSuiteRunDeploymentReleaseTagExecConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -14953,11 +17284,16 @@ func (t *TestSuiteRunDeploymentReleaseTagExecConfig) String() string {
 
 type TestSuiteRunDeploymentReleaseTagExecConfigData struct {
 	// The ID of the Prompt Deployment to run the Test Suite against.
-	DeploymentId string `json:"deployment_id"`
+	DeploymentId string `json:"deployment_id" url:"deployment_id"`
 	// A tag identifying which release of the Prompt Deployment to run the Test Suite against. Useful for testing past versions of the Prompt Deployment
-	Tag *string `json:"tag,omitempty"`
+	Tag *string `json:"tag,omitempty" url:"tag,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunDeploymentReleaseTagExecConfigData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunDeploymentReleaseTagExecConfigData) UnmarshalJSON(data []byte) error {
@@ -14967,6 +17303,13 @@ func (t *TestSuiteRunDeploymentReleaseTagExecConfigData) UnmarshalJSON(data []by
 		return err
 	}
 	*t = TestSuiteRunDeploymentReleaseTagExecConfigData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -14985,11 +17328,16 @@ func (t *TestSuiteRunDeploymentReleaseTagExecConfigData) String() string {
 
 type TestSuiteRunDeploymentReleaseTagExecConfigDataRequest struct {
 	// The ID of the Prompt Deployment to run the Test Suite against.
-	DeploymentId string `json:"deployment_id"`
+	DeploymentId string `json:"deployment_id" url:"deployment_id"`
 	// A tag identifying which release of the Prompt Deployment to run the Test Suite against. Useful for testing past versions of the Prompt Deployment
-	Tag *string `json:"tag,omitempty"`
+	Tag *string `json:"tag,omitempty" url:"tag,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunDeploymentReleaseTagExecConfigDataRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunDeploymentReleaseTagExecConfigDataRequest) UnmarshalJSON(data []byte) error {
@@ -14999,6 +17347,13 @@ func (t *TestSuiteRunDeploymentReleaseTagExecConfigDataRequest) UnmarshalJSON(da
 		return err
 	}
 	*t = TestSuiteRunDeploymentReleaseTagExecConfigDataRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -15017,11 +17372,16 @@ func (t *TestSuiteRunDeploymentReleaseTagExecConfigDataRequest) String() string 
 
 // Execution configuration for running a Test Suite against a Prompt Deployment
 type TestSuiteRunDeploymentReleaseTagExecConfigRequest struct {
-	Data *TestSuiteRunDeploymentReleaseTagExecConfigDataRequest `json:"data,omitempty"`
+	Data *TestSuiteRunDeploymentReleaseTagExecConfigDataRequest `json:"data" url:"data"`
 	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
-	TestCaseIds []string `json:"test_case_ids,omitempty"`
+	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunDeploymentReleaseTagExecConfigRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunDeploymentReleaseTagExecConfigRequest) UnmarshalJSON(data []byte) error {
@@ -15031,6 +17391,13 @@ func (t *TestSuiteRunDeploymentReleaseTagExecConfigRequest) UnmarshalJSON(data [
 		return err
 	}
 	*t = TestSuiteRunDeploymentReleaseTagExecConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -15102,32 +17469,11 @@ func (t TestSuiteRunExecConfig) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", t.Type, t)
 	case "DEPLOYMENT_RELEASE_TAG":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestSuiteRunDeploymentReleaseTagExecConfig
-		}{
-			Type: t.Type,
-			TestSuiteRunDeploymentReleaseTagExecConfig: t.DeploymentReleaseTag,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.DeploymentReleaseTag, "type", "DEPLOYMENT_RELEASE_TAG")
 	case "WORKFLOW_RELEASE_TAG":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestSuiteRunWorkflowReleaseTagExecConfig
-		}{
-			Type:                                     t.Type,
-			TestSuiteRunWorkflowReleaseTagExecConfig: t.WorkflowReleaseTag,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.WorkflowReleaseTag, "type", "WORKFLOW_RELEASE_TAG")
 	case "EXTERNAL":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestSuiteRunExternalExecConfig
-		}{
-			Type:                           t.Type,
-			TestSuiteRunExternalExecConfig: t.External,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.External, "type", "EXTERNAL")
 	}
 }
 
@@ -15205,32 +17551,11 @@ func (t TestSuiteRunExecConfigRequest) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", t.Type, t)
 	case "DEPLOYMENT_RELEASE_TAG":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestSuiteRunDeploymentReleaseTagExecConfigRequest
-		}{
-			Type: t.Type,
-			TestSuiteRunDeploymentReleaseTagExecConfigRequest: t.DeploymentReleaseTag,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.DeploymentReleaseTag, "type", "DEPLOYMENT_RELEASE_TAG")
 	case "WORKFLOW_RELEASE_TAG":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestSuiteRunWorkflowReleaseTagExecConfigRequest
-		}{
-			Type: t.Type,
-			TestSuiteRunWorkflowReleaseTagExecConfigRequest: t.WorkflowReleaseTag,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.WorkflowReleaseTag, "type", "WORKFLOW_RELEASE_TAG")
 	case "EXTERNAL":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestSuiteRunExternalExecConfigRequest
-		}{
-			Type:                                  t.Type,
-			TestSuiteRunExternalExecConfigRequest: t.External,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.External, "type", "EXTERNAL")
 	}
 }
 
@@ -15254,12 +17579,17 @@ func (t *TestSuiteRunExecConfigRequest) Accept(visitor TestSuiteRunExecConfigReq
 }
 
 type TestSuiteRunExecution struct {
-	Id            string                               `json:"id"`
-	TestCaseId    string                               `json:"test_case_id"`
-	Outputs       []*TestSuiteRunExecutionOutput       `json:"outputs,omitempty"`
-	MetricResults []*TestSuiteRunExecutionMetricResult `json:"metric_results,omitempty"`
+	Id            string                               `json:"id" url:"id"`
+	TestCaseId    string                               `json:"test_case_id" url:"test_case_id"`
+	Outputs       []*TestSuiteRunExecutionOutput       `json:"outputs" url:"outputs"`
+	MetricResults []*TestSuiteRunExecutionMetricResult `json:"metric_results" url:"metric_results"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExecution) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunExecution) UnmarshalJSON(data []byte) error {
@@ -15269,6 +17599,13 @@ func (t *TestSuiteRunExecution) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteRunExecution(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -15287,11 +17624,16 @@ func (t *TestSuiteRunExecution) String() string {
 
 // Execution output of an entity evaluated during a Test Suite Run that is of type ARRAY
 type TestSuiteRunExecutionArrayOutput struct {
-	Name             string                  `json:"name"`
-	Value            []*ArrayVellumValueItem `json:"value,omitempty"`
-	OutputVariableId string                  `json:"output_variable_id"`
+	Name             string                  `json:"name" url:"name"`
+	Value            []*ArrayVellumValueItem `json:"value,omitempty" url:"value,omitempty"`
+	OutputVariableId string                  `json:"output_variable_id" url:"output_variable_id"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExecutionArrayOutput) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunExecutionArrayOutput) UnmarshalJSON(data []byte) error {
@@ -15301,6 +17643,13 @@ func (t *TestSuiteRunExecutionArrayOutput) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteRunExecutionArrayOutput(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -15319,11 +17668,16 @@ func (t *TestSuiteRunExecutionArrayOutput) String() string {
 
 // Execution output of an entity evaluated during a Test Suite Run that is of type CHAT_HISTORY
 type TestSuiteRunExecutionChatHistoryOutput struct {
-	Name             string         `json:"name"`
-	Value            []*ChatMessage `json:"value,omitempty"`
-	OutputVariableId string         `json:"output_variable_id"`
+	Name             string         `json:"name" url:"name"`
+	Value            []*ChatMessage `json:"value,omitempty" url:"value,omitempty"`
+	OutputVariableId string         `json:"output_variable_id" url:"output_variable_id"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExecutionChatHistoryOutput) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunExecutionChatHistoryOutput) UnmarshalJSON(data []byte) error {
@@ -15333,6 +17687,13 @@ func (t *TestSuiteRunExecutionChatHistoryOutput) UnmarshalJSON(data []byte) erro
 		return err
 	}
 	*t = TestSuiteRunExecutionChatHistoryOutput(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -15351,11 +17712,16 @@ func (t *TestSuiteRunExecutionChatHistoryOutput) String() string {
 
 // Execution output of an entity evaluated during a Test Suite Run that is of type ERROR
 type TestSuiteRunExecutionErrorOutput struct {
-	Name             string       `json:"name"`
-	Value            *VellumError `json:"value,omitempty"`
-	OutputVariableId string       `json:"output_variable_id"`
+	Name             string       `json:"name" url:"name"`
+	Value            *VellumError `json:"value,omitempty" url:"value,omitempty"`
+	OutputVariableId string       `json:"output_variable_id" url:"output_variable_id"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExecutionErrorOutput) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunExecutionErrorOutput) UnmarshalJSON(data []byte) error {
@@ -15365,6 +17731,13 @@ func (t *TestSuiteRunExecutionErrorOutput) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteRunExecutionErrorOutput(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -15383,11 +17756,16 @@ func (t *TestSuiteRunExecutionErrorOutput) String() string {
 
 // Execution output of an entity evaluated during a Test Suite Run that is of type FUNCTION_CALL
 type TestSuiteRunExecutionFunctionCallOutput struct {
-	Name             string        `json:"name"`
-	Value            *FunctionCall `json:"value,omitempty"`
-	OutputVariableId string        `json:"output_variable_id"`
+	Name             string        `json:"name" url:"name"`
+	Value            *FunctionCall `json:"value,omitempty" url:"value,omitempty"`
+	OutputVariableId string        `json:"output_variable_id" url:"output_variable_id"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExecutionFunctionCallOutput) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunExecutionFunctionCallOutput) UnmarshalJSON(data []byte) error {
@@ -15397,6 +17775,13 @@ func (t *TestSuiteRunExecutionFunctionCallOutput) UnmarshalJSON(data []byte) err
 		return err
 	}
 	*t = TestSuiteRunExecutionFunctionCallOutput(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -15415,11 +17800,16 @@ func (t *TestSuiteRunExecutionFunctionCallOutput) String() string {
 
 // Execution output of an entity evaluated during a Test Suite Run that is of type JSON
 type TestSuiteRunExecutionJsonOutput struct {
-	Name             string      `json:"name"`
-	Value            interface{} `json:"value,omitempty"`
-	OutputVariableId string      `json:"output_variable_id"`
+	Name             string      `json:"name" url:"name"`
+	Value            interface{} `json:"value" url:"value"`
+	OutputVariableId string      `json:"output_variable_id" url:"output_variable_id"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExecutionJsonOutput) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunExecutionJsonOutput) UnmarshalJSON(data []byte) error {
@@ -15429,6 +17819,13 @@ func (t *TestSuiteRunExecutionJsonOutput) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteRunExecutionJsonOutput(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -15446,11 +17843,16 @@ func (t *TestSuiteRunExecutionJsonOutput) String() string {
 }
 
 type TestSuiteRunExecutionMetricDefinition struct {
-	Id    *string `json:"id,omitempty"`
-	Label *string `json:"label,omitempty"`
-	Name  *string `json:"name,omitempty"`
+	Id    *string `json:"id,omitempty" url:"id,omitempty"`
+	Label *string `json:"label,omitempty" url:"label,omitempty"`
+	Name  *string `json:"name,omitempty" url:"name,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExecutionMetricDefinition) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunExecutionMetricDefinition) UnmarshalJSON(data []byte) error {
@@ -15460,6 +17862,13 @@ func (t *TestSuiteRunExecutionMetricDefinition) UnmarshalJSON(data []byte) error
 		return err
 	}
 	*t = TestSuiteRunExecutionMetricDefinition(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -15477,12 +17886,17 @@ func (t *TestSuiteRunExecutionMetricDefinition) String() string {
 }
 
 type TestSuiteRunExecutionMetricResult struct {
-	MetricId         string                                 `json:"metric_id"`
-	Outputs          []*TestSuiteRunMetricOutput            `json:"outputs,omitempty"`
-	MetricLabel      *string                                `json:"metric_label,omitempty"`
-	MetricDefinition *TestSuiteRunExecutionMetricDefinition `json:"metric_definition,omitempty"`
+	MetricId         string                                 `json:"metric_id" url:"metric_id"`
+	Outputs          []*TestSuiteRunMetricOutput            `json:"outputs" url:"outputs"`
+	MetricLabel      *string                                `json:"metric_label,omitempty" url:"metric_label,omitempty"`
+	MetricDefinition *TestSuiteRunExecutionMetricDefinition `json:"metric_definition,omitempty" url:"metric_definition,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExecutionMetricResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunExecutionMetricResult) UnmarshalJSON(data []byte) error {
@@ -15492,6 +17906,13 @@ func (t *TestSuiteRunExecutionMetricResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteRunExecutionMetricResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -15510,11 +17931,16 @@ func (t *TestSuiteRunExecutionMetricResult) String() string {
 
 // Execution output of an entity evaluated during a Test Suite Run that is of type NUMBER
 type TestSuiteRunExecutionNumberOutput struct {
-	Name             string   `json:"name"`
-	Value            *float64 `json:"value,omitempty"`
-	OutputVariableId string   `json:"output_variable_id"`
+	Name             string   `json:"name" url:"name"`
+	Value            *float64 `json:"value,omitempty" url:"value,omitempty"`
+	OutputVariableId string   `json:"output_variable_id" url:"output_variable_id"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExecutionNumberOutput) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunExecutionNumberOutput) UnmarshalJSON(data []byte) error {
@@ -15524,6 +17950,13 @@ func (t *TestSuiteRunExecutionNumberOutput) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteRunExecutionNumberOutput(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -15650,77 +18083,21 @@ func (t TestSuiteRunExecutionOutput) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", t.Type, t)
 	case "STRING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestSuiteRunExecutionStringOutput
-		}{
-			Type:                              t.Type,
-			TestSuiteRunExecutionStringOutput: t.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.String, "type", "STRING")
 	case "NUMBER":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestSuiteRunExecutionNumberOutput
-		}{
-			Type:                              t.Type,
-			TestSuiteRunExecutionNumberOutput: t.Number,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Number, "type", "NUMBER")
 	case "JSON":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestSuiteRunExecutionJsonOutput
-		}{
-			Type:                            t.Type,
-			TestSuiteRunExecutionJsonOutput: t.Json,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Json, "type", "JSON")
 	case "CHAT_HISTORY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestSuiteRunExecutionChatHistoryOutput
-		}{
-			Type:                                   t.Type,
-			TestSuiteRunExecutionChatHistoryOutput: t.ChatHistory,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.ChatHistory, "type", "CHAT_HISTORY")
 	case "SEARCH_RESULTS":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestSuiteRunExecutionSearchResultsOutput
-		}{
-			Type:                                     t.Type,
-			TestSuiteRunExecutionSearchResultsOutput: t.SearchResults,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.SearchResults, "type", "SEARCH_RESULTS")
 	case "ERROR":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestSuiteRunExecutionErrorOutput
-		}{
-			Type:                             t.Type,
-			TestSuiteRunExecutionErrorOutput: t.Error,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Error, "type", "ERROR")
 	case "FUNCTION_CALL":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestSuiteRunExecutionFunctionCallOutput
-		}{
-			Type:                                    t.Type,
-			TestSuiteRunExecutionFunctionCallOutput: t.FunctionCall,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.FunctionCall, "type", "FUNCTION_CALL")
 	case "ARRAY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestSuiteRunExecutionArrayOutput
-		}{
-			Type:                             t.Type,
-			TestSuiteRunExecutionArrayOutput: t.Array,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Array, "type", "ARRAY")
 	}
 }
 
@@ -15760,11 +18137,16 @@ func (t *TestSuiteRunExecutionOutput) Accept(visitor TestSuiteRunExecutionOutput
 
 // Execution output of an entity evaluated during a Test Suite Run that is of type SEARCH_RESULTS
 type TestSuiteRunExecutionSearchResultsOutput struct {
-	Name             string          `json:"name"`
-	Value            []*SearchResult `json:"value,omitempty"`
-	OutputVariableId string          `json:"output_variable_id"`
+	Name             string          `json:"name" url:"name"`
+	Value            []*SearchResult `json:"value,omitempty" url:"value,omitempty"`
+	OutputVariableId string          `json:"output_variable_id" url:"output_variable_id"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExecutionSearchResultsOutput) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunExecutionSearchResultsOutput) UnmarshalJSON(data []byte) error {
@@ -15774,6 +18156,13 @@ func (t *TestSuiteRunExecutionSearchResultsOutput) UnmarshalJSON(data []byte) er
 		return err
 	}
 	*t = TestSuiteRunExecutionSearchResultsOutput(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -15792,11 +18181,16 @@ func (t *TestSuiteRunExecutionSearchResultsOutput) String() string {
 
 // Execution output of an entity evaluated during a Test Suite Run that is of type STRING
 type TestSuiteRunExecutionStringOutput struct {
-	Name             string  `json:"name"`
-	Value            *string `json:"value,omitempty"`
-	OutputVariableId string  `json:"output_variable_id"`
+	Name             string  `json:"name" url:"name"`
+	Value            *string `json:"value,omitempty" url:"value,omitempty"`
+	OutputVariableId string  `json:"output_variable_id" url:"output_variable_id"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExecutionStringOutput) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunExecutionStringOutput) UnmarshalJSON(data []byte) error {
@@ -15806,6 +18200,13 @@ func (t *TestSuiteRunExecutionStringOutput) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteRunExecutionStringOutput(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -15824,11 +18225,16 @@ func (t *TestSuiteRunExecutionStringOutput) String() string {
 
 // Execution configuration for running a Vellum Test Suite against an external callable
 type TestSuiteRunExternalExecConfig struct {
-	Data *TestSuiteRunExternalExecConfigData `json:"data,omitempty"`
+	Data *TestSuiteRunExternalExecConfigData `json:"data" url:"data"`
 	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
-	TestCaseIds []string `json:"test_case_ids,omitempty"`
+	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExternalExecConfig) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunExternalExecConfig) UnmarshalJSON(data []byte) error {
@@ -15838,6 +18244,13 @@ func (t *TestSuiteRunExternalExecConfig) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteRunExternalExecConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -15856,9 +18269,14 @@ func (t *TestSuiteRunExternalExecConfig) String() string {
 
 type TestSuiteRunExternalExecConfigData struct {
 	// The executions of some callable external to Vellum whose outputs you would like to evaluate.
-	Executions []*ExternalTestCaseExecution `json:"executions,omitempty"`
+	Executions []*ExternalTestCaseExecution `json:"executions" url:"executions"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExternalExecConfigData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunExternalExecConfigData) UnmarshalJSON(data []byte) error {
@@ -15868,6 +18286,13 @@ func (t *TestSuiteRunExternalExecConfigData) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteRunExternalExecConfigData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -15886,9 +18311,14 @@ func (t *TestSuiteRunExternalExecConfigData) String() string {
 
 type TestSuiteRunExternalExecConfigDataRequest struct {
 	// The executions of some callable external to Vellum whose outputs you would like to evaluate.
-	Executions []*ExternalTestCaseExecutionRequest `json:"executions,omitempty"`
+	Executions []*ExternalTestCaseExecutionRequest `json:"executions" url:"executions"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExternalExecConfigDataRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunExternalExecConfigDataRequest) UnmarshalJSON(data []byte) error {
@@ -15898,6 +18328,13 @@ func (t *TestSuiteRunExternalExecConfigDataRequest) UnmarshalJSON(data []byte) e
 		return err
 	}
 	*t = TestSuiteRunExternalExecConfigDataRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -15916,11 +18353,16 @@ func (t *TestSuiteRunExternalExecConfigDataRequest) String() string {
 
 // Execution configuration for running a Vellum Test Suite against an external callable
 type TestSuiteRunExternalExecConfigRequest struct {
-	Data *TestSuiteRunExternalExecConfigDataRequest `json:"data,omitempty"`
+	Data *TestSuiteRunExternalExecConfigDataRequest `json:"data" url:"data"`
 	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
-	TestCaseIds []string `json:"test_case_ids,omitempty"`
+	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExternalExecConfigRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunExternalExecConfigRequest) UnmarshalJSON(data []byte) error {
@@ -15930,6 +18372,13 @@ func (t *TestSuiteRunExternalExecConfigRequest) UnmarshalJSON(data []byte) error
 		return err
 	}
 	*t = TestSuiteRunExternalExecConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -15948,10 +18397,15 @@ func (t *TestSuiteRunExternalExecConfigRequest) String() string {
 
 // Output for a test suite run metric that is of type ERROR
 type TestSuiteRunMetricErrorOutput struct {
-	Value *VellumError `json:"value,omitempty"`
-	Name  string       `json:"name"`
+	Value *VellumError `json:"value" url:"value"`
+	Name  string       `json:"name" url:"name"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunMetricErrorOutput) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunMetricErrorOutput) UnmarshalJSON(data []byte) error {
@@ -15961,6 +18415,13 @@ func (t *TestSuiteRunMetricErrorOutput) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteRunMetricErrorOutput(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -15979,10 +18440,15 @@ func (t *TestSuiteRunMetricErrorOutput) String() string {
 
 // Output for a test suite run metric that is of type NUMBER
 type TestSuiteRunMetricNumberOutput struct {
-	Value *float64 `json:"value,omitempty"`
-	Name  string   `json:"name"`
+	Value *float64 `json:"value,omitempty" url:"value,omitempty"`
+	Name  string   `json:"name" url:"name"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunMetricNumberOutput) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunMetricNumberOutput) UnmarshalJSON(data []byte) error {
@@ -15992,6 +18458,13 @@ func (t *TestSuiteRunMetricNumberOutput) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteRunMetricNumberOutput(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -16063,32 +18536,11 @@ func (t TestSuiteRunMetricOutput) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", t.Type, t)
 	case "STRING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestSuiteRunMetricStringOutput
-		}{
-			Type:                           t.Type,
-			TestSuiteRunMetricStringOutput: t.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.String, "type", "STRING")
 	case "NUMBER":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestSuiteRunMetricNumberOutput
-		}{
-			Type:                           t.Type,
-			TestSuiteRunMetricNumberOutput: t.Number,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Number, "type", "NUMBER")
 	case "ERROR":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestSuiteRunMetricErrorOutput
-		}{
-			Type:                          t.Type,
-			TestSuiteRunMetricErrorOutput: t.Error,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Error, "type", "ERROR")
 	}
 }
 
@@ -16113,10 +18565,15 @@ func (t *TestSuiteRunMetricOutput) Accept(visitor TestSuiteRunMetricOutputVisito
 
 // Output for a test suite run metric that is of type STRING
 type TestSuiteRunMetricStringOutput struct {
-	Value *string `json:"value,omitempty"`
-	Name  string  `json:"name"`
+	Value *string `json:"value,omitempty" url:"value,omitempty"`
+	Name  string  `json:"name" url:"name"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunMetricStringOutput) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunMetricStringOutput) UnmarshalJSON(data []byte) error {
@@ -16126,6 +18583,13 @@ func (t *TestSuiteRunMetricStringOutput) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteRunMetricStringOutput(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -16143,9 +18607,9 @@ func (t *TestSuiteRunMetricStringOutput) String() string {
 }
 
 type TestSuiteRunRead struct {
-	Id        string                 `json:"id"`
-	Created   time.Time              `json:"created"`
-	TestSuite *TestSuiteRunTestSuite `json:"test_suite,omitempty"`
+	Id        string                 `json:"id" url:"id"`
+	Created   time.Time              `json:"created" url:"created"`
+	TestSuite *TestSuiteRunTestSuite `json:"test_suite" url:"test_suite"`
 	// The current state of this run
 	//
 	// - `QUEUED` - Queued
@@ -16153,22 +18617,52 @@ type TestSuiteRunRead struct {
 	// - `COMPLETE` - Complete
 	// - `FAILED` - Failed
 	// - `CANCELLED` - Cancelled
-	State TestSuiteRunState `json:"state,omitempty"`
+	State TestSuiteRunState `json:"state" url:"state"`
 	// Configuration that defines how the Test Suite should be run
-	ExecConfig *TestSuiteRunExecConfig `json:"exec_config,omitempty"`
+	ExecConfig *TestSuiteRunExecConfig `json:"exec_config,omitempty" url:"exec_config,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunRead) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunRead) UnmarshalJSON(data []byte) error {
-	type unmarshaler TestSuiteRunRead
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed TestSuiteRunRead
+	var unmarshaler = struct {
+		embed
+		Created *core.DateTime `json:"created"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*t = TestSuiteRunRead(value)
+	*t = TestSuiteRunRead(unmarshaler.embed)
+	t.Created = unmarshaler.Created.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (t *TestSuiteRunRead) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteRunRead
+	var marshaler = struct {
+		embed
+		Created *core.DateTime `json:"created"`
+	}{
+		embed:   embed(*t),
+		Created: core.NewDateTime(t.Created),
+	}
+	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteRunRead) String() string {
@@ -16220,11 +18714,16 @@ func (t TestSuiteRunState) Ptr() *TestSuiteRunState {
 }
 
 type TestSuiteRunTestSuite struct {
-	Id            string `json:"id"`
-	HistoryItemId string `json:"history_item_id"`
-	Label         string `json:"label"`
+	Id            string `json:"id" url:"id"`
+	HistoryItemId string `json:"history_item_id" url:"history_item_id"`
+	Label         string `json:"label" url:"label"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunTestSuite) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunTestSuite) UnmarshalJSON(data []byte) error {
@@ -16234,6 +18733,13 @@ func (t *TestSuiteRunTestSuite) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteRunTestSuite(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -16252,11 +18758,16 @@ func (t *TestSuiteRunTestSuite) String() string {
 
 // Execution configuration for running a Test Suite against a Workflow Deployment
 type TestSuiteRunWorkflowReleaseTagExecConfig struct {
-	Data *TestSuiteRunWorkflowReleaseTagExecConfigData `json:"data,omitempty"`
+	Data *TestSuiteRunWorkflowReleaseTagExecConfigData `json:"data" url:"data"`
 	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
-	TestCaseIds []string `json:"test_case_ids,omitempty"`
+	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunWorkflowReleaseTagExecConfig) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunWorkflowReleaseTagExecConfig) UnmarshalJSON(data []byte) error {
@@ -16266,6 +18777,13 @@ func (t *TestSuiteRunWorkflowReleaseTagExecConfig) UnmarshalJSON(data []byte) er
 		return err
 	}
 	*t = TestSuiteRunWorkflowReleaseTagExecConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -16284,11 +18802,16 @@ func (t *TestSuiteRunWorkflowReleaseTagExecConfig) String() string {
 
 type TestSuiteRunWorkflowReleaseTagExecConfigData struct {
 	// The ID of the Workflow Deployment to run the Test Suite against.
-	WorkflowDeploymentId string `json:"workflow_deployment_id"`
+	WorkflowDeploymentId string `json:"workflow_deployment_id" url:"workflow_deployment_id"`
 	// A tag identifying which release of the Workflow Deployment to run the Test Suite against. Useful for testing past versions of the Workflow Deployment
-	Tag *string `json:"tag,omitempty"`
+	Tag *string `json:"tag,omitempty" url:"tag,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunWorkflowReleaseTagExecConfigData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunWorkflowReleaseTagExecConfigData) UnmarshalJSON(data []byte) error {
@@ -16298,6 +18821,13 @@ func (t *TestSuiteRunWorkflowReleaseTagExecConfigData) UnmarshalJSON(data []byte
 		return err
 	}
 	*t = TestSuiteRunWorkflowReleaseTagExecConfigData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -16316,11 +18846,16 @@ func (t *TestSuiteRunWorkflowReleaseTagExecConfigData) String() string {
 
 type TestSuiteRunWorkflowReleaseTagExecConfigDataRequest struct {
 	// The ID of the Workflow Deployment to run the Test Suite against.
-	WorkflowDeploymentId string `json:"workflow_deployment_id"`
+	WorkflowDeploymentId string `json:"workflow_deployment_id" url:"workflow_deployment_id"`
 	// A tag identifying which release of the Workflow Deployment to run the Test Suite against. Useful for testing past versions of the Workflow Deployment
-	Tag *string `json:"tag,omitempty"`
+	Tag *string `json:"tag,omitempty" url:"tag,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunWorkflowReleaseTagExecConfigDataRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunWorkflowReleaseTagExecConfigDataRequest) UnmarshalJSON(data []byte) error {
@@ -16330,6 +18865,13 @@ func (t *TestSuiteRunWorkflowReleaseTagExecConfigDataRequest) UnmarshalJSON(data
 		return err
 	}
 	*t = TestSuiteRunWorkflowReleaseTagExecConfigDataRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -16348,11 +18890,16 @@ func (t *TestSuiteRunWorkflowReleaseTagExecConfigDataRequest) String() string {
 
 // Execution configuration for running a Test Suite against a Workflow Deployment
 type TestSuiteRunWorkflowReleaseTagExecConfigRequest struct {
-	Data *TestSuiteRunWorkflowReleaseTagExecConfigDataRequest `json:"data,omitempty"`
+	Data *TestSuiteRunWorkflowReleaseTagExecConfigDataRequest `json:"data" url:"data"`
 	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
-	TestCaseIds []string `json:"test_case_ids,omitempty"`
+	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunWorkflowReleaseTagExecConfigRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteRunWorkflowReleaseTagExecConfigRequest) UnmarshalJSON(data []byte) error {
@@ -16362,6 +18909,13 @@ func (t *TestSuiteRunWorkflowReleaseTagExecConfigRequest) UnmarshalJSON(data []b
 		return err
 	}
 	*t = TestSuiteRunWorkflowReleaseTagExecConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -16379,13 +18933,18 @@ func (t *TestSuiteRunWorkflowReleaseTagExecConfigRequest) String() string {
 }
 
 type TestSuiteTestCase struct {
-	Id               *string                  `json:"id,omitempty"`
-	ExternalId       *string                  `json:"external_id,omitempty"`
-	Label            *string                  `json:"label,omitempty"`
-	InputValues      []*TestCaseVariableValue `json:"input_values,omitempty"`
-	EvaluationValues []*TestCaseVariableValue `json:"evaluation_values,omitempty"`
+	Id               *string                  `json:"id,omitempty" url:"id,omitempty"`
+	ExternalId       *string                  `json:"external_id,omitempty" url:"external_id,omitempty"`
+	Label            *string                  `json:"label,omitempty" url:"label,omitempty"`
+	InputValues      []*TestCaseVariableValue `json:"input_values" url:"input_values"`
+	EvaluationValues []*TestCaseVariableValue `json:"evaluation_values" url:"evaluation_values"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCase) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteTestCase) UnmarshalJSON(data []byte) error {
@@ -16395,6 +18954,13 @@ func (t *TestSuiteTestCase) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteTestCase(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -16477,41 +19043,13 @@ func (t TestSuiteTestCaseBulkOperationRequest) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", t.Type, t)
 	case "CREATE":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestSuiteTestCaseCreateBulkOperationRequest
-		}{
-			Type: t.Type,
-			TestSuiteTestCaseCreateBulkOperationRequest: t.Create,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Create, "type", "CREATE")
 	case "REPLACE":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestSuiteTestCaseReplaceBulkOperationRequest
-		}{
-			Type: t.Type,
-			TestSuiteTestCaseReplaceBulkOperationRequest: t.Replace,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Replace, "type", "REPLACE")
 	case "UPSERT":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestSuiteTestCaseUpsertBulkOperationRequest
-		}{
-			Type: t.Type,
-			TestSuiteTestCaseUpsertBulkOperationRequest: t.Upsert,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Upsert, "type", "UPSERT")
 	case "DELETE":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestSuiteTestCaseDeleteBulkOperationRequest
-		}{
-			Type: t.Type,
-			TestSuiteTestCaseDeleteBulkOperationRequest: t.Delete,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Delete, "type", "DELETE")
 	}
 }
 
@@ -16603,41 +19141,13 @@ func (t TestSuiteTestCaseBulkResult) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", t.Type, t)
 	case "CREATED":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestSuiteTestCaseCreatedBulkResult
-		}{
-			Type:                               t.Type,
-			TestSuiteTestCaseCreatedBulkResult: t.Created,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Created, "type", "CREATED")
 	case "REPLACED":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestSuiteTestCaseReplacedBulkResult
-		}{
-			Type:                                t.Type,
-			TestSuiteTestCaseReplacedBulkResult: t.Replaced,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Replaced, "type", "REPLACED")
 	case "DELETED":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestSuiteTestCaseDeletedBulkResult
-		}{
-			Type:                               t.Type,
-			TestSuiteTestCaseDeletedBulkResult: t.Deleted,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Deleted, "type", "DELETED")
 	case "REJECTED":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TestSuiteTestCaseRejectedBulkResult
-		}{
-			Type:                                t.Type,
-			TestSuiteTestCaseRejectedBulkResult: t.Rejected,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(t.Rejected, "type", "REJECTED")
 	}
 }
 
@@ -16666,10 +19176,15 @@ func (t *TestSuiteTestCaseBulkResult) Accept(visitor TestSuiteTestCaseBulkResult
 // A bulk operation that represents the creation of a Test Case.
 type TestSuiteTestCaseCreateBulkOperationRequest struct {
 	// An ID representing this specific operation. Can later be used to look up information about the operation's success in the response.
-	Id   string                          `json:"id"`
-	Data *CreateTestSuiteTestCaseRequest `json:"data,omitempty"`
+	Id   string                          `json:"id" url:"id"`
+	Data *CreateTestSuiteTestCaseRequest `json:"data" url:"data"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCaseCreateBulkOperationRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteTestCaseCreateBulkOperationRequest) UnmarshalJSON(data []byte) error {
@@ -16679,6 +19194,13 @@ func (t *TestSuiteTestCaseCreateBulkOperationRequest) UnmarshalJSON(data []byte)
 		return err
 	}
 	*t = TestSuiteTestCaseCreateBulkOperationRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -16697,10 +19219,15 @@ func (t *TestSuiteTestCaseCreateBulkOperationRequest) String() string {
 
 // The result of a bulk operation that created a Test Case.
 type TestSuiteTestCaseCreatedBulkResult struct {
-	Id   string                                  `json:"id"`
-	Data *TestSuiteTestCaseCreatedBulkResultData `json:"data,omitempty"`
+	Id   string                                  `json:"id" url:"id"`
+	Data *TestSuiteTestCaseCreatedBulkResultData `json:"data" url:"data"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCaseCreatedBulkResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteTestCaseCreatedBulkResult) UnmarshalJSON(data []byte) error {
@@ -16710,6 +19237,13 @@ func (t *TestSuiteTestCaseCreatedBulkResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteTestCaseCreatedBulkResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -16728,9 +19262,14 @@ func (t *TestSuiteTestCaseCreatedBulkResult) String() string {
 
 // Information about the Test Case that was created.
 type TestSuiteTestCaseCreatedBulkResultData struct {
-	Id string `json:"id"`
+	Id string `json:"id" url:"id"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCaseCreatedBulkResultData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteTestCaseCreatedBulkResultData) UnmarshalJSON(data []byte) error {
@@ -16740,6 +19279,13 @@ func (t *TestSuiteTestCaseCreatedBulkResultData) UnmarshalJSON(data []byte) erro
 		return err
 	}
 	*t = TestSuiteTestCaseCreatedBulkResultData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -16757,9 +19303,14 @@ func (t *TestSuiteTestCaseCreatedBulkResultData) String() string {
 }
 
 type TestSuiteTestCaseDeleteBulkOperationDataRequest struct {
-	Id string `json:"id"`
+	Id string `json:"id" url:"id"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCaseDeleteBulkOperationDataRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteTestCaseDeleteBulkOperationDataRequest) UnmarshalJSON(data []byte) error {
@@ -16769,6 +19320,13 @@ func (t *TestSuiteTestCaseDeleteBulkOperationDataRequest) UnmarshalJSON(data []b
 		return err
 	}
 	*t = TestSuiteTestCaseDeleteBulkOperationDataRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -16788,11 +19346,16 @@ func (t *TestSuiteTestCaseDeleteBulkOperationDataRequest) String() string {
 // A bulk operation that represents the deletion of a Test Case.
 type TestSuiteTestCaseDeleteBulkOperationRequest struct {
 	// An ID representing this specific operation. Can later be used to look up information about the operation's success in the response.
-	Id string `json:"id"`
+	Id string `json:"id" url:"id"`
 	// Information about the Test Case to delete
-	Data *TestSuiteTestCaseDeleteBulkOperationDataRequest `json:"data,omitempty"`
+	Data *TestSuiteTestCaseDeleteBulkOperationDataRequest `json:"data" url:"data"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCaseDeleteBulkOperationRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteTestCaseDeleteBulkOperationRequest) UnmarshalJSON(data []byte) error {
@@ -16802,6 +19365,13 @@ func (t *TestSuiteTestCaseDeleteBulkOperationRequest) UnmarshalJSON(data []byte)
 		return err
 	}
 	*t = TestSuiteTestCaseDeleteBulkOperationRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -16821,10 +19391,15 @@ func (t *TestSuiteTestCaseDeleteBulkOperationRequest) String() string {
 // The result of a bulk operation that deleted a Test Case.
 type TestSuiteTestCaseDeletedBulkResult struct {
 	// An ID that maps back to one of the initially supplied operations. Can be used to determine the result of a given operation.
-	Id   string                                  `json:"id"`
-	Data *TestSuiteTestCaseDeletedBulkResultData `json:"data,omitempty"`
+	Id   string                                  `json:"id" url:"id"`
+	Data *TestSuiteTestCaseDeletedBulkResultData `json:"data" url:"data"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCaseDeletedBulkResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteTestCaseDeletedBulkResult) UnmarshalJSON(data []byte) error {
@@ -16834,6 +19409,13 @@ func (t *TestSuiteTestCaseDeletedBulkResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteTestCaseDeletedBulkResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -16852,9 +19434,14 @@ func (t *TestSuiteTestCaseDeletedBulkResult) String() string {
 
 // Information about the Test Case that was deleted
 type TestSuiteTestCaseDeletedBulkResultData struct {
-	Id string `json:"id"`
+	Id string `json:"id" url:"id"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCaseDeletedBulkResultData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteTestCaseDeletedBulkResultData) UnmarshalJSON(data []byte) error {
@@ -16864,6 +19451,13 @@ func (t *TestSuiteTestCaseDeletedBulkResultData) UnmarshalJSON(data []byte) erro
 		return err
 	}
 	*t = TestSuiteTestCaseDeletedBulkResultData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -16883,11 +19477,16 @@ func (t *TestSuiteTestCaseDeletedBulkResultData) String() string {
 // The result of a bulk operation that failed to operate on a Test Case.
 type TestSuiteTestCaseRejectedBulkResult struct {
 	// An ID that maps back to one of the initially supplied operations. Can be used to determine the result of a given operation.
-	Id *string `json:"id,omitempty"`
+	Id *string `json:"id,omitempty" url:"id,omitempty"`
 	// Details about the error that occurred
-	Data map[string]interface{} `json:"data,omitempty"`
+	Data map[string]interface{} `json:"data" url:"data"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCaseRejectedBulkResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteTestCaseRejectedBulkResult) UnmarshalJSON(data []byte) error {
@@ -16897,6 +19496,13 @@ func (t *TestSuiteTestCaseRejectedBulkResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteTestCaseRejectedBulkResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -16916,10 +19522,15 @@ func (t *TestSuiteTestCaseRejectedBulkResult) String() string {
 // A bulk operation that represents the replacing of a Test Case.
 type TestSuiteTestCaseReplaceBulkOperationRequest struct {
 	// An ID representing this specific operation. Can later be used to look up information about the operation's success in the response.
-	Id   string                           `json:"id"`
-	Data *ReplaceTestSuiteTestCaseRequest `json:"data,omitempty"`
+	Id   string                           `json:"id" url:"id"`
+	Data *ReplaceTestSuiteTestCaseRequest `json:"data" url:"data"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCaseReplaceBulkOperationRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteTestCaseReplaceBulkOperationRequest) UnmarshalJSON(data []byte) error {
@@ -16929,6 +19540,13 @@ func (t *TestSuiteTestCaseReplaceBulkOperationRequest) UnmarshalJSON(data []byte
 		return err
 	}
 	*t = TestSuiteTestCaseReplaceBulkOperationRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -16948,10 +19566,15 @@ func (t *TestSuiteTestCaseReplaceBulkOperationRequest) String() string {
 // The result of a bulk operation that replaced a Test Case.
 type TestSuiteTestCaseReplacedBulkResult struct {
 	// An ID that maps back to one of the initially supplied operations. Can be used to determine the result of a given operation.
-	Id   string                                   `json:"id"`
-	Data *TestSuiteTestCaseReplacedBulkResultData `json:"data,omitempty"`
+	Id   string                                   `json:"id" url:"id"`
+	Data *TestSuiteTestCaseReplacedBulkResultData `json:"data" url:"data"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCaseReplacedBulkResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteTestCaseReplacedBulkResult) UnmarshalJSON(data []byte) error {
@@ -16961,6 +19584,13 @@ func (t *TestSuiteTestCaseReplacedBulkResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteTestCaseReplacedBulkResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -16979,9 +19609,14 @@ func (t *TestSuiteTestCaseReplacedBulkResult) String() string {
 
 // Information about the Test Case that was replaced
 type TestSuiteTestCaseReplacedBulkResultData struct {
-	Id string `json:"id"`
+	Id string `json:"id" url:"id"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCaseReplacedBulkResultData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteTestCaseReplacedBulkResultData) UnmarshalJSON(data []byte) error {
@@ -16991,6 +19626,13 @@ func (t *TestSuiteTestCaseReplacedBulkResultData) UnmarshalJSON(data []byte) err
 		return err
 	}
 	*t = TestSuiteTestCaseReplacedBulkResultData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -17010,10 +19652,15 @@ func (t *TestSuiteTestCaseReplacedBulkResultData) String() string {
 // A bulk operation that represents the upserting of a Test Case.
 type TestSuiteTestCaseUpsertBulkOperationRequest struct {
 	// An ID representing this specific operation. Can later be used to look up information about the operation's success in the response.
-	Id   string                          `json:"id"`
-	Data *UpsertTestSuiteTestCaseRequest `json:"data,omitempty"`
+	Id   string                          `json:"id" url:"id"`
+	Data *UpsertTestSuiteTestCaseRequest `json:"data" url:"data"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCaseUpsertBulkOperationRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TestSuiteTestCaseUpsertBulkOperationRequest) UnmarshalJSON(data []byte) error {
@@ -17023,6 +19670,13 @@ func (t *TestSuiteTestCaseUpsertBulkOperationRequest) UnmarshalJSON(data []byte)
 		return err
 	}
 	*t = TestSuiteTestCaseUpsertBulkOperationRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -17041,9 +19695,14 @@ func (t *TestSuiteTestCaseUpsertBulkOperationRequest) String() string {
 
 // Tokenizer config for OpenAI's TikToken type tokenizers.
 type TikTokenTokenizerConfig struct {
-	Name string `json:"name"`
+	Name string `json:"name" url:"name"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TikTokenTokenizerConfig) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TikTokenTokenizerConfig) UnmarshalJSON(data []byte) error {
@@ -17053,6 +19712,13 @@ func (t *TikTokenTokenizerConfig) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TikTokenTokenizerConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -17071,9 +19737,14 @@ func (t *TikTokenTokenizerConfig) String() string {
 
 // Tokenizer config for OpenAI's TikToken type tokenizers.
 type TikTokenTokenizerConfigRequest struct {
-	Name string `json:"name"`
+	Name string `json:"name" url:"name"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TikTokenTokenizerConfigRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TikTokenTokenizerConfigRequest) UnmarshalJSON(data []byte) error {
@@ -17083,6 +19754,13 @@ func (t *TikTokenTokenizerConfigRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TikTokenTokenizerConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -17101,10 +19779,15 @@ func (t *TikTokenTokenizerConfigRequest) String() string {
 
 // Configuration for token overlapping window chunking
 type TokenOverlappingWindowChunkerConfig struct {
-	TokenLimit   *int     `json:"token_limit,omitempty"`
-	OverlapRatio *float64 `json:"overlap_ratio,omitempty"`
+	TokenLimit   *int     `json:"token_limit,omitempty" url:"token_limit,omitempty"`
+	OverlapRatio *float64 `json:"overlap_ratio,omitempty" url:"overlap_ratio,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TokenOverlappingWindowChunkerConfig) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TokenOverlappingWindowChunkerConfig) UnmarshalJSON(data []byte) error {
@@ -17114,6 +19797,13 @@ func (t *TokenOverlappingWindowChunkerConfig) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TokenOverlappingWindowChunkerConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -17132,10 +19822,15 @@ func (t *TokenOverlappingWindowChunkerConfig) String() string {
 
 // Configuration for token overlapping window chunking
 type TokenOverlappingWindowChunkerConfigRequest struct {
-	TokenLimit   *int     `json:"token_limit,omitempty"`
-	OverlapRatio *float64 `json:"overlap_ratio,omitempty"`
+	TokenLimit   *int     `json:"token_limit,omitempty" url:"token_limit,omitempty"`
+	OverlapRatio *float64 `json:"overlap_ratio,omitempty" url:"overlap_ratio,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TokenOverlappingWindowChunkerConfigRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TokenOverlappingWindowChunkerConfigRequest) UnmarshalJSON(data []byte) error {
@@ -17145,6 +19840,13 @@ func (t *TokenOverlappingWindowChunkerConfigRequest) UnmarshalJSON(data []byte) 
 		return err
 	}
 	*t = TokenOverlappingWindowChunkerConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -17163,9 +19865,14 @@ func (t *TokenOverlappingWindowChunkerConfigRequest) String() string {
 
 // Token overlapping window chunking
 type TokenOverlappingWindowChunking struct {
-	ChunkerConfig *TokenOverlappingWindowChunkerConfig `json:"chunker_config,omitempty"`
+	ChunkerConfig *TokenOverlappingWindowChunkerConfig `json:"chunker_config,omitempty" url:"chunker_config,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TokenOverlappingWindowChunking) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TokenOverlappingWindowChunking) UnmarshalJSON(data []byte) error {
@@ -17175,6 +19882,13 @@ func (t *TokenOverlappingWindowChunking) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TokenOverlappingWindowChunking(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -17193,9 +19907,14 @@ func (t *TokenOverlappingWindowChunking) String() string {
 
 // Token overlapping window chunking
 type TokenOverlappingWindowChunkingRequest struct {
-	ChunkerConfig *TokenOverlappingWindowChunkerConfigRequest `json:"chunker_config,omitempty"`
+	ChunkerConfig *TokenOverlappingWindowChunkerConfigRequest `json:"chunker_config,omitempty" url:"chunker_config,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TokenOverlappingWindowChunkingRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
 }
 
 func (t *TokenOverlappingWindowChunkingRequest) UnmarshalJSON(data []byte) error {
@@ -17205,6 +19924,13 @@ func (t *TokenOverlappingWindowChunkingRequest) UnmarshalJSON(data []byte) error
 		return err
 	}
 	*t = TokenOverlappingWindowChunkingRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
 	t._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -17223,9 +19949,14 @@ func (t *TokenOverlappingWindowChunkingRequest) String() string {
 
 type UploadDocumentResponse struct {
 	// The ID of the newly created document.
-	DocumentId string `json:"document_id"`
+	DocumentId string `json:"document_id" url:"document_id"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (u *UploadDocumentResponse) GetExtraProperties() map[string]interface{} {
+	return u.extraProperties
 }
 
 func (u *UploadDocumentResponse) UnmarshalJSON(data []byte) error {
@@ -17235,6 +19966,13 @@ func (u *UploadDocumentResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*u = UploadDocumentResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+
 	u._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -17253,17 +19991,22 @@ func (u *UploadDocumentResponse) String() string {
 
 type UpsertTestSuiteTestCaseRequest struct {
 	// The Vellum-generated ID of an existing Test Case whose data you'd like to replace. If specified and no Test Case exists with this ID, a 404 will be returned.
-	Id *string `json:"id,omitempty"`
+	Id *string `json:"id,omitempty" url:"id,omitempty"`
 	// An ID external to Vellum that uniquely identifies the Test Case that you'd like to create/update. If there's a match on a Test Case that was previously created with the same external_id, it will be updated. Otherwise, a new Test Case will be created with this value as its external_id. If no external_id is specified, then a new Test Case will always be created.
-	ExternalId *string `json:"external_id,omitempty"`
+	ExternalId *string `json:"external_id,omitempty" url:"external_id,omitempty"`
 	// A human-readable label used to convey the intention of this Test Case
-	Label *string `json:"label,omitempty"`
+	Label *string `json:"label,omitempty" url:"label,omitempty"`
 	// Values for each of the Test Case's input variables
-	InputValues []*NamedTestCaseVariableValueRequest `json:"input_values,omitempty"`
+	InputValues []*NamedTestCaseVariableValueRequest `json:"input_values" url:"input_values"`
 	// Values for each of the Test Case's evaluation variables
-	EvaluationValues []*NamedTestCaseVariableValueRequest `json:"evaluation_values,omitempty"`
+	EvaluationValues []*NamedTestCaseVariableValueRequest `json:"evaluation_values" url:"evaluation_values"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (u *UpsertTestSuiteTestCaseRequest) GetExtraProperties() map[string]interface{} {
+	return u.extraProperties
 }
 
 func (u *UpsertTestSuiteTestCaseRequest) UnmarshalJSON(data []byte) error {
@@ -17273,6 +20016,13 @@ func (u *UpsertTestSuiteTestCaseRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*u = UpsertTestSuiteTestCaseRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+
 	u._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -17290,10 +20040,15 @@ func (u *UpsertTestSuiteTestCaseRequest) String() string {
 }
 
 type VellumError struct {
-	Message string              `json:"message"`
-	Code    VellumErrorCodeEnum `json:"code,omitempty"`
+	Message string              `json:"message" url:"message"`
+	Code    VellumErrorCodeEnum `json:"code" url:"code"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VellumError) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
 }
 
 func (v *VellumError) UnmarshalJSON(data []byte) error {
@@ -17303,6 +20058,13 @@ func (v *VellumError) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*v = VellumError(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
 	v._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -17352,10 +20114,15 @@ func (v VellumErrorCodeEnum) Ptr() *VellumErrorCodeEnum {
 }
 
 type VellumErrorRequest struct {
-	Message string              `json:"message"`
-	Code    VellumErrorCodeEnum `json:"code,omitempty"`
+	Message string              `json:"message" url:"message"`
+	Code    VellumErrorCodeEnum `json:"code" url:"code"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VellumErrorRequest) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
 }
 
 func (v *VellumErrorRequest) UnmarshalJSON(data []byte) error {
@@ -17365,6 +20132,13 @@ func (v *VellumErrorRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*v = VellumErrorRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
 	v._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -17382,10 +20156,15 @@ func (v *VellumErrorRequest) String() string {
 }
 
 type VellumImage struct {
-	Src      string                 `json:"src"`
-	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	Src      string                 `json:"src" url:"src"`
+	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VellumImage) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
 }
 
 func (v *VellumImage) UnmarshalJSON(data []byte) error {
@@ -17395,6 +20174,13 @@ func (v *VellumImage) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*v = VellumImage(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
 	v._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -17412,10 +20198,15 @@ func (v *VellumImage) String() string {
 }
 
 type VellumImageRequest struct {
-	Src      string                 `json:"src"`
-	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	Src      string                 `json:"src" url:"src"`
+	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VellumImageRequest) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
 }
 
 func (v *VellumImageRequest) UnmarshalJSON(data []byte) error {
@@ -17425,6 +20216,13 @@ func (v *VellumImageRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*v = VellumImageRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
 	v._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -17442,11 +20240,16 @@ func (v *VellumImageRequest) String() string {
 }
 
 type VellumVariable struct {
-	Id   string             `json:"id"`
-	Key  string             `json:"key"`
-	Type VellumVariableType `json:"type,omitempty"`
+	Id   string             `json:"id" url:"id"`
+	Key  string             `json:"key" url:"key"`
+	Type VellumVariableType `json:"type" url:"type"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VellumVariable) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
 }
 
 func (v *VellumVariable) UnmarshalJSON(data []byte) error {
@@ -17456,6 +20259,13 @@ func (v *VellumVariable) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*v = VellumVariable(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
 	v._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -17561,45 +20371,79 @@ func (v VisibilityEnum) Ptr() *VisibilityEnum {
 }
 
 type WorkflowDeploymentRead struct {
-	Id string `json:"id"`
+	Id string `json:"id" url:"id"`
 	// A name that uniquely identifies this workflow deployment within its workspace
-	Name string `json:"name"`
+	Name string `json:"name" url:"name"`
 	// A human-readable label for the workflow deployment
-	Label string `json:"label"`
+	Label string `json:"label" url:"label"`
 	// The current status of the workflow deployment
 	//
 	// - `ACTIVE` - Active
 	// - `ARCHIVED` - Archived
-	Status *EntityStatus `json:"status,omitempty"`
+	Status *EntityStatus `json:"status,omitempty" url:"status,omitempty"`
 	// The environment this workflow deployment is used in
 	//
 	// - `DEVELOPMENT` - Development
 	// - `STAGING` - Staging
 	// - `PRODUCTION` - Production
-	Environment    *EnvironmentEnum `json:"environment,omitempty"`
-	Created        time.Time        `json:"created"`
-	LastDeployedOn time.Time        `json:"last_deployed_on"`
+	Environment    *EnvironmentEnum `json:"environment,omitempty" url:"environment,omitempty"`
+	Created        time.Time        `json:"created" url:"created"`
+	LastDeployedOn time.Time        `json:"last_deployed_on" url:"last_deployed_on"`
 	// The ID of the history item associated with this Workflow Deployment's LATEST Release Tag
-	LastDeployedHistoryItemId string `json:"last_deployed_history_item_id"`
+	LastDeployedHistoryItemId string `json:"last_deployed_history_item_id" url:"last_deployed_history_item_id"`
 	// The input variables this Workflow Deployment expects to receive values for when it is executed.
-	InputVariables []*VellumVariable `json:"input_variables,omitempty"`
+	InputVariables []*VellumVariable `json:"input_variables" url:"input_variables"`
 	// The output variables this Workflow Deployment produces values for when it's executed.
-	OutputVariables []*VellumVariable `json:"output_variables,omitempty"`
+	OutputVariables []*VellumVariable `json:"output_variables" url:"output_variables"`
 	// A human-readable description of the workflow deployment
-	Description *string `json:"description,omitempty"`
+	Description *string `json:"description,omitempty" url:"description,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowDeploymentRead) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowDeploymentRead) UnmarshalJSON(data []byte) error {
-	type unmarshaler WorkflowDeploymentRead
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed WorkflowDeploymentRead
+	var unmarshaler = struct {
+		embed
+		Created        *core.DateTime `json:"created"`
+		LastDeployedOn *core.DateTime `json:"last_deployed_on"`
+	}{
+		embed: embed(*w),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*w = WorkflowDeploymentRead(value)
+	*w = WorkflowDeploymentRead(unmarshaler.embed)
+	w.Created = unmarshaler.Created.Time()
+	w.LastDeployedOn = unmarshaler.LastDeployedOn.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (w *WorkflowDeploymentRead) MarshalJSON() ([]byte, error) {
+	type embed WorkflowDeploymentRead
+	var marshaler = struct {
+		embed
+		Created        *core.DateTime `json:"created"`
+		LastDeployedOn *core.DateTime `json:"last_deployed_on"`
+	}{
+		embed:          embed(*w),
+		Created:        core.NewDateTime(w.Created),
+		LastDeployedOn: core.NewDateTime(w.LastDeployedOn),
+	}
+	return json.Marshal(marshaler)
 }
 
 func (w *WorkflowDeploymentRead) String() string {
@@ -17615,10 +20459,15 @@ func (w *WorkflowDeploymentRead) String() string {
 }
 
 type WorkflowEventError struct {
-	Message string                          `json:"message"`
-	Code    WorkflowExecutionEventErrorCode `json:"code,omitempty"`
+	Message string                          `json:"message" url:"message"`
+	Code    WorkflowExecutionEventErrorCode `json:"code" url:"code"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowEventError) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowEventError) UnmarshalJSON(data []byte) error {
@@ -17628,6 +20477,13 @@ func (w *WorkflowEventError) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowEventError(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -17646,19 +20502,24 @@ func (w *WorkflowEventError) String() string {
 
 type WorkflowExecutionActualChatHistoryRequest struct {
 	// The Vellum-generated ID of a workflow output. Must provide either this or output_key. output_key is typically preferred.
-	OutputId *string `json:"output_id,omitempty"`
+	OutputId *string `json:"output_id,omitempty" url:"output_id,omitempty"`
 	// The user-defined name of a workflow output. Must provide either this or output_id. Should correspond to the `Name` specified in a Final Output Node. Generally preferred over output_id.
-	OutputKey *string `json:"output_key,omitempty"`
+	OutputKey *string `json:"output_key,omitempty" url:"output_key,omitempty"`
 	// Optionally provide a decimal number between 0.0 and 1.0 (inclusive) representing the quality of the output. 0 is the worst, 1 is the best.
-	Quality *float64 `json:"quality,omitempty"`
+	Quality *float64 `json:"quality,omitempty" url:"quality,omitempty"`
 	// Optionally provide additional metadata about the feedback submission.
-	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
 	// Optionally provide the timestamp representing when this feedback was collected. Used for reporting purposes.
-	Timestamp *float64 `json:"timestamp,omitempty"`
+	Timestamp *float64 `json:"timestamp,omitempty" url:"timestamp,omitempty"`
 	// Optionally provide the value that the output ideally should have been.
-	DesiredOutputValue []*ChatMessageRequest `json:"desired_output_value,omitempty"`
+	DesiredOutputValue []*ChatMessageRequest `json:"desired_output_value,omitempty" url:"desired_output_value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowExecutionActualChatHistoryRequest) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowExecutionActualChatHistoryRequest) UnmarshalJSON(data []byte) error {
@@ -17668,6 +20529,13 @@ func (w *WorkflowExecutionActualChatHistoryRequest) UnmarshalJSON(data []byte) e
 		return err
 	}
 	*w = WorkflowExecutionActualChatHistoryRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -17686,19 +20554,24 @@ func (w *WorkflowExecutionActualChatHistoryRequest) String() string {
 
 type WorkflowExecutionActualJsonRequest struct {
 	// The Vellum-generated ID of a workflow output. Must provide either this or output_key. output_key is typically preferred.
-	OutputId *string `json:"output_id,omitempty"`
+	OutputId *string `json:"output_id,omitempty" url:"output_id,omitempty"`
 	// The user-defined name of a workflow output. Must provide either this or output_id. Should correspond to the `Name` specified in a Final Output Node. Generally preferred over output_id.
-	OutputKey *string `json:"output_key,omitempty"`
+	OutputKey *string `json:"output_key,omitempty" url:"output_key,omitempty"`
 	// Optionally provide a decimal number between 0.0 and 1.0 (inclusive) representing the quality of the output. 0 is the worst, 1 is the best.
-	Quality *float64 `json:"quality,omitempty"`
+	Quality *float64 `json:"quality,omitempty" url:"quality,omitempty"`
 	// Optionally provide additional metadata about the feedback submission.
-	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
 	// Optionally provide the timestamp representing when this feedback was collected. Used for reporting purposes.
-	Timestamp *float64 `json:"timestamp,omitempty"`
+	Timestamp *float64 `json:"timestamp,omitempty" url:"timestamp,omitempty"`
 	// Optionally provide the value that the output ideally should have been.
-	DesiredOutputValue map[string]interface{} `json:"desired_output_value,omitempty"`
+	DesiredOutputValue map[string]interface{} `json:"desired_output_value,omitempty" url:"desired_output_value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowExecutionActualJsonRequest) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowExecutionActualJsonRequest) UnmarshalJSON(data []byte) error {
@@ -17708,6 +20581,13 @@ func (w *WorkflowExecutionActualJsonRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowExecutionActualJsonRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -17726,19 +20606,24 @@ func (w *WorkflowExecutionActualJsonRequest) String() string {
 
 type WorkflowExecutionActualStringRequest struct {
 	// The Vellum-generated ID of a workflow output. Must provide either this or output_key. output_key is typically preferred.
-	OutputId *string `json:"output_id,omitempty"`
+	OutputId *string `json:"output_id,omitempty" url:"output_id,omitempty"`
 	// The user-defined name of a workflow output. Must provide either this or output_id. Should correspond to the `Name` specified in a Final Output Node. Generally preferred over output_id.
-	OutputKey *string `json:"output_key,omitempty"`
+	OutputKey *string `json:"output_key,omitempty" url:"output_key,omitempty"`
 	// Optionally provide a decimal number between 0.0 and 1.0 (inclusive) representing the quality of the output. 0 is the worst, 1 is the best.
-	Quality *float64 `json:"quality,omitempty"`
+	Quality *float64 `json:"quality,omitempty" url:"quality,omitempty"`
 	// Optionally provide additional metadata about the feedback submission.
-	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
 	// Optionally provide the timestamp representing when this feedback was collected. Used for reporting purposes.
-	Timestamp *float64 `json:"timestamp,omitempty"`
+	Timestamp *float64 `json:"timestamp,omitempty" url:"timestamp,omitempty"`
 	// Optionally provide the value that the output ideally should have been.
-	DesiredOutputValue *string `json:"desired_output_value,omitempty"`
+	DesiredOutputValue *string `json:"desired_output_value,omitempty" url:"desired_output_value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowExecutionActualStringRequest) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowExecutionActualStringRequest) UnmarshalJSON(data []byte) error {
@@ -17748,6 +20633,13 @@ func (w *WorkflowExecutionActualStringRequest) UnmarshalJSON(data []byte) error 
 		return err
 	}
 	*w = WorkflowExecutionActualStringRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -17838,12 +20730,17 @@ func (w WorkflowExecutionEventType) Ptr() *WorkflowExecutionEventType {
 
 // A NODE-level event emitted from the workflow's execution.
 type WorkflowExecutionNodeResultEvent struct {
-	ExecutionId string                   `json:"execution_id"`
-	RunId       *string                  `json:"run_id,omitempty"`
-	ExternalId  *string                  `json:"external_id,omitempty"`
-	Data        *WorkflowNodeResultEvent `json:"data,omitempty"`
+	ExecutionId string                   `json:"execution_id" url:"execution_id"`
+	RunId       *string                  `json:"run_id,omitempty" url:"run_id,omitempty"`
+	ExternalId  *string                  `json:"external_id,omitempty" url:"external_id,omitempty"`
+	Data        *WorkflowNodeResultEvent `json:"data" url:"data"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowExecutionNodeResultEvent) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowExecutionNodeResultEvent) UnmarshalJSON(data []byte) error {
@@ -17853,6 +20750,13 @@ func (w *WorkflowExecutionNodeResultEvent) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowExecutionNodeResultEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -17871,12 +20775,17 @@ func (w *WorkflowExecutionNodeResultEvent) String() string {
 
 // A WORKFLOW-level event emitted from the workflow's execution.
 type WorkflowExecutionWorkflowResultEvent struct {
-	ExecutionId string               `json:"execution_id"`
-	RunId       *string              `json:"run_id,omitempty"`
-	ExternalId  *string              `json:"external_id,omitempty"`
-	Data        *WorkflowResultEvent `json:"data,omitempty"`
+	ExecutionId string               `json:"execution_id" url:"execution_id"`
+	RunId       *string              `json:"run_id,omitempty" url:"run_id,omitempty"`
+	ExternalId  *string              `json:"external_id,omitempty" url:"external_id,omitempty"`
+	Data        *WorkflowResultEvent `json:"data" url:"data"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowExecutionWorkflowResultEvent) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowExecutionWorkflowResultEvent) UnmarshalJSON(data []byte) error {
@@ -17886,6 +20795,13 @@ func (w *WorkflowExecutionWorkflowResultEvent) UnmarshalJSON(data []byte) error 
 		return err
 	}
 	*w = WorkflowExecutionWorkflowResultEvent(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -17904,9 +20820,14 @@ func (w *WorkflowExecutionWorkflowResultEvent) String() string {
 
 type WorkflowExpandMetaRequest struct {
 	// If enabled, the Prompt Node FULFILLED events will include model host usage tracking. This may increase latency for some model hosts.
-	Usage *bool `json:"usage,omitempty"`
+	Usage *bool `json:"usage,omitempty" url:"usage,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowExpandMetaRequest) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowExpandMetaRequest) UnmarshalJSON(data []byte) error {
@@ -17916,6 +20837,13 @@ func (w *WorkflowExpandMetaRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowExpandMetaRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -18075,104 +21003,27 @@ func (w WorkflowNodeResultData) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", w.Type, w)
 	case "PROMPT":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*PromptNodeResult
-		}{
-			Type:             w.Type,
-			PromptNodeResult: w.Prompt,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Prompt, "type", "PROMPT")
 	case "SEARCH":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*SearchNodeResult
-		}{
-			Type:             w.Type,
-			SearchNodeResult: w.Search,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Search, "type", "SEARCH")
 	case "TEMPLATING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TemplatingNodeResult
-		}{
-			Type:                 w.Type,
-			TemplatingNodeResult: w.Templating,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Templating, "type", "TEMPLATING")
 	case "CODE_EXECUTION":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*CodeExecutionNodeResult
-		}{
-			Type:                    w.Type,
-			CodeExecutionNodeResult: w.CodeExecution,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.CodeExecution, "type", "CODE_EXECUTION")
 	case "CONDITIONAL":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ConditionalNodeResult
-		}{
-			Type:                  w.Type,
-			ConditionalNodeResult: w.Conditional,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Conditional, "type", "CONDITIONAL")
 	case "API":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*ApiNodeResult
-		}{
-			Type:          w.Type,
-			ApiNodeResult: w.Api,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Api, "type", "API")
 	case "TERMINAL":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*TerminalNodeResult
-		}{
-			Type:               w.Type,
-			TerminalNodeResult: w.Terminal,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Terminal, "type", "TERMINAL")
 	case "MERGE":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*MergeNodeResult
-		}{
-			Type:            w.Type,
-			MergeNodeResult: w.Merge,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Merge, "type", "MERGE")
 	case "SUBWORKFLOW":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*SubworkflowNodeResult
-		}{
-			Type:                  w.Type,
-			SubworkflowNodeResult: w.Subworkflow,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Subworkflow, "type", "SUBWORKFLOW")
 	case "METRIC":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*MetricNodeResult
-		}{
-			Type:             w.Type,
-			MetricNodeResult: w.Metric,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Metric, "type", "METRIC")
 	case "MAP":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*MapNodeResult
-		}{
-			Type:          w.Type,
-			MapNodeResult: w.Map,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Map, "type", "MAP")
 	}
 }
 
@@ -18285,41 +21136,13 @@ func (w WorkflowNodeResultEvent) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", w.State, w)
 	case "INITIATED":
-		var marshaler = struct {
-			State string `json:"state"`
-			*InitiatedWorkflowNodeResultEvent
-		}{
-			State:                            w.State,
-			InitiatedWorkflowNodeResultEvent: w.Initiated,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Initiated, "state", "INITIATED")
 	case "STREAMING":
-		var marshaler = struct {
-			State string `json:"state"`
-			*StreamingWorkflowNodeResultEvent
-		}{
-			State:                            w.State,
-			StreamingWorkflowNodeResultEvent: w.Streaming,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Streaming, "state", "STREAMING")
 	case "FULFILLED":
-		var marshaler = struct {
-			State string `json:"state"`
-			*FulfilledWorkflowNodeResultEvent
-		}{
-			State:                            w.State,
-			FulfilledWorkflowNodeResultEvent: w.Fulfilled,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Fulfilled, "state", "FULFILLED")
 	case "REJECTED":
-		var marshaler = struct {
-			State string `json:"state"`
-			*RejectedWorkflowNodeResultEvent
-		}{
-			State:                           w.State,
-			RejectedWorkflowNodeResultEvent: w.Rejected,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Rejected, "state", "REJECTED")
 	}
 }
 
@@ -18498,86 +21321,23 @@ func (w WorkflowOutput) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", w.Type, w)
 	case "STRING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*WorkflowOutputString
-		}{
-			Type:                 w.Type,
-			WorkflowOutputString: w.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.String, "type", "STRING")
 	case "NUMBER":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*WorkflowOutputNumber
-		}{
-			Type:                 w.Type,
-			WorkflowOutputNumber: w.Number,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Number, "type", "NUMBER")
 	case "JSON":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*WorkflowOutputJson
-		}{
-			Type:               w.Type,
-			WorkflowOutputJson: w.Json,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Json, "type", "JSON")
 	case "CHAT_HISTORY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*WorkflowOutputChatHistory
-		}{
-			Type:                      w.Type,
-			WorkflowOutputChatHistory: w.ChatHistory,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.ChatHistory, "type", "CHAT_HISTORY")
 	case "SEARCH_RESULTS":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*WorkflowOutputSearchResults
-		}{
-			Type:                        w.Type,
-			WorkflowOutputSearchResults: w.SearchResults,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.SearchResults, "type", "SEARCH_RESULTS")
 	case "ARRAY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*WorkflowOutputArray
-		}{
-			Type:                w.Type,
-			WorkflowOutputArray: w.Array,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Array, "type", "ARRAY")
 	case "ERROR":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*WorkflowOutputError
-		}{
-			Type:                w.Type,
-			WorkflowOutputError: w.Error,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Error, "type", "ERROR")
 	case "FUNCTION_CALL":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*WorkflowOutputFunctionCall
-		}{
-			Type:                       w.Type,
-			WorkflowOutputFunctionCall: w.FunctionCall,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.FunctionCall, "type", "FUNCTION_CALL")
 	case "IMAGE":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*WorkflowOutputImage
-		}{
-			Type:                w.Type,
-			WorkflowOutputImage: w.Image,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Image, "type", "IMAGE")
 	}
 }
 
@@ -18620,12 +21380,17 @@ func (w *WorkflowOutput) Accept(visitor WorkflowOutputVisitor) error {
 
 // An array output from a Workflow execution.
 type WorkflowOutputArray struct {
-	Id string `json:"id"`
+	Id string `json:"id" url:"id"`
 	// The output's name, as defined in the workflow
-	Name  string                  `json:"name"`
-	Value []*ArrayVellumValueItem `json:"value,omitempty"`
+	Name  string                  `json:"name" url:"name"`
+	Value []*ArrayVellumValueItem `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowOutputArray) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowOutputArray) UnmarshalJSON(data []byte) error {
@@ -18635,6 +21400,13 @@ func (w *WorkflowOutputArray) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowOutputArray(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -18653,12 +21425,17 @@ func (w *WorkflowOutputArray) String() string {
 
 // A chat history output from a Workflow execution.
 type WorkflowOutputChatHistory struct {
-	Id string `json:"id"`
+	Id string `json:"id" url:"id"`
 	// The output's name, as defined in the workflow
-	Name  string         `json:"name"`
-	Value []*ChatMessage `json:"value,omitempty"`
+	Name  string         `json:"name" url:"name"`
+	Value []*ChatMessage `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowOutputChatHistory) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowOutputChatHistory) UnmarshalJSON(data []byte) error {
@@ -18668,6 +21445,13 @@ func (w *WorkflowOutputChatHistory) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowOutputChatHistory(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -18686,12 +21470,17 @@ func (w *WorkflowOutputChatHistory) String() string {
 
 // An error output from a Workflow execution.
 type WorkflowOutputError struct {
-	Id string `json:"id"`
+	Id string `json:"id" url:"id"`
 	// The output's name, as defined in the workflow
-	Name  string       `json:"name"`
-	Value *VellumError `json:"value,omitempty"`
+	Name  string       `json:"name" url:"name"`
+	Value *VellumError `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowOutputError) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowOutputError) UnmarshalJSON(data []byte) error {
@@ -18701,6 +21490,13 @@ func (w *WorkflowOutputError) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowOutputError(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -18719,12 +21515,17 @@ func (w *WorkflowOutputError) String() string {
 
 // A function call output from a Workflow execution.
 type WorkflowOutputFunctionCall struct {
-	Id string `json:"id"`
+	Id string `json:"id" url:"id"`
 	// The output's name, as defined in the workflow
-	Name  string        `json:"name"`
-	Value *FunctionCall `json:"value,omitempty"`
+	Name  string        `json:"name" url:"name"`
+	Value *FunctionCall `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowOutputFunctionCall) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowOutputFunctionCall) UnmarshalJSON(data []byte) error {
@@ -18734,6 +21535,13 @@ func (w *WorkflowOutputFunctionCall) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowOutputFunctionCall(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -18752,12 +21560,17 @@ func (w *WorkflowOutputFunctionCall) String() string {
 
 // An image output from a Workflow execution.
 type WorkflowOutputImage struct {
-	Id string `json:"id"`
+	Id string `json:"id" url:"id"`
 	// The output's name, as defined in the workflow
-	Name  string       `json:"name"`
-	Value *VellumImage `json:"value,omitempty"`
+	Name  string       `json:"name" url:"name"`
+	Value *VellumImage `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowOutputImage) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowOutputImage) UnmarshalJSON(data []byte) error {
@@ -18767,6 +21580,13 @@ func (w *WorkflowOutputImage) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowOutputImage(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -18785,12 +21605,17 @@ func (w *WorkflowOutputImage) String() string {
 
 // A JSON output from a Workflow execution.
 type WorkflowOutputJson struct {
-	Id string `json:"id"`
+	Id string `json:"id" url:"id"`
 	// The output's name, as defined in the workflow
-	Name  string      `json:"name"`
-	Value interface{} `json:"value,omitempty"`
+	Name  string      `json:"name" url:"name"`
+	Value interface{} `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowOutputJson) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowOutputJson) UnmarshalJSON(data []byte) error {
@@ -18800,6 +21625,13 @@ func (w *WorkflowOutputJson) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowOutputJson(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -18818,12 +21650,17 @@ func (w *WorkflowOutputJson) String() string {
 
 // A number output from a Workflow execution.
 type WorkflowOutputNumber struct {
-	Id string `json:"id"`
+	Id string `json:"id" url:"id"`
 	// The output's name, as defined in the workflow
-	Name  string   `json:"name"`
-	Value *float64 `json:"value,omitempty"`
+	Name  string   `json:"name" url:"name"`
+	Value *float64 `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowOutputNumber) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowOutputNumber) UnmarshalJSON(data []byte) error {
@@ -18833,6 +21670,13 @@ func (w *WorkflowOutputNumber) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowOutputNumber(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -18851,12 +21695,17 @@ func (w *WorkflowOutputNumber) String() string {
 
 // A search results output from a Workflow execution.
 type WorkflowOutputSearchResults struct {
-	Id string `json:"id"`
+	Id string `json:"id" url:"id"`
 	// The output's name, as defined in the workflow
-	Name  string          `json:"name"`
-	Value []*SearchResult `json:"value,omitempty"`
+	Name  string          `json:"name" url:"name"`
+	Value []*SearchResult `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowOutputSearchResults) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowOutputSearchResults) UnmarshalJSON(data []byte) error {
@@ -18866,6 +21715,13 @@ func (w *WorkflowOutputSearchResults) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowOutputSearchResults(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -18884,12 +21740,17 @@ func (w *WorkflowOutputSearchResults) String() string {
 
 // A string output from a Workflow execution.
 type WorkflowOutputString struct {
-	Id string `json:"id"`
+	Id string `json:"id" url:"id"`
 	// The output's name, as defined in the workflow
-	Name  string  `json:"name"`
-	Value *string `json:"value,omitempty"`
+	Name  string  `json:"name" url:"name"`
+	Value *string `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowOutputString) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowOutputString) UnmarshalJSON(data []byte) error {
@@ -18899,6 +21760,13 @@ func (w *WorkflowOutputString) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowOutputString(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -18917,16 +21785,21 @@ func (w *WorkflowOutputString) String() string {
 
 type WorkflowReleaseTagRead struct {
 	// The name of the Release Tag
-	Name string `json:"name"`
+	Name string `json:"name" url:"name"`
 	// The source of how the Release Tag was originally created
 	//
 	// - `SYSTEM` - System
 	// - `USER` - User
-	Source ReleaseTagSource `json:"source,omitempty"`
+	Source ReleaseTagSource `json:"source" url:"source"`
 	// The Workflow Deployment History Item that this Release Tag is associated with
-	HistoryItem *WorkflowReleaseTagWorkflowDeploymentHistoryItem `json:"history_item,omitempty"`
+	HistoryItem *WorkflowReleaseTagWorkflowDeploymentHistoryItem `json:"history_item" url:"history_item"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowReleaseTagRead) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowReleaseTagRead) UnmarshalJSON(data []byte) error {
@@ -18936,6 +21809,13 @@ func (w *WorkflowReleaseTagRead) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowReleaseTagRead(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -18954,22 +21834,52 @@ func (w *WorkflowReleaseTagRead) String() string {
 
 type WorkflowReleaseTagWorkflowDeploymentHistoryItem struct {
 	// The ID of the Workflow Deployment History Item
-	Id string `json:"id"`
+	Id string `json:"id" url:"id"`
 	// The timestamp representing when this History Item was created
-	Timestamp time.Time `json:"timestamp"`
+	Timestamp time.Time `json:"timestamp" url:"timestamp"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowReleaseTagWorkflowDeploymentHistoryItem) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowReleaseTagWorkflowDeploymentHistoryItem) UnmarshalJSON(data []byte) error {
-	type unmarshaler WorkflowReleaseTagWorkflowDeploymentHistoryItem
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed WorkflowReleaseTagWorkflowDeploymentHistoryItem
+	var unmarshaler = struct {
+		embed
+		Timestamp *core.DateTime `json:"timestamp"`
+	}{
+		embed: embed(*w),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*w = WorkflowReleaseTagWorkflowDeploymentHistoryItem(value)
+	*w = WorkflowReleaseTagWorkflowDeploymentHistoryItem(unmarshaler.embed)
+	w.Timestamp = unmarshaler.Timestamp.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (w *WorkflowReleaseTagWorkflowDeploymentHistoryItem) MarshalJSON() ([]byte, error) {
+	type embed WorkflowReleaseTagWorkflowDeploymentHistoryItem
+	var marshaler = struct {
+		embed
+		Timestamp *core.DateTime `json:"timestamp"`
+	}{
+		embed:     embed(*w),
+		Timestamp: core.NewDateTime(w.Timestamp),
+	}
+	return json.Marshal(marshaler)
 }
 
 func (w *WorkflowReleaseTagWorkflowDeploymentHistoryItem) String() string {
@@ -18987,10 +21897,15 @@ func (w *WorkflowReleaseTagWorkflowDeploymentHistoryItem) String() string {
 // The input for a chat history variable in a Workflow.
 type WorkflowRequestChatHistoryInputRequest struct {
 	// The variable's name, as defined in the Workflow.
-	Name  string                `json:"name"`
-	Value []*ChatMessageRequest `json:"value,omitempty"`
+	Name  string                `json:"name" url:"name"`
+	Value []*ChatMessageRequest `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowRequestChatHistoryInputRequest) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowRequestChatHistoryInputRequest) UnmarshalJSON(data []byte) error {
@@ -19000,6 +21915,13 @@ func (w *WorkflowRequestChatHistoryInputRequest) UnmarshalJSON(data []byte) erro
 		return err
 	}
 	*w = WorkflowRequestChatHistoryInputRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -19082,41 +22004,13 @@ func (w WorkflowRequestInputRequest) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", w.Type, w)
 	case "STRING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*WorkflowRequestStringInputRequest
-		}{
-			Type:                              w.Type,
-			WorkflowRequestStringInputRequest: w.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.String, "type", "STRING")
 	case "JSON":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*WorkflowRequestJsonInputRequest
-		}{
-			Type:                            w.Type,
-			WorkflowRequestJsonInputRequest: w.Json,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Json, "type", "JSON")
 	case "CHAT_HISTORY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*WorkflowRequestChatHistoryInputRequest
-		}{
-			Type:                                   w.Type,
-			WorkflowRequestChatHistoryInputRequest: w.ChatHistory,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.ChatHistory, "type", "CHAT_HISTORY")
 	case "NUMBER":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*WorkflowRequestNumberInputRequest
-		}{
-			Type:                              w.Type,
-			WorkflowRequestNumberInputRequest: w.Number,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Number, "type", "NUMBER")
 	}
 }
 
@@ -19145,10 +22039,15 @@ func (w *WorkflowRequestInputRequest) Accept(visitor WorkflowRequestInputRequest
 // The input for a JSON variable in a Workflow.
 type WorkflowRequestJsonInputRequest struct {
 	// The variable's name, as defined in the Workflow.
-	Name  string      `json:"name"`
-	Value interface{} `json:"value,omitempty"`
+	Name  string      `json:"name" url:"name"`
+	Value interface{} `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowRequestJsonInputRequest) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowRequestJsonInputRequest) UnmarshalJSON(data []byte) error {
@@ -19158,6 +22057,13 @@ func (w *WorkflowRequestJsonInputRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowRequestJsonInputRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -19177,10 +22083,15 @@ func (w *WorkflowRequestJsonInputRequest) String() string {
 // The input for a number variable in a Workflow.
 type WorkflowRequestNumberInputRequest struct {
 	// The variable's name, as defined in the Workflow.
-	Name  string  `json:"name"`
-	Value float64 `json:"value"`
+	Name  string  `json:"name" url:"name"`
+	Value float64 `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowRequestNumberInputRequest) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowRequestNumberInputRequest) UnmarshalJSON(data []byte) error {
@@ -19190,6 +22101,13 @@ func (w *WorkflowRequestNumberInputRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowRequestNumberInputRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -19209,10 +22127,15 @@ func (w *WorkflowRequestNumberInputRequest) String() string {
 // The input for a string variable in a Workflow.
 type WorkflowRequestStringInputRequest struct {
 	// The variable's name, as defined in the Workflow.
-	Name  string `json:"name"`
-	Value string `json:"value"`
+	Name  string `json:"name" url:"name"`
+	Value string `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowRequestStringInputRequest) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowRequestStringInputRequest) UnmarshalJSON(data []byte) error {
@@ -19222,6 +22145,13 @@ func (w *WorkflowRequestStringInputRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowRequestStringInputRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -19239,26 +22169,56 @@ func (w *WorkflowRequestStringInputRequest) String() string {
 }
 
 type WorkflowResultEvent struct {
-	Id      string                         `json:"id"`
-	State   WorkflowNodeResultEventState   `json:"state,omitempty"`
-	Ts      time.Time                      `json:"ts"`
-	Output  *WorkflowResultEventOutputData `json:"output,omitempty"`
-	Error   *WorkflowEventError            `json:"error,omitempty"`
-	Outputs []*WorkflowOutput              `json:"outputs,omitempty"`
-	Inputs  []*ExecutionVellumValue        `json:"inputs,omitempty"`
+	Id      string                         `json:"id" url:"id"`
+	State   WorkflowNodeResultEventState   `json:"state" url:"state"`
+	Ts      time.Time                      `json:"ts" url:"ts"`
+	Output  *WorkflowResultEventOutputData `json:"output,omitempty" url:"output,omitempty"`
+	Error   *WorkflowEventError            `json:"error,omitempty" url:"error,omitempty"`
+	Outputs []*WorkflowOutput              `json:"outputs,omitempty" url:"outputs,omitempty"`
+	Inputs  []*ExecutionVellumValue        `json:"inputs,omitempty" url:"inputs,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowResultEvent) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowResultEvent) UnmarshalJSON(data []byte) error {
-	type unmarshaler WorkflowResultEvent
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed WorkflowResultEvent
+	var unmarshaler = struct {
+		embed
+		Ts *core.DateTime `json:"ts"`
+	}{
+		embed: embed(*w),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*w = WorkflowResultEvent(value)
+	*w = WorkflowResultEvent(unmarshaler.embed)
+	w.Ts = unmarshaler.Ts.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (w *WorkflowResultEvent) MarshalJSON() ([]byte, error) {
+	type embed WorkflowResultEvent
+	var marshaler = struct {
+		embed
+		Ts *core.DateTime `json:"ts"`
+	}{
+		embed: embed(*w),
+		Ts:    core.NewDateTime(w.Ts),
+	}
+	return json.Marshal(marshaler)
 }
 
 func (w *WorkflowResultEvent) String() string {
@@ -19383,77 +22343,21 @@ func (w WorkflowResultEventOutputData) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", w.Type, w)
 	case "STRING":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*WorkflowResultEventOutputDataString
-		}{
-			Type:                                w.Type,
-			WorkflowResultEventOutputDataString: w.String,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.String, "type", "STRING")
 	case "NUMBER":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*WorkflowResultEventOutputDataNumber
-		}{
-			Type:                                w.Type,
-			WorkflowResultEventOutputDataNumber: w.Number,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Number, "type", "NUMBER")
 	case "JSON":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*WorkflowResultEventOutputDataJson
-		}{
-			Type:                              w.Type,
-			WorkflowResultEventOutputDataJson: w.Json,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Json, "type", "JSON")
 	case "CHAT_HISTORY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*WorkflowResultEventOutputDataChatHistory
-		}{
-			Type:                                     w.Type,
-			WorkflowResultEventOutputDataChatHistory: w.ChatHistory,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.ChatHistory, "type", "CHAT_HISTORY")
 	case "SEARCH_RESULTS":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*WorkflowResultEventOutputDataSearchResults
-		}{
-			Type: w.Type,
-			WorkflowResultEventOutputDataSearchResults: w.SearchResults,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.SearchResults, "type", "SEARCH_RESULTS")
 	case "ARRAY":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*WorkflowResultEventOutputDataArray
-		}{
-			Type:                               w.Type,
-			WorkflowResultEventOutputDataArray: w.Array,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Array, "type", "ARRAY")
 	case "FUNCTION_CALL":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*WorkflowResultEventOutputDataFunctionCall
-		}{
-			Type: w.Type,
-			WorkflowResultEventOutputDataFunctionCall: w.FunctionCall,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.FunctionCall, "type", "FUNCTION_CALL")
 	case "ERROR":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*WorkflowResultEventOutputDataError
-		}{
-			Type:                               w.Type,
-			WorkflowResultEventOutputDataError: w.Error,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Error, "type", "ERROR")
 	}
 }
 
@@ -19493,15 +22397,20 @@ func (w *WorkflowResultEventOutputData) Accept(visitor WorkflowResultEventOutput
 
 // An Array output returned from a Workflow execution.
 type WorkflowResultEventOutputDataArray struct {
-	Id     *string                      `json:"id,omitempty"`
-	Name   string                       `json:"name"`
-	State  WorkflowNodeResultEventState `json:"state,omitempty"`
-	NodeId string                       `json:"node_id"`
+	Id     *string                      `json:"id,omitempty" url:"id,omitempty"`
+	Name   string                       `json:"name" url:"name"`
+	State  WorkflowNodeResultEventState `json:"state" url:"state"`
+	NodeId string                       `json:"node_id" url:"node_id"`
 	// The newly output string value. Only relevant for string outputs with a state of STREAMING.
-	Delta *string                   `json:"delta,omitempty"`
-	Value []*ArrayVariableValueItem `json:"value,omitempty"`
+	Delta *string                   `json:"delta,omitempty" url:"delta,omitempty"`
+	Value []*ArrayVariableValueItem `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowResultEventOutputDataArray) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowResultEventOutputDataArray) UnmarshalJSON(data []byte) error {
@@ -19511,6 +22420,13 @@ func (w *WorkflowResultEventOutputDataArray) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowResultEventOutputDataArray(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -19529,15 +22445,20 @@ func (w *WorkflowResultEventOutputDataArray) String() string {
 
 // A Chat History output streamed from a Workflow execution.
 type WorkflowResultEventOutputDataChatHistory struct {
-	Id     *string                      `json:"id,omitempty"`
-	Name   string                       `json:"name"`
-	State  WorkflowNodeResultEventState `json:"state,omitempty"`
-	NodeId string                       `json:"node_id"`
+	Id     *string                      `json:"id,omitempty" url:"id,omitempty"`
+	Name   string                       `json:"name" url:"name"`
+	State  WorkflowNodeResultEventState `json:"state" url:"state"`
+	NodeId string                       `json:"node_id" url:"node_id"`
 	// The newly output string value. Only relevant for string outputs with a state of STREAMING.
-	Delta *string        `json:"delta,omitempty"`
-	Value []*ChatMessage `json:"value,omitempty"`
+	Delta *string        `json:"delta,omitempty" url:"delta,omitempty"`
+	Value []*ChatMessage `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowResultEventOutputDataChatHistory) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowResultEventOutputDataChatHistory) UnmarshalJSON(data []byte) error {
@@ -19547,6 +22468,13 @@ func (w *WorkflowResultEventOutputDataChatHistory) UnmarshalJSON(data []byte) er
 		return err
 	}
 	*w = WorkflowResultEventOutputDataChatHistory(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -19565,15 +22493,20 @@ func (w *WorkflowResultEventOutputDataChatHistory) String() string {
 
 // An Error output streamed from a Workflow execution.
 type WorkflowResultEventOutputDataError struct {
-	Id     *string                      `json:"id,omitempty"`
-	Name   string                       `json:"name"`
-	State  WorkflowNodeResultEventState `json:"state,omitempty"`
-	NodeId string                       `json:"node_id"`
+	Id     *string                      `json:"id,omitempty" url:"id,omitempty"`
+	Name   string                       `json:"name" url:"name"`
+	State  WorkflowNodeResultEventState `json:"state" url:"state"`
+	NodeId string                       `json:"node_id" url:"node_id"`
 	// The newly output string value. Only relevant for string outputs with a state of STREAMING.
-	Delta *string      `json:"delta,omitempty"`
-	Value *VellumError `json:"value,omitempty"`
+	Delta *string      `json:"delta,omitempty" url:"delta,omitempty"`
+	Value *VellumError `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowResultEventOutputDataError) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowResultEventOutputDataError) UnmarshalJSON(data []byte) error {
@@ -19583,6 +22516,13 @@ func (w *WorkflowResultEventOutputDataError) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowResultEventOutputDataError(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -19601,15 +22541,20 @@ func (w *WorkflowResultEventOutputDataError) String() string {
 
 // A Function Call output returned from a Workflow execution.
 type WorkflowResultEventOutputDataFunctionCall struct {
-	Id     *string                      `json:"id,omitempty"`
-	Name   string                       `json:"name"`
-	State  WorkflowNodeResultEventState `json:"state,omitempty"`
-	NodeId string                       `json:"node_id"`
+	Id     *string                      `json:"id,omitempty" url:"id,omitempty"`
+	Name   string                       `json:"name" url:"name"`
+	State  WorkflowNodeResultEventState `json:"state" url:"state"`
+	NodeId string                       `json:"node_id" url:"node_id"`
 	// The newly output string value. Only relevant for string outputs with a state of STREAMING.
-	Delta *string       `json:"delta,omitempty"`
-	Value *FunctionCall `json:"value,omitempty"`
+	Delta *string       `json:"delta,omitempty" url:"delta,omitempty"`
+	Value *FunctionCall `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowResultEventOutputDataFunctionCall) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowResultEventOutputDataFunctionCall) UnmarshalJSON(data []byte) error {
@@ -19619,6 +22564,13 @@ func (w *WorkflowResultEventOutputDataFunctionCall) UnmarshalJSON(data []byte) e
 		return err
 	}
 	*w = WorkflowResultEventOutputDataFunctionCall(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -19637,15 +22589,20 @@ func (w *WorkflowResultEventOutputDataFunctionCall) String() string {
 
 // A JSON output streamed from a Workflow execution.
 type WorkflowResultEventOutputDataJson struct {
-	Id     *string                      `json:"id,omitempty"`
-	Name   string                       `json:"name"`
-	State  WorkflowNodeResultEventState `json:"state,omitempty"`
-	NodeId string                       `json:"node_id"`
+	Id     *string                      `json:"id,omitempty" url:"id,omitempty"`
+	Name   string                       `json:"name" url:"name"`
+	State  WorkflowNodeResultEventState `json:"state" url:"state"`
+	NodeId string                       `json:"node_id" url:"node_id"`
 	// The newly output string value. Only relevant for string outputs with a state of STREAMING.
-	Delta *string     `json:"delta,omitempty"`
-	Value interface{} `json:"value,omitempty"`
+	Delta *string     `json:"delta,omitempty" url:"delta,omitempty"`
+	Value interface{} `json:"value" url:"value"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowResultEventOutputDataJson) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowResultEventOutputDataJson) UnmarshalJSON(data []byte) error {
@@ -19655,6 +22612,13 @@ func (w *WorkflowResultEventOutputDataJson) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowResultEventOutputDataJson(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -19673,15 +22637,20 @@ func (w *WorkflowResultEventOutputDataJson) String() string {
 
 // A number output streamed from a Workflow execution.
 type WorkflowResultEventOutputDataNumber struct {
-	Id     *string                      `json:"id,omitempty"`
-	Name   string                       `json:"name"`
-	State  WorkflowNodeResultEventState `json:"state,omitempty"`
-	NodeId string                       `json:"node_id"`
+	Id     *string                      `json:"id,omitempty" url:"id,omitempty"`
+	Name   string                       `json:"name" url:"name"`
+	State  WorkflowNodeResultEventState `json:"state" url:"state"`
+	NodeId string                       `json:"node_id" url:"node_id"`
 	// The newly output string value. Only relevant for string outputs with a state of STREAMING.
-	Delta *string  `json:"delta,omitempty"`
-	Value *float64 `json:"value,omitempty"`
+	Delta *string  `json:"delta,omitempty" url:"delta,omitempty"`
+	Value *float64 `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowResultEventOutputDataNumber) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowResultEventOutputDataNumber) UnmarshalJSON(data []byte) error {
@@ -19691,6 +22660,13 @@ func (w *WorkflowResultEventOutputDataNumber) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowResultEventOutputDataNumber(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -19709,15 +22685,20 @@ func (w *WorkflowResultEventOutputDataNumber) String() string {
 
 // A Search Results output streamed from a Workflow execution.
 type WorkflowResultEventOutputDataSearchResults struct {
-	Id     *string                      `json:"id,omitempty"`
-	Name   string                       `json:"name"`
-	State  WorkflowNodeResultEventState `json:"state,omitempty"`
-	NodeId string                       `json:"node_id"`
+	Id     *string                      `json:"id,omitempty" url:"id,omitempty"`
+	Name   string                       `json:"name" url:"name"`
+	State  WorkflowNodeResultEventState `json:"state" url:"state"`
+	NodeId string                       `json:"node_id" url:"node_id"`
 	// The newly output string value. Only relevant for string outputs with a state of STREAMING.
-	Delta *string         `json:"delta,omitempty"`
-	Value []*SearchResult `json:"value,omitempty"`
+	Delta *string         `json:"delta,omitempty" url:"delta,omitempty"`
+	Value []*SearchResult `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowResultEventOutputDataSearchResults) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowResultEventOutputDataSearchResults) UnmarshalJSON(data []byte) error {
@@ -19727,6 +22708,13 @@ func (w *WorkflowResultEventOutputDataSearchResults) UnmarshalJSON(data []byte) 
 		return err
 	}
 	*w = WorkflowResultEventOutputDataSearchResults(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -19745,16 +22733,21 @@ func (w *WorkflowResultEventOutputDataSearchResults) String() string {
 
 // A string output streamed from a Workflow execution.
 type WorkflowResultEventOutputDataString struct {
-	Id     *string                      `json:"id,omitempty"`
-	Name   string                       `json:"name"`
-	State  WorkflowNodeResultEventState `json:"state,omitempty"`
-	NodeId string                       `json:"node_id"`
+	Id     *string                      `json:"id,omitempty" url:"id,omitempty"`
+	Name   string                       `json:"name" url:"name"`
+	State  WorkflowNodeResultEventState `json:"state" url:"state"`
+	NodeId string                       `json:"node_id" url:"node_id"`
 	// The newly output string value, meant to be concatenated with all previous. Will be non-null for events of state STREAMING.
-	Delta *string `json:"delta,omitempty"`
+	Delta *string `json:"delta,omitempty" url:"delta,omitempty"`
 	// The entire string value. Will be non-null for events of state FULFILLED.
-	Value *string `json:"value,omitempty"`
+	Value *string `json:"value,omitempty" url:"value,omitempty"`
 
-	_rawJSON json.RawMessage
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowResultEventOutputDataString) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
 }
 
 func (w *WorkflowResultEventOutputDataString) UnmarshalJSON(data []byte) error {
@@ -19764,6 +22757,13 @@ func (w *WorkflowResultEventOutputDataString) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowResultEventOutputDataString(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
 	w._rawJSON = json.RawMessage(data)
 	return nil
 }
@@ -19824,23 +22824,9 @@ func (w WorkflowStreamEvent) MarshalJSON() ([]byte, error) {
 	default:
 		return nil, fmt.Errorf("invalid type %s in %T", w.Type, w)
 	case "WORKFLOW":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*WorkflowExecutionWorkflowResultEvent
-		}{
-			Type:                                 w.Type,
-			WorkflowExecutionWorkflowResultEvent: w.Workflow,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Workflow, "type", "WORKFLOW")
 	case "NODE":
-		var marshaler = struct {
-			Type string `json:"type"`
-			*WorkflowExecutionNodeResultEvent
-		}{
-			Type:                             w.Type,
-			WorkflowExecutionNodeResultEvent: w.Node,
-		}
-		return json.Marshal(marshaler)
+		return core.MarshalJSONWithExtraProperty(w.Node, "type", "NODE")
 	}
 }
 

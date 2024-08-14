@@ -4,5 +4,5 @@ package api
 
 type AddEntityToFolderRequest struct {
 	// The ID of the entity you would like to move.
-	EntityId string `json:"entity_id"`
+	EntityId string `json:"entity_id" url:"-"`
 }

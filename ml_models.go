@@ -4,7 +4,7 @@ package api
 
 type MlModelCreateRequest struct {
 	// The unique name of the ML Model.
-	Name string `json:"name"`
+	Name string `json:"name" url:"-"`
 	// The family of the ML Model.
 	//
 	// * `CAPYBARA` - Capybara
@@ -27,7 +27,7 @@ type MlModelCreateRequest struct {
 	// * `WIZARD` - Wizard
 	// * `YI` - Yi
 	// * `ZEPHYR` - Zephyr
-	Family MlModelFamily `json:"family,omitempty"`
+	Family MlModelFamily `json:"family" url:"-"`
 	// The organization hosting the ML Model.
 	//
 	// * `ANTHROPIC` - ANTHROPIC
@@ -47,7 +47,7 @@ type MlModelCreateRequest struct {
 	// * `OPENPIPE` - OPENPIPE
 	// * `PYQ` - PYQ
 	// * `REPLICATE` - REPLICATE
-	HostedBy HostedByEnum `json:"hosted_by,omitempty"`
+	HostedBy HostedByEnum `json:"hosted_by" url:"-"`
 	// The organization that developed the ML Model.
 	//
 	// * `01_AI` - 01_AI
@@ -68,59 +68,59 @@ type MlModelCreateRequest struct {
 	// * `OPENPIPE` - OPENPIPE
 	// * `TII` - TII
 	// * `WIZARDLM` - WIZARDLM
-	DevelopedBy MlModelDeveloper `json:"developed_by,omitempty"`
+	DevelopedBy MlModelDeveloper `json:"developed_by" url:"-"`
 	// Configuration for how to execute the ML Model.
-	ExecConfig *MlModelExecConfigRequest `json:"exec_config,omitempty"`
+	ExecConfig *MlModelExecConfigRequest `json:"exec_config,omitempty" url:"-"`
 	// Configuration for the ML Model's parameters.
-	ParameterConfig *MlModelParameterConfigRequest `json:"parameter_config,omitempty"`
+	ParameterConfig *MlModelParameterConfigRequest `json:"parameter_config,omitempty" url:"-"`
 	// Configuration for how to display the ML Model.
-	DisplayConfig *MlModelDisplayConfigRequest `json:"display_config,omitempty"`
+	DisplayConfig *MlModelDisplayConfigRequest `json:"display_config,omitempty" url:"-"`
 	// The visibility of the ML Model.
 	//
 	// * `DEFAULT` - DEFAULT
 	// * `PUBLIC` - PUBLIC
 	// * `PRIVATE` - PRIVATE
 	// * `DISABLED` - DISABLED
-	Visibility *VisibilityEnum `json:"visibility,omitempty"`
+	Visibility *VisibilityEnum `json:"visibility,omitempty" url:"-"`
 }
 
 type MlModelsListRequest struct {
 	// Number of results to return per page.
-	Limit *int `json:"-"`
+	Limit *int `json:"-" url:"limit,omitempty"`
 	// The initial index from which to return the results.
-	Offset *int `json:"-"`
+	Offset *int `json:"-" url:"offset,omitempty"`
 	// Which field to use when ordering the results.
-	Ordering *string `json:"-"`
+	Ordering *string `json:"-" url:"ordering,omitempty"`
 }
 
 type PatchedMlModelUpdateRequest struct {
 	// Configuration for how to execute the ML Model.
-	ExecConfig *MlModelExecConfigRequest `json:"exec_config,omitempty"`
+	ExecConfig *MlModelExecConfigRequest `json:"exec_config,omitempty" url:"-"`
 	// Configuration for the ML Model's parameters.
-	ParameterConfig *MlModelParameterConfigRequest `json:"parameter_config,omitempty"`
+	ParameterConfig *MlModelParameterConfigRequest `json:"parameter_config,omitempty" url:"-"`
 	// Configuration for how to display the ML Model.
-	DisplayConfig *MlModelDisplayConfigRequest `json:"display_config,omitempty"`
+	DisplayConfig *MlModelDisplayConfigRequest `json:"display_config,omitempty" url:"-"`
 	// The visibility of the ML Model.
 	//
 	// * `DEFAULT` - DEFAULT
 	// * `PUBLIC` - PUBLIC
 	// * `PRIVATE` - PRIVATE
 	// * `DISABLED` - DISABLED
-	Visibility *VisibilityEnum `json:"visibility,omitempty"`
+	Visibility *VisibilityEnum `json:"visibility,omitempty" url:"-"`
 }
 
 type MlModelUpdateRequest struct {
 	// Configuration for how to execute the ML Model.
-	ExecConfig *MlModelExecConfigRequest `json:"exec_config,omitempty"`
+	ExecConfig *MlModelExecConfigRequest `json:"exec_config,omitempty" url:"-"`
 	// Configuration for the ML Model's parameters.
-	ParameterConfig *MlModelParameterConfigRequest `json:"parameter_config,omitempty"`
+	ParameterConfig *MlModelParameterConfigRequest `json:"parameter_config,omitempty" url:"-"`
 	// Configuration for how to display the ML Model.
-	DisplayConfig *MlModelDisplayConfigRequest `json:"display_config,omitempty"`
+	DisplayConfig *MlModelDisplayConfigRequest `json:"display_config,omitempty" url:"-"`
 	// The visibility of the ML Model.
 	//
 	// * `DEFAULT` - DEFAULT
 	// * `PUBLIC` - PUBLIC
 	// * `PRIVATE` - PRIVATE
 	// * `DISABLED` - DISABLED
-	Visibility *VisibilityEnum `json:"visibility,omitempty"`
+	Visibility *VisibilityEnum `json:"visibility,omitempty" url:"-"`
 }
