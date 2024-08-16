@@ -13,6 +13,7 @@ This module requires Go version >= 1.18.
 # Installation
 
 Run the following command to use the Vellum Go library in your module:
+
 ```sh
 go get github.com/vellum-ai/vellum-client-go
 ```
@@ -20,62 +21,85 @@ go get github.com/vellum-ai/vellum-client-go
 # Usage
 
 ```go
-import vellumclient "github.com/vellum-ai/vellum-client-go/client"
+	import (
+	vellum "github.com/vellum-ai/vellum-client-go"
+	vellumclient "github.com/vellum-ai/vellum-client-go/client"
+	vellumoption "github.com/vellum-ai/vellum-client-go/option"
+)
 
-client := vellumclient.NewClient(vellumclient.WithApiKey("<YOUR_AUTH_TOKEN>"))
+
+client := vellumclient.NewClient(vellumoption.WithApiKey(apiKey))
 ```
 
 ## Generate Completion
 
 ```go
+package main
+
 import (
-  vellum       "github.com/vellum-ai/vellum-client-go"
-  vellumclient "github.com/vellum-ai/vellum-client-go/client"
+	"context"
+	"fmt"
+	"net/http"
+	"time"
+
+	vellum "github.com/vellum-ai/vellum-client-go"
+	vellumclient "github.com/vellum-ai/vellum-client-go/client"
+	vellumoption "github.com/vellum-ai/vellum-client-go/option"
 )
 
-client := vellumclient.NewClient(vellumclient.WithApiKey("<YOUR_AUTH_TOKEN>"))
-response, err := client.ExecutePrompt(
-  context.TODO(),
-  &vellum.ExecutePromptRequest{
-    PromptDeploymentName: vellum.String("<your-deployment-name>"),
-    Inputs: []*vellum.PromptDeploymentInputRequest{
-      {
-        Type: "String",
-        String: &vellum.StringInputRequest{
-          Name:  "<input_a>",
-          Value: "Hello, world!",
-        },
-      },
-    },
-  },
-)
-```
+func main() {
+	apiKey := "<YOUR_API_KEY>"
 
-## Timeouts
+	client := vellumclient.NewClient(
+		vellumoption.WithApiKey(apiKey),
+	)
 
-Setting a timeout for each individual request is as simple as using the standard
-`context` library. Setting a one second timeout for an individual API call looks
-like the following:
+	response, err := client.ExecutePrompt(
+		context.TODO(),
+		&vellum.ExecutePromptRequest{
+			PromptDeploymentName: vellum.String("<your_deployment_id>"),
+			Inputs: []*vellum.PromptDeploymentInputRequest{
+				{
+					Type: "STRING",
+					String: &vellum.StringInputRequest{
+						Name:  "<input_a>",
+            Value: "Hello, world!",
+					},
+				},
+				{
+					Type: "CHAT_HISTORY",
+					ChatHistory: &vellum.ChatHistoryInputRequest{
+						Name:  "chat_history",
+						Value: []*vellum.ChatMessageRequest{},
+					},
+				},
+				{
+					Type: "JSON",
+					Json: &vellum.JsonInputRequest{
+						Name: "test",
+						Value: map[string]interface{}{
+							"example-key": "example-value",
+						},
+					},
+				},
+			},
+		},
+	)
 
-```go
-ctx, cancel := context.WithTimeout(context.TODO(), time.Second)
-defer cancel()
+	if err != nil {
+		if badRequestErr, ok := err.(*vellum.BadRequestError); ok {
+			// Handle the bad request error specifically
+			fmt.Println("Bad request error:", badRequestErr)
+		} else {
+			// Handle other errors
+			fmt.Println("Error:", err)
+		}
+		return
+	}
 
-response, err := client.ExecutePrompt(
-  ctx,
-  &vellum.ExecutePromptRequest{
-    PromptDeploymentName: vellum.String("<your-deployment-name>"),
-    Inputs: []*vellum.PromptDeploymentInputRequest{
-      {
-        Type: "String",
-        String: &vellum.StringInputRequest{
-          Name:  "<input_a>",
-          Value: "Hello, world!",
-        },
-      },
-    },
-  },
-)
+	fmt.Println("Response:", response)
+}
+
 ```
 
 ## Client Options
@@ -86,18 +110,44 @@ configuring authorization tokens to be sent on every request, or providing your 
 
 ```go
 client := vellumclient.NewClient(
-  vellumclient.WithApiKey("<YOUR_AUTH_TOKEN>"),
-  vellumclient.WithHTTPClient(
-    &http.Client{
-      Timeout: 5 * time.Second,
-    },
-  ),
-)
+		vellumoption.WithApiKey(apiKey),
+		vellumoption.WithHTTPClient(&http.Client{
+			Timeout: 5 * time.Second,
+		}),
+	)
 ```
 
 > Providing your own `*http.Client` is recommended. Otherwise, the `http.DefaultClient` will be used,
 > and your client will wait indefinitely for a response (unless the per-request, context-based timeout
 > is used).
+
+## Timeouts
+
+Setting a timeout for each individual request is as simple as adding an option in the client declaration.
+
+```go
+client := vellumclient.NewClient(
+		vellumoption.WithHTTPClient(&http.Client{
+			Timeout: 5 * time.Second, // Example of setting an HTTP client timeout
+		}),
+	)
+
+response, err := client.ExecutePrompt(
+		context.TODO(),
+		&vellum.ExecutePromptRequest{
+			PromptDeploymentName: vellum.String("<your_deployment_id>"),
+			Inputs: []*vellum.PromptDeploymentInputRequest{
+				{
+					Type: "STRING",
+					String: &vellum.StringInputRequest{
+						Name:  "<input_a>",
+            Value: "Hello, world!",
+					},
+				},
+			},
+		},
+	)
+```
 
 ## Errors
 
@@ -111,7 +161,7 @@ response, err := client.ExecutePrompt(
     PromptDeploymentName: vellum.String("<invalid-name>"), // Updated to use an invalid deployment name
     Inputs: []*vellum.PromptDeploymentInputRequest{
       {
-        Type: "String",
+        Type: "STRING",
         String: &vellum.StringInputRequest{
           Name:  "<input_a>",
           Value: "Hello, world!",
@@ -121,12 +171,15 @@ response, err := client.ExecutePrompt(
   },
 )
 if err != nil {
-  if badRequestErr, ok := err.(*vellum.BadRequestError); ok {
-    // Do something with the bad request error
-    // Handle the bad request error specifically
-  }
-  return err // Ensure to return the error if present
-}
+		if badRequestErr, ok := err.(*vellum.BadRequestError); ok {
+			// Handle the bad request error specifically
+			fmt.Println("Bad request error:", badRequestErr)
+		} else {
+			// Handle other errors
+			fmt.Println("Error:", err)
+		}
+		return
+	}
 ```
 
 These errors are also compatible with the `errors.Is` and `errors.As` APIs, so you can access the error
@@ -141,7 +194,7 @@ response, err := client.Generate(
 
 
       {
-        Type: "String",
+        Type: "STRING",
         String: &vellum.StringInputRequest{
           Name:  "<input_a>",
           Value: "Hello, world!",
@@ -169,7 +222,7 @@ response, err := client.Generate(
     PromptDeploymentName: vellum.String("<invalid-name>"), // Updated to use an invalid deployment name
     Inputs: []*vellum.PromptDeploymentInputRequest{
       {
-        Type: "String",
+        Type: "STRING",
         String: &vellum.StringInputRequest{
           Name:  "<input_a>",
           Value: "Hello, world!",
@@ -195,7 +248,7 @@ stream, err := client.ExecutePromptStream(
         PromptDeploymentName: vellum.String("<your-deployment-name>>"),
         Inputs: []*vellum.PromptDeploymentInputRequest{
             {
-                Type: "String",
+                Type: "STRING",
                 String: &vellum.StringInputRequest{
                     Name:  "<input_a>",
                     Value: "Hello, world!",
@@ -238,6 +291,7 @@ like any other non-`nil` error.
 While we value open-source contributions to this SDK, most of this library is generated programmatically.
 
 Please feel free to make contributions to any of the directories or files below:
+
 ```plaintext
 tests/*
 README.md
