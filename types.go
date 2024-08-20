@@ -158,6 +158,7 @@ func (a *ApiNodeResult) UnmarshalJSON(data []byte) error {
 	type embed ApiNodeResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*a),
 	}
@@ -165,7 +166,10 @@ func (a *ApiNodeResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*a = ApiNodeResult(unmarshaler.embed)
-	a.type_ = "API"
+	if unmarshaler.Type != "API" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", a, "API", unmarshaler.Type)
+	}
+	a.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *a, "type")
 	if err != nil {
@@ -268,6 +272,7 @@ func (a *ArrayChatMessageContent) UnmarshalJSON(data []byte) error {
 	type embed ArrayChatMessageContent
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*a),
 	}
@@ -275,7 +280,10 @@ func (a *ArrayChatMessageContent) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*a = ArrayChatMessageContent(unmarshaler.embed)
-	a.type_ = "ARRAY"
+	if unmarshaler.Type != "ARRAY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", a, "ARRAY", unmarshaler.Type)
+	}
+	a.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *a, "type")
 	if err != nil {
@@ -446,6 +454,7 @@ func (a *ArrayChatMessageContentRequest) UnmarshalJSON(data []byte) error {
 	type embed ArrayChatMessageContentRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*a),
 	}
@@ -453,7 +462,10 @@ func (a *ArrayChatMessageContentRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*a = ArrayChatMessageContentRequest(unmarshaler.embed)
-	a.type_ = "ARRAY"
+	if unmarshaler.Type != "ARRAY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", a, "ARRAY", unmarshaler.Type)
+	}
+	a.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *a, "type")
 	if err != nil {
@@ -798,6 +810,7 @@ func (b *BasicVectorizerIntfloatMultilingualE5Large) UnmarshalJSON(data []byte) 
 	type embed BasicVectorizerIntfloatMultilingualE5Large
 	var unmarshaler = struct {
 		embed
+		ModelName string `json:"model_name"`
 	}{
 		embed: embed(*b),
 	}
@@ -805,7 +818,10 @@ func (b *BasicVectorizerIntfloatMultilingualE5Large) UnmarshalJSON(data []byte) 
 		return err
 	}
 	*b = BasicVectorizerIntfloatMultilingualE5Large(unmarshaler.embed)
-	b.modelName = "intfloat/multilingual-e5-large"
+	if unmarshaler.ModelName != "intfloat/multilingual-e5-large" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", b, "intfloat/multilingual-e5-large", unmarshaler.ModelName)
+	}
+	b.modelName = unmarshaler.ModelName
 
 	extraProperties, err := core.ExtractExtraProperties(data, *b, "model_name")
 	if err != nil {
@@ -862,6 +878,7 @@ func (b *BasicVectorizerIntfloatMultilingualE5LargeRequest) UnmarshalJSON(data [
 	type embed BasicVectorizerIntfloatMultilingualE5LargeRequest
 	var unmarshaler = struct {
 		embed
+		ModelName string `json:"model_name"`
 	}{
 		embed: embed(*b),
 	}
@@ -869,7 +886,10 @@ func (b *BasicVectorizerIntfloatMultilingualE5LargeRequest) UnmarshalJSON(data [
 		return err
 	}
 	*b = BasicVectorizerIntfloatMultilingualE5LargeRequest(unmarshaler.embed)
-	b.modelName = "intfloat/multilingual-e5-large"
+	if unmarshaler.ModelName != "intfloat/multilingual-e5-large" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", b, "intfloat/multilingual-e5-large", unmarshaler.ModelName)
+	}
+	b.modelName = unmarshaler.ModelName
 
 	extraProperties, err := core.ExtractExtraProperties(data, *b, "model_name")
 	if err != nil {
@@ -926,6 +946,7 @@ func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1) UnmarshalJSON
 	type embed BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1
 	var unmarshaler = struct {
 		embed
+		ModelName string `json:"model_name"`
 	}{
 		embed: embed(*b),
 	}
@@ -933,7 +954,10 @@ func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1) UnmarshalJSON
 		return err
 	}
 	*b = BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1(unmarshaler.embed)
-	b.modelName = "sentence-transformers/multi-qa-mpnet-base-cos-v1"
+	if unmarshaler.ModelName != "sentence-transformers/multi-qa-mpnet-base-cos-v1" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", b, "sentence-transformers/multi-qa-mpnet-base-cos-v1", unmarshaler.ModelName)
+	}
+	b.modelName = unmarshaler.ModelName
 
 	extraProperties, err := core.ExtractExtraProperties(data, *b, "model_name")
 	if err != nil {
@@ -990,6 +1014,7 @@ func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request) Unmars
 	type embed BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request
 	var unmarshaler = struct {
 		embed
+		ModelName string `json:"model_name"`
 	}{
 		embed: embed(*b),
 	}
@@ -997,7 +1022,10 @@ func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request) Unmars
 		return err
 	}
 	*b = BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request(unmarshaler.embed)
-	b.modelName = "sentence-transformers/multi-qa-mpnet-base-cos-v1"
+	if unmarshaler.ModelName != "sentence-transformers/multi-qa-mpnet-base-cos-v1" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", b, "sentence-transformers/multi-qa-mpnet-base-cos-v1", unmarshaler.ModelName)
+	}
+	b.modelName = unmarshaler.ModelName
 
 	extraProperties, err := core.ExtractExtraProperties(data, *b, "model_name")
 	if err != nil {
@@ -1054,6 +1082,7 @@ func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1) UnmarshalJSON
 	type embed BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1
 	var unmarshaler = struct {
 		embed
+		ModelName string `json:"model_name"`
 	}{
 		embed: embed(*b),
 	}
@@ -1061,7 +1090,10 @@ func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1) UnmarshalJSON
 		return err
 	}
 	*b = BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1(unmarshaler.embed)
-	b.modelName = "sentence-transformers/multi-qa-mpnet-base-dot-v1"
+	if unmarshaler.ModelName != "sentence-transformers/multi-qa-mpnet-base-dot-v1" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", b, "sentence-transformers/multi-qa-mpnet-base-dot-v1", unmarshaler.ModelName)
+	}
+	b.modelName = unmarshaler.ModelName
 
 	extraProperties, err := core.ExtractExtraProperties(data, *b, "model_name")
 	if err != nil {
@@ -1118,6 +1150,7 @@ func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request) Unmars
 	type embed BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request
 	var unmarshaler = struct {
 		embed
+		ModelName string `json:"model_name"`
 	}{
 		embed: embed(*b),
 	}
@@ -1125,7 +1158,10 @@ func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request) Unmars
 		return err
 	}
 	*b = BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request(unmarshaler.embed)
-	b.modelName = "sentence-transformers/multi-qa-mpnet-base-dot-v1"
+	if unmarshaler.ModelName != "sentence-transformers/multi-qa-mpnet-base-dot-v1" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", b, "sentence-transformers/multi-qa-mpnet-base-dot-v1", unmarshaler.ModelName)
+	}
+	b.modelName = unmarshaler.ModelName
 
 	extraProperties, err := core.ExtractExtraProperties(data, *b, "model_name")
 	if err != nil {
@@ -1184,6 +1220,7 @@ func (c *ChatHistoryInputRequest) UnmarshalJSON(data []byte) error {
 	type embed ChatHistoryInputRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*c),
 	}
@@ -1191,7 +1228,10 @@ func (c *ChatHistoryInputRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = ChatHistoryInputRequest(unmarshaler.embed)
-	c.type_ = "CHAT_HISTORY"
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", c, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	c.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *c, "type")
 	if err != nil {
@@ -1510,6 +1550,7 @@ func (c *CodeExecutionNodeArrayResult) UnmarshalJSON(data []byte) error {
 	type embed CodeExecutionNodeArrayResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*c),
 	}
@@ -1517,7 +1558,10 @@ func (c *CodeExecutionNodeArrayResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CodeExecutionNodeArrayResult(unmarshaler.embed)
-	c.type_ = "ARRAY"
+	if unmarshaler.Type != "ARRAY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", c, "ARRAY", unmarshaler.Type)
+	}
+	c.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *c, "type")
 	if err != nil {
@@ -1574,6 +1618,7 @@ func (c *CodeExecutionNodeChatHistoryResult) UnmarshalJSON(data []byte) error {
 	type embed CodeExecutionNodeChatHistoryResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*c),
 	}
@@ -1581,7 +1626,10 @@ func (c *CodeExecutionNodeChatHistoryResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CodeExecutionNodeChatHistoryResult(unmarshaler.embed)
-	c.type_ = "CHAT_HISTORY"
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", c, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	c.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *c, "type")
 	if err != nil {
@@ -1638,6 +1686,7 @@ func (c *CodeExecutionNodeErrorResult) UnmarshalJSON(data []byte) error {
 	type embed CodeExecutionNodeErrorResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*c),
 	}
@@ -1645,7 +1694,10 @@ func (c *CodeExecutionNodeErrorResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CodeExecutionNodeErrorResult(unmarshaler.embed)
-	c.type_ = "ERROR"
+	if unmarshaler.Type != "ERROR" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", c, "ERROR", unmarshaler.Type)
+	}
+	c.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *c, "type")
 	if err != nil {
@@ -1702,6 +1754,7 @@ func (c *CodeExecutionNodeFunctionCallResult) UnmarshalJSON(data []byte) error {
 	type embed CodeExecutionNodeFunctionCallResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*c),
 	}
@@ -1709,7 +1762,10 @@ func (c *CodeExecutionNodeFunctionCallResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CodeExecutionNodeFunctionCallResult(unmarshaler.embed)
-	c.type_ = "FUNCTION_CALL"
+	if unmarshaler.Type != "FUNCTION_CALL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", c, "FUNCTION_CALL", unmarshaler.Type)
+	}
+	c.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *c, "type")
 	if err != nil {
@@ -1766,6 +1822,7 @@ func (c *CodeExecutionNodeJsonResult) UnmarshalJSON(data []byte) error {
 	type embed CodeExecutionNodeJsonResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*c),
 	}
@@ -1773,7 +1830,10 @@ func (c *CodeExecutionNodeJsonResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CodeExecutionNodeJsonResult(unmarshaler.embed)
-	c.type_ = "JSON"
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", c, "JSON", unmarshaler.Type)
+	}
+	c.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *c, "type")
 	if err != nil {
@@ -1830,6 +1890,7 @@ func (c *CodeExecutionNodeNumberResult) UnmarshalJSON(data []byte) error {
 	type embed CodeExecutionNodeNumberResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*c),
 	}
@@ -1837,7 +1898,10 @@ func (c *CodeExecutionNodeNumberResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CodeExecutionNodeNumberResult(unmarshaler.embed)
-	c.type_ = "NUMBER"
+	if unmarshaler.Type != "NUMBER" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", c, "NUMBER", unmarshaler.Type)
+	}
+	c.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *c, "type")
 	if err != nil {
@@ -1894,6 +1958,7 @@ func (c *CodeExecutionNodeResult) UnmarshalJSON(data []byte) error {
 	type embed CodeExecutionNodeResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*c),
 	}
@@ -1901,7 +1966,10 @@ func (c *CodeExecutionNodeResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CodeExecutionNodeResult(unmarshaler.embed)
-	c.type_ = "CODE_EXECUTION"
+	if unmarshaler.Type != "CODE_EXECUTION" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", c, "CODE_EXECUTION", unmarshaler.Type)
+	}
+	c.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *c, "type")
 	if err != nil {
@@ -2122,6 +2190,7 @@ func (c *CodeExecutionNodeSearchResultsResult) UnmarshalJSON(data []byte) error 
 	type embed CodeExecutionNodeSearchResultsResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*c),
 	}
@@ -2129,7 +2198,10 @@ func (c *CodeExecutionNodeSearchResultsResult) UnmarshalJSON(data []byte) error 
 		return err
 	}
 	*c = CodeExecutionNodeSearchResultsResult(unmarshaler.embed)
-	c.type_ = "SEARCH_RESULTS"
+	if unmarshaler.Type != "SEARCH_RESULTS" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", c, "SEARCH_RESULTS", unmarshaler.Type)
+	}
+	c.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *c, "type")
 	if err != nil {
@@ -2186,6 +2258,7 @@ func (c *CodeExecutionNodeStringResult) UnmarshalJSON(data []byte) error {
 	type embed CodeExecutionNodeStringResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*c),
 	}
@@ -2193,7 +2266,10 @@ func (c *CodeExecutionNodeStringResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = CodeExecutionNodeStringResult(unmarshaler.embed)
-	c.type_ = "STRING"
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", c, "STRING", unmarshaler.Type)
+	}
+	c.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *c, "type")
 	if err != nil {
@@ -2344,6 +2420,7 @@ func (c *ConditionalNodeResult) UnmarshalJSON(data []byte) error {
 	type embed ConditionalNodeResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*c),
 	}
@@ -2351,7 +2428,10 @@ func (c *ConditionalNodeResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*c = ConditionalNodeResult(unmarshaler.embed)
-	c.type_ = "CONDITIONAL"
+	if unmarshaler.Type != "CONDITIONAL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", c, "CONDITIONAL", unmarshaler.Type)
+	}
+	c.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *c, "type")
 	if err != nil {
@@ -3300,6 +3380,7 @@ func (e *ErrorVariableValue) UnmarshalJSON(data []byte) error {
 	type embed ErrorVariableValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*e),
 	}
@@ -3307,7 +3388,10 @@ func (e *ErrorVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ErrorVariableValue(unmarshaler.embed)
-	e.type_ = "ERROR"
+	if unmarshaler.Type != "ERROR" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", e, "ERROR", unmarshaler.Type)
+	}
+	e.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *e, "type")
 	if err != nil {
@@ -3364,6 +3448,7 @@ func (e *ErrorVellumValue) UnmarshalJSON(data []byte) error {
 	type embed ErrorVellumValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*e),
 	}
@@ -3371,7 +3456,10 @@ func (e *ErrorVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ErrorVellumValue(unmarshaler.embed)
-	e.type_ = "ERROR"
+	if unmarshaler.Type != "ERROR" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", e, "ERROR", unmarshaler.Type)
+	}
+	e.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *e, "type")
 	if err != nil {
@@ -3428,6 +3516,7 @@ func (e *ErrorVellumValueRequest) UnmarshalJSON(data []byte) error {
 	type embed ErrorVellumValueRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*e),
 	}
@@ -3435,7 +3524,10 @@ func (e *ErrorVellumValueRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ErrorVellumValueRequest(unmarshaler.embed)
-	e.type_ = "ERROR"
+	if unmarshaler.Type != "ERROR" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", e, "ERROR", unmarshaler.Type)
+	}
+	e.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *e, "type")
 	if err != nil {
@@ -3697,6 +3789,7 @@ func (e *ExecutionArrayVellumValue) UnmarshalJSON(data []byte) error {
 	type embed ExecutionArrayVellumValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*e),
 	}
@@ -3704,7 +3797,10 @@ func (e *ExecutionArrayVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ExecutionArrayVellumValue(unmarshaler.embed)
-	e.type_ = "ARRAY"
+	if unmarshaler.Type != "ARRAY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", e, "ARRAY", unmarshaler.Type)
+	}
+	e.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *e, "type")
 	if err != nil {
@@ -3764,6 +3860,7 @@ func (e *ExecutionChatHistoryVellumValue) UnmarshalJSON(data []byte) error {
 	type embed ExecutionChatHistoryVellumValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*e),
 	}
@@ -3771,7 +3868,10 @@ func (e *ExecutionChatHistoryVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ExecutionChatHistoryVellumValue(unmarshaler.embed)
-	e.type_ = "CHAT_HISTORY"
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", e, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	e.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *e, "type")
 	if err != nil {
@@ -3831,6 +3931,7 @@ func (e *ExecutionErrorVellumValue) UnmarshalJSON(data []byte) error {
 	type embed ExecutionErrorVellumValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*e),
 	}
@@ -3838,7 +3939,10 @@ func (e *ExecutionErrorVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ExecutionErrorVellumValue(unmarshaler.embed)
-	e.type_ = "ERROR"
+	if unmarshaler.Type != "ERROR" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", e, "ERROR", unmarshaler.Type)
+	}
+	e.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *e, "type")
 	if err != nil {
@@ -3898,6 +4002,7 @@ func (e *ExecutionFunctionCallVellumValue) UnmarshalJSON(data []byte) error {
 	type embed ExecutionFunctionCallVellumValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*e),
 	}
@@ -3905,7 +4010,10 @@ func (e *ExecutionFunctionCallVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ExecutionFunctionCallVellumValue(unmarshaler.embed)
-	e.type_ = "FUNCTION_CALL"
+	if unmarshaler.Type != "FUNCTION_CALL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", e, "FUNCTION_CALL", unmarshaler.Type)
+	}
+	e.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *e, "type")
 	if err != nil {
@@ -3965,6 +4073,7 @@ func (e *ExecutionJsonVellumValue) UnmarshalJSON(data []byte) error {
 	type embed ExecutionJsonVellumValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*e),
 	}
@@ -3972,7 +4081,10 @@ func (e *ExecutionJsonVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ExecutionJsonVellumValue(unmarshaler.embed)
-	e.type_ = "JSON"
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", e, "JSON", unmarshaler.Type)
+	}
+	e.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *e, "type")
 	if err != nil {
@@ -4032,6 +4144,7 @@ func (e *ExecutionNumberVellumValue) UnmarshalJSON(data []byte) error {
 	type embed ExecutionNumberVellumValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*e),
 	}
@@ -4039,7 +4152,10 @@ func (e *ExecutionNumberVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ExecutionNumberVellumValue(unmarshaler.embed)
-	e.type_ = "NUMBER"
+	if unmarshaler.Type != "NUMBER" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", e, "NUMBER", unmarshaler.Type)
+	}
+	e.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *e, "type")
 	if err != nil {
@@ -4099,6 +4215,7 @@ func (e *ExecutionSearchResultsVellumValue) UnmarshalJSON(data []byte) error {
 	type embed ExecutionSearchResultsVellumValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*e),
 	}
@@ -4106,7 +4223,10 @@ func (e *ExecutionSearchResultsVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ExecutionSearchResultsVellumValue(unmarshaler.embed)
-	e.type_ = "SEARCH_RESULTS"
+	if unmarshaler.Type != "SEARCH_RESULTS" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", e, "SEARCH_RESULTS", unmarshaler.Type)
+	}
+	e.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *e, "type")
 	if err != nil {
@@ -4166,6 +4286,7 @@ func (e *ExecutionStringVellumValue) UnmarshalJSON(data []byte) error {
 	type embed ExecutionStringVellumValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*e),
 	}
@@ -4173,7 +4294,10 @@ func (e *ExecutionStringVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*e = ExecutionStringVellumValue(unmarshaler.embed)
-	e.type_ = "STRING"
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", e, "STRING", unmarshaler.Type)
+	}
+	e.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *e, "type")
 	if err != nil {
@@ -4470,6 +4594,7 @@ func (f *FulfilledExecutePromptEvent) UnmarshalJSON(data []byte) error {
 	type embed FulfilledExecutePromptEvent
 	var unmarshaler = struct {
 		embed
+		State string `json:"state"`
 	}{
 		embed: embed(*f),
 	}
@@ -4477,7 +4602,10 @@ func (f *FulfilledExecutePromptEvent) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*f = FulfilledExecutePromptEvent(unmarshaler.embed)
-	f.state = "FULFILLED"
+	if unmarshaler.State != "FULFILLED" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "FULFILLED", unmarshaler.State)
+	}
+	f.state = unmarshaler.State
 
 	extraProperties, err := core.ExtractExtraProperties(data, *f, "state")
 	if err != nil {
@@ -4539,6 +4667,7 @@ func (f *FulfilledExecutePromptResponse) UnmarshalJSON(data []byte) error {
 	type embed FulfilledExecutePromptResponse
 	var unmarshaler = struct {
 		embed
+		State string `json:"state"`
 	}{
 		embed: embed(*f),
 	}
@@ -4546,7 +4675,10 @@ func (f *FulfilledExecutePromptResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*f = FulfilledExecutePromptResponse(unmarshaler.embed)
-	f.state = "FULFILLED"
+	if unmarshaler.State != "FULFILLED" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "FULFILLED", unmarshaler.State)
+	}
+	f.state = unmarshaler.State
 
 	extraProperties, err := core.ExtractExtraProperties(data, *f, "state")
 	if err != nil {
@@ -4605,7 +4737,8 @@ func (f *FulfilledExecuteWorkflowWorkflowResultEvent) UnmarshalJSON(data []byte)
 	type embed FulfilledExecuteWorkflowWorkflowResultEvent
 	var unmarshaler = struct {
 		embed
-		Ts *core.DateTime `json:"ts"`
+		Ts    *core.DateTime `json:"ts"`
+		State string         `json:"state"`
 	}{
 		embed: embed(*f),
 	}
@@ -4614,7 +4747,10 @@ func (f *FulfilledExecuteWorkflowWorkflowResultEvent) UnmarshalJSON(data []byte)
 	}
 	*f = FulfilledExecuteWorkflowWorkflowResultEvent(unmarshaler.embed)
 	f.Ts = unmarshaler.Ts.Time()
-	f.state = "FULFILLED"
+	if unmarshaler.State != "FULFILLED" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "FULFILLED", unmarshaler.State)
+	}
+	f.state = unmarshaler.State
 
 	extraProperties, err := core.ExtractExtraProperties(data, *f, "state")
 	if err != nil {
@@ -4724,7 +4860,8 @@ func (f *FulfilledWorkflowNodeResultEvent) UnmarshalJSON(data []byte) error {
 	type embed FulfilledWorkflowNodeResultEvent
 	var unmarshaler = struct {
 		embed
-		Ts *core.DateTime `json:"ts,omitempty"`
+		Ts    *core.DateTime `json:"ts,omitempty"`
+		State string         `json:"state"`
 	}{
 		embed: embed(*f),
 	}
@@ -4733,7 +4870,10 @@ func (f *FulfilledWorkflowNodeResultEvent) UnmarshalJSON(data []byte) error {
 	}
 	*f = FulfilledWorkflowNodeResultEvent(unmarshaler.embed)
 	f.Ts = unmarshaler.Ts.TimePtr()
-	f.state = "FULFILLED"
+	if unmarshaler.State != "FULFILLED" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "FULFILLED", unmarshaler.State)
+	}
+	f.state = unmarshaler.State
 
 	extraProperties, err := core.ExtractExtraProperties(data, *f, "state")
 	if err != nil {
@@ -4837,6 +4977,7 @@ func (f *FunctionCallChatMessageContent) UnmarshalJSON(data []byte) error {
 	type embed FunctionCallChatMessageContent
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*f),
 	}
@@ -4844,7 +4985,10 @@ func (f *FunctionCallChatMessageContent) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*f = FunctionCallChatMessageContent(unmarshaler.embed)
-	f.type_ = "FUNCTION_CALL"
+	if unmarshaler.Type != "FUNCTION_CALL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "FUNCTION_CALL", unmarshaler.Type)
+	}
+	f.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *f, "type")
 	if err != nil {
@@ -4901,6 +5045,7 @@ func (f *FunctionCallChatMessageContentRequest) UnmarshalJSON(data []byte) error
 	type embed FunctionCallChatMessageContentRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*f),
 	}
@@ -4908,7 +5053,10 @@ func (f *FunctionCallChatMessageContentRequest) UnmarshalJSON(data []byte) error
 		return err
 	}
 	*f = FunctionCallChatMessageContentRequest(unmarshaler.embed)
-	f.type_ = "FUNCTION_CALL"
+	if unmarshaler.Type != "FUNCTION_CALL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "FUNCTION_CALL", unmarshaler.Type)
+	}
+	f.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *f, "type")
 	if err != nil {
@@ -5097,6 +5245,7 @@ func (f *FunctionCallVariableValue) UnmarshalJSON(data []byte) error {
 	type embed FunctionCallVariableValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*f),
 	}
@@ -5104,7 +5253,10 @@ func (f *FunctionCallVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*f = FunctionCallVariableValue(unmarshaler.embed)
-	f.type_ = "FUNCTION_CALL"
+	if unmarshaler.Type != "FUNCTION_CALL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "FUNCTION_CALL", unmarshaler.Type)
+	}
+	f.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *f, "type")
 	if err != nil {
@@ -5161,6 +5313,7 @@ func (f *FunctionCallVellumValue) UnmarshalJSON(data []byte) error {
 	type embed FunctionCallVellumValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*f),
 	}
@@ -5168,7 +5321,10 @@ func (f *FunctionCallVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*f = FunctionCallVellumValue(unmarshaler.embed)
-	f.type_ = "FUNCTION_CALL"
+	if unmarshaler.Type != "FUNCTION_CALL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "FUNCTION_CALL", unmarshaler.Type)
+	}
+	f.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *f, "type")
 	if err != nil {
@@ -5225,6 +5381,7 @@ func (f *FunctionCallVellumValueRequest) UnmarshalJSON(data []byte) error {
 	type embed FunctionCallVellumValueRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*f),
 	}
@@ -5232,7 +5389,10 @@ func (f *FunctionCallVellumValueRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*f = FunctionCallVellumValueRequest(unmarshaler.embed)
-	f.type_ = "FUNCTION_CALL"
+	if unmarshaler.Type != "FUNCTION_CALL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "FUNCTION_CALL", unmarshaler.Type)
+	}
+	f.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *f, "type")
 	if err != nil {
@@ -5676,6 +5836,7 @@ func (h *HkunlpInstructorXlVectorizer) UnmarshalJSON(data []byte) error {
 	type embed HkunlpInstructorXlVectorizer
 	var unmarshaler = struct {
 		embed
+		ModelName string `json:"model_name"`
 	}{
 		embed: embed(*h),
 	}
@@ -5683,7 +5844,10 @@ func (h *HkunlpInstructorXlVectorizer) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*h = HkunlpInstructorXlVectorizer(unmarshaler.embed)
-	h.modelName = "hkunlp/instructor-xl"
+	if unmarshaler.ModelName != "hkunlp/instructor-xl" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", h, "hkunlp/instructor-xl", unmarshaler.ModelName)
+	}
+	h.modelName = unmarshaler.ModelName
 
 	extraProperties, err := core.ExtractExtraProperties(data, *h, "model_name")
 	if err != nil {
@@ -5740,6 +5904,7 @@ func (h *HkunlpInstructorXlVectorizerRequest) UnmarshalJSON(data []byte) error {
 	type embed HkunlpInstructorXlVectorizerRequest
 	var unmarshaler = struct {
 		embed
+		ModelName string `json:"model_name"`
 	}{
 		embed: embed(*h),
 	}
@@ -5747,7 +5912,10 @@ func (h *HkunlpInstructorXlVectorizerRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*h = HkunlpInstructorXlVectorizerRequest(unmarshaler.embed)
-	h.modelName = "hkunlp/instructor-xl"
+	if unmarshaler.ModelName != "hkunlp/instructor-xl" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", h, "hkunlp/instructor-xl", unmarshaler.ModelName)
+	}
+	h.modelName = unmarshaler.ModelName
 
 	extraProperties, err := core.ExtractExtraProperties(data, *h, "model_name")
 	if err != nil {
@@ -5889,6 +6057,7 @@ func (h *HuggingFaceTokenizerConfig) UnmarshalJSON(data []byte) error {
 	type embed HuggingFaceTokenizerConfig
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*h),
 	}
@@ -5896,7 +6065,10 @@ func (h *HuggingFaceTokenizerConfig) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*h = HuggingFaceTokenizerConfig(unmarshaler.embed)
-	h.type_ = "HUGGING_FACE"
+	if unmarshaler.Type != "HUGGING_FACE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", h, "HUGGING_FACE", unmarshaler.Type)
+	}
+	h.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *h, "type")
 	if err != nil {
@@ -5954,6 +6126,7 @@ func (h *HuggingFaceTokenizerConfigRequest) UnmarshalJSON(data []byte) error {
 	type embed HuggingFaceTokenizerConfigRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*h),
 	}
@@ -5961,7 +6134,10 @@ func (h *HuggingFaceTokenizerConfigRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*h = HuggingFaceTokenizerConfigRequest(unmarshaler.embed)
-	h.type_ = "HUGGING_FACE"
+	if unmarshaler.Type != "HUGGING_FACE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", h, "HUGGING_FACE", unmarshaler.Type)
+	}
+	h.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *h, "type")
 	if err != nil {
@@ -6018,6 +6194,7 @@ func (i *ImageChatMessageContent) UnmarshalJSON(data []byte) error {
 	type embed ImageChatMessageContent
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*i),
 	}
@@ -6025,7 +6202,10 @@ func (i *ImageChatMessageContent) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = ImageChatMessageContent(unmarshaler.embed)
-	i.type_ = "IMAGE"
+	if unmarshaler.Type != "IMAGE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", i, "IMAGE", unmarshaler.Type)
+	}
+	i.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *i, "type")
 	if err != nil {
@@ -6082,6 +6262,7 @@ func (i *ImageChatMessageContentRequest) UnmarshalJSON(data []byte) error {
 	type embed ImageChatMessageContentRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*i),
 	}
@@ -6089,7 +6270,10 @@ func (i *ImageChatMessageContentRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = ImageChatMessageContentRequest(unmarshaler.embed)
-	i.type_ = "IMAGE"
+	if unmarshaler.Type != "IMAGE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", i, "IMAGE", unmarshaler.Type)
+	}
+	i.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *i, "type")
 	if err != nil {
@@ -6146,6 +6330,7 @@ func (i *ImageVariableValue) UnmarshalJSON(data []byte) error {
 	type embed ImageVariableValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*i),
 	}
@@ -6153,7 +6338,10 @@ func (i *ImageVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = ImageVariableValue(unmarshaler.embed)
-	i.type_ = "IMAGE"
+	if unmarshaler.Type != "IMAGE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", i, "IMAGE", unmarshaler.Type)
+	}
+	i.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *i, "type")
 	if err != nil {
@@ -6210,6 +6398,7 @@ func (i *ImageVellumValue) UnmarshalJSON(data []byte) error {
 	type embed ImageVellumValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*i),
 	}
@@ -6217,7 +6406,10 @@ func (i *ImageVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = ImageVellumValue(unmarshaler.embed)
-	i.type_ = "IMAGE"
+	if unmarshaler.Type != "IMAGE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", i, "IMAGE", unmarshaler.Type)
+	}
+	i.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *i, "type")
 	if err != nil {
@@ -6274,6 +6466,7 @@ func (i *ImageVellumValueRequest) UnmarshalJSON(data []byte) error {
 	type embed ImageVellumValueRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*i),
 	}
@@ -6281,7 +6474,10 @@ func (i *ImageVellumValueRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = ImageVellumValueRequest(unmarshaler.embed)
-	i.type_ = "IMAGE"
+	if unmarshaler.Type != "IMAGE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", i, "IMAGE", unmarshaler.Type)
+	}
+	i.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *i, "type")
 	if err != nil {
@@ -6593,6 +6789,7 @@ func (i *InitiatedExecutePromptEvent) UnmarshalJSON(data []byte) error {
 	type embed InitiatedExecutePromptEvent
 	var unmarshaler = struct {
 		embed
+		State string `json:"state"`
 	}{
 		embed: embed(*i),
 	}
@@ -6600,7 +6797,10 @@ func (i *InitiatedExecutePromptEvent) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*i = InitiatedExecutePromptEvent(unmarshaler.embed)
-	i.state = "INITIATED"
+	if unmarshaler.State != "INITIATED" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", i, "INITIATED", unmarshaler.State)
+	}
+	i.state = unmarshaler.State
 
 	extraProperties, err := core.ExtractExtraProperties(data, *i, "state")
 	if err != nil {
@@ -6708,7 +6908,8 @@ func (i *InitiatedWorkflowNodeResultEvent) UnmarshalJSON(data []byte) error {
 	type embed InitiatedWorkflowNodeResultEvent
 	var unmarshaler = struct {
 		embed
-		Ts *core.DateTime `json:"ts,omitempty"`
+		Ts    *core.DateTime `json:"ts,omitempty"`
+		State string         `json:"state"`
 	}{
 		embed: embed(*i),
 	}
@@ -6717,7 +6918,10 @@ func (i *InitiatedWorkflowNodeResultEvent) UnmarshalJSON(data []byte) error {
 	}
 	*i = InitiatedWorkflowNodeResultEvent(unmarshaler.embed)
 	i.Ts = unmarshaler.Ts.TimePtr()
-	i.state = "INITIATED"
+	if unmarshaler.State != "INITIATED" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", i, "INITIATED", unmarshaler.State)
+	}
+	i.state = unmarshaler.State
 
 	extraProperties, err := core.ExtractExtraProperties(data, *i, "state")
 	if err != nil {
@@ -6890,6 +7094,7 @@ func (j *JsonInputRequest) UnmarshalJSON(data []byte) error {
 	type embed JsonInputRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*j),
 	}
@@ -6897,7 +7102,10 @@ func (j *JsonInputRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*j = JsonInputRequest(unmarshaler.embed)
-	j.type_ = "JSON"
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", j, "JSON", unmarshaler.Type)
+	}
+	j.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *j, "type")
 	if err != nil {
@@ -6953,6 +7161,7 @@ func (j *JsonVariableValue) UnmarshalJSON(data []byte) error {
 	type embed JsonVariableValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*j),
 	}
@@ -6960,7 +7169,10 @@ func (j *JsonVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*j = JsonVariableValue(unmarshaler.embed)
-	j.type_ = "JSON"
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", j, "JSON", unmarshaler.Type)
+	}
+	j.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *j, "type")
 	if err != nil {
@@ -7017,6 +7229,7 @@ func (j *JsonVellumValue) UnmarshalJSON(data []byte) error {
 	type embed JsonVellumValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*j),
 	}
@@ -7024,7 +7237,10 @@ func (j *JsonVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*j = JsonVellumValue(unmarshaler.embed)
-	j.type_ = "JSON"
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", j, "JSON", unmarshaler.Type)
+	}
+	j.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *j, "type")
 	if err != nil {
@@ -7081,6 +7297,7 @@ func (j *JsonVellumValueRequest) UnmarshalJSON(data []byte) error {
 	type embed JsonVellumValueRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*j),
 	}
@@ -7088,7 +7305,10 @@ func (j *JsonVellumValueRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*j = JsonVellumValueRequest(unmarshaler.embed)
-	j.type_ = "JSON"
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", j, "JSON", unmarshaler.Type)
+	}
+	j.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *j, "type")
 	if err != nil {
@@ -7275,6 +7495,7 @@ func (m *MapNodeResult) UnmarshalJSON(data []byte) error {
 	type embed MapNodeResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*m),
 	}
@@ -7282,7 +7503,10 @@ func (m *MapNodeResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MapNodeResult(unmarshaler.embed)
-	m.type_ = "MAP"
+	if unmarshaler.Type != "MAP" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", m, "MAP", unmarshaler.Type)
+	}
+	m.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *m, "type")
 	if err != nil {
@@ -7381,6 +7605,7 @@ func (m *MergeNodeResult) UnmarshalJSON(data []byte) error {
 	type embed MergeNodeResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*m),
 	}
@@ -7388,7 +7613,10 @@ func (m *MergeNodeResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MergeNodeResult(unmarshaler.embed)
-	m.type_ = "MERGE"
+	if unmarshaler.Type != "MERGE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", m, "MERGE", unmarshaler.Type)
+	}
+	m.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *m, "type")
 	if err != nil {
@@ -7601,6 +7829,7 @@ func (m *MetricNodeResult) UnmarshalJSON(data []byte) error {
 	type embed MetricNodeResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*m),
 	}
@@ -7608,7 +7837,10 @@ func (m *MetricNodeResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*m = MetricNodeResult(unmarshaler.embed)
-	m.type_ = "METRIC"
+	if unmarshaler.Type != "METRIC" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", m, "METRIC", unmarshaler.Type)
+	}
+	m.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *m, "type")
 	if err != nil {
@@ -8854,6 +9086,7 @@ func (n *NamedScenarioInputChatHistoryVariableValueRequest) UnmarshalJSON(data [
 	type embed NamedScenarioInputChatHistoryVariableValueRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -8861,7 +9094,10 @@ func (n *NamedScenarioInputChatHistoryVariableValueRequest) UnmarshalJSON(data [
 		return err
 	}
 	*n = NamedScenarioInputChatHistoryVariableValueRequest(unmarshaler.embed)
-	n.type_ = "CHAT_HISTORY"
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -8919,6 +9155,7 @@ func (n *NamedScenarioInputJsonVariableValueRequest) UnmarshalJSON(data []byte) 
 	type embed NamedScenarioInputJsonVariableValueRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -8926,7 +9163,10 @@ func (n *NamedScenarioInputJsonVariableValueRequest) UnmarshalJSON(data []byte) 
 		return err
 	}
 	*n = NamedScenarioInputJsonVariableValueRequest(unmarshaler.embed)
-	n.type_ = "JSON"
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "JSON", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -9041,6 +9281,7 @@ func (n *NamedScenarioInputStringVariableValueRequest) UnmarshalJSON(data []byte
 	type embed NamedScenarioInputStringVariableValueRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -9048,7 +9289,10 @@ func (n *NamedScenarioInputStringVariableValueRequest) UnmarshalJSON(data []byte
 		return err
 	}
 	*n = NamedScenarioInputStringVariableValueRequest(unmarshaler.embed)
-	n.type_ = "STRING"
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "STRING", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -9106,6 +9350,7 @@ func (n *NamedTestCaseArrayVariableValue) UnmarshalJSON(data []byte) error {
 	type embed NamedTestCaseArrayVariableValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -9113,7 +9358,10 @@ func (n *NamedTestCaseArrayVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NamedTestCaseArrayVariableValue(unmarshaler.embed)
-	n.type_ = "ARRAY"
+	if unmarshaler.Type != "ARRAY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "ARRAY", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -9171,6 +9419,7 @@ func (n *NamedTestCaseArrayVariableValueRequest) UnmarshalJSON(data []byte) erro
 	type embed NamedTestCaseArrayVariableValueRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -9178,7 +9427,10 @@ func (n *NamedTestCaseArrayVariableValueRequest) UnmarshalJSON(data []byte) erro
 		return err
 	}
 	*n = NamedTestCaseArrayVariableValueRequest(unmarshaler.embed)
-	n.type_ = "ARRAY"
+	if unmarshaler.Type != "ARRAY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "ARRAY", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -9236,6 +9488,7 @@ func (n *NamedTestCaseChatHistoryVariableValue) UnmarshalJSON(data []byte) error
 	type embed NamedTestCaseChatHistoryVariableValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -9243,7 +9496,10 @@ func (n *NamedTestCaseChatHistoryVariableValue) UnmarshalJSON(data []byte) error
 		return err
 	}
 	*n = NamedTestCaseChatHistoryVariableValue(unmarshaler.embed)
-	n.type_ = "CHAT_HISTORY"
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -9301,6 +9557,7 @@ func (n *NamedTestCaseChatHistoryVariableValueRequest) UnmarshalJSON(data []byte
 	type embed NamedTestCaseChatHistoryVariableValueRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -9308,7 +9565,10 @@ func (n *NamedTestCaseChatHistoryVariableValueRequest) UnmarshalJSON(data []byte
 		return err
 	}
 	*n = NamedTestCaseChatHistoryVariableValueRequest(unmarshaler.embed)
-	n.type_ = "CHAT_HISTORY"
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -9366,6 +9626,7 @@ func (n *NamedTestCaseErrorVariableValue) UnmarshalJSON(data []byte) error {
 	type embed NamedTestCaseErrorVariableValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -9373,7 +9634,10 @@ func (n *NamedTestCaseErrorVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NamedTestCaseErrorVariableValue(unmarshaler.embed)
-	n.type_ = "ERROR"
+	if unmarshaler.Type != "ERROR" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "ERROR", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -9431,6 +9695,7 @@ func (n *NamedTestCaseErrorVariableValueRequest) UnmarshalJSON(data []byte) erro
 	type embed NamedTestCaseErrorVariableValueRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -9438,7 +9703,10 @@ func (n *NamedTestCaseErrorVariableValueRequest) UnmarshalJSON(data []byte) erro
 		return err
 	}
 	*n = NamedTestCaseErrorVariableValueRequest(unmarshaler.embed)
-	n.type_ = "ERROR"
+	if unmarshaler.Type != "ERROR" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "ERROR", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -9496,6 +9764,7 @@ func (n *NamedTestCaseFunctionCallVariableValue) UnmarshalJSON(data []byte) erro
 	type embed NamedTestCaseFunctionCallVariableValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -9503,7 +9772,10 @@ func (n *NamedTestCaseFunctionCallVariableValue) UnmarshalJSON(data []byte) erro
 		return err
 	}
 	*n = NamedTestCaseFunctionCallVariableValue(unmarshaler.embed)
-	n.type_ = "FUNCTION_CALL"
+	if unmarshaler.Type != "FUNCTION_CALL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "FUNCTION_CALL", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -9561,6 +9833,7 @@ func (n *NamedTestCaseFunctionCallVariableValueRequest) UnmarshalJSON(data []byt
 	type embed NamedTestCaseFunctionCallVariableValueRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -9568,7 +9841,10 @@ func (n *NamedTestCaseFunctionCallVariableValueRequest) UnmarshalJSON(data []byt
 		return err
 	}
 	*n = NamedTestCaseFunctionCallVariableValueRequest(unmarshaler.embed)
-	n.type_ = "FUNCTION_CALL"
+	if unmarshaler.Type != "FUNCTION_CALL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "FUNCTION_CALL", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -9626,6 +9902,7 @@ func (n *NamedTestCaseJsonVariableValue) UnmarshalJSON(data []byte) error {
 	type embed NamedTestCaseJsonVariableValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -9633,7 +9910,10 @@ func (n *NamedTestCaseJsonVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NamedTestCaseJsonVariableValue(unmarshaler.embed)
-	n.type_ = "JSON"
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "JSON", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -9691,6 +9971,7 @@ func (n *NamedTestCaseJsonVariableValueRequest) UnmarshalJSON(data []byte) error
 	type embed NamedTestCaseJsonVariableValueRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -9698,7 +9979,10 @@ func (n *NamedTestCaseJsonVariableValueRequest) UnmarshalJSON(data []byte) error
 		return err
 	}
 	*n = NamedTestCaseJsonVariableValueRequest(unmarshaler.embed)
-	n.type_ = "JSON"
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "JSON", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -9756,6 +10040,7 @@ func (n *NamedTestCaseNumberVariableValue) UnmarshalJSON(data []byte) error {
 	type embed NamedTestCaseNumberVariableValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -9763,7 +10048,10 @@ func (n *NamedTestCaseNumberVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NamedTestCaseNumberVariableValue(unmarshaler.embed)
-	n.type_ = "NUMBER"
+	if unmarshaler.Type != "NUMBER" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "NUMBER", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -9821,6 +10109,7 @@ func (n *NamedTestCaseNumberVariableValueRequest) UnmarshalJSON(data []byte) err
 	type embed NamedTestCaseNumberVariableValueRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -9828,7 +10117,10 @@ func (n *NamedTestCaseNumberVariableValueRequest) UnmarshalJSON(data []byte) err
 		return err
 	}
 	*n = NamedTestCaseNumberVariableValueRequest(unmarshaler.embed)
-	n.type_ = "NUMBER"
+	if unmarshaler.Type != "NUMBER" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "NUMBER", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -9886,6 +10178,7 @@ func (n *NamedTestCaseSearchResultsVariableValue) UnmarshalJSON(data []byte) err
 	type embed NamedTestCaseSearchResultsVariableValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -9893,7 +10186,10 @@ func (n *NamedTestCaseSearchResultsVariableValue) UnmarshalJSON(data []byte) err
 		return err
 	}
 	*n = NamedTestCaseSearchResultsVariableValue(unmarshaler.embed)
-	n.type_ = "SEARCH_RESULTS"
+	if unmarshaler.Type != "SEARCH_RESULTS" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "SEARCH_RESULTS", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -9951,6 +10247,7 @@ func (n *NamedTestCaseSearchResultsVariableValueRequest) UnmarshalJSON(data []by
 	type embed NamedTestCaseSearchResultsVariableValueRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -9958,7 +10255,10 @@ func (n *NamedTestCaseSearchResultsVariableValueRequest) UnmarshalJSON(data []by
 		return err
 	}
 	*n = NamedTestCaseSearchResultsVariableValueRequest(unmarshaler.embed)
-	n.type_ = "SEARCH_RESULTS"
+	if unmarshaler.Type != "SEARCH_RESULTS" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "SEARCH_RESULTS", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -10016,6 +10316,7 @@ func (n *NamedTestCaseStringVariableValue) UnmarshalJSON(data []byte) error {
 	type embed NamedTestCaseStringVariableValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -10023,7 +10324,10 @@ func (n *NamedTestCaseStringVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NamedTestCaseStringVariableValue(unmarshaler.embed)
-	n.type_ = "STRING"
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "STRING", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -10081,6 +10385,7 @@ func (n *NamedTestCaseStringVariableValueRequest) UnmarshalJSON(data []byte) err
 	type embed NamedTestCaseStringVariableValueRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -10088,7 +10393,10 @@ func (n *NamedTestCaseStringVariableValueRequest) UnmarshalJSON(data []byte) err
 		return err
 	}
 	*n = NamedTestCaseStringVariableValueRequest(unmarshaler.embed)
-	n.type_ = "STRING"
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "STRING", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -10390,6 +10698,7 @@ func (n *NodeInputCompiledArrayValue) UnmarshalJSON(data []byte) error {
 	type embed NodeInputCompiledArrayValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -10397,7 +10706,10 @@ func (n *NodeInputCompiledArrayValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeInputCompiledArrayValue(unmarshaler.embed)
-	n.type_ = "ARRAY"
+	if unmarshaler.Type != "ARRAY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "ARRAY", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -10455,6 +10767,7 @@ func (n *NodeInputCompiledChatHistoryValue) UnmarshalJSON(data []byte) error {
 	type embed NodeInputCompiledChatHistoryValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -10462,7 +10775,10 @@ func (n *NodeInputCompiledChatHistoryValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeInputCompiledChatHistoryValue(unmarshaler.embed)
-	n.type_ = "CHAT_HISTORY"
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -10520,6 +10836,7 @@ func (n *NodeInputCompiledErrorValue) UnmarshalJSON(data []byte) error {
 	type embed NodeInputCompiledErrorValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -10527,7 +10844,10 @@ func (n *NodeInputCompiledErrorValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeInputCompiledErrorValue(unmarshaler.embed)
-	n.type_ = "ERROR"
+	if unmarshaler.Type != "ERROR" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "ERROR", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -10585,6 +10905,7 @@ func (n *NodeInputCompiledFunctionCall) UnmarshalJSON(data []byte) error {
 	type embed NodeInputCompiledFunctionCall
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -10592,7 +10913,10 @@ func (n *NodeInputCompiledFunctionCall) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeInputCompiledFunctionCall(unmarshaler.embed)
-	n.type_ = "FUNCTION_CALL"
+	if unmarshaler.Type != "FUNCTION_CALL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "FUNCTION_CALL", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -10650,6 +10974,7 @@ func (n *NodeInputCompiledJsonValue) UnmarshalJSON(data []byte) error {
 	type embed NodeInputCompiledJsonValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -10657,7 +10982,10 @@ func (n *NodeInputCompiledJsonValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeInputCompiledJsonValue(unmarshaler.embed)
-	n.type_ = "JSON"
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "JSON", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -10715,6 +11043,7 @@ func (n *NodeInputCompiledNumberValue) UnmarshalJSON(data []byte) error {
 	type embed NodeInputCompiledNumberValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -10722,7 +11051,10 @@ func (n *NodeInputCompiledNumberValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeInputCompiledNumberValue(unmarshaler.embed)
-	n.type_ = "NUMBER"
+	if unmarshaler.Type != "NUMBER" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "NUMBER", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -10780,6 +11112,7 @@ func (n *NodeInputCompiledSearchResultsValue) UnmarshalJSON(data []byte) error {
 	type embed NodeInputCompiledSearchResultsValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -10787,7 +11120,10 @@ func (n *NodeInputCompiledSearchResultsValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeInputCompiledSearchResultsValue(unmarshaler.embed)
-	n.type_ = "SEARCH_RESULTS"
+	if unmarshaler.Type != "SEARCH_RESULTS" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "SEARCH_RESULTS", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -10845,6 +11181,7 @@ func (n *NodeInputCompiledStringValue) UnmarshalJSON(data []byte) error {
 	type embed NodeInputCompiledStringValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -10852,7 +11189,10 @@ func (n *NodeInputCompiledStringValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeInputCompiledStringValue(unmarshaler.embed)
-	n.type_ = "STRING"
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "STRING", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -11033,6 +11373,7 @@ func (n *NodeOutputCompiledArrayValue) UnmarshalJSON(data []byte) error {
 	type embed NodeOutputCompiledArrayValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -11040,7 +11381,10 @@ func (n *NodeOutputCompiledArrayValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeOutputCompiledArrayValue(unmarshaler.embed)
-	n.type_ = "ARRAY"
+	if unmarshaler.Type != "ARRAY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "ARRAY", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -11099,6 +11443,7 @@ func (n *NodeOutputCompiledChatHistoryValue) UnmarshalJSON(data []byte) error {
 	type embed NodeOutputCompiledChatHistoryValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -11106,7 +11451,10 @@ func (n *NodeOutputCompiledChatHistoryValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeOutputCompiledChatHistoryValue(unmarshaler.embed)
-	n.type_ = "CHAT_HISTORY"
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -11165,6 +11513,7 @@ func (n *NodeOutputCompiledErrorValue) UnmarshalJSON(data []byte) error {
 	type embed NodeOutputCompiledErrorValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -11172,7 +11521,10 @@ func (n *NodeOutputCompiledErrorValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeOutputCompiledErrorValue(unmarshaler.embed)
-	n.type_ = "ERROR"
+	if unmarshaler.Type != "ERROR" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "ERROR", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -11231,6 +11583,7 @@ func (n *NodeOutputCompiledFunctionCallValue) UnmarshalJSON(data []byte) error {
 	type embed NodeOutputCompiledFunctionCallValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -11238,7 +11591,10 @@ func (n *NodeOutputCompiledFunctionCallValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeOutputCompiledFunctionCallValue(unmarshaler.embed)
-	n.type_ = "FUNCTION_CALL"
+	if unmarshaler.Type != "FUNCTION_CALL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "FUNCTION_CALL", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -11297,6 +11653,7 @@ func (n *NodeOutputCompiledJsonValue) UnmarshalJSON(data []byte) error {
 	type embed NodeOutputCompiledJsonValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -11304,7 +11661,10 @@ func (n *NodeOutputCompiledJsonValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeOutputCompiledJsonValue(unmarshaler.embed)
-	n.type_ = "JSON"
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "JSON", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -11363,6 +11723,7 @@ func (n *NodeOutputCompiledNumberValue) UnmarshalJSON(data []byte) error {
 	type embed NodeOutputCompiledNumberValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -11370,7 +11731,10 @@ func (n *NodeOutputCompiledNumberValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeOutputCompiledNumberValue(unmarshaler.embed)
-	n.type_ = "NUMBER"
+	if unmarshaler.Type != "NUMBER" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "NUMBER", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -11429,6 +11793,7 @@ func (n *NodeOutputCompiledSearchResultsValue) UnmarshalJSON(data []byte) error 
 	type embed NodeOutputCompiledSearchResultsValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -11436,7 +11801,10 @@ func (n *NodeOutputCompiledSearchResultsValue) UnmarshalJSON(data []byte) error 
 		return err
 	}
 	*n = NodeOutputCompiledSearchResultsValue(unmarshaler.embed)
-	n.type_ = "SEARCH_RESULTS"
+	if unmarshaler.Type != "SEARCH_RESULTS" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "SEARCH_RESULTS", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -11495,6 +11863,7 @@ func (n *NodeOutputCompiledStringValue) UnmarshalJSON(data []byte) error {
 	type embed NodeOutputCompiledStringValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -11502,7 +11871,10 @@ func (n *NodeOutputCompiledStringValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NodeOutputCompiledStringValue(unmarshaler.embed)
-	n.type_ = "STRING"
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "STRING", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -11766,6 +12138,7 @@ func (n *NumberVariableValue) UnmarshalJSON(data []byte) error {
 	type embed NumberVariableValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -11773,7 +12146,10 @@ func (n *NumberVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NumberVariableValue(unmarshaler.embed)
-	n.type_ = "NUMBER"
+	if unmarshaler.Type != "NUMBER" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "NUMBER", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -11830,6 +12206,7 @@ func (n *NumberVellumValue) UnmarshalJSON(data []byte) error {
 	type embed NumberVellumValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -11837,7 +12214,10 @@ func (n *NumberVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NumberVellumValue(unmarshaler.embed)
-	n.type_ = "NUMBER"
+	if unmarshaler.Type != "NUMBER" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "NUMBER", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -11894,6 +12274,7 @@ func (n *NumberVellumValueRequest) UnmarshalJSON(data []byte) error {
 	type embed NumberVellumValueRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*n),
 	}
@@ -11901,7 +12282,10 @@ func (n *NumberVellumValueRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*n = NumberVellumValueRequest(unmarshaler.embed)
-	n.type_ = "NUMBER"
+	if unmarshaler.Type != "NUMBER" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "NUMBER", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
 	if err != nil {
@@ -12042,6 +12426,7 @@ func (o *OpenAiVectorizerTextEmbedding3Large) UnmarshalJSON(data []byte) error {
 	type embed OpenAiVectorizerTextEmbedding3Large
 	var unmarshaler = struct {
 		embed
+		ModelName string `json:"model_name"`
 	}{
 		embed: embed(*o),
 	}
@@ -12049,7 +12434,10 @@ func (o *OpenAiVectorizerTextEmbedding3Large) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenAiVectorizerTextEmbedding3Large(unmarshaler.embed)
-	o.modelName = "text-embedding-3-large"
+	if unmarshaler.ModelName != "text-embedding-3-large" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "text-embedding-3-large", unmarshaler.ModelName)
+	}
+	o.modelName = unmarshaler.ModelName
 
 	extraProperties, err := core.ExtractExtraProperties(data, *o, "model_name")
 	if err != nil {
@@ -12106,6 +12494,7 @@ func (o *OpenAiVectorizerTextEmbedding3LargeRequest) UnmarshalJSON(data []byte) 
 	type embed OpenAiVectorizerTextEmbedding3LargeRequest
 	var unmarshaler = struct {
 		embed
+		ModelName string `json:"model_name"`
 	}{
 		embed: embed(*o),
 	}
@@ -12113,7 +12502,10 @@ func (o *OpenAiVectorizerTextEmbedding3LargeRequest) UnmarshalJSON(data []byte) 
 		return err
 	}
 	*o = OpenAiVectorizerTextEmbedding3LargeRequest(unmarshaler.embed)
-	o.modelName = "text-embedding-3-large"
+	if unmarshaler.ModelName != "text-embedding-3-large" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "text-embedding-3-large", unmarshaler.ModelName)
+	}
+	o.modelName = unmarshaler.ModelName
 
 	extraProperties, err := core.ExtractExtraProperties(data, *o, "model_name")
 	if err != nil {
@@ -12170,6 +12562,7 @@ func (o *OpenAiVectorizerTextEmbedding3Small) UnmarshalJSON(data []byte) error {
 	type embed OpenAiVectorizerTextEmbedding3Small
 	var unmarshaler = struct {
 		embed
+		ModelName string `json:"model_name"`
 	}{
 		embed: embed(*o),
 	}
@@ -12177,7 +12570,10 @@ func (o *OpenAiVectorizerTextEmbedding3Small) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenAiVectorizerTextEmbedding3Small(unmarshaler.embed)
-	o.modelName = "text-embedding-3-small"
+	if unmarshaler.ModelName != "text-embedding-3-small" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "text-embedding-3-small", unmarshaler.ModelName)
+	}
+	o.modelName = unmarshaler.ModelName
 
 	extraProperties, err := core.ExtractExtraProperties(data, *o, "model_name")
 	if err != nil {
@@ -12234,6 +12630,7 @@ func (o *OpenAiVectorizerTextEmbedding3SmallRequest) UnmarshalJSON(data []byte) 
 	type embed OpenAiVectorizerTextEmbedding3SmallRequest
 	var unmarshaler = struct {
 		embed
+		ModelName string `json:"model_name"`
 	}{
 		embed: embed(*o),
 	}
@@ -12241,7 +12638,10 @@ func (o *OpenAiVectorizerTextEmbedding3SmallRequest) UnmarshalJSON(data []byte) 
 		return err
 	}
 	*o = OpenAiVectorizerTextEmbedding3SmallRequest(unmarshaler.embed)
-	o.modelName = "text-embedding-3-small"
+	if unmarshaler.ModelName != "text-embedding-3-small" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "text-embedding-3-small", unmarshaler.ModelName)
+	}
+	o.modelName = unmarshaler.ModelName
 
 	extraProperties, err := core.ExtractExtraProperties(data, *o, "model_name")
 	if err != nil {
@@ -12298,6 +12698,7 @@ func (o *OpenAiVectorizerTextEmbeddingAda002) UnmarshalJSON(data []byte) error {
 	type embed OpenAiVectorizerTextEmbeddingAda002
 	var unmarshaler = struct {
 		embed
+		ModelName string `json:"model_name"`
 	}{
 		embed: embed(*o),
 	}
@@ -12305,7 +12706,10 @@ func (o *OpenAiVectorizerTextEmbeddingAda002) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenAiVectorizerTextEmbeddingAda002(unmarshaler.embed)
-	o.modelName = "text-embedding-ada-002"
+	if unmarshaler.ModelName != "text-embedding-ada-002" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "text-embedding-ada-002", unmarshaler.ModelName)
+	}
+	o.modelName = unmarshaler.ModelName
 
 	extraProperties, err := core.ExtractExtraProperties(data, *o, "model_name")
 	if err != nil {
@@ -12362,6 +12766,7 @@ func (o *OpenAiVectorizerTextEmbeddingAda002Request) UnmarshalJSON(data []byte) 
 	type embed OpenAiVectorizerTextEmbeddingAda002Request
 	var unmarshaler = struct {
 		embed
+		ModelName string `json:"model_name"`
 	}{
 		embed: embed(*o),
 	}
@@ -12369,7 +12774,10 @@ func (o *OpenAiVectorizerTextEmbeddingAda002Request) UnmarshalJSON(data []byte) 
 		return err
 	}
 	*o = OpenAiVectorizerTextEmbeddingAda002Request(unmarshaler.embed)
-	o.modelName = "text-embedding-ada-002"
+	if unmarshaler.ModelName != "text-embedding-ada-002" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "text-embedding-ada-002", unmarshaler.ModelName)
+	}
+	o.modelName = unmarshaler.ModelName
 
 	extraProperties, err := core.ExtractExtraProperties(data, *o, "model_name")
 	if err != nil {
@@ -12436,6 +12844,7 @@ func (o *OpenApiArrayProperty) UnmarshalJSON(data []byte) error {
 	type embed OpenApiArrayProperty
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*o),
 	}
@@ -12443,7 +12852,10 @@ func (o *OpenApiArrayProperty) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiArrayProperty(unmarshaler.embed)
-	o.type_ = "array"
+	if unmarshaler.Type != "array" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "array", unmarshaler.Type)
+	}
+	o.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
 	if err != nil {
@@ -12510,6 +12922,7 @@ func (o *OpenApiArrayPropertyRequest) UnmarshalJSON(data []byte) error {
 	type embed OpenApiArrayPropertyRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*o),
 	}
@@ -12517,7 +12930,10 @@ func (o *OpenApiArrayPropertyRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiArrayPropertyRequest(unmarshaler.embed)
-	o.type_ = "array"
+	if unmarshaler.Type != "array" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "array", unmarshaler.Type)
+	}
+	o.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
 	if err != nil {
@@ -12576,6 +12992,7 @@ func (o *OpenApiBooleanProperty) UnmarshalJSON(data []byte) error {
 	type embed OpenApiBooleanProperty
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*o),
 	}
@@ -12583,7 +13000,10 @@ func (o *OpenApiBooleanProperty) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiBooleanProperty(unmarshaler.embed)
-	o.type_ = "boolean"
+	if unmarshaler.Type != "boolean" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "boolean", unmarshaler.Type)
+	}
+	o.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
 	if err != nil {
@@ -12642,6 +13062,7 @@ func (o *OpenApiBooleanPropertyRequest) UnmarshalJSON(data []byte) error {
 	type embed OpenApiBooleanPropertyRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*o),
 	}
@@ -12649,7 +13070,10 @@ func (o *OpenApiBooleanPropertyRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiBooleanPropertyRequest(unmarshaler.embed)
-	o.type_ = "boolean"
+	if unmarshaler.Type != "boolean" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "boolean", unmarshaler.Type)
+	}
+	o.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
 	if err != nil {
@@ -12708,6 +13132,7 @@ func (o *OpenApiConstProperty) UnmarshalJSON(data []byte) error {
 	type embed OpenApiConstProperty
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*o),
 	}
@@ -12715,7 +13140,10 @@ func (o *OpenApiConstProperty) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiConstProperty(unmarshaler.embed)
-	o.type_ = "const"
+	if unmarshaler.Type != "const" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "const", unmarshaler.Type)
+	}
+	o.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
 	if err != nil {
@@ -12774,6 +13202,7 @@ func (o *OpenApiConstPropertyRequest) UnmarshalJSON(data []byte) error {
 	type embed OpenApiConstPropertyRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*o),
 	}
@@ -12781,7 +13210,10 @@ func (o *OpenApiConstPropertyRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiConstPropertyRequest(unmarshaler.embed)
-	o.type_ = "const"
+	if unmarshaler.Type != "const" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "const", unmarshaler.Type)
+	}
+	o.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
 	if err != nil {
@@ -12844,6 +13276,7 @@ func (o *OpenApiIntegerProperty) UnmarshalJSON(data []byte) error {
 	type embed OpenApiIntegerProperty
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*o),
 	}
@@ -12851,7 +13284,10 @@ func (o *OpenApiIntegerProperty) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiIntegerProperty(unmarshaler.embed)
-	o.type_ = "integer"
+	if unmarshaler.Type != "integer" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "integer", unmarshaler.Type)
+	}
+	o.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
 	if err != nil {
@@ -12914,6 +13350,7 @@ func (o *OpenApiIntegerPropertyRequest) UnmarshalJSON(data []byte) error {
 	type embed OpenApiIntegerPropertyRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*o),
 	}
@@ -12921,7 +13358,10 @@ func (o *OpenApiIntegerPropertyRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiIntegerPropertyRequest(unmarshaler.embed)
-	o.type_ = "integer"
+	if unmarshaler.Type != "integer" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "integer", unmarshaler.Type)
+	}
+	o.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
 	if err != nil {
@@ -12985,6 +13425,7 @@ func (o *OpenApiNumberProperty) UnmarshalJSON(data []byte) error {
 	type embed OpenApiNumberProperty
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*o),
 	}
@@ -12992,7 +13433,10 @@ func (o *OpenApiNumberProperty) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiNumberProperty(unmarshaler.embed)
-	o.type_ = "number"
+	if unmarshaler.Type != "number" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "number", unmarshaler.Type)
+	}
+	o.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
 	if err != nil {
@@ -13056,6 +13500,7 @@ func (o *OpenApiNumberPropertyRequest) UnmarshalJSON(data []byte) error {
 	type embed OpenApiNumberPropertyRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*o),
 	}
@@ -13063,7 +13508,10 @@ func (o *OpenApiNumberPropertyRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiNumberPropertyRequest(unmarshaler.embed)
-	o.type_ = "number"
+	if unmarshaler.Type != "number" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "number", unmarshaler.Type)
+	}
+	o.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
 	if err != nil {
@@ -13129,6 +13577,7 @@ func (o *OpenApiObjectProperty) UnmarshalJSON(data []byte) error {
 	type embed OpenApiObjectProperty
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*o),
 	}
@@ -13136,7 +13585,10 @@ func (o *OpenApiObjectProperty) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiObjectProperty(unmarshaler.embed)
-	o.type_ = "object"
+	if unmarshaler.Type != "object" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "object", unmarshaler.Type)
+	}
+	o.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
 	if err != nil {
@@ -13202,6 +13654,7 @@ func (o *OpenApiObjectPropertyRequest) UnmarshalJSON(data []byte) error {
 	type embed OpenApiObjectPropertyRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*o),
 	}
@@ -13209,7 +13662,10 @@ func (o *OpenApiObjectPropertyRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiObjectPropertyRequest(unmarshaler.embed)
-	o.type_ = "object"
+	if unmarshaler.Type != "object" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "object", unmarshaler.Type)
+	}
+	o.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
 	if err != nil {
@@ -13268,6 +13724,7 @@ func (o *OpenApiOneOfProperty) UnmarshalJSON(data []byte) error {
 	type embed OpenApiOneOfProperty
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*o),
 	}
@@ -13275,7 +13732,10 @@ func (o *OpenApiOneOfProperty) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiOneOfProperty(unmarshaler.embed)
-	o.type_ = "oneOf"
+	if unmarshaler.Type != "oneOf" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "oneOf", unmarshaler.Type)
+	}
+	o.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
 	if err != nil {
@@ -13334,6 +13794,7 @@ func (o *OpenApiOneOfPropertyRequest) UnmarshalJSON(data []byte) error {
 	type embed OpenApiOneOfPropertyRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*o),
 	}
@@ -13341,7 +13802,10 @@ func (o *OpenApiOneOfPropertyRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiOneOfPropertyRequest(unmarshaler.embed)
-	o.type_ = "oneOf"
+	if unmarshaler.Type != "oneOf" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "oneOf", unmarshaler.Type)
+	}
+	o.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
 	if err != nil {
@@ -13670,6 +14134,7 @@ func (o *OpenApiRefProperty) UnmarshalJSON(data []byte) error {
 	type embed OpenApiRefProperty
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*o),
 	}
@@ -13677,7 +14142,10 @@ func (o *OpenApiRefProperty) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiRefProperty(unmarshaler.embed)
-	o.type_ = "ref"
+	if unmarshaler.Type != "ref" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "ref", unmarshaler.Type)
+	}
+	o.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
 	if err != nil {
@@ -13736,6 +14204,7 @@ func (o *OpenApiRefPropertyRequest) UnmarshalJSON(data []byte) error {
 	type embed OpenApiRefPropertyRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*o),
 	}
@@ -13743,7 +14212,10 @@ func (o *OpenApiRefPropertyRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiRefPropertyRequest(unmarshaler.embed)
-	o.type_ = "ref"
+	if unmarshaler.Type != "ref" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "ref", unmarshaler.Type)
+	}
+	o.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
 	if err != nil {
@@ -13806,6 +14278,7 @@ func (o *OpenApiStringProperty) UnmarshalJSON(data []byte) error {
 	type embed OpenApiStringProperty
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*o),
 	}
@@ -13813,7 +14286,10 @@ func (o *OpenApiStringProperty) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiStringProperty(unmarshaler.embed)
-	o.type_ = "string"
+	if unmarshaler.Type != "string" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "string", unmarshaler.Type)
+	}
+	o.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
 	if err != nil {
@@ -13876,6 +14352,7 @@ func (o *OpenApiStringPropertyRequest) UnmarshalJSON(data []byte) error {
 	type embed OpenApiStringPropertyRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*o),
 	}
@@ -13883,7 +14360,10 @@ func (o *OpenApiStringPropertyRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*o = OpenApiStringPropertyRequest(unmarshaler.embed)
-	o.type_ = "string"
+	if unmarshaler.Type != "string" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "string", unmarshaler.Type)
+	}
+	o.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
 	if err != nil {
@@ -14251,6 +14731,7 @@ func (p *PdfSearchResultMetaSource) UnmarshalJSON(data []byte) error {
 	type embed PdfSearchResultMetaSource
 	var unmarshaler = struct {
 		embed
+		DocumentType string `json:"document_type"`
 	}{
 		embed: embed(*p),
 	}
@@ -14258,7 +14739,10 @@ func (p *PdfSearchResultMetaSource) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*p = PdfSearchResultMetaSource(unmarshaler.embed)
-	p.documentType = "PDF"
+	if unmarshaler.DocumentType != "PDF" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", p, "PDF", unmarshaler.DocumentType)
+	}
+	p.documentType = unmarshaler.DocumentType
 
 	extraProperties, err := core.ExtractExtraProperties(data, *p, "document_type")
 	if err != nil {
@@ -14318,6 +14802,7 @@ func (p *PdfSearchResultMetaSourceRequest) UnmarshalJSON(data []byte) error {
 	type embed PdfSearchResultMetaSourceRequest
 	var unmarshaler = struct {
 		embed
+		DocumentType string `json:"document_type"`
 	}{
 		embed: embed(*p),
 	}
@@ -14325,7 +14810,10 @@ func (p *PdfSearchResultMetaSourceRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*p = PdfSearchResultMetaSourceRequest(unmarshaler.embed)
-	p.documentType = "PDF"
+	if unmarshaler.DocumentType != "PDF" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", p, "PDF", unmarshaler.DocumentType)
+	}
+	p.documentType = unmarshaler.DocumentType
 
 	extraProperties, err := core.ExtractExtraProperties(data, *p, "document_type")
 	if err != nil {
@@ -14636,6 +15124,7 @@ func (p *PromptNodeResult) UnmarshalJSON(data []byte) error {
 	type embed PromptNodeResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*p),
 	}
@@ -14643,7 +15132,10 @@ func (p *PromptNodeResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*p = PromptNodeResult(unmarshaler.embed)
-	p.type_ = "PROMPT"
+	if unmarshaler.Type != "PROMPT" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", p, "PROMPT", unmarshaler.Type)
+	}
+	p.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *p, "type")
 	if err != nil {
@@ -14945,6 +15437,7 @@ func (r *ReductoChunking) UnmarshalJSON(data []byte) error {
 	type embed ReductoChunking
 	var unmarshaler = struct {
 		embed
+		ChunkerName string `json:"chunker_name"`
 	}{
 		embed: embed(*r),
 	}
@@ -14952,7 +15445,10 @@ func (r *ReductoChunking) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*r = ReductoChunking(unmarshaler.embed)
-	r.chunkerName = "reducto-chunker"
+	if unmarshaler.ChunkerName != "reducto-chunker" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", r, "reducto-chunker", unmarshaler.ChunkerName)
+	}
+	r.chunkerName = unmarshaler.ChunkerName
 
 	extraProperties, err := core.ExtractExtraProperties(data, *r, "chunker_name")
 	if err != nil {
@@ -15009,6 +15505,7 @@ func (r *ReductoChunkingRequest) UnmarshalJSON(data []byte) error {
 	type embed ReductoChunkingRequest
 	var unmarshaler = struct {
 		embed
+		ChunkerName string `json:"chunker_name"`
 	}{
 		embed: embed(*r),
 	}
@@ -15016,7 +15513,10 @@ func (r *ReductoChunkingRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*r = ReductoChunkingRequest(unmarshaler.embed)
-	r.chunkerName = "reducto-chunker"
+	if unmarshaler.ChunkerName != "reducto-chunker" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", r, "reducto-chunker", unmarshaler.ChunkerName)
+	}
+	r.chunkerName = unmarshaler.ChunkerName
 
 	extraProperties, err := core.ExtractExtraProperties(data, *r, "chunker_name")
 	if err != nil {
@@ -15075,6 +15575,7 @@ func (r *RejectedExecutePromptEvent) UnmarshalJSON(data []byte) error {
 	type embed RejectedExecutePromptEvent
 	var unmarshaler = struct {
 		embed
+		State string `json:"state"`
 	}{
 		embed: embed(*r),
 	}
@@ -15082,7 +15583,10 @@ func (r *RejectedExecutePromptEvent) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*r = RejectedExecutePromptEvent(unmarshaler.embed)
-	r.state = "REJECTED"
+	if unmarshaler.State != "REJECTED" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", r, "REJECTED", unmarshaler.State)
+	}
+	r.state = unmarshaler.State
 
 	extraProperties, err := core.ExtractExtraProperties(data, *r, "state")
 	if err != nil {
@@ -15144,6 +15648,7 @@ func (r *RejectedExecutePromptResponse) UnmarshalJSON(data []byte) error {
 	type embed RejectedExecutePromptResponse
 	var unmarshaler = struct {
 		embed
+		State string `json:"state"`
 	}{
 		embed: embed(*r),
 	}
@@ -15151,7 +15656,10 @@ func (r *RejectedExecutePromptResponse) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*r = RejectedExecutePromptResponse(unmarshaler.embed)
-	r.state = "REJECTED"
+	if unmarshaler.State != "REJECTED" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", r, "REJECTED", unmarshaler.State)
+	}
+	r.state = unmarshaler.State
 
 	extraProperties, err := core.ExtractExtraProperties(data, *r, "state")
 	if err != nil {
@@ -15210,7 +15718,8 @@ func (r *RejectedExecuteWorkflowWorkflowResultEvent) UnmarshalJSON(data []byte) 
 	type embed RejectedExecuteWorkflowWorkflowResultEvent
 	var unmarshaler = struct {
 		embed
-		Ts *core.DateTime `json:"ts"`
+		Ts    *core.DateTime `json:"ts"`
+		State string         `json:"state"`
 	}{
 		embed: embed(*r),
 	}
@@ -15219,7 +15728,10 @@ func (r *RejectedExecuteWorkflowWorkflowResultEvent) UnmarshalJSON(data []byte) 
 	}
 	*r = RejectedExecuteWorkflowWorkflowResultEvent(unmarshaler.embed)
 	r.Ts = unmarshaler.Ts.Time()
-	r.state = "REJECTED"
+	if unmarshaler.State != "REJECTED" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", r, "REJECTED", unmarshaler.State)
+	}
+	r.state = unmarshaler.State
 
 	extraProperties, err := core.ExtractExtraProperties(data, *r, "state")
 	if err != nil {
@@ -15327,7 +15839,8 @@ func (r *RejectedWorkflowNodeResultEvent) UnmarshalJSON(data []byte) error {
 	type embed RejectedWorkflowNodeResultEvent
 	var unmarshaler = struct {
 		embed
-		Ts *core.DateTime `json:"ts,omitempty"`
+		Ts    *core.DateTime `json:"ts,omitempty"`
+		State string         `json:"state"`
 	}{
 		embed: embed(*r),
 	}
@@ -15336,7 +15849,10 @@ func (r *RejectedWorkflowNodeResultEvent) UnmarshalJSON(data []byte) error {
 	}
 	*r = RejectedWorkflowNodeResultEvent(unmarshaler.embed)
 	r.Ts = unmarshaler.Ts.TimePtr()
-	r.state = "REJECTED"
+	if unmarshaler.State != "REJECTED" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", r, "REJECTED", unmarshaler.State)
+	}
+	r.state = unmarshaler.State
 
 	extraProperties, err := core.ExtractExtraProperties(data, *r, "state")
 	if err != nil {
@@ -15574,6 +16090,7 @@ func (s *ScenarioInputChatHistoryVariableValue) UnmarshalJSON(data []byte) error
 	type embed ScenarioInputChatHistoryVariableValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*s),
 	}
@@ -15581,7 +16098,10 @@ func (s *ScenarioInputChatHistoryVariableValue) UnmarshalJSON(data []byte) error
 		return err
 	}
 	*s = ScenarioInputChatHistoryVariableValue(unmarshaler.embed)
-	s.type_ = "CHAT_HISTORY"
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	s.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *s, "type")
 	if err != nil {
@@ -15639,6 +16159,7 @@ func (s *ScenarioInputJsonVariableValue) UnmarshalJSON(data []byte) error {
 	type embed ScenarioInputJsonVariableValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*s),
 	}
@@ -15646,7 +16167,10 @@ func (s *ScenarioInputJsonVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = ScenarioInputJsonVariableValue(unmarshaler.embed)
-	s.type_ = "JSON"
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "JSON", unmarshaler.Type)
+	}
+	s.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *s, "type")
 	if err != nil {
@@ -15704,6 +16228,7 @@ func (s *ScenarioInputStringVariableValue) UnmarshalJSON(data []byte) error {
 	type embed ScenarioInputStringVariableValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*s),
 	}
@@ -15711,7 +16236,10 @@ func (s *ScenarioInputStringVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = ScenarioInputStringVariableValue(unmarshaler.embed)
-	s.type_ = "STRING"
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "STRING", unmarshaler.Type)
+	}
+	s.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *s, "type")
 	if err != nil {
@@ -15812,6 +16340,7 @@ func (s *SearchNodeResult) UnmarshalJSON(data []byte) error {
 	type embed SearchNodeResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*s),
 	}
@@ -15819,7 +16348,10 @@ func (s *SearchNodeResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SearchNodeResult(unmarshaler.embed)
-	s.type_ = "SEARCH"
+	if unmarshaler.Type != "SEARCH" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "SEARCH", unmarshaler.Type)
+	}
+	s.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *s, "type")
 	if err != nil {
@@ -16459,6 +16991,7 @@ func (s *SentenceChunking) UnmarshalJSON(data []byte) error {
 	type embed SentenceChunking
 	var unmarshaler = struct {
 		embed
+		ChunkerName string `json:"chunker_name"`
 	}{
 		embed: embed(*s),
 	}
@@ -16466,7 +16999,10 @@ func (s *SentenceChunking) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SentenceChunking(unmarshaler.embed)
-	s.chunkerName = "sentence-chunker"
+	if unmarshaler.ChunkerName != "sentence-chunker" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "sentence-chunker", unmarshaler.ChunkerName)
+	}
+	s.chunkerName = unmarshaler.ChunkerName
 
 	extraProperties, err := core.ExtractExtraProperties(data, *s, "chunker_name")
 	if err != nil {
@@ -16523,6 +17059,7 @@ func (s *SentenceChunkingRequest) UnmarshalJSON(data []byte) error {
 	type embed SentenceChunkingRequest
 	var unmarshaler = struct {
 		embed
+		ChunkerName string `json:"chunker_name"`
 	}{
 		embed: embed(*s),
 	}
@@ -16530,7 +17067,10 @@ func (s *SentenceChunkingRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SentenceChunkingRequest(unmarshaler.embed)
-	s.chunkerName = "sentence-chunker"
+	if unmarshaler.ChunkerName != "sentence-chunker" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "sentence-chunker", unmarshaler.ChunkerName)
+	}
+	s.chunkerName = unmarshaler.ChunkerName
 
 	extraProperties, err := core.ExtractExtraProperties(data, *s, "chunker_name")
 	if err != nil {
@@ -16848,6 +17388,7 @@ func (s *StreamingExecutePromptEvent) UnmarshalJSON(data []byte) error {
 	type embed StreamingExecutePromptEvent
 	var unmarshaler = struct {
 		embed
+		State string `json:"state"`
 	}{
 		embed: embed(*s),
 	}
@@ -16855,7 +17396,10 @@ func (s *StreamingExecutePromptEvent) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = StreamingExecutePromptEvent(unmarshaler.embed)
-	s.state = "STREAMING"
+	if unmarshaler.State != "STREAMING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "STREAMING", unmarshaler.State)
+	}
+	s.state = unmarshaler.State
 
 	extraProperties, err := core.ExtractExtraProperties(data, *s, "state")
 	if err != nil {
@@ -16961,7 +17505,8 @@ func (s *StreamingWorkflowNodeResultEvent) UnmarshalJSON(data []byte) error {
 	type embed StreamingWorkflowNodeResultEvent
 	var unmarshaler = struct {
 		embed
-		Ts *core.DateTime `json:"ts,omitempty"`
+		Ts    *core.DateTime `json:"ts,omitempty"`
+		State string         `json:"state"`
 	}{
 		embed: embed(*s),
 	}
@@ -16970,7 +17515,10 @@ func (s *StreamingWorkflowNodeResultEvent) UnmarshalJSON(data []byte) error {
 	}
 	*s = StreamingWorkflowNodeResultEvent(unmarshaler.embed)
 	s.Ts = unmarshaler.Ts.TimePtr()
-	s.state = "STREAMING"
+	if unmarshaler.State != "STREAMING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "STREAMING", unmarshaler.State)
+	}
+	s.state = unmarshaler.State
 
 	extraProperties, err := core.ExtractExtraProperties(data, *s, "state")
 	if err != nil {
@@ -17029,6 +17577,7 @@ func (s *StringChatMessageContent) UnmarshalJSON(data []byte) error {
 	type embed StringChatMessageContent
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*s),
 	}
@@ -17036,7 +17585,10 @@ func (s *StringChatMessageContent) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = StringChatMessageContent(unmarshaler.embed)
-	s.type_ = "STRING"
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "STRING", unmarshaler.Type)
+	}
+	s.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *s, "type")
 	if err != nil {
@@ -17093,6 +17645,7 @@ func (s *StringChatMessageContentRequest) UnmarshalJSON(data []byte) error {
 	type embed StringChatMessageContentRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*s),
 	}
@@ -17100,7 +17653,10 @@ func (s *StringChatMessageContentRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = StringChatMessageContentRequest(unmarshaler.embed)
-	s.type_ = "STRING"
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "STRING", unmarshaler.Type)
+	}
+	s.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *s, "type")
 	if err != nil {
@@ -17159,6 +17715,7 @@ func (s *StringInputRequest) UnmarshalJSON(data []byte) error {
 	type embed StringInputRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*s),
 	}
@@ -17166,7 +17723,10 @@ func (s *StringInputRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = StringInputRequest(unmarshaler.embed)
-	s.type_ = "STRING"
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "STRING", unmarshaler.Type)
+	}
+	s.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *s, "type")
 	if err != nil {
@@ -17222,6 +17782,7 @@ func (s *StringVariableValue) UnmarshalJSON(data []byte) error {
 	type embed StringVariableValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*s),
 	}
@@ -17229,7 +17790,10 @@ func (s *StringVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = StringVariableValue(unmarshaler.embed)
-	s.type_ = "STRING"
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "STRING", unmarshaler.Type)
+	}
+	s.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *s, "type")
 	if err != nil {
@@ -17286,6 +17850,7 @@ func (s *StringVellumValue) UnmarshalJSON(data []byte) error {
 	type embed StringVellumValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*s),
 	}
@@ -17293,7 +17858,10 @@ func (s *StringVellumValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = StringVellumValue(unmarshaler.embed)
-	s.type_ = "STRING"
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "STRING", unmarshaler.Type)
+	}
+	s.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *s, "type")
 	if err != nil {
@@ -17350,6 +17918,7 @@ func (s *StringVellumValueRequest) UnmarshalJSON(data []byte) error {
 	type embed StringVellumValueRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*s),
 	}
@@ -17357,7 +17926,10 @@ func (s *StringVellumValueRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = StringVellumValueRequest(unmarshaler.embed)
-	s.type_ = "STRING"
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "STRING", unmarshaler.Type)
+	}
+	s.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *s, "type")
 	if err != nil {
@@ -17541,6 +18113,7 @@ func (s *SubworkflowNodeResult) UnmarshalJSON(data []byte) error {
 	type embed SubworkflowNodeResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*s),
 	}
@@ -17548,7 +18121,10 @@ func (s *SubworkflowNodeResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SubworkflowNodeResult(unmarshaler.embed)
-	s.type_ = "SUBWORKFLOW"
+	if unmarshaler.Type != "SUBWORKFLOW" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "SUBWORKFLOW", unmarshaler.Type)
+	}
+	s.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *s, "type")
 	if err != nil {
@@ -17646,6 +18222,7 @@ func (t *TemplatingNodeArrayResult) UnmarshalJSON(data []byte) error {
 	type embed TemplatingNodeArrayResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -17653,7 +18230,10 @@ func (t *TemplatingNodeArrayResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TemplatingNodeArrayResult(unmarshaler.embed)
-	t.type_ = "ARRAY"
+	if unmarshaler.Type != "ARRAY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "ARRAY", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -17710,6 +18290,7 @@ func (t *TemplatingNodeChatHistoryResult) UnmarshalJSON(data []byte) error {
 	type embed TemplatingNodeChatHistoryResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -17717,7 +18298,10 @@ func (t *TemplatingNodeChatHistoryResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TemplatingNodeChatHistoryResult(unmarshaler.embed)
-	t.type_ = "CHAT_HISTORY"
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -17774,6 +18358,7 @@ func (t *TemplatingNodeErrorResult) UnmarshalJSON(data []byte) error {
 	type embed TemplatingNodeErrorResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -17781,7 +18366,10 @@ func (t *TemplatingNodeErrorResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TemplatingNodeErrorResult(unmarshaler.embed)
-	t.type_ = "ERROR"
+	if unmarshaler.Type != "ERROR" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "ERROR", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -17838,6 +18426,7 @@ func (t *TemplatingNodeFunctionCallResult) UnmarshalJSON(data []byte) error {
 	type embed TemplatingNodeFunctionCallResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -17845,7 +18434,10 @@ func (t *TemplatingNodeFunctionCallResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TemplatingNodeFunctionCallResult(unmarshaler.embed)
-	t.type_ = "FUNCTION_CALL"
+	if unmarshaler.Type != "FUNCTION_CALL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "FUNCTION_CALL", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -17902,6 +18494,7 @@ func (t *TemplatingNodeJsonResult) UnmarshalJSON(data []byte) error {
 	type embed TemplatingNodeJsonResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -17909,7 +18502,10 @@ func (t *TemplatingNodeJsonResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TemplatingNodeJsonResult(unmarshaler.embed)
-	t.type_ = "JSON"
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "JSON", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -17966,6 +18562,7 @@ func (t *TemplatingNodeNumberResult) UnmarshalJSON(data []byte) error {
 	type embed TemplatingNodeNumberResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -17973,7 +18570,10 @@ func (t *TemplatingNodeNumberResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TemplatingNodeNumberResult(unmarshaler.embed)
-	t.type_ = "NUMBER"
+	if unmarshaler.Type != "NUMBER" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "NUMBER", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -18030,6 +18630,7 @@ func (t *TemplatingNodeResult) UnmarshalJSON(data []byte) error {
 	type embed TemplatingNodeResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -18037,7 +18638,10 @@ func (t *TemplatingNodeResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TemplatingNodeResult(unmarshaler.embed)
-	t.type_ = "TEMPLATING"
+	if unmarshaler.Type != "TEMPLATING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "TEMPLATING", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -18257,6 +18861,7 @@ func (t *TemplatingNodeSearchResultsResult) UnmarshalJSON(data []byte) error {
 	type embed TemplatingNodeSearchResultsResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -18264,7 +18869,10 @@ func (t *TemplatingNodeSearchResultsResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TemplatingNodeSearchResultsResult(unmarshaler.embed)
-	t.type_ = "SEARCH_RESULTS"
+	if unmarshaler.Type != "SEARCH_RESULTS" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "SEARCH_RESULTS", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -18321,6 +18929,7 @@ func (t *TemplatingNodeStringResult) UnmarshalJSON(data []byte) error {
 	type embed TemplatingNodeStringResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -18328,7 +18937,10 @@ func (t *TemplatingNodeStringResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TemplatingNodeStringResult(unmarshaler.embed)
-	t.type_ = "STRING"
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "STRING", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -18387,6 +18999,7 @@ func (t *TerminalNodeArrayResult) UnmarshalJSON(data []byte) error {
 	type embed TerminalNodeArrayResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -18394,7 +19007,10 @@ func (t *TerminalNodeArrayResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TerminalNodeArrayResult(unmarshaler.embed)
-	t.type_ = "ARRAY"
+	if unmarshaler.Type != "ARRAY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "ARRAY", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -18453,6 +19069,7 @@ func (t *TerminalNodeChatHistoryResult) UnmarshalJSON(data []byte) error {
 	type embed TerminalNodeChatHistoryResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -18460,7 +19077,10 @@ func (t *TerminalNodeChatHistoryResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TerminalNodeChatHistoryResult(unmarshaler.embed)
-	t.type_ = "CHAT_HISTORY"
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -18519,6 +19139,7 @@ func (t *TerminalNodeErrorResult) UnmarshalJSON(data []byte) error {
 	type embed TerminalNodeErrorResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -18526,7 +19147,10 @@ func (t *TerminalNodeErrorResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TerminalNodeErrorResult(unmarshaler.embed)
-	t.type_ = "ERROR"
+	if unmarshaler.Type != "ERROR" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "ERROR", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -18585,6 +19209,7 @@ func (t *TerminalNodeFunctionCallResult) UnmarshalJSON(data []byte) error {
 	type embed TerminalNodeFunctionCallResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -18592,7 +19217,10 @@ func (t *TerminalNodeFunctionCallResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TerminalNodeFunctionCallResult(unmarshaler.embed)
-	t.type_ = "FUNCTION_CALL"
+	if unmarshaler.Type != "FUNCTION_CALL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "FUNCTION_CALL", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -18651,6 +19279,7 @@ func (t *TerminalNodeJsonResult) UnmarshalJSON(data []byte) error {
 	type embed TerminalNodeJsonResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -18658,7 +19287,10 @@ func (t *TerminalNodeJsonResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TerminalNodeJsonResult(unmarshaler.embed)
-	t.type_ = "JSON"
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "JSON", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -18717,6 +19349,7 @@ func (t *TerminalNodeNumberResult) UnmarshalJSON(data []byte) error {
 	type embed TerminalNodeNumberResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -18724,7 +19357,10 @@ func (t *TerminalNodeNumberResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TerminalNodeNumberResult(unmarshaler.embed)
-	t.type_ = "NUMBER"
+	if unmarshaler.Type != "NUMBER" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "NUMBER", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -18781,6 +19417,7 @@ func (t *TerminalNodeResult) UnmarshalJSON(data []byte) error {
 	type embed TerminalNodeResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -18788,7 +19425,10 @@ func (t *TerminalNodeResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TerminalNodeResult(unmarshaler.embed)
-	t.type_ = "TERMINAL"
+	if unmarshaler.Type != "TERMINAL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "TERMINAL", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -19010,6 +19650,7 @@ func (t *TerminalNodeSearchResultsResult) UnmarshalJSON(data []byte) error {
 	type embed TerminalNodeSearchResultsResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -19017,7 +19658,10 @@ func (t *TerminalNodeSearchResultsResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TerminalNodeSearchResultsResult(unmarshaler.embed)
-	t.type_ = "SEARCH_RESULTS"
+	if unmarshaler.Type != "SEARCH_RESULTS" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "SEARCH_RESULTS", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -19076,6 +19720,7 @@ func (t *TerminalNodeStringResult) UnmarshalJSON(data []byte) error {
 	type embed TerminalNodeStringResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -19083,7 +19728,10 @@ func (t *TerminalNodeStringResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TerminalNodeStringResult(unmarshaler.embed)
-	t.type_ = "STRING"
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "STRING", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -19142,6 +19790,7 @@ func (t *TestCaseArrayVariableValue) UnmarshalJSON(data []byte) error {
 	type embed TestCaseArrayVariableValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -19149,7 +19798,10 @@ func (t *TestCaseArrayVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestCaseArrayVariableValue(unmarshaler.embed)
-	t.type_ = "ARRAY"
+	if unmarshaler.Type != "ARRAY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "ARRAY", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -19208,6 +19860,7 @@ func (t *TestCaseChatHistoryVariableValue) UnmarshalJSON(data []byte) error {
 	type embed TestCaseChatHistoryVariableValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -19215,7 +19868,10 @@ func (t *TestCaseChatHistoryVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestCaseChatHistoryVariableValue(unmarshaler.embed)
-	t.type_ = "CHAT_HISTORY"
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -19274,6 +19930,7 @@ func (t *TestCaseErrorVariableValue) UnmarshalJSON(data []byte) error {
 	type embed TestCaseErrorVariableValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -19281,7 +19938,10 @@ func (t *TestCaseErrorVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestCaseErrorVariableValue(unmarshaler.embed)
-	t.type_ = "ERROR"
+	if unmarshaler.Type != "ERROR" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "ERROR", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -19340,6 +20000,7 @@ func (t *TestCaseFunctionCallVariableValue) UnmarshalJSON(data []byte) error {
 	type embed TestCaseFunctionCallVariableValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -19347,7 +20008,10 @@ func (t *TestCaseFunctionCallVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestCaseFunctionCallVariableValue(unmarshaler.embed)
-	t.type_ = "FUNCTION_CALL"
+	if unmarshaler.Type != "FUNCTION_CALL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "FUNCTION_CALL", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -19406,6 +20070,7 @@ func (t *TestCaseJsonVariableValue) UnmarshalJSON(data []byte) error {
 	type embed TestCaseJsonVariableValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -19413,7 +20078,10 @@ func (t *TestCaseJsonVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestCaseJsonVariableValue(unmarshaler.embed)
-	t.type_ = "JSON"
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "JSON", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -19472,6 +20140,7 @@ func (t *TestCaseNumberVariableValue) UnmarshalJSON(data []byte) error {
 	type embed TestCaseNumberVariableValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -19479,7 +20148,10 @@ func (t *TestCaseNumberVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestCaseNumberVariableValue(unmarshaler.embed)
-	t.type_ = "NUMBER"
+	if unmarshaler.Type != "NUMBER" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "NUMBER", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -19538,6 +20210,7 @@ func (t *TestCaseSearchResultsVariableValue) UnmarshalJSON(data []byte) error {
 	type embed TestCaseSearchResultsVariableValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -19545,7 +20218,10 @@ func (t *TestCaseSearchResultsVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestCaseSearchResultsVariableValue(unmarshaler.embed)
-	t.type_ = "SEARCH_RESULTS"
+	if unmarshaler.Type != "SEARCH_RESULTS" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "SEARCH_RESULTS", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -19604,6 +20280,7 @@ func (t *TestCaseStringVariableValue) UnmarshalJSON(data []byte) error {
 	type embed TestCaseStringVariableValue
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -19611,7 +20288,10 @@ func (t *TestCaseStringVariableValue) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestCaseStringVariableValue(unmarshaler.embed)
-	t.type_ = "STRING"
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "STRING", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -19792,6 +20472,7 @@ func (t *TestSuiteRunDeploymentReleaseTagExecConfig) UnmarshalJSON(data []byte) 
 	type embed TestSuiteRunDeploymentReleaseTagExecConfig
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -19799,7 +20480,10 @@ func (t *TestSuiteRunDeploymentReleaseTagExecConfig) UnmarshalJSON(data []byte) 
 		return err
 	}
 	*t = TestSuiteRunDeploymentReleaseTagExecConfig(unmarshaler.embed)
-	t.type_ = "DEPLOYMENT_RELEASE_TAG"
+	if unmarshaler.Type != "DEPLOYMENT_RELEASE_TAG" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "DEPLOYMENT_RELEASE_TAG", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -19946,6 +20630,7 @@ func (t *TestSuiteRunDeploymentReleaseTagExecConfigRequest) UnmarshalJSON(data [
 	type embed TestSuiteRunDeploymentReleaseTagExecConfigRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -19953,7 +20638,10 @@ func (t *TestSuiteRunDeploymentReleaseTagExecConfigRequest) UnmarshalJSON(data [
 		return err
 	}
 	*t = TestSuiteRunDeploymentReleaseTagExecConfigRequest(unmarshaler.embed)
-	t.type_ = "DEPLOYMENT_RELEASE_TAG"
+	if unmarshaler.Type != "DEPLOYMENT_RELEASE_TAG" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "DEPLOYMENT_RELEASE_TAG", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -20170,6 +20858,7 @@ func (t *TestSuiteRunExecutionArrayOutput) UnmarshalJSON(data []byte) error {
 	type embed TestSuiteRunExecutionArrayOutput
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -20177,7 +20866,10 @@ func (t *TestSuiteRunExecutionArrayOutput) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteRunExecutionArrayOutput(unmarshaler.embed)
-	t.type_ = "ARRAY"
+	if unmarshaler.Type != "ARRAY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "ARRAY", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -20236,6 +20928,7 @@ func (t *TestSuiteRunExecutionChatHistoryOutput) UnmarshalJSON(data []byte) erro
 	type embed TestSuiteRunExecutionChatHistoryOutput
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -20243,7 +20936,10 @@ func (t *TestSuiteRunExecutionChatHistoryOutput) UnmarshalJSON(data []byte) erro
 		return err
 	}
 	*t = TestSuiteRunExecutionChatHistoryOutput(unmarshaler.embed)
-	t.type_ = "CHAT_HISTORY"
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -20302,6 +20998,7 @@ func (t *TestSuiteRunExecutionErrorOutput) UnmarshalJSON(data []byte) error {
 	type embed TestSuiteRunExecutionErrorOutput
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -20309,7 +21006,10 @@ func (t *TestSuiteRunExecutionErrorOutput) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteRunExecutionErrorOutput(unmarshaler.embed)
-	t.type_ = "ERROR"
+	if unmarshaler.Type != "ERROR" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "ERROR", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -20368,6 +21068,7 @@ func (t *TestSuiteRunExecutionFunctionCallOutput) UnmarshalJSON(data []byte) err
 	type embed TestSuiteRunExecutionFunctionCallOutput
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -20375,7 +21076,10 @@ func (t *TestSuiteRunExecutionFunctionCallOutput) UnmarshalJSON(data []byte) err
 		return err
 	}
 	*t = TestSuiteRunExecutionFunctionCallOutput(unmarshaler.embed)
-	t.type_ = "FUNCTION_CALL"
+	if unmarshaler.Type != "FUNCTION_CALL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "FUNCTION_CALL", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -20434,6 +21138,7 @@ func (t *TestSuiteRunExecutionJsonOutput) UnmarshalJSON(data []byte) error {
 	type embed TestSuiteRunExecutionJsonOutput
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -20441,7 +21146,10 @@ func (t *TestSuiteRunExecutionJsonOutput) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteRunExecutionJsonOutput(unmarshaler.embed)
-	t.type_ = "JSON"
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "JSON", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -20587,6 +21295,7 @@ func (t *TestSuiteRunExecutionNumberOutput) UnmarshalJSON(data []byte) error {
 	type embed TestSuiteRunExecutionNumberOutput
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -20594,7 +21303,10 @@ func (t *TestSuiteRunExecutionNumberOutput) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteRunExecutionNumberOutput(unmarshaler.embed)
-	t.type_ = "NUMBER"
+	if unmarshaler.Type != "NUMBER" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "NUMBER", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -20775,6 +21487,7 @@ func (t *TestSuiteRunExecutionSearchResultsOutput) UnmarshalJSON(data []byte) er
 	type embed TestSuiteRunExecutionSearchResultsOutput
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -20782,7 +21495,10 @@ func (t *TestSuiteRunExecutionSearchResultsOutput) UnmarshalJSON(data []byte) er
 		return err
 	}
 	*t = TestSuiteRunExecutionSearchResultsOutput(unmarshaler.embed)
-	t.type_ = "SEARCH_RESULTS"
+	if unmarshaler.Type != "SEARCH_RESULTS" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "SEARCH_RESULTS", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -20841,6 +21557,7 @@ func (t *TestSuiteRunExecutionStringOutput) UnmarshalJSON(data []byte) error {
 	type embed TestSuiteRunExecutionStringOutput
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -20848,7 +21565,10 @@ func (t *TestSuiteRunExecutionStringOutput) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteRunExecutionStringOutput(unmarshaler.embed)
-	t.type_ = "STRING"
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "STRING", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -20907,6 +21627,7 @@ func (t *TestSuiteRunExternalExecConfig) UnmarshalJSON(data []byte) error {
 	type embed TestSuiteRunExternalExecConfig
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -20914,7 +21635,10 @@ func (t *TestSuiteRunExternalExecConfig) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteRunExternalExecConfig(unmarshaler.embed)
-	t.type_ = "EXTERNAL"
+	if unmarshaler.Type != "EXTERNAL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "EXTERNAL", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -21057,6 +21781,7 @@ func (t *TestSuiteRunExternalExecConfigRequest) UnmarshalJSON(data []byte) error
 	type embed TestSuiteRunExternalExecConfigRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -21064,7 +21789,10 @@ func (t *TestSuiteRunExternalExecConfigRequest) UnmarshalJSON(data []byte) error
 		return err
 	}
 	*t = TestSuiteRunExternalExecConfigRequest(unmarshaler.embed)
-	t.type_ = "EXTERNAL"
+	if unmarshaler.Type != "EXTERNAL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "EXTERNAL", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -21122,6 +21850,7 @@ func (t *TestSuiteRunMetricErrorOutput) UnmarshalJSON(data []byte) error {
 	type embed TestSuiteRunMetricErrorOutput
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -21129,7 +21858,10 @@ func (t *TestSuiteRunMetricErrorOutput) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteRunMetricErrorOutput(unmarshaler.embed)
-	t.type_ = "ERROR"
+	if unmarshaler.Type != "ERROR" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "ERROR", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -21187,6 +21919,7 @@ func (t *TestSuiteRunMetricNumberOutput) UnmarshalJSON(data []byte) error {
 	type embed TestSuiteRunMetricNumberOutput
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -21194,7 +21927,10 @@ func (t *TestSuiteRunMetricNumberOutput) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteRunMetricNumberOutput(unmarshaler.embed)
-	t.type_ = "NUMBER"
+	if unmarshaler.Type != "NUMBER" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "NUMBER", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -21309,6 +22045,7 @@ func (t *TestSuiteRunMetricStringOutput) UnmarshalJSON(data []byte) error {
 	type embed TestSuiteRunMetricStringOutput
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -21316,7 +22053,10 @@ func (t *TestSuiteRunMetricStringOutput) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteRunMetricStringOutput(unmarshaler.embed)
-	t.type_ = "STRING"
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "STRING", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -21525,6 +22265,7 @@ func (t *TestSuiteRunWorkflowReleaseTagExecConfig) UnmarshalJSON(data []byte) er
 	type embed TestSuiteRunWorkflowReleaseTagExecConfig
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -21532,7 +22273,10 @@ func (t *TestSuiteRunWorkflowReleaseTagExecConfig) UnmarshalJSON(data []byte) er
 		return err
 	}
 	*t = TestSuiteRunWorkflowReleaseTagExecConfig(unmarshaler.embed)
-	t.type_ = "WORKFLOW_RELEASE_TAG"
+	if unmarshaler.Type != "WORKFLOW_RELEASE_TAG" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "WORKFLOW_RELEASE_TAG", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -21679,6 +22423,7 @@ func (t *TestSuiteRunWorkflowReleaseTagExecConfigRequest) UnmarshalJSON(data []b
 	type embed TestSuiteRunWorkflowReleaseTagExecConfigRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -21686,7 +22431,10 @@ func (t *TestSuiteRunWorkflowReleaseTagExecConfigRequest) UnmarshalJSON(data []b
 		return err
 	}
 	*t = TestSuiteRunWorkflowReleaseTagExecConfigRequest(unmarshaler.embed)
-	t.type_ = "WORKFLOW_RELEASE_TAG"
+	if unmarshaler.Type != "WORKFLOW_RELEASE_TAG" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "WORKFLOW_RELEASE_TAG", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -21930,6 +22678,7 @@ func (t *TestSuiteTestCaseCreateBulkOperationRequest) UnmarshalJSON(data []byte)
 	type embed TestSuiteTestCaseCreateBulkOperationRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -21937,7 +22686,10 @@ func (t *TestSuiteTestCaseCreateBulkOperationRequest) UnmarshalJSON(data []byte)
 		return err
 	}
 	*t = TestSuiteTestCaseCreateBulkOperationRequest(unmarshaler.embed)
-	t.type_ = "CREATE"
+	if unmarshaler.Type != "CREATE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "CREATE", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -21995,6 +22747,7 @@ func (t *TestSuiteTestCaseCreatedBulkResult) UnmarshalJSON(data []byte) error {
 	type embed TestSuiteTestCaseCreatedBulkResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -22002,7 +22755,10 @@ func (t *TestSuiteTestCaseCreatedBulkResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteTestCaseCreatedBulkResult(unmarshaler.embed)
-	t.type_ = "CREATED"
+	if unmarshaler.Type != "CREATED" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "CREATED", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -22145,6 +22901,7 @@ func (t *TestSuiteTestCaseDeleteBulkOperationRequest) UnmarshalJSON(data []byte)
 	type embed TestSuiteTestCaseDeleteBulkOperationRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -22152,7 +22909,10 @@ func (t *TestSuiteTestCaseDeleteBulkOperationRequest) UnmarshalJSON(data []byte)
 		return err
 	}
 	*t = TestSuiteTestCaseDeleteBulkOperationRequest(unmarshaler.embed)
-	t.type_ = "DELETE"
+	if unmarshaler.Type != "DELETE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "DELETE", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -22211,6 +22971,7 @@ func (t *TestSuiteTestCaseDeletedBulkResult) UnmarshalJSON(data []byte) error {
 	type embed TestSuiteTestCaseDeletedBulkResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -22218,7 +22979,10 @@ func (t *TestSuiteTestCaseDeletedBulkResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteTestCaseDeletedBulkResult(unmarshaler.embed)
-	t.type_ = "DELETED"
+	if unmarshaler.Type != "DELETED" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "DELETED", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -22320,6 +23084,7 @@ func (t *TestSuiteTestCaseRejectedBulkResult) UnmarshalJSON(data []byte) error {
 	type embed TestSuiteTestCaseRejectedBulkResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -22327,7 +23092,10 @@ func (t *TestSuiteTestCaseRejectedBulkResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteTestCaseRejectedBulkResult(unmarshaler.embed)
-	t.type_ = "REJECTED"
+	if unmarshaler.Type != "REJECTED" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "REJECTED", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -22386,6 +23154,7 @@ func (t *TestSuiteTestCaseReplaceBulkOperationRequest) UnmarshalJSON(data []byte
 	type embed TestSuiteTestCaseReplaceBulkOperationRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -22393,7 +23162,10 @@ func (t *TestSuiteTestCaseReplaceBulkOperationRequest) UnmarshalJSON(data []byte
 		return err
 	}
 	*t = TestSuiteTestCaseReplaceBulkOperationRequest(unmarshaler.embed)
-	t.type_ = "REPLACE"
+	if unmarshaler.Type != "REPLACE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "REPLACE", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -22452,6 +23224,7 @@ func (t *TestSuiteTestCaseReplacedBulkResult) UnmarshalJSON(data []byte) error {
 	type embed TestSuiteTestCaseReplacedBulkResult
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -22459,7 +23232,10 @@ func (t *TestSuiteTestCaseReplacedBulkResult) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteTestCaseReplacedBulkResult(unmarshaler.embed)
-	t.type_ = "REPLACED"
+	if unmarshaler.Type != "REPLACED" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "REPLACED", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -22560,6 +23336,7 @@ func (t *TestSuiteTestCaseUpsertBulkOperationRequest) UnmarshalJSON(data []byte)
 	type embed TestSuiteTestCaseUpsertBulkOperationRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -22567,7 +23344,10 @@ func (t *TestSuiteTestCaseUpsertBulkOperationRequest) UnmarshalJSON(data []byte)
 		return err
 	}
 	*t = TestSuiteTestCaseUpsertBulkOperationRequest(unmarshaler.embed)
-	t.type_ = "UPSERT"
+	if unmarshaler.Type != "UPSERT" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "UPSERT", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -22624,6 +23404,7 @@ func (t *TikTokenTokenizerConfig) UnmarshalJSON(data []byte) error {
 	type embed TikTokenTokenizerConfig
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -22631,7 +23412,10 @@ func (t *TikTokenTokenizerConfig) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TikTokenTokenizerConfig(unmarshaler.embed)
-	t.type_ = "TIKTOKEN"
+	if unmarshaler.Type != "TIKTOKEN" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "TIKTOKEN", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -22688,6 +23472,7 @@ func (t *TikTokenTokenizerConfigRequest) UnmarshalJSON(data []byte) error {
 	type embed TikTokenTokenizerConfigRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*t),
 	}
@@ -22695,7 +23480,10 @@ func (t *TikTokenTokenizerConfigRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TikTokenTokenizerConfigRequest(unmarshaler.embed)
-	t.type_ = "TIKTOKEN"
+	if unmarshaler.Type != "TIKTOKEN" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "TIKTOKEN", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
 	if err != nil {
@@ -22838,6 +23626,7 @@ func (t *TokenOverlappingWindowChunking) UnmarshalJSON(data []byte) error {
 	type embed TokenOverlappingWindowChunking
 	var unmarshaler = struct {
 		embed
+		ChunkerName string `json:"chunker_name"`
 	}{
 		embed: embed(*t),
 	}
@@ -22845,7 +23634,10 @@ func (t *TokenOverlappingWindowChunking) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TokenOverlappingWindowChunking(unmarshaler.embed)
-	t.chunkerName = "token-overlapping-window-chunker"
+	if unmarshaler.ChunkerName != "token-overlapping-window-chunker" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "token-overlapping-window-chunker", unmarshaler.ChunkerName)
+	}
+	t.chunkerName = unmarshaler.ChunkerName
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "chunker_name")
 	if err != nil {
@@ -22902,6 +23694,7 @@ func (t *TokenOverlappingWindowChunkingRequest) UnmarshalJSON(data []byte) error
 	type embed TokenOverlappingWindowChunkingRequest
 	var unmarshaler = struct {
 		embed
+		ChunkerName string `json:"chunker_name"`
 	}{
 		embed: embed(*t),
 	}
@@ -22909,7 +23702,10 @@ func (t *TokenOverlappingWindowChunkingRequest) UnmarshalJSON(data []byte) error
 		return err
 	}
 	*t = TokenOverlappingWindowChunkingRequest(unmarshaler.embed)
-	t.chunkerName = "token-overlapping-window-chunker"
+	if unmarshaler.ChunkerName != "token-overlapping-window-chunker" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "token-overlapping-window-chunker", unmarshaler.ChunkerName)
+	}
+	t.chunkerName = unmarshaler.ChunkerName
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t, "chunker_name")
 	if err != nil {
@@ -23529,6 +24325,7 @@ func (w *WorkflowExecutionActualChatHistoryRequest) UnmarshalJSON(data []byte) e
 	type embed WorkflowExecutionActualChatHistoryRequest
 	var unmarshaler = struct {
 		embed
+		OutputType string `json:"output_type"`
 	}{
 		embed: embed(*w),
 	}
@@ -23536,7 +24333,10 @@ func (w *WorkflowExecutionActualChatHistoryRequest) UnmarshalJSON(data []byte) e
 		return err
 	}
 	*w = WorkflowExecutionActualChatHistoryRequest(unmarshaler.embed)
-	w.outputType = "CHAT_HISTORY"
+	if unmarshaler.OutputType != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "CHAT_HISTORY", unmarshaler.OutputType)
+	}
+	w.outputType = unmarshaler.OutputType
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "output_type")
 	if err != nil {
@@ -23603,6 +24403,7 @@ func (w *WorkflowExecutionActualJsonRequest) UnmarshalJSON(data []byte) error {
 	type embed WorkflowExecutionActualJsonRequest
 	var unmarshaler = struct {
 		embed
+		OutputType string `json:"output_type"`
 	}{
 		embed: embed(*w),
 	}
@@ -23610,7 +24411,10 @@ func (w *WorkflowExecutionActualJsonRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowExecutionActualJsonRequest(unmarshaler.embed)
-	w.outputType = "JSON"
+	if unmarshaler.OutputType != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "JSON", unmarshaler.OutputType)
+	}
+	w.outputType = unmarshaler.OutputType
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "output_type")
 	if err != nil {
@@ -23677,6 +24481,7 @@ func (w *WorkflowExecutionActualStringRequest) UnmarshalJSON(data []byte) error 
 	type embed WorkflowExecutionActualStringRequest
 	var unmarshaler = struct {
 		embed
+		OutputType string `json:"output_type"`
 	}{
 		embed: embed(*w),
 	}
@@ -23684,7 +24489,10 @@ func (w *WorkflowExecutionActualStringRequest) UnmarshalJSON(data []byte) error 
 		return err
 	}
 	*w = WorkflowExecutionActualStringRequest(unmarshaler.embed)
-	w.outputType = "STRING"
+	if unmarshaler.OutputType != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "STRING", unmarshaler.OutputType)
+	}
+	w.outputType = unmarshaler.OutputType
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "output_type")
 	if err != nil {
@@ -23816,6 +24624,7 @@ func (w *WorkflowExecutionNodeResultEvent) UnmarshalJSON(data []byte) error {
 	type embed WorkflowExecutionNodeResultEvent
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*w),
 	}
@@ -23823,7 +24632,10 @@ func (w *WorkflowExecutionNodeResultEvent) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowExecutionNodeResultEvent(unmarshaler.embed)
-	w.type_ = "NODE"
+	if unmarshaler.Type != "NODE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "NODE", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
 	if err != nil {
@@ -23883,6 +24695,7 @@ func (w *WorkflowExecutionWorkflowResultEvent) UnmarshalJSON(data []byte) error 
 	type embed WorkflowExecutionWorkflowResultEvent
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*w),
 	}
@@ -23890,7 +24703,10 @@ func (w *WorkflowExecutionWorkflowResultEvent) UnmarshalJSON(data []byte) error 
 		return err
 	}
 	*w = WorkflowExecutionWorkflowResultEvent(unmarshaler.embed)
-	w.type_ = "WORKFLOW"
+	if unmarshaler.Type != "WORKFLOW" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "WORKFLOW", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
 	if err != nil {
@@ -24390,6 +25206,7 @@ func (w *WorkflowOutputArray) UnmarshalJSON(data []byte) error {
 	type embed WorkflowOutputArray
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*w),
 	}
@@ -24397,7 +25214,10 @@ func (w *WorkflowOutputArray) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowOutputArray(unmarshaler.embed)
-	w.type_ = "ARRAY"
+	if unmarshaler.Type != "ARRAY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "ARRAY", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
 	if err != nil {
@@ -24457,6 +25277,7 @@ func (w *WorkflowOutputChatHistory) UnmarshalJSON(data []byte) error {
 	type embed WorkflowOutputChatHistory
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*w),
 	}
@@ -24464,7 +25285,10 @@ func (w *WorkflowOutputChatHistory) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowOutputChatHistory(unmarshaler.embed)
-	w.type_ = "CHAT_HISTORY"
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
 	if err != nil {
@@ -24524,6 +25348,7 @@ func (w *WorkflowOutputError) UnmarshalJSON(data []byte) error {
 	type embed WorkflowOutputError
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*w),
 	}
@@ -24531,7 +25356,10 @@ func (w *WorkflowOutputError) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowOutputError(unmarshaler.embed)
-	w.type_ = "ERROR"
+	if unmarshaler.Type != "ERROR" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "ERROR", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
 	if err != nil {
@@ -24591,6 +25419,7 @@ func (w *WorkflowOutputFunctionCall) UnmarshalJSON(data []byte) error {
 	type embed WorkflowOutputFunctionCall
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*w),
 	}
@@ -24598,7 +25427,10 @@ func (w *WorkflowOutputFunctionCall) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowOutputFunctionCall(unmarshaler.embed)
-	w.type_ = "FUNCTION_CALL"
+	if unmarshaler.Type != "FUNCTION_CALL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "FUNCTION_CALL", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
 	if err != nil {
@@ -24658,6 +25490,7 @@ func (w *WorkflowOutputImage) UnmarshalJSON(data []byte) error {
 	type embed WorkflowOutputImage
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*w),
 	}
@@ -24665,7 +25498,10 @@ func (w *WorkflowOutputImage) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowOutputImage(unmarshaler.embed)
-	w.type_ = "IMAGE"
+	if unmarshaler.Type != "IMAGE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "IMAGE", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
 	if err != nil {
@@ -24725,6 +25561,7 @@ func (w *WorkflowOutputJson) UnmarshalJSON(data []byte) error {
 	type embed WorkflowOutputJson
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*w),
 	}
@@ -24732,7 +25569,10 @@ func (w *WorkflowOutputJson) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowOutputJson(unmarshaler.embed)
-	w.type_ = "JSON"
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "JSON", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
 	if err != nil {
@@ -24792,6 +25632,7 @@ func (w *WorkflowOutputNumber) UnmarshalJSON(data []byte) error {
 	type embed WorkflowOutputNumber
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*w),
 	}
@@ -24799,7 +25640,10 @@ func (w *WorkflowOutputNumber) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowOutputNumber(unmarshaler.embed)
-	w.type_ = "NUMBER"
+	if unmarshaler.Type != "NUMBER" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "NUMBER", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
 	if err != nil {
@@ -24859,6 +25703,7 @@ func (w *WorkflowOutputSearchResults) UnmarshalJSON(data []byte) error {
 	type embed WorkflowOutputSearchResults
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*w),
 	}
@@ -24866,7 +25711,10 @@ func (w *WorkflowOutputSearchResults) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowOutputSearchResults(unmarshaler.embed)
-	w.type_ = "SEARCH_RESULTS"
+	if unmarshaler.Type != "SEARCH_RESULTS" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "SEARCH_RESULTS", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
 	if err != nil {
@@ -24926,6 +25774,7 @@ func (w *WorkflowOutputString) UnmarshalJSON(data []byte) error {
 	type embed WorkflowOutputString
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*w),
 	}
@@ -24933,7 +25782,10 @@ func (w *WorkflowOutputString) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowOutputString(unmarshaler.embed)
-	w.type_ = "STRING"
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "STRING", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
 	if err != nil {
@@ -25103,6 +25955,7 @@ func (w *WorkflowRequestChatHistoryInputRequest) UnmarshalJSON(data []byte) erro
 	type embed WorkflowRequestChatHistoryInputRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*w),
 	}
@@ -25110,7 +25963,10 @@ func (w *WorkflowRequestChatHistoryInputRequest) UnmarshalJSON(data []byte) erro
 		return err
 	}
 	*w = WorkflowRequestChatHistoryInputRequest(unmarshaler.embed)
-	w.type_ = "CHAT_HISTORY"
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
 	if err != nil {
@@ -25239,6 +26095,7 @@ func (w *WorkflowRequestJsonInputRequest) UnmarshalJSON(data []byte) error {
 	type embed WorkflowRequestJsonInputRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*w),
 	}
@@ -25246,7 +26103,10 @@ func (w *WorkflowRequestJsonInputRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowRequestJsonInputRequest(unmarshaler.embed)
-	w.type_ = "JSON"
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "JSON", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
 	if err != nil {
@@ -25305,6 +26165,7 @@ func (w *WorkflowRequestNumberInputRequest) UnmarshalJSON(data []byte) error {
 	type embed WorkflowRequestNumberInputRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*w),
 	}
@@ -25312,7 +26173,10 @@ func (w *WorkflowRequestNumberInputRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowRequestNumberInputRequest(unmarshaler.embed)
-	w.type_ = "NUMBER"
+	if unmarshaler.Type != "NUMBER" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "NUMBER", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
 	if err != nil {
@@ -25371,6 +26235,7 @@ func (w *WorkflowRequestStringInputRequest) UnmarshalJSON(data []byte) error {
 	type embed WorkflowRequestStringInputRequest
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*w),
 	}
@@ -25378,7 +26243,10 @@ func (w *WorkflowRequestStringInputRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowRequestStringInputRequest(unmarshaler.embed)
-	w.type_ = "STRING"
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "STRING", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
 	if err != nil {
@@ -25628,6 +26496,7 @@ func (w *WorkflowResultEventOutputDataArray) UnmarshalJSON(data []byte) error {
 	type embed WorkflowResultEventOutputDataArray
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*w),
 	}
@@ -25635,7 +26504,10 @@ func (w *WorkflowResultEventOutputDataArray) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowResultEventOutputDataArray(unmarshaler.embed)
-	w.type_ = "ARRAY"
+	if unmarshaler.Type != "ARRAY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "ARRAY", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
 	if err != nil {
@@ -25698,6 +26570,7 @@ func (w *WorkflowResultEventOutputDataChatHistory) UnmarshalJSON(data []byte) er
 	type embed WorkflowResultEventOutputDataChatHistory
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*w),
 	}
@@ -25705,7 +26578,10 @@ func (w *WorkflowResultEventOutputDataChatHistory) UnmarshalJSON(data []byte) er
 		return err
 	}
 	*w = WorkflowResultEventOutputDataChatHistory(unmarshaler.embed)
-	w.type_ = "CHAT_HISTORY"
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
 	if err != nil {
@@ -25768,6 +26644,7 @@ func (w *WorkflowResultEventOutputDataError) UnmarshalJSON(data []byte) error {
 	type embed WorkflowResultEventOutputDataError
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*w),
 	}
@@ -25775,7 +26652,10 @@ func (w *WorkflowResultEventOutputDataError) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowResultEventOutputDataError(unmarshaler.embed)
-	w.type_ = "ERROR"
+	if unmarshaler.Type != "ERROR" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "ERROR", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
 	if err != nil {
@@ -25838,6 +26718,7 @@ func (w *WorkflowResultEventOutputDataFunctionCall) UnmarshalJSON(data []byte) e
 	type embed WorkflowResultEventOutputDataFunctionCall
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*w),
 	}
@@ -25845,7 +26726,10 @@ func (w *WorkflowResultEventOutputDataFunctionCall) UnmarshalJSON(data []byte) e
 		return err
 	}
 	*w = WorkflowResultEventOutputDataFunctionCall(unmarshaler.embed)
-	w.type_ = "FUNCTION_CALL"
+	if unmarshaler.Type != "FUNCTION_CALL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "FUNCTION_CALL", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
 	if err != nil {
@@ -25908,6 +26792,7 @@ func (w *WorkflowResultEventOutputDataJson) UnmarshalJSON(data []byte) error {
 	type embed WorkflowResultEventOutputDataJson
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*w),
 	}
@@ -25915,7 +26800,10 @@ func (w *WorkflowResultEventOutputDataJson) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowResultEventOutputDataJson(unmarshaler.embed)
-	w.type_ = "JSON"
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "JSON", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
 	if err != nil {
@@ -25978,6 +26866,7 @@ func (w *WorkflowResultEventOutputDataNumber) UnmarshalJSON(data []byte) error {
 	type embed WorkflowResultEventOutputDataNumber
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*w),
 	}
@@ -25985,7 +26874,10 @@ func (w *WorkflowResultEventOutputDataNumber) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowResultEventOutputDataNumber(unmarshaler.embed)
-	w.type_ = "NUMBER"
+	if unmarshaler.Type != "NUMBER" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "NUMBER", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
 	if err != nil {
@@ -26048,6 +26940,7 @@ func (w *WorkflowResultEventOutputDataSearchResults) UnmarshalJSON(data []byte) 
 	type embed WorkflowResultEventOutputDataSearchResults
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*w),
 	}
@@ -26055,7 +26948,10 @@ func (w *WorkflowResultEventOutputDataSearchResults) UnmarshalJSON(data []byte) 
 		return err
 	}
 	*w = WorkflowResultEventOutputDataSearchResults(unmarshaler.embed)
-	w.type_ = "SEARCH_RESULTS"
+	if unmarshaler.Type != "SEARCH_RESULTS" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "SEARCH_RESULTS", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
 	if err != nil {
@@ -26119,6 +27015,7 @@ func (w *WorkflowResultEventOutputDataString) UnmarshalJSON(data []byte) error {
 	type embed WorkflowResultEventOutputDataString
 	var unmarshaler = struct {
 		embed
+		Type string `json:"type"`
 	}{
 		embed: embed(*w),
 	}
@@ -26126,7 +27023,10 @@ func (w *WorkflowResultEventOutputDataString) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowResultEventOutputDataString(unmarshaler.embed)
-	w.type_ = "STRING"
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "STRING", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
 	if err != nil {

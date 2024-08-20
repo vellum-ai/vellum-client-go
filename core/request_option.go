@@ -52,7 +52,7 @@ func (r *RequestOptions) cloneHeader() http.Header {
 	headers := r.HTTPHeader.Clone()
 	headers.Set("X-Fern-Language", "Go")
 	headers.Set("X-Fern-SDK-Name", "github.com/vellum-ai/vellum-client-go")
-	headers.Set("X-Fern-SDK-Version", "v0.8.2")
+	headers.Set("X-Fern-SDK-Version", "v0.8.3")
 	return headers
 }
 
