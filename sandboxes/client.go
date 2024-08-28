@@ -85,7 +85,7 @@ func (c *Client) UpsertSandboxScenario(
 	ctx context.Context,
 	// A UUID string identifying this sandbox.
 	id string,
-	request *vellumclientgo.UpsertSandboxScenarioRequestRequest,
+	request *vellumclientgo.UpsertSandboxScenarioRequest,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.SandboxScenario, error) {
 	options := core.NewRequestOptions(opts...)
