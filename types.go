@@ -64,6 +64,8 @@ type ExecuteWorkflowRequest struct {
 	ReleaseTag *string `json:"release_tag,omitempty" url:"-"`
 	// Optionally include a unique identifier for tracking purposes. Must be unique for a given workflow deployment.
 	ExternalId *string `json:"external_id,omitempty" url:"-"`
+	// Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
+	Metadata map[string]interface{} `json:"metadata,omitempty" url:"-"`
 }
 
 type ExecuteWorkflowStreamRequest struct {
@@ -81,6 +83,8 @@ type ExecuteWorkflowStreamRequest struct {
 	ExternalId *string `json:"external_id,omitempty" url:"-"`
 	// Optionally specify which events you want to receive. Defaults to only WORKFLOW events. Note that the schema of non-WORKFLOW events is unstable and should be used with caution.
 	EventTypes []WorkflowExecutionEventType `json:"event_types,omitempty" url:"-"`
+	// Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
+	Metadata map[string]interface{} `json:"metadata,omitempty" url:"-"`
 }
 
 type GenerateBodyRequest struct {
