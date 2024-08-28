@@ -21,7 +21,7 @@ type ExecutePromptRequest struct {
 	// Optionally include a unique identifier for tracking purposes. Must be unique within a given Prompt Deployment.
 	ExternalId *string `json:"external_id,omitempty" url:"-"`
 	// An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
-	ExpandMeta *PromptDeploymentExpandMetaRequestRequest `json:"expand_meta,omitempty" url:"-"`
+	ExpandMeta *PromptDeploymentExpandMetaRequest `json:"expand_meta,omitempty" url:"-"`
 	// Overrides for the raw API request sent to the model host. Combined with `expand_raw`, it can be used to access new features from models.
 	RawOverrides *RawPromptExecutionOverridesRequest `json:"raw_overrides,omitempty" url:"-"`
 	// A list of keys whose values you'd like to directly return from the JSON response of the model provider. Useful if you need lower-level info returned by model providers that Vellum would otherwise omit. Corresponding key/value pairs will be returned under the `raw` key of the API response.
@@ -42,7 +42,7 @@ type ExecutePromptStreamRequest struct {
 	// Optionally include a unique identifier for tracking purposes. Must be unique within a given Prompt Deployment.
 	ExternalId *string `json:"external_id,omitempty" url:"-"`
 	// An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
-	ExpandMeta *PromptDeploymentExpandMetaRequestRequest `json:"expand_meta,omitempty" url:"-"`
+	ExpandMeta *PromptDeploymentExpandMetaRequest `json:"expand_meta,omitempty" url:"-"`
 	// Overrides for the raw API request sent to the model host. Combined with `expand_raw`, it can be used to access new features from models.
 	RawOverrides *RawPromptExecutionOverridesRequest `json:"raw_overrides,omitempty" url:"-"`
 	// A list of keys whose values you'd like to directly return from the JSON response of the model provider. Useful if you need lower-level info returned by model providers that Vellum would otherwise omit. Corresponding key/value pairs will be returned under the `raw` key of the API response.
@@ -132,6 +132,295 @@ type SubmitWorkflowExecutionActualsRequest struct {
 	ExecutionId *string `json:"execution_id,omitempty" url:"-"`
 	// The external ID that was originally provided by when executing the workflow, if applicable, that you'd now like to submit actuals for. Must provide either this or execution_id.
 	ExternalId *string `json:"external_id,omitempty" url:"-"`
+}
+
+type AdHocExecutePromptEvent struct {
+	InitiatedAdHocExecutePromptEvent *InitiatedAdHocExecutePromptEvent
+	StreamingAdHocExecutePromptEvent *StreamingAdHocExecutePromptEvent
+	FulfilledAdHocExecutePromptEvent *FulfilledAdHocExecutePromptEvent
+	RejectedAdHocExecutePromptEvent  *RejectedAdHocExecutePromptEvent
+}
+
+func (a *AdHocExecutePromptEvent) UnmarshalJSON(data []byte) error {
+	valueInitiatedAdHocExecutePromptEvent := new(InitiatedAdHocExecutePromptEvent)
+	if err := json.Unmarshal(data, &valueInitiatedAdHocExecutePromptEvent); err == nil {
+		a.InitiatedAdHocExecutePromptEvent = valueInitiatedAdHocExecutePromptEvent
+		return nil
+	}
+	valueStreamingAdHocExecutePromptEvent := new(StreamingAdHocExecutePromptEvent)
+	if err := json.Unmarshal(data, &valueStreamingAdHocExecutePromptEvent); err == nil {
+		a.StreamingAdHocExecutePromptEvent = valueStreamingAdHocExecutePromptEvent
+		return nil
+	}
+	valueFulfilledAdHocExecutePromptEvent := new(FulfilledAdHocExecutePromptEvent)
+	if err := json.Unmarshal(data, &valueFulfilledAdHocExecutePromptEvent); err == nil {
+		a.FulfilledAdHocExecutePromptEvent = valueFulfilledAdHocExecutePromptEvent
+		return nil
+	}
+	valueRejectedAdHocExecutePromptEvent := new(RejectedAdHocExecutePromptEvent)
+	if err := json.Unmarshal(data, &valueRejectedAdHocExecutePromptEvent); err == nil {
+		a.RejectedAdHocExecutePromptEvent = valueRejectedAdHocExecutePromptEvent
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, a)
+}
+
+func (a AdHocExecutePromptEvent) MarshalJSON() ([]byte, error) {
+	if a.InitiatedAdHocExecutePromptEvent != nil {
+		return json.Marshal(a.InitiatedAdHocExecutePromptEvent)
+	}
+	if a.StreamingAdHocExecutePromptEvent != nil {
+		return json.Marshal(a.StreamingAdHocExecutePromptEvent)
+	}
+	if a.FulfilledAdHocExecutePromptEvent != nil {
+		return json.Marshal(a.FulfilledAdHocExecutePromptEvent)
+	}
+	if a.RejectedAdHocExecutePromptEvent != nil {
+		return json.Marshal(a.RejectedAdHocExecutePromptEvent)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", a)
+}
+
+type AdHocExecutePromptEventVisitor interface {
+	VisitInitiatedAdHocExecutePromptEvent(*InitiatedAdHocExecutePromptEvent) error
+	VisitStreamingAdHocExecutePromptEvent(*StreamingAdHocExecutePromptEvent) error
+	VisitFulfilledAdHocExecutePromptEvent(*FulfilledAdHocExecutePromptEvent) error
+	VisitRejectedAdHocExecutePromptEvent(*RejectedAdHocExecutePromptEvent) error
+}
+
+func (a *AdHocExecutePromptEvent) Accept(visitor AdHocExecutePromptEventVisitor) error {
+	if a.InitiatedAdHocExecutePromptEvent != nil {
+		return visitor.VisitInitiatedAdHocExecutePromptEvent(a.InitiatedAdHocExecutePromptEvent)
+	}
+	if a.StreamingAdHocExecutePromptEvent != nil {
+		return visitor.VisitStreamingAdHocExecutePromptEvent(a.StreamingAdHocExecutePromptEvent)
+	}
+	if a.FulfilledAdHocExecutePromptEvent != nil {
+		return visitor.VisitFulfilledAdHocExecutePromptEvent(a.FulfilledAdHocExecutePromptEvent)
+	}
+	if a.RejectedAdHocExecutePromptEvent != nil {
+		return visitor.VisitRejectedAdHocExecutePromptEvent(a.RejectedAdHocExecutePromptEvent)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", a)
+}
+
+type AdHocExpandMetaRequest struct {
+	Cost *bool `json:"cost,omitempty" url:"cost,omitempty"`
+	// If enabled, the response will include the model identifier representing the ML Model invoked by the Prompt.
+	ModelName *bool `json:"model_name,omitempty" url:"model_name,omitempty"`
+	// If enabled, the response will include model host usage tracking. This may increase latency for some model hosts.
+	Usage *bool `json:"usage,omitempty" url:"usage,omitempty"`
+	// If enabled, the response will include the reason provided by the model for why the execution finished.
+	FinishReason *bool `json:"finish_reason,omitempty" url:"finish_reason,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (a *AdHocExpandMetaRequest) GetExtraProperties() map[string]interface{} {
+	return a.extraProperties
+}
+
+func (a *AdHocExpandMetaRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler AdHocExpandMetaRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*a = AdHocExpandMetaRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *a)
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+
+	a._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *AdHocExpandMetaRequest) String() string {
+	if len(a._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(a._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
+
+// The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
+type AdHocFulfilledPromptExecutionMeta struct {
+	Latency      *int              `json:"latency,omitempty" url:"latency,omitempty"`
+	FinishReason *FinishReasonEnum `json:"finish_reason,omitempty" url:"finish_reason,omitempty"`
+	Usage        *MlModelUsage     `json:"usage,omitempty" url:"usage,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (a *AdHocFulfilledPromptExecutionMeta) GetExtraProperties() map[string]interface{} {
+	return a.extraProperties
+}
+
+func (a *AdHocFulfilledPromptExecutionMeta) UnmarshalJSON(data []byte) error {
+	type unmarshaler AdHocFulfilledPromptExecutionMeta
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*a = AdHocFulfilledPromptExecutionMeta(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *a)
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+
+	a._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *AdHocFulfilledPromptExecutionMeta) String() string {
+	if len(a._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(a._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
+
+// The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
+type AdHocInitiatedPromptExecutionMeta struct {
+	ModelName *string `json:"model_name,omitempty" url:"model_name,omitempty"`
+	Latency   *int    `json:"latency,omitempty" url:"latency,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (a *AdHocInitiatedPromptExecutionMeta) GetExtraProperties() map[string]interface{} {
+	return a.extraProperties
+}
+
+func (a *AdHocInitiatedPromptExecutionMeta) UnmarshalJSON(data []byte) error {
+	type unmarshaler AdHocInitiatedPromptExecutionMeta
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*a = AdHocInitiatedPromptExecutionMeta(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *a)
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+
+	a._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *AdHocInitiatedPromptExecutionMeta) String() string {
+	if len(a._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(a._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
+
+// The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
+type AdHocRejectedPromptExecutionMeta struct {
+	Latency      *int              `json:"latency,omitempty" url:"latency,omitempty"`
+	FinishReason *FinishReasonEnum `json:"finish_reason,omitempty" url:"finish_reason,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (a *AdHocRejectedPromptExecutionMeta) GetExtraProperties() map[string]interface{} {
+	return a.extraProperties
+}
+
+func (a *AdHocRejectedPromptExecutionMeta) UnmarshalJSON(data []byte) error {
+	type unmarshaler AdHocRejectedPromptExecutionMeta
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*a = AdHocRejectedPromptExecutionMeta(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *a)
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+
+	a._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *AdHocRejectedPromptExecutionMeta) String() string {
+	if len(a._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(a._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
+
+// The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
+type AdHocStreamingPromptExecutionMeta struct {
+	Latency *int `json:"latency,omitempty" url:"latency,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (a *AdHocStreamingPromptExecutionMeta) GetExtraProperties() map[string]interface{} {
+	return a.extraProperties
+}
+
+func (a *AdHocStreamingPromptExecutionMeta) UnmarshalJSON(data []byte) error {
+	type unmarshaler AdHocStreamingPromptExecutionMeta
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*a = AdHocStreamingPromptExecutionMeta(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *a)
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+
+	a._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *AdHocStreamingPromptExecutionMeta) String() string {
+	if len(a._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(a._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
 }
 
 // - `True` - True
@@ -1450,6 +1739,122 @@ func (c *ChatMessageContentRequest) Accept(visitor ChatMessageContentRequestVisi
 		return visitor.VisitImageChatMessageContentRequest(c.ImageChatMessageContentRequest)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", c)
+}
+
+// The properties of a ChatMessagePromptTemplateBlock
+type ChatMessagePromptBlockPropertiesRequest struct {
+	Blocks                  []*PromptBlockRequest `json:"blocks" url:"blocks"`
+	ChatRole                *ChatMessageRole      `json:"chat_role,omitempty" url:"chat_role,omitempty"`
+	ChatSource              *string               `json:"chat_source,omitempty" url:"chat_source,omitempty"`
+	ChatMessageUnterminated *bool                 `json:"chat_message_unterminated,omitempty" url:"chat_message_unterminated,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *ChatMessagePromptBlockPropertiesRequest) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *ChatMessagePromptBlockPropertiesRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler ChatMessagePromptBlockPropertiesRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = ChatMessagePromptBlockPropertiesRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *ChatMessagePromptBlockPropertiesRequest) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// A block that represents a chat message in a prompt template.
+type ChatMessagePromptBlockRequest struct {
+	Properties  *ChatMessagePromptBlockPropertiesRequest `json:"properties" url:"properties"`
+	Id          string                                   `json:"id" url:"id"`
+	State       *PromptBlockState                        `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *EphemeralPromptCacheConfigRequest       `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	blockType   string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *ChatMessagePromptBlockRequest) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *ChatMessagePromptBlockRequest) BlockType() string {
+	return c.blockType
+}
+
+func (c *ChatMessagePromptBlockRequest) UnmarshalJSON(data []byte) error {
+	type embed ChatMessagePromptBlockRequest
+	var unmarshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed: embed(*c),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*c = ChatMessagePromptBlockRequest(unmarshaler.embed)
+	if unmarshaler.BlockType != "CHAT_MESSAGE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", c, "CHAT_MESSAGE", unmarshaler.BlockType)
+	}
+	c.blockType = unmarshaler.BlockType
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c, "block_type")
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *ChatMessagePromptBlockRequest) MarshalJSON() ([]byte, error) {
+	type embed ChatMessagePromptBlockRequest
+	var marshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed:     embed(*c),
+		BlockType: "CHAT_MESSAGE",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (c *ChatMessagePromptBlockRequest) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
 }
 
 type ChatMessageRequest struct {
@@ -3360,6 +3765,50 @@ func (e EnvironmentEnum) Ptr() *EnvironmentEnum {
 	return &e
 }
 
+type EphemeralPromptCacheConfigRequest struct {
+	Type *EphemeralPromptCacheConfigTypeEnum `json:"type,omitempty" url:"type,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *EphemeralPromptCacheConfigRequest) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
+}
+
+func (e *EphemeralPromptCacheConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler EphemeralPromptCacheConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = EphemeralPromptCacheConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *EphemeralPromptCacheConfigRequest) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+// - `EPHEMERAL` - EPHEMERAL
+type EphemeralPromptCacheConfigTypeEnum = string
+
 type ErrorVariableValue struct {
 	Value *VellumError `json:"value,omitempty" url:"value,omitempty"`
 	type_ string
@@ -4569,6 +5018,76 @@ func (f FinishReasonEnum) Ptr() *FinishReasonEnum {
 	return &f
 }
 
+// The final data event returned indicating that the stream has ended and all final resolved values from the model can be found.
+type FulfilledAdHocExecutePromptEvent struct {
+	Outputs     []*PromptOutput                    `json:"outputs" url:"outputs"`
+	ExecutionId string                             `json:"execution_id" url:"execution_id"`
+	Meta        *AdHocFulfilledPromptExecutionMeta `json:"meta,omitempty" url:"meta,omitempty"`
+	state       string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FulfilledAdHocExecutePromptEvent) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
+}
+
+func (f *FulfilledAdHocExecutePromptEvent) State() string {
+	return f.state
+}
+
+func (f *FulfilledAdHocExecutePromptEvent) UnmarshalJSON(data []byte) error {
+	type embed FulfilledAdHocExecutePromptEvent
+	var unmarshaler = struct {
+		embed
+		State string `json:"state"`
+	}{
+		embed: embed(*f),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*f = FulfilledAdHocExecutePromptEvent(unmarshaler.embed)
+	if unmarshaler.State != "FULFILLED" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "FULFILLED", unmarshaler.State)
+	}
+	f.state = unmarshaler.State
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f, "state")
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FulfilledAdHocExecutePromptEvent) MarshalJSON() ([]byte, error) {
+	type embed FulfilledAdHocExecutePromptEvent
+	var marshaler = struct {
+		embed
+		State string `json:"state"`
+	}{
+		embed: embed(*f),
+		State: "FULFILLED",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (f *FulfilledAdHocExecutePromptEvent) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
 type FulfilledEnum = string
 
 // The final data event returned indicating that the stream has ended and all final resolved values from the model can be found.
@@ -5428,6 +5947,127 @@ func (f *FunctionCallVellumValueRequest) String() string {
 	return fmt.Sprintf("%#v", f)
 }
 
+type FunctionDefinitionPromptBlockPropertiesRequest struct {
+	// The name identifying the function.
+	FunctionName *string `json:"function_name,omitempty" url:"function_name,omitempty"`
+	// A description to help guide the model when to invoke this function.
+	FunctionDescription *string `json:"function_description,omitempty" url:"function_description,omitempty"`
+	// An OpenAPI specification of parameters that are supported by this function.
+	FunctionParameters map[string]interface{} `json:"function_parameters,omitempty" url:"function_parameters,omitempty"`
+	// Set this option to true to force the model to return a function call of this function.
+	FunctionForced *bool `json:"function_forced,omitempty" url:"function_forced,omitempty"`
+	// Set this option to use strict schema decoding when available.
+	FunctionStrict *bool `json:"function_strict,omitempty" url:"function_strict,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FunctionDefinitionPromptBlockPropertiesRequest) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
+}
+
+func (f *FunctionDefinitionPromptBlockPropertiesRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler FunctionDefinitionPromptBlockPropertiesRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*f = FunctionDefinitionPromptBlockPropertiesRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FunctionDefinitionPromptBlockPropertiesRequest) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
+// A block that represents a function definition in a prompt template.
+type FunctionDefinitionPromptBlockRequest struct {
+	Properties  *FunctionDefinitionPromptBlockPropertiesRequest `json:"properties" url:"properties"`
+	Id          string                                          `json:"id" url:"id"`
+	State       *PromptBlockState                               `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *EphemeralPromptCacheConfigRequest              `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	blockType   string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FunctionDefinitionPromptBlockRequest) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
+}
+
+func (f *FunctionDefinitionPromptBlockRequest) BlockType() string {
+	return f.blockType
+}
+
+func (f *FunctionDefinitionPromptBlockRequest) UnmarshalJSON(data []byte) error {
+	type embed FunctionDefinitionPromptBlockRequest
+	var unmarshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed: embed(*f),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*f = FunctionDefinitionPromptBlockRequest(unmarshaler.embed)
+	if unmarshaler.BlockType != "FUNCTION_DEFINITION" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "FUNCTION_DEFINITION", unmarshaler.BlockType)
+	}
+	f.blockType = unmarshaler.BlockType
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f, "block_type")
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FunctionDefinitionPromptBlockRequest) MarshalJSON() ([]byte, error) {
+	type embed FunctionDefinitionPromptBlockRequest
+	var marshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed:     embed(*f),
+		BlockType: "FUNCTION_DEFINITION",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (f *FunctionDefinitionPromptBlockRequest) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
 type GenerateOptionsRequest struct {
 	// Which logprobs to include, if any. Defaults to NONE.
 	//
@@ -5940,228 +6580,6 @@ func (h *HkunlpInstructorXlVectorizerRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (h *HkunlpInstructorXlVectorizerRequest) String() string {
-	if len(h._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(h._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(h); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", h)
-}
-
-// - `ANTHROPIC` - ANTHROPIC
-// - `AWS_BEDROCK` - AWS_BEDROCK
-// - `AZURE_OPENAI` - AZURE_OPENAI
-// - `COHERE` - COHERE
-// - `CUSTOM` - CUSTOM
-// - `FIREWORKS_AI` - FIREWORKS_AI
-// - `GOOGLE` - GOOGLE
-// - `GOOGLE_VERTEX_AI` - GOOGLE_VERTEX_AI
-// - `GROQ` - GROQ
-// - `HUGGINGFACE` - HUGGINGFACE
-// - `IBM_WATSONX` - IBM_WATSONX
-// - `MOSAICML` - MOSAICML
-// - `MYSTIC` - MYSTIC
-// - `OPENAI` - OPENAI
-// - `OPENPIPE` - OPENPIPE
-// - `PYQ` - PYQ
-// - `REPLICATE` - REPLICATE
-type HostedByEnum string
-
-const (
-	HostedByEnumAnthropic      HostedByEnum = "ANTHROPIC"
-	HostedByEnumAwsBedrock     HostedByEnum = "AWS_BEDROCK"
-	HostedByEnumAzureOpenai    HostedByEnum = "AZURE_OPENAI"
-	HostedByEnumCohere         HostedByEnum = "COHERE"
-	HostedByEnumCustom         HostedByEnum = "CUSTOM"
-	HostedByEnumFireworksAi    HostedByEnum = "FIREWORKS_AI"
-	HostedByEnumGoogle         HostedByEnum = "GOOGLE"
-	HostedByEnumGoogleVertexAi HostedByEnum = "GOOGLE_VERTEX_AI"
-	HostedByEnumGroq           HostedByEnum = "GROQ"
-	HostedByEnumHuggingface    HostedByEnum = "HUGGINGFACE"
-	HostedByEnumIbmWatsonx     HostedByEnum = "IBM_WATSONX"
-	HostedByEnumMosaicml       HostedByEnum = "MOSAICML"
-	HostedByEnumMystic         HostedByEnum = "MYSTIC"
-	HostedByEnumOpenai         HostedByEnum = "OPENAI"
-	HostedByEnumOpenpipe       HostedByEnum = "OPENPIPE"
-	HostedByEnumPyq            HostedByEnum = "PYQ"
-	HostedByEnumReplicate      HostedByEnum = "REPLICATE"
-)
-
-func NewHostedByEnumFromString(s string) (HostedByEnum, error) {
-	switch s {
-	case "ANTHROPIC":
-		return HostedByEnumAnthropic, nil
-	case "AWS_BEDROCK":
-		return HostedByEnumAwsBedrock, nil
-	case "AZURE_OPENAI":
-		return HostedByEnumAzureOpenai, nil
-	case "COHERE":
-		return HostedByEnumCohere, nil
-	case "CUSTOM":
-		return HostedByEnumCustom, nil
-	case "FIREWORKS_AI":
-		return HostedByEnumFireworksAi, nil
-	case "GOOGLE":
-		return HostedByEnumGoogle, nil
-	case "GOOGLE_VERTEX_AI":
-		return HostedByEnumGoogleVertexAi, nil
-	case "GROQ":
-		return HostedByEnumGroq, nil
-	case "HUGGINGFACE":
-		return HostedByEnumHuggingface, nil
-	case "IBM_WATSONX":
-		return HostedByEnumIbmWatsonx, nil
-	case "MOSAICML":
-		return HostedByEnumMosaicml, nil
-	case "MYSTIC":
-		return HostedByEnumMystic, nil
-	case "OPENAI":
-		return HostedByEnumOpenai, nil
-	case "OPENPIPE":
-		return HostedByEnumOpenpipe, nil
-	case "PYQ":
-		return HostedByEnumPyq, nil
-	case "REPLICATE":
-		return HostedByEnumReplicate, nil
-	}
-	var t HostedByEnum
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (h HostedByEnum) Ptr() *HostedByEnum {
-	return &h
-}
-
-// Tokenizer config for Hugging Face type tokenizers.
-type HuggingFaceTokenizerConfig struct {
-	Name  string  `json:"name" url:"name"`
-	Path  *string `json:"path,omitempty" url:"path,omitempty"`
-	type_ string
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (h *HuggingFaceTokenizerConfig) GetExtraProperties() map[string]interface{} {
-	return h.extraProperties
-}
-
-func (h *HuggingFaceTokenizerConfig) Type() string {
-	return h.type_
-}
-
-func (h *HuggingFaceTokenizerConfig) UnmarshalJSON(data []byte) error {
-	type embed HuggingFaceTokenizerConfig
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*h),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*h = HuggingFaceTokenizerConfig(unmarshaler.embed)
-	if unmarshaler.Type != "HUGGING_FACE" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", h, "HUGGING_FACE", unmarshaler.Type)
-	}
-	h.type_ = unmarshaler.Type
-
-	extraProperties, err := core.ExtractExtraProperties(data, *h, "type")
-	if err != nil {
-		return err
-	}
-	h.extraProperties = extraProperties
-
-	h._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (h *HuggingFaceTokenizerConfig) MarshalJSON() ([]byte, error) {
-	type embed HuggingFaceTokenizerConfig
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*h),
-		Type:  "HUGGING_FACE",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (h *HuggingFaceTokenizerConfig) String() string {
-	if len(h._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(h._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(h); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", h)
-}
-
-// Tokenizer config for Hugging Face type tokenizers.
-type HuggingFaceTokenizerConfigRequest struct {
-	Name  string  `json:"name" url:"name"`
-	Path  *string `json:"path,omitempty" url:"path,omitempty"`
-	type_ string
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (h *HuggingFaceTokenizerConfigRequest) GetExtraProperties() map[string]interface{} {
-	return h.extraProperties
-}
-
-func (h *HuggingFaceTokenizerConfigRequest) Type() string {
-	return h.type_
-}
-
-func (h *HuggingFaceTokenizerConfigRequest) UnmarshalJSON(data []byte) error {
-	type embed HuggingFaceTokenizerConfigRequest
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*h),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*h = HuggingFaceTokenizerConfigRequest(unmarshaler.embed)
-	if unmarshaler.Type != "HUGGING_FACE" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", h, "HUGGING_FACE", unmarshaler.Type)
-	}
-	h.type_ = unmarshaler.Type
-
-	extraProperties, err := core.ExtractExtraProperties(data, *h, "type")
-	if err != nil {
-		return err
-	}
-	h.extraProperties = extraProperties
-
-	h._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (h *HuggingFaceTokenizerConfigRequest) MarshalJSON() ([]byte, error) {
-	type embed HuggingFaceTokenizerConfigRequest
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*h),
-		Type:  "HUGGING_FACE",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (h *HuggingFaceTokenizerConfigRequest) String() string {
 	if len(h._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(h._rawJSON); err == nil {
 			return value
@@ -6768,6 +7186,75 @@ func (i IndexingStateEnum) Ptr() *IndexingStateEnum {
 }
 
 // The initial data returned indicating that the response from the model has returned and begun streaming.
+type InitiatedAdHocExecutePromptEvent struct {
+	Meta        *AdHocInitiatedPromptExecutionMeta `json:"meta,omitempty" url:"meta,omitempty"`
+	ExecutionId string                             `json:"execution_id" url:"execution_id"`
+	state       string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InitiatedAdHocExecutePromptEvent) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InitiatedAdHocExecutePromptEvent) State() string {
+	return i.state
+}
+
+func (i *InitiatedAdHocExecutePromptEvent) UnmarshalJSON(data []byte) error {
+	type embed InitiatedAdHocExecutePromptEvent
+	var unmarshaler = struct {
+		embed
+		State string `json:"state"`
+	}{
+		embed: embed(*i),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*i = InitiatedAdHocExecutePromptEvent(unmarshaler.embed)
+	if unmarshaler.State != "INITIATED" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", i, "INITIATED", unmarshaler.State)
+	}
+	i.state = unmarshaler.State
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i, "state")
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InitiatedAdHocExecutePromptEvent) MarshalJSON() ([]byte, error) {
+	type embed InitiatedAdHocExecutePromptEvent
+	var marshaler = struct {
+		embed
+		State string `json:"state"`
+	}{
+		embed: embed(*i),
+		State: "INITIATED",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (i *InitiatedAdHocExecutePromptEvent) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// The initial data returned indicating that the response from the model has returned and begun streaming.
 type InitiatedExecutePromptEvent struct {
 	Meta        *InitiatedPromptExecutionMeta `json:"meta,omitempty" url:"meta,omitempty"`
 	ExecutionId string                        `json:"execution_id" url:"execution_id"`
@@ -7069,6 +7556,119 @@ func NewIterationStateEnumFromString(s string) (IterationStateEnum, error) {
 
 func (i IterationStateEnum) Ptr() *IterationStateEnum {
 	return &i
+}
+
+type JinjaPromptBlockPropertiesRequest struct {
+	Template     *string             `json:"template,omitempty" url:"template,omitempty"`
+	TemplateType *VellumVariableType `json:"template_type,omitempty" url:"template_type,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (j *JinjaPromptBlockPropertiesRequest) GetExtraProperties() map[string]interface{} {
+	return j.extraProperties
+}
+
+func (j *JinjaPromptBlockPropertiesRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler JinjaPromptBlockPropertiesRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*j = JinjaPromptBlockPropertiesRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *j)
+	if err != nil {
+		return err
+	}
+	j.extraProperties = extraProperties
+
+	j._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (j *JinjaPromptBlockPropertiesRequest) String() string {
+	if len(j._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(j._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(j); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", j)
+}
+
+// A block of Jinja template code that is used to generate a prompt
+type JinjaPromptBlockRequest struct {
+	Properties  *JinjaPromptBlockPropertiesRequest `json:"properties" url:"properties"`
+	Id          string                             `json:"id" url:"id"`
+	State       *PromptBlockState                  `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *EphemeralPromptCacheConfigRequest `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	blockType   string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (j *JinjaPromptBlockRequest) GetExtraProperties() map[string]interface{} {
+	return j.extraProperties
+}
+
+func (j *JinjaPromptBlockRequest) BlockType() string {
+	return j.blockType
+}
+
+func (j *JinjaPromptBlockRequest) UnmarshalJSON(data []byte) error {
+	type embed JinjaPromptBlockRequest
+	var unmarshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed: embed(*j),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*j = JinjaPromptBlockRequest(unmarshaler.embed)
+	if unmarshaler.BlockType != "JINJA" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", j, "JINJA", unmarshaler.BlockType)
+	}
+	j.blockType = unmarshaler.BlockType
+
+	extraProperties, err := core.ExtractExtraProperties(data, *j, "block_type")
+	if err != nil {
+		return err
+	}
+	j.extraProperties = extraProperties
+
+	j._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (j *JinjaPromptBlockRequest) MarshalJSON() ([]byte, error) {
+	type embed JinjaPromptBlockRequest
+	var marshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed:     embed(*j),
+		BlockType: "JINJA",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (j *JinjaPromptBlockRequest) String() string {
+	if len(j._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(j._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(j); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", j)
 }
 
 // A user input representing a JSON object
@@ -7876,1155 +8476,14 @@ func (m *MetricNodeResult) String() string {
 	return fmt.Sprintf("%#v", m)
 }
 
-// - `01_AI` - 01_AI
-// - `AMAZON` - AMAZON
-// - `ANTHROPIC` - ANTHROPIC
-// - `COHERE` - COHERE
-// - `ELUTHERAI` - ELUTHERAI
-// - `FIREWORKS_AI` - FIREWORKS_AI
-// - `GOOGLE` - GOOGLE
-// - `HUGGINGFACE` - HUGGINGFACE
-// - `IBM` - IBM
-// - `META` - META
-// - `MISTRAL_AI` - MISTRAL_AI
-// - `MOSAICML` - MOSAICML
-// - `NOUS_RESEARCH` - NOUS_RESEARCH
-// - `OPENAI` - OPENAI
-// - `OPENCHAT` - OPENCHAT
-// - `OPENPIPE` - OPENPIPE
-// - `TII` - TII
-// - `WIZARDLM` - WIZARDLM
-type MlModelDeveloper string
-
-const (
-	MlModelDeveloperOneAi        MlModelDeveloper = "01_AI"
-	MlModelDeveloperAmazon       MlModelDeveloper = "AMAZON"
-	MlModelDeveloperAnthropic    MlModelDeveloper = "ANTHROPIC"
-	MlModelDeveloperCohere       MlModelDeveloper = "COHERE"
-	MlModelDeveloperElutherai    MlModelDeveloper = "ELUTHERAI"
-	MlModelDeveloperFireworksAi  MlModelDeveloper = "FIREWORKS_AI"
-	MlModelDeveloperGoogle       MlModelDeveloper = "GOOGLE"
-	MlModelDeveloperHuggingface  MlModelDeveloper = "HUGGINGFACE"
-	MlModelDeveloperIbm          MlModelDeveloper = "IBM"
-	MlModelDeveloperMeta         MlModelDeveloper = "META"
-	MlModelDeveloperMistralAi    MlModelDeveloper = "MISTRAL_AI"
-	MlModelDeveloperMosaicml     MlModelDeveloper = "MOSAICML"
-	MlModelDeveloperNousResearch MlModelDeveloper = "NOUS_RESEARCH"
-	MlModelDeveloperOpenai       MlModelDeveloper = "OPENAI"
-	MlModelDeveloperOpenchat     MlModelDeveloper = "OPENCHAT"
-	MlModelDeveloperOpenpipe     MlModelDeveloper = "OPENPIPE"
-	MlModelDeveloperTii          MlModelDeveloper = "TII"
-	MlModelDeveloperWizardlm     MlModelDeveloper = "WIZARDLM"
-)
-
-func NewMlModelDeveloperFromString(s string) (MlModelDeveloper, error) {
-	switch s {
-	case "01_AI":
-		return MlModelDeveloperOneAi, nil
-	case "AMAZON":
-		return MlModelDeveloperAmazon, nil
-	case "ANTHROPIC":
-		return MlModelDeveloperAnthropic, nil
-	case "COHERE":
-		return MlModelDeveloperCohere, nil
-	case "ELUTHERAI":
-		return MlModelDeveloperElutherai, nil
-	case "FIREWORKS_AI":
-		return MlModelDeveloperFireworksAi, nil
-	case "GOOGLE":
-		return MlModelDeveloperGoogle, nil
-	case "HUGGINGFACE":
-		return MlModelDeveloperHuggingface, nil
-	case "IBM":
-		return MlModelDeveloperIbm, nil
-	case "META":
-		return MlModelDeveloperMeta, nil
-	case "MISTRAL_AI":
-		return MlModelDeveloperMistralAi, nil
-	case "MOSAICML":
-		return MlModelDeveloperMosaicml, nil
-	case "NOUS_RESEARCH":
-		return MlModelDeveloperNousResearch, nil
-	case "OPENAI":
-		return MlModelDeveloperOpenai, nil
-	case "OPENCHAT":
-		return MlModelDeveloperOpenchat, nil
-	case "OPENPIPE":
-		return MlModelDeveloperOpenpipe, nil
-	case "TII":
-		return MlModelDeveloperTii, nil
-	case "WIZARDLM":
-		return MlModelDeveloperWizardlm, nil
-	}
-	var t MlModelDeveloper
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (m MlModelDeveloper) Ptr() *MlModelDeveloper {
-	return &m
-}
-
-type MlModelDeveloperEnumValueLabel struct {
-	Label string           `json:"label" url:"label"`
-	Value MlModelDeveloper `json:"value" url:"value"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (m *MlModelDeveloperEnumValueLabel) GetExtraProperties() map[string]interface{} {
-	return m.extraProperties
-}
-
-func (m *MlModelDeveloperEnumValueLabel) UnmarshalJSON(data []byte) error {
-	type unmarshaler MlModelDeveloperEnumValueLabel
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*m = MlModelDeveloperEnumValueLabel(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *m)
-	if err != nil {
-		return err
-	}
-	m.extraProperties = extraProperties
-
-	m._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (m *MlModelDeveloperEnumValueLabel) String() string {
-	if len(m._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(m); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", m)
-}
-
-type MlModelDisplayConfigLabelled struct {
-	Label       string                             `json:"label" url:"label"`
-	Description string                             `json:"description" url:"description"`
-	Tags        []*MlModelDisplayTagEnumValueLabel `json:"tags" url:"tags"`
-	// Can only be set when using an internal service token.
-	DefaultDisplayPriority *float64 `json:"default_display_priority,omitempty" url:"default_display_priority,omitempty"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (m *MlModelDisplayConfigLabelled) GetExtraProperties() map[string]interface{} {
-	return m.extraProperties
-}
-
-func (m *MlModelDisplayConfigLabelled) UnmarshalJSON(data []byte) error {
-	type unmarshaler MlModelDisplayConfigLabelled
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*m = MlModelDisplayConfigLabelled(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *m)
-	if err != nil {
-		return err
-	}
-	m.extraProperties = extraProperties
-
-	m._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (m *MlModelDisplayConfigLabelled) String() string {
-	if len(m._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(m); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", m)
-}
-
-type MlModelDisplayConfigRequest struct {
-	Label       string              `json:"label" url:"label"`
-	Description string              `json:"description" url:"description"`
-	Tags        []MlModelDisplayTag `json:"tags" url:"tags"`
-	// Can only be set when using an internal service token.
-	DefaultDisplayPriority *float64 `json:"default_display_priority,omitempty" url:"default_display_priority,omitempty"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (m *MlModelDisplayConfigRequest) GetExtraProperties() map[string]interface{} {
-	return m.extraProperties
-}
-
-func (m *MlModelDisplayConfigRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler MlModelDisplayConfigRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*m = MlModelDisplayConfigRequest(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *m)
-	if err != nil {
-		return err
-	}
-	m.extraProperties = extraProperties
-
-	m._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (m *MlModelDisplayConfigRequest) String() string {
-	if len(m._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(m); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", m)
-}
-
-// - `TEXT` - TEXT
-// - `CHAT` - CHAT
-// - `OPEN_SOURCE` - OPEN_SOURCE
-// - `FINETUNED` - FINETUNED
-// - `NEW` - NEW
-// - `ALPHA` - ALPHA
-// - `BETA` - BETA
-// - `DEPRECATED` - DEPRECATED
-type MlModelDisplayTag string
-
-const (
-	MlModelDisplayTagText       MlModelDisplayTag = "TEXT"
-	MlModelDisplayTagChat       MlModelDisplayTag = "CHAT"
-	MlModelDisplayTagOpenSource MlModelDisplayTag = "OPEN_SOURCE"
-	MlModelDisplayTagFinetuned  MlModelDisplayTag = "FINETUNED"
-	MlModelDisplayTagNew        MlModelDisplayTag = "NEW"
-	MlModelDisplayTagAlpha      MlModelDisplayTag = "ALPHA"
-	MlModelDisplayTagBeta       MlModelDisplayTag = "BETA"
-	MlModelDisplayTagDeprecated MlModelDisplayTag = "DEPRECATED"
-)
-
-func NewMlModelDisplayTagFromString(s string) (MlModelDisplayTag, error) {
-	switch s {
-	case "TEXT":
-		return MlModelDisplayTagText, nil
-	case "CHAT":
-		return MlModelDisplayTagChat, nil
-	case "OPEN_SOURCE":
-		return MlModelDisplayTagOpenSource, nil
-	case "FINETUNED":
-		return MlModelDisplayTagFinetuned, nil
-	case "NEW":
-		return MlModelDisplayTagNew, nil
-	case "ALPHA":
-		return MlModelDisplayTagAlpha, nil
-	case "BETA":
-		return MlModelDisplayTagBeta, nil
-	case "DEPRECATED":
-		return MlModelDisplayTagDeprecated, nil
-	}
-	var t MlModelDisplayTag
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (m MlModelDisplayTag) Ptr() *MlModelDisplayTag {
-	return &m
-}
-
-type MlModelDisplayTagEnumValueLabel struct {
-	Label string            `json:"label" url:"label"`
-	Value MlModelDisplayTag `json:"value" url:"value"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (m *MlModelDisplayTagEnumValueLabel) GetExtraProperties() map[string]interface{} {
-	return m.extraProperties
-}
-
-func (m *MlModelDisplayTagEnumValueLabel) UnmarshalJSON(data []byte) error {
-	type unmarshaler MlModelDisplayTagEnumValueLabel
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*m = MlModelDisplayTagEnumValueLabel(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *m)
-	if err != nil {
-		return err
-	}
-	m.extraProperties = extraProperties
-
-	m._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (m *MlModelDisplayTagEnumValueLabel) String() string {
-	if len(m._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(m); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", m)
-}
-
-type MlModelExecConfig struct {
-	ModelIdentifier string                 `json:"model_identifier" url:"model_identifier"`
-	BaseUrl         string                 `json:"base_url" url:"base_url"`
-	Metadata        map[string]interface{} `json:"metadata" url:"metadata"`
-	Features        []MlModelFeature       `json:"features" url:"features"`
-	// Can only be set when using an internal service token.
-	ForceSystemCredentials *bool                   `json:"force_system_credentials,omitempty" url:"force_system_credentials,omitempty"`
-	TokenizerConfig        *MlModelTokenizerConfig `json:"tokenizer_config,omitempty" url:"tokenizer_config,omitempty"`
-	RequestConfig          *MlModelRequestConfig   `json:"request_config,omitempty" url:"request_config,omitempty"`
-	ResponseConfig         *MlModelResponseConfig  `json:"response_config,omitempty" url:"response_config,omitempty"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (m *MlModelExecConfig) GetExtraProperties() map[string]interface{} {
-	return m.extraProperties
-}
-
-func (m *MlModelExecConfig) UnmarshalJSON(data []byte) error {
-	type unmarshaler MlModelExecConfig
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*m = MlModelExecConfig(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *m)
-	if err != nil {
-		return err
-	}
-	m.extraProperties = extraProperties
-
-	m._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (m *MlModelExecConfig) String() string {
-	if len(m._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(m); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", m)
-}
-
-type MlModelExecConfigRequest struct {
-	ModelIdentifier string                 `json:"model_identifier" url:"model_identifier"`
-	BaseUrl         string                 `json:"base_url" url:"base_url"`
-	Metadata        map[string]interface{} `json:"metadata" url:"metadata"`
-	Features        []MlModelFeature       `json:"features" url:"features"`
-	// Can only be set when using an internal service token.
-	ForceSystemCredentials *bool                          `json:"force_system_credentials,omitempty" url:"force_system_credentials,omitempty"`
-	TokenizerConfig        *MlModelTokenizerConfigRequest `json:"tokenizer_config,omitempty" url:"tokenizer_config,omitempty"`
-	RequestConfig          *MlModelRequestConfigRequest   `json:"request_config,omitempty" url:"request_config,omitempty"`
-	ResponseConfig         *MlModelResponseConfigRequest  `json:"response_config,omitempty" url:"response_config,omitempty"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (m *MlModelExecConfigRequest) GetExtraProperties() map[string]interface{} {
-	return m.extraProperties
-}
-
-func (m *MlModelExecConfigRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler MlModelExecConfigRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*m = MlModelExecConfigRequest(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *m)
-	if err != nil {
-		return err
-	}
-	m.extraProperties = extraProperties
-
-	m._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (m *MlModelExecConfigRequest) String() string {
-	if len(m._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(m); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", m)
-}
-
-// - `CAPYBARA` - Capybara
-// - `CHAT_GPT` - Chat GPT
-// - `CLAUDE` - Claude
-// - `COHERE` - Cohere
-// - `FALCON` - Falcon
-// - `GEMINI` - Gemini
-// - `GRANITE` - Granite
-// - `GPT3` - GPT-3
-// - `FIREWORKS` - Fireworks
-// - `LLAMA2` - Llama2
-// - `LLAMA3` - Llama3
-// - `MISTRAL` - Mistral
-// - `MPT` - MPT
-// - `OPENCHAT` - OpenChat
-// - `PALM` - PaLM
-// - `SOLAR` - Solar
-// - `TITAN` - Titan
-// - `WIZARD` - Wizard
-// - `YI` - Yi
-// - `ZEPHYR` - Zephyr
-type MlModelFamily string
-
-const (
-	MlModelFamilyCapybara  MlModelFamily = "CAPYBARA"
-	MlModelFamilyChatGpt   MlModelFamily = "CHAT_GPT"
-	MlModelFamilyClaude    MlModelFamily = "CLAUDE"
-	MlModelFamilyCohere    MlModelFamily = "COHERE"
-	MlModelFamilyFalcon    MlModelFamily = "FALCON"
-	MlModelFamilyGemini    MlModelFamily = "GEMINI"
-	MlModelFamilyGranite   MlModelFamily = "GRANITE"
-	MlModelFamilyGpt3      MlModelFamily = "GPT3"
-	MlModelFamilyFireworks MlModelFamily = "FIREWORKS"
-	MlModelFamilyLlama2    MlModelFamily = "LLAMA2"
-	MlModelFamilyLlama3    MlModelFamily = "LLAMA3"
-	MlModelFamilyMistral   MlModelFamily = "MISTRAL"
-	MlModelFamilyMpt       MlModelFamily = "MPT"
-	MlModelFamilyOpenchat  MlModelFamily = "OPENCHAT"
-	MlModelFamilyPalm      MlModelFamily = "PALM"
-	MlModelFamilySolar     MlModelFamily = "SOLAR"
-	MlModelFamilyTitan     MlModelFamily = "TITAN"
-	MlModelFamilyWizard    MlModelFamily = "WIZARD"
-	MlModelFamilyYi        MlModelFamily = "YI"
-	MlModelFamilyZephyr    MlModelFamily = "ZEPHYR"
-)
-
-func NewMlModelFamilyFromString(s string) (MlModelFamily, error) {
-	switch s {
-	case "CAPYBARA":
-		return MlModelFamilyCapybara, nil
-	case "CHAT_GPT":
-		return MlModelFamilyChatGpt, nil
-	case "CLAUDE":
-		return MlModelFamilyClaude, nil
-	case "COHERE":
-		return MlModelFamilyCohere, nil
-	case "FALCON":
-		return MlModelFamilyFalcon, nil
-	case "GEMINI":
-		return MlModelFamilyGemini, nil
-	case "GRANITE":
-		return MlModelFamilyGranite, nil
-	case "GPT3":
-		return MlModelFamilyGpt3, nil
-	case "FIREWORKS":
-		return MlModelFamilyFireworks, nil
-	case "LLAMA2":
-		return MlModelFamilyLlama2, nil
-	case "LLAMA3":
-		return MlModelFamilyLlama3, nil
-	case "MISTRAL":
-		return MlModelFamilyMistral, nil
-	case "MPT":
-		return MlModelFamilyMpt, nil
-	case "OPENCHAT":
-		return MlModelFamilyOpenchat, nil
-	case "PALM":
-		return MlModelFamilyPalm, nil
-	case "SOLAR":
-		return MlModelFamilySolar, nil
-	case "TITAN":
-		return MlModelFamilyTitan, nil
-	case "WIZARD":
-		return MlModelFamilyWizard, nil
-	case "YI":
-		return MlModelFamilyYi, nil
-	case "ZEPHYR":
-		return MlModelFamilyZephyr, nil
-	}
-	var t MlModelFamily
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (m MlModelFamily) Ptr() *MlModelFamily {
-	return &m
-}
-
-type MlModelFamilyEnumValueLabel struct {
-	Label string        `json:"label" url:"label"`
-	Value MlModelFamily `json:"value" url:"value"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (m *MlModelFamilyEnumValueLabel) GetExtraProperties() map[string]interface{} {
-	return m.extraProperties
-}
-
-func (m *MlModelFamilyEnumValueLabel) UnmarshalJSON(data []byte) error {
-	type unmarshaler MlModelFamilyEnumValueLabel
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*m = MlModelFamilyEnumValueLabel(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *m)
-	if err != nil {
-		return err
-	}
-	m.extraProperties = extraProperties
-
-	m._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (m *MlModelFamilyEnumValueLabel) String() string {
-	if len(m._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(m); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", m)
-}
-
-// - `TEXT` - Text
-// - `CHAT_MESSAGE_SYSTEM` - Chat Message System
-// - `CHAT_MESSAGE_USER` - Chat Message User
-// - `CHAT_MESSAGE_ASSISTANT` - Chat Message Assistant
-// - `CHAT_MESSAGE_ASSISTANT_UNTERMINATED` - Chat Message Assistant Unterminated
-// - `CHAT_MESSAGE_FUNCTION_CALL` - Chat Message Function Call
-// - `CHAT_MESSAGE_IMAGE` - Chat Message Image
-// - `FUNCTION_DEFINITION` - Function Definition
-// - `STREAMING_SUPPORT` - Streaming Support
-type MlModelFeature string
-
-const (
-	MlModelFeatureText                             MlModelFeature = "TEXT"
-	MlModelFeatureChatMessageSystem                MlModelFeature = "CHAT_MESSAGE_SYSTEM"
-	MlModelFeatureChatMessageUser                  MlModelFeature = "CHAT_MESSAGE_USER"
-	MlModelFeatureChatMessageAssistant             MlModelFeature = "CHAT_MESSAGE_ASSISTANT"
-	MlModelFeatureChatMessageAssistantUnterminated MlModelFeature = "CHAT_MESSAGE_ASSISTANT_UNTERMINATED"
-	MlModelFeatureChatMessageFunctionCall          MlModelFeature = "CHAT_MESSAGE_FUNCTION_CALL"
-	MlModelFeatureChatMessageImage                 MlModelFeature = "CHAT_MESSAGE_IMAGE"
-	MlModelFeatureFunctionDefinition               MlModelFeature = "FUNCTION_DEFINITION"
-	MlModelFeatureStreamingSupport                 MlModelFeature = "STREAMING_SUPPORT"
-)
-
-func NewMlModelFeatureFromString(s string) (MlModelFeature, error) {
-	switch s {
-	case "TEXT":
-		return MlModelFeatureText, nil
-	case "CHAT_MESSAGE_SYSTEM":
-		return MlModelFeatureChatMessageSystem, nil
-	case "CHAT_MESSAGE_USER":
-		return MlModelFeatureChatMessageUser, nil
-	case "CHAT_MESSAGE_ASSISTANT":
-		return MlModelFeatureChatMessageAssistant, nil
-	case "CHAT_MESSAGE_ASSISTANT_UNTERMINATED":
-		return MlModelFeatureChatMessageAssistantUnterminated, nil
-	case "CHAT_MESSAGE_FUNCTION_CALL":
-		return MlModelFeatureChatMessageFunctionCall, nil
-	case "CHAT_MESSAGE_IMAGE":
-		return MlModelFeatureChatMessageImage, nil
-	case "FUNCTION_DEFINITION":
-		return MlModelFeatureFunctionDefinition, nil
-	case "STREAMING_SUPPORT":
-		return MlModelFeatureStreamingSupport, nil
-	}
-	var t MlModelFeature
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (m MlModelFeature) Ptr() *MlModelFeature {
-	return &m
-}
-
-type MlModelParameterConfig struct {
-	Temperature      *OpenApiNumberProperty      `json:"temperature,omitempty" url:"temperature,omitempty"`
-	MaxTokens        *OpenApiIntegerProperty     `json:"max_tokens,omitempty" url:"max_tokens,omitempty"`
-	Stop             *OpenApiArrayProperty       `json:"stop,omitempty" url:"stop,omitempty"`
-	TopP             *OpenApiNumberProperty      `json:"top_p,omitempty" url:"top_p,omitempty"`
-	TopK             *OpenApiIntegerProperty     `json:"top_k,omitempty" url:"top_k,omitempty"`
-	FrequencyPenalty *OpenApiNumberProperty      `json:"frequency_penalty,omitempty" url:"frequency_penalty,omitempty"`
-	PresencePenalty  *OpenApiNumberProperty      `json:"presence_penalty,omitempty" url:"presence_penalty,omitempty"`
-	LogitBias        *OpenApiObjectProperty      `json:"logit_bias,omitempty" url:"logit_bias,omitempty"`
-	CustomParameters map[string]*OpenApiProperty `json:"custom_parameters,omitempty" url:"custom_parameters,omitempty"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (m *MlModelParameterConfig) GetExtraProperties() map[string]interface{} {
-	return m.extraProperties
-}
-
-func (m *MlModelParameterConfig) UnmarshalJSON(data []byte) error {
-	type unmarshaler MlModelParameterConfig
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*m = MlModelParameterConfig(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *m)
-	if err != nil {
-		return err
-	}
-	m.extraProperties = extraProperties
-
-	m._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (m *MlModelParameterConfig) String() string {
-	if len(m._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(m); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", m)
-}
-
-type MlModelParameterConfigRequest struct {
-	Temperature      *OpenApiNumberPropertyRequest      `json:"temperature,omitempty" url:"temperature,omitempty"`
-	MaxTokens        *OpenApiIntegerPropertyRequest     `json:"max_tokens,omitempty" url:"max_tokens,omitempty"`
-	Stop             *OpenApiArrayPropertyRequest       `json:"stop,omitempty" url:"stop,omitempty"`
-	TopP             *OpenApiNumberPropertyRequest      `json:"top_p,omitempty" url:"top_p,omitempty"`
-	TopK             *OpenApiIntegerPropertyRequest     `json:"top_k,omitempty" url:"top_k,omitempty"`
-	FrequencyPenalty *OpenApiNumberPropertyRequest      `json:"frequency_penalty,omitempty" url:"frequency_penalty,omitempty"`
-	PresencePenalty  *OpenApiNumberPropertyRequest      `json:"presence_penalty,omitempty" url:"presence_penalty,omitempty"`
-	LogitBias        *OpenApiObjectPropertyRequest      `json:"logit_bias,omitempty" url:"logit_bias,omitempty"`
-	CustomParameters map[string]*OpenApiPropertyRequest `json:"custom_parameters,omitempty" url:"custom_parameters,omitempty"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (m *MlModelParameterConfigRequest) GetExtraProperties() map[string]interface{} {
-	return m.extraProperties
-}
-
-func (m *MlModelParameterConfigRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler MlModelParameterConfigRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*m = MlModelParameterConfigRequest(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *m)
-	if err != nil {
-		return err
-	}
-	m.extraProperties = extraProperties
-
-	m._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (m *MlModelParameterConfigRequest) String() string {
-	if len(m._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(m); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", m)
-}
-
-// An ML Model that your Workspace has access to.
-type MlModelRead struct {
-	Id string `json:"id" url:"id"`
-	// The unique name of the ML Model.
-	Name string `json:"name" url:"name"`
-	// The family of the ML Model.
-	Family *MlModelFamilyEnumValueLabel `json:"family" url:"family"`
-	// The organization hosting the ML Model.
-	//
-	// - `ANTHROPIC` - Anthropic
-	// - `AWS_BEDROCK` - AWS Bedrock
-	// - `AZURE_OPENAI` - Azure OpenAI
-	// - `COHERE` - Cohere
-	// - `CUSTOM` - Custom
-	// - `FIREWORKS_AI` - Fireworks AI
-	// - `GOOGLE` - Google
-	// - `GOOGLE_VERTEX_AI` - Google Vertex AI
-	// - `GROQ` - Groq
-	// - `HUGGINGFACE` - HuggingFace
-	// - `IBM_WATSONX` - IBM WatsonX
-	// - `MOSAICML` - MosaicML
-	// - `MYSTIC` - Mystic
-	// - `OPENAI` - OpenAI
-	// - `OPENPIPE` - OpenPipe
-	// - `PYQ` - Pyq
-	// - `REPLICATE` - Replicate
-	HostedBy HostedByEnum `json:"hosted_by" url:"hosted_by"`
-	// The organization that developed the ML Model.
-	DevelopedBy *MlModelDeveloperEnumValueLabel `json:"developed_by" url:"developed_by"`
-	// The visibility of the ML Model.
-	//
-	// - `DEFAULT` - Default
-	// - `PUBLIC` - Public
-	// - `PRIVATE` - Private
-	// - `DISABLED` - Disabled
-	Visibility *VisibilityEnum `json:"visibility,omitempty" url:"visibility,omitempty"`
-	// Configuration for how to execute the ML Model.
-	ExecConfig *MlModelExecConfig `json:"exec_config" url:"exec_config"`
-	// Configuration for the ML Model's parameters.
-	ParameterConfig *MlModelParameterConfig `json:"parameter_config" url:"parameter_config"`
-	// Configuration for how to display the ML Model.
-	DisplayConfig *MlModelDisplayConfigLabelled `json:"display_config" url:"display_config"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (m *MlModelRead) GetExtraProperties() map[string]interface{} {
-	return m.extraProperties
-}
-
-func (m *MlModelRead) UnmarshalJSON(data []byte) error {
-	type unmarshaler MlModelRead
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*m = MlModelRead(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *m)
-	if err != nil {
-		return err
-	}
-	m.extraProperties = extraProperties
-
-	m._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (m *MlModelRead) String() string {
-	if len(m._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(m); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", m)
-}
-
-type MlModelRequestAuthorizationConfig struct {
-	Type MlModelRequestAuthorizationConfigTypeEnum `json:"type" url:"type"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (m *MlModelRequestAuthorizationConfig) GetExtraProperties() map[string]interface{} {
-	return m.extraProperties
-}
-
-func (m *MlModelRequestAuthorizationConfig) UnmarshalJSON(data []byte) error {
-	type unmarshaler MlModelRequestAuthorizationConfig
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*m = MlModelRequestAuthorizationConfig(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *m)
-	if err != nil {
-		return err
-	}
-	m.extraProperties = extraProperties
-
-	m._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (m *MlModelRequestAuthorizationConfig) String() string {
-	if len(m._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(m); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", m)
-}
-
-type MlModelRequestAuthorizationConfigRequest struct {
-	Type MlModelRequestAuthorizationConfigTypeEnum `json:"type" url:"type"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (m *MlModelRequestAuthorizationConfigRequest) GetExtraProperties() map[string]interface{} {
-	return m.extraProperties
-}
-
-func (m *MlModelRequestAuthorizationConfigRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler MlModelRequestAuthorizationConfigRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*m = MlModelRequestAuthorizationConfigRequest(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *m)
-	if err != nil {
-		return err
-	}
-	m.extraProperties = extraProperties
-
-	m._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (m *MlModelRequestAuthorizationConfigRequest) String() string {
-	if len(m._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(m); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", m)
-}
-
-// - `BEARER_TOKEN` - Bearer Token
-// - `API_KEY` - API Key
-type MlModelRequestAuthorizationConfigTypeEnum string
-
-const (
-	MlModelRequestAuthorizationConfigTypeEnumBearerToken MlModelRequestAuthorizationConfigTypeEnum = "BEARER_TOKEN"
-	MlModelRequestAuthorizationConfigTypeEnumApiKey      MlModelRequestAuthorizationConfigTypeEnum = "API_KEY"
-)
-
-func NewMlModelRequestAuthorizationConfigTypeEnumFromString(s string) (MlModelRequestAuthorizationConfigTypeEnum, error) {
-	switch s {
-	case "BEARER_TOKEN":
-		return MlModelRequestAuthorizationConfigTypeEnumBearerToken, nil
-	case "API_KEY":
-		return MlModelRequestAuthorizationConfigTypeEnumApiKey, nil
-	}
-	var t MlModelRequestAuthorizationConfigTypeEnum
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (m MlModelRequestAuthorizationConfigTypeEnum) Ptr() *MlModelRequestAuthorizationConfigTypeEnum {
-	return &m
-}
-
-type MlModelRequestConfig struct {
-	Headers       map[string]*string                 `json:"headers,omitempty" url:"headers,omitempty"`
-	Authorization *MlModelRequestAuthorizationConfig `json:"authorization,omitempty" url:"authorization,omitempty"`
-	BodyTemplate  *string                            `json:"body_template,omitempty" url:"body_template,omitempty"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (m *MlModelRequestConfig) GetExtraProperties() map[string]interface{} {
-	return m.extraProperties
-}
-
-func (m *MlModelRequestConfig) UnmarshalJSON(data []byte) error {
-	type unmarshaler MlModelRequestConfig
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*m = MlModelRequestConfig(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *m)
-	if err != nil {
-		return err
-	}
-	m.extraProperties = extraProperties
-
-	m._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (m *MlModelRequestConfig) String() string {
-	if len(m._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(m); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", m)
-}
-
-type MlModelRequestConfigRequest struct {
-	Headers       map[string]*string                        `json:"headers,omitempty" url:"headers,omitempty"`
-	Authorization *MlModelRequestAuthorizationConfigRequest `json:"authorization,omitempty" url:"authorization,omitempty"`
-	BodyTemplate  *string                                   `json:"body_template,omitempty" url:"body_template,omitempty"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (m *MlModelRequestConfigRequest) GetExtraProperties() map[string]interface{} {
-	return m.extraProperties
-}
-
-func (m *MlModelRequestConfigRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler MlModelRequestConfigRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*m = MlModelRequestConfigRequest(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *m)
-	if err != nil {
-		return err
-	}
-	m.extraProperties = extraProperties
-
-	m._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (m *MlModelRequestConfigRequest) String() string {
-	if len(m._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(m); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", m)
-}
-
-type MlModelResponseConfig struct {
-	ResultPath                *string            `json:"result_path,omitempty" url:"result_path,omitempty"`
-	ResultExtractionRegex     *string            `json:"result_extraction_regex,omitempty" url:"result_extraction_regex,omitempty"`
-	ResultSubstitutionRegexes map[string]*string `json:"result_substitution_regexes,omitempty" url:"result_substitution_regexes,omitempty"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (m *MlModelResponseConfig) GetExtraProperties() map[string]interface{} {
-	return m.extraProperties
-}
-
-func (m *MlModelResponseConfig) UnmarshalJSON(data []byte) error {
-	type unmarshaler MlModelResponseConfig
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*m = MlModelResponseConfig(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *m)
-	if err != nil {
-		return err
-	}
-	m.extraProperties = extraProperties
-
-	m._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (m *MlModelResponseConfig) String() string {
-	if len(m._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(m); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", m)
-}
-
-type MlModelResponseConfigRequest struct {
-	ResultPath                *string            `json:"result_path,omitempty" url:"result_path,omitempty"`
-	ResultExtractionRegex     *string            `json:"result_extraction_regex,omitempty" url:"result_extraction_regex,omitempty"`
-	ResultSubstitutionRegexes map[string]*string `json:"result_substitution_regexes,omitempty" url:"result_substitution_regexes,omitempty"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (m *MlModelResponseConfigRequest) GetExtraProperties() map[string]interface{} {
-	return m.extraProperties
-}
-
-func (m *MlModelResponseConfigRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler MlModelResponseConfigRequest
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*m = MlModelResponseConfigRequest(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *m)
-	if err != nil {
-		return err
-	}
-	m.extraProperties = extraProperties
-
-	m._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (m *MlModelResponseConfigRequest) String() string {
-	if len(m._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(m); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", m)
-}
-
-type MlModelTokenizerConfig struct {
-	HuggingFaceTokenizerConfig *HuggingFaceTokenizerConfig
-	TikTokenTokenizerConfig    *TikTokenTokenizerConfig
-}
-
-func (m *MlModelTokenizerConfig) UnmarshalJSON(data []byte) error {
-	valueHuggingFaceTokenizerConfig := new(HuggingFaceTokenizerConfig)
-	if err := json.Unmarshal(data, &valueHuggingFaceTokenizerConfig); err == nil {
-		m.HuggingFaceTokenizerConfig = valueHuggingFaceTokenizerConfig
-		return nil
-	}
-	valueTikTokenTokenizerConfig := new(TikTokenTokenizerConfig)
-	if err := json.Unmarshal(data, &valueTikTokenTokenizerConfig); err == nil {
-		m.TikTokenTokenizerConfig = valueTikTokenTokenizerConfig
-		return nil
-	}
-	return fmt.Errorf("%s cannot be deserialized as a %T", data, m)
-}
-
-func (m MlModelTokenizerConfig) MarshalJSON() ([]byte, error) {
-	if m.HuggingFaceTokenizerConfig != nil {
-		return json.Marshal(m.HuggingFaceTokenizerConfig)
-	}
-	if m.TikTokenTokenizerConfig != nil {
-		return json.Marshal(m.TikTokenTokenizerConfig)
-	}
-	return nil, fmt.Errorf("type %T does not include a non-empty union type", m)
-}
-
-type MlModelTokenizerConfigVisitor interface {
-	VisitHuggingFaceTokenizerConfig(*HuggingFaceTokenizerConfig) error
-	VisitTikTokenTokenizerConfig(*TikTokenTokenizerConfig) error
-}
-
-func (m *MlModelTokenizerConfig) Accept(visitor MlModelTokenizerConfigVisitor) error {
-	if m.HuggingFaceTokenizerConfig != nil {
-		return visitor.VisitHuggingFaceTokenizerConfig(m.HuggingFaceTokenizerConfig)
-	}
-	if m.TikTokenTokenizerConfig != nil {
-		return visitor.VisitTikTokenTokenizerConfig(m.TikTokenTokenizerConfig)
-	}
-	return fmt.Errorf("type %T does not include a non-empty union type", m)
-}
-
-type MlModelTokenizerConfigRequest struct {
-	HuggingFaceTokenizerConfigRequest *HuggingFaceTokenizerConfigRequest
-	TikTokenTokenizerConfigRequest    *TikTokenTokenizerConfigRequest
-}
-
-func (m *MlModelTokenizerConfigRequest) UnmarshalJSON(data []byte) error {
-	valueHuggingFaceTokenizerConfigRequest := new(HuggingFaceTokenizerConfigRequest)
-	if err := json.Unmarshal(data, &valueHuggingFaceTokenizerConfigRequest); err == nil {
-		m.HuggingFaceTokenizerConfigRequest = valueHuggingFaceTokenizerConfigRequest
-		return nil
-	}
-	valueTikTokenTokenizerConfigRequest := new(TikTokenTokenizerConfigRequest)
-	if err := json.Unmarshal(data, &valueTikTokenTokenizerConfigRequest); err == nil {
-		m.TikTokenTokenizerConfigRequest = valueTikTokenTokenizerConfigRequest
-		return nil
-	}
-	return fmt.Errorf("%s cannot be deserialized as a %T", data, m)
-}
-
-func (m MlModelTokenizerConfigRequest) MarshalJSON() ([]byte, error) {
-	if m.HuggingFaceTokenizerConfigRequest != nil {
-		return json.Marshal(m.HuggingFaceTokenizerConfigRequest)
-	}
-	if m.TikTokenTokenizerConfigRequest != nil {
-		return json.Marshal(m.TikTokenTokenizerConfigRequest)
-	}
-	return nil, fmt.Errorf("type %T does not include a non-empty union type", m)
-}
-
-type MlModelTokenizerConfigRequestVisitor interface {
-	VisitHuggingFaceTokenizerConfigRequest(*HuggingFaceTokenizerConfigRequest) error
-	VisitTikTokenTokenizerConfigRequest(*TikTokenTokenizerConfigRequest) error
-}
-
-func (m *MlModelTokenizerConfigRequest) Accept(visitor MlModelTokenizerConfigRequestVisitor) error {
-	if m.HuggingFaceTokenizerConfigRequest != nil {
-		return visitor.VisitHuggingFaceTokenizerConfigRequest(m.HuggingFaceTokenizerConfigRequest)
-	}
-	if m.TikTokenTokenizerConfigRequest != nil {
-		return visitor.VisitTikTokenTokenizerConfigRequest(m.TikTokenTokenizerConfigRequest)
-	}
-	return fmt.Errorf("type %T does not include a non-empty union type", m)
-}
-
 type MlModelUsage struct {
-	OutputTokenCount *int `json:"output_token_count,omitempty" url:"output_token_count,omitempty"`
-	InputTokenCount  *int `json:"input_token_count,omitempty" url:"input_token_count,omitempty"`
-	InputCharCount   *int `json:"input_char_count,omitempty" url:"input_char_count,omitempty"`
-	OutputCharCount  *int `json:"output_char_count,omitempty" url:"output_char_count,omitempty"`
-	ComputeNanos     *int `json:"compute_nanos,omitempty" url:"compute_nanos,omitempty"`
+	OutputTokenCount         *int `json:"output_token_count,omitempty" url:"output_token_count,omitempty"`
+	InputTokenCount          *int `json:"input_token_count,omitempty" url:"input_token_count,omitempty"`
+	InputCharCount           *int `json:"input_char_count,omitempty" url:"input_char_count,omitempty"`
+	OutputCharCount          *int `json:"output_char_count,omitempty" url:"output_char_count,omitempty"`
+	ComputeNanos             *int `json:"compute_nanos,omitempty" url:"compute_nanos,omitempty"`
+	CacheCreationInputTokens *int `json:"cache_creation_input_tokens,omitempty" url:"cache_creation_input_tokens,omitempty"`
+	CacheReadInputTokens     *int `json:"cache_read_input_tokens,omitempty" url:"cache_read_input_tokens,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -12813,1592 +12272,6 @@ func (o *OpenAiVectorizerTextEmbeddingAda002Request) String() string {
 	return fmt.Sprintf("%#v", o)
 }
 
-// An OpenAPI specification of a property with type 'array'
-type OpenApiArrayProperty struct {
-	MinItems    *int               `json:"min_items,omitempty" url:"min_items,omitempty"`
-	MaxItems    *int               `json:"max_items,omitempty" url:"max_items,omitempty"`
-	UniqueItems *bool              `json:"unique_items,omitempty" url:"unique_items,omitempty"`
-	Items       *OpenApiProperty   `json:"items" url:"items"`
-	PrefixItems []*OpenApiProperty `json:"prefix_items,omitempty" url:"prefix_items,omitempty"`
-	Contains    *OpenApiProperty   `json:"contains,omitempty" url:"contains,omitempty"`
-	MinContains *int               `json:"min_contains,omitempty" url:"min_contains,omitempty"`
-	MaxContains *int               `json:"max_contains,omitempty" url:"max_contains,omitempty"`
-	Default     []interface{}      `json:"default,omitempty" url:"default,omitempty"`
-	Title       *string            `json:"title,omitempty" url:"title,omitempty"`
-	Description *string            `json:"description,omitempty" url:"description,omitempty"`
-	type_       string
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (o *OpenApiArrayProperty) GetExtraProperties() map[string]interface{} {
-	return o.extraProperties
-}
-
-func (o *OpenApiArrayProperty) Type() string {
-	return o.type_
-}
-
-func (o *OpenApiArrayProperty) UnmarshalJSON(data []byte) error {
-	type embed OpenApiArrayProperty
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*o = OpenApiArrayProperty(unmarshaler.embed)
-	if unmarshaler.Type != "array" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "array", unmarshaler.Type)
-	}
-	o.type_ = unmarshaler.Type
-
-	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
-	if err != nil {
-		return err
-	}
-	o.extraProperties = extraProperties
-
-	o._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (o *OpenApiArrayProperty) MarshalJSON() ([]byte, error) {
-	type embed OpenApiArrayProperty
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-		Type:  "array",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (o *OpenApiArrayProperty) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(o); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", o)
-}
-
-// An OpenAPI specification of a property with type 'array'
-type OpenApiArrayPropertyRequest struct {
-	MinItems    *int                      `json:"min_items,omitempty" url:"min_items,omitempty"`
-	MaxItems    *int                      `json:"max_items,omitempty" url:"max_items,omitempty"`
-	UniqueItems *bool                     `json:"unique_items,omitempty" url:"unique_items,omitempty"`
-	Items       *OpenApiPropertyRequest   `json:"items" url:"items"`
-	PrefixItems []*OpenApiPropertyRequest `json:"prefix_items,omitempty" url:"prefix_items,omitempty"`
-	Contains    *OpenApiPropertyRequest   `json:"contains,omitempty" url:"contains,omitempty"`
-	MinContains *int                      `json:"min_contains,omitempty" url:"min_contains,omitempty"`
-	MaxContains *int                      `json:"max_contains,omitempty" url:"max_contains,omitempty"`
-	Default     []interface{}             `json:"default,omitempty" url:"default,omitempty"`
-	Title       *string                   `json:"title,omitempty" url:"title,omitempty"`
-	Description *string                   `json:"description,omitempty" url:"description,omitempty"`
-	type_       string
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (o *OpenApiArrayPropertyRequest) GetExtraProperties() map[string]interface{} {
-	return o.extraProperties
-}
-
-func (o *OpenApiArrayPropertyRequest) Type() string {
-	return o.type_
-}
-
-func (o *OpenApiArrayPropertyRequest) UnmarshalJSON(data []byte) error {
-	type embed OpenApiArrayPropertyRequest
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*o = OpenApiArrayPropertyRequest(unmarshaler.embed)
-	if unmarshaler.Type != "array" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "array", unmarshaler.Type)
-	}
-	o.type_ = unmarshaler.Type
-
-	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
-	if err != nil {
-		return err
-	}
-	o.extraProperties = extraProperties
-
-	o._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (o *OpenApiArrayPropertyRequest) MarshalJSON() ([]byte, error) {
-	type embed OpenApiArrayPropertyRequest
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-		Type:  "array",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (o *OpenApiArrayPropertyRequest) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(o); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", o)
-}
-
-// An OpenAPI specification of a property with type 'boolean'
-type OpenApiBooleanProperty struct {
-	Default     *bool   `json:"default,omitempty" url:"default,omitempty"`
-	Title       *string `json:"title,omitempty" url:"title,omitempty"`
-	Description *string `json:"description,omitempty" url:"description,omitempty"`
-	type_       string
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (o *OpenApiBooleanProperty) GetExtraProperties() map[string]interface{} {
-	return o.extraProperties
-}
-
-func (o *OpenApiBooleanProperty) Type() string {
-	return o.type_
-}
-
-func (o *OpenApiBooleanProperty) UnmarshalJSON(data []byte) error {
-	type embed OpenApiBooleanProperty
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*o = OpenApiBooleanProperty(unmarshaler.embed)
-	if unmarshaler.Type != "boolean" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "boolean", unmarshaler.Type)
-	}
-	o.type_ = unmarshaler.Type
-
-	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
-	if err != nil {
-		return err
-	}
-	o.extraProperties = extraProperties
-
-	o._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (o *OpenApiBooleanProperty) MarshalJSON() ([]byte, error) {
-	type embed OpenApiBooleanProperty
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-		Type:  "boolean",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (o *OpenApiBooleanProperty) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(o); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", o)
-}
-
-// An OpenAPI specification of a property with type 'boolean'
-type OpenApiBooleanPropertyRequest struct {
-	Default     *bool   `json:"default,omitempty" url:"default,omitempty"`
-	Title       *string `json:"title,omitempty" url:"title,omitempty"`
-	Description *string `json:"description,omitempty" url:"description,omitempty"`
-	type_       string
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (o *OpenApiBooleanPropertyRequest) GetExtraProperties() map[string]interface{} {
-	return o.extraProperties
-}
-
-func (o *OpenApiBooleanPropertyRequest) Type() string {
-	return o.type_
-}
-
-func (o *OpenApiBooleanPropertyRequest) UnmarshalJSON(data []byte) error {
-	type embed OpenApiBooleanPropertyRequest
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*o = OpenApiBooleanPropertyRequest(unmarshaler.embed)
-	if unmarshaler.Type != "boolean" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "boolean", unmarshaler.Type)
-	}
-	o.type_ = unmarshaler.Type
-
-	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
-	if err != nil {
-		return err
-	}
-	o.extraProperties = extraProperties
-
-	o._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (o *OpenApiBooleanPropertyRequest) MarshalJSON() ([]byte, error) {
-	type embed OpenApiBooleanPropertyRequest
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-		Type:  "boolean",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (o *OpenApiBooleanPropertyRequest) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(o); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", o)
-}
-
-// An OpenAPI specification of a property with type 'const'
-type OpenApiConstProperty struct {
-	Title       *string `json:"title,omitempty" url:"title,omitempty"`
-	Description *string `json:"description,omitempty" url:"description,omitempty"`
-	Const       string  `json:"const" url:"const"`
-	type_       string
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (o *OpenApiConstProperty) GetExtraProperties() map[string]interface{} {
-	return o.extraProperties
-}
-
-func (o *OpenApiConstProperty) Type() string {
-	return o.type_
-}
-
-func (o *OpenApiConstProperty) UnmarshalJSON(data []byte) error {
-	type embed OpenApiConstProperty
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*o = OpenApiConstProperty(unmarshaler.embed)
-	if unmarshaler.Type != "const" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "const", unmarshaler.Type)
-	}
-	o.type_ = unmarshaler.Type
-
-	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
-	if err != nil {
-		return err
-	}
-	o.extraProperties = extraProperties
-
-	o._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (o *OpenApiConstProperty) MarshalJSON() ([]byte, error) {
-	type embed OpenApiConstProperty
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-		Type:  "const",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (o *OpenApiConstProperty) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(o); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", o)
-}
-
-// An OpenAPI specification of a property with type 'const'
-type OpenApiConstPropertyRequest struct {
-	Title       *string `json:"title,omitempty" url:"title,omitempty"`
-	Description *string `json:"description,omitempty" url:"description,omitempty"`
-	Const       string  `json:"const" url:"const"`
-	type_       string
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (o *OpenApiConstPropertyRequest) GetExtraProperties() map[string]interface{} {
-	return o.extraProperties
-}
-
-func (o *OpenApiConstPropertyRequest) Type() string {
-	return o.type_
-}
-
-func (o *OpenApiConstPropertyRequest) UnmarshalJSON(data []byte) error {
-	type embed OpenApiConstPropertyRequest
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*o = OpenApiConstPropertyRequest(unmarshaler.embed)
-	if unmarshaler.Type != "const" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "const", unmarshaler.Type)
-	}
-	o.type_ = unmarshaler.Type
-
-	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
-	if err != nil {
-		return err
-	}
-	o.extraProperties = extraProperties
-
-	o._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (o *OpenApiConstPropertyRequest) MarshalJSON() ([]byte, error) {
-	type embed OpenApiConstPropertyRequest
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-		Type:  "const",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (o *OpenApiConstPropertyRequest) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(o); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", o)
-}
-
-// An OpenAPI specification of a property with type 'integer'
-type OpenApiIntegerProperty struct {
-	Minimum          *int    `json:"minimum,omitempty" url:"minimum,omitempty"`
-	Maximum          *int    `json:"maximum,omitempty" url:"maximum,omitempty"`
-	ExclusiveMinimum *bool   `json:"exclusive_minimum,omitempty" url:"exclusive_minimum,omitempty"`
-	ExclusiveMaximum *bool   `json:"exclusive_maximum,omitempty" url:"exclusive_maximum,omitempty"`
-	Default          *int    `json:"default,omitempty" url:"default,omitempty"`
-	Title            *string `json:"title,omitempty" url:"title,omitempty"`
-	Description      *string `json:"description,omitempty" url:"description,omitempty"`
-	type_            string
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (o *OpenApiIntegerProperty) GetExtraProperties() map[string]interface{} {
-	return o.extraProperties
-}
-
-func (o *OpenApiIntegerProperty) Type() string {
-	return o.type_
-}
-
-func (o *OpenApiIntegerProperty) UnmarshalJSON(data []byte) error {
-	type embed OpenApiIntegerProperty
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*o = OpenApiIntegerProperty(unmarshaler.embed)
-	if unmarshaler.Type != "integer" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "integer", unmarshaler.Type)
-	}
-	o.type_ = unmarshaler.Type
-
-	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
-	if err != nil {
-		return err
-	}
-	o.extraProperties = extraProperties
-
-	o._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (o *OpenApiIntegerProperty) MarshalJSON() ([]byte, error) {
-	type embed OpenApiIntegerProperty
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-		Type:  "integer",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (o *OpenApiIntegerProperty) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(o); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", o)
-}
-
-// An OpenAPI specification of a property with type 'integer'
-type OpenApiIntegerPropertyRequest struct {
-	Minimum          *int    `json:"minimum,omitempty" url:"minimum,omitempty"`
-	Maximum          *int    `json:"maximum,omitempty" url:"maximum,omitempty"`
-	ExclusiveMinimum *bool   `json:"exclusive_minimum,omitempty" url:"exclusive_minimum,omitempty"`
-	ExclusiveMaximum *bool   `json:"exclusive_maximum,omitempty" url:"exclusive_maximum,omitempty"`
-	Default          *int    `json:"default,omitempty" url:"default,omitempty"`
-	Title            *string `json:"title,omitempty" url:"title,omitempty"`
-	Description      *string `json:"description,omitempty" url:"description,omitempty"`
-	type_            string
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (o *OpenApiIntegerPropertyRequest) GetExtraProperties() map[string]interface{} {
-	return o.extraProperties
-}
-
-func (o *OpenApiIntegerPropertyRequest) Type() string {
-	return o.type_
-}
-
-func (o *OpenApiIntegerPropertyRequest) UnmarshalJSON(data []byte) error {
-	type embed OpenApiIntegerPropertyRequest
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*o = OpenApiIntegerPropertyRequest(unmarshaler.embed)
-	if unmarshaler.Type != "integer" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "integer", unmarshaler.Type)
-	}
-	o.type_ = unmarshaler.Type
-
-	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
-	if err != nil {
-		return err
-	}
-	o.extraProperties = extraProperties
-
-	o._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (o *OpenApiIntegerPropertyRequest) MarshalJSON() ([]byte, error) {
-	type embed OpenApiIntegerPropertyRequest
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-		Type:  "integer",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (o *OpenApiIntegerPropertyRequest) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(o); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", o)
-}
-
-// An OpenAPI specification of a property with type 'number'
-type OpenApiNumberProperty struct {
-	Minimum          *float64 `json:"minimum,omitempty" url:"minimum,omitempty"`
-	Maximum          *float64 `json:"maximum,omitempty" url:"maximum,omitempty"`
-	Format           *string  `json:"format,omitempty" url:"format,omitempty"`
-	ExclusiveMinimum *bool    `json:"exclusive_minimum,omitempty" url:"exclusive_minimum,omitempty"`
-	ExclusiveMaximum *bool    `json:"exclusive_maximum,omitempty" url:"exclusive_maximum,omitempty"`
-	Default          *float64 `json:"default,omitempty" url:"default,omitempty"`
-	Title            *string  `json:"title,omitempty" url:"title,omitempty"`
-	Description      *string  `json:"description,omitempty" url:"description,omitempty"`
-	type_            string
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (o *OpenApiNumberProperty) GetExtraProperties() map[string]interface{} {
-	return o.extraProperties
-}
-
-func (o *OpenApiNumberProperty) Type() string {
-	return o.type_
-}
-
-func (o *OpenApiNumberProperty) UnmarshalJSON(data []byte) error {
-	type embed OpenApiNumberProperty
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*o = OpenApiNumberProperty(unmarshaler.embed)
-	if unmarshaler.Type != "number" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "number", unmarshaler.Type)
-	}
-	o.type_ = unmarshaler.Type
-
-	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
-	if err != nil {
-		return err
-	}
-	o.extraProperties = extraProperties
-
-	o._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (o *OpenApiNumberProperty) MarshalJSON() ([]byte, error) {
-	type embed OpenApiNumberProperty
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-		Type:  "number",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (o *OpenApiNumberProperty) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(o); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", o)
-}
-
-// An OpenAPI specification of a property with type 'number'
-type OpenApiNumberPropertyRequest struct {
-	Minimum          *float64 `json:"minimum,omitempty" url:"minimum,omitempty"`
-	Maximum          *float64 `json:"maximum,omitempty" url:"maximum,omitempty"`
-	Format           *string  `json:"format,omitempty" url:"format,omitempty"`
-	ExclusiveMinimum *bool    `json:"exclusive_minimum,omitempty" url:"exclusive_minimum,omitempty"`
-	ExclusiveMaximum *bool    `json:"exclusive_maximum,omitempty" url:"exclusive_maximum,omitempty"`
-	Default          *float64 `json:"default,omitempty" url:"default,omitempty"`
-	Title            *string  `json:"title,omitempty" url:"title,omitempty"`
-	Description      *string  `json:"description,omitempty" url:"description,omitempty"`
-	type_            string
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (o *OpenApiNumberPropertyRequest) GetExtraProperties() map[string]interface{} {
-	return o.extraProperties
-}
-
-func (o *OpenApiNumberPropertyRequest) Type() string {
-	return o.type_
-}
-
-func (o *OpenApiNumberPropertyRequest) UnmarshalJSON(data []byte) error {
-	type embed OpenApiNumberPropertyRequest
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*o = OpenApiNumberPropertyRequest(unmarshaler.embed)
-	if unmarshaler.Type != "number" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "number", unmarshaler.Type)
-	}
-	o.type_ = unmarshaler.Type
-
-	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
-	if err != nil {
-		return err
-	}
-	o.extraProperties = extraProperties
-
-	o._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (o *OpenApiNumberPropertyRequest) MarshalJSON() ([]byte, error) {
-	type embed OpenApiNumberPropertyRequest
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-		Type:  "number",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (o *OpenApiNumberPropertyRequest) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(o); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", o)
-}
-
-// An OpenAPI specification of a property with type 'object'
-type OpenApiObjectProperty struct {
-	Properties           map[string]*OpenApiProperty `json:"properties,omitempty" url:"properties,omitempty"`
-	Required             []string                    `json:"required,omitempty" url:"required,omitempty"`
-	MinProperties        *int                        `json:"min_properties,omitempty" url:"min_properties,omitempty"`
-	MaxProperties        *int                        `json:"max_properties,omitempty" url:"max_properties,omitempty"`
-	PropertyNames        *OpenApiProperty            `json:"property_names,omitempty" url:"property_names,omitempty"`
-	AdditionalProperties *OpenApiProperty            `json:"additional_properties,omitempty" url:"additional_properties,omitempty"`
-	PatternProperties    map[string]*OpenApiProperty `json:"pattern_properties,omitempty" url:"pattern_properties,omitempty"`
-	Default              map[string]interface{}      `json:"default,omitempty" url:"default,omitempty"`
-	Title                *string                     `json:"title,omitempty" url:"title,omitempty"`
-	Description          *string                     `json:"description,omitempty" url:"description,omitempty"`
-	type_                string
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (o *OpenApiObjectProperty) GetExtraProperties() map[string]interface{} {
-	return o.extraProperties
-}
-
-func (o *OpenApiObjectProperty) Type() string {
-	return o.type_
-}
-
-func (o *OpenApiObjectProperty) UnmarshalJSON(data []byte) error {
-	type embed OpenApiObjectProperty
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*o = OpenApiObjectProperty(unmarshaler.embed)
-	if unmarshaler.Type != "object" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "object", unmarshaler.Type)
-	}
-	o.type_ = unmarshaler.Type
-
-	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
-	if err != nil {
-		return err
-	}
-	o.extraProperties = extraProperties
-
-	o._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (o *OpenApiObjectProperty) MarshalJSON() ([]byte, error) {
-	type embed OpenApiObjectProperty
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-		Type:  "object",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (o *OpenApiObjectProperty) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(o); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", o)
-}
-
-// An OpenAPI specification of a property with type 'object'
-type OpenApiObjectPropertyRequest struct {
-	Properties           map[string]*OpenApiPropertyRequest `json:"properties,omitempty" url:"properties,omitempty"`
-	Required             []string                           `json:"required,omitempty" url:"required,omitempty"`
-	MinProperties        *int                               `json:"min_properties,omitempty" url:"min_properties,omitempty"`
-	MaxProperties        *int                               `json:"max_properties,omitempty" url:"max_properties,omitempty"`
-	PropertyNames        *OpenApiPropertyRequest            `json:"property_names,omitempty" url:"property_names,omitempty"`
-	AdditionalProperties *OpenApiPropertyRequest            `json:"additional_properties,omitempty" url:"additional_properties,omitempty"`
-	PatternProperties    map[string]*OpenApiPropertyRequest `json:"pattern_properties,omitempty" url:"pattern_properties,omitempty"`
-	Default              map[string]interface{}             `json:"default,omitempty" url:"default,omitempty"`
-	Title                *string                            `json:"title,omitempty" url:"title,omitempty"`
-	Description          *string                            `json:"description,omitempty" url:"description,omitempty"`
-	type_                string
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (o *OpenApiObjectPropertyRequest) GetExtraProperties() map[string]interface{} {
-	return o.extraProperties
-}
-
-func (o *OpenApiObjectPropertyRequest) Type() string {
-	return o.type_
-}
-
-func (o *OpenApiObjectPropertyRequest) UnmarshalJSON(data []byte) error {
-	type embed OpenApiObjectPropertyRequest
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*o = OpenApiObjectPropertyRequest(unmarshaler.embed)
-	if unmarshaler.Type != "object" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "object", unmarshaler.Type)
-	}
-	o.type_ = unmarshaler.Type
-
-	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
-	if err != nil {
-		return err
-	}
-	o.extraProperties = extraProperties
-
-	o._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (o *OpenApiObjectPropertyRequest) MarshalJSON() ([]byte, error) {
-	type embed OpenApiObjectPropertyRequest
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-		Type:  "object",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (o *OpenApiObjectPropertyRequest) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(o); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", o)
-}
-
-// An OpenAPI specification of a property with type 'oneOf'
-type OpenApiOneOfProperty struct {
-	OneOf       []*OpenApiProperty `json:"oneOf" url:"oneOf"`
-	Title       *string            `json:"title,omitempty" url:"title,omitempty"`
-	Description *string            `json:"description,omitempty" url:"description,omitempty"`
-	type_       string
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (o *OpenApiOneOfProperty) GetExtraProperties() map[string]interface{} {
-	return o.extraProperties
-}
-
-func (o *OpenApiOneOfProperty) Type() string {
-	return o.type_
-}
-
-func (o *OpenApiOneOfProperty) UnmarshalJSON(data []byte) error {
-	type embed OpenApiOneOfProperty
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*o = OpenApiOneOfProperty(unmarshaler.embed)
-	if unmarshaler.Type != "oneOf" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "oneOf", unmarshaler.Type)
-	}
-	o.type_ = unmarshaler.Type
-
-	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
-	if err != nil {
-		return err
-	}
-	o.extraProperties = extraProperties
-
-	o._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (o *OpenApiOneOfProperty) MarshalJSON() ([]byte, error) {
-	type embed OpenApiOneOfProperty
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-		Type:  "oneOf",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (o *OpenApiOneOfProperty) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(o); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", o)
-}
-
-// An OpenAPI specification of a property with type 'oneOf'
-type OpenApiOneOfPropertyRequest struct {
-	OneOf       []*OpenApiPropertyRequest `json:"oneOf" url:"oneOf"`
-	Title       *string                   `json:"title,omitempty" url:"title,omitempty"`
-	Description *string                   `json:"description,omitempty" url:"description,omitempty"`
-	type_       string
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (o *OpenApiOneOfPropertyRequest) GetExtraProperties() map[string]interface{} {
-	return o.extraProperties
-}
-
-func (o *OpenApiOneOfPropertyRequest) Type() string {
-	return o.type_
-}
-
-func (o *OpenApiOneOfPropertyRequest) UnmarshalJSON(data []byte) error {
-	type embed OpenApiOneOfPropertyRequest
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*o = OpenApiOneOfPropertyRequest(unmarshaler.embed)
-	if unmarshaler.Type != "oneOf" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "oneOf", unmarshaler.Type)
-	}
-	o.type_ = unmarshaler.Type
-
-	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
-	if err != nil {
-		return err
-	}
-	o.extraProperties = extraProperties
-
-	o._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (o *OpenApiOneOfPropertyRequest) MarshalJSON() ([]byte, error) {
-	type embed OpenApiOneOfPropertyRequest
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-		Type:  "oneOf",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (o *OpenApiOneOfPropertyRequest) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(o); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", o)
-}
-
-type OpenApiProperty struct {
-	OpenApiArrayProperty   *OpenApiArrayProperty
-	OpenApiObjectProperty  *OpenApiObjectProperty
-	OpenApiIntegerProperty *OpenApiIntegerProperty
-	OpenApiNumberProperty  *OpenApiNumberProperty
-	OpenApiStringProperty  *OpenApiStringProperty
-	OpenApiBooleanProperty *OpenApiBooleanProperty
-	OpenApiOneOfProperty   *OpenApiOneOfProperty
-	OpenApiConstProperty   *OpenApiConstProperty
-	OpenApiRefProperty     *OpenApiRefProperty
-}
-
-func (o *OpenApiProperty) UnmarshalJSON(data []byte) error {
-	valueOpenApiArrayProperty := new(OpenApiArrayProperty)
-	if err := json.Unmarshal(data, &valueOpenApiArrayProperty); err == nil {
-		o.OpenApiArrayProperty = valueOpenApiArrayProperty
-		return nil
-	}
-	valueOpenApiObjectProperty := new(OpenApiObjectProperty)
-	if err := json.Unmarshal(data, &valueOpenApiObjectProperty); err == nil {
-		o.OpenApiObjectProperty = valueOpenApiObjectProperty
-		return nil
-	}
-	valueOpenApiIntegerProperty := new(OpenApiIntegerProperty)
-	if err := json.Unmarshal(data, &valueOpenApiIntegerProperty); err == nil {
-		o.OpenApiIntegerProperty = valueOpenApiIntegerProperty
-		return nil
-	}
-	valueOpenApiNumberProperty := new(OpenApiNumberProperty)
-	if err := json.Unmarshal(data, &valueOpenApiNumberProperty); err == nil {
-		o.OpenApiNumberProperty = valueOpenApiNumberProperty
-		return nil
-	}
-	valueOpenApiStringProperty := new(OpenApiStringProperty)
-	if err := json.Unmarshal(data, &valueOpenApiStringProperty); err == nil {
-		o.OpenApiStringProperty = valueOpenApiStringProperty
-		return nil
-	}
-	valueOpenApiBooleanProperty := new(OpenApiBooleanProperty)
-	if err := json.Unmarshal(data, &valueOpenApiBooleanProperty); err == nil {
-		o.OpenApiBooleanProperty = valueOpenApiBooleanProperty
-		return nil
-	}
-	valueOpenApiOneOfProperty := new(OpenApiOneOfProperty)
-	if err := json.Unmarshal(data, &valueOpenApiOneOfProperty); err == nil {
-		o.OpenApiOneOfProperty = valueOpenApiOneOfProperty
-		return nil
-	}
-	valueOpenApiConstProperty := new(OpenApiConstProperty)
-	if err := json.Unmarshal(data, &valueOpenApiConstProperty); err == nil {
-		o.OpenApiConstProperty = valueOpenApiConstProperty
-		return nil
-	}
-	valueOpenApiRefProperty := new(OpenApiRefProperty)
-	if err := json.Unmarshal(data, &valueOpenApiRefProperty); err == nil {
-		o.OpenApiRefProperty = valueOpenApiRefProperty
-		return nil
-	}
-	return fmt.Errorf("%s cannot be deserialized as a %T", data, o)
-}
-
-func (o OpenApiProperty) MarshalJSON() ([]byte, error) {
-	if o.OpenApiArrayProperty != nil {
-		return json.Marshal(o.OpenApiArrayProperty)
-	}
-	if o.OpenApiObjectProperty != nil {
-		return json.Marshal(o.OpenApiObjectProperty)
-	}
-	if o.OpenApiIntegerProperty != nil {
-		return json.Marshal(o.OpenApiIntegerProperty)
-	}
-	if o.OpenApiNumberProperty != nil {
-		return json.Marshal(o.OpenApiNumberProperty)
-	}
-	if o.OpenApiStringProperty != nil {
-		return json.Marshal(o.OpenApiStringProperty)
-	}
-	if o.OpenApiBooleanProperty != nil {
-		return json.Marshal(o.OpenApiBooleanProperty)
-	}
-	if o.OpenApiOneOfProperty != nil {
-		return json.Marshal(o.OpenApiOneOfProperty)
-	}
-	if o.OpenApiConstProperty != nil {
-		return json.Marshal(o.OpenApiConstProperty)
-	}
-	if o.OpenApiRefProperty != nil {
-		return json.Marshal(o.OpenApiRefProperty)
-	}
-	return nil, fmt.Errorf("type %T does not include a non-empty union type", o)
-}
-
-type OpenApiPropertyVisitor interface {
-	VisitOpenApiArrayProperty(*OpenApiArrayProperty) error
-	VisitOpenApiObjectProperty(*OpenApiObjectProperty) error
-	VisitOpenApiIntegerProperty(*OpenApiIntegerProperty) error
-	VisitOpenApiNumberProperty(*OpenApiNumberProperty) error
-	VisitOpenApiStringProperty(*OpenApiStringProperty) error
-	VisitOpenApiBooleanProperty(*OpenApiBooleanProperty) error
-	VisitOpenApiOneOfProperty(*OpenApiOneOfProperty) error
-	VisitOpenApiConstProperty(*OpenApiConstProperty) error
-	VisitOpenApiRefProperty(*OpenApiRefProperty) error
-}
-
-func (o *OpenApiProperty) Accept(visitor OpenApiPropertyVisitor) error {
-	if o.OpenApiArrayProperty != nil {
-		return visitor.VisitOpenApiArrayProperty(o.OpenApiArrayProperty)
-	}
-	if o.OpenApiObjectProperty != nil {
-		return visitor.VisitOpenApiObjectProperty(o.OpenApiObjectProperty)
-	}
-	if o.OpenApiIntegerProperty != nil {
-		return visitor.VisitOpenApiIntegerProperty(o.OpenApiIntegerProperty)
-	}
-	if o.OpenApiNumberProperty != nil {
-		return visitor.VisitOpenApiNumberProperty(o.OpenApiNumberProperty)
-	}
-	if o.OpenApiStringProperty != nil {
-		return visitor.VisitOpenApiStringProperty(o.OpenApiStringProperty)
-	}
-	if o.OpenApiBooleanProperty != nil {
-		return visitor.VisitOpenApiBooleanProperty(o.OpenApiBooleanProperty)
-	}
-	if o.OpenApiOneOfProperty != nil {
-		return visitor.VisitOpenApiOneOfProperty(o.OpenApiOneOfProperty)
-	}
-	if o.OpenApiConstProperty != nil {
-		return visitor.VisitOpenApiConstProperty(o.OpenApiConstProperty)
-	}
-	if o.OpenApiRefProperty != nil {
-		return visitor.VisitOpenApiRefProperty(o.OpenApiRefProperty)
-	}
-	return fmt.Errorf("type %T does not include a non-empty union type", o)
-}
-
-type OpenApiPropertyRequest struct {
-	OpenApiArrayPropertyRequest   *OpenApiArrayPropertyRequest
-	OpenApiObjectPropertyRequest  *OpenApiObjectPropertyRequest
-	OpenApiIntegerPropertyRequest *OpenApiIntegerPropertyRequest
-	OpenApiNumberPropertyRequest  *OpenApiNumberPropertyRequest
-	OpenApiStringPropertyRequest  *OpenApiStringPropertyRequest
-	OpenApiBooleanPropertyRequest *OpenApiBooleanPropertyRequest
-	OpenApiOneOfPropertyRequest   *OpenApiOneOfPropertyRequest
-	OpenApiConstPropertyRequest   *OpenApiConstPropertyRequest
-	OpenApiRefPropertyRequest     *OpenApiRefPropertyRequest
-}
-
-func (o *OpenApiPropertyRequest) UnmarshalJSON(data []byte) error {
-	valueOpenApiArrayPropertyRequest := new(OpenApiArrayPropertyRequest)
-	if err := json.Unmarshal(data, &valueOpenApiArrayPropertyRequest); err == nil {
-		o.OpenApiArrayPropertyRequest = valueOpenApiArrayPropertyRequest
-		return nil
-	}
-	valueOpenApiObjectPropertyRequest := new(OpenApiObjectPropertyRequest)
-	if err := json.Unmarshal(data, &valueOpenApiObjectPropertyRequest); err == nil {
-		o.OpenApiObjectPropertyRequest = valueOpenApiObjectPropertyRequest
-		return nil
-	}
-	valueOpenApiIntegerPropertyRequest := new(OpenApiIntegerPropertyRequest)
-	if err := json.Unmarshal(data, &valueOpenApiIntegerPropertyRequest); err == nil {
-		o.OpenApiIntegerPropertyRequest = valueOpenApiIntegerPropertyRequest
-		return nil
-	}
-	valueOpenApiNumberPropertyRequest := new(OpenApiNumberPropertyRequest)
-	if err := json.Unmarshal(data, &valueOpenApiNumberPropertyRequest); err == nil {
-		o.OpenApiNumberPropertyRequest = valueOpenApiNumberPropertyRequest
-		return nil
-	}
-	valueOpenApiStringPropertyRequest := new(OpenApiStringPropertyRequest)
-	if err := json.Unmarshal(data, &valueOpenApiStringPropertyRequest); err == nil {
-		o.OpenApiStringPropertyRequest = valueOpenApiStringPropertyRequest
-		return nil
-	}
-	valueOpenApiBooleanPropertyRequest := new(OpenApiBooleanPropertyRequest)
-	if err := json.Unmarshal(data, &valueOpenApiBooleanPropertyRequest); err == nil {
-		o.OpenApiBooleanPropertyRequest = valueOpenApiBooleanPropertyRequest
-		return nil
-	}
-	valueOpenApiOneOfPropertyRequest := new(OpenApiOneOfPropertyRequest)
-	if err := json.Unmarshal(data, &valueOpenApiOneOfPropertyRequest); err == nil {
-		o.OpenApiOneOfPropertyRequest = valueOpenApiOneOfPropertyRequest
-		return nil
-	}
-	valueOpenApiConstPropertyRequest := new(OpenApiConstPropertyRequest)
-	if err := json.Unmarshal(data, &valueOpenApiConstPropertyRequest); err == nil {
-		o.OpenApiConstPropertyRequest = valueOpenApiConstPropertyRequest
-		return nil
-	}
-	valueOpenApiRefPropertyRequest := new(OpenApiRefPropertyRequest)
-	if err := json.Unmarshal(data, &valueOpenApiRefPropertyRequest); err == nil {
-		o.OpenApiRefPropertyRequest = valueOpenApiRefPropertyRequest
-		return nil
-	}
-	return fmt.Errorf("%s cannot be deserialized as a %T", data, o)
-}
-
-func (o OpenApiPropertyRequest) MarshalJSON() ([]byte, error) {
-	if o.OpenApiArrayPropertyRequest != nil {
-		return json.Marshal(o.OpenApiArrayPropertyRequest)
-	}
-	if o.OpenApiObjectPropertyRequest != nil {
-		return json.Marshal(o.OpenApiObjectPropertyRequest)
-	}
-	if o.OpenApiIntegerPropertyRequest != nil {
-		return json.Marshal(o.OpenApiIntegerPropertyRequest)
-	}
-	if o.OpenApiNumberPropertyRequest != nil {
-		return json.Marshal(o.OpenApiNumberPropertyRequest)
-	}
-	if o.OpenApiStringPropertyRequest != nil {
-		return json.Marshal(o.OpenApiStringPropertyRequest)
-	}
-	if o.OpenApiBooleanPropertyRequest != nil {
-		return json.Marshal(o.OpenApiBooleanPropertyRequest)
-	}
-	if o.OpenApiOneOfPropertyRequest != nil {
-		return json.Marshal(o.OpenApiOneOfPropertyRequest)
-	}
-	if o.OpenApiConstPropertyRequest != nil {
-		return json.Marshal(o.OpenApiConstPropertyRequest)
-	}
-	if o.OpenApiRefPropertyRequest != nil {
-		return json.Marshal(o.OpenApiRefPropertyRequest)
-	}
-	return nil, fmt.Errorf("type %T does not include a non-empty union type", o)
-}
-
-type OpenApiPropertyRequestVisitor interface {
-	VisitOpenApiArrayPropertyRequest(*OpenApiArrayPropertyRequest) error
-	VisitOpenApiObjectPropertyRequest(*OpenApiObjectPropertyRequest) error
-	VisitOpenApiIntegerPropertyRequest(*OpenApiIntegerPropertyRequest) error
-	VisitOpenApiNumberPropertyRequest(*OpenApiNumberPropertyRequest) error
-	VisitOpenApiStringPropertyRequest(*OpenApiStringPropertyRequest) error
-	VisitOpenApiBooleanPropertyRequest(*OpenApiBooleanPropertyRequest) error
-	VisitOpenApiOneOfPropertyRequest(*OpenApiOneOfPropertyRequest) error
-	VisitOpenApiConstPropertyRequest(*OpenApiConstPropertyRequest) error
-	VisitOpenApiRefPropertyRequest(*OpenApiRefPropertyRequest) error
-}
-
-func (o *OpenApiPropertyRequest) Accept(visitor OpenApiPropertyRequestVisitor) error {
-	if o.OpenApiArrayPropertyRequest != nil {
-		return visitor.VisitOpenApiArrayPropertyRequest(o.OpenApiArrayPropertyRequest)
-	}
-	if o.OpenApiObjectPropertyRequest != nil {
-		return visitor.VisitOpenApiObjectPropertyRequest(o.OpenApiObjectPropertyRequest)
-	}
-	if o.OpenApiIntegerPropertyRequest != nil {
-		return visitor.VisitOpenApiIntegerPropertyRequest(o.OpenApiIntegerPropertyRequest)
-	}
-	if o.OpenApiNumberPropertyRequest != nil {
-		return visitor.VisitOpenApiNumberPropertyRequest(o.OpenApiNumberPropertyRequest)
-	}
-	if o.OpenApiStringPropertyRequest != nil {
-		return visitor.VisitOpenApiStringPropertyRequest(o.OpenApiStringPropertyRequest)
-	}
-	if o.OpenApiBooleanPropertyRequest != nil {
-		return visitor.VisitOpenApiBooleanPropertyRequest(o.OpenApiBooleanPropertyRequest)
-	}
-	if o.OpenApiOneOfPropertyRequest != nil {
-		return visitor.VisitOpenApiOneOfPropertyRequest(o.OpenApiOneOfPropertyRequest)
-	}
-	if o.OpenApiConstPropertyRequest != nil {
-		return visitor.VisitOpenApiConstPropertyRequest(o.OpenApiConstPropertyRequest)
-	}
-	if o.OpenApiRefPropertyRequest != nil {
-		return visitor.VisitOpenApiRefPropertyRequest(o.OpenApiRefPropertyRequest)
-	}
-	return fmt.Errorf("type %T does not include a non-empty union type", o)
-}
-
-// An OpenAPI specification of a property that is a URI-reference to another schema
-type OpenApiRefProperty struct {
-	Title       *string `json:"title,omitempty" url:"title,omitempty"`
-	Description *string `json:"description,omitempty" url:"description,omitempty"`
-	Ref         string  `json:"ref" url:"ref"`
-	type_       string
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (o *OpenApiRefProperty) GetExtraProperties() map[string]interface{} {
-	return o.extraProperties
-}
-
-func (o *OpenApiRefProperty) Type() string {
-	return o.type_
-}
-
-func (o *OpenApiRefProperty) UnmarshalJSON(data []byte) error {
-	type embed OpenApiRefProperty
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*o = OpenApiRefProperty(unmarshaler.embed)
-	if unmarshaler.Type != "ref" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "ref", unmarshaler.Type)
-	}
-	o.type_ = unmarshaler.Type
-
-	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
-	if err != nil {
-		return err
-	}
-	o.extraProperties = extraProperties
-
-	o._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (o *OpenApiRefProperty) MarshalJSON() ([]byte, error) {
-	type embed OpenApiRefProperty
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-		Type:  "ref",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (o *OpenApiRefProperty) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(o); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", o)
-}
-
-// An OpenAPI specification of a property that is a URI-reference to another schema
-type OpenApiRefPropertyRequest struct {
-	Title       *string `json:"title,omitempty" url:"title,omitempty"`
-	Description *string `json:"description,omitempty" url:"description,omitempty"`
-	Ref         string  `json:"ref" url:"ref"`
-	type_       string
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (o *OpenApiRefPropertyRequest) GetExtraProperties() map[string]interface{} {
-	return o.extraProperties
-}
-
-func (o *OpenApiRefPropertyRequest) Type() string {
-	return o.type_
-}
-
-func (o *OpenApiRefPropertyRequest) UnmarshalJSON(data []byte) error {
-	type embed OpenApiRefPropertyRequest
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*o = OpenApiRefPropertyRequest(unmarshaler.embed)
-	if unmarshaler.Type != "ref" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "ref", unmarshaler.Type)
-	}
-	o.type_ = unmarshaler.Type
-
-	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
-	if err != nil {
-		return err
-	}
-	o.extraProperties = extraProperties
-
-	o._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (o *OpenApiRefPropertyRequest) MarshalJSON() ([]byte, error) {
-	type embed OpenApiRefPropertyRequest
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-		Type:  "ref",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (o *OpenApiRefPropertyRequest) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(o); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", o)
-}
-
-// An OpenAPI specification of a property with type 'string'
-type OpenApiStringProperty struct {
-	MinLength   *int    `json:"min_length,omitempty" url:"min_length,omitempty"`
-	MaxLength   *int    `json:"max_length,omitempty" url:"max_length,omitempty"`
-	Pattern     *string `json:"pattern,omitempty" url:"pattern,omitempty"`
-	Format      *string `json:"format,omitempty" url:"format,omitempty"`
-	Default     *string `json:"default,omitempty" url:"default,omitempty"`
-	Title       *string `json:"title,omitempty" url:"title,omitempty"`
-	Description *string `json:"description,omitempty" url:"description,omitempty"`
-	type_       string
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (o *OpenApiStringProperty) GetExtraProperties() map[string]interface{} {
-	return o.extraProperties
-}
-
-func (o *OpenApiStringProperty) Type() string {
-	return o.type_
-}
-
-func (o *OpenApiStringProperty) UnmarshalJSON(data []byte) error {
-	type embed OpenApiStringProperty
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*o = OpenApiStringProperty(unmarshaler.embed)
-	if unmarshaler.Type != "string" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "string", unmarshaler.Type)
-	}
-	o.type_ = unmarshaler.Type
-
-	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
-	if err != nil {
-		return err
-	}
-	o.extraProperties = extraProperties
-
-	o._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (o *OpenApiStringProperty) MarshalJSON() ([]byte, error) {
-	type embed OpenApiStringProperty
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-		Type:  "string",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (o *OpenApiStringProperty) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(o); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", o)
-}
-
-// An OpenAPI specification of a property with type 'string'
-type OpenApiStringPropertyRequest struct {
-	MinLength   *int    `json:"min_length,omitempty" url:"min_length,omitempty"`
-	MaxLength   *int    `json:"max_length,omitempty" url:"max_length,omitempty"`
-	Pattern     *string `json:"pattern,omitempty" url:"pattern,omitempty"`
-	Format      *string `json:"format,omitempty" url:"format,omitempty"`
-	Default     *string `json:"default,omitempty" url:"default,omitempty"`
-	Title       *string `json:"title,omitempty" url:"title,omitempty"`
-	Description *string `json:"description,omitempty" url:"description,omitempty"`
-	type_       string
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (o *OpenApiStringPropertyRequest) GetExtraProperties() map[string]interface{} {
-	return o.extraProperties
-}
-
-func (o *OpenApiStringPropertyRequest) Type() string {
-	return o.type_
-}
-
-func (o *OpenApiStringPropertyRequest) UnmarshalJSON(data []byte) error {
-	type embed OpenApiStringPropertyRequest
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*o = OpenApiStringPropertyRequest(unmarshaler.embed)
-	if unmarshaler.Type != "string" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "string", unmarshaler.Type)
-	}
-	o.type_ = unmarshaler.Type
-
-	extraProperties, err := core.ExtractExtraProperties(data, *o, "type")
-	if err != nil {
-		return err
-	}
-	o.extraProperties = extraProperties
-
-	o._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (o *OpenApiStringPropertyRequest) MarshalJSON() ([]byte, error) {
-	type embed OpenApiStringPropertyRequest
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*o),
-		Type:  "string",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (o *OpenApiStringPropertyRequest) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(o); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", o)
-}
-
 type PaginatedDocumentIndexReadList struct {
 	Count    *int                 `json:"count,omitempty" url:"count,omitempty"`
 	Next     *string              `json:"next,omitempty" url:"next,omitempty"`
@@ -14432,50 +12305,6 @@ func (p *PaginatedDocumentIndexReadList) UnmarshalJSON(data []byte) error {
 }
 
 func (p *PaginatedDocumentIndexReadList) String() string {
-	if len(p._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(p); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", p)
-}
-
-type PaginatedMlModelReadList struct {
-	Count    *int           `json:"count,omitempty" url:"count,omitempty"`
-	Next     *string        `json:"next,omitempty" url:"next,omitempty"`
-	Previous *string        `json:"previous,omitempty" url:"previous,omitempty"`
-	Results  []*MlModelRead `json:"results,omitempty" url:"results,omitempty"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (p *PaginatedMlModelReadList) GetExtraProperties() map[string]interface{} {
-	return p.extraProperties
-}
-
-func (p *PaginatedMlModelReadList) UnmarshalJSON(data []byte) error {
-	type unmarshaler PaginatedMlModelReadList
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*p = PaginatedMlModelReadList(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *p)
-	if err != nil {
-		return err
-	}
-	p.extraProperties = extraProperties
-
-	p._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (p *PaginatedMlModelReadList) String() string {
 	if len(p._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
 			return value
@@ -14849,6 +12678,77 @@ func (p *PdfSearchResultMetaSourceRequest) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
+// A block that holds a plain text string value.
+type PlainTextPromptBlockRequest struct {
+	Text        string                             `json:"text" url:"text"`
+	Id          string                             `json:"id" url:"id"`
+	State       *PromptBlockState                  `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *EphemeralPromptCacheConfigRequest `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	blockType   string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PlainTextPromptBlockRequest) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PlainTextPromptBlockRequest) BlockType() string {
+	return p.blockType
+}
+
+func (p *PlainTextPromptBlockRequest) UnmarshalJSON(data []byte) error {
+	type embed PlainTextPromptBlockRequest
+	var unmarshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed: embed(*p),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*p = PlainTextPromptBlockRequest(unmarshaler.embed)
+	if unmarshaler.BlockType != "PLAIN_TEXT" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", p, "PLAIN_TEXT", unmarshaler.BlockType)
+	}
+	p.blockType = unmarshaler.BlockType
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p, "block_type")
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PlainTextPromptBlockRequest) MarshalJSON() ([]byte, error) {
+	type embed PlainTextPromptBlockRequest
+	var marshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed:     embed(*p),
+		BlockType: "PLAIN_TEXT",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (p *PlainTextPromptBlockRequest) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
 // - `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit
 // - `INVALID_FILE` - Invalid File
 type ProcessingFailureReasonEnum string
@@ -14905,7 +12805,114 @@ func (p ProcessingStateEnum) Ptr() *ProcessingStateEnum {
 	return &p
 }
 
-type PromptDeploymentExpandMetaRequestRequest struct {
+type PromptBlockRequest struct {
+	JinjaPromptBlockRequest              *JinjaPromptBlockRequest
+	ChatMessagePromptBlockRequest        *ChatMessagePromptBlockRequest
+	FunctionDefinitionPromptBlockRequest *FunctionDefinitionPromptBlockRequest
+	VariablePromptBlockRequest           *VariablePromptBlockRequest
+	RichTextPromptBlockRequest           *RichTextPromptBlockRequest
+}
+
+func (p *PromptBlockRequest) UnmarshalJSON(data []byte) error {
+	valueJinjaPromptBlockRequest := new(JinjaPromptBlockRequest)
+	if err := json.Unmarshal(data, &valueJinjaPromptBlockRequest); err == nil {
+		p.JinjaPromptBlockRequest = valueJinjaPromptBlockRequest
+		return nil
+	}
+	valueChatMessagePromptBlockRequest := new(ChatMessagePromptBlockRequest)
+	if err := json.Unmarshal(data, &valueChatMessagePromptBlockRequest); err == nil {
+		p.ChatMessagePromptBlockRequest = valueChatMessagePromptBlockRequest
+		return nil
+	}
+	valueFunctionDefinitionPromptBlockRequest := new(FunctionDefinitionPromptBlockRequest)
+	if err := json.Unmarshal(data, &valueFunctionDefinitionPromptBlockRequest); err == nil {
+		p.FunctionDefinitionPromptBlockRequest = valueFunctionDefinitionPromptBlockRequest
+		return nil
+	}
+	valueVariablePromptBlockRequest := new(VariablePromptBlockRequest)
+	if err := json.Unmarshal(data, &valueVariablePromptBlockRequest); err == nil {
+		p.VariablePromptBlockRequest = valueVariablePromptBlockRequest
+		return nil
+	}
+	valueRichTextPromptBlockRequest := new(RichTextPromptBlockRequest)
+	if err := json.Unmarshal(data, &valueRichTextPromptBlockRequest); err == nil {
+		p.RichTextPromptBlockRequest = valueRichTextPromptBlockRequest
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, p)
+}
+
+func (p PromptBlockRequest) MarshalJSON() ([]byte, error) {
+	if p.JinjaPromptBlockRequest != nil {
+		return json.Marshal(p.JinjaPromptBlockRequest)
+	}
+	if p.ChatMessagePromptBlockRequest != nil {
+		return json.Marshal(p.ChatMessagePromptBlockRequest)
+	}
+	if p.FunctionDefinitionPromptBlockRequest != nil {
+		return json.Marshal(p.FunctionDefinitionPromptBlockRequest)
+	}
+	if p.VariablePromptBlockRequest != nil {
+		return json.Marshal(p.VariablePromptBlockRequest)
+	}
+	if p.RichTextPromptBlockRequest != nil {
+		return json.Marshal(p.RichTextPromptBlockRequest)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", p)
+}
+
+type PromptBlockRequestVisitor interface {
+	VisitJinjaPromptBlockRequest(*JinjaPromptBlockRequest) error
+	VisitChatMessagePromptBlockRequest(*ChatMessagePromptBlockRequest) error
+	VisitFunctionDefinitionPromptBlockRequest(*FunctionDefinitionPromptBlockRequest) error
+	VisitVariablePromptBlockRequest(*VariablePromptBlockRequest) error
+	VisitRichTextPromptBlockRequest(*RichTextPromptBlockRequest) error
+}
+
+func (p *PromptBlockRequest) Accept(visitor PromptBlockRequestVisitor) error {
+	if p.JinjaPromptBlockRequest != nil {
+		return visitor.VisitJinjaPromptBlockRequest(p.JinjaPromptBlockRequest)
+	}
+	if p.ChatMessagePromptBlockRequest != nil {
+		return visitor.VisitChatMessagePromptBlockRequest(p.ChatMessagePromptBlockRequest)
+	}
+	if p.FunctionDefinitionPromptBlockRequest != nil {
+		return visitor.VisitFunctionDefinitionPromptBlockRequest(p.FunctionDefinitionPromptBlockRequest)
+	}
+	if p.VariablePromptBlockRequest != nil {
+		return visitor.VisitVariablePromptBlockRequest(p.VariablePromptBlockRequest)
+	}
+	if p.RichTextPromptBlockRequest != nil {
+		return visitor.VisitRichTextPromptBlockRequest(p.RichTextPromptBlockRequest)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", p)
+}
+
+// - `ENABLED` - ENABLED
+// - `DISABLED` - DISABLED
+type PromptBlockState string
+
+const (
+	PromptBlockStateEnabled  PromptBlockState = "ENABLED"
+	PromptBlockStateDisabled PromptBlockState = "DISABLED"
+)
+
+func NewPromptBlockStateFromString(s string) (PromptBlockState, error) {
+	switch s {
+	case "ENABLED":
+		return PromptBlockStateEnabled, nil
+	case "DISABLED":
+		return PromptBlockStateDisabled, nil
+	}
+	var t PromptBlockState
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (p PromptBlockState) Ptr() *PromptBlockState {
+	return &p
+}
+
+type PromptDeploymentExpandMetaRequest struct {
 	// If enabled, the response will include the model identifier representing the ML Model invoked by the Prompt.
 	ModelName *bool `json:"model_name,omitempty" url:"model_name,omitempty"`
 	// If enabled, the response will include model host usage tracking. This may increase latency for some model hosts.
@@ -14923,17 +12930,17 @@ type PromptDeploymentExpandMetaRequestRequest struct {
 	_rawJSON        json.RawMessage
 }
 
-func (p *PromptDeploymentExpandMetaRequestRequest) GetExtraProperties() map[string]interface{} {
+func (p *PromptDeploymentExpandMetaRequest) GetExtraProperties() map[string]interface{} {
 	return p.extraProperties
 }
 
-func (p *PromptDeploymentExpandMetaRequestRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler PromptDeploymentExpandMetaRequestRequest
+func (p *PromptDeploymentExpandMetaRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler PromptDeploymentExpandMetaRequest
 	var value unmarshaler
 	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*p = PromptDeploymentExpandMetaRequestRequest(value)
+	*p = PromptDeploymentExpandMetaRequest(value)
 
 	extraProperties, err := core.ExtractExtraProperties(data, *p)
 	if err != nil {
@@ -14945,7 +12952,7 @@ func (p *PromptDeploymentExpandMetaRequestRequest) UnmarshalJSON(data []byte) er
 	return nil
 }
 
-func (p *PromptDeploymentExpandMetaRequestRequest) String() string {
+func (p *PromptDeploymentExpandMetaRequest) String() string {
 	if len(p._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
 			return value
@@ -15287,6 +13294,319 @@ func (p *PromptOutput) Accept(visitor PromptOutputVisitor) error {
 	return fmt.Errorf("type %T does not include a non-empty union type", p)
 }
 
+type PromptParametersRequest struct {
+	Stop             []string               `json:"stop,omitempty" url:"stop,omitempty"`
+	Temperature      *float64               `json:"temperature,omitempty" url:"temperature,omitempty"`
+	MaxTokens        *int                   `json:"max_tokens,omitempty" url:"max_tokens,omitempty"`
+	TopP             *float64               `json:"top_p,omitempty" url:"top_p,omitempty"`
+	TopK             *int                   `json:"top_k,omitempty" url:"top_k,omitempty"`
+	FrequencyPenalty *float64               `json:"frequency_penalty,omitempty" url:"frequency_penalty,omitempty"`
+	PresencePenalty  *float64               `json:"presence_penalty,omitempty" url:"presence_penalty,omitempty"`
+	LogitBias        map[string]*float64    `json:"logit_bias,omitempty" url:"logit_bias,omitempty"`
+	CustomParameters map[string]interface{} `json:"custom_parameters,omitempty" url:"custom_parameters,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PromptParametersRequest) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PromptParametersRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler PromptParametersRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PromptParametersRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PromptParametersRequest) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PromptRequestChatHistoryInputRequest struct {
+	// The variable's name, as defined in the Prompt.
+	Key   string                `json:"key" url:"key"`
+	Value []*ChatMessageRequest `json:"value" url:"value"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PromptRequestChatHistoryInputRequest) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PromptRequestChatHistoryInputRequest) Type() string {
+	return p.type_
+}
+
+func (p *PromptRequestChatHistoryInputRequest) UnmarshalJSON(data []byte) error {
+	type embed PromptRequestChatHistoryInputRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*p),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*p = PromptRequestChatHistoryInputRequest(unmarshaler.embed)
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", p, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	p.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p, "type")
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PromptRequestChatHistoryInputRequest) MarshalJSON() ([]byte, error) {
+	type embed PromptRequestChatHistoryInputRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*p),
+		Type:  "CHAT_HISTORY",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (p *PromptRequestChatHistoryInputRequest) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PromptRequestInputRequest struct {
+	PromptRequestStringInputRequest      *PromptRequestStringInputRequest
+	PromptRequestJsonInputRequest        *PromptRequestJsonInputRequest
+	PromptRequestChatHistoryInputRequest *PromptRequestChatHistoryInputRequest
+}
+
+func (p *PromptRequestInputRequest) UnmarshalJSON(data []byte) error {
+	valuePromptRequestStringInputRequest := new(PromptRequestStringInputRequest)
+	if err := json.Unmarshal(data, &valuePromptRequestStringInputRequest); err == nil {
+		p.PromptRequestStringInputRequest = valuePromptRequestStringInputRequest
+		return nil
+	}
+	valuePromptRequestJsonInputRequest := new(PromptRequestJsonInputRequest)
+	if err := json.Unmarshal(data, &valuePromptRequestJsonInputRequest); err == nil {
+		p.PromptRequestJsonInputRequest = valuePromptRequestJsonInputRequest
+		return nil
+	}
+	valuePromptRequestChatHistoryInputRequest := new(PromptRequestChatHistoryInputRequest)
+	if err := json.Unmarshal(data, &valuePromptRequestChatHistoryInputRequest); err == nil {
+		p.PromptRequestChatHistoryInputRequest = valuePromptRequestChatHistoryInputRequest
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, p)
+}
+
+func (p PromptRequestInputRequest) MarshalJSON() ([]byte, error) {
+	if p.PromptRequestStringInputRequest != nil {
+		return json.Marshal(p.PromptRequestStringInputRequest)
+	}
+	if p.PromptRequestJsonInputRequest != nil {
+		return json.Marshal(p.PromptRequestJsonInputRequest)
+	}
+	if p.PromptRequestChatHistoryInputRequest != nil {
+		return json.Marshal(p.PromptRequestChatHistoryInputRequest)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", p)
+}
+
+type PromptRequestInputRequestVisitor interface {
+	VisitPromptRequestStringInputRequest(*PromptRequestStringInputRequest) error
+	VisitPromptRequestJsonInputRequest(*PromptRequestJsonInputRequest) error
+	VisitPromptRequestChatHistoryInputRequest(*PromptRequestChatHistoryInputRequest) error
+}
+
+func (p *PromptRequestInputRequest) Accept(visitor PromptRequestInputRequestVisitor) error {
+	if p.PromptRequestStringInputRequest != nil {
+		return visitor.VisitPromptRequestStringInputRequest(p.PromptRequestStringInputRequest)
+	}
+	if p.PromptRequestJsonInputRequest != nil {
+		return visitor.VisitPromptRequestJsonInputRequest(p.PromptRequestJsonInputRequest)
+	}
+	if p.PromptRequestChatHistoryInputRequest != nil {
+		return visitor.VisitPromptRequestChatHistoryInputRequest(p.PromptRequestChatHistoryInputRequest)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", p)
+}
+
+type PromptRequestJsonInputRequest struct {
+	// The variable's name, as defined in the Prompt.
+	Key   string                 `json:"key" url:"key"`
+	Value map[string]interface{} `json:"value" url:"value"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PromptRequestJsonInputRequest) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PromptRequestJsonInputRequest) Type() string {
+	return p.type_
+}
+
+func (p *PromptRequestJsonInputRequest) UnmarshalJSON(data []byte) error {
+	type embed PromptRequestJsonInputRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*p),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*p = PromptRequestJsonInputRequest(unmarshaler.embed)
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", p, "JSON", unmarshaler.Type)
+	}
+	p.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p, "type")
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PromptRequestJsonInputRequest) MarshalJSON() ([]byte, error) {
+	type embed PromptRequestJsonInputRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*p),
+		Type:  "JSON",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (p *PromptRequestJsonInputRequest) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PromptRequestStringInputRequest struct {
+	// The variable's name, as defined in the Prompt.
+	Key   string `json:"key" url:"key"`
+	Value string `json:"value" url:"value"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PromptRequestStringInputRequest) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PromptRequestStringInputRequest) Type() string {
+	return p.type_
+}
+
+func (p *PromptRequestStringInputRequest) UnmarshalJSON(data []byte) error {
+	type embed PromptRequestStringInputRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*p),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*p = PromptRequestStringInputRequest(unmarshaler.embed)
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", p, "STRING", unmarshaler.Type)
+	}
+	p.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p, "type")
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PromptRequestStringInputRequest) MarshalJSON() ([]byte, error) {
+	type embed PromptRequestStringInputRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*p),
+		Type:  "STRING",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (p *PromptRequestStringInputRequest) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
 type RawPromptExecutionOverridesRequest struct {
 	Body map[string]interface{} `json:"body,omitempty" url:"body,omitempty"`
 	// The raw headers to send to the model host.
@@ -15541,6 +13861,76 @@ func (r *ReductoChunkingRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (r *ReductoChunkingRequest) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+// The final data returned indicating an error occurred during the stream.
+type RejectedAdHocExecutePromptEvent struct {
+	Error       *VellumError                      `json:"error" url:"error"`
+	ExecutionId string                            `json:"execution_id" url:"execution_id"`
+	Meta        *AdHocRejectedPromptExecutionMeta `json:"meta,omitempty" url:"meta,omitempty"`
+	state       string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RejectedAdHocExecutePromptEvent) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RejectedAdHocExecutePromptEvent) State() string {
+	return r.state
+}
+
+func (r *RejectedAdHocExecutePromptEvent) UnmarshalJSON(data []byte) error {
+	type embed RejectedAdHocExecutePromptEvent
+	var unmarshaler = struct {
+		embed
+		State string `json:"state"`
+	}{
+		embed: embed(*r),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*r = RejectedAdHocExecutePromptEvent(unmarshaler.embed)
+	if unmarshaler.State != "REJECTED" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", r, "REJECTED", unmarshaler.State)
+	}
+	r.state = unmarshaler.State
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r, "state")
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RejectedAdHocExecutePromptEvent) MarshalJSON() ([]byte, error) {
+	type embed RejectedAdHocExecutePromptEvent
+	var marshaler = struct {
+		embed
+		State string `json:"state"`
+	}{
+		embed: embed(*r),
+		State: "REJECTED",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (r *RejectedAdHocExecutePromptEvent) String() string {
 	if len(r._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
 			return value
@@ -15954,6 +14344,121 @@ func (r *ReplaceTestSuiteTestCaseRequest) UnmarshalJSON(data []byte) error {
 }
 
 func (r *ReplaceTestSuiteTestCaseRequest) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+type RichTextChildBlockRequest struct {
+	VariablePromptBlockRequest  *VariablePromptBlockRequest
+	PlainTextPromptBlockRequest *PlainTextPromptBlockRequest
+}
+
+func (r *RichTextChildBlockRequest) UnmarshalJSON(data []byte) error {
+	valueVariablePromptBlockRequest := new(VariablePromptBlockRequest)
+	if err := json.Unmarshal(data, &valueVariablePromptBlockRequest); err == nil {
+		r.VariablePromptBlockRequest = valueVariablePromptBlockRequest
+		return nil
+	}
+	valuePlainTextPromptBlockRequest := new(PlainTextPromptBlockRequest)
+	if err := json.Unmarshal(data, &valuePlainTextPromptBlockRequest); err == nil {
+		r.PlainTextPromptBlockRequest = valuePlainTextPromptBlockRequest
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, r)
+}
+
+func (r RichTextChildBlockRequest) MarshalJSON() ([]byte, error) {
+	if r.VariablePromptBlockRequest != nil {
+		return json.Marshal(r.VariablePromptBlockRequest)
+	}
+	if r.PlainTextPromptBlockRequest != nil {
+		return json.Marshal(r.PlainTextPromptBlockRequest)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", r)
+}
+
+type RichTextChildBlockRequestVisitor interface {
+	VisitVariablePromptBlockRequest(*VariablePromptBlockRequest) error
+	VisitPlainTextPromptBlockRequest(*PlainTextPromptBlockRequest) error
+}
+
+func (r *RichTextChildBlockRequest) Accept(visitor RichTextChildBlockRequestVisitor) error {
+	if r.VariablePromptBlockRequest != nil {
+		return visitor.VisitVariablePromptBlockRequest(r.VariablePromptBlockRequest)
+	}
+	if r.PlainTextPromptBlockRequest != nil {
+		return visitor.VisitPlainTextPromptBlockRequest(r.PlainTextPromptBlockRequest)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", r)
+}
+
+// A block that includes a combination of plain text and variable blocks.
+type RichTextPromptBlockRequest struct {
+	Blocks      []*RichTextChildBlockRequest       `json:"blocks" url:"blocks"`
+	Id          string                             `json:"id" url:"id"`
+	State       *PromptBlockState                  `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *EphemeralPromptCacheConfigRequest `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	blockType   string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RichTextPromptBlockRequest) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RichTextPromptBlockRequest) BlockType() string {
+	return r.blockType
+}
+
+func (r *RichTextPromptBlockRequest) UnmarshalJSON(data []byte) error {
+	type embed RichTextPromptBlockRequest
+	var unmarshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed: embed(*r),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*r = RichTextPromptBlockRequest(unmarshaler.embed)
+	if unmarshaler.BlockType != "RICH_TEXT" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", r, "RICH_TEXT", unmarshaler.BlockType)
+	}
+	r.blockType = unmarshaler.BlockType
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r, "block_type")
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RichTextPromptBlockRequest) MarshalJSON() ([]byte, error) {
+	type embed RichTextPromptBlockRequest
+	var marshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed:     embed(*r),
+		BlockType: "RICH_TEXT",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (r *RichTextPromptBlockRequest) String() string {
 	if len(r._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
 			return value
@@ -17351,6 +15856,79 @@ func (s *SlimWorkflowDeployment) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SlimWorkflowDeployment) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// The data returned for each delta during the prompt execution stream.
+type StreamingAdHocExecutePromptEvent struct {
+	Output      *PromptOutput                      `json:"output" url:"output"`
+	OutputIndex int                                `json:"output_index" url:"output_index"`
+	ExecutionId string                             `json:"execution_id" url:"execution_id"`
+	Meta        *AdHocStreamingPromptExecutionMeta `json:"meta,omitempty" url:"meta,omitempty"`
+	// The subset of the raw response from the model that the request opted into with `expand_raw`.
+	Raw   map[string]interface{} `json:"raw,omitempty" url:"raw,omitempty"`
+	state string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *StreamingAdHocExecutePromptEvent) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *StreamingAdHocExecutePromptEvent) State() string {
+	return s.state
+}
+
+func (s *StreamingAdHocExecutePromptEvent) UnmarshalJSON(data []byte) error {
+	type embed StreamingAdHocExecutePromptEvent
+	var unmarshaler = struct {
+		embed
+		State string `json:"state"`
+	}{
+		embed: embed(*s),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*s = StreamingAdHocExecutePromptEvent(unmarshaler.embed)
+	if unmarshaler.State != "STREAMING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "STREAMING", unmarshaler.State)
+	}
+	s.state = unmarshaler.State
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s, "state")
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *StreamingAdHocExecutePromptEvent) MarshalJSON() ([]byte, error) {
+	type embed StreamingAdHocExecutePromptEvent
+	var marshaler = struct {
+		embed
+		State string `json:"state"`
+	}{
+		embed: embed(*s),
+		State: "STREAMING",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (s *StreamingAdHocExecutePromptEvent) String() string {
 	if len(s._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
 			return value
@@ -23383,142 +21961,6 @@ func (t *TestSuiteTestCaseUpsertBulkOperationRequest) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
-// Tokenizer config for OpenAI's TikToken type tokenizers.
-type TikTokenTokenizerConfig struct {
-	Name  string `json:"name" url:"name"`
-	type_ string
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (t *TikTokenTokenizerConfig) GetExtraProperties() map[string]interface{} {
-	return t.extraProperties
-}
-
-func (t *TikTokenTokenizerConfig) Type() string {
-	return t.type_
-}
-
-func (t *TikTokenTokenizerConfig) UnmarshalJSON(data []byte) error {
-	type embed TikTokenTokenizerConfig
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*t = TikTokenTokenizerConfig(unmarshaler.embed)
-	if unmarshaler.Type != "TIKTOKEN" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "TIKTOKEN", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
-
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
-	if err != nil {
-		return err
-	}
-	t.extraProperties = extraProperties
-
-	t._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (t *TikTokenTokenizerConfig) MarshalJSON() ([]byte, error) {
-	type embed TikTokenTokenizerConfig
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "TIKTOKEN",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (t *TikTokenTokenizerConfig) String() string {
-	if len(t._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(t); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", t)
-}
-
-// Tokenizer config for OpenAI's TikToken type tokenizers.
-type TikTokenTokenizerConfigRequest struct {
-	Name  string `json:"name" url:"name"`
-	type_ string
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (t *TikTokenTokenizerConfigRequest) GetExtraProperties() map[string]interface{} {
-	return t.extraProperties
-}
-
-func (t *TikTokenTokenizerConfigRequest) Type() string {
-	return t.type_
-}
-
-func (t *TikTokenTokenizerConfigRequest) UnmarshalJSON(data []byte) error {
-	type embed TikTokenTokenizerConfigRequest
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*t = TikTokenTokenizerConfigRequest(unmarshaler.embed)
-	if unmarshaler.Type != "TIKTOKEN" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "TIKTOKEN", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
-
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
-	if err != nil {
-		return err
-	}
-	t.extraProperties = extraProperties
-
-	t._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (t *TikTokenTokenizerConfigRequest) MarshalJSON() ([]byte, error) {
-	type embed TikTokenTokenizerConfigRequest
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "TIKTOKEN",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (t *TikTokenTokenizerConfigRequest) String() string {
-	if len(t._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(t); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", t)
-}
-
 // Configuration for token overlapping window chunking
 type TokenOverlappingWindowChunkerConfig struct {
 	TokenLimit   *int     `json:"token_limit,omitempty" url:"token_limit,omitempty"`
@@ -23833,6 +22275,77 @@ func (u *UpsertTestSuiteTestCaseRequest) String() string {
 	return fmt.Sprintf("%#v", u)
 }
 
+// A block that represents a variable in a prompt template.
+type VariablePromptBlockRequest struct {
+	Id              string                             `json:"id" url:"id"`
+	State           *PromptBlockState                  `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig     *EphemeralPromptCacheConfigRequest `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	InputVariableId string                             `json:"input_variable_id" url:"input_variable_id"`
+	blockType       string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VariablePromptBlockRequest) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VariablePromptBlockRequest) BlockType() string {
+	return v.blockType
+}
+
+func (v *VariablePromptBlockRequest) UnmarshalJSON(data []byte) error {
+	type embed VariablePromptBlockRequest
+	var unmarshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed: embed(*v),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*v = VariablePromptBlockRequest(unmarshaler.embed)
+	if unmarshaler.BlockType != "VARIABLE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", v, "VARIABLE", unmarshaler.BlockType)
+	}
+	v.blockType = unmarshaler.BlockType
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v, "block_type")
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VariablePromptBlockRequest) MarshalJSON() ([]byte, error) {
+	type embed VariablePromptBlockRequest
+	var marshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed:     embed(*v),
+		BlockType: "VARIABLE",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (v *VariablePromptBlockRequest) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
 type VellumError struct {
 	Message string              `json:"message" url:"message"`
 	Code    VellumErrorCodeEnum `json:"code" url:"code"`
@@ -24076,6 +22589,49 @@ func (v *VellumVariable) String() string {
 	return fmt.Sprintf("%#v", v)
 }
 
+type VellumVariableRequest struct {
+	Id   string             `json:"id" url:"id"`
+	Key  string             `json:"key" url:"key"`
+	Type VellumVariableType `json:"type" url:"type"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VellumVariableRequest) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VellumVariableRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler VellumVariableRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = VellumVariableRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VellumVariableRequest) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
 // - `STRING` - STRING
 // - `NUMBER` - NUMBER
 // - `JSON` - JSON
@@ -24129,38 +22685,6 @@ func NewVellumVariableTypeFromString(s string) (VellumVariableType, error) {
 }
 
 func (v VellumVariableType) Ptr() *VellumVariableType {
-	return &v
-}
-
-// - `DEFAULT` - DEFAULT
-// - `PUBLIC` - PUBLIC
-// - `PRIVATE` - PRIVATE
-// - `DISABLED` - DISABLED
-type VisibilityEnum string
-
-const (
-	VisibilityEnumDefault  VisibilityEnum = "DEFAULT"
-	VisibilityEnumPublic   VisibilityEnum = "PUBLIC"
-	VisibilityEnumPrivate  VisibilityEnum = "PRIVATE"
-	VisibilityEnumDisabled VisibilityEnum = "DISABLED"
-)
-
-func NewVisibilityEnumFromString(s string) (VisibilityEnum, error) {
-	switch s {
-	case "DEFAULT":
-		return VisibilityEnumDefault, nil
-	case "PUBLIC":
-		return VisibilityEnumPublic, nil
-	case "PRIVATE":
-		return VisibilityEnumPrivate, nil
-	case "DISABLED":
-		return VisibilityEnumDisabled, nil
-	}
-	var t VisibilityEnum
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (v VisibilityEnum) Ptr() *VisibilityEnum {
 	return &v
 }
 

@@ -8,12 +8,12 @@ import (
 	json "encoding/json"
 	errors "errors"
 	vellumclientgo "github.com/vellum-ai/vellum-client-go"
+	adhoc "github.com/vellum-ai/vellum-client-go/adhoc"
 	core "github.com/vellum-ai/vellum-client-go/core"
 	deployments "github.com/vellum-ai/vellum-client-go/deployments"
 	documentindexes "github.com/vellum-ai/vellum-client-go/documentindexes"
 	documents "github.com/vellum-ai/vellum-client-go/documents"
 	folderentities "github.com/vellum-ai/vellum-client-go/folderentities"
-	mlmodels "github.com/vellum-ai/vellum-client-go/mlmodels"
 	option "github.com/vellum-ai/vellum-client-go/option"
 	sandboxes "github.com/vellum-ai/vellum-client-go/sandboxes"
 	testsuiteruns "github.com/vellum-ai/vellum-client-go/testsuiteruns"
@@ -29,11 +29,11 @@ type Client struct {
 	caller  *core.Caller
 	header  http.Header
 
+	AdHoc               *adhoc.Client
 	Deployments         *deployments.Client
 	DocumentIndexes     *documentindexes.Client
 	Documents           *documents.Client
 	FolderEntities      *folderentities.Client
-	MlModels            *mlmodels.Client
 	Sandboxes           *sandboxes.Client
 	TestSuiteRuns       *testsuiteruns.Client
 	TestSuites          *testsuites.Client
@@ -52,11 +52,11 @@ func NewClient(opts ...option.RequestOption) *Client {
 			},
 		),
 		header:              options.ToHeader(),
+		AdHoc:               adhoc.NewClient(opts...),
 		Deployments:         deployments.NewClient(opts...),
 		DocumentIndexes:     documentindexes.NewClient(opts...),
 		Documents:           documents.NewClient(opts...),
 		FolderEntities:      folderentities.NewClient(opts...),
-		MlModels:            mlmodels.NewClient(opts...),
 		Sandboxes:           sandboxes.NewClient(opts...),
 		TestSuiteRuns:       testsuiteruns.NewClient(opts...),
 		TestSuites:          testsuites.NewClient(opts...),

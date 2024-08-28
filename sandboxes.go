@@ -13,7 +13,7 @@ type DeploySandboxPromptRequest struct {
 	ReleaseTags []string `json:"release_tags,omitempty" url:"-"`
 }
 
-type UpsertSandboxScenarioRequestRequest struct {
+type UpsertSandboxScenarioRequest struct {
 	Label *string `json:"label,omitempty" url:"-"`
 	// The inputs for the scenario
 	Inputs []*NamedScenarioInputRequest `json:"inputs,omitempty" url:"-"`
