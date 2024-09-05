@@ -12753,6 +12753,48 @@ func (p *PlainTextPromptBlockRequest) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
+type Price struct {
+	Value float64  `json:"value" url:"value"`
+	Unit  UnitEnum `json:"unit" url:"unit"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *Price) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *Price) UnmarshalJSON(data []byte) error {
+	type unmarshaler Price
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = Price(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *Price) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
 // - `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit
 // - `INVALID_FILE` - Invalid File
 type ProcessingFailureReasonEnum string
@@ -12921,6 +12963,7 @@ type PromptDeploymentExpandMetaRequest struct {
 	ModelName *bool `json:"model_name,omitempty" url:"model_name,omitempty"`
 	// If enabled, the response will include model host usage tracking. This may increase latency for some model hosts.
 	Usage *bool `json:"usage,omitempty" url:"usage,omitempty"`
+	Cost  *bool `json:"cost,omitempty" url:"cost,omitempty"`
 	// If enabled, the response will include the reason provided by the model for why the execution finished.
 	FinishReason *bool `json:"finish_reason,omitempty" url:"finish_reason,omitempty"`
 	// If enabled, the response will include the time in nanoseconds it took to execute the Prompt Deployment.
@@ -13033,6 +13076,7 @@ type PromptExecutionMeta struct {
 	PromptVersionId      *string           `json:"prompt_version_id,omitempty" url:"prompt_version_id,omitempty"`
 	FinishReason         *FinishReasonEnum `json:"finish_reason,omitempty" url:"finish_reason,omitempty"`
 	Usage                *MlModelUsage     `json:"usage,omitempty" url:"usage,omitempty"`
+	Cost                 *Price            `json:"cost,omitempty" url:"cost,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -20480,6 +20524,75 @@ func (t *TestSuiteRunMetricErrorOutput) String() string {
 }
 
 // Output for a test suite run metric that is of type NUMBER
+type TestSuiteRunMetricJsonOutput struct {
+	Value interface{} `json:"value" url:"value"`
+	Name  string      `json:"name" url:"name"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunMetricJsonOutput) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunMetricJsonOutput) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteRunMetricJsonOutput) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteRunMetricJsonOutput
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteRunMetricJsonOutput(unmarshaler.embed)
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "JSON", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunMetricJsonOutput) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteRunMetricJsonOutput
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "JSON",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteRunMetricJsonOutput) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Output for a test suite run metric that is of type NUMBER
 type TestSuiteRunMetricNumberOutput struct {
 	Value *float64 `json:"value,omitempty" url:"value,omitempty"`
 	Name  string   `json:"name" url:"name"`
@@ -20551,6 +20664,7 @@ func (t *TestSuiteRunMetricNumberOutput) String() string {
 type TestSuiteRunMetricOutput struct {
 	TestSuiteRunMetricStringOutput *TestSuiteRunMetricStringOutput
 	TestSuiteRunMetricNumberOutput *TestSuiteRunMetricNumberOutput
+	TestSuiteRunMetricJsonOutput   *TestSuiteRunMetricJsonOutput
 	TestSuiteRunMetricErrorOutput  *TestSuiteRunMetricErrorOutput
 }
 
@@ -20563,6 +20677,11 @@ func (t *TestSuiteRunMetricOutput) UnmarshalJSON(data []byte) error {
 	valueTestSuiteRunMetricNumberOutput := new(TestSuiteRunMetricNumberOutput)
 	if err := json.Unmarshal(data, &valueTestSuiteRunMetricNumberOutput); err == nil {
 		t.TestSuiteRunMetricNumberOutput = valueTestSuiteRunMetricNumberOutput
+		return nil
+	}
+	valueTestSuiteRunMetricJsonOutput := new(TestSuiteRunMetricJsonOutput)
+	if err := json.Unmarshal(data, &valueTestSuiteRunMetricJsonOutput); err == nil {
+		t.TestSuiteRunMetricJsonOutput = valueTestSuiteRunMetricJsonOutput
 		return nil
 	}
 	valueTestSuiteRunMetricErrorOutput := new(TestSuiteRunMetricErrorOutput)
@@ -20580,6 +20699,9 @@ func (t TestSuiteRunMetricOutput) MarshalJSON() ([]byte, error) {
 	if t.TestSuiteRunMetricNumberOutput != nil {
 		return json.Marshal(t.TestSuiteRunMetricNumberOutput)
 	}
+	if t.TestSuiteRunMetricJsonOutput != nil {
+		return json.Marshal(t.TestSuiteRunMetricJsonOutput)
+	}
 	if t.TestSuiteRunMetricErrorOutput != nil {
 		return json.Marshal(t.TestSuiteRunMetricErrorOutput)
 	}
@@ -20589,6 +20711,7 @@ func (t TestSuiteRunMetricOutput) MarshalJSON() ([]byte, error) {
 type TestSuiteRunMetricOutputVisitor interface {
 	VisitTestSuiteRunMetricStringOutput(*TestSuiteRunMetricStringOutput) error
 	VisitTestSuiteRunMetricNumberOutput(*TestSuiteRunMetricNumberOutput) error
+	VisitTestSuiteRunMetricJsonOutput(*TestSuiteRunMetricJsonOutput) error
 	VisitTestSuiteRunMetricErrorOutput(*TestSuiteRunMetricErrorOutput) error
 }
 
@@ -20598,6 +20721,9 @@ func (t *TestSuiteRunMetricOutput) Accept(visitor TestSuiteRunMetricOutputVisito
 	}
 	if t.TestSuiteRunMetricNumberOutput != nil {
 		return visitor.VisitTestSuiteRunMetricNumberOutput(t.TestSuiteRunMetricNumberOutput)
+	}
+	if t.TestSuiteRunMetricJsonOutput != nil {
+		return visitor.VisitTestSuiteRunMetricJsonOutput(t.TestSuiteRunMetricJsonOutput)
 	}
 	if t.TestSuiteRunMetricErrorOutput != nil {
 		return visitor.VisitTestSuiteRunMetricErrorOutput(t.TestSuiteRunMetricErrorOutput)
@@ -22186,6 +22312,9 @@ func (t *TokenOverlappingWindowChunkingRequest) String() string {
 	}
 	return fmt.Sprintf("%#v", t)
 }
+
+// - `USD` - USD
+type UnitEnum = string
 
 type UploadDocumentResponse struct {
 	// The ID of the newly created document.
