@@ -196,7 +196,7 @@ func (c *Client) Destroy(
 ) error {
 	options := core.NewRequestOptions(opts...)
 
-	baseURL := "https://api.vellum.ai"
+	baseURL := "https://documents.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
@@ -313,7 +313,7 @@ func (c *Client) RemoveDocument(
 ) error {
 	options := core.NewRequestOptions(opts...)
 
-	baseURL := "https://api.vellum.ai"
+	baseURL := "https://documents.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}

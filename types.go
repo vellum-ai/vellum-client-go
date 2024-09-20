@@ -7541,11 +7541,13 @@ func (i *InstructorVectorizerConfigRequest) String() string {
 
 // - `INITIATED` - INITIATED
 // - `FULFILLED` - FULFILLED
+// - `REJECTED` - REJECTED
 type IterationStateEnum string
 
 const (
 	IterationStateEnumInitiated IterationStateEnum = "INITIATED"
 	IterationStateEnumFulfilled IterationStateEnum = "FULFILLED"
+	IterationStateEnumRejected  IterationStateEnum = "REJECTED"
 )
 
 func NewIterationStateEnumFromString(s string) (IterationStateEnum, error) {
@@ -7554,6 +7556,8 @@ func NewIterationStateEnumFromString(s string) (IterationStateEnum, error) {
 		return IterationStateEnumInitiated, nil
 	case "FULFILLED":
 		return IterationStateEnumFulfilled, nil
+	case "REJECTED":
+		return IterationStateEnumRejected, nil
 	}
 	var t IterationStateEnum
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
