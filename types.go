@@ -7683,8 +7683,8 @@ func (j *JinjaPromptBlockRequest) String() string {
 // A user input representing a JSON object
 type JsonInputRequest struct {
 	// The variable's name, as defined in the deployment.
-	Name  string                 `json:"name" url:"name"`
-	Value map[string]interface{} `json:"value" url:"value"`
+	Name  string      `json:"name" url:"name"`
+	Value interface{} `json:"value" url:"value"`
 	type_ string
 
 	extraProperties map[string]interface{}
