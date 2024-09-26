@@ -795,13 +795,83 @@ func (a *ArrayChatMessageContentRequest) String() string {
 	return fmt.Sprintf("%#v", a)
 }
 
+type ArrayVariableValue struct {
+	Value []*ArrayVariableValueItem `json:"value,omitempty" url:"value,omitempty"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (a *ArrayVariableValue) GetExtraProperties() map[string]interface{} {
+	return a.extraProperties
+}
+
+func (a *ArrayVariableValue) Type() string {
+	return a.type_
+}
+
+func (a *ArrayVariableValue) UnmarshalJSON(data []byte) error {
+	type embed ArrayVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*a),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*a = ArrayVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "ARRAY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", a, "ARRAY", unmarshaler.Type)
+	}
+	a.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *a, "type")
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+
+	a._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *ArrayVariableValue) MarshalJSON() ([]byte, error) {
+	type embed ArrayVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*a),
+		Type:  "ARRAY",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (a *ArrayVariableValue) String() string {
+	if len(a._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(a._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
+
 type ArrayVariableValueItem struct {
-	StringVariableValue       *StringVariableValue
-	NumberVariableValue       *NumberVariableValue
-	JsonVariableValue         *JsonVariableValue
-	ErrorVariableValue        *ErrorVariableValue
-	FunctionCallVariableValue *FunctionCallVariableValue
-	ImageVariableValue        *ImageVariableValue
+	StringVariableValue        *StringVariableValue
+	NumberVariableValue        *NumberVariableValue
+	JsonVariableValue          *JsonVariableValue
+	ErrorVariableValue         *ErrorVariableValue
+	FunctionCallVariableValue  *FunctionCallVariableValue
+	ImageVariableValue         *ImageVariableValue
+	ChatHistoryVariableValue   *ChatHistoryVariableValue
+	SearchResultsVariableValue *SearchResultsVariableValue
+	ArrayVariableValue         *ArrayVariableValue
 }
 
 func (a *ArrayVariableValueItem) UnmarshalJSON(data []byte) error {
@@ -835,6 +905,21 @@ func (a *ArrayVariableValueItem) UnmarshalJSON(data []byte) error {
 		a.ImageVariableValue = valueImageVariableValue
 		return nil
 	}
+	valueChatHistoryVariableValue := new(ChatHistoryVariableValue)
+	if err := json.Unmarshal(data, &valueChatHistoryVariableValue); err == nil {
+		a.ChatHistoryVariableValue = valueChatHistoryVariableValue
+		return nil
+	}
+	valueSearchResultsVariableValue := new(SearchResultsVariableValue)
+	if err := json.Unmarshal(data, &valueSearchResultsVariableValue); err == nil {
+		a.SearchResultsVariableValue = valueSearchResultsVariableValue
+		return nil
+	}
+	valueArrayVariableValue := new(ArrayVariableValue)
+	if err := json.Unmarshal(data, &valueArrayVariableValue); err == nil {
+		a.ArrayVariableValue = valueArrayVariableValue
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, a)
 }
 
@@ -857,6 +942,15 @@ func (a ArrayVariableValueItem) MarshalJSON() ([]byte, error) {
 	if a.ImageVariableValue != nil {
 		return json.Marshal(a.ImageVariableValue)
 	}
+	if a.ChatHistoryVariableValue != nil {
+		return json.Marshal(a.ChatHistoryVariableValue)
+	}
+	if a.SearchResultsVariableValue != nil {
+		return json.Marshal(a.SearchResultsVariableValue)
+	}
+	if a.ArrayVariableValue != nil {
+		return json.Marshal(a.ArrayVariableValue)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", a)
 }
 
@@ -867,6 +961,9 @@ type ArrayVariableValueItemVisitor interface {
 	VisitErrorVariableValue(*ErrorVariableValue) error
 	VisitFunctionCallVariableValue(*FunctionCallVariableValue) error
 	VisitImageVariableValue(*ImageVariableValue) error
+	VisitChatHistoryVariableValue(*ChatHistoryVariableValue) error
+	VisitSearchResultsVariableValue(*SearchResultsVariableValue) error
+	VisitArrayVariableValue(*ArrayVariableValue) error
 }
 
 func (a *ArrayVariableValueItem) Accept(visitor ArrayVariableValueItemVisitor) error {
@@ -888,16 +985,96 @@ func (a *ArrayVariableValueItem) Accept(visitor ArrayVariableValueItemVisitor) e
 	if a.ImageVariableValue != nil {
 		return visitor.VisitImageVariableValue(a.ImageVariableValue)
 	}
+	if a.ChatHistoryVariableValue != nil {
+		return visitor.VisitChatHistoryVariableValue(a.ChatHistoryVariableValue)
+	}
+	if a.SearchResultsVariableValue != nil {
+		return visitor.VisitSearchResultsVariableValue(a.SearchResultsVariableValue)
+	}
+	if a.ArrayVariableValue != nil {
+		return visitor.VisitArrayVariableValue(a.ArrayVariableValue)
+	}
 	return fmt.Errorf("type %T does not include a non-empty union type", a)
 }
 
+// A value representing an array of Vellum variable values.
+type ArrayVellumValue struct {
+	Value []*ArrayVellumValueItem `json:"value,omitempty" url:"value,omitempty"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (a *ArrayVellumValue) GetExtraProperties() map[string]interface{} {
+	return a.extraProperties
+}
+
+func (a *ArrayVellumValue) Type() string {
+	return a.type_
+}
+
+func (a *ArrayVellumValue) UnmarshalJSON(data []byte) error {
+	type embed ArrayVellumValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*a),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*a = ArrayVellumValue(unmarshaler.embed)
+	if unmarshaler.Type != "ARRAY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", a, "ARRAY", unmarshaler.Type)
+	}
+	a.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *a, "type")
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+
+	a._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *ArrayVellumValue) MarshalJSON() ([]byte, error) {
+	type embed ArrayVellumValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*a),
+		Type:  "ARRAY",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (a *ArrayVellumValue) String() string {
+	if len(a._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(a._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
+
 type ArrayVellumValueItem struct {
-	StringVellumValue       *StringVellumValue
-	NumberVellumValue       *NumberVellumValue
-	JsonVellumValue         *JsonVellumValue
-	ImageVellumValue        *ImageVellumValue
-	FunctionCallVellumValue *FunctionCallVellumValue
-	ErrorVellumValue        *ErrorVellumValue
+	StringVellumValue        *StringVellumValue
+	NumberVellumValue        *NumberVellumValue
+	JsonVellumValue          *JsonVellumValue
+	ImageVellumValue         *ImageVellumValue
+	FunctionCallVellumValue  *FunctionCallVellumValue
+	ErrorVellumValue         *ErrorVellumValue
+	ChatHistoryVellumValue   *ChatHistoryVellumValue
+	SearchResultsVellumValue *SearchResultsVellumValue
+	ArrayVellumValue         *ArrayVellumValue
 }
 
 func (a *ArrayVellumValueItem) UnmarshalJSON(data []byte) error {
@@ -931,6 +1108,21 @@ func (a *ArrayVellumValueItem) UnmarshalJSON(data []byte) error {
 		a.ErrorVellumValue = valueErrorVellumValue
 		return nil
 	}
+	valueChatHistoryVellumValue := new(ChatHistoryVellumValue)
+	if err := json.Unmarshal(data, &valueChatHistoryVellumValue); err == nil {
+		a.ChatHistoryVellumValue = valueChatHistoryVellumValue
+		return nil
+	}
+	valueSearchResultsVellumValue := new(SearchResultsVellumValue)
+	if err := json.Unmarshal(data, &valueSearchResultsVellumValue); err == nil {
+		a.SearchResultsVellumValue = valueSearchResultsVellumValue
+		return nil
+	}
+	valueArrayVellumValue := new(ArrayVellumValue)
+	if err := json.Unmarshal(data, &valueArrayVellumValue); err == nil {
+		a.ArrayVellumValue = valueArrayVellumValue
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, a)
 }
 
@@ -953,6 +1145,15 @@ func (a ArrayVellumValueItem) MarshalJSON() ([]byte, error) {
 	if a.ErrorVellumValue != nil {
 		return json.Marshal(a.ErrorVellumValue)
 	}
+	if a.ChatHistoryVellumValue != nil {
+		return json.Marshal(a.ChatHistoryVellumValue)
+	}
+	if a.SearchResultsVellumValue != nil {
+		return json.Marshal(a.SearchResultsVellumValue)
+	}
+	if a.ArrayVellumValue != nil {
+		return json.Marshal(a.ArrayVellumValue)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", a)
 }
 
@@ -963,6 +1164,9 @@ type ArrayVellumValueItemVisitor interface {
 	VisitImageVellumValue(*ImageVellumValue) error
 	VisitFunctionCallVellumValue(*FunctionCallVellumValue) error
 	VisitErrorVellumValue(*ErrorVellumValue) error
+	VisitChatHistoryVellumValue(*ChatHistoryVellumValue) error
+	VisitSearchResultsVellumValue(*SearchResultsVellumValue) error
+	VisitArrayVellumValue(*ArrayVellumValue) error
 }
 
 func (a *ArrayVellumValueItem) Accept(visitor ArrayVellumValueItemVisitor) error {
@@ -984,16 +1188,28 @@ func (a *ArrayVellumValueItem) Accept(visitor ArrayVellumValueItemVisitor) error
 	if a.ErrorVellumValue != nil {
 		return visitor.VisitErrorVellumValue(a.ErrorVellumValue)
 	}
+	if a.ChatHistoryVellumValue != nil {
+		return visitor.VisitChatHistoryVellumValue(a.ChatHistoryVellumValue)
+	}
+	if a.SearchResultsVellumValue != nil {
+		return visitor.VisitSearchResultsVellumValue(a.SearchResultsVellumValue)
+	}
+	if a.ArrayVellumValue != nil {
+		return visitor.VisitArrayVellumValue(a.ArrayVellumValue)
+	}
 	return fmt.Errorf("type %T does not include a non-empty union type", a)
 }
 
 type ArrayVellumValueItemRequest struct {
-	StringVellumValueRequest       *StringVellumValueRequest
-	NumberVellumValueRequest       *NumberVellumValueRequest
-	JsonVellumValueRequest         *JsonVellumValueRequest
-	ImageVellumValueRequest        *ImageVellumValueRequest
-	FunctionCallVellumValueRequest *FunctionCallVellumValueRequest
-	ErrorVellumValueRequest        *ErrorVellumValueRequest
+	StringVellumValueRequest        *StringVellumValueRequest
+	NumberVellumValueRequest        *NumberVellumValueRequest
+	JsonVellumValueRequest          *JsonVellumValueRequest
+	ImageVellumValueRequest         *ImageVellumValueRequest
+	FunctionCallVellumValueRequest  *FunctionCallVellumValueRequest
+	ErrorVellumValueRequest         *ErrorVellumValueRequest
+	ChatHistoryVellumValueRequest   *ChatHistoryVellumValueRequest
+	SearchResultsVellumValueRequest *SearchResultsVellumValueRequest
+	ArrayVellumValueRequest         *ArrayVellumValueRequest
 }
 
 func (a *ArrayVellumValueItemRequest) UnmarshalJSON(data []byte) error {
@@ -1027,6 +1243,21 @@ func (a *ArrayVellumValueItemRequest) UnmarshalJSON(data []byte) error {
 		a.ErrorVellumValueRequest = valueErrorVellumValueRequest
 		return nil
 	}
+	valueChatHistoryVellumValueRequest := new(ChatHistoryVellumValueRequest)
+	if err := json.Unmarshal(data, &valueChatHistoryVellumValueRequest); err == nil {
+		a.ChatHistoryVellumValueRequest = valueChatHistoryVellumValueRequest
+		return nil
+	}
+	valueSearchResultsVellumValueRequest := new(SearchResultsVellumValueRequest)
+	if err := json.Unmarshal(data, &valueSearchResultsVellumValueRequest); err == nil {
+		a.SearchResultsVellumValueRequest = valueSearchResultsVellumValueRequest
+		return nil
+	}
+	valueArrayVellumValueRequest := new(ArrayVellumValueRequest)
+	if err := json.Unmarshal(data, &valueArrayVellumValueRequest); err == nil {
+		a.ArrayVellumValueRequest = valueArrayVellumValueRequest
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, a)
 }
 
@@ -1049,6 +1280,15 @@ func (a ArrayVellumValueItemRequest) MarshalJSON() ([]byte, error) {
 	if a.ErrorVellumValueRequest != nil {
 		return json.Marshal(a.ErrorVellumValueRequest)
 	}
+	if a.ChatHistoryVellumValueRequest != nil {
+		return json.Marshal(a.ChatHistoryVellumValueRequest)
+	}
+	if a.SearchResultsVellumValueRequest != nil {
+		return json.Marshal(a.SearchResultsVellumValueRequest)
+	}
+	if a.ArrayVellumValueRequest != nil {
+		return json.Marshal(a.ArrayVellumValueRequest)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", a)
 }
 
@@ -1059,6 +1299,9 @@ type ArrayVellumValueItemRequestVisitor interface {
 	VisitImageVellumValueRequest(*ImageVellumValueRequest) error
 	VisitFunctionCallVellumValueRequest(*FunctionCallVellumValueRequest) error
 	VisitErrorVellumValueRequest(*ErrorVellumValueRequest) error
+	VisitChatHistoryVellumValueRequest(*ChatHistoryVellumValueRequest) error
+	VisitSearchResultsVellumValueRequest(*SearchResultsVellumValueRequest) error
+	VisitArrayVellumValueRequest(*ArrayVellumValueRequest) error
 }
 
 func (a *ArrayVellumValueItemRequest) Accept(visitor ArrayVellumValueItemRequestVisitor) error {
@@ -1080,7 +1323,84 @@ func (a *ArrayVellumValueItemRequest) Accept(visitor ArrayVellumValueItemRequest
 	if a.ErrorVellumValueRequest != nil {
 		return visitor.VisitErrorVellumValueRequest(a.ErrorVellumValueRequest)
 	}
+	if a.ChatHistoryVellumValueRequest != nil {
+		return visitor.VisitChatHistoryVellumValueRequest(a.ChatHistoryVellumValueRequest)
+	}
+	if a.SearchResultsVellumValueRequest != nil {
+		return visitor.VisitSearchResultsVellumValueRequest(a.SearchResultsVellumValueRequest)
+	}
+	if a.ArrayVellumValueRequest != nil {
+		return visitor.VisitArrayVellumValueRequest(a.ArrayVellumValueRequest)
+	}
 	return fmt.Errorf("type %T does not include a non-empty union type", a)
+}
+
+// A value representing an array of Vellum variable values.
+type ArrayVellumValueRequest struct {
+	Value []*ArrayVellumValueItemRequest `json:"value,omitempty" url:"value,omitempty"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (a *ArrayVellumValueRequest) GetExtraProperties() map[string]interface{} {
+	return a.extraProperties
+}
+
+func (a *ArrayVellumValueRequest) Type() string {
+	return a.type_
+}
+
+func (a *ArrayVellumValueRequest) UnmarshalJSON(data []byte) error {
+	type embed ArrayVellumValueRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*a),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*a = ArrayVellumValueRequest(unmarshaler.embed)
+	if unmarshaler.Type != "ARRAY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", a, "ARRAY", unmarshaler.Type)
+	}
+	a.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *a, "type")
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+
+	a._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *ArrayVellumValueRequest) MarshalJSON() ([]byte, error) {
+	type embed ArrayVellumValueRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*a),
+		Type:  "ARRAY",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (a *ArrayVellumValueRequest) String() string {
+	if len(a._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(a._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
 }
 
 // Basic vectorizer for intfloat/multilingual-e5-large.
@@ -1550,6 +1870,209 @@ func (c *ChatHistoryInputRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (c *ChatHistoryInputRequest) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type ChatHistoryVariableValue struct {
+	Value []*ChatMessage `json:"value,omitempty" url:"value,omitempty"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *ChatHistoryVariableValue) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *ChatHistoryVariableValue) Type() string {
+	return c.type_
+}
+
+func (c *ChatHistoryVariableValue) UnmarshalJSON(data []byte) error {
+	type embed ChatHistoryVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*c),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*c = ChatHistoryVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", c, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	c.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c, "type")
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *ChatHistoryVariableValue) MarshalJSON() ([]byte, error) {
+	type embed ChatHistoryVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*c),
+		Type:  "CHAT_HISTORY",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (c *ChatHistoryVariableValue) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// A value representing Chat History.
+type ChatHistoryVellumValue struct {
+	Value []*ChatMessage `json:"value,omitempty" url:"value,omitempty"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *ChatHistoryVellumValue) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *ChatHistoryVellumValue) Type() string {
+	return c.type_
+}
+
+func (c *ChatHistoryVellumValue) UnmarshalJSON(data []byte) error {
+	type embed ChatHistoryVellumValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*c),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*c = ChatHistoryVellumValue(unmarshaler.embed)
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", c, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	c.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c, "type")
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *ChatHistoryVellumValue) MarshalJSON() ([]byte, error) {
+	type embed ChatHistoryVellumValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*c),
+		Type:  "CHAT_HISTORY",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (c *ChatHistoryVellumValue) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// A value representing Chat History.
+type ChatHistoryVellumValueRequest struct {
+	Value []*ChatMessageRequest `json:"value,omitempty" url:"value,omitempty"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *ChatHistoryVellumValueRequest) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *ChatHistoryVellumValueRequest) Type() string {
+	return c.type_
+}
+
+func (c *ChatHistoryVellumValueRequest) UnmarshalJSON(data []byte) error {
+	type embed ChatHistoryVellumValueRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*c),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*c = ChatHistoryVellumValueRequest(unmarshaler.embed)
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", c, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	c.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c, "type")
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *ChatHistoryVellumValueRequest) MarshalJSON() ([]byte, error) {
+	type embed ChatHistoryVellumValueRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*c),
+		Type:  "CHAT_HISTORY",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (c *ChatHistoryVellumValueRequest) String() string {
 	if len(c._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
 			return value
@@ -15388,6 +15911,209 @@ func (s *SearchResultRequest) UnmarshalJSON(data []byte) error {
 }
 
 func (s *SearchResultRequest) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type SearchResultsVariableValue struct {
+	Value []*SearchResult `json:"value,omitempty" url:"value,omitempty"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SearchResultsVariableValue) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SearchResultsVariableValue) Type() string {
+	return s.type_
+}
+
+func (s *SearchResultsVariableValue) UnmarshalJSON(data []byte) error {
+	type embed SearchResultsVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*s),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*s = SearchResultsVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "SEARCH_RESULTS" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "SEARCH_RESULTS", unmarshaler.Type)
+	}
+	s.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s, "type")
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SearchResultsVariableValue) MarshalJSON() ([]byte, error) {
+	type embed SearchResultsVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*s),
+		Type:  "SEARCH_RESULTS",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (s *SearchResultsVariableValue) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// A value representing Search Results.
+type SearchResultsVellumValue struct {
+	Value []*SearchResult `json:"value,omitempty" url:"value,omitempty"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SearchResultsVellumValue) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SearchResultsVellumValue) Type() string {
+	return s.type_
+}
+
+func (s *SearchResultsVellumValue) UnmarshalJSON(data []byte) error {
+	type embed SearchResultsVellumValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*s),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*s = SearchResultsVellumValue(unmarshaler.embed)
+	if unmarshaler.Type != "SEARCH_RESULTS" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "SEARCH_RESULTS", unmarshaler.Type)
+	}
+	s.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s, "type")
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SearchResultsVellumValue) MarshalJSON() ([]byte, error) {
+	type embed SearchResultsVellumValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*s),
+		Type:  "SEARCH_RESULTS",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (s *SearchResultsVellumValue) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// A value representing Search Results.
+type SearchResultsVellumValueRequest struct {
+	Value []*SearchResultRequest `json:"value,omitempty" url:"value,omitempty"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SearchResultsVellumValueRequest) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SearchResultsVellumValueRequest) Type() string {
+	return s.type_
+}
+
+func (s *SearchResultsVellumValueRequest) UnmarshalJSON(data []byte) error {
+	type embed SearchResultsVellumValueRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*s),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*s = SearchResultsVellumValueRequest(unmarshaler.embed)
+	if unmarshaler.Type != "SEARCH_RESULTS" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "SEARCH_RESULTS", unmarshaler.Type)
+	}
+	s.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s, "type")
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SearchResultsVellumValueRequest) MarshalJSON() ([]byte, error) {
+	type embed SearchResultsVellumValueRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*s),
+		Type:  "SEARCH_RESULTS",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (s *SearchResultsVellumValueRequest) String() string {
 	if len(s._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
 			return value
