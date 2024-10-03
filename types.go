@@ -3332,6 +3332,30 @@ type ComponentsSchemasPdfSearchResultMetaSource = *PdfSearchResultMetaSource
 
 type ComponentsSchemasPdfSearchResultMetaSourceRequest = *PdfSearchResultMetaSourceRequest
 
+// - `OR` - OR
+// - `AND` - AND
+type ConditionCombinator string
+
+const (
+	ConditionCombinatorOr  ConditionCombinator = "OR"
+	ConditionCombinatorAnd ConditionCombinator = "AND"
+)
+
+func NewConditionCombinatorFromString(s string) (ConditionCombinator, error) {
+	switch s {
+	case "OR":
+		return ConditionCombinatorOr, nil
+	case "AND":
+		return ConditionCombinatorAnd, nil
+	}
+	var t ConditionCombinator
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (c ConditionCombinator) Ptr() *ConditionCombinator {
+	return &c
+}
+
 // A Node Result Event emitted from a Conditional Node.
 type ConditionalNodeResult struct {
 	Data  *ConditionalNodeResultData `json:"data" url:"data"`
@@ -8476,6 +8500,234 @@ func (j *JsonVellumValueRequest) String() string {
 	return fmt.Sprintf("%#v", j)
 }
 
+type LegacySupportingMetadataFiltersRequest struct {
+	MetadataFilterConfigRequest *MetadataFilterConfigRequest
+	MetadataFiltersRequest      *MetadataFiltersRequest
+}
+
+func (l *LegacySupportingMetadataFiltersRequest) UnmarshalJSON(data []byte) error {
+	valueMetadataFilterConfigRequest := new(MetadataFilterConfigRequest)
+	if err := json.Unmarshal(data, &valueMetadataFilterConfigRequest); err == nil {
+		l.MetadataFilterConfigRequest = valueMetadataFilterConfigRequest
+		return nil
+	}
+	valueMetadataFiltersRequest := new(MetadataFiltersRequest)
+	if err := json.Unmarshal(data, &valueMetadataFiltersRequest); err == nil {
+		l.MetadataFiltersRequest = valueMetadataFiltersRequest
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, l)
+}
+
+func (l LegacySupportingMetadataFiltersRequest) MarshalJSON() ([]byte, error) {
+	if l.MetadataFilterConfigRequest != nil {
+		return json.Marshal(l.MetadataFilterConfigRequest)
+	}
+	if l.MetadataFiltersRequest != nil {
+		return json.Marshal(l.MetadataFiltersRequest)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", l)
+}
+
+type LegacySupportingMetadataFiltersRequestVisitor interface {
+	VisitMetadataFilterConfigRequest(*MetadataFilterConfigRequest) error
+	VisitMetadataFiltersRequest(*MetadataFiltersRequest) error
+}
+
+func (l *LegacySupportingMetadataFiltersRequest) Accept(visitor LegacySupportingMetadataFiltersRequestVisitor) error {
+	if l.MetadataFilterConfigRequest != nil {
+		return visitor.VisitMetadataFilterConfigRequest(l.MetadataFilterConfigRequest)
+	}
+	if l.MetadataFiltersRequest != nil {
+		return visitor.VisitMetadataFiltersRequest(l.MetadataFiltersRequest)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", l)
+}
+
+// A higher-order condition that combines one or more basic conditions or other higher-order conditions.
+type LogicalConditionGroupRequest struct {
+	Conditions []*LogicalExpressionRequest `json:"conditions" url:"conditions"`
+	Combinator ConditionCombinator         `json:"combinator" url:"combinator"`
+	Negated    bool                        `json:"negated" url:"negated"`
+	type_      string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LogicalConditionGroupRequest) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LogicalConditionGroupRequest) Type() string {
+	return l.type_
+}
+
+func (l *LogicalConditionGroupRequest) UnmarshalJSON(data []byte) error {
+	type embed LogicalConditionGroupRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*l),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*l = LogicalConditionGroupRequest(unmarshaler.embed)
+	if unmarshaler.Type != "LOGICAL_CONDITION_GROUP" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", l, "LOGICAL_CONDITION_GROUP", unmarshaler.Type)
+	}
+	l.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l, "type")
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LogicalConditionGroupRequest) MarshalJSON() ([]byte, error) {
+	type embed LogicalConditionGroupRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*l),
+		Type:  "LOGICAL_CONDITION_GROUP",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (l *LogicalConditionGroupRequest) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// A basic condition comparing a two variables.
+type LogicalConditionRequest struct {
+	LhsVariableId string          `json:"lhs_variable_id" url:"lhs_variable_id"`
+	Operator      LogicalOperator `json:"operator" url:"operator"`
+	RhsVariableId string          `json:"rhs_variable_id" url:"rhs_variable_id"`
+	type_         string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (l *LogicalConditionRequest) GetExtraProperties() map[string]interface{} {
+	return l.extraProperties
+}
+
+func (l *LogicalConditionRequest) Type() string {
+	return l.type_
+}
+
+func (l *LogicalConditionRequest) UnmarshalJSON(data []byte) error {
+	type embed LogicalConditionRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*l),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*l = LogicalConditionRequest(unmarshaler.embed)
+	if unmarshaler.Type != "LOGICAL_CONDITION" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", l, "LOGICAL_CONDITION", unmarshaler.Type)
+	}
+	l.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *l, "type")
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+
+	l._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LogicalConditionRequest) MarshalJSON() ([]byte, error) {
+	type embed LogicalConditionRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*l),
+		Type:  "LOGICAL_CONDITION",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (l *LogicalConditionRequest) String() string {
+	if len(l._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(l._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+type LogicalExpressionRequest struct {
+	LogicalConditionRequest      *LogicalConditionRequest
+	LogicalConditionGroupRequest *LogicalConditionGroupRequest
+}
+
+func (l *LogicalExpressionRequest) UnmarshalJSON(data []byte) error {
+	valueLogicalConditionRequest := new(LogicalConditionRequest)
+	if err := json.Unmarshal(data, &valueLogicalConditionRequest); err == nil {
+		l.LogicalConditionRequest = valueLogicalConditionRequest
+		return nil
+	}
+	valueLogicalConditionGroupRequest := new(LogicalConditionGroupRequest)
+	if err := json.Unmarshal(data, &valueLogicalConditionGroupRequest); err == nil {
+		l.LogicalConditionGroupRequest = valueLogicalConditionGroupRequest
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, l)
+}
+
+func (l LogicalExpressionRequest) MarshalJSON() ([]byte, error) {
+	if l.LogicalConditionRequest != nil {
+		return json.Marshal(l.LogicalConditionRequest)
+	}
+	if l.LogicalConditionGroupRequest != nil {
+		return json.Marshal(l.LogicalConditionGroupRequest)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", l)
+}
+
+type LogicalExpressionRequestVisitor interface {
+	VisitLogicalConditionRequest(*LogicalConditionRequest) error
+	VisitLogicalConditionGroupRequest(*LogicalConditionGroupRequest) error
+}
+
+func (l *LogicalExpressionRequest) Accept(visitor LogicalExpressionRequestVisitor) error {
+	if l.LogicalConditionRequest != nil {
+		return visitor.VisitLogicalConditionRequest(l.LogicalConditionRequest)
+	}
+	if l.LogicalConditionGroupRequest != nil {
+		return visitor.VisitLogicalConditionGroupRequest(l.LogicalConditionGroupRequest)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", l)
+}
+
 // - `=` - EQUALS
 // - `!=` - DOES_NOT_EQUAL
 // - `<` - LESS_THAN
@@ -8494,6 +8746,8 @@ func (j *JsonVellumValueRequest) String() string {
 // - `notIn` - NOT_IN
 // - `between` - BETWEEN
 // - `notBetween` - NOT_BETWEEN
+// - `blank` - BLANK
+// - `notBlank` - NOT_BLANK
 type LogicalOperator string
 
 const (
@@ -8533,6 +8787,8 @@ const (
 	LogicalOperatorBetween LogicalOperator = "between"
 	// Not between
 	LogicalOperatorNotBetween LogicalOperator = "notBetween"
+	LogicalOperatorBlank      LogicalOperator = "blank"
+	LogicalOperatorNotBlank   LogicalOperator = "notBlank"
 )
 
 func NewLogicalOperatorFromString(s string) (LogicalOperator, error) {
@@ -8573,6 +8829,10 @@ func NewLogicalOperatorFromString(s string) (LogicalOperator, error) {
 		return LogicalOperatorBetween, nil
 	case "notBetween":
 		return LogicalOperatorNotBetween, nil
+	case "blank":
+		return LogicalOperatorBlank, nil
+	case "notBlank":
+		return LogicalOperatorNotBlank, nil
 	}
 	var t LogicalOperator
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -8825,6 +9085,7 @@ func (m *MergeNodeResultData) String() string {
 	return fmt.Sprintf("%#v", m)
 }
 
+// A deprecated pattern for filtering on metadata. Please use MetadataFilters instead.
 type MetadataFilterConfigRequest struct {
 	Combinator *MetadataFilterRuleCombinator `json:"combinator,omitempty" url:"combinator,omitempty"`
 	Negated    *bool                         `json:"negated,omitempty" url:"negated,omitempty"`
@@ -8930,6 +9191,91 @@ func (m *MetadataFilterRuleRequest) UnmarshalJSON(data []byte) error {
 }
 
 func (m *MetadataFilterRuleRequest) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+// A filter that follows Vellum's ResolvableLogicalExpression pattern.
+type MetadataFiltersRequest struct {
+	Expression *LogicalExpressionRequest          `json:"expression" url:"expression"`
+	Variables  []*MetadataResolverVariableRequest `json:"variables" url:"variables"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MetadataFiltersRequest) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MetadataFiltersRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler MetadataFiltersRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MetadataFiltersRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MetadataFiltersRequest) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+type MetadataResolverVariableRequest struct {
+	Value *VellumValueRequest `json:"value" url:"value"`
+	Id    string              `json:"id" url:"id"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MetadataResolverVariableRequest) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MetadataResolverVariableRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler MetadataResolverVariableRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MetadataResolverVariableRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MetadataResolverVariableRequest) String() string {
 	if len(m._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
 			return value
@@ -15361,7 +15707,7 @@ type SearchFiltersRequest struct {
 	// The document external IDs to filter by
 	ExternalIds []string `json:"external_ids,omitempty" url:"external_ids,omitempty"`
 	// The metadata filters to apply to the search
-	Metadata *MetadataFilterConfigRequest `json:"metadata,omitempty" url:"metadata,omitempty"`
+	Metadata *LegacySupportingMetadataFiltersRequest `json:"metadata,omitempty" url:"metadata,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -23409,6 +23755,141 @@ func (v *VellumImageRequest) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", v)
+}
+
+type VellumValueRequest struct {
+	StringVellumValueRequest        *StringVellumValueRequest
+	NumberVellumValueRequest        *NumberVellumValueRequest
+	JsonVellumValueRequest          *JsonVellumValueRequest
+	ImageVellumValueRequest         *ImageVellumValueRequest
+	FunctionCallVellumValueRequest  *FunctionCallVellumValueRequest
+	ErrorVellumValueRequest         *ErrorVellumValueRequest
+	ArrayVellumValueRequest         *ArrayVellumValueRequest
+	ChatHistoryVellumValueRequest   *ChatHistoryVellumValueRequest
+	SearchResultsVellumValueRequest *SearchResultsVellumValueRequest
+}
+
+func (v *VellumValueRequest) UnmarshalJSON(data []byte) error {
+	valueStringVellumValueRequest := new(StringVellumValueRequest)
+	if err := json.Unmarshal(data, &valueStringVellumValueRequest); err == nil {
+		v.StringVellumValueRequest = valueStringVellumValueRequest
+		return nil
+	}
+	valueNumberVellumValueRequest := new(NumberVellumValueRequest)
+	if err := json.Unmarshal(data, &valueNumberVellumValueRequest); err == nil {
+		v.NumberVellumValueRequest = valueNumberVellumValueRequest
+		return nil
+	}
+	valueJsonVellumValueRequest := new(JsonVellumValueRequest)
+	if err := json.Unmarshal(data, &valueJsonVellumValueRequest); err == nil {
+		v.JsonVellumValueRequest = valueJsonVellumValueRequest
+		return nil
+	}
+	valueImageVellumValueRequest := new(ImageVellumValueRequest)
+	if err := json.Unmarshal(data, &valueImageVellumValueRequest); err == nil {
+		v.ImageVellumValueRequest = valueImageVellumValueRequest
+		return nil
+	}
+	valueFunctionCallVellumValueRequest := new(FunctionCallVellumValueRequest)
+	if err := json.Unmarshal(data, &valueFunctionCallVellumValueRequest); err == nil {
+		v.FunctionCallVellumValueRequest = valueFunctionCallVellumValueRequest
+		return nil
+	}
+	valueErrorVellumValueRequest := new(ErrorVellumValueRequest)
+	if err := json.Unmarshal(data, &valueErrorVellumValueRequest); err == nil {
+		v.ErrorVellumValueRequest = valueErrorVellumValueRequest
+		return nil
+	}
+	valueArrayVellumValueRequest := new(ArrayVellumValueRequest)
+	if err := json.Unmarshal(data, &valueArrayVellumValueRequest); err == nil {
+		v.ArrayVellumValueRequest = valueArrayVellumValueRequest
+		return nil
+	}
+	valueChatHistoryVellumValueRequest := new(ChatHistoryVellumValueRequest)
+	if err := json.Unmarshal(data, &valueChatHistoryVellumValueRequest); err == nil {
+		v.ChatHistoryVellumValueRequest = valueChatHistoryVellumValueRequest
+		return nil
+	}
+	valueSearchResultsVellumValueRequest := new(SearchResultsVellumValueRequest)
+	if err := json.Unmarshal(data, &valueSearchResultsVellumValueRequest); err == nil {
+		v.SearchResultsVellumValueRequest = valueSearchResultsVellumValueRequest
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, v)
+}
+
+func (v VellumValueRequest) MarshalJSON() ([]byte, error) {
+	if v.StringVellumValueRequest != nil {
+		return json.Marshal(v.StringVellumValueRequest)
+	}
+	if v.NumberVellumValueRequest != nil {
+		return json.Marshal(v.NumberVellumValueRequest)
+	}
+	if v.JsonVellumValueRequest != nil {
+		return json.Marshal(v.JsonVellumValueRequest)
+	}
+	if v.ImageVellumValueRequest != nil {
+		return json.Marshal(v.ImageVellumValueRequest)
+	}
+	if v.FunctionCallVellumValueRequest != nil {
+		return json.Marshal(v.FunctionCallVellumValueRequest)
+	}
+	if v.ErrorVellumValueRequest != nil {
+		return json.Marshal(v.ErrorVellumValueRequest)
+	}
+	if v.ArrayVellumValueRequest != nil {
+		return json.Marshal(v.ArrayVellumValueRequest)
+	}
+	if v.ChatHistoryVellumValueRequest != nil {
+		return json.Marshal(v.ChatHistoryVellumValueRequest)
+	}
+	if v.SearchResultsVellumValueRequest != nil {
+		return json.Marshal(v.SearchResultsVellumValueRequest)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", v)
+}
+
+type VellumValueRequestVisitor interface {
+	VisitStringVellumValueRequest(*StringVellumValueRequest) error
+	VisitNumberVellumValueRequest(*NumberVellumValueRequest) error
+	VisitJsonVellumValueRequest(*JsonVellumValueRequest) error
+	VisitImageVellumValueRequest(*ImageVellumValueRequest) error
+	VisitFunctionCallVellumValueRequest(*FunctionCallVellumValueRequest) error
+	VisitErrorVellumValueRequest(*ErrorVellumValueRequest) error
+	VisitArrayVellumValueRequest(*ArrayVellumValueRequest) error
+	VisitChatHistoryVellumValueRequest(*ChatHistoryVellumValueRequest) error
+	VisitSearchResultsVellumValueRequest(*SearchResultsVellumValueRequest) error
+}
+
+func (v *VellumValueRequest) Accept(visitor VellumValueRequestVisitor) error {
+	if v.StringVellumValueRequest != nil {
+		return visitor.VisitStringVellumValueRequest(v.StringVellumValueRequest)
+	}
+	if v.NumberVellumValueRequest != nil {
+		return visitor.VisitNumberVellumValueRequest(v.NumberVellumValueRequest)
+	}
+	if v.JsonVellumValueRequest != nil {
+		return visitor.VisitJsonVellumValueRequest(v.JsonVellumValueRequest)
+	}
+	if v.ImageVellumValueRequest != nil {
+		return visitor.VisitImageVellumValueRequest(v.ImageVellumValueRequest)
+	}
+	if v.FunctionCallVellumValueRequest != nil {
+		return visitor.VisitFunctionCallVellumValueRequest(v.FunctionCallVellumValueRequest)
+	}
+	if v.ErrorVellumValueRequest != nil {
+		return visitor.VisitErrorVellumValueRequest(v.ErrorVellumValueRequest)
+	}
+	if v.ArrayVellumValueRequest != nil {
+		return visitor.VisitArrayVellumValueRequest(v.ArrayVellumValueRequest)
+	}
+	if v.ChatHistoryVellumValueRequest != nil {
+		return visitor.VisitChatHistoryVellumValueRequest(v.ChatHistoryVellumValueRequest)
+	}
+	if v.SearchResultsVellumValueRequest != nil {
+		return visitor.VisitSearchResultsVellumValueRequest(v.SearchResultsVellumValueRequest)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", v)
 }
 
 type VellumVariable struct {
