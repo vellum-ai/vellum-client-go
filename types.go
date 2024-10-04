@@ -8494,6 +8494,8 @@ func (j *JsonVellumValueRequest) String() string {
 // - `notIn` - NOT_IN
 // - `between` - BETWEEN
 // - `notBetween` - NOT_BETWEEN
+// - `blank` - BLANK
+// - `notBlank` - NOT_BLANK
 type LogicalOperator string
 
 const (
@@ -8533,6 +8535,8 @@ const (
 	LogicalOperatorBetween LogicalOperator = "between"
 	// Not between
 	LogicalOperatorNotBetween LogicalOperator = "notBetween"
+	LogicalOperatorBlank      LogicalOperator = "blank"
+	LogicalOperatorNotBlank   LogicalOperator = "notBlank"
 )
 
 func NewLogicalOperatorFromString(s string) (LogicalOperator, error) {
@@ -8573,6 +8577,10 @@ func NewLogicalOperatorFromString(s string) (LogicalOperator, error) {
 		return LogicalOperatorBetween, nil
 	case "notBetween":
 		return LogicalOperatorNotBetween, nil
+	case "blank":
+		return LogicalOperatorBlank, nil
+	case "notBlank":
+		return LogicalOperatorNotBlank, nil
 	}
 	var t LogicalOperator
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -8825,6 +8833,7 @@ func (m *MergeNodeResultData) String() string {
 	return fmt.Sprintf("%#v", m)
 }
 
+// A deprecated pattern for filtering on metadata. Please use MetadataFilters instead.
 type MetadataFilterConfigRequest struct {
 	Combinator *MetadataFilterRuleCombinator `json:"combinator,omitempty" url:"combinator,omitempty"`
 	Negated    *bool                         `json:"negated,omitempty" url:"negated,omitempty"`
