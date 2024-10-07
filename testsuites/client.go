@@ -33,7 +33,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // List the Test Cases associated with a Test Suite
 func (c *Client) ListTestSuiteTestCases(
 	ctx context.Context,
-	// A UUID string identifying this test suite.
+	// Either the Test Suites' ID or its unique name
 	id string,
 	request *vellumclientgo.ListTestSuiteTestCasesRequest,
 	opts ...option.RequestOption,
@@ -87,7 +87,7 @@ func (c *Client) ListTestSuiteTestCases(
 // or overwritten with default values.
 func (c *Client) UpsertTestSuiteTestCase(
 	ctx context.Context,
-	// A UUID string identifying this test suite.
+	// Either the Test Suites' ID or its unique name
 	id string,
 	request *vellumclientgo.UpsertTestSuiteTestCaseRequest,
 	opts ...option.RequestOption,
@@ -128,7 +128,7 @@ func (c *Client) UpsertTestSuiteTestCase(
 // Created, replace, and delete Test Cases within the specified Test Suite in bulk
 func (c *Client) TestSuiteTestCasesBulk(
 	ctx context.Context,
-	// A UUID string identifying this test suite.
+	// Either the Test Suites' ID or its unique name
 	id string,
 	request []*vellumclientgo.TestSuiteTestCaseBulkOperationRequest,
 	opts ...option.RequestOption,
@@ -165,7 +165,7 @@ func (c *Client) TestSuiteTestCasesBulk(
 // Deletes an existing test case for a test suite, keying off of the test case id.
 func (c *Client) DeleteTestSuiteTestCase(
 	ctx context.Context,
-	// A UUID string identifying this test suite.
+	// Either the Test Suites' ID or its unique name
 	id string,
 	// An id identifying the test case that you'd like to delete
 	testCaseId string,
