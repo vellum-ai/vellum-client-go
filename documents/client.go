@@ -278,7 +278,7 @@ func (c *Client) Upload(
 		return nil, err
 	}
 	if request.AddToIndexNames != nil {
-		for _, value := range request.Keywords {
+		for _, value := range request.AddToIndexNames {
 			if err := writer.WriteField("add_to_index_names", value); err != nil {
 				return nil, err
 			}
