@@ -8,13 +8,12 @@ import (
 	json "encoding/json"
 	errors "errors"
 	fmt "fmt"
-	io "io"
-	multipart "mime/multipart"
-	http "net/http"
-
 	vellumclientgo "github.com/vellum-ai/vellum-client-go"
 	core "github.com/vellum-ai/vellum-client-go/core"
 	option "github.com/vellum-ai/vellum-client-go/option"
+	io "io"
+	multipart "mime/multipart"
+	http "net/http"
 )
 
 type Client struct {
@@ -278,10 +277,8 @@ func (c *Client) Upload(
 		return nil, err
 	}
 	if request.AddToIndexNames != nil {
-		for _, value := range request.Keywords {
-			if err := writer.WriteField("add_to_index_names", value); err != nil {
-				return nil, err
-			}
+		if err := core.WriteMultipartJSON(writer, "add_to_index_names", request.AddToIndexNames); err != nil {
+			return nil, err
 		}
 	}
 	if request.ExternalId != nil {
@@ -293,10 +290,8 @@ func (c *Client) Upload(
 		return nil, err
 	}
 	if request.Keywords != nil {
-		for _, value := range request.Keywords {
-			if err := writer.WriteField("keywords", value); err != nil {
-				return nil, err
-			}
+		if err := core.WriteMultipartJSON(writer, "keywords", request.Keywords); err != nil {
+			return nil, err
 		}
 	}
 	if request.Metadata != nil {
