@@ -25046,9 +25046,12 @@ func (v *VellumValueRequest) Accept(visitor VellumValueRequestVisitor) error {
 }
 
 type VellumVariable struct {
-	Id   string             `json:"id" url:"id"`
-	Key  string             `json:"key" url:"key"`
-	Type VellumVariableType `json:"type" url:"type"`
+	Id         string                    `json:"id" url:"id"`
+	Key        string                    `json:"key" url:"key"`
+	Type       VellumVariableType        `json:"type" url:"type"`
+	Required   *bool                     `json:"required,omitempty" url:"required,omitempty"`
+	Default    *VellumValue              `json:"default,omitempty" url:"default,omitempty"`
+	Extensions *VellumVariableExtensions `json:"extensions,omitempty" url:"extensions,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -25088,10 +25091,97 @@ func (v *VellumVariable) String() string {
 	return fmt.Sprintf("%#v", v)
 }
 
+// A set of fields with additional properties for use in Vellum Variables.
+type VellumVariableExtensions struct {
+	Color *string `json:"color,omitempty" url:"color,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VellumVariableExtensions) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VellumVariableExtensions) UnmarshalJSON(data []byte) error {
+	type unmarshaler VellumVariableExtensions
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = VellumVariableExtensions(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VellumVariableExtensions) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// A set of fields with additional properties for use in Vellum Variables.
+type VellumVariableExtensionsRequest struct {
+	Color *string `json:"color,omitempty" url:"color,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VellumVariableExtensionsRequest) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VellumVariableExtensionsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler VellumVariableExtensionsRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = VellumVariableExtensionsRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VellumVariableExtensionsRequest) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
 type VellumVariableRequest struct {
-	Id   string             `json:"id" url:"id"`
-	Key  string             `json:"key" url:"key"`
-	Type VellumVariableType `json:"type" url:"type"`
+	Id         string                           `json:"id" url:"id"`
+	Key        string                           `json:"key" url:"key"`
+	Type       VellumVariableType               `json:"type" url:"type"`
+	Required   *bool                            `json:"required,omitempty" url:"required,omitempty"`
+	Default    *VellumValueRequest              `json:"default,omitempty" url:"default,omitempty"`
+	Extensions *VellumVariableExtensionsRequest `json:"extensions,omitempty" url:"extensions,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
