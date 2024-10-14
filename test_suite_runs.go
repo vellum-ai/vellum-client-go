@@ -3,8 +3,10 @@
 package api
 
 type TestSuiteRunCreateRequest struct {
-	// The ID of the Test Suite to run
+	// The ID of the Test Suite to run. Must provide either this or test_suite_id.
 	TestSuiteId string `json:"test_suite_id" url:"-"`
+	// The name of the Test Suite to run. Must provide either this or test_suite_id.
+	TestSuiteName *string `json:"test_suite_name,omitempty" url:"-"`
 	// Configuration that defines how the Test Suite should be run
 	ExecConfig *TestSuiteRunExecConfigRequest `json:"exec_config,omitempty" url:"-"`
 }
