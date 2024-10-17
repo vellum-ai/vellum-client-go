@@ -30,6 +30,52 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
+// List all folder entities within a specified folder.
+func (c *Client) List(
+	ctx context.Context,
+	request *vellumclientgo.FolderEntitiesListRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.PaginatedFolderEntityList, error) {
+	options := core.NewRequestOptions(opts...)
+
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := baseURL + "/v1/folder-entities"
+
+	queryParams, err := core.QueryValues(request)
+	if err != nil {
+		return nil, err
+	}
+	if len(queryParams) > 0 {
+		endpointURL += "?" + queryParams.Encode()
+	}
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
+	var response *vellumclientgo.PaginatedFolderEntityList
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodGet,
+			MaxAttempts:     options.MaxAttempts,
+			Headers:         headers,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
 // Add an entity to a specific folder or root directory.
 //
 // Adding an entity to a folder will remove it from any other folders it might have been a member of.
