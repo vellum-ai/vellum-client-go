@@ -5948,6 +5948,779 @@ func (f FinishReasonEnum) Ptr() *FinishReasonEnum {
 	return &f
 }
 
+type FolderEntity struct {
+	FolderEntityFolder          *FolderEntityFolder
+	FolderEntityPromptSandbox   *FolderEntityPromptSandbox
+	FolderEntityWorkflowSandbox *FolderEntityWorkflowSandbox
+	FolderEntityDocumentIndex   *FolderEntityDocumentIndex
+	FolderEntityTestSuite       *FolderEntityTestSuite
+}
+
+func (f *FolderEntity) UnmarshalJSON(data []byte) error {
+	valueFolderEntityFolder := new(FolderEntityFolder)
+	if err := json.Unmarshal(data, &valueFolderEntityFolder); err == nil {
+		f.FolderEntityFolder = valueFolderEntityFolder
+		return nil
+	}
+	valueFolderEntityPromptSandbox := new(FolderEntityPromptSandbox)
+	if err := json.Unmarshal(data, &valueFolderEntityPromptSandbox); err == nil {
+		f.FolderEntityPromptSandbox = valueFolderEntityPromptSandbox
+		return nil
+	}
+	valueFolderEntityWorkflowSandbox := new(FolderEntityWorkflowSandbox)
+	if err := json.Unmarshal(data, &valueFolderEntityWorkflowSandbox); err == nil {
+		f.FolderEntityWorkflowSandbox = valueFolderEntityWorkflowSandbox
+		return nil
+	}
+	valueFolderEntityDocumentIndex := new(FolderEntityDocumentIndex)
+	if err := json.Unmarshal(data, &valueFolderEntityDocumentIndex); err == nil {
+		f.FolderEntityDocumentIndex = valueFolderEntityDocumentIndex
+		return nil
+	}
+	valueFolderEntityTestSuite := new(FolderEntityTestSuite)
+	if err := json.Unmarshal(data, &valueFolderEntityTestSuite); err == nil {
+		f.FolderEntityTestSuite = valueFolderEntityTestSuite
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, f)
+}
+
+func (f FolderEntity) MarshalJSON() ([]byte, error) {
+	if f.FolderEntityFolder != nil {
+		return json.Marshal(f.FolderEntityFolder)
+	}
+	if f.FolderEntityPromptSandbox != nil {
+		return json.Marshal(f.FolderEntityPromptSandbox)
+	}
+	if f.FolderEntityWorkflowSandbox != nil {
+		return json.Marshal(f.FolderEntityWorkflowSandbox)
+	}
+	if f.FolderEntityDocumentIndex != nil {
+		return json.Marshal(f.FolderEntityDocumentIndex)
+	}
+	if f.FolderEntityTestSuite != nil {
+		return json.Marshal(f.FolderEntityTestSuite)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", f)
+}
+
+type FolderEntityVisitor interface {
+	VisitFolderEntityFolder(*FolderEntityFolder) error
+	VisitFolderEntityPromptSandbox(*FolderEntityPromptSandbox) error
+	VisitFolderEntityWorkflowSandbox(*FolderEntityWorkflowSandbox) error
+	VisitFolderEntityDocumentIndex(*FolderEntityDocumentIndex) error
+	VisitFolderEntityTestSuite(*FolderEntityTestSuite) error
+}
+
+func (f *FolderEntity) Accept(visitor FolderEntityVisitor) error {
+	if f.FolderEntityFolder != nil {
+		return visitor.VisitFolderEntityFolder(f.FolderEntityFolder)
+	}
+	if f.FolderEntityPromptSandbox != nil {
+		return visitor.VisitFolderEntityPromptSandbox(f.FolderEntityPromptSandbox)
+	}
+	if f.FolderEntityWorkflowSandbox != nil {
+		return visitor.VisitFolderEntityWorkflowSandbox(f.FolderEntityWorkflowSandbox)
+	}
+	if f.FolderEntityDocumentIndex != nil {
+		return visitor.VisitFolderEntityDocumentIndex(f.FolderEntityDocumentIndex)
+	}
+	if f.FolderEntityTestSuite != nil {
+		return visitor.VisitFolderEntityTestSuite(f.FolderEntityTestSuite)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", f)
+}
+
+// A slim representation of a Document Index, as it exists within a Folder.
+type FolderEntityDocumentIndex struct {
+	Id    string                         `json:"id" url:"id"`
+	Data  *FolderEntityDocumentIndexData `json:"data" url:"data"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FolderEntityDocumentIndex) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
+}
+
+func (f *FolderEntityDocumentIndex) Type() string {
+	return f.type_
+}
+
+func (f *FolderEntityDocumentIndex) UnmarshalJSON(data []byte) error {
+	type embed FolderEntityDocumentIndex
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*f),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*f = FolderEntityDocumentIndex(unmarshaler.embed)
+	if unmarshaler.Type != "DOCUMENT_INDEX" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "DOCUMENT_INDEX", unmarshaler.Type)
+	}
+	f.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f, "type")
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FolderEntityDocumentIndex) MarshalJSON() ([]byte, error) {
+	type embed FolderEntityDocumentIndex
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*f),
+		Type:  "DOCUMENT_INDEX",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (f *FolderEntityDocumentIndex) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
+type FolderEntityDocumentIndexData struct {
+	Id       string       `json:"id" url:"id"`
+	Label    string       `json:"label" url:"label"`
+	Created  time.Time    `json:"created" url:"created"`
+	Modified time.Time    `json:"modified" url:"modified"`
+	Status   EntityStatus `json:"status" url:"status"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FolderEntityDocumentIndexData) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
+}
+
+func (f *FolderEntityDocumentIndexData) UnmarshalJSON(data []byte) error {
+	type embed FolderEntityDocumentIndexData
+	var unmarshaler = struct {
+		embed
+		Created  *core.DateTime `json:"created"`
+		Modified *core.DateTime `json:"modified"`
+	}{
+		embed: embed(*f),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*f = FolderEntityDocumentIndexData(unmarshaler.embed)
+	f.Created = unmarshaler.Created.Time()
+	f.Modified = unmarshaler.Modified.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FolderEntityDocumentIndexData) MarshalJSON() ([]byte, error) {
+	type embed FolderEntityDocumentIndexData
+	var marshaler = struct {
+		embed
+		Created  *core.DateTime `json:"created"`
+		Modified *core.DateTime `json:"modified"`
+	}{
+		embed:    embed(*f),
+		Created:  core.NewDateTime(f.Created),
+		Modified: core.NewDateTime(f.Modified),
+	}
+	return json.Marshal(marshaler)
+}
+
+func (f *FolderEntityDocumentIndexData) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
+// A slim representation of a Folder, as it exists within another Folder.
+type FolderEntityFolder struct {
+	Id    string                  `json:"id" url:"id"`
+	Data  *FolderEntityFolderData `json:"data" url:"data"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FolderEntityFolder) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
+}
+
+func (f *FolderEntityFolder) Type() string {
+	return f.type_
+}
+
+func (f *FolderEntityFolder) UnmarshalJSON(data []byte) error {
+	type embed FolderEntityFolder
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*f),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*f = FolderEntityFolder(unmarshaler.embed)
+	if unmarshaler.Type != "FOLDER" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "FOLDER", unmarshaler.Type)
+	}
+	f.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f, "type")
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FolderEntityFolder) MarshalJSON() ([]byte, error) {
+	type embed FolderEntityFolder
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*f),
+		Type:  "FOLDER",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (f *FolderEntityFolder) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
+type FolderEntityFolderData struct {
+	Id          string    `json:"id" url:"id"`
+	Label       string    `json:"label" url:"label"`
+	Created     time.Time `json:"created" url:"created"`
+	Modified    time.Time `json:"modified" url:"modified"`
+	HasContents bool      `json:"has_contents" url:"has_contents"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FolderEntityFolderData) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
+}
+
+func (f *FolderEntityFolderData) UnmarshalJSON(data []byte) error {
+	type embed FolderEntityFolderData
+	var unmarshaler = struct {
+		embed
+		Created  *core.DateTime `json:"created"`
+		Modified *core.DateTime `json:"modified"`
+	}{
+		embed: embed(*f),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*f = FolderEntityFolderData(unmarshaler.embed)
+	f.Created = unmarshaler.Created.Time()
+	f.Modified = unmarshaler.Modified.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FolderEntityFolderData) MarshalJSON() ([]byte, error) {
+	type embed FolderEntityFolderData
+	var marshaler = struct {
+		embed
+		Created  *core.DateTime `json:"created"`
+		Modified *core.DateTime `json:"modified"`
+	}{
+		embed:    embed(*f),
+		Created:  core.NewDateTime(f.Created),
+		Modified: core.NewDateTime(f.Modified),
+	}
+	return json.Marshal(marshaler)
+}
+
+func (f *FolderEntityFolderData) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
+// A slim representation of a Prompt Sandbox, as it exists within a Folder.
+type FolderEntityPromptSandbox struct {
+	Id    string                         `json:"id" url:"id"`
+	Data  *FolderEntityPromptSandboxData `json:"data" url:"data"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FolderEntityPromptSandbox) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
+}
+
+func (f *FolderEntityPromptSandbox) Type() string {
+	return f.type_
+}
+
+func (f *FolderEntityPromptSandbox) UnmarshalJSON(data []byte) error {
+	type embed FolderEntityPromptSandbox
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*f),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*f = FolderEntityPromptSandbox(unmarshaler.embed)
+	if unmarshaler.Type != "PROMPT_SANDBOX" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "PROMPT_SANDBOX", unmarshaler.Type)
+	}
+	f.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f, "type")
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FolderEntityPromptSandbox) MarshalJSON() ([]byte, error) {
+	type embed FolderEntityPromptSandbox
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*f),
+		Type:  "PROMPT_SANDBOX",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (f *FolderEntityPromptSandbox) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
+type FolderEntityPromptSandboxData struct {
+	Id             string       `json:"id" url:"id"`
+	Label          string       `json:"label" url:"label"`
+	Created        time.Time    `json:"created" url:"created"`
+	Modified       time.Time    `json:"modified" url:"modified"`
+	Status         EntityStatus `json:"status" url:"status"`
+	LastDeployedOn *time.Time   `json:"last_deployed_on,omitempty" url:"last_deployed_on,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FolderEntityPromptSandboxData) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
+}
+
+func (f *FolderEntityPromptSandboxData) UnmarshalJSON(data []byte) error {
+	type embed FolderEntityPromptSandboxData
+	var unmarshaler = struct {
+		embed
+		Created        *core.DateTime `json:"created"`
+		Modified       *core.DateTime `json:"modified"`
+		LastDeployedOn *core.DateTime `json:"last_deployed_on,omitempty"`
+	}{
+		embed: embed(*f),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*f = FolderEntityPromptSandboxData(unmarshaler.embed)
+	f.Created = unmarshaler.Created.Time()
+	f.Modified = unmarshaler.Modified.Time()
+	f.LastDeployedOn = unmarshaler.LastDeployedOn.TimePtr()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FolderEntityPromptSandboxData) MarshalJSON() ([]byte, error) {
+	type embed FolderEntityPromptSandboxData
+	var marshaler = struct {
+		embed
+		Created        *core.DateTime `json:"created"`
+		Modified       *core.DateTime `json:"modified"`
+		LastDeployedOn *core.DateTime `json:"last_deployed_on,omitempty"`
+	}{
+		embed:          embed(*f),
+		Created:        core.NewDateTime(f.Created),
+		Modified:       core.NewDateTime(f.Modified),
+		LastDeployedOn: core.NewOptionalDateTime(f.LastDeployedOn),
+	}
+	return json.Marshal(marshaler)
+}
+
+func (f *FolderEntityPromptSandboxData) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
+// A slim representation of a Test Suite, as it exists within a Folder.
+type FolderEntityTestSuite struct {
+	Id    string                     `json:"id" url:"id"`
+	Data  *FolderEntityTestSuiteData `json:"data" url:"data"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FolderEntityTestSuite) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
+}
+
+func (f *FolderEntityTestSuite) Type() string {
+	return f.type_
+}
+
+func (f *FolderEntityTestSuite) UnmarshalJSON(data []byte) error {
+	type embed FolderEntityTestSuite
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*f),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*f = FolderEntityTestSuite(unmarshaler.embed)
+	if unmarshaler.Type != "TEST_SUITE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "TEST_SUITE", unmarshaler.Type)
+	}
+	f.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f, "type")
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FolderEntityTestSuite) MarshalJSON() ([]byte, error) {
+	type embed FolderEntityTestSuite
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*f),
+		Type:  "TEST_SUITE",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (f *FolderEntityTestSuite) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
+type FolderEntityTestSuiteData struct {
+	Id       string       `json:"id" url:"id"`
+	Label    string       `json:"label" url:"label"`
+	Created  time.Time    `json:"created" url:"created"`
+	Modified time.Time    `json:"modified" url:"modified"`
+	Status   EntityStatus `json:"status" url:"status"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FolderEntityTestSuiteData) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
+}
+
+func (f *FolderEntityTestSuiteData) UnmarshalJSON(data []byte) error {
+	type embed FolderEntityTestSuiteData
+	var unmarshaler = struct {
+		embed
+		Created  *core.DateTime `json:"created"`
+		Modified *core.DateTime `json:"modified"`
+	}{
+		embed: embed(*f),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*f = FolderEntityTestSuiteData(unmarshaler.embed)
+	f.Created = unmarshaler.Created.Time()
+	f.Modified = unmarshaler.Modified.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FolderEntityTestSuiteData) MarshalJSON() ([]byte, error) {
+	type embed FolderEntityTestSuiteData
+	var marshaler = struct {
+		embed
+		Created  *core.DateTime `json:"created"`
+		Modified *core.DateTime `json:"modified"`
+	}{
+		embed:    embed(*f),
+		Created:  core.NewDateTime(f.Created),
+		Modified: core.NewDateTime(f.Modified),
+	}
+	return json.Marshal(marshaler)
+}
+
+func (f *FolderEntityTestSuiteData) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
+// A slim representation of a Workflow Sandbox, as it exists within a Folder.
+type FolderEntityWorkflowSandbox struct {
+	Id    string                           `json:"id" url:"id"`
+	Data  *FolderEntityWorkflowSandboxData `json:"data" url:"data"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FolderEntityWorkflowSandbox) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
+}
+
+func (f *FolderEntityWorkflowSandbox) Type() string {
+	return f.type_
+}
+
+func (f *FolderEntityWorkflowSandbox) UnmarshalJSON(data []byte) error {
+	type embed FolderEntityWorkflowSandbox
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*f),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*f = FolderEntityWorkflowSandbox(unmarshaler.embed)
+	if unmarshaler.Type != "WORKFLOW_SANDBOX" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "WORKFLOW_SANDBOX", unmarshaler.Type)
+	}
+	f.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f, "type")
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FolderEntityWorkflowSandbox) MarshalJSON() ([]byte, error) {
+	type embed FolderEntityWorkflowSandbox
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*f),
+		Type:  "WORKFLOW_SANDBOX",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (f *FolderEntityWorkflowSandbox) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
+type FolderEntityWorkflowSandboxData struct {
+	Id             string       `json:"id" url:"id"`
+	Label          string       `json:"label" url:"label"`
+	Created        time.Time    `json:"created" url:"created"`
+	Modified       time.Time    `json:"modified" url:"modified"`
+	Status         EntityStatus `json:"status" url:"status"`
+	LastDeployedOn *time.Time   `json:"last_deployed_on,omitempty" url:"last_deployed_on,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FolderEntityWorkflowSandboxData) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
+}
+
+func (f *FolderEntityWorkflowSandboxData) UnmarshalJSON(data []byte) error {
+	type embed FolderEntityWorkflowSandboxData
+	var unmarshaler = struct {
+		embed
+		Created        *core.DateTime `json:"created"`
+		Modified       *core.DateTime `json:"modified"`
+		LastDeployedOn *core.DateTime `json:"last_deployed_on,omitempty"`
+	}{
+		embed: embed(*f),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*f = FolderEntityWorkflowSandboxData(unmarshaler.embed)
+	f.Created = unmarshaler.Created.Time()
+	f.Modified = unmarshaler.Modified.Time()
+	f.LastDeployedOn = unmarshaler.LastDeployedOn.TimePtr()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FolderEntityWorkflowSandboxData) MarshalJSON() ([]byte, error) {
+	type embed FolderEntityWorkflowSandboxData
+	var marshaler = struct {
+		embed
+		Created        *core.DateTime `json:"created"`
+		Modified       *core.DateTime `json:"modified"`
+		LastDeployedOn *core.DateTime `json:"last_deployed_on,omitempty"`
+	}{
+		embed:          embed(*f),
+		Created:        core.NewDateTime(f.Created),
+		Modified:       core.NewDateTime(f.Modified),
+		LastDeployedOn: core.NewOptionalDateTime(f.LastDeployedOn),
+	}
+	return json.Marshal(marshaler)
+}
+
+func (f *FolderEntityWorkflowSandboxData) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
 // The final data event returned indicating that the stream has ended and all final resolved values from the model can be found.
 type FulfilledAdHocExecutePromptEvent struct {
 	Outputs     []*PromptOutput                    `json:"outputs" url:"outputs"`
@@ -13947,6 +14720,50 @@ func (p *PaginatedDocumentIndexReadList) UnmarshalJSON(data []byte) error {
 }
 
 func (p *PaginatedDocumentIndexReadList) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PaginatedFolderEntityList struct {
+	Count    *int            `json:"count,omitempty" url:"count,omitempty"`
+	Next     *string         `json:"next,omitempty" url:"next,omitempty"`
+	Previous *string         `json:"previous,omitempty" url:"previous,omitempty"`
+	Results  []*FolderEntity `json:"results,omitempty" url:"results,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaginatedFolderEntityList) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaginatedFolderEntityList) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaginatedFolderEntityList
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaginatedFolderEntityList(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaginatedFolderEntityList) String() string {
 	if len(p._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
 			return value
