@@ -508,10 +508,10 @@ func (a *ApiNodeResult) String() string {
 }
 
 type ApiNodeResultData struct {
+	Json               map[string]interface{} `json:"json,omitempty" url:"json,omitempty"`
 	TextOutputId       string                 `json:"text_output_id" url:"text_output_id"`
 	Text               *string                `json:"text,omitempty" url:"text,omitempty"`
 	JsonOutputId       string                 `json:"json_output_id" url:"json_output_id"`
-	Json               map[string]interface{} `json:"json,omitempty" url:"json,omitempty"`
 	StatusCodeOutputId string                 `json:"status_code_output_id" url:"status_code_output_id"`
 	StatusCode         int                    `json:"status_code" url:"status_code"`
 
@@ -16111,6 +16111,47 @@ func (p *PromptRequestStringInputRequest) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
+type PromptSettingsRequest struct {
+	Timeout *float64 `json:"timeout,omitempty" url:"timeout,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PromptSettingsRequest) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PromptSettingsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler PromptSettingsRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PromptSettingsRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PromptSettingsRequest) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
 type RawPromptExecutionOverridesRequest struct {
 	Body map[string]interface{} `json:"body,omitempty" url:"body,omitempty"`
 	// The raw headers to send to the model host.
@@ -18164,6 +18205,34 @@ func (s *SearchWeightsRequest) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", s)
+}
+
+// - `USER_DEFINED` - User Defined
+// - `HMAC` - Hmac
+// - `INTERNAL_API_KEY` - Internal Api Key
+type SecretTypeEnum string
+
+const (
+	SecretTypeEnumUserDefined    SecretTypeEnum = "USER_DEFINED"
+	SecretTypeEnumHmac           SecretTypeEnum = "HMAC"
+	SecretTypeEnumInternalApiKey SecretTypeEnum = "INTERNAL_API_KEY"
+)
+
+func NewSecretTypeEnumFromString(s string) (SecretTypeEnum, error) {
+	switch s {
+	case "USER_DEFINED":
+		return SecretTypeEnumUserDefined, nil
+	case "HMAC":
+		return SecretTypeEnumHmac, nil
+	case "INTERNAL_API_KEY":
+		return SecretTypeEnumInternalApiKey, nil
+	}
+	var t SecretTypeEnum
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (s SecretTypeEnum) Ptr() *SecretTypeEnum {
+	return &s
 }
 
 // Configuration for sentence chunking
@@ -25252,6 +25321,7 @@ func (v *VellumError) String() string {
 
 // - `INVALID_REQUEST` - INVALID_REQUEST
 // - `PROVIDER_ERROR` - PROVIDER_ERROR
+// - `REQUEST_TIMEOUT` - REQUEST_TIMEOUT
 // - `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
 // - `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
 type VellumErrorCodeEnum string
@@ -25259,6 +25329,7 @@ type VellumErrorCodeEnum string
 const (
 	VellumErrorCodeEnumInvalidRequest      VellumErrorCodeEnum = "INVALID_REQUEST"
 	VellumErrorCodeEnumProviderError       VellumErrorCodeEnum = "PROVIDER_ERROR"
+	VellumErrorCodeEnumRequestTimeout      VellumErrorCodeEnum = "REQUEST_TIMEOUT"
 	VellumErrorCodeEnumInternalServerError VellumErrorCodeEnum = "INTERNAL_SERVER_ERROR"
 	VellumErrorCodeEnumUserDefinedError    VellumErrorCodeEnum = "USER_DEFINED_ERROR"
 )
@@ -25269,6 +25340,8 @@ func NewVellumErrorCodeEnumFromString(s string) (VellumErrorCodeEnum, error) {
 		return VellumErrorCodeEnumInvalidRequest, nil
 	case "PROVIDER_ERROR":
 		return VellumErrorCodeEnumProviderError, nil
+	case "REQUEST_TIMEOUT":
+		return VellumErrorCodeEnumRequestTimeout, nil
 	case "INTERNAL_SERVER_ERROR":
 		return VellumErrorCodeEnumInternalServerError, nil
 	case "USER_DEFINED_ERROR":
@@ -29034,4 +29107,67 @@ func (w *WorkflowStreamEvent) Accept(visitor WorkflowStreamEventVisitor) error {
 		return visitor.VisitWorkflowExecutionNodeResultEvent(w.WorkflowExecutionNodeResultEvent)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", w)
+}
+
+type WorkspaceSecretRead struct {
+	Id         string         `json:"id" url:"id"`
+	Modified   time.Time      `json:"modified" url:"modified"`
+	Name       string         `json:"name" url:"name"`
+	Label      string         `json:"label" url:"label"`
+	SecretType SecretTypeEnum `json:"secret_type" url:"secret_type"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkspaceSecretRead) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkspaceSecretRead) UnmarshalJSON(data []byte) error {
+	type embed WorkspaceSecretRead
+	var unmarshaler = struct {
+		embed
+		Modified *core.DateTime `json:"modified"`
+	}{
+		embed: embed(*w),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*w = WorkspaceSecretRead(unmarshaler.embed)
+	w.Modified = unmarshaler.Modified.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkspaceSecretRead) MarshalJSON() ([]byte, error) {
+	type embed WorkspaceSecretRead
+	var marshaler = struct {
+		embed
+		Modified *core.DateTime `json:"modified"`
+	}{
+		embed:    embed(*w),
+		Modified: core.NewDateTime(w.Modified),
+	}
+	return json.Marshal(marshaler)
+}
+
+func (w *WorkspaceSecretRead) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
 }
