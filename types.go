@@ -508,10 +508,10 @@ func (a *ApiNodeResult) String() string {
 }
 
 type ApiNodeResultData struct {
+	Json               map[string]interface{} `json:"json,omitempty" url:"json,omitempty"`
 	TextOutputId       string                 `json:"text_output_id" url:"text_output_id"`
 	Text               *string                `json:"text,omitempty" url:"text,omitempty"`
 	JsonOutputId       string                 `json:"json_output_id" url:"json_output_id"`
-	Json               map[string]interface{} `json:"json,omitempty" url:"json,omitempty"`
 	StatusCodeOutputId string                 `json:"status_code_output_id" url:"status_code_output_id"`
 	StatusCode         int                    `json:"status_code" url:"status_code"`
 
@@ -16111,6 +16111,47 @@ func (p *PromptRequestStringInputRequest) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
+type PromptSettingsRequest struct {
+	Timeout *float64 `json:"timeout,omitempty" url:"timeout,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PromptSettingsRequest) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PromptSettingsRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler PromptSettingsRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PromptSettingsRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PromptSettingsRequest) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
 type RawPromptExecutionOverridesRequest struct {
 	Body map[string]interface{} `json:"body,omitempty" url:"body,omitempty"`
 	// The raw headers to send to the model host.
@@ -25252,6 +25293,7 @@ func (v *VellumError) String() string {
 
 // - `INVALID_REQUEST` - INVALID_REQUEST
 // - `PROVIDER_ERROR` - PROVIDER_ERROR
+// - `REQUEST_TIMEOUT` - REQUEST_TIMEOUT
 // - `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
 // - `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
 type VellumErrorCodeEnum string
@@ -25259,6 +25301,7 @@ type VellumErrorCodeEnum string
 const (
 	VellumErrorCodeEnumInvalidRequest      VellumErrorCodeEnum = "INVALID_REQUEST"
 	VellumErrorCodeEnumProviderError       VellumErrorCodeEnum = "PROVIDER_ERROR"
+	VellumErrorCodeEnumRequestTimeout      VellumErrorCodeEnum = "REQUEST_TIMEOUT"
 	VellumErrorCodeEnumInternalServerError VellumErrorCodeEnum = "INTERNAL_SERVER_ERROR"
 	VellumErrorCodeEnumUserDefinedError    VellumErrorCodeEnum = "USER_DEFINED_ERROR"
 )
@@ -25269,6 +25312,8 @@ func NewVellumErrorCodeEnumFromString(s string) (VellumErrorCodeEnum, error) {
 		return VellumErrorCodeEnumInvalidRequest, nil
 	case "PROVIDER_ERROR":
 		return VellumErrorCodeEnumProviderError, nil
+	case "REQUEST_TIMEOUT":
+		return VellumErrorCodeEnumRequestTimeout, nil
 	case "INTERNAL_SERVER_ERROR":
 		return VellumErrorCodeEnumInternalServerError, nil
 	case "USER_DEFINED_ERROR":
@@ -27740,6 +27785,49 @@ func (w *WorkflowOutputString) MarshalJSON() ([]byte, error) {
 }
 
 func (w *WorkflowOutputString) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
+}
+
+type WorkflowPushExecConfig = map[string]interface{}
+
+type WorkflowPushResponse struct {
+	WorkflowSandboxId string `json:"workflow_sandbox_id" url:"workflow_sandbox_id"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowPushResponse) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkflowPushResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler WorkflowPushResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*w = WorkflowPushResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowPushResponse) String() string {
 	if len(w._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
 			return value
