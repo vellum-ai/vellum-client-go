@@ -27824,6 +27824,49 @@ func (w *WorkflowOutputString) String() string {
 	return fmt.Sprintf("%#v", w)
 }
 
+type WorkflowPushExecConfig = map[string]interface{}
+
+type WorkflowPushResponse struct {
+	WorkflowSandboxId string `json:"workflow_sandbox_id" url:"workflow_sandbox_id"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowPushResponse) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkflowPushResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler WorkflowPushResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*w = WorkflowPushResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowPushResponse) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
+}
+
 type WorkflowReleaseTagRead struct {
 	// The name of the Release Tag
 	Name string `json:"name" url:"name"`

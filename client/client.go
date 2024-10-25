@@ -20,6 +20,7 @@ import (
 	testsuiteruns "github.com/vellum-ai/vellum-client-go/testsuiteruns"
 	testsuites "github.com/vellum-ai/vellum-client-go/testsuites"
 	workflowdeployments "github.com/vellum-ai/vellum-client-go/workflowdeployments"
+	workflows "github.com/vellum-ai/vellum-client-go/workflows"
 	workflowsandboxes "github.com/vellum-ai/vellum-client-go/workflowsandboxes"
 	workspacesecrets "github.com/vellum-ai/vellum-client-go/workspacesecrets"
 	io "io"
@@ -42,6 +43,7 @@ type Client struct {
 	TestSuites          *testsuites.Client
 	WorkflowDeployments *workflowdeployments.Client
 	WorkflowSandboxes   *workflowsandboxes.Client
+	Workflows           *workflows.Client
 	WorkspaceSecrets    *workspacesecrets.Client
 }
 
@@ -67,6 +69,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 		TestSuites:          testsuites.NewClient(opts...),
 		WorkflowDeployments: workflowdeployments.NewClient(opts...),
 		WorkflowSandboxes:   workflowsandboxes.NewClient(opts...),
+		Workflows:           workflows.NewClient(opts...),
 		WorkspaceSecrets:    workspacesecrets.NewClient(opts...),
 	}
 }
