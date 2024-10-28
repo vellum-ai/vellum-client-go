@@ -2541,8 +2541,8 @@ func (c ChatMessageRole) Ptr() *ChatMessageRole {
 }
 
 type CodeExecutionNodeArrayResult struct {
-	Id    string                    `json:"id" url:"id"`
-	Value []*ArrayVariableValueItem `json:"value,omitempty" url:"value,omitempty"`
+	Id    string                  `json:"id" url:"id"`
+	Value []*ArrayVellumValueItem `json:"value,omitempty" url:"value,omitempty"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -12481,9 +12481,9 @@ func (n *NamedTestCaseVariableValueRequest) Accept(visitor NamedTestCaseVariable
 }
 
 type NodeInputCompiledArrayValue struct {
-	NodeInputId string                    `json:"node_input_id" url:"node_input_id"`
-	Key         string                    `json:"key" url:"key"`
-	Value       []*ArrayVariableValueItem `json:"value,omitempty" url:"value,omitempty"`
+	NodeInputId string                  `json:"node_input_id" url:"node_input_id"`
+	Key         string                  `json:"key" url:"key"`
+	Value       []*ArrayVellumValueItem `json:"value,omitempty" url:"value,omitempty"`
 	type_       string
 
 	extraProperties map[string]interface{}
@@ -12687,7 +12687,7 @@ func (n *NodeInputCompiledErrorValue) String() string {
 	return fmt.Sprintf("%#v", n)
 }
 
-type NodeInputCompiledFunctionCall struct {
+type NodeInputCompiledFunctionCallValue struct {
 	NodeInputId string        `json:"node_input_id" url:"node_input_id"`
 	Key         string        `json:"key" url:"key"`
 	Value       *FunctionCall `json:"value,omitempty" url:"value,omitempty"`
@@ -12697,16 +12697,16 @@ type NodeInputCompiledFunctionCall struct {
 	_rawJSON        json.RawMessage
 }
 
-func (n *NodeInputCompiledFunctionCall) GetExtraProperties() map[string]interface{} {
+func (n *NodeInputCompiledFunctionCallValue) GetExtraProperties() map[string]interface{} {
 	return n.extraProperties
 }
 
-func (n *NodeInputCompiledFunctionCall) Type() string {
+func (n *NodeInputCompiledFunctionCallValue) Type() string {
 	return n.type_
 }
 
-func (n *NodeInputCompiledFunctionCall) UnmarshalJSON(data []byte) error {
-	type embed NodeInputCompiledFunctionCall
+func (n *NodeInputCompiledFunctionCallValue) UnmarshalJSON(data []byte) error {
+	type embed NodeInputCompiledFunctionCallValue
 	var unmarshaler = struct {
 		embed
 		Type string `json:"type"`
@@ -12716,7 +12716,7 @@ func (n *NodeInputCompiledFunctionCall) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*n = NodeInputCompiledFunctionCall(unmarshaler.embed)
+	*n = NodeInputCompiledFunctionCallValue(unmarshaler.embed)
 	if unmarshaler.Type != "FUNCTION_CALL" {
 		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "FUNCTION_CALL", unmarshaler.Type)
 	}
@@ -12732,8 +12732,8 @@ func (n *NodeInputCompiledFunctionCall) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (n *NodeInputCompiledFunctionCall) MarshalJSON() ([]byte, error) {
-	type embed NodeInputCompiledFunctionCall
+func (n *NodeInputCompiledFunctionCallValue) MarshalJSON() ([]byte, error) {
+	type embed NodeInputCompiledFunctionCallValue
 	var marshaler = struct {
 		embed
 		Type string `json:"type"`
@@ -12744,7 +12744,7 @@ func (n *NodeInputCompiledFunctionCall) MarshalJSON() ([]byte, error) {
 	return json.Marshal(marshaler)
 }
 
-func (n *NodeInputCompiledFunctionCall) String() string {
+func (n *NodeInputCompiledFunctionCallValue) String() string {
 	if len(n._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
 			return value
@@ -13040,7 +13040,7 @@ type NodeInputVariableCompiledValue struct {
 	NodeInputCompiledSearchResultsValue *NodeInputCompiledSearchResultsValue
 	NodeInputCompiledErrorValue         *NodeInputCompiledErrorValue
 	NodeInputCompiledArrayValue         *NodeInputCompiledArrayValue
-	NodeInputCompiledFunctionCall       *NodeInputCompiledFunctionCall
+	NodeInputCompiledFunctionCallValue  *NodeInputCompiledFunctionCallValue
 }
 
 func (n *NodeInputVariableCompiledValue) UnmarshalJSON(data []byte) error {
@@ -13079,9 +13079,9 @@ func (n *NodeInputVariableCompiledValue) UnmarshalJSON(data []byte) error {
 		n.NodeInputCompiledArrayValue = valueNodeInputCompiledArrayValue
 		return nil
 	}
-	valueNodeInputCompiledFunctionCall := new(NodeInputCompiledFunctionCall)
-	if err := json.Unmarshal(data, &valueNodeInputCompiledFunctionCall); err == nil {
-		n.NodeInputCompiledFunctionCall = valueNodeInputCompiledFunctionCall
+	valueNodeInputCompiledFunctionCallValue := new(NodeInputCompiledFunctionCallValue)
+	if err := json.Unmarshal(data, &valueNodeInputCompiledFunctionCallValue); err == nil {
+		n.NodeInputCompiledFunctionCallValue = valueNodeInputCompiledFunctionCallValue
 		return nil
 	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, n)
@@ -13109,8 +13109,8 @@ func (n NodeInputVariableCompiledValue) MarshalJSON() ([]byte, error) {
 	if n.NodeInputCompiledArrayValue != nil {
 		return json.Marshal(n.NodeInputCompiledArrayValue)
 	}
-	if n.NodeInputCompiledFunctionCall != nil {
-		return json.Marshal(n.NodeInputCompiledFunctionCall)
+	if n.NodeInputCompiledFunctionCallValue != nil {
+		return json.Marshal(n.NodeInputCompiledFunctionCallValue)
 	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", n)
 }
@@ -13123,7 +13123,7 @@ type NodeInputVariableCompiledValueVisitor interface {
 	VisitNodeInputCompiledSearchResultsValue(*NodeInputCompiledSearchResultsValue) error
 	VisitNodeInputCompiledErrorValue(*NodeInputCompiledErrorValue) error
 	VisitNodeInputCompiledArrayValue(*NodeInputCompiledArrayValue) error
-	VisitNodeInputCompiledFunctionCall(*NodeInputCompiledFunctionCall) error
+	VisitNodeInputCompiledFunctionCallValue(*NodeInputCompiledFunctionCallValue) error
 }
 
 func (n *NodeInputVariableCompiledValue) Accept(visitor NodeInputVariableCompiledValueVisitor) error {
@@ -13148,8 +13148,8 @@ func (n *NodeInputVariableCompiledValue) Accept(visitor NodeInputVariableCompile
 	if n.NodeInputCompiledArrayValue != nil {
 		return visitor.VisitNodeInputCompiledArrayValue(n.NodeInputCompiledArrayValue)
 	}
-	if n.NodeInputCompiledFunctionCall != nil {
-		return visitor.VisitNodeInputCompiledFunctionCall(n.NodeInputCompiledFunctionCall)
+	if n.NodeInputCompiledFunctionCallValue != nil {
+		return visitor.VisitNodeInputCompiledFunctionCallValue(n.NodeInputCompiledFunctionCallValue)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", n)
 }
@@ -19626,8 +19626,8 @@ func (s *SubworkflowNodeResultData) String() string {
 }
 
 type TemplatingNodeArrayResult struct {
-	Id    string                    `json:"id" url:"id"`
-	Value []*ArrayVariableValueItem `json:"value,omitempty" url:"value,omitempty"`
+	Id    string                  `json:"id" url:"id"`
+	Value []*ArrayVellumValueItem `json:"value,omitempty" url:"value,omitempty"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -20403,8 +20403,8 @@ func (t *TemplatingNodeStringResult) String() string {
 type TerminalNodeArrayResult struct {
 	Id *string `json:"id,omitempty" url:"id,omitempty"`
 	// The unique name given to the terminal node that produced this output.
-	Name  string                    `json:"name" url:"name"`
-	Value []*ArrayVariableValueItem `json:"value,omitempty" url:"value,omitempty"`
+	Name  string                  `json:"name" url:"name"`
+	Value []*ArrayVellumValueItem `json:"value,omitempty" url:"value,omitempty"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -20935,9 +20935,9 @@ type TerminalNodeResultOutput struct {
 	TerminalNodeJsonResult          *TerminalNodeJsonResult
 	TerminalNodeChatHistoryResult   *TerminalNodeChatHistoryResult
 	TerminalNodeSearchResultsResult *TerminalNodeSearchResultsResult
+	TerminalNodeErrorResult         *TerminalNodeErrorResult
 	TerminalNodeArrayResult         *TerminalNodeArrayResult
 	TerminalNodeFunctionCallResult  *TerminalNodeFunctionCallResult
-	TerminalNodeErrorResult         *TerminalNodeErrorResult
 }
 
 func (t *TerminalNodeResultOutput) UnmarshalJSON(data []byte) error {
@@ -20966,6 +20966,11 @@ func (t *TerminalNodeResultOutput) UnmarshalJSON(data []byte) error {
 		t.TerminalNodeSearchResultsResult = valueTerminalNodeSearchResultsResult
 		return nil
 	}
+	valueTerminalNodeErrorResult := new(TerminalNodeErrorResult)
+	if err := json.Unmarshal(data, &valueTerminalNodeErrorResult); err == nil {
+		t.TerminalNodeErrorResult = valueTerminalNodeErrorResult
+		return nil
+	}
 	valueTerminalNodeArrayResult := new(TerminalNodeArrayResult)
 	if err := json.Unmarshal(data, &valueTerminalNodeArrayResult); err == nil {
 		t.TerminalNodeArrayResult = valueTerminalNodeArrayResult
@@ -20974,11 +20979,6 @@ func (t *TerminalNodeResultOutput) UnmarshalJSON(data []byte) error {
 	valueTerminalNodeFunctionCallResult := new(TerminalNodeFunctionCallResult)
 	if err := json.Unmarshal(data, &valueTerminalNodeFunctionCallResult); err == nil {
 		t.TerminalNodeFunctionCallResult = valueTerminalNodeFunctionCallResult
-		return nil
-	}
-	valueTerminalNodeErrorResult := new(TerminalNodeErrorResult)
-	if err := json.Unmarshal(data, &valueTerminalNodeErrorResult); err == nil {
-		t.TerminalNodeErrorResult = valueTerminalNodeErrorResult
 		return nil
 	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, t)
@@ -21000,14 +21000,14 @@ func (t TerminalNodeResultOutput) MarshalJSON() ([]byte, error) {
 	if t.TerminalNodeSearchResultsResult != nil {
 		return json.Marshal(t.TerminalNodeSearchResultsResult)
 	}
+	if t.TerminalNodeErrorResult != nil {
+		return json.Marshal(t.TerminalNodeErrorResult)
+	}
 	if t.TerminalNodeArrayResult != nil {
 		return json.Marshal(t.TerminalNodeArrayResult)
 	}
 	if t.TerminalNodeFunctionCallResult != nil {
 		return json.Marshal(t.TerminalNodeFunctionCallResult)
-	}
-	if t.TerminalNodeErrorResult != nil {
-		return json.Marshal(t.TerminalNodeErrorResult)
 	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", t)
 }
@@ -21018,9 +21018,9 @@ type TerminalNodeResultOutputVisitor interface {
 	VisitTerminalNodeJsonResult(*TerminalNodeJsonResult) error
 	VisitTerminalNodeChatHistoryResult(*TerminalNodeChatHistoryResult) error
 	VisitTerminalNodeSearchResultsResult(*TerminalNodeSearchResultsResult) error
+	VisitTerminalNodeErrorResult(*TerminalNodeErrorResult) error
 	VisitTerminalNodeArrayResult(*TerminalNodeArrayResult) error
 	VisitTerminalNodeFunctionCallResult(*TerminalNodeFunctionCallResult) error
-	VisitTerminalNodeErrorResult(*TerminalNodeErrorResult) error
 }
 
 func (t *TerminalNodeResultOutput) Accept(visitor TerminalNodeResultOutputVisitor) error {
@@ -21039,14 +21039,14 @@ func (t *TerminalNodeResultOutput) Accept(visitor TerminalNodeResultOutputVisito
 	if t.TerminalNodeSearchResultsResult != nil {
 		return visitor.VisitTerminalNodeSearchResultsResult(t.TerminalNodeSearchResultsResult)
 	}
+	if t.TerminalNodeErrorResult != nil {
+		return visitor.VisitTerminalNodeErrorResult(t.TerminalNodeErrorResult)
+	}
 	if t.TerminalNodeArrayResult != nil {
 		return visitor.VisitTerminalNodeArrayResult(t.TerminalNodeArrayResult)
 	}
 	if t.TerminalNodeFunctionCallResult != nil {
 		return visitor.VisitTerminalNodeFunctionCallResult(t.TerminalNodeFunctionCallResult)
-	}
-	if t.TerminalNodeErrorResult != nil {
-		return visitor.VisitTerminalNodeErrorResult(t.TerminalNodeErrorResult)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", t)
 }
