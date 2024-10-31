@@ -3383,14 +3383,15 @@ func (c CodeExecutionRuntime) Ptr() *CodeExecutionRuntime {
 }
 
 type CodeExecutorInputRequest struct {
-	StringInputRequest        *StringInputRequest
-	JsonInputRequest          *JsonInputRequest
-	ChatHistoryInputRequest   *ChatHistoryInputRequest
-	NumberInputRequest        *NumberInputRequest
-	SearchResultsInputRequest *SearchResultsInputRequest
-	ErrorInputRequest         *ErrorInputRequest
-	ArrayInputRequest         *ArrayInputRequest
-	FunctionCallInputRequest  *FunctionCallInputRequest
+	StringInputRequest             *StringInputRequest
+	JsonInputRequest               *JsonInputRequest
+	ChatHistoryInputRequest        *ChatHistoryInputRequest
+	NumberInputRequest             *NumberInputRequest
+	SearchResultsInputRequest      *SearchResultsInputRequest
+	ErrorInputRequest              *ErrorInputRequest
+	ArrayInputRequest              *ArrayInputRequest
+	FunctionCallInputRequest       *FunctionCallInputRequest
+	CodeExecutorSecretInputRequest *CodeExecutorSecretInputRequest
 }
 
 func (c *CodeExecutorInputRequest) UnmarshalJSON(data []byte) error {
@@ -3434,6 +3435,11 @@ func (c *CodeExecutorInputRequest) UnmarshalJSON(data []byte) error {
 		c.FunctionCallInputRequest = valueFunctionCallInputRequest
 		return nil
 	}
+	valueCodeExecutorSecretInputRequest := new(CodeExecutorSecretInputRequest)
+	if err := json.Unmarshal(data, &valueCodeExecutorSecretInputRequest); err == nil {
+		c.CodeExecutorSecretInputRequest = valueCodeExecutorSecretInputRequest
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, c)
 }
 
@@ -3462,6 +3468,9 @@ func (c CodeExecutorInputRequest) MarshalJSON() ([]byte, error) {
 	if c.FunctionCallInputRequest != nil {
 		return json.Marshal(c.FunctionCallInputRequest)
 	}
+	if c.CodeExecutorSecretInputRequest != nil {
+		return json.Marshal(c.CodeExecutorSecretInputRequest)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", c)
 }
 
@@ -3474,6 +3483,7 @@ type CodeExecutorInputRequestVisitor interface {
 	VisitErrorInputRequest(*ErrorInputRequest) error
 	VisitArrayInputRequest(*ArrayInputRequest) error
 	VisitFunctionCallInputRequest(*FunctionCallInputRequest) error
+	VisitCodeExecutorSecretInputRequest(*CodeExecutorSecretInputRequest) error
 }
 
 func (c *CodeExecutorInputRequest) Accept(visitor CodeExecutorInputRequestVisitor) error {
@@ -3500,6 +3510,9 @@ func (c *CodeExecutorInputRequest) Accept(visitor CodeExecutorInputRequestVisito
 	}
 	if c.FunctionCallInputRequest != nil {
 		return visitor.VisitFunctionCallInputRequest(c.FunctionCallInputRequest)
+	}
+	if c.CodeExecutorSecretInputRequest != nil {
+		return visitor.VisitCodeExecutorSecretInputRequest(c.CodeExecutorSecretInputRequest)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", c)
 }
@@ -3535,6 +3548,76 @@ func (c *CodeExecutorResponse) UnmarshalJSON(data []byte) error {
 }
 
 func (c *CodeExecutorResponse) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// A user input representing a Vellum Workspace Secret value
+type CodeExecutorSecretInputRequest struct {
+	// The variable's name
+	Name  string `json:"name" url:"name"`
+	Value string `json:"value" url:"value"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CodeExecutorSecretInputRequest) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CodeExecutorSecretInputRequest) Type() string {
+	return c.type_
+}
+
+func (c *CodeExecutorSecretInputRequest) UnmarshalJSON(data []byte) error {
+	type embed CodeExecutorSecretInputRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*c),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*c = CodeExecutorSecretInputRequest(unmarshaler.embed)
+	if unmarshaler.Type != "SECRET" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", c, "SECRET", unmarshaler.Type)
+	}
+	c.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c, "type")
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CodeExecutorSecretInputRequest) MarshalJSON() ([]byte, error) {
+	type embed CodeExecutorSecretInputRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*c),
+		Type:  "SECRET",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (c *CodeExecutorSecretInputRequest) String() string {
 	if len(c._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
 			return value

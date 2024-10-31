@@ -68,3 +68,44 @@ func (c *Client) Retrieve(
 	}
 	return response, nil
 }
+
+// Used to update a Workspace Secret given its ID or name.
+func (c *Client) PartialUpdate(
+	ctx context.Context,
+	// Either the Workspace Secret's ID or its unique name
+	id string,
+	request *vellumclientgo.PatchedWorkspaceSecretUpdateRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.WorkspaceSecretRead, error) {
+	options := core.NewRequestOptions(opts...)
+
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(baseURL+"/v1/workspace-secrets/%v", id)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
+	var response *vellumclientgo.WorkspaceSecretRead
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPatch,
+			MaxAttempts:     options.MaxAttempts,
+			Headers:         headers,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
