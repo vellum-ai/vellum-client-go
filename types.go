@@ -806,8 +806,8 @@ func (a *ArrayChatMessageContentRequest) String() string {
 // A user input representing a Vellum Array value
 type ArrayInputRequest struct {
 	// The variable's name
-	Name  string                         `json:"name" url:"name"`
-	Value []*ArrayVellumValueItemRequest `json:"value" url:"value"`
+	Name  string                `json:"name" url:"name"`
+	Value []*VellumValueRequest `json:"value" url:"value"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -1077,7 +1077,7 @@ func (a *ArrayVariableValueItem) Accept(visitor ArrayVariableValueItemVisitor) e
 
 // A value representing an array of Vellum variable values.
 type ArrayVellumValue struct {
-	Value []*ArrayVellumValueItem `json:"value,omitempty" url:"value,omitempty"`
+	Value []*VellumValue `json:"value,omitempty" url:"value,omitempty"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -1143,279 +1143,9 @@ func (a *ArrayVellumValue) String() string {
 	return fmt.Sprintf("%#v", a)
 }
 
-type ArrayVellumValueItem struct {
-	StringVellumValue        *StringVellumValue
-	NumberVellumValue        *NumberVellumValue
-	JsonVellumValue          *JsonVellumValue
-	ImageVellumValue         *ImageVellumValue
-	FunctionCallVellumValue  *FunctionCallVellumValue
-	ErrorVellumValue         *ErrorVellumValue
-	ChatHistoryVellumValue   *ChatHistoryVellumValue
-	SearchResultsVellumValue *SearchResultsVellumValue
-	ArrayVellumValue         *ArrayVellumValue
-}
-
-func (a *ArrayVellumValueItem) UnmarshalJSON(data []byte) error {
-	valueStringVellumValue := new(StringVellumValue)
-	if err := json.Unmarshal(data, &valueStringVellumValue); err == nil {
-		a.StringVellumValue = valueStringVellumValue
-		return nil
-	}
-	valueNumberVellumValue := new(NumberVellumValue)
-	if err := json.Unmarshal(data, &valueNumberVellumValue); err == nil {
-		a.NumberVellumValue = valueNumberVellumValue
-		return nil
-	}
-	valueJsonVellumValue := new(JsonVellumValue)
-	if err := json.Unmarshal(data, &valueJsonVellumValue); err == nil {
-		a.JsonVellumValue = valueJsonVellumValue
-		return nil
-	}
-	valueImageVellumValue := new(ImageVellumValue)
-	if err := json.Unmarshal(data, &valueImageVellumValue); err == nil {
-		a.ImageVellumValue = valueImageVellumValue
-		return nil
-	}
-	valueFunctionCallVellumValue := new(FunctionCallVellumValue)
-	if err := json.Unmarshal(data, &valueFunctionCallVellumValue); err == nil {
-		a.FunctionCallVellumValue = valueFunctionCallVellumValue
-		return nil
-	}
-	valueErrorVellumValue := new(ErrorVellumValue)
-	if err := json.Unmarshal(data, &valueErrorVellumValue); err == nil {
-		a.ErrorVellumValue = valueErrorVellumValue
-		return nil
-	}
-	valueChatHistoryVellumValue := new(ChatHistoryVellumValue)
-	if err := json.Unmarshal(data, &valueChatHistoryVellumValue); err == nil {
-		a.ChatHistoryVellumValue = valueChatHistoryVellumValue
-		return nil
-	}
-	valueSearchResultsVellumValue := new(SearchResultsVellumValue)
-	if err := json.Unmarshal(data, &valueSearchResultsVellumValue); err == nil {
-		a.SearchResultsVellumValue = valueSearchResultsVellumValue
-		return nil
-	}
-	valueArrayVellumValue := new(ArrayVellumValue)
-	if err := json.Unmarshal(data, &valueArrayVellumValue); err == nil {
-		a.ArrayVellumValue = valueArrayVellumValue
-		return nil
-	}
-	return fmt.Errorf("%s cannot be deserialized as a %T", data, a)
-}
-
-func (a ArrayVellumValueItem) MarshalJSON() ([]byte, error) {
-	if a.StringVellumValue != nil {
-		return json.Marshal(a.StringVellumValue)
-	}
-	if a.NumberVellumValue != nil {
-		return json.Marshal(a.NumberVellumValue)
-	}
-	if a.JsonVellumValue != nil {
-		return json.Marshal(a.JsonVellumValue)
-	}
-	if a.ImageVellumValue != nil {
-		return json.Marshal(a.ImageVellumValue)
-	}
-	if a.FunctionCallVellumValue != nil {
-		return json.Marshal(a.FunctionCallVellumValue)
-	}
-	if a.ErrorVellumValue != nil {
-		return json.Marshal(a.ErrorVellumValue)
-	}
-	if a.ChatHistoryVellumValue != nil {
-		return json.Marshal(a.ChatHistoryVellumValue)
-	}
-	if a.SearchResultsVellumValue != nil {
-		return json.Marshal(a.SearchResultsVellumValue)
-	}
-	if a.ArrayVellumValue != nil {
-		return json.Marshal(a.ArrayVellumValue)
-	}
-	return nil, fmt.Errorf("type %T does not include a non-empty union type", a)
-}
-
-type ArrayVellumValueItemVisitor interface {
-	VisitStringVellumValue(*StringVellumValue) error
-	VisitNumberVellumValue(*NumberVellumValue) error
-	VisitJsonVellumValue(*JsonVellumValue) error
-	VisitImageVellumValue(*ImageVellumValue) error
-	VisitFunctionCallVellumValue(*FunctionCallVellumValue) error
-	VisitErrorVellumValue(*ErrorVellumValue) error
-	VisitChatHistoryVellumValue(*ChatHistoryVellumValue) error
-	VisitSearchResultsVellumValue(*SearchResultsVellumValue) error
-	VisitArrayVellumValue(*ArrayVellumValue) error
-}
-
-func (a *ArrayVellumValueItem) Accept(visitor ArrayVellumValueItemVisitor) error {
-	if a.StringVellumValue != nil {
-		return visitor.VisitStringVellumValue(a.StringVellumValue)
-	}
-	if a.NumberVellumValue != nil {
-		return visitor.VisitNumberVellumValue(a.NumberVellumValue)
-	}
-	if a.JsonVellumValue != nil {
-		return visitor.VisitJsonVellumValue(a.JsonVellumValue)
-	}
-	if a.ImageVellumValue != nil {
-		return visitor.VisitImageVellumValue(a.ImageVellumValue)
-	}
-	if a.FunctionCallVellumValue != nil {
-		return visitor.VisitFunctionCallVellumValue(a.FunctionCallVellumValue)
-	}
-	if a.ErrorVellumValue != nil {
-		return visitor.VisitErrorVellumValue(a.ErrorVellumValue)
-	}
-	if a.ChatHistoryVellumValue != nil {
-		return visitor.VisitChatHistoryVellumValue(a.ChatHistoryVellumValue)
-	}
-	if a.SearchResultsVellumValue != nil {
-		return visitor.VisitSearchResultsVellumValue(a.SearchResultsVellumValue)
-	}
-	if a.ArrayVellumValue != nil {
-		return visitor.VisitArrayVellumValue(a.ArrayVellumValue)
-	}
-	return fmt.Errorf("type %T does not include a non-empty union type", a)
-}
-
-type ArrayVellumValueItemRequest struct {
-	StringVellumValueRequest        *StringVellumValueRequest
-	NumberVellumValueRequest        *NumberVellumValueRequest
-	JsonVellumValueRequest          *JsonVellumValueRequest
-	ImageVellumValueRequest         *ImageVellumValueRequest
-	FunctionCallVellumValueRequest  *FunctionCallVellumValueRequest
-	ErrorVellumValueRequest         *ErrorVellumValueRequest
-	ChatHistoryVellumValueRequest   *ChatHistoryVellumValueRequest
-	SearchResultsVellumValueRequest *SearchResultsVellumValueRequest
-	ArrayVellumValueRequest         *ArrayVellumValueRequest
-}
-
-func (a *ArrayVellumValueItemRequest) UnmarshalJSON(data []byte) error {
-	valueStringVellumValueRequest := new(StringVellumValueRequest)
-	if err := json.Unmarshal(data, &valueStringVellumValueRequest); err == nil {
-		a.StringVellumValueRequest = valueStringVellumValueRequest
-		return nil
-	}
-	valueNumberVellumValueRequest := new(NumberVellumValueRequest)
-	if err := json.Unmarshal(data, &valueNumberVellumValueRequest); err == nil {
-		a.NumberVellumValueRequest = valueNumberVellumValueRequest
-		return nil
-	}
-	valueJsonVellumValueRequest := new(JsonVellumValueRequest)
-	if err := json.Unmarshal(data, &valueJsonVellumValueRequest); err == nil {
-		a.JsonVellumValueRequest = valueJsonVellumValueRequest
-		return nil
-	}
-	valueImageVellumValueRequest := new(ImageVellumValueRequest)
-	if err := json.Unmarshal(data, &valueImageVellumValueRequest); err == nil {
-		a.ImageVellumValueRequest = valueImageVellumValueRequest
-		return nil
-	}
-	valueFunctionCallVellumValueRequest := new(FunctionCallVellumValueRequest)
-	if err := json.Unmarshal(data, &valueFunctionCallVellumValueRequest); err == nil {
-		a.FunctionCallVellumValueRequest = valueFunctionCallVellumValueRequest
-		return nil
-	}
-	valueErrorVellumValueRequest := new(ErrorVellumValueRequest)
-	if err := json.Unmarshal(data, &valueErrorVellumValueRequest); err == nil {
-		a.ErrorVellumValueRequest = valueErrorVellumValueRequest
-		return nil
-	}
-	valueChatHistoryVellumValueRequest := new(ChatHistoryVellumValueRequest)
-	if err := json.Unmarshal(data, &valueChatHistoryVellumValueRequest); err == nil {
-		a.ChatHistoryVellumValueRequest = valueChatHistoryVellumValueRequest
-		return nil
-	}
-	valueSearchResultsVellumValueRequest := new(SearchResultsVellumValueRequest)
-	if err := json.Unmarshal(data, &valueSearchResultsVellumValueRequest); err == nil {
-		a.SearchResultsVellumValueRequest = valueSearchResultsVellumValueRequest
-		return nil
-	}
-	valueArrayVellumValueRequest := new(ArrayVellumValueRequest)
-	if err := json.Unmarshal(data, &valueArrayVellumValueRequest); err == nil {
-		a.ArrayVellumValueRequest = valueArrayVellumValueRequest
-		return nil
-	}
-	return fmt.Errorf("%s cannot be deserialized as a %T", data, a)
-}
-
-func (a ArrayVellumValueItemRequest) MarshalJSON() ([]byte, error) {
-	if a.StringVellumValueRequest != nil {
-		return json.Marshal(a.StringVellumValueRequest)
-	}
-	if a.NumberVellumValueRequest != nil {
-		return json.Marshal(a.NumberVellumValueRequest)
-	}
-	if a.JsonVellumValueRequest != nil {
-		return json.Marshal(a.JsonVellumValueRequest)
-	}
-	if a.ImageVellumValueRequest != nil {
-		return json.Marshal(a.ImageVellumValueRequest)
-	}
-	if a.FunctionCallVellumValueRequest != nil {
-		return json.Marshal(a.FunctionCallVellumValueRequest)
-	}
-	if a.ErrorVellumValueRequest != nil {
-		return json.Marshal(a.ErrorVellumValueRequest)
-	}
-	if a.ChatHistoryVellumValueRequest != nil {
-		return json.Marshal(a.ChatHistoryVellumValueRequest)
-	}
-	if a.SearchResultsVellumValueRequest != nil {
-		return json.Marshal(a.SearchResultsVellumValueRequest)
-	}
-	if a.ArrayVellumValueRequest != nil {
-		return json.Marshal(a.ArrayVellumValueRequest)
-	}
-	return nil, fmt.Errorf("type %T does not include a non-empty union type", a)
-}
-
-type ArrayVellumValueItemRequestVisitor interface {
-	VisitStringVellumValueRequest(*StringVellumValueRequest) error
-	VisitNumberVellumValueRequest(*NumberVellumValueRequest) error
-	VisitJsonVellumValueRequest(*JsonVellumValueRequest) error
-	VisitImageVellumValueRequest(*ImageVellumValueRequest) error
-	VisitFunctionCallVellumValueRequest(*FunctionCallVellumValueRequest) error
-	VisitErrorVellumValueRequest(*ErrorVellumValueRequest) error
-	VisitChatHistoryVellumValueRequest(*ChatHistoryVellumValueRequest) error
-	VisitSearchResultsVellumValueRequest(*SearchResultsVellumValueRequest) error
-	VisitArrayVellumValueRequest(*ArrayVellumValueRequest) error
-}
-
-func (a *ArrayVellumValueItemRequest) Accept(visitor ArrayVellumValueItemRequestVisitor) error {
-	if a.StringVellumValueRequest != nil {
-		return visitor.VisitStringVellumValueRequest(a.StringVellumValueRequest)
-	}
-	if a.NumberVellumValueRequest != nil {
-		return visitor.VisitNumberVellumValueRequest(a.NumberVellumValueRequest)
-	}
-	if a.JsonVellumValueRequest != nil {
-		return visitor.VisitJsonVellumValueRequest(a.JsonVellumValueRequest)
-	}
-	if a.ImageVellumValueRequest != nil {
-		return visitor.VisitImageVellumValueRequest(a.ImageVellumValueRequest)
-	}
-	if a.FunctionCallVellumValueRequest != nil {
-		return visitor.VisitFunctionCallVellumValueRequest(a.FunctionCallVellumValueRequest)
-	}
-	if a.ErrorVellumValueRequest != nil {
-		return visitor.VisitErrorVellumValueRequest(a.ErrorVellumValueRequest)
-	}
-	if a.ChatHistoryVellumValueRequest != nil {
-		return visitor.VisitChatHistoryVellumValueRequest(a.ChatHistoryVellumValueRequest)
-	}
-	if a.SearchResultsVellumValueRequest != nil {
-		return visitor.VisitSearchResultsVellumValueRequest(a.SearchResultsVellumValueRequest)
-	}
-	if a.ArrayVellumValueRequest != nil {
-		return visitor.VisitArrayVellumValueRequest(a.ArrayVellumValueRequest)
-	}
-	return fmt.Errorf("type %T does not include a non-empty union type", a)
-}
-
 // A value representing an array of Vellum variable values.
 type ArrayVellumValueRequest struct {
-	Value []*ArrayVellumValueItemRequest `json:"value,omitempty" url:"value,omitempty"`
+	Value []*VellumValueRequest `json:"value,omitempty" url:"value,omitempty"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -2541,8 +2271,8 @@ func (c ChatMessageRole) Ptr() *ChatMessageRole {
 }
 
 type CodeExecutionNodeArrayResult struct {
-	Id    string                  `json:"id" url:"id"`
-	Value []*ArrayVellumValueItem `json:"value,omitempty" url:"value,omitempty"`
+	Id    string         `json:"id" url:"id"`
+	Value []*VellumValue `json:"value,omitempty" url:"value,omitempty"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -5230,9 +4960,9 @@ func (e *ExecuteWorkflowWorkflowResultEvent) Accept(visitor ExecuteWorkflowWorkf
 // A value representing an array of Vellum variable values.
 type ExecutionArrayVellumValue struct {
 	// The variable's uniquely identifying internal id.
-	Id    string                  `json:"id" url:"id"`
-	Name  string                  `json:"name" url:"name"`
-	Value []*ArrayVellumValueItem `json:"value,omitempty" url:"value,omitempty"`
+	Id    string         `json:"id" url:"id"`
+	Name  string         `json:"name" url:"name"`
+	Value []*VellumValue `json:"value,omitempty" url:"value,omitempty"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -11217,8 +10947,8 @@ func (n *NamedScenarioInputStringVariableValueRequest) String() string {
 
 // Named Test Case value that is of type ARRAY
 type NamedTestCaseArrayVariableValue struct {
-	Value []*ArrayVellumValueItem `json:"value,omitempty" url:"value,omitempty"`
-	Name  string                  `json:"name" url:"name"`
+	Value []*VellumValue `json:"value,omitempty" url:"value,omitempty"`
+	Name  string         `json:"name" url:"name"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -11286,8 +11016,8 @@ func (n *NamedTestCaseArrayVariableValue) String() string {
 
 // Named Test Case value that is of type ARRAY
 type NamedTestCaseArrayVariableValueRequest struct {
-	Value []*ArrayVellumValueItemRequest `json:"value,omitempty" url:"value,omitempty"`
-	Name  string                         `json:"name" url:"name"`
+	Value []*VellumValueRequest `json:"value,omitempty" url:"value,omitempty"`
+	Name  string                `json:"name" url:"name"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -12564,9 +12294,9 @@ func (n *NamedTestCaseVariableValueRequest) Accept(visitor NamedTestCaseVariable
 }
 
 type NodeInputCompiledArrayValue struct {
-	NodeInputId string                  `json:"node_input_id" url:"node_input_id"`
-	Key         string                  `json:"key" url:"key"`
-	Value       []*ArrayVellumValueItem `json:"value,omitempty" url:"value,omitempty"`
+	NodeInputId string         `json:"node_input_id" url:"node_input_id"`
+	Key         string         `json:"key" url:"key"`
+	Value       []*VellumValue `json:"value,omitempty" url:"value,omitempty"`
 	type_       string
 
 	extraProperties map[string]interface{}
@@ -13239,7 +12969,7 @@ func (n *NodeInputVariableCompiledValue) Accept(visitor NodeInputVariableCompile
 
 // An output returned by a node that is of type ARRAY.
 type NodeOutputCompiledArrayValue struct {
-	Value        []*ArrayVellumValueItem       `json:"value,omitempty" url:"value,omitempty"`
+	Value        []*VellumValue                `json:"value,omitempty" url:"value,omitempty"`
 	NodeOutputId string                        `json:"node_output_id" url:"node_output_id"`
 	State        *WorkflowNodeResultEventState `json:"state,omitempty" url:"state,omitempty"`
 	type_        string
@@ -19709,8 +19439,8 @@ func (s *SubworkflowNodeResultData) String() string {
 }
 
 type TemplatingNodeArrayResult struct {
-	Id    string                  `json:"id" url:"id"`
-	Value []*ArrayVellumValueItem `json:"value,omitempty" url:"value,omitempty"`
+	Id    string         `json:"id" url:"id"`
+	Value []*VellumValue `json:"value,omitempty" url:"value,omitempty"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -20486,8 +20216,8 @@ func (t *TemplatingNodeStringResult) String() string {
 type TerminalNodeArrayResult struct {
 	Id *string `json:"id,omitempty" url:"id,omitempty"`
 	// The unique name given to the terminal node that produced this output.
-	Name  string                  `json:"name" url:"name"`
-	Value []*ArrayVellumValueItem `json:"value,omitempty" url:"value,omitempty"`
+	Name  string         `json:"name" url:"name"`
+	Value []*VellumValue `json:"value,omitempty" url:"value,omitempty"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -21276,9 +21006,9 @@ func (t *TerminalNodeStringResult) String() string {
 
 // An Array value for a variable in a Test Case.
 type TestCaseArrayVariableValue struct {
-	VariableId string                  `json:"variable_id" url:"variable_id"`
-	Name       string                  `json:"name" url:"name"`
-	Value      []*ArrayVellumValueItem `json:"value,omitempty" url:"value,omitempty"`
+	VariableId string         `json:"variable_id" url:"variable_id"`
+	Name       string         `json:"name" url:"name"`
+	Value      []*VellumValue `json:"value,omitempty" url:"value,omitempty"`
 	type_      string
 
 	extraProperties map[string]interface{}
@@ -22344,9 +22074,9 @@ func (t *TestSuiteRunExecution) String() string {
 
 // Execution output of an entity evaluated during a Test Suite Run that is of type ARRAY
 type TestSuiteRunExecutionArrayOutput struct {
-	Name             string                  `json:"name" url:"name"`
-	Value            []*ArrayVellumValueItem `json:"value,omitempty" url:"value,omitempty"`
-	OutputVariableId string                  `json:"output_variable_id" url:"output_variable_id"`
+	Name             string         `json:"name" url:"name"`
+	Value            []*VellumValue `json:"value,omitempty" url:"value,omitempty"`
+	OutputVariableId string         `json:"output_variable_id" url:"output_variable_id"`
 	type_            string
 
 	extraProperties map[string]interface{}
@@ -26203,6 +25933,7 @@ func (v *VellumVariableRequest) String() string {
 // - `ARRAY` - ARRAY
 // - `FUNCTION_CALL` - FUNCTION_CALL
 // - `IMAGE` - IMAGE
+// - `AUDIO` - AUDIO
 // - `NULL` - NULL
 type VellumVariableType string
 
@@ -26216,6 +25947,7 @@ const (
 	VellumVariableTypeArray         VellumVariableType = "ARRAY"
 	VellumVariableTypeFunctionCall  VellumVariableType = "FUNCTION_CALL"
 	VellumVariableTypeImage         VellumVariableType = "IMAGE"
+	VellumVariableTypeAudio         VellumVariableType = "AUDIO"
 	VellumVariableTypeNull          VellumVariableType = "NULL"
 )
 
@@ -26239,6 +25971,8 @@ func NewVellumVariableTypeFromString(s string) (VellumVariableType, error) {
 		return VellumVariableTypeFunctionCall, nil
 	case "IMAGE":
 		return VellumVariableTypeImage, nil
+	case "AUDIO":
+		return VellumVariableTypeAudio, nil
 	case "NULL":
 		return VellumVariableTypeNull, nil
 	}
@@ -27272,8 +27006,8 @@ func (w *WorkflowOutput) Accept(visitor WorkflowOutputVisitor) error {
 type WorkflowOutputArray struct {
 	Id string `json:"id" url:"id"`
 	// The output's name, as defined in the workflow
-	Name  string                  `json:"name" url:"name"`
-	Value []*ArrayVellumValueItem `json:"value,omitempty" url:"value,omitempty"`
+	Name  string         `json:"name" url:"name"`
+	Value []*VellumValue `json:"value,omitempty" url:"value,omitempty"`
 	type_ string
 
 	extraProperties map[string]interface{}
