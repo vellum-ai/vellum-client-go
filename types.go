@@ -3586,6 +3586,76 @@ func (c *ConditionalNodeResultData) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+type ContainerImageRead struct {
+	Id         string           `json:"id" url:"id"`
+	Name       string           `json:"name" url:"name"`
+	Visibility EntityVisibility `json:"visibility" url:"visibility"`
+	Created    time.Time        `json:"created" url:"created"`
+	Modified   time.Time        `json:"modified" url:"modified"`
+	Repository string           `json:"repository" url:"repository"`
+	Sha        string           `json:"sha" url:"sha"`
+	Tags       []string         `json:"tags" url:"tags"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *ContainerImageRead) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *ContainerImageRead) UnmarshalJSON(data []byte) error {
+	type embed ContainerImageRead
+	var unmarshaler = struct {
+		embed
+		Created  *core.DateTime `json:"created"`
+		Modified *core.DateTime `json:"modified"`
+	}{
+		embed: embed(*c),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*c = ContainerImageRead(unmarshaler.embed)
+	c.Created = unmarshaler.Created.Time()
+	c.Modified = unmarshaler.Modified.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *ContainerImageRead) MarshalJSON() ([]byte, error) {
+	type embed ContainerImageRead
+	var marshaler = struct {
+		embed
+		Created  *core.DateTime `json:"created"`
+		Modified *core.DateTime `json:"modified"`
+	}{
+		embed:    embed(*c),
+		Created:  core.NewDateTime(c.Created),
+		Modified: core.NewDateTime(c.Modified),
+	}
+	return json.Marshal(marshaler)
+}
+
+func (c *ContainerImageRead) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
 // Information about the Test Case to create
 type CreateTestSuiteTestCaseRequest struct {
 	// A human-readable label used to convey the intention of this Test Case
@@ -4407,6 +4477,38 @@ func NewEntityStatusFromString(s string) (EntityStatus, error) {
 }
 
 func (e EntityStatus) Ptr() *EntityStatus {
+	return &e
+}
+
+// - `DEFAULT` - Default
+// - `PUBLIC` - Public
+// - `PRIVATE` - Private
+// - `DISABLED` - Disabled
+type EntityVisibility string
+
+const (
+	EntityVisibilityDefault  EntityVisibility = "DEFAULT"
+	EntityVisibilityPublic   EntityVisibility = "PUBLIC"
+	EntityVisibilityPrivate  EntityVisibility = "PRIVATE"
+	EntityVisibilityDisabled EntityVisibility = "DISABLED"
+)
+
+func NewEntityVisibilityFromString(s string) (EntityVisibility, error) {
+	switch s {
+	case "DEFAULT":
+		return EntityVisibilityDefault, nil
+	case "PUBLIC":
+		return EntityVisibilityPublic, nil
+	case "PRIVATE":
+		return EntityVisibilityPrivate, nil
+	case "DISABLED":
+		return EntityVisibilityDisabled, nil
+	}
+	var t EntityVisibility
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (e EntityVisibility) Ptr() *EntityVisibility {
 	return &e
 }
 
@@ -14498,6 +14600,50 @@ func (o *OpenAiVectorizerTextEmbeddingAda002Request) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", o)
+}
+
+type PaginatedContainerImageReadList struct {
+	Count    *int                  `json:"count,omitempty" url:"count,omitempty"`
+	Next     *string               `json:"next,omitempty" url:"next,omitempty"`
+	Previous *string               `json:"previous,omitempty" url:"previous,omitempty"`
+	Results  []*ContainerImageRead `json:"results,omitempty" url:"results,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaginatedContainerImageReadList) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaginatedContainerImageReadList) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaginatedContainerImageReadList
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaginatedContainerImageReadList(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaginatedContainerImageReadList) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
 }
 
 type PaginatedDocumentIndexReadList struct {

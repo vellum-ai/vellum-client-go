@@ -9,6 +9,7 @@ import (
 	errors "errors"
 	vellumclientgo "github.com/vellum-ai/vellum-client-go"
 	adhoc "github.com/vellum-ai/vellum-client-go/adhoc"
+	containerimages "github.com/vellum-ai/vellum-client-go/containerimages"
 	core "github.com/vellum-ai/vellum-client-go/core"
 	deployments "github.com/vellum-ai/vellum-client-go/deployments"
 	documentindexes "github.com/vellum-ai/vellum-client-go/documentindexes"
@@ -33,6 +34,7 @@ type Client struct {
 	header  http.Header
 
 	AdHoc               *adhoc.Client
+	ContainerImages     *containerimages.Client
 	Deployments         *deployments.Client
 	DocumentIndexes     *documentindexes.Client
 	Documents           *documents.Client
@@ -59,6 +61,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 		),
 		header:              options.ToHeader(),
 		AdHoc:               adhoc.NewClient(opts...),
+		ContainerImages:     containerimages.NewClient(opts...),
 		Deployments:         deployments.NewClient(opts...),
 		DocumentIndexes:     documentindexes.NewClient(opts...),
 		Documents:           documents.NewClient(opts...),
