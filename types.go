@@ -625,6 +625,7 @@ type ArrayChatMessageContentItem struct {
 	StringChatMessageContent       *StringChatMessageContent
 	FunctionCallChatMessageContent *FunctionCallChatMessageContent
 	ImageChatMessageContent        *ImageChatMessageContent
+	AudioChatMessageContent        *AudioChatMessageContent
 }
 
 func (a *ArrayChatMessageContentItem) UnmarshalJSON(data []byte) error {
@@ -643,6 +644,11 @@ func (a *ArrayChatMessageContentItem) UnmarshalJSON(data []byte) error {
 		a.ImageChatMessageContent = valueImageChatMessageContent
 		return nil
 	}
+	valueAudioChatMessageContent := new(AudioChatMessageContent)
+	if err := json.Unmarshal(data, &valueAudioChatMessageContent); err == nil {
+		a.AudioChatMessageContent = valueAudioChatMessageContent
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, a)
 }
 
@@ -656,6 +662,9 @@ func (a ArrayChatMessageContentItem) MarshalJSON() ([]byte, error) {
 	if a.ImageChatMessageContent != nil {
 		return json.Marshal(a.ImageChatMessageContent)
 	}
+	if a.AudioChatMessageContent != nil {
+		return json.Marshal(a.AudioChatMessageContent)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", a)
 }
 
@@ -663,6 +672,7 @@ type ArrayChatMessageContentItemVisitor interface {
 	VisitStringChatMessageContent(*StringChatMessageContent) error
 	VisitFunctionCallChatMessageContent(*FunctionCallChatMessageContent) error
 	VisitImageChatMessageContent(*ImageChatMessageContent) error
+	VisitAudioChatMessageContent(*AudioChatMessageContent) error
 }
 
 func (a *ArrayChatMessageContentItem) Accept(visitor ArrayChatMessageContentItemVisitor) error {
@@ -675,6 +685,9 @@ func (a *ArrayChatMessageContentItem) Accept(visitor ArrayChatMessageContentItem
 	if a.ImageChatMessageContent != nil {
 		return visitor.VisitImageChatMessageContent(a.ImageChatMessageContent)
 	}
+	if a.AudioChatMessageContent != nil {
+		return visitor.VisitAudioChatMessageContent(a.AudioChatMessageContent)
+	}
 	return fmt.Errorf("type %T does not include a non-empty union type", a)
 }
 
@@ -682,6 +695,7 @@ type ArrayChatMessageContentItemRequest struct {
 	StringChatMessageContentRequest       *StringChatMessageContentRequest
 	FunctionCallChatMessageContentRequest *FunctionCallChatMessageContentRequest
 	ImageChatMessageContentRequest        *ImageChatMessageContentRequest
+	AudioChatMessageContentRequest        *AudioChatMessageContentRequest
 }
 
 func (a *ArrayChatMessageContentItemRequest) UnmarshalJSON(data []byte) error {
@@ -700,6 +714,11 @@ func (a *ArrayChatMessageContentItemRequest) UnmarshalJSON(data []byte) error {
 		a.ImageChatMessageContentRequest = valueImageChatMessageContentRequest
 		return nil
 	}
+	valueAudioChatMessageContentRequest := new(AudioChatMessageContentRequest)
+	if err := json.Unmarshal(data, &valueAudioChatMessageContentRequest); err == nil {
+		a.AudioChatMessageContentRequest = valueAudioChatMessageContentRequest
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, a)
 }
 
@@ -713,6 +732,9 @@ func (a ArrayChatMessageContentItemRequest) MarshalJSON() ([]byte, error) {
 	if a.ImageChatMessageContentRequest != nil {
 		return json.Marshal(a.ImageChatMessageContentRequest)
 	}
+	if a.AudioChatMessageContentRequest != nil {
+		return json.Marshal(a.AudioChatMessageContentRequest)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", a)
 }
 
@@ -720,6 +742,7 @@ type ArrayChatMessageContentItemRequestVisitor interface {
 	VisitStringChatMessageContentRequest(*StringChatMessageContentRequest) error
 	VisitFunctionCallChatMessageContentRequest(*FunctionCallChatMessageContentRequest) error
 	VisitImageChatMessageContentRequest(*ImageChatMessageContentRequest) error
+	VisitAudioChatMessageContentRequest(*AudioChatMessageContentRequest) error
 }
 
 func (a *ArrayChatMessageContentItemRequest) Accept(visitor ArrayChatMessageContentItemRequestVisitor) error {
@@ -731,6 +754,9 @@ func (a *ArrayChatMessageContentItemRequest) Accept(visitor ArrayChatMessageCont
 	}
 	if a.ImageChatMessageContentRequest != nil {
 		return visitor.VisitImageChatMessageContentRequest(a.ImageChatMessageContentRequest)
+	}
+	if a.AudioChatMessageContentRequest != nil {
+		return visitor.VisitAudioChatMessageContentRequest(a.AudioChatMessageContentRequest)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", a)
 }
@@ -1200,6 +1226,142 @@ func (a *ArrayVellumValueRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (a *ArrayVellumValueRequest) String() string {
+	if len(a._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(a._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
+
+// An audio value that is used in a chat message.
+type AudioChatMessageContent struct {
+	Value *VellumAudio `json:"value" url:"value"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (a *AudioChatMessageContent) GetExtraProperties() map[string]interface{} {
+	return a.extraProperties
+}
+
+func (a *AudioChatMessageContent) Type() string {
+	return a.type_
+}
+
+func (a *AudioChatMessageContent) UnmarshalJSON(data []byte) error {
+	type embed AudioChatMessageContent
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*a),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*a = AudioChatMessageContent(unmarshaler.embed)
+	if unmarshaler.Type != "AUDIO" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", a, "AUDIO", unmarshaler.Type)
+	}
+	a.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *a, "type")
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+
+	a._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *AudioChatMessageContent) MarshalJSON() ([]byte, error) {
+	type embed AudioChatMessageContent
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*a),
+		Type:  "AUDIO",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (a *AudioChatMessageContent) String() string {
+	if len(a._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(a._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
+
+// An audio value that is used in a chat message.
+type AudioChatMessageContentRequest struct {
+	Value *VellumAudioRequest `json:"value" url:"value"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (a *AudioChatMessageContentRequest) GetExtraProperties() map[string]interface{} {
+	return a.extraProperties
+}
+
+func (a *AudioChatMessageContentRequest) Type() string {
+	return a.type_
+}
+
+func (a *AudioChatMessageContentRequest) UnmarshalJSON(data []byte) error {
+	type embed AudioChatMessageContentRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*a),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*a = AudioChatMessageContentRequest(unmarshaler.embed)
+	if unmarshaler.Type != "AUDIO" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", a, "AUDIO", unmarshaler.Type)
+	}
+	a.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *a, "type")
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+
+	a._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *AudioChatMessageContentRequest) MarshalJSON() ([]byte, error) {
+	type embed AudioChatMessageContentRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*a),
+		Type:  "AUDIO",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (a *AudioChatMessageContentRequest) String() string {
 	if len(a._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(a._rawJSON); err == nil {
 			return value
@@ -1942,6 +2104,7 @@ type ChatMessageContent struct {
 	FunctionCallChatMessageContent *FunctionCallChatMessageContent
 	ArrayChatMessageContent        *ArrayChatMessageContent
 	ImageChatMessageContent        *ImageChatMessageContent
+	AudioChatMessageContent        *AudioChatMessageContent
 }
 
 func (c *ChatMessageContent) UnmarshalJSON(data []byte) error {
@@ -1965,6 +2128,11 @@ func (c *ChatMessageContent) UnmarshalJSON(data []byte) error {
 		c.ImageChatMessageContent = valueImageChatMessageContent
 		return nil
 	}
+	valueAudioChatMessageContent := new(AudioChatMessageContent)
+	if err := json.Unmarshal(data, &valueAudioChatMessageContent); err == nil {
+		c.AudioChatMessageContent = valueAudioChatMessageContent
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, c)
 }
 
@@ -1981,6 +2149,9 @@ func (c ChatMessageContent) MarshalJSON() ([]byte, error) {
 	if c.ImageChatMessageContent != nil {
 		return json.Marshal(c.ImageChatMessageContent)
 	}
+	if c.AudioChatMessageContent != nil {
+		return json.Marshal(c.AudioChatMessageContent)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", c)
 }
 
@@ -1989,6 +2160,7 @@ type ChatMessageContentVisitor interface {
 	VisitFunctionCallChatMessageContent(*FunctionCallChatMessageContent) error
 	VisitArrayChatMessageContent(*ArrayChatMessageContent) error
 	VisitImageChatMessageContent(*ImageChatMessageContent) error
+	VisitAudioChatMessageContent(*AudioChatMessageContent) error
 }
 
 func (c *ChatMessageContent) Accept(visitor ChatMessageContentVisitor) error {
@@ -2004,6 +2176,9 @@ func (c *ChatMessageContent) Accept(visitor ChatMessageContentVisitor) error {
 	if c.ImageChatMessageContent != nil {
 		return visitor.VisitImageChatMessageContent(c.ImageChatMessageContent)
 	}
+	if c.AudioChatMessageContent != nil {
+		return visitor.VisitAudioChatMessageContent(c.AudioChatMessageContent)
+	}
 	return fmt.Errorf("type %T does not include a non-empty union type", c)
 }
 
@@ -2012,6 +2187,7 @@ type ChatMessageContentRequest struct {
 	FunctionCallChatMessageContentRequest *FunctionCallChatMessageContentRequest
 	ArrayChatMessageContentRequest        *ArrayChatMessageContentRequest
 	ImageChatMessageContentRequest        *ImageChatMessageContentRequest
+	AudioChatMessageContentRequest        *AudioChatMessageContentRequest
 }
 
 func (c *ChatMessageContentRequest) UnmarshalJSON(data []byte) error {
@@ -2035,6 +2211,11 @@ func (c *ChatMessageContentRequest) UnmarshalJSON(data []byte) error {
 		c.ImageChatMessageContentRequest = valueImageChatMessageContentRequest
 		return nil
 	}
+	valueAudioChatMessageContentRequest := new(AudioChatMessageContentRequest)
+	if err := json.Unmarshal(data, &valueAudioChatMessageContentRequest); err == nil {
+		c.AudioChatMessageContentRequest = valueAudioChatMessageContentRequest
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, c)
 }
 
@@ -2051,6 +2232,9 @@ func (c ChatMessageContentRequest) MarshalJSON() ([]byte, error) {
 	if c.ImageChatMessageContentRequest != nil {
 		return json.Marshal(c.ImageChatMessageContentRequest)
 	}
+	if c.AudioChatMessageContentRequest != nil {
+		return json.Marshal(c.AudioChatMessageContentRequest)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", c)
 }
 
@@ -2059,6 +2243,7 @@ type ChatMessageContentRequestVisitor interface {
 	VisitFunctionCallChatMessageContentRequest(*FunctionCallChatMessageContentRequest) error
 	VisitArrayChatMessageContentRequest(*ArrayChatMessageContentRequest) error
 	VisitImageChatMessageContentRequest(*ImageChatMessageContentRequest) error
+	VisitAudioChatMessageContentRequest(*AudioChatMessageContentRequest) error
 }
 
 func (c *ChatMessageContentRequest) Accept(visitor ChatMessageContentRequestVisitor) error {
@@ -2073,6 +2258,9 @@ func (c *ChatMessageContentRequest) Accept(visitor ChatMessageContentRequestVisi
 	}
 	if c.ImageChatMessageContentRequest != nil {
 		return visitor.VisitImageChatMessageContentRequest(c.ImageChatMessageContentRequest)
+	}
+	if c.AudioChatMessageContentRequest != nil {
+		return visitor.VisitAudioChatMessageContentRequest(c.AudioChatMessageContentRequest)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", c)
 }
@@ -25225,6 +25413,90 @@ func (v *VariablePromptBlockRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (v *VariablePromptBlockRequest) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+type VellumAudio struct {
+	Src      string                 `json:"src" url:"src"`
+	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VellumAudio) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VellumAudio) UnmarshalJSON(data []byte) error {
+	type unmarshaler VellumAudio
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = VellumAudio(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VellumAudio) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+type VellumAudioRequest struct {
+	Src      string                 `json:"src" url:"src"`
+	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VellumAudioRequest) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VellumAudioRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler VellumAudioRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = VellumAudioRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VellumAudioRequest) String() string {
 	if len(v._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
 			return value

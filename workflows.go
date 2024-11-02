@@ -3,6 +3,7 @@
 package api
 
 type WorkflowPushRequest struct {
-	ExecConfig WorkflowPushExecConfig `json:"exec_config,omitempty" url:"-"`
-	Label      string                 `json:"label" url:"-"`
+	ExecConfig        WorkflowPushExecConfig `json:"exec_config,omitempty" url:"-"`
+	Label             string                 `json:"label" url:"-"`
+	WorkflowSandboxId *string                `json:"workflow_sandbox_id,omitempty" url:"-"`
 }
