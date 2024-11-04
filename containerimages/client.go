@@ -116,6 +116,43 @@ func (c *Client) Retrieve(
 }
 
 // An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
+func (c *Client) DockerServiceToken(
+	ctx context.Context,
+	opts ...option.RequestOption,
+) (*vellumclientgo.DockerServiceToken, error) {
+	options := core.NewRequestOptions(opts...)
+
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := baseURL + "/v1/container-images/docker-service-token"
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
+	var response *vellumclientgo.DockerServiceToken
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodGet,
+			MaxAttempts:     options.MaxAttempts,
+			Headers:         headers,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
 func (c *Client) PushContainerImage(
 	ctx context.Context,
 	request *vellumclientgo.PushContainerImageRequest,

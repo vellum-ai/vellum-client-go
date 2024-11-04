@@ -4175,6 +4175,49 @@ func (d *DeploymentReleaseTagRead) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
+type DockerServiceToken struct {
+	AccessToken    string `json:"access_token" url:"access_token"`
+	OrganizationId string `json:"organization_id" url:"organization_id"`
+	Repository     string `json:"repository" url:"repository"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DockerServiceToken) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DockerServiceToken) UnmarshalJSON(data []byte) error {
+	type unmarshaler DockerServiceToken
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DockerServiceToken(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DockerServiceToken) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
 type DocumentDocumentToDocumentIndex struct {
 	// Vellum-generated ID that uniquely identifies this link.
 	Id string `json:"id" url:"id"`
@@ -4600,7 +4643,7 @@ type EnrichedNormalizedCompletion struct {
 	// The logprobs of the completion. Only present if specified in the original request options.
 	Logprobs *NormalizedLogProbs `json:"logprobs,omitempty" url:"logprobs,omitempty"`
 	// The ID of the model version used to generate this completion.
-	ModelVersionId       string              `json:"model_version_id" url:"model_version_id"`
+	ModelVersionId       *string             `json:"model_version_id,omitempty" url:"model_version_id,omitempty"`
 	PromptVersionId      string              `json:"prompt_version_id" url:"prompt_version_id"`
 	Type                 *VellumVariableType `json:"type,omitempty" url:"type,omitempty"`
 	DeploymentReleaseTag string              `json:"deployment_release_tag" url:"deployment_release_tag"`
