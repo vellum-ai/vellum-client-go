@@ -4600,7 +4600,7 @@ type EnrichedNormalizedCompletion struct {
 	// The logprobs of the completion. Only present if specified in the original request options.
 	Logprobs *NormalizedLogProbs `json:"logprobs,omitempty" url:"logprobs,omitempty"`
 	// The ID of the model version used to generate this completion.
-	ModelVersionId       string              `json:"model_version_id" url:"model_version_id"`
+	ModelVersionId       *string             `json:"model_version_id,omitempty" url:"model_version_id,omitempty"`
 	PromptVersionId      string              `json:"prompt_version_id" url:"prompt_version_id"`
 	Type                 *VellumVariableType `json:"type,omitempty" url:"type,omitempty"`
 	DeploymentReleaseTag string              `json:"deployment_release_tag" url:"deployment_release_tag"`
