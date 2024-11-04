@@ -3,10 +3,12 @@
 package workflows
 
 import (
+	bytes "bytes"
 	context "context"
 	vellumclientgo "github.com/vellum-ai/vellum-client-go"
 	core "github.com/vellum-ai/vellum-client-go/core"
 	option "github.com/vellum-ai/vellum-client-go/option"
+	io "io"
 	http "net/http"
 )
 
@@ -28,6 +30,45 @@ func NewClient(opts ...option.RequestOption) *Client {
 		),
 		header: options.ToHeader(),
 	}
+}
+
+// An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
+func (c *Client) Pull(
+	ctx context.Context,
+	// The ID of the Workflow to pull from
+	id string,
+	opts ...option.RequestOption,
+) (io.Reader, error) {
+	options := core.NewRequestOptions(opts...)
+
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(baseURL+"/v1/workflows/%v/pull", id)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
+	response := bytes.NewBuffer(nil)
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodGet,
+			MaxAttempts:     options.MaxAttempts,
+			Headers:         headers,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
 }
 
 // An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
