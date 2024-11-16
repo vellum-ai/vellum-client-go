@@ -17,6 +17,16 @@ type DeploymentsListRequest struct {
 	Status *DeploymentsListRequestStatus `json:"-" url:"status,omitempty"`
 }
 
+type ListDeploymentReleaseTagsRequest struct {
+	// Number of results to return per page.
+	Limit *int `json:"-" url:"limit,omitempty"`
+	// The initial index from which to return the results.
+	Offset *int `json:"-" url:"offset,omitempty"`
+	// Which field to use when ordering the results.
+	Ordering *string                                 `json:"-" url:"ordering,omitempty"`
+	Source   *ListDeploymentReleaseTagsRequestSource `json:"-" url:"source,omitempty"`
+}
+
 type DeploymentProviderPayloadRequest struct {
 	// The ID of the deployment. Must provide either this or deployment_name.
 	DeploymentId *string `json:"deployment_id,omitempty" url:"-"`
@@ -49,6 +59,28 @@ func NewDeploymentsListRequestStatusFromString(s string) (DeploymentsListRequest
 
 func (d DeploymentsListRequestStatus) Ptr() *DeploymentsListRequestStatus {
 	return &d
+}
+
+type ListDeploymentReleaseTagsRequestSource string
+
+const (
+	ListDeploymentReleaseTagsRequestSourceSystem ListDeploymentReleaseTagsRequestSource = "SYSTEM"
+	ListDeploymentReleaseTagsRequestSourceUser   ListDeploymentReleaseTagsRequestSource = "USER"
+)
+
+func NewListDeploymentReleaseTagsRequestSourceFromString(s string) (ListDeploymentReleaseTagsRequestSource, error) {
+	switch s {
+	case "SYSTEM":
+		return ListDeploymentReleaseTagsRequestSourceSystem, nil
+	case "USER":
+		return ListDeploymentReleaseTagsRequestSourceUser, nil
+	}
+	var t ListDeploymentReleaseTagsRequestSource
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (l ListDeploymentReleaseTagsRequestSource) Ptr() *ListDeploymentReleaseTagsRequestSource {
+	return &l
 }
 
 type PatchedDeploymentReleaseTagUpdateRequest struct {

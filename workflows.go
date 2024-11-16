@@ -2,9 +2,39 @@
 
 package api
 
+import (
+	fmt "fmt"
+)
+
+type WorkflowsPullRequest struct {
+	Format *WorkflowsPullRequestFormat `json:"-" url:"format,omitempty"`
+}
+
 type WorkflowPushRequest struct {
 	ExecConfig        WorkflowPushExecConfig               `json:"exec_config,omitempty" url:"-"`
 	Label             string                               `json:"label" url:"-"`
 	WorkflowSandboxId *string                              `json:"workflow_sandbox_id,omitempty" url:"-"`
 	DeploymentConfig  *WorkflowPushDeploymentConfigRequest `json:"deployment_config,omitempty" url:"-"`
+}
+
+type WorkflowsPullRequestFormat string
+
+const (
+	WorkflowsPullRequestFormatJson WorkflowsPullRequestFormat = "json"
+	WorkflowsPullRequestFormatZip  WorkflowsPullRequestFormat = "zip"
+)
+
+func NewWorkflowsPullRequestFormatFromString(s string) (WorkflowsPullRequestFormat, error) {
+	switch s {
+	case "json":
+		return WorkflowsPullRequestFormatJson, nil
+	case "zip":
+		return WorkflowsPullRequestFormatZip, nil
+	}
+	var t WorkflowsPullRequestFormat
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (w WorkflowsPullRequestFormat) Ptr() *WorkflowsPullRequestFormat {
+	return &w
 }
