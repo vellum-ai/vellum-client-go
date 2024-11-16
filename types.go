@@ -15094,6 +15094,50 @@ func (p *PaginatedContainerImageReadList) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
+type PaginatedDeploymentReleaseTagReadList struct {
+	Count    *int                        `json:"count,omitempty" url:"count,omitempty"`
+	Next     *string                     `json:"next,omitempty" url:"next,omitempty"`
+	Previous *string                     `json:"previous,omitempty" url:"previous,omitempty"`
+	Results  []*DeploymentReleaseTagRead `json:"results,omitempty" url:"results,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaginatedDeploymentReleaseTagReadList) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaginatedDeploymentReleaseTagReadList) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaginatedDeploymentReleaseTagReadList
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaginatedDeploymentReleaseTagReadList(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaginatedDeploymentReleaseTagReadList) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
 type PaginatedDocumentIndexReadList struct {
 	Count    *int                 `json:"count,omitempty" url:"count,omitempty"`
 	Next     *string              `json:"next,omitempty" url:"next,omitempty"`
@@ -15391,6 +15435,50 @@ func (p *PaginatedTestSuiteTestCaseList) UnmarshalJSON(data []byte) error {
 }
 
 func (p *PaginatedTestSuiteTestCaseList) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PaginatedWorkflowReleaseTagReadList struct {
+	Count    *int                      `json:"count,omitempty" url:"count,omitempty"`
+	Next     *string                   `json:"next,omitempty" url:"next,omitempty"`
+	Previous *string                   `json:"previous,omitempty" url:"previous,omitempty"`
+	Results  []*WorkflowReleaseTagRead `json:"results,omitempty" url:"results,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaginatedWorkflowReleaseTagReadList) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaginatedWorkflowReleaseTagReadList) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaginatedWorkflowReleaseTagReadList
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaginatedWorkflowReleaseTagReadList(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaginatedWorkflowReleaseTagReadList) String() string {
 	if len(p._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
 			return value

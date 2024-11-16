@@ -17,6 +17,38 @@ type WorkflowDeploymentsListRequest struct {
 	Status *WorkflowDeploymentsListRequestStatus `json:"-" url:"status,omitempty"`
 }
 
+type ListWorkflowReleaseTagsRequest struct {
+	// Number of results to return per page.
+	Limit *int `json:"-" url:"limit,omitempty"`
+	// The initial index from which to return the results.
+	Offset *int `json:"-" url:"offset,omitempty"`
+	// Which field to use when ordering the results.
+	Ordering *string                               `json:"-" url:"ordering,omitempty"`
+	Source   *ListWorkflowReleaseTagsRequestSource `json:"-" url:"source,omitempty"`
+}
+
+type ListWorkflowReleaseTagsRequestSource string
+
+const (
+	ListWorkflowReleaseTagsRequestSourceSystem ListWorkflowReleaseTagsRequestSource = "SYSTEM"
+	ListWorkflowReleaseTagsRequestSourceUser   ListWorkflowReleaseTagsRequestSource = "USER"
+)
+
+func NewListWorkflowReleaseTagsRequestSourceFromString(s string) (ListWorkflowReleaseTagsRequestSource, error) {
+	switch s {
+	case "SYSTEM":
+		return ListWorkflowReleaseTagsRequestSourceSystem, nil
+	case "USER":
+		return ListWorkflowReleaseTagsRequestSourceUser, nil
+	}
+	var t ListWorkflowReleaseTagsRequestSource
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (l ListWorkflowReleaseTagsRequestSource) Ptr() *ListWorkflowReleaseTagsRequestSource {
+	return &l
+}
+
 type WorkflowDeploymentsListRequestStatus string
 
 const (

@@ -5,6 +5,8 @@ package workflows
 import (
 	bytes "bytes"
 	context "context"
+	json "encoding/json"
+	errors "errors"
 	vellumclientgo "github.com/vellum-ai/vellum-client-go"
 	core "github.com/vellum-ai/vellum-client-go/core"
 	option "github.com/vellum-ai/vellum-client-go/option"
@@ -37,6 +39,7 @@ func (c *Client) Pull(
 	ctx context.Context,
 	// The ID of the Workflow to pull from
 	id string,
+	request *vellumclientgo.WorkflowsPullRequest,
 	opts ...option.RequestOption,
 ) (io.Reader, error) {
 	options := core.NewRequestOptions(opts...)
@@ -50,7 +53,34 @@ func (c *Client) Pull(
 	}
 	endpointURL := core.EncodeURL(baseURL+"/v1/workflows/%v/pull", id)
 
+	queryParams, err := core.QueryValues(request)
+	if err != nil {
+		return nil, err
+	}
+	if len(queryParams) > 0 {
+		endpointURL += "?" + queryParams.Encode()
+	}
+
 	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
+	errorDecoder := func(statusCode int, body io.Reader) error {
+		raw, err := io.ReadAll(body)
+		if err != nil {
+			return err
+		}
+		apiError := core.NewAPIError(statusCode, errors.New(string(raw)))
+		decoder := json.NewDecoder(bytes.NewReader(raw))
+		switch statusCode {
+		case 400:
+			value := new(vellumclientgo.BadRequestError)
+			value.APIError = apiError
+			if err := decoder.Decode(value); err != nil {
+				return apiError
+			}
+			return value
+		}
+		return apiError
+	}
 
 	response := bytes.NewBuffer(nil)
 	if err := c.caller.Call(
@@ -64,6 +94,7 @@ func (c *Client) Pull(
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
 			Response:        response,
+			ErrorDecoder:    errorDecoder,
 		},
 	); err != nil {
 		return nil, err
