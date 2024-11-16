@@ -119,6 +119,54 @@ func (c *Client) Retrieve(
 	return response, nil
 }
 
+// List Release Tags associated with the specified Prompt Deployment
+func (c *Client) ListDeploymentReleaseTags(
+	ctx context.Context,
+	// Either the Prompt Deployment's ID or its unique name
+	id string,
+	request *vellumclientgo.ListDeploymentReleaseTagsRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.PaginatedDeploymentReleaseTagReadList, error) {
+	options := core.NewRequestOptions(opts...)
+
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(baseURL+"/v1/deployments/%v/release-tags", id)
+
+	queryParams, err := core.QueryValues(request)
+	if err != nil {
+		return nil, err
+	}
+	if len(queryParams) > 0 {
+		endpointURL += "?" + queryParams.Encode()
+	}
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
+	var response *vellumclientgo.PaginatedDeploymentReleaseTagReadList
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodGet,
+			MaxAttempts:     options.MaxAttempts,
+			Headers:         headers,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
 // Retrieve a Deployment Release Tag by tag name, associated with a specified Deployment.
 func (c *Client) RetrieveDeploymentReleaseTag(
 	ctx context.Context,
@@ -164,7 +212,7 @@ func (c *Client) RetrieveDeploymentReleaseTag(
 	return response, nil
 }
 
-// Updates an existing Release Tag associated with the specified Deployment.
+// Updates an existing Release Tag associated with the specified Prompt Deployment.
 func (c *Client) UpdateDeploymentReleaseTag(
 	ctx context.Context,
 	// A UUID string identifying this deployment.
