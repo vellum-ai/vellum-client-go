@@ -37,7 +37,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
 func (c *Client) AdhocExecutePromptStream(
 	ctx context.Context,
-	request *vellumclientgo.AdHocExecutePromptStreamRequest,
+	request *vellumclientgo.AdHocExecutePromptStream,
 	opts ...option.RequestOption,
 ) (*core.Stream[vellumclientgo.AdHocExecutePromptEvent], error) {
 	options := core.NewRequestOptions(opts...)
