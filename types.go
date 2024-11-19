@@ -2482,6 +2482,121 @@ func (c *ChatMessageContentRequest) Accept(visitor ChatMessageContentRequestVisi
 	return fmt.Errorf("type %T does not include a non-empty union type", c)
 }
 
+// A block that represents a chat message in a prompt template.
+type ChatMessagePromptBlock struct {
+	State       *PromptBlockState                 `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *EphemeralPromptCacheConfig       `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	Properties  *ChatMessagePromptBlockProperties `json:"properties" url:"properties"`
+	blockType   string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *ChatMessagePromptBlock) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *ChatMessagePromptBlock) BlockType() string {
+	return c.blockType
+}
+
+func (c *ChatMessagePromptBlock) UnmarshalJSON(data []byte) error {
+	type embed ChatMessagePromptBlock
+	var unmarshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed: embed(*c),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*c = ChatMessagePromptBlock(unmarshaler.embed)
+	if unmarshaler.BlockType != "CHAT_MESSAGE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", c, "CHAT_MESSAGE", unmarshaler.BlockType)
+	}
+	c.blockType = unmarshaler.BlockType
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c, "block_type")
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *ChatMessagePromptBlock) MarshalJSON() ([]byte, error) {
+	type embed ChatMessagePromptBlock
+	var marshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed:     embed(*c),
+		BlockType: "CHAT_MESSAGE",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (c *ChatMessagePromptBlock) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// The properties of a ChatMessagePromptTemplateBlock
+type ChatMessagePromptBlockProperties struct {
+	Blocks                  []*PromptBlock   `json:"blocks" url:"blocks"`
+	ChatRole                *ChatMessageRole `json:"chat_role,omitempty" url:"chat_role,omitempty"`
+	ChatSource              *string          `json:"chat_source,omitempty" url:"chat_source,omitempty"`
+	ChatMessageUnterminated *bool            `json:"chat_message_unterminated,omitempty" url:"chat_message_unterminated,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *ChatMessagePromptBlockProperties) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *ChatMessagePromptBlockProperties) UnmarshalJSON(data []byte) error {
+	type unmarshaler ChatMessagePromptBlockProperties
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = ChatMessagePromptBlockProperties(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *ChatMessagePromptBlockProperties) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
 type ChatMessageRequest struct {
 	Text    *string                    `json:"text,omitempty" url:"text,omitempty"`
 	Role    ChatMessageRole            `json:"role" url:"role"`
@@ -4871,6 +4986,50 @@ func NewEnvironmentEnumFromString(s string) (EnvironmentEnum, error) {
 func (e EnvironmentEnum) Ptr() *EnvironmentEnum {
 	return &e
 }
+
+type EphemeralPromptCacheConfig struct {
+	Type *EphemeralPromptCacheConfigTypeEnum `json:"type,omitempty" url:"type,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *EphemeralPromptCacheConfig) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
+}
+
+func (e *EphemeralPromptCacheConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler EphemeralPromptCacheConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = EphemeralPromptCacheConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *EphemeralPromptCacheConfig) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+// - `EPHEMERAL` - EPHEMERAL
+type EphemeralPromptCacheConfigTypeEnum = string
 
 // A user input representing a Vellum Error value
 type ErrorInputRequest struct {
@@ -7923,6 +8082,126 @@ func (f *FunctionCallVellumValueRequest) String() string {
 	return fmt.Sprintf("%#v", f)
 }
 
+// A block that represents a function definition in a prompt template.
+type FunctionDefinitionPromptBlock struct {
+	State       *PromptBlockState                        `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *EphemeralPromptCacheConfig              `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	Properties  *FunctionDefinitionPromptBlockProperties `json:"properties" url:"properties"`
+	blockType   string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FunctionDefinitionPromptBlock) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
+}
+
+func (f *FunctionDefinitionPromptBlock) BlockType() string {
+	return f.blockType
+}
+
+func (f *FunctionDefinitionPromptBlock) UnmarshalJSON(data []byte) error {
+	type embed FunctionDefinitionPromptBlock
+	var unmarshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed: embed(*f),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*f = FunctionDefinitionPromptBlock(unmarshaler.embed)
+	if unmarshaler.BlockType != "FUNCTION_DEFINITION" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "FUNCTION_DEFINITION", unmarshaler.BlockType)
+	}
+	f.blockType = unmarshaler.BlockType
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f, "block_type")
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FunctionDefinitionPromptBlock) MarshalJSON() ([]byte, error) {
+	type embed FunctionDefinitionPromptBlock
+	var marshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed:     embed(*f),
+		BlockType: "FUNCTION_DEFINITION",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (f *FunctionDefinitionPromptBlock) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
+type FunctionDefinitionPromptBlockProperties struct {
+	// The name identifying the function.
+	FunctionName *string `json:"function_name,omitempty" url:"function_name,omitempty"`
+	// A description to help guide the model when to invoke this function.
+	FunctionDescription *string `json:"function_description,omitempty" url:"function_description,omitempty"`
+	// An OpenAPI specification of parameters that are supported by this function.
+	FunctionParameters map[string]interface{} `json:"function_parameters,omitempty" url:"function_parameters,omitempty"`
+	// Set this option to true to force the model to return a function call of this function.
+	FunctionForced *bool `json:"function_forced,omitempty" url:"function_forced,omitempty"`
+	// Set this option to use strict schema decoding when available.
+	FunctionStrict *bool `json:"function_strict,omitempty" url:"function_strict,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FunctionDefinitionPromptBlockProperties) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
+}
+
+func (f *FunctionDefinitionPromptBlockProperties) UnmarshalJSON(data []byte) error {
+	type unmarshaler FunctionDefinitionPromptBlockProperties
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*f = FunctionDefinitionPromptBlockProperties(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FunctionDefinitionPromptBlockProperties) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
 type GenerateOptionsRequest struct {
 	// Which logprobs to include, if any. Defaults to NONE.
 	//
@@ -9819,6 +10098,118 @@ func NewIterationStateEnumFromString(s string) (IterationStateEnum, error) {
 
 func (i IterationStateEnum) Ptr() *IterationStateEnum {
 	return &i
+}
+
+// A block of Jinja template code that is used to generate a prompt
+type JinjaPromptBlock struct {
+	State       *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	Properties  *JinjaPromptBlockProperties `json:"properties" url:"properties"`
+	blockType   string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (j *JinjaPromptBlock) GetExtraProperties() map[string]interface{} {
+	return j.extraProperties
+}
+
+func (j *JinjaPromptBlock) BlockType() string {
+	return j.blockType
+}
+
+func (j *JinjaPromptBlock) UnmarshalJSON(data []byte) error {
+	type embed JinjaPromptBlock
+	var unmarshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed: embed(*j),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*j = JinjaPromptBlock(unmarshaler.embed)
+	if unmarshaler.BlockType != "JINJA" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", j, "JINJA", unmarshaler.BlockType)
+	}
+	j.blockType = unmarshaler.BlockType
+
+	extraProperties, err := core.ExtractExtraProperties(data, *j, "block_type")
+	if err != nil {
+		return err
+	}
+	j.extraProperties = extraProperties
+
+	j._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (j *JinjaPromptBlock) MarshalJSON() ([]byte, error) {
+	type embed JinjaPromptBlock
+	var marshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed:     embed(*j),
+		BlockType: "JINJA",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (j *JinjaPromptBlock) String() string {
+	if len(j._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(j._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(j); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", j)
+}
+
+type JinjaPromptBlockProperties struct {
+	Template     *string             `json:"template,omitempty" url:"template,omitempty"`
+	TemplateType *VellumVariableType `json:"template_type,omitempty" url:"template_type,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (j *JinjaPromptBlockProperties) GetExtraProperties() map[string]interface{} {
+	return j.extraProperties
+}
+
+func (j *JinjaPromptBlockProperties) UnmarshalJSON(data []byte) error {
+	type unmarshaler JinjaPromptBlockProperties
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*j = JinjaPromptBlockProperties(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *j)
+	if err != nil {
+		return err
+	}
+	j.extraProperties = extraProperties
+
+	j._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (j *JinjaPromptBlockProperties) String() string {
+	if len(j._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(j._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(j); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", j)
 }
 
 // A user input representing a JSON object
@@ -15238,6 +15629,76 @@ func (p *PdfSearchResultMetaSourceRequest) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
+// A block that holds a plain text string value.
+type PlainTextPromptBlock struct {
+	State       *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	Text        string                      `json:"text" url:"text"`
+	blockType   string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PlainTextPromptBlock) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PlainTextPromptBlock) BlockType() string {
+	return p.blockType
+}
+
+func (p *PlainTextPromptBlock) UnmarshalJSON(data []byte) error {
+	type embed PlainTextPromptBlock
+	var unmarshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed: embed(*p),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*p = PlainTextPromptBlock(unmarshaler.embed)
+	if unmarshaler.BlockType != "PLAIN_TEXT" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", p, "PLAIN_TEXT", unmarshaler.BlockType)
+	}
+	p.blockType = unmarshaler.BlockType
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p, "block_type")
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PlainTextPromptBlock) MarshalJSON() ([]byte, error) {
+	type embed PlainTextPromptBlock
+	var marshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed:     embed(*p),
+		BlockType: "PLAIN_TEXT",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (p *PlainTextPromptBlock) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
 type Price struct {
 	Value float64  `json:"value" url:"value"`
 	Unit  UnitEnum `json:"unit" url:"unit"`
@@ -15333,6 +15794,113 @@ func NewProcessingStateEnumFromString(s string) (ProcessingStateEnum, error) {
 }
 
 func (p ProcessingStateEnum) Ptr() *ProcessingStateEnum {
+	return &p
+}
+
+type PromptBlock struct {
+	JinjaPromptBlock              *JinjaPromptBlock
+	ChatMessagePromptBlock        *ChatMessagePromptBlock
+	FunctionDefinitionPromptBlock *FunctionDefinitionPromptBlock
+	VariablePromptBlock           *VariablePromptBlock
+	RichTextPromptBlock           *RichTextPromptBlock
+}
+
+func (p *PromptBlock) UnmarshalJSON(data []byte) error {
+	valueJinjaPromptBlock := new(JinjaPromptBlock)
+	if err := json.Unmarshal(data, &valueJinjaPromptBlock); err == nil {
+		p.JinjaPromptBlock = valueJinjaPromptBlock
+		return nil
+	}
+	valueChatMessagePromptBlock := new(ChatMessagePromptBlock)
+	if err := json.Unmarshal(data, &valueChatMessagePromptBlock); err == nil {
+		p.ChatMessagePromptBlock = valueChatMessagePromptBlock
+		return nil
+	}
+	valueFunctionDefinitionPromptBlock := new(FunctionDefinitionPromptBlock)
+	if err := json.Unmarshal(data, &valueFunctionDefinitionPromptBlock); err == nil {
+		p.FunctionDefinitionPromptBlock = valueFunctionDefinitionPromptBlock
+		return nil
+	}
+	valueVariablePromptBlock := new(VariablePromptBlock)
+	if err := json.Unmarshal(data, &valueVariablePromptBlock); err == nil {
+		p.VariablePromptBlock = valueVariablePromptBlock
+		return nil
+	}
+	valueRichTextPromptBlock := new(RichTextPromptBlock)
+	if err := json.Unmarshal(data, &valueRichTextPromptBlock); err == nil {
+		p.RichTextPromptBlock = valueRichTextPromptBlock
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, p)
+}
+
+func (p PromptBlock) MarshalJSON() ([]byte, error) {
+	if p.JinjaPromptBlock != nil {
+		return json.Marshal(p.JinjaPromptBlock)
+	}
+	if p.ChatMessagePromptBlock != nil {
+		return json.Marshal(p.ChatMessagePromptBlock)
+	}
+	if p.FunctionDefinitionPromptBlock != nil {
+		return json.Marshal(p.FunctionDefinitionPromptBlock)
+	}
+	if p.VariablePromptBlock != nil {
+		return json.Marshal(p.VariablePromptBlock)
+	}
+	if p.RichTextPromptBlock != nil {
+		return json.Marshal(p.RichTextPromptBlock)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", p)
+}
+
+type PromptBlockVisitor interface {
+	VisitJinjaPromptBlock(*JinjaPromptBlock) error
+	VisitChatMessagePromptBlock(*ChatMessagePromptBlock) error
+	VisitFunctionDefinitionPromptBlock(*FunctionDefinitionPromptBlock) error
+	VisitVariablePromptBlock(*VariablePromptBlock) error
+	VisitRichTextPromptBlock(*RichTextPromptBlock) error
+}
+
+func (p *PromptBlock) Accept(visitor PromptBlockVisitor) error {
+	if p.JinjaPromptBlock != nil {
+		return visitor.VisitJinjaPromptBlock(p.JinjaPromptBlock)
+	}
+	if p.ChatMessagePromptBlock != nil {
+		return visitor.VisitChatMessagePromptBlock(p.ChatMessagePromptBlock)
+	}
+	if p.FunctionDefinitionPromptBlock != nil {
+		return visitor.VisitFunctionDefinitionPromptBlock(p.FunctionDefinitionPromptBlock)
+	}
+	if p.VariablePromptBlock != nil {
+		return visitor.VisitVariablePromptBlock(p.VariablePromptBlock)
+	}
+	if p.RichTextPromptBlock != nil {
+		return visitor.VisitRichTextPromptBlock(p.RichTextPromptBlock)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", p)
+}
+
+// - `ENABLED` - ENABLED
+// - `DISABLED` - DISABLED
+type PromptBlockState string
+
+const (
+	PromptBlockStateEnabled  PromptBlockState = "ENABLED"
+	PromptBlockStateDisabled PromptBlockState = "DISABLED"
+)
+
+func NewPromptBlockStateFromString(s string) (PromptBlockState, error) {
+	switch s {
+	case "ENABLED":
+		return PromptBlockStateEnabled, nil
+	case "DISABLED":
+		return PromptBlockStateDisabled, nil
+	}
+	var t PromptBlockState
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (p PromptBlockState) Ptr() *PromptBlockState {
 	return &p
 }
 
@@ -16812,6 +17380,120 @@ func (r *ReplaceTestSuiteTestCaseRequest) UnmarshalJSON(data []byte) error {
 }
 
 func (r *ReplaceTestSuiteTestCaseRequest) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+type RichTextChildBlock struct {
+	VariablePromptBlock  *VariablePromptBlock
+	PlainTextPromptBlock *PlainTextPromptBlock
+}
+
+func (r *RichTextChildBlock) UnmarshalJSON(data []byte) error {
+	valueVariablePromptBlock := new(VariablePromptBlock)
+	if err := json.Unmarshal(data, &valueVariablePromptBlock); err == nil {
+		r.VariablePromptBlock = valueVariablePromptBlock
+		return nil
+	}
+	valuePlainTextPromptBlock := new(PlainTextPromptBlock)
+	if err := json.Unmarshal(data, &valuePlainTextPromptBlock); err == nil {
+		r.PlainTextPromptBlock = valuePlainTextPromptBlock
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, r)
+}
+
+func (r RichTextChildBlock) MarshalJSON() ([]byte, error) {
+	if r.VariablePromptBlock != nil {
+		return json.Marshal(r.VariablePromptBlock)
+	}
+	if r.PlainTextPromptBlock != nil {
+		return json.Marshal(r.PlainTextPromptBlock)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", r)
+}
+
+type RichTextChildBlockVisitor interface {
+	VisitVariablePromptBlock(*VariablePromptBlock) error
+	VisitPlainTextPromptBlock(*PlainTextPromptBlock) error
+}
+
+func (r *RichTextChildBlock) Accept(visitor RichTextChildBlockVisitor) error {
+	if r.VariablePromptBlock != nil {
+		return visitor.VisitVariablePromptBlock(r.VariablePromptBlock)
+	}
+	if r.PlainTextPromptBlock != nil {
+		return visitor.VisitPlainTextPromptBlock(r.PlainTextPromptBlock)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", r)
+}
+
+// A block that includes a combination of plain text and variable blocks.
+type RichTextPromptBlock struct {
+	State       *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	Blocks      []*RichTextChildBlock       `json:"blocks" url:"blocks"`
+	blockType   string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RichTextPromptBlock) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RichTextPromptBlock) BlockType() string {
+	return r.blockType
+}
+
+func (r *RichTextPromptBlock) UnmarshalJSON(data []byte) error {
+	type embed RichTextPromptBlock
+	var unmarshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed: embed(*r),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*r = RichTextPromptBlock(unmarshaler.embed)
+	if unmarshaler.BlockType != "RICH_TEXT" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", r, "RICH_TEXT", unmarshaler.BlockType)
+	}
+	r.blockType = unmarshaler.BlockType
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r, "block_type")
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RichTextPromptBlock) MarshalJSON() ([]byte, error) {
+	type embed RichTextPromptBlock
+	var marshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed:     embed(*r),
+		BlockType: "RICH_TEXT",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (r *RichTextPromptBlock) String() string {
 	if len(r._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
 			return value
@@ -25012,6 +25694,76 @@ func (u *UpsertTestSuiteTestCaseRequest) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", u)
+}
+
+// A block that represents a variable in a prompt template.
+type VariablePromptBlock struct {
+	State           *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig     *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	InputVariableId string                      `json:"input_variable_id" url:"input_variable_id"`
+	blockType       string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VariablePromptBlock) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VariablePromptBlock) BlockType() string {
+	return v.blockType
+}
+
+func (v *VariablePromptBlock) UnmarshalJSON(data []byte) error {
+	type embed VariablePromptBlock
+	var unmarshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed: embed(*v),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*v = VariablePromptBlock(unmarshaler.embed)
+	if unmarshaler.BlockType != "VARIABLE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", v, "VARIABLE", unmarshaler.BlockType)
+	}
+	v.blockType = unmarshaler.BlockType
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v, "block_type")
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VariablePromptBlock) MarshalJSON() ([]byte, error) {
+	type embed VariablePromptBlock
+	var marshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed:     embed(*v),
+		BlockType: "VARIABLE",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (v *VariablePromptBlock) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
 }
 
 type VellumAudio struct {
