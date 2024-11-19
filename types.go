@@ -2529,10 +2529,9 @@ func (c *ChatMessagePromptBlockPropertiesRequest) String() string {
 
 // A block that represents a chat message in a prompt template.
 type ChatMessagePromptBlockRequest struct {
-	Properties  *ChatMessagePromptBlockPropertiesRequest `json:"properties" url:"properties"`
-	Id          string                                   `json:"id" url:"id"`
 	State       *PromptBlockState                        `json:"state,omitempty" url:"state,omitempty"`
 	CacheConfig *EphemeralPromptCacheConfigRequest       `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	Properties  *ChatMessagePromptBlockPropertiesRequest `json:"properties" url:"properties"`
 	blockType   string
 
 	extraProperties map[string]interface{}
@@ -8135,10 +8134,9 @@ func (f *FunctionDefinitionPromptBlockPropertiesRequest) String() string {
 
 // A block that represents a function definition in a prompt template.
 type FunctionDefinitionPromptBlockRequest struct {
-	Properties  *FunctionDefinitionPromptBlockPropertiesRequest `json:"properties" url:"properties"`
-	Id          string                                          `json:"id" url:"id"`
 	State       *PromptBlockState                               `json:"state,omitempty" url:"state,omitempty"`
 	CacheConfig *EphemeralPromptCacheConfigRequest              `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	Properties  *FunctionDefinitionPromptBlockPropertiesRequest `json:"properties" url:"properties"`
 	blockType   string
 
 	extraProperties map[string]interface{}
@@ -10146,10 +10144,9 @@ func (j *JinjaPromptBlockPropertiesRequest) String() string {
 
 // A block of Jinja template code that is used to generate a prompt
 type JinjaPromptBlockRequest struct {
-	Properties  *JinjaPromptBlockPropertiesRequest `json:"properties" url:"properties"`
-	Id          string                             `json:"id" url:"id"`
 	State       *PromptBlockState                  `json:"state,omitempty" url:"state,omitempty"`
 	CacheConfig *EphemeralPromptCacheConfigRequest `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	Properties  *JinjaPromptBlockPropertiesRequest `json:"properties" url:"properties"`
 	blockType   string
 
 	extraProperties map[string]interface{}
@@ -15634,10 +15631,9 @@ func (p *PdfSearchResultMetaSourceRequest) String() string {
 
 // A block that holds a plain text string value.
 type PlainTextPromptBlockRequest struct {
-	Text        string                             `json:"text" url:"text"`
-	Id          string                             `json:"id" url:"id"`
 	State       *PromptBlockState                  `json:"state,omitempty" url:"state,omitempty"`
 	CacheConfig *EphemeralPromptCacheConfigRequest `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	Text        string                             `json:"text" url:"text"`
 	blockType   string
 
 	extraProperties map[string]interface{}
@@ -25703,7 +25699,6 @@ func (u *UpsertTestSuiteTestCaseRequest) String() string {
 
 // A block that represents a variable in a prompt template.
 type VariablePromptBlockRequest struct {
-	Id              string                             `json:"id" url:"id"`
 	State           *PromptBlockState                  `json:"state,omitempty" url:"state,omitempty"`
 	CacheConfig     *EphemeralPromptCacheConfigRequest `json:"cache_config,omitempty" url:"cache_config,omitempty"`
 	InputVariableId string                             `json:"input_variable_id" url:"input_variable_id"`
