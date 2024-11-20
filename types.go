@@ -10014,11 +10014,10 @@ func (i IterationStateEnum) Ptr() *IterationStateEnum {
 
 // A block of Jinja template code that is used to generate a prompt
 type JinjaPromptBlock struct {
-	State        *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
-	CacheConfig  *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
-	Template     string                      `json:"template" url:"template"`
-	TemplateType VellumVariableType          `json:"template_type" url:"template_type"`
-	blockType    string
+	State       *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	Template    string                      `json:"template" url:"template"`
+	blockType   string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -25569,10 +25568,10 @@ func (u *UpsertTestSuiteTestCaseRequest) String() string {
 
 // A block that represents a variable in a prompt template.
 type VariablePromptBlock struct {
-	State           *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
-	CacheConfig     *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
-	InputVariableId string                      `json:"input_variable_id" url:"input_variable_id"`
-	blockType       string
+	State         *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig   *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	InputVariable string                      `json:"input_variable" url:"input_variable"`
+	blockType     string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
