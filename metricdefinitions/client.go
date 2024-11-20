@@ -35,7 +35,7 @@ func (c *Client) ExecuteMetricDefinition(
 	ctx context.Context,
 	// Either the Metric Definition's ID or its unique name
 	id string,
-	request *vellumclientgo.ExecuteMetricDefinitionRequest,
+	request *vellumclientgo.ExecuteMetricDefinition,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.MetricDefinitionExecution, error) {
 	options := core.NewRequestOptions(opts...)
