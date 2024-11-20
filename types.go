@@ -2484,10 +2484,13 @@ func (c *ChatMessageContentRequest) Accept(visitor ChatMessageContentRequestVisi
 
 // A block that represents a chat message in a prompt template.
 type ChatMessagePromptBlock struct {
-	State       *PromptBlockState                 `json:"state,omitempty" url:"state,omitempty"`
-	CacheConfig *EphemeralPromptCacheConfig       `json:"cache_config,omitempty" url:"cache_config,omitempty"`
-	Properties  *ChatMessagePromptBlockProperties `json:"properties" url:"properties"`
-	blockType   string
+	State                   *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig             *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	ChatRole                ChatMessageRole             `json:"chat_role" url:"chat_role"`
+	ChatSource              *string                     `json:"chat_source,omitempty" url:"chat_source,omitempty"`
+	ChatMessageUnterminated *bool                       `json:"chat_message_unterminated,omitempty" url:"chat_message_unterminated,omitempty"`
+	Blocks                  []*PromptBlock              `json:"blocks" url:"blocks"`
+	blockType               string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -2541,51 +2544,6 @@ func (c *ChatMessagePromptBlock) MarshalJSON() ([]byte, error) {
 }
 
 func (c *ChatMessagePromptBlock) String() string {
-	if len(c._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(c); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", c)
-}
-
-// The properties of a ChatMessagePromptTemplateBlock
-type ChatMessagePromptBlockProperties struct {
-	Blocks                  []*PromptBlock   `json:"blocks" url:"blocks"`
-	ChatRole                *ChatMessageRole `json:"chat_role,omitempty" url:"chat_role,omitempty"`
-	ChatSource              *string          `json:"chat_source,omitempty" url:"chat_source,omitempty"`
-	ChatMessageUnterminated *bool            `json:"chat_message_unterminated,omitempty" url:"chat_message_unterminated,omitempty"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (c *ChatMessagePromptBlockProperties) GetExtraProperties() map[string]interface{} {
-	return c.extraProperties
-}
-
-func (c *ChatMessagePromptBlockProperties) UnmarshalJSON(data []byte) error {
-	type unmarshaler ChatMessagePromptBlockProperties
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*c = ChatMessagePromptBlockProperties(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *c)
-	if err != nil {
-		return err
-	}
-	c.extraProperties = extraProperties
-
-	c._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (c *ChatMessagePromptBlockProperties) String() string {
 	if len(c._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
 			return value
@@ -8084,10 +8042,12 @@ func (f *FunctionCallVellumValueRequest) String() string {
 
 // A block that represents a function definition in a prompt template.
 type FunctionDefinitionPromptBlock struct {
-	State       *PromptBlockState                        `json:"state,omitempty" url:"state,omitempty"`
-	CacheConfig *EphemeralPromptCacheConfig              `json:"cache_config,omitempty" url:"cache_config,omitempty"`
-	Properties  *FunctionDefinitionPromptBlockProperties `json:"properties" url:"properties"`
-	blockType   string
+	State               *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig         *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	FunctionName        *string                     `json:"function_name,omitempty" url:"function_name,omitempty"`
+	FunctionDescription *string                     `json:"function_description,omitempty" url:"function_description,omitempty"`
+	FunctionParameters  map[string]interface{}      `json:"function_parameters,omitempty" url:"function_parameters,omitempty"`
+	blockType           string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -8141,56 +8101,6 @@ func (f *FunctionDefinitionPromptBlock) MarshalJSON() ([]byte, error) {
 }
 
 func (f *FunctionDefinitionPromptBlock) String() string {
-	if len(f._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(f); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", f)
-}
-
-type FunctionDefinitionPromptBlockProperties struct {
-	// The name identifying the function.
-	FunctionName *string `json:"function_name,omitempty" url:"function_name,omitempty"`
-	// A description to help guide the model when to invoke this function.
-	FunctionDescription *string `json:"function_description,omitempty" url:"function_description,omitempty"`
-	// An OpenAPI specification of parameters that are supported by this function.
-	FunctionParameters map[string]interface{} `json:"function_parameters,omitempty" url:"function_parameters,omitempty"`
-	// Set this option to true to force the model to return a function call of this function.
-	FunctionForced *bool `json:"function_forced,omitempty" url:"function_forced,omitempty"`
-	// Set this option to use strict schema decoding when available.
-	FunctionStrict *bool `json:"function_strict,omitempty" url:"function_strict,omitempty"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (f *FunctionDefinitionPromptBlockProperties) GetExtraProperties() map[string]interface{} {
-	return f.extraProperties
-}
-
-func (f *FunctionDefinitionPromptBlockProperties) UnmarshalJSON(data []byte) error {
-	type unmarshaler FunctionDefinitionPromptBlockProperties
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*f = FunctionDefinitionPromptBlockProperties(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *f)
-	if err != nil {
-		return err
-	}
-	f.extraProperties = extraProperties
-
-	f._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (f *FunctionDefinitionPromptBlockProperties) String() string {
 	if len(f._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
 			return value
@@ -10102,10 +10012,11 @@ func (i IterationStateEnum) Ptr() *IterationStateEnum {
 
 // A block of Jinja template code that is used to generate a prompt
 type JinjaPromptBlock struct {
-	State       *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
-	CacheConfig *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
-	Properties  *JinjaPromptBlockProperties `json:"properties" url:"properties"`
-	blockType   string
+	State        *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig  *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	Template     string                      `json:"template" url:"template"`
+	TemplateType VellumVariableType          `json:"template_type" url:"template_type"`
+	blockType    string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -10159,48 +10070,6 @@ func (j *JinjaPromptBlock) MarshalJSON() ([]byte, error) {
 }
 
 func (j *JinjaPromptBlock) String() string {
-	if len(j._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(j._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(j); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", j)
-}
-
-type JinjaPromptBlockProperties struct {
-	Template     *string             `json:"template,omitempty" url:"template,omitempty"`
-	TemplateType *VellumVariableType `json:"template_type,omitempty" url:"template_type,omitempty"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (j *JinjaPromptBlockProperties) GetExtraProperties() map[string]interface{} {
-	return j.extraProperties
-}
-
-func (j *JinjaPromptBlockProperties) UnmarshalJSON(data []byte) error {
-	type unmarshaler JinjaPromptBlockProperties
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*j = JinjaPromptBlockProperties(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *j)
-	if err != nil {
-		return err
-	}
-	j.extraProperties = extraProperties
-
-	j._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (j *JinjaPromptBlockProperties) String() string {
 	if len(j._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(j._rawJSON); err == nil {
 			return value
