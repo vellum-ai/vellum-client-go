@@ -80,7 +80,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
 func (c *Client) ExecuteCode(
 	ctx context.Context,
-	request *vellumclientgo.CodeExecutorRequest,
+	request *vellumclientgo.CodeExecutor,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.CodeExecutorResponse, error) {
 	options := core.NewRequestOptions(opts...)

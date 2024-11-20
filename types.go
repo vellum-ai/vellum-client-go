@@ -9,12 +9,12 @@ import (
 	time "time"
 )
 
-type CodeExecutorRequest struct {
-	Code        string                         `json:"code" url:"-"`
-	Runtime     CodeExecutionRuntime           `json:"runtime" url:"-"`
-	InputValues []*CodeExecutorInputRequest    `json:"input_values,omitempty" url:"-"`
-	Packages    []*CodeExecutionPackageRequest `json:"packages,omitempty" url:"-"`
-	OutputType  VellumVariableType             `json:"output_type" url:"-"`
+type CodeExecutor struct {
+	Code        string                  `json:"code" url:"-"`
+	Runtime     CodeExecutionRuntime    `json:"runtime" url:"-"`
+	InputValues []*CodeExecutorInput    `json:"input_values,omitempty" url:"-"`
+	Packages    []*CodeExecutionPackage `json:"packages,omitempty" url:"-"`
+	OutputType  VellumVariableType      `json:"output_type" url:"-"`
 }
 
 type ExecutePromptRequest struct {
@@ -830,26 +830,26 @@ func (a *ArrayChatMessageContentRequest) String() string {
 }
 
 // A user input representing a Vellum Array value
-type ArrayInputRequest struct {
+type ArrayInput struct {
 	// The variable's name
-	Name  string                `json:"name" url:"name"`
-	Value []*VellumValueRequest `json:"value" url:"value"`
+	Name  string         `json:"name" url:"name"`
+	Value []*VellumValue `json:"value" url:"value"`
 	type_ string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
 }
 
-func (a *ArrayInputRequest) GetExtraProperties() map[string]interface{} {
+func (a *ArrayInput) GetExtraProperties() map[string]interface{} {
 	return a.extraProperties
 }
 
-func (a *ArrayInputRequest) Type() string {
+func (a *ArrayInput) Type() string {
 	return a.type_
 }
 
-func (a *ArrayInputRequest) UnmarshalJSON(data []byte) error {
-	type embed ArrayInputRequest
+func (a *ArrayInput) UnmarshalJSON(data []byte) error {
+	type embed ArrayInput
 	var unmarshaler = struct {
 		embed
 		Type string `json:"type"`
@@ -859,7 +859,7 @@ func (a *ArrayInputRequest) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*a = ArrayInputRequest(unmarshaler.embed)
+	*a = ArrayInput(unmarshaler.embed)
 	if unmarshaler.Type != "ARRAY" {
 		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", a, "ARRAY", unmarshaler.Type)
 	}
@@ -875,8 +875,8 @@ func (a *ArrayInputRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (a *ArrayInputRequest) MarshalJSON() ([]byte, error) {
-	type embed ArrayInputRequest
+func (a *ArrayInput) MarshalJSON() ([]byte, error) {
+	type embed ArrayInput
 	var marshaler = struct {
 		embed
 		Type string `json:"type"`
@@ -887,7 +887,7 @@ func (a *ArrayInputRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(marshaler)
 }
 
-func (a *ArrayInputRequest) String() string {
+func (a *ArrayInput) String() string {
 	if len(a._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(a._rawJSON); err == nil {
 			return value
@@ -1996,6 +1996,76 @@ func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request) String
 		return value
 	}
 	return fmt.Sprintf("%#v", b)
+}
+
+// A user input representing a list of chat messages
+type ChatHistoryInput struct {
+	// The variable's name, as defined in the deployment.
+	Name  string         `json:"name" url:"name"`
+	Value []*ChatMessage `json:"value" url:"value"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *ChatHistoryInput) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *ChatHistoryInput) Type() string {
+	return c.type_
+}
+
+func (c *ChatHistoryInput) UnmarshalJSON(data []byte) error {
+	type embed ChatHistoryInput
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*c),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*c = ChatHistoryInput(unmarshaler.embed)
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", c, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	c.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c, "type")
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *ChatHistoryInput) MarshalJSON() ([]byte, error) {
+	type embed ChatHistoryInput
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*c),
+		Type:  "CHAT_HISTORY",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (c *ChatHistoryInput) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
 }
 
 // A user input representing a list of chat messages
@@ -3408,7 +3478,7 @@ func (c *CodeExecutionNodeStringResult) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-type CodeExecutionPackageRequest struct {
+type CodeExecutionPackage struct {
 	Version string `json:"version" url:"version"`
 	Name    string `json:"name" url:"name"`
 
@@ -3416,17 +3486,17 @@ type CodeExecutionPackageRequest struct {
 	_rawJSON        json.RawMessage
 }
 
-func (c *CodeExecutionPackageRequest) GetExtraProperties() map[string]interface{} {
+func (c *CodeExecutionPackage) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
-func (c *CodeExecutionPackageRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler CodeExecutionPackageRequest
+func (c *CodeExecutionPackage) UnmarshalJSON(data []byte) error {
+	type unmarshaler CodeExecutionPackage
 	var value unmarshaler
 	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*c = CodeExecutionPackageRequest(value)
+	*c = CodeExecutionPackage(value)
 
 	extraProperties, err := core.ExtractExtraProperties(data, *c)
 	if err != nil {
@@ -3438,7 +3508,7 @@ func (c *CodeExecutionPackageRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (c *CodeExecutionPackageRequest) String() string {
+func (c *CodeExecutionPackage) String() string {
 	if len(c._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
 			return value
@@ -3474,137 +3544,137 @@ func (c CodeExecutionRuntime) Ptr() *CodeExecutionRuntime {
 	return &c
 }
 
-type CodeExecutorInputRequest struct {
-	StringInputRequest             *StringInputRequest
-	JsonInputRequest               *JsonInputRequest
-	ChatHistoryInputRequest        *ChatHistoryInputRequest
-	NumberInputRequest             *NumberInputRequest
-	SearchResultsInputRequest      *SearchResultsInputRequest
-	ErrorInputRequest              *ErrorInputRequest
-	ArrayInputRequest              *ArrayInputRequest
-	FunctionCallInputRequest       *FunctionCallInputRequest
-	CodeExecutorSecretInputRequest *CodeExecutorSecretInputRequest
+type CodeExecutorInput struct {
+	StringInput             *StringInput
+	JsonInput               *JsonInput
+	ChatHistoryInput        *ChatHistoryInput
+	NumberInput             *NumberInput
+	SearchResultsInput      *SearchResultsInput
+	ErrorInput              *ErrorInput
+	ArrayInput              *ArrayInput
+	FunctionCallInput       *FunctionCallInput
+	CodeExecutorSecretInput *CodeExecutorSecretInput
 }
 
-func (c *CodeExecutorInputRequest) UnmarshalJSON(data []byte) error {
-	valueStringInputRequest := new(StringInputRequest)
-	if err := json.Unmarshal(data, &valueStringInputRequest); err == nil {
-		c.StringInputRequest = valueStringInputRequest
+func (c *CodeExecutorInput) UnmarshalJSON(data []byte) error {
+	valueStringInput := new(StringInput)
+	if err := json.Unmarshal(data, &valueStringInput); err == nil {
+		c.StringInput = valueStringInput
 		return nil
 	}
-	valueJsonInputRequest := new(JsonInputRequest)
-	if err := json.Unmarshal(data, &valueJsonInputRequest); err == nil {
-		c.JsonInputRequest = valueJsonInputRequest
+	valueJsonInput := new(JsonInput)
+	if err := json.Unmarshal(data, &valueJsonInput); err == nil {
+		c.JsonInput = valueJsonInput
 		return nil
 	}
-	valueChatHistoryInputRequest := new(ChatHistoryInputRequest)
-	if err := json.Unmarshal(data, &valueChatHistoryInputRequest); err == nil {
-		c.ChatHistoryInputRequest = valueChatHistoryInputRequest
+	valueChatHistoryInput := new(ChatHistoryInput)
+	if err := json.Unmarshal(data, &valueChatHistoryInput); err == nil {
+		c.ChatHistoryInput = valueChatHistoryInput
 		return nil
 	}
-	valueNumberInputRequest := new(NumberInputRequest)
-	if err := json.Unmarshal(data, &valueNumberInputRequest); err == nil {
-		c.NumberInputRequest = valueNumberInputRequest
+	valueNumberInput := new(NumberInput)
+	if err := json.Unmarshal(data, &valueNumberInput); err == nil {
+		c.NumberInput = valueNumberInput
 		return nil
 	}
-	valueSearchResultsInputRequest := new(SearchResultsInputRequest)
-	if err := json.Unmarshal(data, &valueSearchResultsInputRequest); err == nil {
-		c.SearchResultsInputRequest = valueSearchResultsInputRequest
+	valueSearchResultsInput := new(SearchResultsInput)
+	if err := json.Unmarshal(data, &valueSearchResultsInput); err == nil {
+		c.SearchResultsInput = valueSearchResultsInput
 		return nil
 	}
-	valueErrorInputRequest := new(ErrorInputRequest)
-	if err := json.Unmarshal(data, &valueErrorInputRequest); err == nil {
-		c.ErrorInputRequest = valueErrorInputRequest
+	valueErrorInput := new(ErrorInput)
+	if err := json.Unmarshal(data, &valueErrorInput); err == nil {
+		c.ErrorInput = valueErrorInput
 		return nil
 	}
-	valueArrayInputRequest := new(ArrayInputRequest)
-	if err := json.Unmarshal(data, &valueArrayInputRequest); err == nil {
-		c.ArrayInputRequest = valueArrayInputRequest
+	valueArrayInput := new(ArrayInput)
+	if err := json.Unmarshal(data, &valueArrayInput); err == nil {
+		c.ArrayInput = valueArrayInput
 		return nil
 	}
-	valueFunctionCallInputRequest := new(FunctionCallInputRequest)
-	if err := json.Unmarshal(data, &valueFunctionCallInputRequest); err == nil {
-		c.FunctionCallInputRequest = valueFunctionCallInputRequest
+	valueFunctionCallInput := new(FunctionCallInput)
+	if err := json.Unmarshal(data, &valueFunctionCallInput); err == nil {
+		c.FunctionCallInput = valueFunctionCallInput
 		return nil
 	}
-	valueCodeExecutorSecretInputRequest := new(CodeExecutorSecretInputRequest)
-	if err := json.Unmarshal(data, &valueCodeExecutorSecretInputRequest); err == nil {
-		c.CodeExecutorSecretInputRequest = valueCodeExecutorSecretInputRequest
+	valueCodeExecutorSecretInput := new(CodeExecutorSecretInput)
+	if err := json.Unmarshal(data, &valueCodeExecutorSecretInput); err == nil {
+		c.CodeExecutorSecretInput = valueCodeExecutorSecretInput
 		return nil
 	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, c)
 }
 
-func (c CodeExecutorInputRequest) MarshalJSON() ([]byte, error) {
-	if c.StringInputRequest != nil {
-		return json.Marshal(c.StringInputRequest)
+func (c CodeExecutorInput) MarshalJSON() ([]byte, error) {
+	if c.StringInput != nil {
+		return json.Marshal(c.StringInput)
 	}
-	if c.JsonInputRequest != nil {
-		return json.Marshal(c.JsonInputRequest)
+	if c.JsonInput != nil {
+		return json.Marshal(c.JsonInput)
 	}
-	if c.ChatHistoryInputRequest != nil {
-		return json.Marshal(c.ChatHistoryInputRequest)
+	if c.ChatHistoryInput != nil {
+		return json.Marshal(c.ChatHistoryInput)
 	}
-	if c.NumberInputRequest != nil {
-		return json.Marshal(c.NumberInputRequest)
+	if c.NumberInput != nil {
+		return json.Marshal(c.NumberInput)
 	}
-	if c.SearchResultsInputRequest != nil {
-		return json.Marshal(c.SearchResultsInputRequest)
+	if c.SearchResultsInput != nil {
+		return json.Marshal(c.SearchResultsInput)
 	}
-	if c.ErrorInputRequest != nil {
-		return json.Marshal(c.ErrorInputRequest)
+	if c.ErrorInput != nil {
+		return json.Marshal(c.ErrorInput)
 	}
-	if c.ArrayInputRequest != nil {
-		return json.Marshal(c.ArrayInputRequest)
+	if c.ArrayInput != nil {
+		return json.Marshal(c.ArrayInput)
 	}
-	if c.FunctionCallInputRequest != nil {
-		return json.Marshal(c.FunctionCallInputRequest)
+	if c.FunctionCallInput != nil {
+		return json.Marshal(c.FunctionCallInput)
 	}
-	if c.CodeExecutorSecretInputRequest != nil {
-		return json.Marshal(c.CodeExecutorSecretInputRequest)
+	if c.CodeExecutorSecretInput != nil {
+		return json.Marshal(c.CodeExecutorSecretInput)
 	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", c)
 }
 
-type CodeExecutorInputRequestVisitor interface {
-	VisitStringInputRequest(*StringInputRequest) error
-	VisitJsonInputRequest(*JsonInputRequest) error
-	VisitChatHistoryInputRequest(*ChatHistoryInputRequest) error
-	VisitNumberInputRequest(*NumberInputRequest) error
-	VisitSearchResultsInputRequest(*SearchResultsInputRequest) error
-	VisitErrorInputRequest(*ErrorInputRequest) error
-	VisitArrayInputRequest(*ArrayInputRequest) error
-	VisitFunctionCallInputRequest(*FunctionCallInputRequest) error
-	VisitCodeExecutorSecretInputRequest(*CodeExecutorSecretInputRequest) error
+type CodeExecutorInputVisitor interface {
+	VisitStringInput(*StringInput) error
+	VisitJsonInput(*JsonInput) error
+	VisitChatHistoryInput(*ChatHistoryInput) error
+	VisitNumberInput(*NumberInput) error
+	VisitSearchResultsInput(*SearchResultsInput) error
+	VisitErrorInput(*ErrorInput) error
+	VisitArrayInput(*ArrayInput) error
+	VisitFunctionCallInput(*FunctionCallInput) error
+	VisitCodeExecutorSecretInput(*CodeExecutorSecretInput) error
 }
 
-func (c *CodeExecutorInputRequest) Accept(visitor CodeExecutorInputRequestVisitor) error {
-	if c.StringInputRequest != nil {
-		return visitor.VisitStringInputRequest(c.StringInputRequest)
+func (c *CodeExecutorInput) Accept(visitor CodeExecutorInputVisitor) error {
+	if c.StringInput != nil {
+		return visitor.VisitStringInput(c.StringInput)
 	}
-	if c.JsonInputRequest != nil {
-		return visitor.VisitJsonInputRequest(c.JsonInputRequest)
+	if c.JsonInput != nil {
+		return visitor.VisitJsonInput(c.JsonInput)
 	}
-	if c.ChatHistoryInputRequest != nil {
-		return visitor.VisitChatHistoryInputRequest(c.ChatHistoryInputRequest)
+	if c.ChatHistoryInput != nil {
+		return visitor.VisitChatHistoryInput(c.ChatHistoryInput)
 	}
-	if c.NumberInputRequest != nil {
-		return visitor.VisitNumberInputRequest(c.NumberInputRequest)
+	if c.NumberInput != nil {
+		return visitor.VisitNumberInput(c.NumberInput)
 	}
-	if c.SearchResultsInputRequest != nil {
-		return visitor.VisitSearchResultsInputRequest(c.SearchResultsInputRequest)
+	if c.SearchResultsInput != nil {
+		return visitor.VisitSearchResultsInput(c.SearchResultsInput)
 	}
-	if c.ErrorInputRequest != nil {
-		return visitor.VisitErrorInputRequest(c.ErrorInputRequest)
+	if c.ErrorInput != nil {
+		return visitor.VisitErrorInput(c.ErrorInput)
 	}
-	if c.ArrayInputRequest != nil {
-		return visitor.VisitArrayInputRequest(c.ArrayInputRequest)
+	if c.ArrayInput != nil {
+		return visitor.VisitArrayInput(c.ArrayInput)
 	}
-	if c.FunctionCallInputRequest != nil {
-		return visitor.VisitFunctionCallInputRequest(c.FunctionCallInputRequest)
+	if c.FunctionCallInput != nil {
+		return visitor.VisitFunctionCallInput(c.FunctionCallInput)
 	}
-	if c.CodeExecutorSecretInputRequest != nil {
-		return visitor.VisitCodeExecutorSecretInputRequest(c.CodeExecutorSecretInputRequest)
+	if c.CodeExecutorSecretInput != nil {
+		return visitor.VisitCodeExecutorSecretInput(c.CodeExecutorSecretInput)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", c)
 }
@@ -3652,7 +3722,7 @@ func (c *CodeExecutorResponse) String() string {
 }
 
 // A user input representing a Vellum Workspace Secret value
-type CodeExecutorSecretInputRequest struct {
+type CodeExecutorSecretInput struct {
 	// The variable's name
 	Name  string `json:"name" url:"name"`
 	Value string `json:"value" url:"value"`
@@ -3662,16 +3732,16 @@ type CodeExecutorSecretInputRequest struct {
 	_rawJSON        json.RawMessage
 }
 
-func (c *CodeExecutorSecretInputRequest) GetExtraProperties() map[string]interface{} {
+func (c *CodeExecutorSecretInput) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
-func (c *CodeExecutorSecretInputRequest) Type() string {
+func (c *CodeExecutorSecretInput) Type() string {
 	return c.type_
 }
 
-func (c *CodeExecutorSecretInputRequest) UnmarshalJSON(data []byte) error {
-	type embed CodeExecutorSecretInputRequest
+func (c *CodeExecutorSecretInput) UnmarshalJSON(data []byte) error {
+	type embed CodeExecutorSecretInput
 	var unmarshaler = struct {
 		embed
 		Type string `json:"type"`
@@ -3681,7 +3751,7 @@ func (c *CodeExecutorSecretInputRequest) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*c = CodeExecutorSecretInputRequest(unmarshaler.embed)
+	*c = CodeExecutorSecretInput(unmarshaler.embed)
 	if unmarshaler.Type != "SECRET" {
 		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", c, "SECRET", unmarshaler.Type)
 	}
@@ -3697,8 +3767,8 @@ func (c *CodeExecutorSecretInputRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (c *CodeExecutorSecretInputRequest) MarshalJSON() ([]byte, error) {
-	type embed CodeExecutorSecretInputRequest
+func (c *CodeExecutorSecretInput) MarshalJSON() ([]byte, error) {
+	type embed CodeExecutorSecretInput
 	var marshaler = struct {
 		embed
 		Type string `json:"type"`
@@ -3709,7 +3779,7 @@ func (c *CodeExecutorSecretInputRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(marshaler)
 }
 
-func (c *CodeExecutorSecretInputRequest) String() string {
+func (c *CodeExecutorSecretInput) String() string {
 	if len(c._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
 			return value
@@ -4718,20 +4788,50 @@ func (d *DocumentIndexRead) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
+// - `QUEUED` - Queued
+// - `PROCESSING` - Processing
+// - `PROCESSED` - Processed
+// - `FAILED` - Failed
+// - `UNKNOWN` - Unknown
+type DocumentProcessingState string
+
+const (
+	DocumentProcessingStateQueued     DocumentProcessingState = "QUEUED"
+	DocumentProcessingStateProcessing DocumentProcessingState = "PROCESSING"
+	DocumentProcessingStateProcessed  DocumentProcessingState = "PROCESSED"
+	DocumentProcessingStateFailed     DocumentProcessingState = "FAILED"
+	DocumentProcessingStateUnknown    DocumentProcessingState = "UNKNOWN"
+)
+
+func NewDocumentProcessingStateFromString(s string) (DocumentProcessingState, error) {
+	switch s {
+	case "QUEUED":
+		return DocumentProcessingStateQueued, nil
+	case "PROCESSING":
+		return DocumentProcessingStateProcessing, nil
+	case "PROCESSED":
+		return DocumentProcessingStateProcessed, nil
+	case "FAILED":
+		return DocumentProcessingStateFailed, nil
+	case "UNKNOWN":
+		return DocumentProcessingStateUnknown, nil
+	}
+	var t DocumentProcessingState
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (d DocumentProcessingState) Ptr() *DocumentProcessingState {
+	return &d
+}
+
 type DocumentRead struct {
 	Id string `json:"id" url:"id"`
 	// The unique id of this document as it exists in the user's system.
 	ExternalId     *string   `json:"external_id,omitempty" url:"external_id,omitempty"`
 	LastUploadedAt time.Time `json:"last_uploaded_at" url:"last_uploaded_at"`
 	// A human-readable label for the document. Defaults to the originally uploaded file's file name.
-	Label string `json:"label" url:"label"`
-	// The current processing state of the document
-	//
-	// - `QUEUED` - Queued
-	// - `PROCESSING` - Processing
-	// - `PROCESSED` - Processed
-	// - `FAILED` - Failed
-	ProcessingState *ProcessingStateEnum `json:"processing_state,omitempty" url:"processing_state,omitempty"`
+	Label           string                  `json:"label" url:"label"`
+	ProcessingState DocumentProcessingState `json:"processing_state" url:"processing_state"`
 	// The current status of the document
 	//
 	// - `ACTIVE` - Active
@@ -4990,26 +5090,26 @@ func (e *EphemeralPromptCacheConfig) String() string {
 type EphemeralPromptCacheConfigTypeEnum = string
 
 // A user input representing a Vellum Error value
-type ErrorInputRequest struct {
+type ErrorInput struct {
 	// The variable's name
-	Name  string              `json:"name" url:"name"`
-	Value *VellumErrorRequest `json:"value" url:"value"`
+	Name  string       `json:"name" url:"name"`
+	Value *VellumError `json:"value" url:"value"`
 	type_ string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
 }
 
-func (e *ErrorInputRequest) GetExtraProperties() map[string]interface{} {
+func (e *ErrorInput) GetExtraProperties() map[string]interface{} {
 	return e.extraProperties
 }
 
-func (e *ErrorInputRequest) Type() string {
+func (e *ErrorInput) Type() string {
 	return e.type_
 }
 
-func (e *ErrorInputRequest) UnmarshalJSON(data []byte) error {
-	type embed ErrorInputRequest
+func (e *ErrorInput) UnmarshalJSON(data []byte) error {
+	type embed ErrorInput
 	var unmarshaler = struct {
 		embed
 		Type string `json:"type"`
@@ -5019,7 +5119,7 @@ func (e *ErrorInputRequest) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*e = ErrorInputRequest(unmarshaler.embed)
+	*e = ErrorInput(unmarshaler.embed)
 	if unmarshaler.Type != "ERROR" {
 		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", e, "ERROR", unmarshaler.Type)
 	}
@@ -5035,8 +5135,8 @@ func (e *ErrorInputRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (e *ErrorInputRequest) MarshalJSON() ([]byte, error) {
-	type embed ErrorInputRequest
+func (e *ErrorInput) MarshalJSON() ([]byte, error) {
+	type embed ErrorInput
 	var marshaler = struct {
 		embed
 		Type string `json:"type"`
@@ -5047,7 +5147,7 @@ func (e *ErrorInputRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(marshaler)
 }
 
-func (e *ErrorInputRequest) String() string {
+func (e *ErrorInput) String() string {
 	if len(e._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
 			return value
@@ -7723,26 +7823,26 @@ func (f *FunctionCallChatMessageContentValueRequest) String() string {
 }
 
 // A user input representing a Vellum Function Call value
-type FunctionCallInputRequest struct {
+type FunctionCallInput struct {
 	// The variable's name
-	Name  string               `json:"name" url:"name"`
-	Value *FunctionCallRequest `json:"value" url:"value"`
+	Name  string        `json:"name" url:"name"`
+	Value *FunctionCall `json:"value" url:"value"`
 	type_ string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
 }
 
-func (f *FunctionCallInputRequest) GetExtraProperties() map[string]interface{} {
+func (f *FunctionCallInput) GetExtraProperties() map[string]interface{} {
 	return f.extraProperties
 }
 
-func (f *FunctionCallInputRequest) Type() string {
+func (f *FunctionCallInput) Type() string {
 	return f.type_
 }
 
-func (f *FunctionCallInputRequest) UnmarshalJSON(data []byte) error {
-	type embed FunctionCallInputRequest
+func (f *FunctionCallInput) UnmarshalJSON(data []byte) error {
+	type embed FunctionCallInput
 	var unmarshaler = struct {
 		embed
 		Type string `json:"type"`
@@ -7752,7 +7852,7 @@ func (f *FunctionCallInputRequest) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*f = FunctionCallInputRequest(unmarshaler.embed)
+	*f = FunctionCallInput(unmarshaler.embed)
 	if unmarshaler.Type != "FUNCTION_CALL" {
 		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "FUNCTION_CALL", unmarshaler.Type)
 	}
@@ -7768,8 +7868,8 @@ func (f *FunctionCallInputRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (f *FunctionCallInputRequest) MarshalJSON() ([]byte, error) {
-	type embed FunctionCallInputRequest
+func (f *FunctionCallInput) MarshalJSON() ([]byte, error) {
+	type embed FunctionCallInput
 	var marshaler = struct {
 		embed
 		Type string `json:"type"`
@@ -7780,7 +7880,7 @@ func (f *FunctionCallInputRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(marshaler)
 }
 
-func (f *FunctionCallInputRequest) String() string {
+func (f *FunctionCallInput) String() string {
 	if len(f._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
 			return value
@@ -10083,6 +10183,76 @@ func (j *JinjaPromptBlock) String() string {
 }
 
 // A user input representing a JSON object
+type JsonInput struct {
+	// The variable's name
+	Name  string      `json:"name" url:"name"`
+	Value interface{} `json:"value" url:"value"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (j *JsonInput) GetExtraProperties() map[string]interface{} {
+	return j.extraProperties
+}
+
+func (j *JsonInput) Type() string {
+	return j.type_
+}
+
+func (j *JsonInput) UnmarshalJSON(data []byte) error {
+	type embed JsonInput
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*j),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*j = JsonInput(unmarshaler.embed)
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", j, "JSON", unmarshaler.Type)
+	}
+	j.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *j, "type")
+	if err != nil {
+		return err
+	}
+	j.extraProperties = extraProperties
+
+	j._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (j *JsonInput) MarshalJSON() ([]byte, error) {
+	type embed JsonInput
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*j),
+		Type:  "JSON",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (j *JsonInput) String() string {
+	if len(j._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(j._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(j); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", j)
+}
+
+// A user input representing a JSON object
 type JsonInputRequest struct {
 	// The variable's name
 	Name  string      `json:"name" url:"name"`
@@ -10914,72 +11084,72 @@ func (m *MetricDefinitionExecution) String() string {
 	return fmt.Sprintf("%#v", m)
 }
 
-type MetricDefinitionInputRequest struct {
-	StringInputRequest      *StringInputRequest
-	JsonInputRequest        *JsonInputRequest
-	ChatHistoryInputRequest *ChatHistoryInputRequest
-	NumberInputRequest      *NumberInputRequest
+type MetricDefinitionInput struct {
+	StringInput      *StringInput
+	JsonInput        *JsonInput
+	ChatHistoryInput *ChatHistoryInput
+	NumberInput      *NumberInput
 }
 
-func (m *MetricDefinitionInputRequest) UnmarshalJSON(data []byte) error {
-	valueStringInputRequest := new(StringInputRequest)
-	if err := json.Unmarshal(data, &valueStringInputRequest); err == nil {
-		m.StringInputRequest = valueStringInputRequest
+func (m *MetricDefinitionInput) UnmarshalJSON(data []byte) error {
+	valueStringInput := new(StringInput)
+	if err := json.Unmarshal(data, &valueStringInput); err == nil {
+		m.StringInput = valueStringInput
 		return nil
 	}
-	valueJsonInputRequest := new(JsonInputRequest)
-	if err := json.Unmarshal(data, &valueJsonInputRequest); err == nil {
-		m.JsonInputRequest = valueJsonInputRequest
+	valueJsonInput := new(JsonInput)
+	if err := json.Unmarshal(data, &valueJsonInput); err == nil {
+		m.JsonInput = valueJsonInput
 		return nil
 	}
-	valueChatHistoryInputRequest := new(ChatHistoryInputRequest)
-	if err := json.Unmarshal(data, &valueChatHistoryInputRequest); err == nil {
-		m.ChatHistoryInputRequest = valueChatHistoryInputRequest
+	valueChatHistoryInput := new(ChatHistoryInput)
+	if err := json.Unmarshal(data, &valueChatHistoryInput); err == nil {
+		m.ChatHistoryInput = valueChatHistoryInput
 		return nil
 	}
-	valueNumberInputRequest := new(NumberInputRequest)
-	if err := json.Unmarshal(data, &valueNumberInputRequest); err == nil {
-		m.NumberInputRequest = valueNumberInputRequest
+	valueNumberInput := new(NumberInput)
+	if err := json.Unmarshal(data, &valueNumberInput); err == nil {
+		m.NumberInput = valueNumberInput
 		return nil
 	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, m)
 }
 
-func (m MetricDefinitionInputRequest) MarshalJSON() ([]byte, error) {
-	if m.StringInputRequest != nil {
-		return json.Marshal(m.StringInputRequest)
+func (m MetricDefinitionInput) MarshalJSON() ([]byte, error) {
+	if m.StringInput != nil {
+		return json.Marshal(m.StringInput)
 	}
-	if m.JsonInputRequest != nil {
-		return json.Marshal(m.JsonInputRequest)
+	if m.JsonInput != nil {
+		return json.Marshal(m.JsonInput)
 	}
-	if m.ChatHistoryInputRequest != nil {
-		return json.Marshal(m.ChatHistoryInputRequest)
+	if m.ChatHistoryInput != nil {
+		return json.Marshal(m.ChatHistoryInput)
 	}
-	if m.NumberInputRequest != nil {
-		return json.Marshal(m.NumberInputRequest)
+	if m.NumberInput != nil {
+		return json.Marshal(m.NumberInput)
 	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", m)
 }
 
-type MetricDefinitionInputRequestVisitor interface {
-	VisitStringInputRequest(*StringInputRequest) error
-	VisitJsonInputRequest(*JsonInputRequest) error
-	VisitChatHistoryInputRequest(*ChatHistoryInputRequest) error
-	VisitNumberInputRequest(*NumberInputRequest) error
+type MetricDefinitionInputVisitor interface {
+	VisitStringInput(*StringInput) error
+	VisitJsonInput(*JsonInput) error
+	VisitChatHistoryInput(*ChatHistoryInput) error
+	VisitNumberInput(*NumberInput) error
 }
 
-func (m *MetricDefinitionInputRequest) Accept(visitor MetricDefinitionInputRequestVisitor) error {
-	if m.StringInputRequest != nil {
-		return visitor.VisitStringInputRequest(m.StringInputRequest)
+func (m *MetricDefinitionInput) Accept(visitor MetricDefinitionInputVisitor) error {
+	if m.StringInput != nil {
+		return visitor.VisitStringInput(m.StringInput)
 	}
-	if m.JsonInputRequest != nil {
-		return visitor.VisitJsonInputRequest(m.JsonInputRequest)
+	if m.JsonInput != nil {
+		return visitor.VisitJsonInput(m.JsonInput)
 	}
-	if m.ChatHistoryInputRequest != nil {
-		return visitor.VisitChatHistoryInputRequest(m.ChatHistoryInputRequest)
+	if m.ChatHistoryInput != nil {
+		return visitor.VisitChatHistoryInput(m.ChatHistoryInput)
 	}
-	if m.NumberInputRequest != nil {
-		return visitor.VisitNumberInputRequest(m.NumberInputRequest)
+	if m.NumberInput != nil {
+		return visitor.VisitNumberInput(m.NumberInput)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", m)
 }
@@ -14153,7 +14323,7 @@ func (n *NormalizedTokenLogProbs) String() string {
 }
 
 // A user input representing a number value
-type NumberInputRequest struct {
+type NumberInput struct {
 	// The variable's name
 	Name  string  `json:"name" url:"name"`
 	Value float64 `json:"value" url:"value"`
@@ -14163,16 +14333,16 @@ type NumberInputRequest struct {
 	_rawJSON        json.RawMessage
 }
 
-func (n *NumberInputRequest) GetExtraProperties() map[string]interface{} {
+func (n *NumberInput) GetExtraProperties() map[string]interface{} {
 	return n.extraProperties
 }
 
-func (n *NumberInputRequest) Type() string {
+func (n *NumberInput) Type() string {
 	return n.type_
 }
 
-func (n *NumberInputRequest) UnmarshalJSON(data []byte) error {
-	type embed NumberInputRequest
+func (n *NumberInput) UnmarshalJSON(data []byte) error {
+	type embed NumberInput
 	var unmarshaler = struct {
 		embed
 		Type string `json:"type"`
@@ -14182,7 +14352,7 @@ func (n *NumberInputRequest) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*n = NumberInputRequest(unmarshaler.embed)
+	*n = NumberInput(unmarshaler.embed)
 	if unmarshaler.Type != "NUMBER" {
 		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "NUMBER", unmarshaler.Type)
 	}
@@ -14198,8 +14368,8 @@ func (n *NumberInputRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (n *NumberInputRequest) MarshalJSON() ([]byte, error) {
-	type embed NumberInputRequest
+func (n *NumberInput) MarshalJSON() ([]byte, error) {
+	type embed NumberInput
 	var marshaler = struct {
 		embed
 		Type string `json:"type"`
@@ -14210,7 +14380,7 @@ func (n *NumberInputRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(marshaler)
 }
 
-func (n *NumberInputRequest) String() string {
+func (n *NumberInput) String() string {
 	if len(n._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
 			return value
@@ -15632,38 +15802,6 @@ func NewProcessingFailureReasonEnumFromString(s string) (ProcessingFailureReason
 }
 
 func (p ProcessingFailureReasonEnum) Ptr() *ProcessingFailureReasonEnum {
-	return &p
-}
-
-// - `QUEUED` - Queued
-// - `PROCESSING` - Processing
-// - `PROCESSED` - Processed
-// - `FAILED` - Failed
-type ProcessingStateEnum string
-
-const (
-	ProcessingStateEnumQueued     ProcessingStateEnum = "QUEUED"
-	ProcessingStateEnumProcessing ProcessingStateEnum = "PROCESSING"
-	ProcessingStateEnumProcessed  ProcessingStateEnum = "PROCESSED"
-	ProcessingStateEnumFailed     ProcessingStateEnum = "FAILED"
-)
-
-func NewProcessingStateEnumFromString(s string) (ProcessingStateEnum, error) {
-	switch s {
-	case "QUEUED":
-		return ProcessingStateEnumQueued, nil
-	case "PROCESSING":
-		return ProcessingStateEnumProcessing, nil
-	case "PROCESSED":
-		return ProcessingStateEnumProcessed, nil
-	case "FAILED":
-		return ProcessingStateEnumFailed, nil
-	}
-	var t ProcessingStateEnum
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (p ProcessingStateEnum) Ptr() *ProcessingStateEnum {
 	return &p
 }
 
@@ -18251,26 +18389,26 @@ func (s *SearchResultRequest) String() string {
 }
 
 // A user input representing a search results value
-type SearchResultsInputRequest struct {
+type SearchResultsInput struct {
 	// The variable's name
-	Name  string                 `json:"name" url:"name"`
-	Value []*SearchResultRequest `json:"value" url:"value"`
+	Name  string          `json:"name" url:"name"`
+	Value []*SearchResult `json:"value" url:"value"`
 	type_ string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
 }
 
-func (s *SearchResultsInputRequest) GetExtraProperties() map[string]interface{} {
+func (s *SearchResultsInput) GetExtraProperties() map[string]interface{} {
 	return s.extraProperties
 }
 
-func (s *SearchResultsInputRequest) Type() string {
+func (s *SearchResultsInput) Type() string {
 	return s.type_
 }
 
-func (s *SearchResultsInputRequest) UnmarshalJSON(data []byte) error {
-	type embed SearchResultsInputRequest
+func (s *SearchResultsInput) UnmarshalJSON(data []byte) error {
+	type embed SearchResultsInput
 	var unmarshaler = struct {
 		embed
 		Type string `json:"type"`
@@ -18280,7 +18418,7 @@ func (s *SearchResultsInputRequest) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*s = SearchResultsInputRequest(unmarshaler.embed)
+	*s = SearchResultsInput(unmarshaler.embed)
 	if unmarshaler.Type != "SEARCH_RESULTS" {
 		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "SEARCH_RESULTS", unmarshaler.Type)
 	}
@@ -18296,8 +18434,8 @@ func (s *SearchResultsInputRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (s *SearchResultsInputRequest) MarshalJSON() ([]byte, error) {
-	type embed SearchResultsInputRequest
+func (s *SearchResultsInput) MarshalJSON() ([]byte, error) {
+	type embed SearchResultsInput
 	var marshaler = struct {
 		embed
 		Type string `json:"type"`
@@ -18308,7 +18446,7 @@ func (s *SearchResultsInputRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(marshaler)
 }
 
-func (s *SearchResultsInputRequest) String() string {
+func (s *SearchResultsInput) String() string {
 	if len(s._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
 			return value
@@ -18908,14 +19046,8 @@ type SlimDocument struct {
 	// A timestamp representing when this document was most recently uploaded.
 	LastUploadedAt time.Time `json:"last_uploaded_at" url:"last_uploaded_at"`
 	// Human-friendly name for this document.
-	Label string `json:"label" url:"label"`
-	// An enum value representing where this document is along its processing lifecycle. Note that this is different than its indexing lifecycle.
-	//
-	// - `QUEUED` - Queued
-	// - `PROCESSING` - Processing
-	// - `PROCESSED` - Processed
-	// - `FAILED` - Failed
-	ProcessingState *ProcessingStateEnum `json:"processing_state,omitempty" url:"processing_state,omitempty"`
+	Label           string                  `json:"label" url:"label"`
+	ProcessingState DocumentProcessingState `json:"processing_state" url:"processing_state"`
 	// An enum value representing why the document could not be processed. Is null unless processing_state is FAILED.
 	//
 	// - `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit
@@ -19465,6 +19597,76 @@ func (s *StringChatMessageContentRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (s *StringChatMessageContentRequest) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// A user input representing a string value
+type StringInput struct {
+	// The variable's name
+	Name  string `json:"name" url:"name"`
+	Value string `json:"value" url:"value"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *StringInput) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *StringInput) Type() string {
+	return s.type_
+}
+
+func (s *StringInput) UnmarshalJSON(data []byte) error {
+	type embed StringInput
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*s),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*s = StringInput(unmarshaler.embed)
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "STRING", unmarshaler.Type)
+	}
+	s.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s, "type")
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *StringInput) MarshalJSON() ([]byte, error) {
+	type embed StringInput
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*s),
+		Type:  "STRING",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (s *StringInput) String() string {
 	if len(s._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
 			return value
@@ -25765,6 +25967,7 @@ func (v *VellumError) String() string {
 }
 
 // - `INVALID_REQUEST` - INVALID_REQUEST
+// - `INVALID_INPUTS` - INVALID_INPUTS
 // - `PROVIDER_ERROR` - PROVIDER_ERROR
 // - `REQUEST_TIMEOUT` - REQUEST_TIMEOUT
 // - `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
@@ -25773,6 +25976,7 @@ type VellumErrorCodeEnum string
 
 const (
 	VellumErrorCodeEnumInvalidRequest      VellumErrorCodeEnum = "INVALID_REQUEST"
+	VellumErrorCodeEnumInvalidInputs       VellumErrorCodeEnum = "INVALID_INPUTS"
 	VellumErrorCodeEnumProviderError       VellumErrorCodeEnum = "PROVIDER_ERROR"
 	VellumErrorCodeEnumRequestTimeout      VellumErrorCodeEnum = "REQUEST_TIMEOUT"
 	VellumErrorCodeEnumInternalServerError VellumErrorCodeEnum = "INTERNAL_SERVER_ERROR"
@@ -25783,6 +25987,8 @@ func NewVellumErrorCodeEnumFromString(s string) (VellumErrorCodeEnum, error) {
 	switch s {
 	case "INVALID_REQUEST":
 		return VellumErrorCodeEnumInvalidRequest, nil
+	case "INVALID_INPUTS":
+		return VellumErrorCodeEnumInvalidInputs, nil
 	case "PROVIDER_ERROR":
 		return VellumErrorCodeEnumProviderError, nil
 	case "REQUEST_TIMEOUT":

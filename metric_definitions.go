@@ -2,7 +2,7 @@
 
 package api
 
-type ExecuteMetricDefinitionRequest struct {
-	Inputs     []*MetricDefinitionInputRequest `json:"inputs,omitempty" url:"-"`
-	ReleaseTag *string                         `json:"release_tag,omitempty" url:"-"`
+type ExecuteMetricDefinition struct {
+	Inputs     []*MetricDefinitionInput `json:"inputs,omitempty" url:"-"`
+	ReleaseTag *string                  `json:"release_tag,omitempty" url:"-"`
 }
