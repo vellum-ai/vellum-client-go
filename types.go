@@ -8047,6 +8047,8 @@ type FunctionDefinitionPromptBlock struct {
 	FunctionName        *string                     `json:"function_name,omitempty" url:"function_name,omitempty"`
 	FunctionDescription *string                     `json:"function_description,omitempty" url:"function_description,omitempty"`
 	FunctionParameters  map[string]interface{}      `json:"function_parameters,omitempty" url:"function_parameters,omitempty"`
+	FunctionForced      *bool                       `json:"function_forced,omitempty" url:"function_forced,omitempty"`
+	FunctionStrict      *bool                       `json:"function_strict,omitempty" url:"function_strict,omitempty"`
 	blockType           string
 
 	extraProperties map[string]interface{}
