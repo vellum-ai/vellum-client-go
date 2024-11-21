@@ -3,11 +3,12 @@
 package api
 
 type AdHocExecutePromptStream struct {
-	MlModel        string                `json:"ml_model" url:"-"`
-	InputValues    []*PromptRequestInput `json:"input_values,omitempty" url:"-"`
-	InputVariables []*VellumVariable     `json:"input_variables,omitempty" url:"-"`
-	Parameters     *PromptParameters     `json:"parameters,omitempty" url:"-"`
-	Settings       *PromptSettings       `json:"settings,omitempty" url:"-"`
-	Blocks         []*PromptBlock        `json:"blocks,omitempty" url:"-"`
-	ExpandMeta     *AdHocExpandMeta      `json:"expand_meta,omitempty" url:"-"`
+	MlModel        string                           `json:"ml_model" url:"-"`
+	InputValues    []*PromptRequestInput            `json:"input_values,omitempty" url:"-"`
+	InputVariables []*VellumVariable                `json:"input_variables,omitempty" url:"-"`
+	Parameters     *PromptParameters                `json:"parameters,omitempty" url:"-"`
+	Settings       *PromptSettings                  `json:"settings,omitempty" url:"-"`
+	Blocks         []*PromptBlock                   `json:"blocks,omitempty" url:"-"`
+	Functions      []*FunctionDefinitionPromptBlock `json:"functions,omitempty" url:"-"`
+	ExpandMeta     *AdHocExpandMeta                 `json:"expand_meta,omitempty" url:"-"`
 }

@@ -8142,14 +8142,14 @@ func (f *FunctionCallVellumValueRequest) String() string {
 
 // A block that represents a function definition in a prompt template.
 type FunctionDefinitionPromptBlock struct {
-	State               *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
-	CacheConfig         *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
-	FunctionName        *string                     `json:"function_name,omitempty" url:"function_name,omitempty"`
-	FunctionDescription *string                     `json:"function_description,omitempty" url:"function_description,omitempty"`
-	FunctionParameters  map[string]interface{}      `json:"function_parameters,omitempty" url:"function_parameters,omitempty"`
-	FunctionForced      *bool                       `json:"function_forced,omitempty" url:"function_forced,omitempty"`
-	FunctionStrict      *bool                       `json:"function_strict,omitempty" url:"function_strict,omitempty"`
-	blockType           string
+	State       *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	Name        *string                     `json:"name,omitempty" url:"name,omitempty"`
+	Description *string                     `json:"description,omitempty" url:"description,omitempty"`
+	Parameters  map[string]interface{}      `json:"parameters,omitempty" url:"parameters,omitempty"`
+	Forced      *bool                       `json:"forced,omitempty" url:"forced,omitempty"`
+	Strict      *bool                       `json:"strict,omitempty" url:"strict,omitempty"`
+	blockType   string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
