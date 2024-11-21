@@ -9,5 +9,6 @@ type AdHocExecutePromptStream struct {
 	Parameters     *PromptParameters     `json:"parameters,omitempty" url:"-"`
 	Settings       *PromptSettings       `json:"settings,omitempty" url:"-"`
 	Blocks         []*PromptBlock        `json:"blocks,omitempty" url:"-"`
+	Functions      []*FunctionDefinition `json:"functions,omitempty" url:"-"`
 	ExpandMeta     *AdHocExpandMeta      `json:"expand_meta,omitempty" url:"-"`
 }
