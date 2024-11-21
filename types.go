@@ -8141,46 +8141,32 @@ func (f *FunctionCallVellumValueRequest) String() string {
 }
 
 // A block that represents a function definition in a prompt template.
-type FunctionDefinitionPromptBlock struct {
-	State               *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
-	CacheConfig         *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
-	FunctionName        *string                     `json:"function_name,omitempty" url:"function_name,omitempty"`
-	FunctionDescription *string                     `json:"function_description,omitempty" url:"function_description,omitempty"`
-	FunctionParameters  map[string]interface{}      `json:"function_parameters,omitempty" url:"function_parameters,omitempty"`
-	FunctionForced      *bool                       `json:"function_forced,omitempty" url:"function_forced,omitempty"`
-	FunctionStrict      *bool                       `json:"function_strict,omitempty" url:"function_strict,omitempty"`
-	blockType           string
+type FunctionDefinition struct {
+	State       *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	Name        *string                     `json:"name,omitempty" url:"name,omitempty"`
+	Description *string                     `json:"description,omitempty" url:"description,omitempty"`
+	Parameters  map[string]interface{}      `json:"parameters,omitempty" url:"parameters,omitempty"`
+	Forced      *bool                       `json:"forced,omitempty" url:"forced,omitempty"`
+	Strict      *bool                       `json:"strict,omitempty" url:"strict,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
 }
 
-func (f *FunctionDefinitionPromptBlock) GetExtraProperties() map[string]interface{} {
+func (f *FunctionDefinition) GetExtraProperties() map[string]interface{} {
 	return f.extraProperties
 }
 
-func (f *FunctionDefinitionPromptBlock) BlockType() string {
-	return f.blockType
-}
-
-func (f *FunctionDefinitionPromptBlock) UnmarshalJSON(data []byte) error {
-	type embed FunctionDefinitionPromptBlock
-	var unmarshaler = struct {
-		embed
-		BlockType string `json:"block_type"`
-	}{
-		embed: embed(*f),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+func (f *FunctionDefinition) UnmarshalJSON(data []byte) error {
+	type unmarshaler FunctionDefinition
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*f = FunctionDefinitionPromptBlock(unmarshaler.embed)
-	if unmarshaler.BlockType != "FUNCTION_DEFINITION" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "FUNCTION_DEFINITION", unmarshaler.BlockType)
-	}
-	f.blockType = unmarshaler.BlockType
+	*f = FunctionDefinition(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *f, "block_type")
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
 	if err != nil {
 		return err
 	}
@@ -8190,19 +8176,7 @@ func (f *FunctionDefinitionPromptBlock) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (f *FunctionDefinitionPromptBlock) MarshalJSON() ([]byte, error) {
-	type embed FunctionDefinitionPromptBlock
-	var marshaler = struct {
-		embed
-		BlockType string `json:"block_type"`
-	}{
-		embed:     embed(*f),
-		BlockType: "FUNCTION_DEFINITION",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (f *FunctionDefinitionPromptBlock) String() string {
+func (f *FunctionDefinition) String() string {
 	if len(f._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
 			return value
@@ -15806,11 +15780,10 @@ func (p ProcessingFailureReasonEnum) Ptr() *ProcessingFailureReasonEnum {
 }
 
 type PromptBlock struct {
-	JinjaPromptBlock              *JinjaPromptBlock
-	ChatMessagePromptBlock        *ChatMessagePromptBlock
-	FunctionDefinitionPromptBlock *FunctionDefinitionPromptBlock
-	VariablePromptBlock           *VariablePromptBlock
-	RichTextPromptBlock           *RichTextPromptBlock
+	JinjaPromptBlock       *JinjaPromptBlock
+	ChatMessagePromptBlock *ChatMessagePromptBlock
+	VariablePromptBlock    *VariablePromptBlock
+	RichTextPromptBlock    *RichTextPromptBlock
 }
 
 func (p *PromptBlock) UnmarshalJSON(data []byte) error {
@@ -15822,11 +15795,6 @@ func (p *PromptBlock) UnmarshalJSON(data []byte) error {
 	valueChatMessagePromptBlock := new(ChatMessagePromptBlock)
 	if err := json.Unmarshal(data, &valueChatMessagePromptBlock); err == nil {
 		p.ChatMessagePromptBlock = valueChatMessagePromptBlock
-		return nil
-	}
-	valueFunctionDefinitionPromptBlock := new(FunctionDefinitionPromptBlock)
-	if err := json.Unmarshal(data, &valueFunctionDefinitionPromptBlock); err == nil {
-		p.FunctionDefinitionPromptBlock = valueFunctionDefinitionPromptBlock
 		return nil
 	}
 	valueVariablePromptBlock := new(VariablePromptBlock)
@@ -15849,9 +15817,6 @@ func (p PromptBlock) MarshalJSON() ([]byte, error) {
 	if p.ChatMessagePromptBlock != nil {
 		return json.Marshal(p.ChatMessagePromptBlock)
 	}
-	if p.FunctionDefinitionPromptBlock != nil {
-		return json.Marshal(p.FunctionDefinitionPromptBlock)
-	}
 	if p.VariablePromptBlock != nil {
 		return json.Marshal(p.VariablePromptBlock)
 	}
@@ -15864,7 +15829,6 @@ func (p PromptBlock) MarshalJSON() ([]byte, error) {
 type PromptBlockVisitor interface {
 	VisitJinjaPromptBlock(*JinjaPromptBlock) error
 	VisitChatMessagePromptBlock(*ChatMessagePromptBlock) error
-	VisitFunctionDefinitionPromptBlock(*FunctionDefinitionPromptBlock) error
 	VisitVariablePromptBlock(*VariablePromptBlock) error
 	VisitRichTextPromptBlock(*RichTextPromptBlock) error
 }
@@ -15875,9 +15839,6 @@ func (p *PromptBlock) Accept(visitor PromptBlockVisitor) error {
 	}
 	if p.ChatMessagePromptBlock != nil {
 		return visitor.VisitChatMessagePromptBlock(p.ChatMessagePromptBlock)
-	}
-	if p.FunctionDefinitionPromptBlock != nil {
-		return visitor.VisitFunctionDefinitionPromptBlock(p.FunctionDefinitionPromptBlock)
 	}
 	if p.VariablePromptBlock != nil {
 		return visitor.VisitVariablePromptBlock(p.VariablePromptBlock)
