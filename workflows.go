@@ -11,7 +11,8 @@ type WorkflowsPullRequest struct {
 }
 
 type WorkflowPushRequest struct {
-	ExecConfig        WorkflowPushExecConfig               `json:"exec_config,omitempty" url:"-"`
+	// The execution configuration of the workflow.
+	ExecConfig        WorkflowPushExecConfig               `json:"exec_config" url:"-"`
 	Label             string                               `json:"label" url:"-"`
 	WorkflowSandboxId *string                              `json:"workflow_sandbox_id,omitempty" url:"-"`
 	DeploymentConfig  *WorkflowPushDeploymentConfigRequest `json:"deployment_config,omitempty" url:"-"`

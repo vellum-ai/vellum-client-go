@@ -7,10 +7,12 @@ import (
 	context "context"
 	json "encoding/json"
 	errors "errors"
+	fmt "fmt"
 	vellumclientgo "github.com/vellum-ai/vellum-client-go"
 	core "github.com/vellum-ai/vellum-client-go/core"
 	option "github.com/vellum-ai/vellum-client-go/option"
 	io "io"
+	multipart "mime/multipart"
 	http "net/http"
 )
 
@@ -105,6 +107,7 @@ func (c *Client) Pull(
 // An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
 func (c *Client) Push(
 	ctx context.Context,
+	artifact io.Reader,
 	request *vellumclientgo.WorkflowPushRequest,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.WorkflowPushResponse, error) {
@@ -122,6 +125,42 @@ func (c *Client) Push(
 	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
 	var response *vellumclientgo.WorkflowPushResponse
+	requestBuffer := bytes.NewBuffer(nil)
+	writer := multipart.NewWriter(requestBuffer)
+	if artifact != nil {
+		artifactFilename := "artifact_filename"
+		if named, ok := artifact.(interface{ Name() string }); ok {
+			artifactFilename = named.Name()
+		}
+		artifactPart, err := writer.CreateFormFile("artifact", artifactFilename)
+		if err != nil {
+			return nil, err
+		}
+		if _, err := io.Copy(artifactPart, artifact); err != nil {
+			return nil, err
+		}
+	}
+	if err := core.WriteMultipartJSON(writer, "exec_config", request.ExecConfig); err != nil {
+		return nil, err
+	}
+	if err := writer.WriteField("label", fmt.Sprintf("%v", request.Label)); err != nil {
+		return nil, err
+	}
+	if request.WorkflowSandboxId != nil {
+		if err := writer.WriteField("workflow_sandbox_id", fmt.Sprintf("%v", *request.WorkflowSandboxId)); err != nil {
+			return nil, err
+		}
+	}
+	if request.DeploymentConfig != nil {
+		if err := core.WriteMultipartJSON(writer, "deployment_config", request.DeploymentConfig); err != nil {
+			return nil, err
+		}
+	}
+	if err := writer.Close(); err != nil {
+		return nil, err
+	}
+	headers.Set("Content-Type", writer.FormDataContentType())
+
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
@@ -132,7 +171,7 @@ func (c *Client) Push(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
-			Request:         request,
+			Request:         requestBuffer,
 			Response:        &response,
 		},
 	); err != nil {
