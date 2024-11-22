@@ -28422,7 +28422,7 @@ func (w *WorkflowPushDeploymentConfigRequest) String() string {
 	return fmt.Sprintf("%#v", w)
 }
 
-type WorkflowPushExecConfig = map[string]interface{}
+type WorkflowPushExecConfig = string
 
 type WorkflowPushResponse struct {
 	WorkflowSandboxId    string  `json:"workflow_sandbox_id" url:"workflow_sandbox_id"`
