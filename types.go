@@ -4137,6 +4137,74 @@ func (c *CreateTestSuiteTestCaseRequest) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+type DeploymentHistoryItem struct {
+	Id           string    `json:"id" url:"id"`
+	DeploymentId string    `json:"deployment_id" url:"deployment_id"`
+	Timestamp    time.Time `json:"timestamp" url:"timestamp"`
+	// A human-readable label for the deployment
+	Label string `json:"label" url:"label"`
+	// A name that uniquely identifies this deployment within its workspace
+	Name           string            `json:"name" url:"name"`
+	InputVariables []*VellumVariable `json:"input_variables" url:"input_variables"`
+	// A human-readable description of the deployment
+	Description *string `json:"description,omitempty" url:"description,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DeploymentHistoryItem) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DeploymentHistoryItem) UnmarshalJSON(data []byte) error {
+	type embed DeploymentHistoryItem
+	var unmarshaler = struct {
+		embed
+		Timestamp *core.DateTime `json:"timestamp"`
+	}{
+		embed: embed(*d),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*d = DeploymentHistoryItem(unmarshaler.embed)
+	d.Timestamp = unmarshaler.Timestamp.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DeploymentHistoryItem) MarshalJSON() ([]byte, error) {
+	type embed DeploymentHistoryItem
+	var marshaler = struct {
+		embed
+		Timestamp *core.DateTime `json:"timestamp"`
+	}{
+		embed:     embed(*d),
+		Timestamp: core.NewDateTime(d.Timestamp),
+	}
+	return json.Marshal(marshaler)
+}
+
+func (d *DeploymentHistoryItem) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
 type DeploymentProviderPayloadResponse struct {
 	Payload *DeploymentProviderPayloadResponsePayload `json:"payload" url:"payload"`
 	Meta    *CompilePromptMeta                        `json:"meta,omitempty" url:"meta,omitempty"`
@@ -26719,6 +26787,75 @@ func NewVellumVariableTypeFromString(s string) (VellumVariableType, error) {
 
 func (v VellumVariableType) Ptr() *VellumVariableType {
 	return &v
+}
+
+type WorkflowDeploymentHistoryItem struct {
+	Id                   string    `json:"id" url:"id"`
+	WorkflowDeploymentId string    `json:"workflow_deployment_id" url:"workflow_deployment_id"`
+	Timestamp            time.Time `json:"timestamp" url:"timestamp"`
+	// A human-readable label for the workflow deployment
+	Label string `json:"label" url:"label"`
+	// A name that uniquely identifies this workflow deployment within its workspace
+	Name            string            `json:"name" url:"name"`
+	InputVariables  []*VellumVariable `json:"input_variables" url:"input_variables"`
+	OutputVariables []*VellumVariable `json:"output_variables" url:"output_variables"`
+	// A human-readable description of the workflow deployment
+	Description *string `json:"description,omitempty" url:"description,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowDeploymentHistoryItem) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkflowDeploymentHistoryItem) UnmarshalJSON(data []byte) error {
+	type embed WorkflowDeploymentHistoryItem
+	var unmarshaler = struct {
+		embed
+		Timestamp *core.DateTime `json:"timestamp"`
+	}{
+		embed: embed(*w),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*w = WorkflowDeploymentHistoryItem(unmarshaler.embed)
+	w.Timestamp = unmarshaler.Timestamp.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowDeploymentHistoryItem) MarshalJSON() ([]byte, error) {
+	type embed WorkflowDeploymentHistoryItem
+	var marshaler = struct {
+		embed
+		Timestamp *core.DateTime `json:"timestamp"`
+	}{
+		embed:     embed(*w),
+		Timestamp: core.NewDateTime(w.Timestamp),
+	}
+	return json.Marshal(marshaler)
+}
+
+func (w *WorkflowDeploymentHistoryItem) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
 }
 
 type WorkflowDeploymentRead struct {
