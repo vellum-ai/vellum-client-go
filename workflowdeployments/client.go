@@ -115,6 +115,51 @@ func (c *Client) Retrieve(
 	return response, nil
 }
 
+// Retrieve a specific Workflow Deployment History Item by either its UUID or the name of a Release Tag that points to it.
+func (c *Client) WorkflowDeploymentHistoryItemRetrieve(
+	ctx context.Context,
+	// Either the UUID of Workflow Deployment History Item you'd like to retrieve, or the name of a Release Tag that's pointing to the Workflow Deployment History Item you'd like to retrieve.
+	historyIdOrReleaseTag string,
+	// A UUID string identifying this workflow deployment.
+	id string,
+	opts ...option.RequestOption,
+) (*vellumclientgo.WorkflowDeploymentHistoryItem, error) {
+	options := core.NewRequestOptions(opts...)
+
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(
+		baseURL+"/v1/workflow-deployments/%v/history/%v",
+		id,
+		historyIdOrReleaseTag,
+	)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
+	var response *vellumclientgo.WorkflowDeploymentHistoryItem
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodGet,
+			MaxAttempts:     options.MaxAttempts,
+			Headers:         headers,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
 // List Release Tags associated with the specified Workflow Deployment
 func (c *Client) ListWorkflowReleaseTags(
 	ctx context.Context,
