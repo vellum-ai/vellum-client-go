@@ -16,6 +16,7 @@ import (
 	documents "github.com/vellum-ai/vellum-client-go/documents"
 	folderentities "github.com/vellum-ai/vellum-client-go/folderentities"
 	metricdefinitions "github.com/vellum-ai/vellum-client-go/metricdefinitions"
+	mlmodels "github.com/vellum-ai/vellum-client-go/mlmodels"
 	option "github.com/vellum-ai/vellum-client-go/option"
 	sandboxes "github.com/vellum-ai/vellum-client-go/sandboxes"
 	testsuiteruns "github.com/vellum-ai/vellum-client-go/testsuiteruns"
@@ -40,6 +41,7 @@ type Client struct {
 	Documents           *documents.Client
 	FolderEntities      *folderentities.Client
 	MetricDefinitions   *metricdefinitions.Client
+	MlModels            *mlmodels.Client
 	Sandboxes           *sandboxes.Client
 	TestSuiteRuns       *testsuiteruns.Client
 	TestSuites          *testsuites.Client
@@ -67,6 +69,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 		Documents:           documents.NewClient(opts...),
 		FolderEntities:      folderentities.NewClient(opts...),
 		MetricDefinitions:   metricdefinitions.NewClient(opts...),
+		MlModels:            mlmodels.NewClient(opts...),
 		Sandboxes:           sandboxes.NewClient(opts...),
 		TestSuiteRuns:       testsuiteruns.NewClient(opts...),
 		TestSuites:          testsuites.NewClient(opts...),
