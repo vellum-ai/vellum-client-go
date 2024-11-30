@@ -11126,6 +11126,54 @@ func (m *MetricDefinitionExecution) String() string {
 	return fmt.Sprintf("%#v", m)
 }
 
+type MetricDefinitionHistoryItem struct {
+	Id string `json:"id" url:"id"`
+	// A human-readable label for the metric
+	Label string `json:"label" url:"label"`
+	// A name that uniquely identifies this metric within its workspace
+	Name            string            `json:"name" url:"name"`
+	Description     string            `json:"description" url:"description"`
+	InputVariables  []*VellumVariable `json:"input_variables" url:"input_variables"`
+	OutputVariables []*VellumVariable `json:"output_variables" url:"output_variables"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MetricDefinitionHistoryItem) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MetricDefinitionHistoryItem) UnmarshalJSON(data []byte) error {
+	type unmarshaler MetricDefinitionHistoryItem
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MetricDefinitionHistoryItem(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MetricDefinitionHistoryItem) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
 type MetricDefinitionInput struct {
 	StringInput      *StringInput
 	JsonInput        *JsonInput

@@ -70,3 +70,47 @@ func (c *Client) ExecuteMetricDefinition(
 	}
 	return response, nil
 }
+
+func (c *Client) MetricDefinitionHistoryItemRetrieve(
+	ctx context.Context,
+	// Either the UUID of Metric Definition History Item you'd like to retrieve, or the name of a Release Tag that's pointing to the Metric Definition History Item you'd like to retrieve.
+	historyIdOrReleaseTag string,
+	// A UUID string identifying this metric definition.
+	id string,
+	opts ...option.RequestOption,
+) (*vellumclientgo.MetricDefinitionHistoryItem, error) {
+	options := core.NewRequestOptions(opts...)
+
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(
+		baseURL+"/v1/metric-definitions/%v/history/%v",
+		id,
+		historyIdOrReleaseTag,
+	)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
+	var response *vellumclientgo.MetricDefinitionHistoryItem
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodGet,
+			MaxAttempts:     options.MaxAttempts,
+			Headers:         headers,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
