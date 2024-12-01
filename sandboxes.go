@@ -2,6 +2,12 @@
 
 package api
 
+import (
+	json "encoding/json"
+	fmt "fmt"
+	core "github.com/vellum-ai/vellum-client-go/core"
+)
+
 type DeploySandboxPromptRequest struct {
 	// The Vellum-generated ID of the Prompt Deployment you'd like to update. Cannot specify both this and prompt_deployment_name. Leave null to create a new Prompt Deployment.
 	PromptDeploymentId *string `json:"prompt_deployment_id,omitempty" url:"-"`
@@ -11,6 +17,580 @@ type DeploySandboxPromptRequest struct {
 	Label *string `json:"label,omitempty" url:"-"`
 	// Optionally provide the release tags that you'd like to be associated with the latest release of the created/updated Prompt Deployment.
 	ReleaseTags []string `json:"release_tags,omitempty" url:"-"`
+}
+
+// Named Prompt Sandbox Scenario input value that is of type CHAT_HISTORY
+type NamedScenarioInputChatHistoryVariableValueRequest struct {
+	Value []*ChatMessageRequest `json:"value,omitempty" url:"value,omitempty"`
+	Name  string                `json:"name" url:"name"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedScenarioInputChatHistoryVariableValueRequest) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
+}
+
+func (n *NamedScenarioInputChatHistoryVariableValueRequest) Type() string {
+	return n.type_
+}
+
+func (n *NamedScenarioInputChatHistoryVariableValueRequest) UnmarshalJSON(data []byte) error {
+	type embed NamedScenarioInputChatHistoryVariableValueRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*n = NamedScenarioInputChatHistoryVariableValueRequest(unmarshaler.embed)
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NamedScenarioInputChatHistoryVariableValueRequest) MarshalJSON() ([]byte, error) {
+	type embed NamedScenarioInputChatHistoryVariableValueRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+		Type:  "CHAT_HISTORY",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (n *NamedScenarioInputChatHistoryVariableValueRequest) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
+// Named Prompt Sandbox Scenario input value that is of type JSON
+type NamedScenarioInputJsonVariableValueRequest struct {
+	Value interface{} `json:"value" url:"value"`
+	Name  string      `json:"name" url:"name"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedScenarioInputJsonVariableValueRequest) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
+}
+
+func (n *NamedScenarioInputJsonVariableValueRequest) Type() string {
+	return n.type_
+}
+
+func (n *NamedScenarioInputJsonVariableValueRequest) UnmarshalJSON(data []byte) error {
+	type embed NamedScenarioInputJsonVariableValueRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*n = NamedScenarioInputJsonVariableValueRequest(unmarshaler.embed)
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "JSON", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NamedScenarioInputJsonVariableValueRequest) MarshalJSON() ([]byte, error) {
+	type embed NamedScenarioInputJsonVariableValueRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+		Type:  "JSON",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (n *NamedScenarioInputJsonVariableValueRequest) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
+type NamedScenarioInputRequest struct {
+	NamedScenarioInputStringVariableValueRequest      *NamedScenarioInputStringVariableValueRequest
+	NamedScenarioInputJsonVariableValueRequest        *NamedScenarioInputJsonVariableValueRequest
+	NamedScenarioInputChatHistoryVariableValueRequest *NamedScenarioInputChatHistoryVariableValueRequest
+}
+
+func (n *NamedScenarioInputRequest) UnmarshalJSON(data []byte) error {
+	valueNamedScenarioInputStringVariableValueRequest := new(NamedScenarioInputStringVariableValueRequest)
+	if err := json.Unmarshal(data, &valueNamedScenarioInputStringVariableValueRequest); err == nil {
+		n.NamedScenarioInputStringVariableValueRequest = valueNamedScenarioInputStringVariableValueRequest
+		return nil
+	}
+	valueNamedScenarioInputJsonVariableValueRequest := new(NamedScenarioInputJsonVariableValueRequest)
+	if err := json.Unmarshal(data, &valueNamedScenarioInputJsonVariableValueRequest); err == nil {
+		n.NamedScenarioInputJsonVariableValueRequest = valueNamedScenarioInputJsonVariableValueRequest
+		return nil
+	}
+	valueNamedScenarioInputChatHistoryVariableValueRequest := new(NamedScenarioInputChatHistoryVariableValueRequest)
+	if err := json.Unmarshal(data, &valueNamedScenarioInputChatHistoryVariableValueRequest); err == nil {
+		n.NamedScenarioInputChatHistoryVariableValueRequest = valueNamedScenarioInputChatHistoryVariableValueRequest
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, n)
+}
+
+func (n NamedScenarioInputRequest) MarshalJSON() ([]byte, error) {
+	if n.NamedScenarioInputStringVariableValueRequest != nil {
+		return json.Marshal(n.NamedScenarioInputStringVariableValueRequest)
+	}
+	if n.NamedScenarioInputJsonVariableValueRequest != nil {
+		return json.Marshal(n.NamedScenarioInputJsonVariableValueRequest)
+	}
+	if n.NamedScenarioInputChatHistoryVariableValueRequest != nil {
+		return json.Marshal(n.NamedScenarioInputChatHistoryVariableValueRequest)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", n)
+}
+
+type NamedScenarioInputRequestVisitor interface {
+	VisitNamedScenarioInputStringVariableValueRequest(*NamedScenarioInputStringVariableValueRequest) error
+	VisitNamedScenarioInputJsonVariableValueRequest(*NamedScenarioInputJsonVariableValueRequest) error
+	VisitNamedScenarioInputChatHistoryVariableValueRequest(*NamedScenarioInputChatHistoryVariableValueRequest) error
+}
+
+func (n *NamedScenarioInputRequest) Accept(visitor NamedScenarioInputRequestVisitor) error {
+	if n.NamedScenarioInputStringVariableValueRequest != nil {
+		return visitor.VisitNamedScenarioInputStringVariableValueRequest(n.NamedScenarioInputStringVariableValueRequest)
+	}
+	if n.NamedScenarioInputJsonVariableValueRequest != nil {
+		return visitor.VisitNamedScenarioInputJsonVariableValueRequest(n.NamedScenarioInputJsonVariableValueRequest)
+	}
+	if n.NamedScenarioInputChatHistoryVariableValueRequest != nil {
+		return visitor.VisitNamedScenarioInputChatHistoryVariableValueRequest(n.NamedScenarioInputChatHistoryVariableValueRequest)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", n)
+}
+
+// Named Prompt Sandbox Scenario input value that is of type STRING
+type NamedScenarioInputStringVariableValueRequest struct {
+	Value *string `json:"value,omitempty" url:"value,omitempty"`
+	Name  string  `json:"name" url:"name"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedScenarioInputStringVariableValueRequest) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
+}
+
+func (n *NamedScenarioInputStringVariableValueRequest) Type() string {
+	return n.type_
+}
+
+func (n *NamedScenarioInputStringVariableValueRequest) UnmarshalJSON(data []byte) error {
+	type embed NamedScenarioInputStringVariableValueRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*n = NamedScenarioInputStringVariableValueRequest(unmarshaler.embed)
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "STRING", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NamedScenarioInputStringVariableValueRequest) MarshalJSON() ([]byte, error) {
+	type embed NamedScenarioInputStringVariableValueRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+		Type:  "STRING",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (n *NamedScenarioInputStringVariableValueRequest) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
+// Sandbox Scenario
+type SandboxScenario struct {
+	Label *string `json:"label,omitempty" url:"label,omitempty"`
+	// The inputs for the scenario
+	Inputs []*ScenarioInput `json:"inputs" url:"inputs"`
+	// The id of the scenario
+	Id string `json:"id" url:"id"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SandboxScenario) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SandboxScenario) UnmarshalJSON(data []byte) error {
+	type unmarshaler SandboxScenario
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SandboxScenario(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SandboxScenario) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type ScenarioInput struct {
+	ScenarioInputStringVariableValue      *ScenarioInputStringVariableValue
+	ScenarioInputJsonVariableValue        *ScenarioInputJsonVariableValue
+	ScenarioInputChatHistoryVariableValue *ScenarioInputChatHistoryVariableValue
+}
+
+func (s *ScenarioInput) UnmarshalJSON(data []byte) error {
+	valueScenarioInputStringVariableValue := new(ScenarioInputStringVariableValue)
+	if err := json.Unmarshal(data, &valueScenarioInputStringVariableValue); err == nil {
+		s.ScenarioInputStringVariableValue = valueScenarioInputStringVariableValue
+		return nil
+	}
+	valueScenarioInputJsonVariableValue := new(ScenarioInputJsonVariableValue)
+	if err := json.Unmarshal(data, &valueScenarioInputJsonVariableValue); err == nil {
+		s.ScenarioInputJsonVariableValue = valueScenarioInputJsonVariableValue
+		return nil
+	}
+	valueScenarioInputChatHistoryVariableValue := new(ScenarioInputChatHistoryVariableValue)
+	if err := json.Unmarshal(data, &valueScenarioInputChatHistoryVariableValue); err == nil {
+		s.ScenarioInputChatHistoryVariableValue = valueScenarioInputChatHistoryVariableValue
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, s)
+}
+
+func (s ScenarioInput) MarshalJSON() ([]byte, error) {
+	if s.ScenarioInputStringVariableValue != nil {
+		return json.Marshal(s.ScenarioInputStringVariableValue)
+	}
+	if s.ScenarioInputJsonVariableValue != nil {
+		return json.Marshal(s.ScenarioInputJsonVariableValue)
+	}
+	if s.ScenarioInputChatHistoryVariableValue != nil {
+		return json.Marshal(s.ScenarioInputChatHistoryVariableValue)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", s)
+}
+
+type ScenarioInputVisitor interface {
+	VisitScenarioInputStringVariableValue(*ScenarioInputStringVariableValue) error
+	VisitScenarioInputJsonVariableValue(*ScenarioInputJsonVariableValue) error
+	VisitScenarioInputChatHistoryVariableValue(*ScenarioInputChatHistoryVariableValue) error
+}
+
+func (s *ScenarioInput) Accept(visitor ScenarioInputVisitor) error {
+	if s.ScenarioInputStringVariableValue != nil {
+		return visitor.VisitScenarioInputStringVariableValue(s.ScenarioInputStringVariableValue)
+	}
+	if s.ScenarioInputJsonVariableValue != nil {
+		return visitor.VisitScenarioInputJsonVariableValue(s.ScenarioInputJsonVariableValue)
+	}
+	if s.ScenarioInputChatHistoryVariableValue != nil {
+		return visitor.VisitScenarioInputChatHistoryVariableValue(s.ScenarioInputChatHistoryVariableValue)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", s)
+}
+
+// Prompt Sandbox Scenario input value that is of type CHAT_HISTORY
+type ScenarioInputChatHistoryVariableValue struct {
+	Value           []*ChatMessage `json:"value,omitempty" url:"value,omitempty"`
+	InputVariableId string         `json:"input_variable_id" url:"input_variable_id"`
+	type_           string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *ScenarioInputChatHistoryVariableValue) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *ScenarioInputChatHistoryVariableValue) Type() string {
+	return s.type_
+}
+
+func (s *ScenarioInputChatHistoryVariableValue) UnmarshalJSON(data []byte) error {
+	type embed ScenarioInputChatHistoryVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*s),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*s = ScenarioInputChatHistoryVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	s.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s, "type")
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *ScenarioInputChatHistoryVariableValue) MarshalJSON() ([]byte, error) {
+	type embed ScenarioInputChatHistoryVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*s),
+		Type:  "CHAT_HISTORY",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (s *ScenarioInputChatHistoryVariableValue) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// Prompt Sandbox Scenario input value that is of type JSON
+type ScenarioInputJsonVariableValue struct {
+	Value           interface{} `json:"value" url:"value"`
+	InputVariableId string      `json:"input_variable_id" url:"input_variable_id"`
+	type_           string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *ScenarioInputJsonVariableValue) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *ScenarioInputJsonVariableValue) Type() string {
+	return s.type_
+}
+
+func (s *ScenarioInputJsonVariableValue) UnmarshalJSON(data []byte) error {
+	type embed ScenarioInputJsonVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*s),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*s = ScenarioInputJsonVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "JSON", unmarshaler.Type)
+	}
+	s.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s, "type")
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *ScenarioInputJsonVariableValue) MarshalJSON() ([]byte, error) {
+	type embed ScenarioInputJsonVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*s),
+		Type:  "JSON",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (s *ScenarioInputJsonVariableValue) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// Prompt Sandbox Scenario input value that is of type STRING
+type ScenarioInputStringVariableValue struct {
+	Value           *string `json:"value,omitempty" url:"value,omitempty"`
+	InputVariableId string  `json:"input_variable_id" url:"input_variable_id"`
+	type_           string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *ScenarioInputStringVariableValue) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *ScenarioInputStringVariableValue) Type() string {
+	return s.type_
+}
+
+func (s *ScenarioInputStringVariableValue) UnmarshalJSON(data []byte) error {
+	type embed ScenarioInputStringVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*s),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*s = ScenarioInputStringVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "STRING", unmarshaler.Type)
+	}
+	s.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s, "type")
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *ScenarioInputStringVariableValue) MarshalJSON() ([]byte, error) {
+	type embed ScenarioInputStringVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*s),
+		Type:  "STRING",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (s *ScenarioInputStringVariableValue) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
 }
 
 type UpsertSandboxScenarioRequest struct {

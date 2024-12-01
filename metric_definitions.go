@@ -2,7 +2,172 @@
 
 package api
 
+import (
+	json "encoding/json"
+	fmt "fmt"
+	core "github.com/vellum-ai/vellum-client-go/core"
+)
+
 type ExecuteMetricDefinition struct {
 	Inputs     []*MetricDefinitionInput `json:"inputs,omitempty" url:"-"`
 	ReleaseTag *string                  `json:"release_tag,omitempty" url:"-"`
+}
+
+type MetricDefinitionExecution struct {
+	Outputs []*TestSuiteRunMetricOutput `json:"outputs" url:"outputs"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MetricDefinitionExecution) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MetricDefinitionExecution) UnmarshalJSON(data []byte) error {
+	type unmarshaler MetricDefinitionExecution
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MetricDefinitionExecution(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MetricDefinitionExecution) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+type MetricDefinitionHistoryItem struct {
+	Id string `json:"id" url:"id"`
+	// A human-readable label for the metric
+	Label string `json:"label" url:"label"`
+	// A name that uniquely identifies this metric within its workspace
+	Name            string            `json:"name" url:"name"`
+	Description     string            `json:"description" url:"description"`
+	InputVariables  []*VellumVariable `json:"input_variables" url:"input_variables"`
+	OutputVariables []*VellumVariable `json:"output_variables" url:"output_variables"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (m *MetricDefinitionHistoryItem) GetExtraProperties() map[string]interface{} {
+	return m.extraProperties
+}
+
+func (m *MetricDefinitionHistoryItem) UnmarshalJSON(data []byte) error {
+	type unmarshaler MetricDefinitionHistoryItem
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*m = MetricDefinitionHistoryItem(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *m)
+	if err != nil {
+		return err
+	}
+	m.extraProperties = extraProperties
+
+	m._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (m *MetricDefinitionHistoryItem) String() string {
+	if len(m._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(m._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(m); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", m)
+}
+
+type MetricDefinitionInput struct {
+	StringInput      *StringInput
+	JsonInput        *JsonInput
+	ChatHistoryInput *ChatHistoryInput
+	NumberInput      *NumberInput
+}
+
+func (m *MetricDefinitionInput) UnmarshalJSON(data []byte) error {
+	valueStringInput := new(StringInput)
+	if err := json.Unmarshal(data, &valueStringInput); err == nil {
+		m.StringInput = valueStringInput
+		return nil
+	}
+	valueJsonInput := new(JsonInput)
+	if err := json.Unmarshal(data, &valueJsonInput); err == nil {
+		m.JsonInput = valueJsonInput
+		return nil
+	}
+	valueChatHistoryInput := new(ChatHistoryInput)
+	if err := json.Unmarshal(data, &valueChatHistoryInput); err == nil {
+		m.ChatHistoryInput = valueChatHistoryInput
+		return nil
+	}
+	valueNumberInput := new(NumberInput)
+	if err := json.Unmarshal(data, &valueNumberInput); err == nil {
+		m.NumberInput = valueNumberInput
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, m)
+}
+
+func (m MetricDefinitionInput) MarshalJSON() ([]byte, error) {
+	if m.StringInput != nil {
+		return json.Marshal(m.StringInput)
+	}
+	if m.JsonInput != nil {
+		return json.Marshal(m.JsonInput)
+	}
+	if m.ChatHistoryInput != nil {
+		return json.Marshal(m.ChatHistoryInput)
+	}
+	if m.NumberInput != nil {
+		return json.Marshal(m.NumberInput)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", m)
+}
+
+type MetricDefinitionInputVisitor interface {
+	VisitStringInput(*StringInput) error
+	VisitJsonInput(*JsonInput) error
+	VisitChatHistoryInput(*ChatHistoryInput) error
+	VisitNumberInput(*NumberInput) error
+}
+
+func (m *MetricDefinitionInput) Accept(visitor MetricDefinitionInputVisitor) error {
+	if m.StringInput != nil {
+		return visitor.VisitStringInput(m.StringInput)
+	}
+	if m.JsonInput != nil {
+		return visitor.VisitJsonInput(m.JsonInput)
+	}
+	if m.ChatHistoryInput != nil {
+		return visitor.VisitChatHistoryInput(m.ChatHistoryInput)
+	}
+	if m.NumberInput != nil {
+		return visitor.VisitNumberInput(m.NumberInput)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", m)
 }

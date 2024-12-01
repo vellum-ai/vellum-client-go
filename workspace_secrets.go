@@ -2,7 +2,105 @@
 
 package api
 
+import (
+	json "encoding/json"
+	fmt "fmt"
+	core "github.com/vellum-ai/vellum-client-go/core"
+	time "time"
+)
+
 type PatchedWorkspaceSecretUpdateRequest struct {
 	Label *string `json:"label,omitempty" url:"-"`
 	Value *string `json:"value,omitempty" url:"-"`
+}
+
+// - `USER_DEFINED` - User Defined
+// - `HMAC` - Hmac
+// - `INTERNAL_API_KEY` - Internal Api Key
+type SecretTypeEnum string
+
+const (
+	SecretTypeEnumUserDefined    SecretTypeEnum = "USER_DEFINED"
+	SecretTypeEnumHmac           SecretTypeEnum = "HMAC"
+	SecretTypeEnumInternalApiKey SecretTypeEnum = "INTERNAL_API_KEY"
+)
+
+func NewSecretTypeEnumFromString(s string) (SecretTypeEnum, error) {
+	switch s {
+	case "USER_DEFINED":
+		return SecretTypeEnumUserDefined, nil
+	case "HMAC":
+		return SecretTypeEnumHmac, nil
+	case "INTERNAL_API_KEY":
+		return SecretTypeEnumInternalApiKey, nil
+	}
+	var t SecretTypeEnum
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (s SecretTypeEnum) Ptr() *SecretTypeEnum {
+	return &s
+}
+
+type WorkspaceSecretRead struct {
+	Id         string         `json:"id" url:"id"`
+	Modified   time.Time      `json:"modified" url:"modified"`
+	Name       string         `json:"name" url:"name"`
+	Label      string         `json:"label" url:"label"`
+	SecretType SecretTypeEnum `json:"secret_type" url:"secret_type"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkspaceSecretRead) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkspaceSecretRead) UnmarshalJSON(data []byte) error {
+	type embed WorkspaceSecretRead
+	var unmarshaler = struct {
+		embed
+		Modified *core.DateTime `json:"modified"`
+	}{
+		embed: embed(*w),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*w = WorkspaceSecretRead(unmarshaler.embed)
+	w.Modified = unmarshaler.Modified.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkspaceSecretRead) MarshalJSON() ([]byte, error) {
+	type embed WorkspaceSecretRead
+	var marshaler = struct {
+		embed
+		Modified *core.DateTime `json:"modified"`
+	}{
+		embed:    embed(*w),
+		Modified: core.NewDateTime(w.Modified),
+	}
+	return json.Marshal(marshaler)
+}
+
+func (w *WorkspaceSecretRead) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
 }

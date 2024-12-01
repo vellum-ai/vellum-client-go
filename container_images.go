@@ -2,6 +2,13 @@
 
 package api
 
+import (
+	json "encoding/json"
+	fmt "fmt"
+	core "github.com/vellum-ai/vellum-client-go/core"
+	time "time"
+)
+
 type ContainerImagesListRequest struct {
 	// Number of results to return per page.
 	Limit *int `json:"-" url:"limit,omitempty"`
@@ -15,4 +22,193 @@ type PushContainerImageRequest struct {
 	Name string   `json:"name" url:"-"`
 	Sha  string   `json:"sha" url:"-"`
 	Tags []string `json:"tags,omitempty" url:"-"`
+}
+
+type ContainerImageRead struct {
+	Id         string           `json:"id" url:"id"`
+	Name       string           `json:"name" url:"name"`
+	Visibility EntityVisibility `json:"visibility" url:"visibility"`
+	Created    time.Time        `json:"created" url:"created"`
+	Modified   time.Time        `json:"modified" url:"modified"`
+	Repository string           `json:"repository" url:"repository"`
+	Sha        string           `json:"sha" url:"sha"`
+	Tags       []string         `json:"tags" url:"tags"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *ContainerImageRead) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *ContainerImageRead) UnmarshalJSON(data []byte) error {
+	type embed ContainerImageRead
+	var unmarshaler = struct {
+		embed
+		Created  *core.DateTime `json:"created"`
+		Modified *core.DateTime `json:"modified"`
+	}{
+		embed: embed(*c),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*c = ContainerImageRead(unmarshaler.embed)
+	c.Created = unmarshaler.Created.Time()
+	c.Modified = unmarshaler.Modified.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *ContainerImageRead) MarshalJSON() ([]byte, error) {
+	type embed ContainerImageRead
+	var marshaler = struct {
+		embed
+		Created  *core.DateTime `json:"created"`
+		Modified *core.DateTime `json:"modified"`
+	}{
+		embed:    embed(*c),
+		Created:  core.NewDateTime(c.Created),
+		Modified: core.NewDateTime(c.Modified),
+	}
+	return json.Marshal(marshaler)
+}
+
+func (c *ContainerImageRead) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type DockerServiceToken struct {
+	AccessToken    string `json:"access_token" url:"access_token"`
+	OrganizationId string `json:"organization_id" url:"organization_id"`
+	Repository     string `json:"repository" url:"repository"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DockerServiceToken) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DockerServiceToken) UnmarshalJSON(data []byte) error {
+	type unmarshaler DockerServiceToken
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DockerServiceToken(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DockerServiceToken) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// - `DEFAULT` - Default
+// - `PUBLIC` - Public
+// - `PRIVATE` - Private
+// - `DISABLED` - Disabled
+type EntityVisibility string
+
+const (
+	EntityVisibilityDefault  EntityVisibility = "DEFAULT"
+	EntityVisibilityPublic   EntityVisibility = "PUBLIC"
+	EntityVisibilityPrivate  EntityVisibility = "PRIVATE"
+	EntityVisibilityDisabled EntityVisibility = "DISABLED"
+)
+
+func NewEntityVisibilityFromString(s string) (EntityVisibility, error) {
+	switch s {
+	case "DEFAULT":
+		return EntityVisibilityDefault, nil
+	case "PUBLIC":
+		return EntityVisibilityPublic, nil
+	case "PRIVATE":
+		return EntityVisibilityPrivate, nil
+	case "DISABLED":
+		return EntityVisibilityDisabled, nil
+	}
+	var t EntityVisibility
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (e EntityVisibility) Ptr() *EntityVisibility {
+	return &e
+}
+
+type PaginatedContainerImageReadList struct {
+	Count    *int                  `json:"count,omitempty" url:"count,omitempty"`
+	Next     *string               `json:"next,omitempty" url:"next,omitempty"`
+	Previous *string               `json:"previous,omitempty" url:"previous,omitempty"`
+	Results  []*ContainerImageRead `json:"results,omitempty" url:"results,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaginatedContainerImageReadList) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaginatedContainerImageReadList) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaginatedContainerImageReadList
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaginatedContainerImageReadList(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaginatedContainerImageReadList) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
 }

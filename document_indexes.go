@@ -3,7 +3,10 @@
 package api
 
 import (
+	json "encoding/json"
 	fmt "fmt"
+	core "github.com/vellum-ai/vellum-client-go/core"
+	time "time"
 )
 
 type DocumentIndexCreateRequest struct {
@@ -57,6 +60,2737 @@ type PatchedDocumentIndexUpdateRequest struct {
 	// * `STAGING` - Staging
 	// * `PRODUCTION` - Production
 	Environment *EnvironmentEnum `json:"environment,omitempty" url:"-"`
+}
+
+// - `True` - True
+type AddOpenaiApiKeyEnum = bool
+
+// Basic vectorizer for intfloat/multilingual-e5-large.
+type BasicVectorizerIntfloatMultilingualE5Large struct {
+	Config    map[string]interface{} `json:"config,omitempty" url:"config,omitempty"`
+	modelName string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BasicVectorizerIntfloatMultilingualE5Large) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BasicVectorizerIntfloatMultilingualE5Large) ModelName() string {
+	return b.modelName
+}
+
+func (b *BasicVectorizerIntfloatMultilingualE5Large) UnmarshalJSON(data []byte) error {
+	type embed BasicVectorizerIntfloatMultilingualE5Large
+	var unmarshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed: embed(*b),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*b = BasicVectorizerIntfloatMultilingualE5Large(unmarshaler.embed)
+	if unmarshaler.ModelName != "intfloat/multilingual-e5-large" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", b, "intfloat/multilingual-e5-large", unmarshaler.ModelName)
+	}
+	b.modelName = unmarshaler.ModelName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b, "model_name")
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BasicVectorizerIntfloatMultilingualE5Large) MarshalJSON() ([]byte, error) {
+	type embed BasicVectorizerIntfloatMultilingualE5Large
+	var marshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed:     embed(*b),
+		ModelName: "intfloat/multilingual-e5-large",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (b *BasicVectorizerIntfloatMultilingualE5Large) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Basic vectorizer for intfloat/multilingual-e5-large.
+type BasicVectorizerIntfloatMultilingualE5LargeRequest struct {
+	Config    map[string]interface{} `json:"config,omitempty" url:"config,omitempty"`
+	modelName string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BasicVectorizerIntfloatMultilingualE5LargeRequest) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BasicVectorizerIntfloatMultilingualE5LargeRequest) ModelName() string {
+	return b.modelName
+}
+
+func (b *BasicVectorizerIntfloatMultilingualE5LargeRequest) UnmarshalJSON(data []byte) error {
+	type embed BasicVectorizerIntfloatMultilingualE5LargeRequest
+	var unmarshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed: embed(*b),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*b = BasicVectorizerIntfloatMultilingualE5LargeRequest(unmarshaler.embed)
+	if unmarshaler.ModelName != "intfloat/multilingual-e5-large" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", b, "intfloat/multilingual-e5-large", unmarshaler.ModelName)
+	}
+	b.modelName = unmarshaler.ModelName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b, "model_name")
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BasicVectorizerIntfloatMultilingualE5LargeRequest) MarshalJSON() ([]byte, error) {
+	type embed BasicVectorizerIntfloatMultilingualE5LargeRequest
+	var marshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed:     embed(*b),
+		ModelName: "intfloat/multilingual-e5-large",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (b *BasicVectorizerIntfloatMultilingualE5LargeRequest) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Basic vectorizer for sentence-transformers/multi-qa-mpnet-base-cos-v1.
+type BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1 struct {
+	Config    map[string]interface{} `json:"config,omitempty" url:"config,omitempty"`
+	modelName string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1) ModelName() string {
+	return b.modelName
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1) UnmarshalJSON(data []byte) error {
+	type embed BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1
+	var unmarshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed: embed(*b),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*b = BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1(unmarshaler.embed)
+	if unmarshaler.ModelName != "sentence-transformers/multi-qa-mpnet-base-cos-v1" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", b, "sentence-transformers/multi-qa-mpnet-base-cos-v1", unmarshaler.ModelName)
+	}
+	b.modelName = unmarshaler.ModelName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b, "model_name")
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1) MarshalJSON() ([]byte, error) {
+	type embed BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1
+	var marshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed:     embed(*b),
+		ModelName: "sentence-transformers/multi-qa-mpnet-base-cos-v1",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Basic vectorizer for sentence-transformers/multi-qa-mpnet-base-cos-v1.
+type BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request struct {
+	Config    map[string]interface{} `json:"config,omitempty" url:"config,omitempty"`
+	modelName string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request) ModelName() string {
+	return b.modelName
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request) UnmarshalJSON(data []byte) error {
+	type embed BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request
+	var unmarshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed: embed(*b),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*b = BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request(unmarshaler.embed)
+	if unmarshaler.ModelName != "sentence-transformers/multi-qa-mpnet-base-cos-v1" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", b, "sentence-transformers/multi-qa-mpnet-base-cos-v1", unmarshaler.ModelName)
+	}
+	b.modelName = unmarshaler.ModelName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b, "model_name")
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request) MarshalJSON() ([]byte, error) {
+	type embed BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request
+	var marshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed:     embed(*b),
+		ModelName: "sentence-transformers/multi-qa-mpnet-base-cos-v1",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Basic vectorizer for sentence-transformers/multi-qa-mpnet-base-dot-v1.
+type BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1 struct {
+	Config    map[string]interface{} `json:"config,omitempty" url:"config,omitempty"`
+	modelName string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1) ModelName() string {
+	return b.modelName
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1) UnmarshalJSON(data []byte) error {
+	type embed BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1
+	var unmarshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed: embed(*b),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*b = BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1(unmarshaler.embed)
+	if unmarshaler.ModelName != "sentence-transformers/multi-qa-mpnet-base-dot-v1" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", b, "sentence-transformers/multi-qa-mpnet-base-dot-v1", unmarshaler.ModelName)
+	}
+	b.modelName = unmarshaler.ModelName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b, "model_name")
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1) MarshalJSON() ([]byte, error) {
+	type embed BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1
+	var marshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed:     embed(*b),
+		ModelName: "sentence-transformers/multi-qa-mpnet-base-dot-v1",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+// Basic vectorizer for sentence-transformers/multi-qa-mpnet-base-dot-v1.
+type BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request struct {
+	Config    map[string]interface{} `json:"config,omitempty" url:"config,omitempty"`
+	modelName string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request) GetExtraProperties() map[string]interface{} {
+	return b.extraProperties
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request) ModelName() string {
+	return b.modelName
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request) UnmarshalJSON(data []byte) error {
+	type embed BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request
+	var unmarshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed: embed(*b),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*b = BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request(unmarshaler.embed)
+	if unmarshaler.ModelName != "sentence-transformers/multi-qa-mpnet-base-dot-v1" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", b, "sentence-transformers/multi-qa-mpnet-base-dot-v1", unmarshaler.ModelName)
+	}
+	b.modelName = unmarshaler.ModelName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *b, "model_name")
+	if err != nil {
+		return err
+	}
+	b.extraProperties = extraProperties
+
+	b._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request) MarshalJSON() ([]byte, error) {
+	type embed BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request
+	var marshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed:     embed(*b),
+		ModelName: "sentence-transformers/multi-qa-mpnet-base-dot-v1",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request) String() string {
+	if len(b._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(b._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(b); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", b)
+}
+
+type DocumentIndexChunking struct {
+	ReductoChunking                *ReductoChunking
+	SentenceChunking               *SentenceChunking
+	TokenOverlappingWindowChunking *TokenOverlappingWindowChunking
+}
+
+func (d *DocumentIndexChunking) UnmarshalJSON(data []byte) error {
+	valueReductoChunking := new(ReductoChunking)
+	if err := json.Unmarshal(data, &valueReductoChunking); err == nil {
+		d.ReductoChunking = valueReductoChunking
+		return nil
+	}
+	valueSentenceChunking := new(SentenceChunking)
+	if err := json.Unmarshal(data, &valueSentenceChunking); err == nil {
+		d.SentenceChunking = valueSentenceChunking
+		return nil
+	}
+	valueTokenOverlappingWindowChunking := new(TokenOverlappingWindowChunking)
+	if err := json.Unmarshal(data, &valueTokenOverlappingWindowChunking); err == nil {
+		d.TokenOverlappingWindowChunking = valueTokenOverlappingWindowChunking
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, d)
+}
+
+func (d DocumentIndexChunking) MarshalJSON() ([]byte, error) {
+	if d.ReductoChunking != nil {
+		return json.Marshal(d.ReductoChunking)
+	}
+	if d.SentenceChunking != nil {
+		return json.Marshal(d.SentenceChunking)
+	}
+	if d.TokenOverlappingWindowChunking != nil {
+		return json.Marshal(d.TokenOverlappingWindowChunking)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", d)
+}
+
+type DocumentIndexChunkingVisitor interface {
+	VisitReductoChunking(*ReductoChunking) error
+	VisitSentenceChunking(*SentenceChunking) error
+	VisitTokenOverlappingWindowChunking(*TokenOverlappingWindowChunking) error
+}
+
+func (d *DocumentIndexChunking) Accept(visitor DocumentIndexChunkingVisitor) error {
+	if d.ReductoChunking != nil {
+		return visitor.VisitReductoChunking(d.ReductoChunking)
+	}
+	if d.SentenceChunking != nil {
+		return visitor.VisitSentenceChunking(d.SentenceChunking)
+	}
+	if d.TokenOverlappingWindowChunking != nil {
+		return visitor.VisitTokenOverlappingWindowChunking(d.TokenOverlappingWindowChunking)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", d)
+}
+
+type DocumentIndexChunkingRequest struct {
+	ReductoChunkingRequest                *ReductoChunkingRequest
+	SentenceChunkingRequest               *SentenceChunkingRequest
+	TokenOverlappingWindowChunkingRequest *TokenOverlappingWindowChunkingRequest
+}
+
+func (d *DocumentIndexChunkingRequest) UnmarshalJSON(data []byte) error {
+	valueReductoChunkingRequest := new(ReductoChunkingRequest)
+	if err := json.Unmarshal(data, &valueReductoChunkingRequest); err == nil {
+		d.ReductoChunkingRequest = valueReductoChunkingRequest
+		return nil
+	}
+	valueSentenceChunkingRequest := new(SentenceChunkingRequest)
+	if err := json.Unmarshal(data, &valueSentenceChunkingRequest); err == nil {
+		d.SentenceChunkingRequest = valueSentenceChunkingRequest
+		return nil
+	}
+	valueTokenOverlappingWindowChunkingRequest := new(TokenOverlappingWindowChunkingRequest)
+	if err := json.Unmarshal(data, &valueTokenOverlappingWindowChunkingRequest); err == nil {
+		d.TokenOverlappingWindowChunkingRequest = valueTokenOverlappingWindowChunkingRequest
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, d)
+}
+
+func (d DocumentIndexChunkingRequest) MarshalJSON() ([]byte, error) {
+	if d.ReductoChunkingRequest != nil {
+		return json.Marshal(d.ReductoChunkingRequest)
+	}
+	if d.SentenceChunkingRequest != nil {
+		return json.Marshal(d.SentenceChunkingRequest)
+	}
+	if d.TokenOverlappingWindowChunkingRequest != nil {
+		return json.Marshal(d.TokenOverlappingWindowChunkingRequest)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", d)
+}
+
+type DocumentIndexChunkingRequestVisitor interface {
+	VisitReductoChunkingRequest(*ReductoChunkingRequest) error
+	VisitSentenceChunkingRequest(*SentenceChunkingRequest) error
+	VisitTokenOverlappingWindowChunkingRequest(*TokenOverlappingWindowChunkingRequest) error
+}
+
+func (d *DocumentIndexChunkingRequest) Accept(visitor DocumentIndexChunkingRequestVisitor) error {
+	if d.ReductoChunkingRequest != nil {
+		return visitor.VisitReductoChunkingRequest(d.ReductoChunkingRequest)
+	}
+	if d.SentenceChunkingRequest != nil {
+		return visitor.VisitSentenceChunkingRequest(d.SentenceChunkingRequest)
+	}
+	if d.TokenOverlappingWindowChunkingRequest != nil {
+		return visitor.VisitTokenOverlappingWindowChunkingRequest(d.TokenOverlappingWindowChunkingRequest)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", d)
+}
+
+type DocumentIndexIndexingConfig struct {
+	Vectorizer *IndexingConfigVectorizer `json:"vectorizer" url:"vectorizer"`
+	Chunking   *DocumentIndexChunking    `json:"chunking,omitempty" url:"chunking,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DocumentIndexIndexingConfig) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DocumentIndexIndexingConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler DocumentIndexIndexingConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DocumentIndexIndexingConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DocumentIndexIndexingConfig) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DocumentIndexIndexingConfigRequest struct {
+	Vectorizer *IndexingConfigVectorizerRequest `json:"vectorizer" url:"vectorizer"`
+	Chunking   *DocumentIndexChunkingRequest    `json:"chunking,omitempty" url:"chunking,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DocumentIndexIndexingConfigRequest) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DocumentIndexIndexingConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler DocumentIndexIndexingConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DocumentIndexIndexingConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DocumentIndexIndexingConfigRequest) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DocumentIndexRead struct {
+	Id      string    `json:"id" url:"id"`
+	Created time.Time `json:"created" url:"created"`
+	// A human-readable label for the document index
+	Label string `json:"label" url:"label"`
+	// A name that uniquely identifies this index within its workspace
+	Name string `json:"name" url:"name"`
+	// The current status of the document index
+	//
+	// - `ACTIVE` - Active
+	// - `ARCHIVED` - Archived
+	Status *EntityStatus `json:"status,omitempty" url:"status,omitempty"`
+	// The environment this document index is used in
+	//
+	// - `DEVELOPMENT` - Development
+	// - `STAGING` - Staging
+	// - `PRODUCTION` - Production
+	Environment    *EnvironmentEnum             `json:"environment,omitempty" url:"environment,omitempty"`
+	IndexingConfig *DocumentIndexIndexingConfig `json:"indexing_config" url:"indexing_config"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DocumentIndexRead) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DocumentIndexRead) UnmarshalJSON(data []byte) error {
+	type embed DocumentIndexRead
+	var unmarshaler = struct {
+		embed
+		Created *core.DateTime `json:"created"`
+	}{
+		embed: embed(*d),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*d = DocumentIndexRead(unmarshaler.embed)
+	d.Created = unmarshaler.Created.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DocumentIndexRead) MarshalJSON() ([]byte, error) {
+	type embed DocumentIndexRead
+	var marshaler = struct {
+		embed
+		Created *core.DateTime `json:"created"`
+	}{
+		embed:   embed(*d),
+		Created: core.NewDateTime(d.Created),
+	}
+	return json.Marshal(marshaler)
+}
+
+func (d *DocumentIndexRead) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type GoogleVertexAiVectorizerConfig struct {
+	ProjectId string `json:"project_id" url:"project_id"`
+	Region    string `json:"region" url:"region"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GoogleVertexAiVectorizerConfig) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GoogleVertexAiVectorizerConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler GoogleVertexAiVectorizerConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GoogleVertexAiVectorizerConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GoogleVertexAiVectorizerConfig) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+type GoogleVertexAiVectorizerConfigRequest struct {
+	ProjectId string `json:"project_id" url:"project_id"`
+	Region    string `json:"region" url:"region"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GoogleVertexAiVectorizerConfigRequest) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GoogleVertexAiVectorizerConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler GoogleVertexAiVectorizerConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*g = GoogleVertexAiVectorizerConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g)
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GoogleVertexAiVectorizerConfigRequest) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+type GoogleVertexAiVectorizerTextEmbedding004 struct {
+	Config    *GoogleVertexAiVectorizerConfig `json:"config" url:"config"`
+	modelName string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GoogleVertexAiVectorizerTextEmbedding004) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GoogleVertexAiVectorizerTextEmbedding004) ModelName() string {
+	return g.modelName
+}
+
+func (g *GoogleVertexAiVectorizerTextEmbedding004) UnmarshalJSON(data []byte) error {
+	type embed GoogleVertexAiVectorizerTextEmbedding004
+	var unmarshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed: embed(*g),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*g = GoogleVertexAiVectorizerTextEmbedding004(unmarshaler.embed)
+	if unmarshaler.ModelName != "text-embedding-004" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", g, "text-embedding-004", unmarshaler.ModelName)
+	}
+	g.modelName = unmarshaler.ModelName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g, "model_name")
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GoogleVertexAiVectorizerTextEmbedding004) MarshalJSON() ([]byte, error) {
+	type embed GoogleVertexAiVectorizerTextEmbedding004
+	var marshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed:     embed(*g),
+		ModelName: "text-embedding-004",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (g *GoogleVertexAiVectorizerTextEmbedding004) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+type GoogleVertexAiVectorizerTextEmbedding004Request struct {
+	Config    *GoogleVertexAiVectorizerConfigRequest `json:"config" url:"config"`
+	modelName string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GoogleVertexAiVectorizerTextEmbedding004Request) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GoogleVertexAiVectorizerTextEmbedding004Request) ModelName() string {
+	return g.modelName
+}
+
+func (g *GoogleVertexAiVectorizerTextEmbedding004Request) UnmarshalJSON(data []byte) error {
+	type embed GoogleVertexAiVectorizerTextEmbedding004Request
+	var unmarshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed: embed(*g),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*g = GoogleVertexAiVectorizerTextEmbedding004Request(unmarshaler.embed)
+	if unmarshaler.ModelName != "text-embedding-004" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", g, "text-embedding-004", unmarshaler.ModelName)
+	}
+	g.modelName = unmarshaler.ModelName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g, "model_name")
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GoogleVertexAiVectorizerTextEmbedding004Request) MarshalJSON() ([]byte, error) {
+	type embed GoogleVertexAiVectorizerTextEmbedding004Request
+	var marshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed:     embed(*g),
+		ModelName: "text-embedding-004",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (g *GoogleVertexAiVectorizerTextEmbedding004Request) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+type GoogleVertexAiVectorizerTextMultilingualEmbedding002 struct {
+	Config    *GoogleVertexAiVectorizerConfig `json:"config" url:"config"`
+	modelName string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GoogleVertexAiVectorizerTextMultilingualEmbedding002) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GoogleVertexAiVectorizerTextMultilingualEmbedding002) ModelName() string {
+	return g.modelName
+}
+
+func (g *GoogleVertexAiVectorizerTextMultilingualEmbedding002) UnmarshalJSON(data []byte) error {
+	type embed GoogleVertexAiVectorizerTextMultilingualEmbedding002
+	var unmarshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed: embed(*g),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*g = GoogleVertexAiVectorizerTextMultilingualEmbedding002(unmarshaler.embed)
+	if unmarshaler.ModelName != "text-multilingual-embedding-002" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", g, "text-multilingual-embedding-002", unmarshaler.ModelName)
+	}
+	g.modelName = unmarshaler.ModelName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g, "model_name")
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GoogleVertexAiVectorizerTextMultilingualEmbedding002) MarshalJSON() ([]byte, error) {
+	type embed GoogleVertexAiVectorizerTextMultilingualEmbedding002
+	var marshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed:     embed(*g),
+		ModelName: "text-multilingual-embedding-002",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (g *GoogleVertexAiVectorizerTextMultilingualEmbedding002) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+type GoogleVertexAiVectorizerTextMultilingualEmbedding002Request struct {
+	Config    *GoogleVertexAiVectorizerConfigRequest `json:"config" url:"config"`
+	modelName string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GoogleVertexAiVectorizerTextMultilingualEmbedding002Request) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GoogleVertexAiVectorizerTextMultilingualEmbedding002Request) ModelName() string {
+	return g.modelName
+}
+
+func (g *GoogleVertexAiVectorizerTextMultilingualEmbedding002Request) UnmarshalJSON(data []byte) error {
+	type embed GoogleVertexAiVectorizerTextMultilingualEmbedding002Request
+	var unmarshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed: embed(*g),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*g = GoogleVertexAiVectorizerTextMultilingualEmbedding002Request(unmarshaler.embed)
+	if unmarshaler.ModelName != "text-multilingual-embedding-002" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", g, "text-multilingual-embedding-002", unmarshaler.ModelName)
+	}
+	g.modelName = unmarshaler.ModelName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g, "model_name")
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GoogleVertexAiVectorizerTextMultilingualEmbedding002Request) MarshalJSON() ([]byte, error) {
+	type embed GoogleVertexAiVectorizerTextMultilingualEmbedding002Request
+	var marshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed:     embed(*g),
+		ModelName: "text-multilingual-embedding-002",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (g *GoogleVertexAiVectorizerTextMultilingualEmbedding002Request) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
+// Vectorizer for hkunlp/instructor-xl.
+type HkunlpInstructorXlVectorizer struct {
+	Config    *InstructorVectorizerConfig `json:"config" url:"config"`
+	modelName string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (h *HkunlpInstructorXlVectorizer) GetExtraProperties() map[string]interface{} {
+	return h.extraProperties
+}
+
+func (h *HkunlpInstructorXlVectorizer) ModelName() string {
+	return h.modelName
+}
+
+func (h *HkunlpInstructorXlVectorizer) UnmarshalJSON(data []byte) error {
+	type embed HkunlpInstructorXlVectorizer
+	var unmarshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed: embed(*h),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*h = HkunlpInstructorXlVectorizer(unmarshaler.embed)
+	if unmarshaler.ModelName != "hkunlp/instructor-xl" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", h, "hkunlp/instructor-xl", unmarshaler.ModelName)
+	}
+	h.modelName = unmarshaler.ModelName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *h, "model_name")
+	if err != nil {
+		return err
+	}
+	h.extraProperties = extraProperties
+
+	h._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (h *HkunlpInstructorXlVectorizer) MarshalJSON() ([]byte, error) {
+	type embed HkunlpInstructorXlVectorizer
+	var marshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed:     embed(*h),
+		ModelName: "hkunlp/instructor-xl",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (h *HkunlpInstructorXlVectorizer) String() string {
+	if len(h._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(h._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(h); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", h)
+}
+
+// Vectorizer for hkunlp/instructor-xl.
+type HkunlpInstructorXlVectorizerRequest struct {
+	Config    *InstructorVectorizerConfigRequest `json:"config" url:"config"`
+	modelName string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (h *HkunlpInstructorXlVectorizerRequest) GetExtraProperties() map[string]interface{} {
+	return h.extraProperties
+}
+
+func (h *HkunlpInstructorXlVectorizerRequest) ModelName() string {
+	return h.modelName
+}
+
+func (h *HkunlpInstructorXlVectorizerRequest) UnmarshalJSON(data []byte) error {
+	type embed HkunlpInstructorXlVectorizerRequest
+	var unmarshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed: embed(*h),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*h = HkunlpInstructorXlVectorizerRequest(unmarshaler.embed)
+	if unmarshaler.ModelName != "hkunlp/instructor-xl" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", h, "hkunlp/instructor-xl", unmarshaler.ModelName)
+	}
+	h.modelName = unmarshaler.ModelName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *h, "model_name")
+	if err != nil {
+		return err
+	}
+	h.extraProperties = extraProperties
+
+	h._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (h *HkunlpInstructorXlVectorizerRequest) MarshalJSON() ([]byte, error) {
+	type embed HkunlpInstructorXlVectorizerRequest
+	var marshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed:     embed(*h),
+		ModelName: "hkunlp/instructor-xl",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (h *HkunlpInstructorXlVectorizerRequest) String() string {
+	if len(h._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(h._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(h); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", h)
+}
+
+type IndexingConfigVectorizer struct {
+	OpenAiVectorizerTextEmbedding3Small                      *OpenAiVectorizerTextEmbedding3Small
+	OpenAiVectorizerTextEmbedding3Large                      *OpenAiVectorizerTextEmbedding3Large
+	OpenAiVectorizerTextEmbeddingAda002                      *OpenAiVectorizerTextEmbeddingAda002
+	BasicVectorizerIntfloatMultilingualE5Large               *BasicVectorizerIntfloatMultilingualE5Large
+	BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1 *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1
+	BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1 *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1
+	HkunlpInstructorXlVectorizer                             *HkunlpInstructorXlVectorizer
+	GoogleVertexAiVectorizerTextEmbedding004                 *GoogleVertexAiVectorizerTextEmbedding004
+	GoogleVertexAiVectorizerTextMultilingualEmbedding002     *GoogleVertexAiVectorizerTextMultilingualEmbedding002
+}
+
+func (i *IndexingConfigVectorizer) UnmarshalJSON(data []byte) error {
+	valueOpenAiVectorizerTextEmbedding3Small := new(OpenAiVectorizerTextEmbedding3Small)
+	if err := json.Unmarshal(data, &valueOpenAiVectorizerTextEmbedding3Small); err == nil {
+		i.OpenAiVectorizerTextEmbedding3Small = valueOpenAiVectorizerTextEmbedding3Small
+		return nil
+	}
+	valueOpenAiVectorizerTextEmbedding3Large := new(OpenAiVectorizerTextEmbedding3Large)
+	if err := json.Unmarshal(data, &valueOpenAiVectorizerTextEmbedding3Large); err == nil {
+		i.OpenAiVectorizerTextEmbedding3Large = valueOpenAiVectorizerTextEmbedding3Large
+		return nil
+	}
+	valueOpenAiVectorizerTextEmbeddingAda002 := new(OpenAiVectorizerTextEmbeddingAda002)
+	if err := json.Unmarshal(data, &valueOpenAiVectorizerTextEmbeddingAda002); err == nil {
+		i.OpenAiVectorizerTextEmbeddingAda002 = valueOpenAiVectorizerTextEmbeddingAda002
+		return nil
+	}
+	valueBasicVectorizerIntfloatMultilingualE5Large := new(BasicVectorizerIntfloatMultilingualE5Large)
+	if err := json.Unmarshal(data, &valueBasicVectorizerIntfloatMultilingualE5Large); err == nil {
+		i.BasicVectorizerIntfloatMultilingualE5Large = valueBasicVectorizerIntfloatMultilingualE5Large
+		return nil
+	}
+	valueBasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1 := new(BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1)
+	if err := json.Unmarshal(data, &valueBasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1); err == nil {
+		i.BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1 = valueBasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1
+		return nil
+	}
+	valueBasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1 := new(BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1)
+	if err := json.Unmarshal(data, &valueBasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1); err == nil {
+		i.BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1 = valueBasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1
+		return nil
+	}
+	valueHkunlpInstructorXlVectorizer := new(HkunlpInstructorXlVectorizer)
+	if err := json.Unmarshal(data, &valueHkunlpInstructorXlVectorizer); err == nil {
+		i.HkunlpInstructorXlVectorizer = valueHkunlpInstructorXlVectorizer
+		return nil
+	}
+	valueGoogleVertexAiVectorizerTextEmbedding004 := new(GoogleVertexAiVectorizerTextEmbedding004)
+	if err := json.Unmarshal(data, &valueGoogleVertexAiVectorizerTextEmbedding004); err == nil {
+		i.GoogleVertexAiVectorizerTextEmbedding004 = valueGoogleVertexAiVectorizerTextEmbedding004
+		return nil
+	}
+	valueGoogleVertexAiVectorizerTextMultilingualEmbedding002 := new(GoogleVertexAiVectorizerTextMultilingualEmbedding002)
+	if err := json.Unmarshal(data, &valueGoogleVertexAiVectorizerTextMultilingualEmbedding002); err == nil {
+		i.GoogleVertexAiVectorizerTextMultilingualEmbedding002 = valueGoogleVertexAiVectorizerTextMultilingualEmbedding002
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, i)
+}
+
+func (i IndexingConfigVectorizer) MarshalJSON() ([]byte, error) {
+	if i.OpenAiVectorizerTextEmbedding3Small != nil {
+		return json.Marshal(i.OpenAiVectorizerTextEmbedding3Small)
+	}
+	if i.OpenAiVectorizerTextEmbedding3Large != nil {
+		return json.Marshal(i.OpenAiVectorizerTextEmbedding3Large)
+	}
+	if i.OpenAiVectorizerTextEmbeddingAda002 != nil {
+		return json.Marshal(i.OpenAiVectorizerTextEmbeddingAda002)
+	}
+	if i.BasicVectorizerIntfloatMultilingualE5Large != nil {
+		return json.Marshal(i.BasicVectorizerIntfloatMultilingualE5Large)
+	}
+	if i.BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1 != nil {
+		return json.Marshal(i.BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1)
+	}
+	if i.BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1 != nil {
+		return json.Marshal(i.BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1)
+	}
+	if i.HkunlpInstructorXlVectorizer != nil {
+		return json.Marshal(i.HkunlpInstructorXlVectorizer)
+	}
+	if i.GoogleVertexAiVectorizerTextEmbedding004 != nil {
+		return json.Marshal(i.GoogleVertexAiVectorizerTextEmbedding004)
+	}
+	if i.GoogleVertexAiVectorizerTextMultilingualEmbedding002 != nil {
+		return json.Marshal(i.GoogleVertexAiVectorizerTextMultilingualEmbedding002)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", i)
+}
+
+type IndexingConfigVectorizerVisitor interface {
+	VisitOpenAiVectorizerTextEmbedding3Small(*OpenAiVectorizerTextEmbedding3Small) error
+	VisitOpenAiVectorizerTextEmbedding3Large(*OpenAiVectorizerTextEmbedding3Large) error
+	VisitOpenAiVectorizerTextEmbeddingAda002(*OpenAiVectorizerTextEmbeddingAda002) error
+	VisitBasicVectorizerIntfloatMultilingualE5Large(*BasicVectorizerIntfloatMultilingualE5Large) error
+	VisitBasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1(*BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1) error
+	VisitBasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1(*BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1) error
+	VisitHkunlpInstructorXlVectorizer(*HkunlpInstructorXlVectorizer) error
+	VisitGoogleVertexAiVectorizerTextEmbedding004(*GoogleVertexAiVectorizerTextEmbedding004) error
+	VisitGoogleVertexAiVectorizerTextMultilingualEmbedding002(*GoogleVertexAiVectorizerTextMultilingualEmbedding002) error
+}
+
+func (i *IndexingConfigVectorizer) Accept(visitor IndexingConfigVectorizerVisitor) error {
+	if i.OpenAiVectorizerTextEmbedding3Small != nil {
+		return visitor.VisitOpenAiVectorizerTextEmbedding3Small(i.OpenAiVectorizerTextEmbedding3Small)
+	}
+	if i.OpenAiVectorizerTextEmbedding3Large != nil {
+		return visitor.VisitOpenAiVectorizerTextEmbedding3Large(i.OpenAiVectorizerTextEmbedding3Large)
+	}
+	if i.OpenAiVectorizerTextEmbeddingAda002 != nil {
+		return visitor.VisitOpenAiVectorizerTextEmbeddingAda002(i.OpenAiVectorizerTextEmbeddingAda002)
+	}
+	if i.BasicVectorizerIntfloatMultilingualE5Large != nil {
+		return visitor.VisitBasicVectorizerIntfloatMultilingualE5Large(i.BasicVectorizerIntfloatMultilingualE5Large)
+	}
+	if i.BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1 != nil {
+		return visitor.VisitBasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1(i.BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1)
+	}
+	if i.BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1 != nil {
+		return visitor.VisitBasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1(i.BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1)
+	}
+	if i.HkunlpInstructorXlVectorizer != nil {
+		return visitor.VisitHkunlpInstructorXlVectorizer(i.HkunlpInstructorXlVectorizer)
+	}
+	if i.GoogleVertexAiVectorizerTextEmbedding004 != nil {
+		return visitor.VisitGoogleVertexAiVectorizerTextEmbedding004(i.GoogleVertexAiVectorizerTextEmbedding004)
+	}
+	if i.GoogleVertexAiVectorizerTextMultilingualEmbedding002 != nil {
+		return visitor.VisitGoogleVertexAiVectorizerTextMultilingualEmbedding002(i.GoogleVertexAiVectorizerTextMultilingualEmbedding002)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", i)
+}
+
+type IndexingConfigVectorizerRequest struct {
+	OpenAiVectorizerTextEmbedding3SmallRequest                      *OpenAiVectorizerTextEmbedding3SmallRequest
+	OpenAiVectorizerTextEmbedding3LargeRequest                      *OpenAiVectorizerTextEmbedding3LargeRequest
+	OpenAiVectorizerTextEmbeddingAda002Request                      *OpenAiVectorizerTextEmbeddingAda002Request
+	BasicVectorizerIntfloatMultilingualE5LargeRequest               *BasicVectorizerIntfloatMultilingualE5LargeRequest
+	BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request *BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request
+	BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request
+	HkunlpInstructorXlVectorizerRequest                             *HkunlpInstructorXlVectorizerRequest
+	GoogleVertexAiVectorizerTextEmbedding004Request                 *GoogleVertexAiVectorizerTextEmbedding004Request
+	GoogleVertexAiVectorizerTextMultilingualEmbedding002Request     *GoogleVertexAiVectorizerTextMultilingualEmbedding002Request
+}
+
+func (i *IndexingConfigVectorizerRequest) UnmarshalJSON(data []byte) error {
+	valueOpenAiVectorizerTextEmbedding3SmallRequest := new(OpenAiVectorizerTextEmbedding3SmallRequest)
+	if err := json.Unmarshal(data, &valueOpenAiVectorizerTextEmbedding3SmallRequest); err == nil {
+		i.OpenAiVectorizerTextEmbedding3SmallRequest = valueOpenAiVectorizerTextEmbedding3SmallRequest
+		return nil
+	}
+	valueOpenAiVectorizerTextEmbedding3LargeRequest := new(OpenAiVectorizerTextEmbedding3LargeRequest)
+	if err := json.Unmarshal(data, &valueOpenAiVectorizerTextEmbedding3LargeRequest); err == nil {
+		i.OpenAiVectorizerTextEmbedding3LargeRequest = valueOpenAiVectorizerTextEmbedding3LargeRequest
+		return nil
+	}
+	valueOpenAiVectorizerTextEmbeddingAda002Request := new(OpenAiVectorizerTextEmbeddingAda002Request)
+	if err := json.Unmarshal(data, &valueOpenAiVectorizerTextEmbeddingAda002Request); err == nil {
+		i.OpenAiVectorizerTextEmbeddingAda002Request = valueOpenAiVectorizerTextEmbeddingAda002Request
+		return nil
+	}
+	valueBasicVectorizerIntfloatMultilingualE5LargeRequest := new(BasicVectorizerIntfloatMultilingualE5LargeRequest)
+	if err := json.Unmarshal(data, &valueBasicVectorizerIntfloatMultilingualE5LargeRequest); err == nil {
+		i.BasicVectorizerIntfloatMultilingualE5LargeRequest = valueBasicVectorizerIntfloatMultilingualE5LargeRequest
+		return nil
+	}
+	valueBasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request := new(BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request)
+	if err := json.Unmarshal(data, &valueBasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request); err == nil {
+		i.BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request = valueBasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request
+		return nil
+	}
+	valueBasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request := new(BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request)
+	if err := json.Unmarshal(data, &valueBasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request); err == nil {
+		i.BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request = valueBasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request
+		return nil
+	}
+	valueHkunlpInstructorXlVectorizerRequest := new(HkunlpInstructorXlVectorizerRequest)
+	if err := json.Unmarshal(data, &valueHkunlpInstructorXlVectorizerRequest); err == nil {
+		i.HkunlpInstructorXlVectorizerRequest = valueHkunlpInstructorXlVectorizerRequest
+		return nil
+	}
+	valueGoogleVertexAiVectorizerTextEmbedding004Request := new(GoogleVertexAiVectorizerTextEmbedding004Request)
+	if err := json.Unmarshal(data, &valueGoogleVertexAiVectorizerTextEmbedding004Request); err == nil {
+		i.GoogleVertexAiVectorizerTextEmbedding004Request = valueGoogleVertexAiVectorizerTextEmbedding004Request
+		return nil
+	}
+	valueGoogleVertexAiVectorizerTextMultilingualEmbedding002Request := new(GoogleVertexAiVectorizerTextMultilingualEmbedding002Request)
+	if err := json.Unmarshal(data, &valueGoogleVertexAiVectorizerTextMultilingualEmbedding002Request); err == nil {
+		i.GoogleVertexAiVectorizerTextMultilingualEmbedding002Request = valueGoogleVertexAiVectorizerTextMultilingualEmbedding002Request
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, i)
+}
+
+func (i IndexingConfigVectorizerRequest) MarshalJSON() ([]byte, error) {
+	if i.OpenAiVectorizerTextEmbedding3SmallRequest != nil {
+		return json.Marshal(i.OpenAiVectorizerTextEmbedding3SmallRequest)
+	}
+	if i.OpenAiVectorizerTextEmbedding3LargeRequest != nil {
+		return json.Marshal(i.OpenAiVectorizerTextEmbedding3LargeRequest)
+	}
+	if i.OpenAiVectorizerTextEmbeddingAda002Request != nil {
+		return json.Marshal(i.OpenAiVectorizerTextEmbeddingAda002Request)
+	}
+	if i.BasicVectorizerIntfloatMultilingualE5LargeRequest != nil {
+		return json.Marshal(i.BasicVectorizerIntfloatMultilingualE5LargeRequest)
+	}
+	if i.BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request != nil {
+		return json.Marshal(i.BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request)
+	}
+	if i.BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request != nil {
+		return json.Marshal(i.BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request)
+	}
+	if i.HkunlpInstructorXlVectorizerRequest != nil {
+		return json.Marshal(i.HkunlpInstructorXlVectorizerRequest)
+	}
+	if i.GoogleVertexAiVectorizerTextEmbedding004Request != nil {
+		return json.Marshal(i.GoogleVertexAiVectorizerTextEmbedding004Request)
+	}
+	if i.GoogleVertexAiVectorizerTextMultilingualEmbedding002Request != nil {
+		return json.Marshal(i.GoogleVertexAiVectorizerTextMultilingualEmbedding002Request)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", i)
+}
+
+type IndexingConfigVectorizerRequestVisitor interface {
+	VisitOpenAiVectorizerTextEmbedding3SmallRequest(*OpenAiVectorizerTextEmbedding3SmallRequest) error
+	VisitOpenAiVectorizerTextEmbedding3LargeRequest(*OpenAiVectorizerTextEmbedding3LargeRequest) error
+	VisitOpenAiVectorizerTextEmbeddingAda002Request(*OpenAiVectorizerTextEmbeddingAda002Request) error
+	VisitBasicVectorizerIntfloatMultilingualE5LargeRequest(*BasicVectorizerIntfloatMultilingualE5LargeRequest) error
+	VisitBasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request(*BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request) error
+	VisitBasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request(*BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request) error
+	VisitHkunlpInstructorXlVectorizerRequest(*HkunlpInstructorXlVectorizerRequest) error
+	VisitGoogleVertexAiVectorizerTextEmbedding004Request(*GoogleVertexAiVectorizerTextEmbedding004Request) error
+	VisitGoogleVertexAiVectorizerTextMultilingualEmbedding002Request(*GoogleVertexAiVectorizerTextMultilingualEmbedding002Request) error
+}
+
+func (i *IndexingConfigVectorizerRequest) Accept(visitor IndexingConfigVectorizerRequestVisitor) error {
+	if i.OpenAiVectorizerTextEmbedding3SmallRequest != nil {
+		return visitor.VisitOpenAiVectorizerTextEmbedding3SmallRequest(i.OpenAiVectorizerTextEmbedding3SmallRequest)
+	}
+	if i.OpenAiVectorizerTextEmbedding3LargeRequest != nil {
+		return visitor.VisitOpenAiVectorizerTextEmbedding3LargeRequest(i.OpenAiVectorizerTextEmbedding3LargeRequest)
+	}
+	if i.OpenAiVectorizerTextEmbeddingAda002Request != nil {
+		return visitor.VisitOpenAiVectorizerTextEmbeddingAda002Request(i.OpenAiVectorizerTextEmbeddingAda002Request)
+	}
+	if i.BasicVectorizerIntfloatMultilingualE5LargeRequest != nil {
+		return visitor.VisitBasicVectorizerIntfloatMultilingualE5LargeRequest(i.BasicVectorizerIntfloatMultilingualE5LargeRequest)
+	}
+	if i.BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request != nil {
+		return visitor.VisitBasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request(i.BasicVectorizerSentenceTransformersMultiQaMpnetBaseCosV1Request)
+	}
+	if i.BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request != nil {
+		return visitor.VisitBasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request(i.BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request)
+	}
+	if i.HkunlpInstructorXlVectorizerRequest != nil {
+		return visitor.VisitHkunlpInstructorXlVectorizerRequest(i.HkunlpInstructorXlVectorizerRequest)
+	}
+	if i.GoogleVertexAiVectorizerTextEmbedding004Request != nil {
+		return visitor.VisitGoogleVertexAiVectorizerTextEmbedding004Request(i.GoogleVertexAiVectorizerTextEmbedding004Request)
+	}
+	if i.GoogleVertexAiVectorizerTextMultilingualEmbedding002Request != nil {
+		return visitor.VisitGoogleVertexAiVectorizerTextMultilingualEmbedding002Request(i.GoogleVertexAiVectorizerTextMultilingualEmbedding002Request)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", i)
+}
+
+// Configuration for using an Instructor vectorizer.
+type InstructorVectorizerConfig struct {
+	InstructionDomain           string `json:"instruction_domain" url:"instruction_domain"`
+	InstructionQueryTextType    string `json:"instruction_query_text_type" url:"instruction_query_text_type"`
+	InstructionDocumentTextType string `json:"instruction_document_text_type" url:"instruction_document_text_type"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InstructorVectorizerConfig) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InstructorVectorizerConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler InstructorVectorizerConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InstructorVectorizerConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InstructorVectorizerConfig) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// Configuration for using an Instructor vectorizer.
+type InstructorVectorizerConfigRequest struct {
+	InstructionDomain           string `json:"instruction_domain" url:"instruction_domain"`
+	InstructionQueryTextType    string `json:"instruction_query_text_type" url:"instruction_query_text_type"`
+	InstructionDocumentTextType string `json:"instruction_document_text_type" url:"instruction_document_text_type"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *InstructorVectorizerConfigRequest) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *InstructorVectorizerConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler InstructorVectorizerConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = InstructorVectorizerConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *InstructorVectorizerConfigRequest) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+// Configuration for using an OpenAI vectorizer.
+type OpenAiVectorizerConfig struct {
+	AddOpenaiApiKey *AddOpenaiApiKeyEnum `json:"add_openai_api_key,omitempty" url:"add_openai_api_key,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenAiVectorizerConfig) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OpenAiVectorizerConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenAiVectorizerConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenAiVectorizerConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenAiVectorizerConfig) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// Configuration for using an OpenAI vectorizer.
+type OpenAiVectorizerConfigRequest struct {
+	AddOpenaiApiKey *AddOpenaiApiKeyEnum `json:"add_openai_api_key,omitempty" url:"add_openai_api_key,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenAiVectorizerConfigRequest) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OpenAiVectorizerConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler OpenAiVectorizerConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*o = OpenAiVectorizerConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o)
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenAiVectorizerConfigRequest) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// OpenAI vectorizer for text-embedding-3-large.
+type OpenAiVectorizerTextEmbedding3Large struct {
+	Config    *OpenAiVectorizerConfig `json:"config" url:"config"`
+	modelName string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenAiVectorizerTextEmbedding3Large) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OpenAiVectorizerTextEmbedding3Large) ModelName() string {
+	return o.modelName
+}
+
+func (o *OpenAiVectorizerTextEmbedding3Large) UnmarshalJSON(data []byte) error {
+	type embed OpenAiVectorizerTextEmbedding3Large
+	var unmarshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed: embed(*o),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*o = OpenAiVectorizerTextEmbedding3Large(unmarshaler.embed)
+	if unmarshaler.ModelName != "text-embedding-3-large" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "text-embedding-3-large", unmarshaler.ModelName)
+	}
+	o.modelName = unmarshaler.ModelName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o, "model_name")
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenAiVectorizerTextEmbedding3Large) MarshalJSON() ([]byte, error) {
+	type embed OpenAiVectorizerTextEmbedding3Large
+	var marshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed:     embed(*o),
+		ModelName: "text-embedding-3-large",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (o *OpenAiVectorizerTextEmbedding3Large) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// OpenAI vectorizer for text-embedding-3-large.
+type OpenAiVectorizerTextEmbedding3LargeRequest struct {
+	Config    *OpenAiVectorizerConfigRequest `json:"config" url:"config"`
+	modelName string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenAiVectorizerTextEmbedding3LargeRequest) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OpenAiVectorizerTextEmbedding3LargeRequest) ModelName() string {
+	return o.modelName
+}
+
+func (o *OpenAiVectorizerTextEmbedding3LargeRequest) UnmarshalJSON(data []byte) error {
+	type embed OpenAiVectorizerTextEmbedding3LargeRequest
+	var unmarshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed: embed(*o),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*o = OpenAiVectorizerTextEmbedding3LargeRequest(unmarshaler.embed)
+	if unmarshaler.ModelName != "text-embedding-3-large" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "text-embedding-3-large", unmarshaler.ModelName)
+	}
+	o.modelName = unmarshaler.ModelName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o, "model_name")
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenAiVectorizerTextEmbedding3LargeRequest) MarshalJSON() ([]byte, error) {
+	type embed OpenAiVectorizerTextEmbedding3LargeRequest
+	var marshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed:     embed(*o),
+		ModelName: "text-embedding-3-large",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (o *OpenAiVectorizerTextEmbedding3LargeRequest) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// OpenAI vectorizer for text-embedding-3-small.
+type OpenAiVectorizerTextEmbedding3Small struct {
+	Config    *OpenAiVectorizerConfig `json:"config" url:"config"`
+	modelName string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenAiVectorizerTextEmbedding3Small) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OpenAiVectorizerTextEmbedding3Small) ModelName() string {
+	return o.modelName
+}
+
+func (o *OpenAiVectorizerTextEmbedding3Small) UnmarshalJSON(data []byte) error {
+	type embed OpenAiVectorizerTextEmbedding3Small
+	var unmarshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed: embed(*o),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*o = OpenAiVectorizerTextEmbedding3Small(unmarshaler.embed)
+	if unmarshaler.ModelName != "text-embedding-3-small" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "text-embedding-3-small", unmarshaler.ModelName)
+	}
+	o.modelName = unmarshaler.ModelName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o, "model_name")
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenAiVectorizerTextEmbedding3Small) MarshalJSON() ([]byte, error) {
+	type embed OpenAiVectorizerTextEmbedding3Small
+	var marshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed:     embed(*o),
+		ModelName: "text-embedding-3-small",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (o *OpenAiVectorizerTextEmbedding3Small) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// OpenAI vectorizer for text-embedding-3-small.
+type OpenAiVectorizerTextEmbedding3SmallRequest struct {
+	Config    *OpenAiVectorizerConfigRequest `json:"config" url:"config"`
+	modelName string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenAiVectorizerTextEmbedding3SmallRequest) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OpenAiVectorizerTextEmbedding3SmallRequest) ModelName() string {
+	return o.modelName
+}
+
+func (o *OpenAiVectorizerTextEmbedding3SmallRequest) UnmarshalJSON(data []byte) error {
+	type embed OpenAiVectorizerTextEmbedding3SmallRequest
+	var unmarshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed: embed(*o),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*o = OpenAiVectorizerTextEmbedding3SmallRequest(unmarshaler.embed)
+	if unmarshaler.ModelName != "text-embedding-3-small" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "text-embedding-3-small", unmarshaler.ModelName)
+	}
+	o.modelName = unmarshaler.ModelName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o, "model_name")
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenAiVectorizerTextEmbedding3SmallRequest) MarshalJSON() ([]byte, error) {
+	type embed OpenAiVectorizerTextEmbedding3SmallRequest
+	var marshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed:     embed(*o),
+		ModelName: "text-embedding-3-small",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (o *OpenAiVectorizerTextEmbedding3SmallRequest) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// OpenAI vectorizer for text-embedding-ada-002.
+type OpenAiVectorizerTextEmbeddingAda002 struct {
+	Config    *OpenAiVectorizerConfig `json:"config" url:"config"`
+	modelName string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenAiVectorizerTextEmbeddingAda002) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OpenAiVectorizerTextEmbeddingAda002) ModelName() string {
+	return o.modelName
+}
+
+func (o *OpenAiVectorizerTextEmbeddingAda002) UnmarshalJSON(data []byte) error {
+	type embed OpenAiVectorizerTextEmbeddingAda002
+	var unmarshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed: embed(*o),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*o = OpenAiVectorizerTextEmbeddingAda002(unmarshaler.embed)
+	if unmarshaler.ModelName != "text-embedding-ada-002" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "text-embedding-ada-002", unmarshaler.ModelName)
+	}
+	o.modelName = unmarshaler.ModelName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o, "model_name")
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenAiVectorizerTextEmbeddingAda002) MarshalJSON() ([]byte, error) {
+	type embed OpenAiVectorizerTextEmbeddingAda002
+	var marshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed:     embed(*o),
+		ModelName: "text-embedding-ada-002",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (o *OpenAiVectorizerTextEmbeddingAda002) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+// OpenAI vectorizer for text-embedding-ada-002.
+type OpenAiVectorizerTextEmbeddingAda002Request struct {
+	Config    *OpenAiVectorizerConfigRequest `json:"config" url:"config"`
+	modelName string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (o *OpenAiVectorizerTextEmbeddingAda002Request) GetExtraProperties() map[string]interface{} {
+	return o.extraProperties
+}
+
+func (o *OpenAiVectorizerTextEmbeddingAda002Request) ModelName() string {
+	return o.modelName
+}
+
+func (o *OpenAiVectorizerTextEmbeddingAda002Request) UnmarshalJSON(data []byte) error {
+	type embed OpenAiVectorizerTextEmbeddingAda002Request
+	var unmarshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed: embed(*o),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*o = OpenAiVectorizerTextEmbeddingAda002Request(unmarshaler.embed)
+	if unmarshaler.ModelName != "text-embedding-ada-002" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", o, "text-embedding-ada-002", unmarshaler.ModelName)
+	}
+	o.modelName = unmarshaler.ModelName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *o, "model_name")
+	if err != nil {
+		return err
+	}
+	o.extraProperties = extraProperties
+
+	o._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (o *OpenAiVectorizerTextEmbeddingAda002Request) MarshalJSON() ([]byte, error) {
+	type embed OpenAiVectorizerTextEmbeddingAda002Request
+	var marshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed:     embed(*o),
+		ModelName: "text-embedding-ada-002",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (o *OpenAiVectorizerTextEmbeddingAda002Request) String() string {
+	if len(o._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(o); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", o)
+}
+
+type PaginatedDocumentIndexReadList struct {
+	Count    *int                 `json:"count,omitempty" url:"count,omitempty"`
+	Next     *string              `json:"next,omitempty" url:"next,omitempty"`
+	Previous *string              `json:"previous,omitempty" url:"previous,omitempty"`
+	Results  []*DocumentIndexRead `json:"results,omitempty" url:"results,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaginatedDocumentIndexReadList) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaginatedDocumentIndexReadList) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaginatedDocumentIndexReadList
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaginatedDocumentIndexReadList(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaginatedDocumentIndexReadList) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+// Configuration for Reducto chunking
+type ReductoChunkerConfig struct {
+	CharacterLimit *int `json:"character_limit,omitempty" url:"character_limit,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *ReductoChunkerConfig) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *ReductoChunkerConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler ReductoChunkerConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = ReductoChunkerConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *ReductoChunkerConfig) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+// Configuration for Reducto chunking
+type ReductoChunkerConfigRequest struct {
+	CharacterLimit *int `json:"character_limit,omitempty" url:"character_limit,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *ReductoChunkerConfigRequest) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *ReductoChunkerConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler ReductoChunkerConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = ReductoChunkerConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *ReductoChunkerConfigRequest) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+// Reducto chunking
+type ReductoChunking struct {
+	ChunkerConfig *ReductoChunkerConfig `json:"chunker_config,omitempty" url:"chunker_config,omitempty"`
+	chunkerName   string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *ReductoChunking) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *ReductoChunking) ChunkerName() string {
+	return r.chunkerName
+}
+
+func (r *ReductoChunking) UnmarshalJSON(data []byte) error {
+	type embed ReductoChunking
+	var unmarshaler = struct {
+		embed
+		ChunkerName string `json:"chunker_name"`
+	}{
+		embed: embed(*r),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*r = ReductoChunking(unmarshaler.embed)
+	if unmarshaler.ChunkerName != "reducto-chunker" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", r, "reducto-chunker", unmarshaler.ChunkerName)
+	}
+	r.chunkerName = unmarshaler.ChunkerName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r, "chunker_name")
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *ReductoChunking) MarshalJSON() ([]byte, error) {
+	type embed ReductoChunking
+	var marshaler = struct {
+		embed
+		ChunkerName string `json:"chunker_name"`
+	}{
+		embed:       embed(*r),
+		ChunkerName: "reducto-chunker",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (r *ReductoChunking) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+// Reducto chunking
+type ReductoChunkingRequest struct {
+	ChunkerConfig *ReductoChunkerConfigRequest `json:"chunker_config,omitempty" url:"chunker_config,omitempty"`
+	chunkerName   string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *ReductoChunkingRequest) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *ReductoChunkingRequest) ChunkerName() string {
+	return r.chunkerName
+}
+
+func (r *ReductoChunkingRequest) UnmarshalJSON(data []byte) error {
+	type embed ReductoChunkingRequest
+	var unmarshaler = struct {
+		embed
+		ChunkerName string `json:"chunker_name"`
+	}{
+		embed: embed(*r),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*r = ReductoChunkingRequest(unmarshaler.embed)
+	if unmarshaler.ChunkerName != "reducto-chunker" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", r, "reducto-chunker", unmarshaler.ChunkerName)
+	}
+	r.chunkerName = unmarshaler.ChunkerName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r, "chunker_name")
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *ReductoChunkingRequest) MarshalJSON() ([]byte, error) {
+	type embed ReductoChunkingRequest
+	var marshaler = struct {
+		embed
+		ChunkerName string `json:"chunker_name"`
+	}{
+		embed:       embed(*r),
+		ChunkerName: "reducto-chunker",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (r *ReductoChunkingRequest) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+// Configuration for sentence chunking
+type SentenceChunkerConfig struct {
+	CharacterLimit  *int     `json:"character_limit,omitempty" url:"character_limit,omitempty"`
+	MinOverlapRatio *float64 `json:"min_overlap_ratio,omitempty" url:"min_overlap_ratio,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SentenceChunkerConfig) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SentenceChunkerConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler SentenceChunkerConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SentenceChunkerConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SentenceChunkerConfig) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// Configuration for sentence chunking
+type SentenceChunkerConfigRequest struct {
+	CharacterLimit  *int     `json:"character_limit,omitempty" url:"character_limit,omitempty"`
+	MinOverlapRatio *float64 `json:"min_overlap_ratio,omitempty" url:"min_overlap_ratio,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SentenceChunkerConfigRequest) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SentenceChunkerConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler SentenceChunkerConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SentenceChunkerConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SentenceChunkerConfigRequest) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// Sentence chunking
+type SentenceChunking struct {
+	ChunkerConfig *SentenceChunkerConfig `json:"chunker_config,omitempty" url:"chunker_config,omitempty"`
+	chunkerName   string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SentenceChunking) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SentenceChunking) ChunkerName() string {
+	return s.chunkerName
+}
+
+func (s *SentenceChunking) UnmarshalJSON(data []byte) error {
+	type embed SentenceChunking
+	var unmarshaler = struct {
+		embed
+		ChunkerName string `json:"chunker_name"`
+	}{
+		embed: embed(*s),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*s = SentenceChunking(unmarshaler.embed)
+	if unmarshaler.ChunkerName != "sentence-chunker" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "sentence-chunker", unmarshaler.ChunkerName)
+	}
+	s.chunkerName = unmarshaler.ChunkerName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s, "chunker_name")
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SentenceChunking) MarshalJSON() ([]byte, error) {
+	type embed SentenceChunking
+	var marshaler = struct {
+		embed
+		ChunkerName string `json:"chunker_name"`
+	}{
+		embed:       embed(*s),
+		ChunkerName: "sentence-chunker",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (s *SentenceChunking) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// Sentence chunking
+type SentenceChunkingRequest struct {
+	ChunkerConfig *SentenceChunkerConfigRequest `json:"chunker_config,omitempty" url:"chunker_config,omitempty"`
+	chunkerName   string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SentenceChunkingRequest) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SentenceChunkingRequest) ChunkerName() string {
+	return s.chunkerName
+}
+
+func (s *SentenceChunkingRequest) UnmarshalJSON(data []byte) error {
+	type embed SentenceChunkingRequest
+	var unmarshaler = struct {
+		embed
+		ChunkerName string `json:"chunker_name"`
+	}{
+		embed: embed(*s),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*s = SentenceChunkingRequest(unmarshaler.embed)
+	if unmarshaler.ChunkerName != "sentence-chunker" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "sentence-chunker", unmarshaler.ChunkerName)
+	}
+	s.chunkerName = unmarshaler.ChunkerName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s, "chunker_name")
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SentenceChunkingRequest) MarshalJSON() ([]byte, error) {
+	type embed SentenceChunkingRequest
+	var marshaler = struct {
+		embed
+		ChunkerName string `json:"chunker_name"`
+	}{
+		embed:       embed(*s),
+		ChunkerName: "sentence-chunker",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (s *SentenceChunkingRequest) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// Configuration for token overlapping window chunking
+type TokenOverlappingWindowChunkerConfig struct {
+	TokenLimit   *int     `json:"token_limit,omitempty" url:"token_limit,omitempty"`
+	OverlapRatio *float64 `json:"overlap_ratio,omitempty" url:"overlap_ratio,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TokenOverlappingWindowChunkerConfig) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TokenOverlappingWindowChunkerConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler TokenOverlappingWindowChunkerConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TokenOverlappingWindowChunkerConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TokenOverlappingWindowChunkerConfig) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Configuration for token overlapping window chunking
+type TokenOverlappingWindowChunkerConfigRequest struct {
+	TokenLimit   *int     `json:"token_limit,omitempty" url:"token_limit,omitempty"`
+	OverlapRatio *float64 `json:"overlap_ratio,omitempty" url:"overlap_ratio,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TokenOverlappingWindowChunkerConfigRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TokenOverlappingWindowChunkerConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler TokenOverlappingWindowChunkerConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TokenOverlappingWindowChunkerConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TokenOverlappingWindowChunkerConfigRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Token overlapping window chunking
+type TokenOverlappingWindowChunking struct {
+	ChunkerConfig *TokenOverlappingWindowChunkerConfig `json:"chunker_config,omitempty" url:"chunker_config,omitempty"`
+	chunkerName   string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TokenOverlappingWindowChunking) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TokenOverlappingWindowChunking) ChunkerName() string {
+	return t.chunkerName
+}
+
+func (t *TokenOverlappingWindowChunking) UnmarshalJSON(data []byte) error {
+	type embed TokenOverlappingWindowChunking
+	var unmarshaler = struct {
+		embed
+		ChunkerName string `json:"chunker_name"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TokenOverlappingWindowChunking(unmarshaler.embed)
+	if unmarshaler.ChunkerName != "token-overlapping-window-chunker" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "token-overlapping-window-chunker", unmarshaler.ChunkerName)
+	}
+	t.chunkerName = unmarshaler.ChunkerName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "chunker_name")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TokenOverlappingWindowChunking) MarshalJSON() ([]byte, error) {
+	type embed TokenOverlappingWindowChunking
+	var marshaler = struct {
+		embed
+		ChunkerName string `json:"chunker_name"`
+	}{
+		embed:       embed(*t),
+		ChunkerName: "token-overlapping-window-chunker",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TokenOverlappingWindowChunking) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Token overlapping window chunking
+type TokenOverlappingWindowChunkingRequest struct {
+	ChunkerConfig *TokenOverlappingWindowChunkerConfigRequest `json:"chunker_config,omitempty" url:"chunker_config,omitempty"`
+	chunkerName   string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TokenOverlappingWindowChunkingRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TokenOverlappingWindowChunkingRequest) ChunkerName() string {
+	return t.chunkerName
+}
+
+func (t *TokenOverlappingWindowChunkingRequest) UnmarshalJSON(data []byte) error {
+	type embed TokenOverlappingWindowChunkingRequest
+	var unmarshaler = struct {
+		embed
+		ChunkerName string `json:"chunker_name"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TokenOverlappingWindowChunkingRequest(unmarshaler.embed)
+	if unmarshaler.ChunkerName != "token-overlapping-window-chunker" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "token-overlapping-window-chunker", unmarshaler.ChunkerName)
+	}
+	t.chunkerName = unmarshaler.ChunkerName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "chunker_name")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TokenOverlappingWindowChunkingRequest) MarshalJSON() ([]byte, error) {
+	type embed TokenOverlappingWindowChunkingRequest
+	var marshaler = struct {
+		embed
+		ChunkerName string `json:"chunker_name"`
+	}{
+		embed:       embed(*t),
+		ChunkerName: "token-overlapping-window-chunker",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TokenOverlappingWindowChunkingRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
 }
 
 type DocumentIndexesListRequestStatus string

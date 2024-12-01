@@ -3,7 +3,10 @@
 package api
 
 import (
+	json "encoding/json"
 	fmt "fmt"
+	core "github.com/vellum-ai/vellum-client-go/core"
+	time "time"
 )
 
 type WorkflowDeploymentsListRequest struct {
@@ -25,6 +28,360 @@ type ListWorkflowReleaseTagsRequest struct {
 	// Which field to use when ordering the results.
 	Ordering *string                               `json:"-" url:"ordering,omitempty"`
 	Source   *ListWorkflowReleaseTagsRequestSource `json:"-" url:"source,omitempty"`
+}
+
+type PaginatedSlimWorkflowDeploymentList struct {
+	Count    *int                      `json:"count,omitempty" url:"count,omitempty"`
+	Next     *string                   `json:"next,omitempty" url:"next,omitempty"`
+	Previous *string                   `json:"previous,omitempty" url:"previous,omitempty"`
+	Results  []*SlimWorkflowDeployment `json:"results,omitempty" url:"results,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaginatedSlimWorkflowDeploymentList) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaginatedSlimWorkflowDeploymentList) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaginatedSlimWorkflowDeploymentList
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaginatedSlimWorkflowDeploymentList(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaginatedSlimWorkflowDeploymentList) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PaginatedWorkflowReleaseTagReadList struct {
+	Count    *int                      `json:"count,omitempty" url:"count,omitempty"`
+	Next     *string                   `json:"next,omitempty" url:"next,omitempty"`
+	Previous *string                   `json:"previous,omitempty" url:"previous,omitempty"`
+	Results  []*WorkflowReleaseTagRead `json:"results,omitempty" url:"results,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaginatedWorkflowReleaseTagReadList) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaginatedWorkflowReleaseTagReadList) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaginatedWorkflowReleaseTagReadList
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaginatedWorkflowReleaseTagReadList(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaginatedWorkflowReleaseTagReadList) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type SlimWorkflowDeployment struct {
+	Id string `json:"id" url:"id"`
+	// A name that uniquely identifies this workflow deployment within its workspace
+	Name string `json:"name" url:"name"`
+	// A human-readable label for the workflow deployment
+	Label string `json:"label" url:"label"`
+	// The current status of the workflow deployment
+	//
+	// - `ACTIVE` - Active
+	// - `ARCHIVED` - Archived
+	Status *EntityStatus `json:"status,omitempty" url:"status,omitempty"`
+	// The environment this workflow deployment is used in
+	//
+	// - `DEVELOPMENT` - Development
+	// - `STAGING` - Staging
+	// - `PRODUCTION` - Production
+	Environment    *EnvironmentEnum `json:"environment,omitempty" url:"environment,omitempty"`
+	Created        time.Time        `json:"created" url:"created"`
+	LastDeployedOn time.Time        `json:"last_deployed_on" url:"last_deployed_on"`
+	// The input variables this Workflow Deployment expects to receive values for when it is executed.
+	InputVariables []*VellumVariable `json:"input_variables" url:"input_variables"`
+	// The output variables this Workflow Deployment will produce when it is executed.
+	OutputVariables []*VellumVariable `json:"output_variables" url:"output_variables"`
+	// A human-readable description of the workflow deployment
+	Description *string `json:"description,omitempty" url:"description,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SlimWorkflowDeployment) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SlimWorkflowDeployment) UnmarshalJSON(data []byte) error {
+	type embed SlimWorkflowDeployment
+	var unmarshaler = struct {
+		embed
+		Created        *core.DateTime `json:"created"`
+		LastDeployedOn *core.DateTime `json:"last_deployed_on"`
+	}{
+		embed: embed(*s),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*s = SlimWorkflowDeployment(unmarshaler.embed)
+	s.Created = unmarshaler.Created.Time()
+	s.LastDeployedOn = unmarshaler.LastDeployedOn.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SlimWorkflowDeployment) MarshalJSON() ([]byte, error) {
+	type embed SlimWorkflowDeployment
+	var marshaler = struct {
+		embed
+		Created        *core.DateTime `json:"created"`
+		LastDeployedOn *core.DateTime `json:"last_deployed_on"`
+	}{
+		embed:          embed(*s),
+		Created:        core.NewDateTime(s.Created),
+		LastDeployedOn: core.NewDateTime(s.LastDeployedOn),
+	}
+	return json.Marshal(marshaler)
+}
+
+func (s *SlimWorkflowDeployment) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type WorkflowDeploymentHistoryItem struct {
+	Id                   string    `json:"id" url:"id"`
+	WorkflowDeploymentId string    `json:"workflow_deployment_id" url:"workflow_deployment_id"`
+	Timestamp            time.Time `json:"timestamp" url:"timestamp"`
+	// A human-readable label for the workflow deployment
+	Label string `json:"label" url:"label"`
+	// A name that uniquely identifies this workflow deployment within its workspace
+	Name            string            `json:"name" url:"name"`
+	InputVariables  []*VellumVariable `json:"input_variables" url:"input_variables"`
+	OutputVariables []*VellumVariable `json:"output_variables" url:"output_variables"`
+	// A human-readable description of the workflow deployment
+	Description *string `json:"description,omitempty" url:"description,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowDeploymentHistoryItem) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkflowDeploymentHistoryItem) UnmarshalJSON(data []byte) error {
+	type embed WorkflowDeploymentHistoryItem
+	var unmarshaler = struct {
+		embed
+		Timestamp *core.DateTime `json:"timestamp"`
+	}{
+		embed: embed(*w),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*w = WorkflowDeploymentHistoryItem(unmarshaler.embed)
+	w.Timestamp = unmarshaler.Timestamp.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowDeploymentHistoryItem) MarshalJSON() ([]byte, error) {
+	type embed WorkflowDeploymentHistoryItem
+	var marshaler = struct {
+		embed
+		Timestamp *core.DateTime `json:"timestamp"`
+	}{
+		embed:     embed(*w),
+		Timestamp: core.NewDateTime(w.Timestamp),
+	}
+	return json.Marshal(marshaler)
+}
+
+func (w *WorkflowDeploymentHistoryItem) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
+}
+
+type WorkflowReleaseTagRead struct {
+	// The name of the Release Tag
+	Name string `json:"name" url:"name"`
+	// The source of how the Release Tag was originally created
+	//
+	// - `SYSTEM` - System
+	// - `USER` - User
+	Source ReleaseTagSource `json:"source" url:"source"`
+	// The Workflow Deployment History Item that this Release Tag is associated with
+	HistoryItem *WorkflowReleaseTagWorkflowDeploymentHistoryItem `json:"history_item" url:"history_item"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowReleaseTagRead) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkflowReleaseTagRead) UnmarshalJSON(data []byte) error {
+	type unmarshaler WorkflowReleaseTagRead
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*w = WorkflowReleaseTagRead(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowReleaseTagRead) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
+}
+
+type WorkflowReleaseTagWorkflowDeploymentHistoryItem struct {
+	// The ID of the Workflow Deployment History Item
+	Id string `json:"id" url:"id"`
+	// The timestamp representing when this History Item was created
+	Timestamp time.Time `json:"timestamp" url:"timestamp"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowReleaseTagWorkflowDeploymentHistoryItem) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkflowReleaseTagWorkflowDeploymentHistoryItem) UnmarshalJSON(data []byte) error {
+	type embed WorkflowReleaseTagWorkflowDeploymentHistoryItem
+	var unmarshaler = struct {
+		embed
+		Timestamp *core.DateTime `json:"timestamp"`
+	}{
+		embed: embed(*w),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*w = WorkflowReleaseTagWorkflowDeploymentHistoryItem(unmarshaler.embed)
+	w.Timestamp = unmarshaler.Timestamp.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowReleaseTagWorkflowDeploymentHistoryItem) MarshalJSON() ([]byte, error) {
+	type embed WorkflowReleaseTagWorkflowDeploymentHistoryItem
+	var marshaler = struct {
+		embed
+		Timestamp *core.DateTime `json:"timestamp"`
+	}{
+		embed:     embed(*w),
+		Timestamp: core.NewDateTime(w.Timestamp),
+	}
+	return json.Marshal(marshaler)
+}
+
+func (w *WorkflowReleaseTagWorkflowDeploymentHistoryItem) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
 }
 
 type ListWorkflowReleaseTagsRequestSource string

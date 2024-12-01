@@ -3,7 +3,9 @@
 package api
 
 import (
+	json "encoding/json"
 	fmt "fmt"
+	core "github.com/vellum-ai/vellum-client-go/core"
 )
 
 type WorkflowsPullRequest struct {
@@ -16,6 +18,94 @@ type WorkflowPushRequest struct {
 	Label             string                               `json:"label" url:"-"`
 	WorkflowSandboxId *string                              `json:"workflow_sandbox_id,omitempty" url:"-"`
 	DeploymentConfig  *WorkflowPushDeploymentConfigRequest `json:"deployment_config,omitempty" url:"-"`
+}
+
+type WorkflowPushDeploymentConfigRequest struct {
+	Label       *string  `json:"label,omitempty" url:"label,omitempty"`
+	Name        *string  `json:"name,omitempty" url:"name,omitempty"`
+	Description *string  `json:"description,omitempty" url:"description,omitempty"`
+	ReleaseTags []string `json:"release_tags,omitempty" url:"release_tags,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowPushDeploymentConfigRequest) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkflowPushDeploymentConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler WorkflowPushDeploymentConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*w = WorkflowPushDeploymentConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowPushDeploymentConfigRequest) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
+}
+
+type WorkflowPushExecConfig = string
+
+type WorkflowPushResponse struct {
+	WorkflowSandboxId    string  `json:"workflow_sandbox_id" url:"workflow_sandbox_id"`
+	WorkflowDeploymentId *string `json:"workflow_deployment_id,omitempty" url:"workflow_deployment_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowPushResponse) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkflowPushResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler WorkflowPushResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*w = WorkflowPushResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowPushResponse) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
 }
 
 type WorkflowsPullRequestFormat string

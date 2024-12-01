@@ -2,9 +2,1804 @@
 
 package api
 
+import (
+	json "encoding/json"
+	fmt "fmt"
+	core "github.com/vellum-ai/vellum-client-go/core"
+)
+
 type ListTestSuiteTestCasesRequest struct {
 	// Number of results to return per page.
 	Limit *int `json:"-" url:"limit,omitempty"`
 	// The initial index from which to return the results.
 	Offset *int `json:"-" url:"offset,omitempty"`
+}
+
+// Information about the Test Case to create
+type CreateTestSuiteTestCaseRequest struct {
+	// A human-readable label used to convey the intention of this Test Case
+	Label *string `json:"label,omitempty" url:"label,omitempty"`
+	// Values for each of the Test Case's input variables
+	InputValues []*NamedTestCaseVariableValueRequest `json:"input_values" url:"input_values"`
+	// Values for each of the Test Case's evaluation variables
+	EvaluationValues []*NamedTestCaseVariableValueRequest `json:"evaluation_values" url:"evaluation_values"`
+	// Optionally provide an ID that uniquely identifies this Test Case in your system. Useful for updating this Test Cases data after initial creation. Cannot be changed later.
+	ExternalId *string `json:"external_id,omitempty" url:"external_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CreateTestSuiteTestCaseRequest) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CreateTestSuiteTestCaseRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateTestSuiteTestCaseRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CreateTestSuiteTestCaseRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CreateTestSuiteTestCaseRequest) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+type PaginatedTestSuiteTestCaseList struct {
+	Count    int                  `json:"count" url:"count"`
+	Next     *string              `json:"next,omitempty" url:"next,omitempty"`
+	Previous *string              `json:"previous,omitempty" url:"previous,omitempty"`
+	Results  []*TestSuiteTestCase `json:"results" url:"results"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaginatedTestSuiteTestCaseList) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaginatedTestSuiteTestCaseList) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaginatedTestSuiteTestCaseList
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaginatedTestSuiteTestCaseList(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaginatedTestSuiteTestCaseList) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+// Information about the Test Case to replace
+type ReplaceTestSuiteTestCaseRequest struct {
+	// The Vellum-generated ID of the Test Case whose data you'd like to replace. Must specify either this or external_id.
+	Id *string `json:"id,omitempty" url:"id,omitempty"`
+	// The ID that was originally provided upon Test Case creation that uniquely identifies the Test Case whose data you'd like to replace. Must specify either this of id.
+	ExternalId *string `json:"external_id,omitempty" url:"external_id,omitempty"`
+	// A human-readable label used to convey the intention of this Test Case
+	Label *string `json:"label,omitempty" url:"label,omitempty"`
+	// Values for each of the Test Case's input variables
+	InputValues []*NamedTestCaseVariableValueRequest `json:"input_values" url:"input_values"`
+	// Values for each of the Test Case's evaluation variables
+	EvaluationValues []*NamedTestCaseVariableValueRequest `json:"evaluation_values" url:"evaluation_values"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *ReplaceTestSuiteTestCaseRequest) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *ReplaceTestSuiteTestCaseRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler ReplaceTestSuiteTestCaseRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = ReplaceTestSuiteTestCaseRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *ReplaceTestSuiteTestCaseRequest) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+// An Array value for a variable in a Test Case.
+type TestCaseArrayVariableValue struct {
+	VariableId string         `json:"variable_id" url:"variable_id"`
+	Name       string         `json:"name" url:"name"`
+	Value      []*VellumValue `json:"value,omitempty" url:"value,omitempty"`
+	type_      string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestCaseArrayVariableValue) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestCaseArrayVariableValue) Type() string {
+	return t.type_
+}
+
+func (t *TestCaseArrayVariableValue) UnmarshalJSON(data []byte) error {
+	type embed TestCaseArrayVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestCaseArrayVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "ARRAY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "ARRAY", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestCaseArrayVariableValue) MarshalJSON() ([]byte, error) {
+	type embed TestCaseArrayVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "ARRAY",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestCaseArrayVariableValue) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// A chat history value for a variable in a Test Case.
+type TestCaseChatHistoryVariableValue struct {
+	VariableId string         `json:"variable_id" url:"variable_id"`
+	Name       string         `json:"name" url:"name"`
+	Value      []*ChatMessage `json:"value,omitempty" url:"value,omitempty"`
+	type_      string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestCaseChatHistoryVariableValue) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestCaseChatHistoryVariableValue) Type() string {
+	return t.type_
+}
+
+func (t *TestCaseChatHistoryVariableValue) UnmarshalJSON(data []byte) error {
+	type embed TestCaseChatHistoryVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestCaseChatHistoryVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestCaseChatHistoryVariableValue) MarshalJSON() ([]byte, error) {
+	type embed TestCaseChatHistoryVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "CHAT_HISTORY",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestCaseChatHistoryVariableValue) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// An error value for a variable in a Test Case.
+type TestCaseErrorVariableValue struct {
+	VariableId string       `json:"variable_id" url:"variable_id"`
+	Name       string       `json:"name" url:"name"`
+	Value      *VellumError `json:"value,omitempty" url:"value,omitempty"`
+	type_      string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestCaseErrorVariableValue) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestCaseErrorVariableValue) Type() string {
+	return t.type_
+}
+
+func (t *TestCaseErrorVariableValue) UnmarshalJSON(data []byte) error {
+	type embed TestCaseErrorVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestCaseErrorVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "ERROR" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "ERROR", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestCaseErrorVariableValue) MarshalJSON() ([]byte, error) {
+	type embed TestCaseErrorVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "ERROR",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestCaseErrorVariableValue) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// A function call value for a variable in a Test Case.
+type TestCaseFunctionCallVariableValue struct {
+	VariableId string        `json:"variable_id" url:"variable_id"`
+	Name       string        `json:"name" url:"name"`
+	Value      *FunctionCall `json:"value,omitempty" url:"value,omitempty"`
+	type_      string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestCaseFunctionCallVariableValue) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestCaseFunctionCallVariableValue) Type() string {
+	return t.type_
+}
+
+func (t *TestCaseFunctionCallVariableValue) UnmarshalJSON(data []byte) error {
+	type embed TestCaseFunctionCallVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestCaseFunctionCallVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "FUNCTION_CALL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "FUNCTION_CALL", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestCaseFunctionCallVariableValue) MarshalJSON() ([]byte, error) {
+	type embed TestCaseFunctionCallVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "FUNCTION_CALL",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestCaseFunctionCallVariableValue) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// A JSON value for a variable in a Test Case.
+type TestCaseJsonVariableValue struct {
+	VariableId string      `json:"variable_id" url:"variable_id"`
+	Name       string      `json:"name" url:"name"`
+	Value      interface{} `json:"value" url:"value"`
+	type_      string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestCaseJsonVariableValue) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestCaseJsonVariableValue) Type() string {
+	return t.type_
+}
+
+func (t *TestCaseJsonVariableValue) UnmarshalJSON(data []byte) error {
+	type embed TestCaseJsonVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestCaseJsonVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "JSON", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestCaseJsonVariableValue) MarshalJSON() ([]byte, error) {
+	type embed TestCaseJsonVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "JSON",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestCaseJsonVariableValue) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// A numerical value for a variable in a Test Case.
+type TestCaseNumberVariableValue struct {
+	VariableId string   `json:"variable_id" url:"variable_id"`
+	Name       string   `json:"name" url:"name"`
+	Value      *float64 `json:"value,omitempty" url:"value,omitempty"`
+	type_      string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestCaseNumberVariableValue) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestCaseNumberVariableValue) Type() string {
+	return t.type_
+}
+
+func (t *TestCaseNumberVariableValue) UnmarshalJSON(data []byte) error {
+	type embed TestCaseNumberVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestCaseNumberVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "NUMBER" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "NUMBER", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestCaseNumberVariableValue) MarshalJSON() ([]byte, error) {
+	type embed TestCaseNumberVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "NUMBER",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestCaseNumberVariableValue) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// A search results value for a variable in a Test Case.
+type TestCaseSearchResultsVariableValue struct {
+	VariableId string          `json:"variable_id" url:"variable_id"`
+	Name       string          `json:"name" url:"name"`
+	Value      []*SearchResult `json:"value,omitempty" url:"value,omitempty"`
+	type_      string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestCaseSearchResultsVariableValue) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestCaseSearchResultsVariableValue) Type() string {
+	return t.type_
+}
+
+func (t *TestCaseSearchResultsVariableValue) UnmarshalJSON(data []byte) error {
+	type embed TestCaseSearchResultsVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestCaseSearchResultsVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "SEARCH_RESULTS" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "SEARCH_RESULTS", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestCaseSearchResultsVariableValue) MarshalJSON() ([]byte, error) {
+	type embed TestCaseSearchResultsVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "SEARCH_RESULTS",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestCaseSearchResultsVariableValue) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// A string value for a variable in a Test Case.
+type TestCaseStringVariableValue struct {
+	VariableId string  `json:"variable_id" url:"variable_id"`
+	Name       string  `json:"name" url:"name"`
+	Value      *string `json:"value,omitempty" url:"value,omitempty"`
+	type_      string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestCaseStringVariableValue) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestCaseStringVariableValue) Type() string {
+	return t.type_
+}
+
+func (t *TestCaseStringVariableValue) UnmarshalJSON(data []byte) error {
+	type embed TestCaseStringVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestCaseStringVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "STRING", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestCaseStringVariableValue) MarshalJSON() ([]byte, error) {
+	type embed TestCaseStringVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "STRING",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestCaseStringVariableValue) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestCaseVariableValue struct {
+	TestCaseStringVariableValue        *TestCaseStringVariableValue
+	TestCaseNumberVariableValue        *TestCaseNumberVariableValue
+	TestCaseJsonVariableValue          *TestCaseJsonVariableValue
+	TestCaseChatHistoryVariableValue   *TestCaseChatHistoryVariableValue
+	TestCaseSearchResultsVariableValue *TestCaseSearchResultsVariableValue
+	TestCaseErrorVariableValue         *TestCaseErrorVariableValue
+	TestCaseFunctionCallVariableValue  *TestCaseFunctionCallVariableValue
+	TestCaseArrayVariableValue         *TestCaseArrayVariableValue
+}
+
+func (t *TestCaseVariableValue) UnmarshalJSON(data []byte) error {
+	valueTestCaseStringVariableValue := new(TestCaseStringVariableValue)
+	if err := json.Unmarshal(data, &valueTestCaseStringVariableValue); err == nil {
+		t.TestCaseStringVariableValue = valueTestCaseStringVariableValue
+		return nil
+	}
+	valueTestCaseNumberVariableValue := new(TestCaseNumberVariableValue)
+	if err := json.Unmarshal(data, &valueTestCaseNumberVariableValue); err == nil {
+		t.TestCaseNumberVariableValue = valueTestCaseNumberVariableValue
+		return nil
+	}
+	valueTestCaseJsonVariableValue := new(TestCaseJsonVariableValue)
+	if err := json.Unmarshal(data, &valueTestCaseJsonVariableValue); err == nil {
+		t.TestCaseJsonVariableValue = valueTestCaseJsonVariableValue
+		return nil
+	}
+	valueTestCaseChatHistoryVariableValue := new(TestCaseChatHistoryVariableValue)
+	if err := json.Unmarshal(data, &valueTestCaseChatHistoryVariableValue); err == nil {
+		t.TestCaseChatHistoryVariableValue = valueTestCaseChatHistoryVariableValue
+		return nil
+	}
+	valueTestCaseSearchResultsVariableValue := new(TestCaseSearchResultsVariableValue)
+	if err := json.Unmarshal(data, &valueTestCaseSearchResultsVariableValue); err == nil {
+		t.TestCaseSearchResultsVariableValue = valueTestCaseSearchResultsVariableValue
+		return nil
+	}
+	valueTestCaseErrorVariableValue := new(TestCaseErrorVariableValue)
+	if err := json.Unmarshal(data, &valueTestCaseErrorVariableValue); err == nil {
+		t.TestCaseErrorVariableValue = valueTestCaseErrorVariableValue
+		return nil
+	}
+	valueTestCaseFunctionCallVariableValue := new(TestCaseFunctionCallVariableValue)
+	if err := json.Unmarshal(data, &valueTestCaseFunctionCallVariableValue); err == nil {
+		t.TestCaseFunctionCallVariableValue = valueTestCaseFunctionCallVariableValue
+		return nil
+	}
+	valueTestCaseArrayVariableValue := new(TestCaseArrayVariableValue)
+	if err := json.Unmarshal(data, &valueTestCaseArrayVariableValue); err == nil {
+		t.TestCaseArrayVariableValue = valueTestCaseArrayVariableValue
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, t)
+}
+
+func (t TestCaseVariableValue) MarshalJSON() ([]byte, error) {
+	if t.TestCaseStringVariableValue != nil {
+		return json.Marshal(t.TestCaseStringVariableValue)
+	}
+	if t.TestCaseNumberVariableValue != nil {
+		return json.Marshal(t.TestCaseNumberVariableValue)
+	}
+	if t.TestCaseJsonVariableValue != nil {
+		return json.Marshal(t.TestCaseJsonVariableValue)
+	}
+	if t.TestCaseChatHistoryVariableValue != nil {
+		return json.Marshal(t.TestCaseChatHistoryVariableValue)
+	}
+	if t.TestCaseSearchResultsVariableValue != nil {
+		return json.Marshal(t.TestCaseSearchResultsVariableValue)
+	}
+	if t.TestCaseErrorVariableValue != nil {
+		return json.Marshal(t.TestCaseErrorVariableValue)
+	}
+	if t.TestCaseFunctionCallVariableValue != nil {
+		return json.Marshal(t.TestCaseFunctionCallVariableValue)
+	}
+	if t.TestCaseArrayVariableValue != nil {
+		return json.Marshal(t.TestCaseArrayVariableValue)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", t)
+}
+
+type TestCaseVariableValueVisitor interface {
+	VisitTestCaseStringVariableValue(*TestCaseStringVariableValue) error
+	VisitTestCaseNumberVariableValue(*TestCaseNumberVariableValue) error
+	VisitTestCaseJsonVariableValue(*TestCaseJsonVariableValue) error
+	VisitTestCaseChatHistoryVariableValue(*TestCaseChatHistoryVariableValue) error
+	VisitTestCaseSearchResultsVariableValue(*TestCaseSearchResultsVariableValue) error
+	VisitTestCaseErrorVariableValue(*TestCaseErrorVariableValue) error
+	VisitTestCaseFunctionCallVariableValue(*TestCaseFunctionCallVariableValue) error
+	VisitTestCaseArrayVariableValue(*TestCaseArrayVariableValue) error
+}
+
+func (t *TestCaseVariableValue) Accept(visitor TestCaseVariableValueVisitor) error {
+	if t.TestCaseStringVariableValue != nil {
+		return visitor.VisitTestCaseStringVariableValue(t.TestCaseStringVariableValue)
+	}
+	if t.TestCaseNumberVariableValue != nil {
+		return visitor.VisitTestCaseNumberVariableValue(t.TestCaseNumberVariableValue)
+	}
+	if t.TestCaseJsonVariableValue != nil {
+		return visitor.VisitTestCaseJsonVariableValue(t.TestCaseJsonVariableValue)
+	}
+	if t.TestCaseChatHistoryVariableValue != nil {
+		return visitor.VisitTestCaseChatHistoryVariableValue(t.TestCaseChatHistoryVariableValue)
+	}
+	if t.TestCaseSearchResultsVariableValue != nil {
+		return visitor.VisitTestCaseSearchResultsVariableValue(t.TestCaseSearchResultsVariableValue)
+	}
+	if t.TestCaseErrorVariableValue != nil {
+		return visitor.VisitTestCaseErrorVariableValue(t.TestCaseErrorVariableValue)
+	}
+	if t.TestCaseFunctionCallVariableValue != nil {
+		return visitor.VisitTestCaseFunctionCallVariableValue(t.TestCaseFunctionCallVariableValue)
+	}
+	if t.TestCaseArrayVariableValue != nil {
+		return visitor.VisitTestCaseArrayVariableValue(t.TestCaseArrayVariableValue)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", t)
+}
+
+type TestSuiteTestCase struct {
+	Id               *string                  `json:"id,omitempty" url:"id,omitempty"`
+	ExternalId       *string                  `json:"external_id,omitempty" url:"external_id,omitempty"`
+	Label            *string                  `json:"label,omitempty" url:"label,omitempty"`
+	InputValues      []*TestCaseVariableValue `json:"input_values" url:"input_values"`
+	EvaluationValues []*TestCaseVariableValue `json:"evaluation_values" url:"evaluation_values"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCase) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteTestCase) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteTestCase
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteTestCase(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteTestCase) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestSuiteTestCaseBulkOperationRequest struct {
+	TestSuiteTestCaseCreateBulkOperationRequest  *TestSuiteTestCaseCreateBulkOperationRequest
+	TestSuiteTestCaseReplaceBulkOperationRequest *TestSuiteTestCaseReplaceBulkOperationRequest
+	TestSuiteTestCaseUpsertBulkOperationRequest  *TestSuiteTestCaseUpsertBulkOperationRequest
+	TestSuiteTestCaseDeleteBulkOperationRequest  *TestSuiteTestCaseDeleteBulkOperationRequest
+}
+
+func (t *TestSuiteTestCaseBulkOperationRequest) UnmarshalJSON(data []byte) error {
+	valueTestSuiteTestCaseCreateBulkOperationRequest := new(TestSuiteTestCaseCreateBulkOperationRequest)
+	if err := json.Unmarshal(data, &valueTestSuiteTestCaseCreateBulkOperationRequest); err == nil {
+		t.TestSuiteTestCaseCreateBulkOperationRequest = valueTestSuiteTestCaseCreateBulkOperationRequest
+		return nil
+	}
+	valueTestSuiteTestCaseReplaceBulkOperationRequest := new(TestSuiteTestCaseReplaceBulkOperationRequest)
+	if err := json.Unmarshal(data, &valueTestSuiteTestCaseReplaceBulkOperationRequest); err == nil {
+		t.TestSuiteTestCaseReplaceBulkOperationRequest = valueTestSuiteTestCaseReplaceBulkOperationRequest
+		return nil
+	}
+	valueTestSuiteTestCaseUpsertBulkOperationRequest := new(TestSuiteTestCaseUpsertBulkOperationRequest)
+	if err := json.Unmarshal(data, &valueTestSuiteTestCaseUpsertBulkOperationRequest); err == nil {
+		t.TestSuiteTestCaseUpsertBulkOperationRequest = valueTestSuiteTestCaseUpsertBulkOperationRequest
+		return nil
+	}
+	valueTestSuiteTestCaseDeleteBulkOperationRequest := new(TestSuiteTestCaseDeleteBulkOperationRequest)
+	if err := json.Unmarshal(data, &valueTestSuiteTestCaseDeleteBulkOperationRequest); err == nil {
+		t.TestSuiteTestCaseDeleteBulkOperationRequest = valueTestSuiteTestCaseDeleteBulkOperationRequest
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, t)
+}
+
+func (t TestSuiteTestCaseBulkOperationRequest) MarshalJSON() ([]byte, error) {
+	if t.TestSuiteTestCaseCreateBulkOperationRequest != nil {
+		return json.Marshal(t.TestSuiteTestCaseCreateBulkOperationRequest)
+	}
+	if t.TestSuiteTestCaseReplaceBulkOperationRequest != nil {
+		return json.Marshal(t.TestSuiteTestCaseReplaceBulkOperationRequest)
+	}
+	if t.TestSuiteTestCaseUpsertBulkOperationRequest != nil {
+		return json.Marshal(t.TestSuiteTestCaseUpsertBulkOperationRequest)
+	}
+	if t.TestSuiteTestCaseDeleteBulkOperationRequest != nil {
+		return json.Marshal(t.TestSuiteTestCaseDeleteBulkOperationRequest)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", t)
+}
+
+type TestSuiteTestCaseBulkOperationRequestVisitor interface {
+	VisitTestSuiteTestCaseCreateBulkOperationRequest(*TestSuiteTestCaseCreateBulkOperationRequest) error
+	VisitTestSuiteTestCaseReplaceBulkOperationRequest(*TestSuiteTestCaseReplaceBulkOperationRequest) error
+	VisitTestSuiteTestCaseUpsertBulkOperationRequest(*TestSuiteTestCaseUpsertBulkOperationRequest) error
+	VisitTestSuiteTestCaseDeleteBulkOperationRequest(*TestSuiteTestCaseDeleteBulkOperationRequest) error
+}
+
+func (t *TestSuiteTestCaseBulkOperationRequest) Accept(visitor TestSuiteTestCaseBulkOperationRequestVisitor) error {
+	if t.TestSuiteTestCaseCreateBulkOperationRequest != nil {
+		return visitor.VisitTestSuiteTestCaseCreateBulkOperationRequest(t.TestSuiteTestCaseCreateBulkOperationRequest)
+	}
+	if t.TestSuiteTestCaseReplaceBulkOperationRequest != nil {
+		return visitor.VisitTestSuiteTestCaseReplaceBulkOperationRequest(t.TestSuiteTestCaseReplaceBulkOperationRequest)
+	}
+	if t.TestSuiteTestCaseUpsertBulkOperationRequest != nil {
+		return visitor.VisitTestSuiteTestCaseUpsertBulkOperationRequest(t.TestSuiteTestCaseUpsertBulkOperationRequest)
+	}
+	if t.TestSuiteTestCaseDeleteBulkOperationRequest != nil {
+		return visitor.VisitTestSuiteTestCaseDeleteBulkOperationRequest(t.TestSuiteTestCaseDeleteBulkOperationRequest)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", t)
+}
+
+type TestSuiteTestCaseBulkResult struct {
+	TestSuiteTestCaseCreatedBulkResult  *TestSuiteTestCaseCreatedBulkResult
+	TestSuiteTestCaseReplacedBulkResult *TestSuiteTestCaseReplacedBulkResult
+	TestSuiteTestCaseDeletedBulkResult  *TestSuiteTestCaseDeletedBulkResult
+	TestSuiteTestCaseRejectedBulkResult *TestSuiteTestCaseRejectedBulkResult
+}
+
+func (t *TestSuiteTestCaseBulkResult) UnmarshalJSON(data []byte) error {
+	valueTestSuiteTestCaseCreatedBulkResult := new(TestSuiteTestCaseCreatedBulkResult)
+	if err := json.Unmarshal(data, &valueTestSuiteTestCaseCreatedBulkResult); err == nil {
+		t.TestSuiteTestCaseCreatedBulkResult = valueTestSuiteTestCaseCreatedBulkResult
+		return nil
+	}
+	valueTestSuiteTestCaseReplacedBulkResult := new(TestSuiteTestCaseReplacedBulkResult)
+	if err := json.Unmarshal(data, &valueTestSuiteTestCaseReplacedBulkResult); err == nil {
+		t.TestSuiteTestCaseReplacedBulkResult = valueTestSuiteTestCaseReplacedBulkResult
+		return nil
+	}
+	valueTestSuiteTestCaseDeletedBulkResult := new(TestSuiteTestCaseDeletedBulkResult)
+	if err := json.Unmarshal(data, &valueTestSuiteTestCaseDeletedBulkResult); err == nil {
+		t.TestSuiteTestCaseDeletedBulkResult = valueTestSuiteTestCaseDeletedBulkResult
+		return nil
+	}
+	valueTestSuiteTestCaseRejectedBulkResult := new(TestSuiteTestCaseRejectedBulkResult)
+	if err := json.Unmarshal(data, &valueTestSuiteTestCaseRejectedBulkResult); err == nil {
+		t.TestSuiteTestCaseRejectedBulkResult = valueTestSuiteTestCaseRejectedBulkResult
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, t)
+}
+
+func (t TestSuiteTestCaseBulkResult) MarshalJSON() ([]byte, error) {
+	if t.TestSuiteTestCaseCreatedBulkResult != nil {
+		return json.Marshal(t.TestSuiteTestCaseCreatedBulkResult)
+	}
+	if t.TestSuiteTestCaseReplacedBulkResult != nil {
+		return json.Marshal(t.TestSuiteTestCaseReplacedBulkResult)
+	}
+	if t.TestSuiteTestCaseDeletedBulkResult != nil {
+		return json.Marshal(t.TestSuiteTestCaseDeletedBulkResult)
+	}
+	if t.TestSuiteTestCaseRejectedBulkResult != nil {
+		return json.Marshal(t.TestSuiteTestCaseRejectedBulkResult)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", t)
+}
+
+type TestSuiteTestCaseBulkResultVisitor interface {
+	VisitTestSuiteTestCaseCreatedBulkResult(*TestSuiteTestCaseCreatedBulkResult) error
+	VisitTestSuiteTestCaseReplacedBulkResult(*TestSuiteTestCaseReplacedBulkResult) error
+	VisitTestSuiteTestCaseDeletedBulkResult(*TestSuiteTestCaseDeletedBulkResult) error
+	VisitTestSuiteTestCaseRejectedBulkResult(*TestSuiteTestCaseRejectedBulkResult) error
+}
+
+func (t *TestSuiteTestCaseBulkResult) Accept(visitor TestSuiteTestCaseBulkResultVisitor) error {
+	if t.TestSuiteTestCaseCreatedBulkResult != nil {
+		return visitor.VisitTestSuiteTestCaseCreatedBulkResult(t.TestSuiteTestCaseCreatedBulkResult)
+	}
+	if t.TestSuiteTestCaseReplacedBulkResult != nil {
+		return visitor.VisitTestSuiteTestCaseReplacedBulkResult(t.TestSuiteTestCaseReplacedBulkResult)
+	}
+	if t.TestSuiteTestCaseDeletedBulkResult != nil {
+		return visitor.VisitTestSuiteTestCaseDeletedBulkResult(t.TestSuiteTestCaseDeletedBulkResult)
+	}
+	if t.TestSuiteTestCaseRejectedBulkResult != nil {
+		return visitor.VisitTestSuiteTestCaseRejectedBulkResult(t.TestSuiteTestCaseRejectedBulkResult)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", t)
+}
+
+// A bulk operation that represents the creation of a Test Case.
+type TestSuiteTestCaseCreateBulkOperationRequest struct {
+	// An ID representing this specific operation. Can later be used to look up information about the operation's success in the response.
+	Id    string                          `json:"id" url:"id"`
+	Data  *CreateTestSuiteTestCaseRequest `json:"data" url:"data"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCaseCreateBulkOperationRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteTestCaseCreateBulkOperationRequest) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteTestCaseCreateBulkOperationRequest) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteTestCaseCreateBulkOperationRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteTestCaseCreateBulkOperationRequest(unmarshaler.embed)
+	if unmarshaler.Type != "CREATE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "CREATE", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteTestCaseCreateBulkOperationRequest) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteTestCaseCreateBulkOperationRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "CREATE",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteTestCaseCreateBulkOperationRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// The result of a bulk operation that created a Test Case.
+type TestSuiteTestCaseCreatedBulkResult struct {
+	Id    string                                  `json:"id" url:"id"`
+	Data  *TestSuiteTestCaseCreatedBulkResultData `json:"data" url:"data"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCaseCreatedBulkResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteTestCaseCreatedBulkResult) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteTestCaseCreatedBulkResult) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteTestCaseCreatedBulkResult
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteTestCaseCreatedBulkResult(unmarshaler.embed)
+	if unmarshaler.Type != "CREATED" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "CREATED", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteTestCaseCreatedBulkResult) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteTestCaseCreatedBulkResult
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "CREATED",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteTestCaseCreatedBulkResult) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Information about the Test Case that was created.
+type TestSuiteTestCaseCreatedBulkResultData struct {
+	Id string `json:"id" url:"id"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCaseCreatedBulkResultData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteTestCaseCreatedBulkResultData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteTestCaseCreatedBulkResultData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteTestCaseCreatedBulkResultData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteTestCaseCreatedBulkResultData) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestSuiteTestCaseDeleteBulkOperationDataRequest struct {
+	Id string `json:"id" url:"id"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCaseDeleteBulkOperationDataRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteTestCaseDeleteBulkOperationDataRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteTestCaseDeleteBulkOperationDataRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteTestCaseDeleteBulkOperationDataRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteTestCaseDeleteBulkOperationDataRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// A bulk operation that represents the deletion of a Test Case.
+type TestSuiteTestCaseDeleteBulkOperationRequest struct {
+	// An ID representing this specific operation. Can later be used to look up information about the operation's success in the response.
+	Id string `json:"id" url:"id"`
+	// Information about the Test Case to delete
+	Data  *TestSuiteTestCaseDeleteBulkOperationDataRequest `json:"data" url:"data"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCaseDeleteBulkOperationRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteTestCaseDeleteBulkOperationRequest) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteTestCaseDeleteBulkOperationRequest) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteTestCaseDeleteBulkOperationRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteTestCaseDeleteBulkOperationRequest(unmarshaler.embed)
+	if unmarshaler.Type != "DELETE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "DELETE", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteTestCaseDeleteBulkOperationRequest) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteTestCaseDeleteBulkOperationRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "DELETE",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteTestCaseDeleteBulkOperationRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// The result of a bulk operation that deleted a Test Case.
+type TestSuiteTestCaseDeletedBulkResult struct {
+	// An ID that maps back to one of the initially supplied operations. Can be used to determine the result of a given operation.
+	Id    string                                  `json:"id" url:"id"`
+	Data  *TestSuiteTestCaseDeletedBulkResultData `json:"data" url:"data"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCaseDeletedBulkResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteTestCaseDeletedBulkResult) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteTestCaseDeletedBulkResult) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteTestCaseDeletedBulkResult
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteTestCaseDeletedBulkResult(unmarshaler.embed)
+	if unmarshaler.Type != "DELETED" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "DELETED", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteTestCaseDeletedBulkResult) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteTestCaseDeletedBulkResult
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "DELETED",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteTestCaseDeletedBulkResult) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Information about the Test Case that was deleted
+type TestSuiteTestCaseDeletedBulkResultData struct {
+	Id string `json:"id" url:"id"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCaseDeletedBulkResultData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteTestCaseDeletedBulkResultData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteTestCaseDeletedBulkResultData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteTestCaseDeletedBulkResultData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteTestCaseDeletedBulkResultData) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// The result of a bulk operation that failed to operate on a Test Case.
+type TestSuiteTestCaseRejectedBulkResult struct {
+	// An ID that maps back to one of the initially supplied operations. Can be used to determine the result of a given operation.
+	Id *string `json:"id,omitempty" url:"id,omitempty"`
+	// Details about the error that occurred
+	Data  map[string]interface{} `json:"data" url:"data"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCaseRejectedBulkResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteTestCaseRejectedBulkResult) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteTestCaseRejectedBulkResult) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteTestCaseRejectedBulkResult
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteTestCaseRejectedBulkResult(unmarshaler.embed)
+	if unmarshaler.Type != "REJECTED" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "REJECTED", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteTestCaseRejectedBulkResult) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteTestCaseRejectedBulkResult
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "REJECTED",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteTestCaseRejectedBulkResult) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// A bulk operation that represents the replacing of a Test Case.
+type TestSuiteTestCaseReplaceBulkOperationRequest struct {
+	// An ID representing this specific operation. Can later be used to look up information about the operation's success in the response.
+	Id    string                           `json:"id" url:"id"`
+	Data  *ReplaceTestSuiteTestCaseRequest `json:"data" url:"data"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCaseReplaceBulkOperationRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteTestCaseReplaceBulkOperationRequest) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteTestCaseReplaceBulkOperationRequest) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteTestCaseReplaceBulkOperationRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteTestCaseReplaceBulkOperationRequest(unmarshaler.embed)
+	if unmarshaler.Type != "REPLACE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "REPLACE", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteTestCaseReplaceBulkOperationRequest) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteTestCaseReplaceBulkOperationRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "REPLACE",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteTestCaseReplaceBulkOperationRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// The result of a bulk operation that replaced a Test Case.
+type TestSuiteTestCaseReplacedBulkResult struct {
+	// An ID that maps back to one of the initially supplied operations. Can be used to determine the result of a given operation.
+	Id    string                                   `json:"id" url:"id"`
+	Data  *TestSuiteTestCaseReplacedBulkResultData `json:"data" url:"data"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCaseReplacedBulkResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteTestCaseReplacedBulkResult) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteTestCaseReplacedBulkResult) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteTestCaseReplacedBulkResult
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteTestCaseReplacedBulkResult(unmarshaler.embed)
+	if unmarshaler.Type != "REPLACED" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "REPLACED", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteTestCaseReplacedBulkResult) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteTestCaseReplacedBulkResult
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "REPLACED",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteTestCaseReplacedBulkResult) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Information about the Test Case that was replaced
+type TestSuiteTestCaseReplacedBulkResultData struct {
+	Id string `json:"id" url:"id"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCaseReplacedBulkResultData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteTestCaseReplacedBulkResultData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteTestCaseReplacedBulkResultData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteTestCaseReplacedBulkResultData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteTestCaseReplacedBulkResultData) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// A bulk operation that represents the upserting of a Test Case.
+type TestSuiteTestCaseUpsertBulkOperationRequest struct {
+	// An ID representing this specific operation. Can later be used to look up information about the operation's success in the response.
+	Id    string                          `json:"id" url:"id"`
+	Data  *UpsertTestSuiteTestCaseRequest `json:"data" url:"data"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteTestCaseUpsertBulkOperationRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteTestCaseUpsertBulkOperationRequest) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteTestCaseUpsertBulkOperationRequest) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteTestCaseUpsertBulkOperationRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteTestCaseUpsertBulkOperationRequest(unmarshaler.embed)
+	if unmarshaler.Type != "UPSERT" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "UPSERT", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteTestCaseUpsertBulkOperationRequest) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteTestCaseUpsertBulkOperationRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "UPSERT",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteTestCaseUpsertBulkOperationRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type UpsertTestSuiteTestCaseRequest struct {
+	// The Vellum-generated ID of an existing Test Case whose data you'd like to replace. If specified and no Test Case exists with this ID, a 404 will be returned.
+	Id *string `json:"id,omitempty" url:"id,omitempty"`
+	// An ID external to Vellum that uniquely identifies the Test Case that you'd like to create/update. If there's a match on a Test Case that was previously created with the same external_id, it will be updated. Otherwise, a new Test Case will be created with this value as its external_id. If no external_id is specified, then a new Test Case will always be created.
+	ExternalId *string `json:"external_id,omitempty" url:"external_id,omitempty"`
+	// A human-readable label used to convey the intention of this Test Case
+	Label *string `json:"label,omitempty" url:"label,omitempty"`
+	// Values for each of the Test Case's input variables
+	InputValues []*NamedTestCaseVariableValueRequest `json:"input_values" url:"input_values"`
+	// Values for each of the Test Case's evaluation variables
+	EvaluationValues []*NamedTestCaseVariableValueRequest `json:"evaluation_values" url:"evaluation_values"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (u *UpsertTestSuiteTestCaseRequest) GetExtraProperties() map[string]interface{} {
+	return u.extraProperties
+}
+
+func (u *UpsertTestSuiteTestCaseRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpsertTestSuiteTestCaseRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = UpsertTestSuiteTestCaseRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+
+	u._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *UpsertTestSuiteTestCaseRequest) String() string {
+	if len(u._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(u._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
 }

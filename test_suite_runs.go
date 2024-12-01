@@ -2,6 +2,13 @@
 
 package api
 
+import (
+	json "encoding/json"
+	fmt "fmt"
+	core "github.com/vellum-ai/vellum-client-go/core"
+	time "time"
+)
+
 type TestSuiteRunCreateRequest struct {
 	// The ID of the Test Suite to run. Must provide either this or test_suite_id.
 	TestSuiteId *string `json:"test_suite_id,omitempty" url:"-"`
@@ -22,4 +29,2565 @@ type TestSuiteRunsListExecutionsRequest struct {
 	Limit *int `json:"-" url:"limit,omitempty"`
 	// The initial index from which to return the results.
 	Offset *int `json:"-" url:"offset,omitempty"`
+}
+
+type ExternalTestCaseExecution struct {
+	// The output values of a callable that was executed against a Test Case outside of Vellum
+	Outputs    []*NamedTestCaseVariableValue `json:"outputs" url:"outputs"`
+	TestCaseId string                        `json:"test_case_id" url:"test_case_id"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ExternalTestCaseExecution) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
+}
+
+func (e *ExternalTestCaseExecution) UnmarshalJSON(data []byte) error {
+	type unmarshaler ExternalTestCaseExecution
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = ExternalTestCaseExecution(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ExternalTestCaseExecution) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+type ExternalTestCaseExecutionRequest struct {
+	// The output values of a callable that was executed against a Test Case outside of Vellum
+	Outputs    []*NamedTestCaseVariableValueRequest `json:"outputs" url:"outputs"`
+	TestCaseId string                               `json:"test_case_id" url:"test_case_id"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ExternalTestCaseExecutionRequest) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
+}
+
+func (e *ExternalTestCaseExecutionRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler ExternalTestCaseExecutionRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = ExternalTestCaseExecutionRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ExternalTestCaseExecutionRequest) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+// Named Test Case value that is of type ARRAY
+type NamedTestCaseArrayVariableValue struct {
+	Value []*VellumValue `json:"value,omitempty" url:"value,omitempty"`
+	Name  string         `json:"name" url:"name"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedTestCaseArrayVariableValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
+}
+
+func (n *NamedTestCaseArrayVariableValue) Type() string {
+	return n.type_
+}
+
+func (n *NamedTestCaseArrayVariableValue) UnmarshalJSON(data []byte) error {
+	type embed NamedTestCaseArrayVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*n = NamedTestCaseArrayVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "ARRAY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "ARRAY", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NamedTestCaseArrayVariableValue) MarshalJSON() ([]byte, error) {
+	type embed NamedTestCaseArrayVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+		Type:  "ARRAY",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (n *NamedTestCaseArrayVariableValue) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
+// Named Test Case value that is of type CHAT_HISTORY
+type NamedTestCaseChatHistoryVariableValue struct {
+	Value []*ChatMessage `json:"value,omitempty" url:"value,omitempty"`
+	Name  string         `json:"name" url:"name"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedTestCaseChatHistoryVariableValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
+}
+
+func (n *NamedTestCaseChatHistoryVariableValue) Type() string {
+	return n.type_
+}
+
+func (n *NamedTestCaseChatHistoryVariableValue) UnmarshalJSON(data []byte) error {
+	type embed NamedTestCaseChatHistoryVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*n = NamedTestCaseChatHistoryVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NamedTestCaseChatHistoryVariableValue) MarshalJSON() ([]byte, error) {
+	type embed NamedTestCaseChatHistoryVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+		Type:  "CHAT_HISTORY",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (n *NamedTestCaseChatHistoryVariableValue) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
+// Named Test Case value that is of type ERROR
+type NamedTestCaseErrorVariableValue struct {
+	Value *VellumError `json:"value,omitempty" url:"value,omitempty"`
+	Name  string       `json:"name" url:"name"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedTestCaseErrorVariableValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
+}
+
+func (n *NamedTestCaseErrorVariableValue) Type() string {
+	return n.type_
+}
+
+func (n *NamedTestCaseErrorVariableValue) UnmarshalJSON(data []byte) error {
+	type embed NamedTestCaseErrorVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*n = NamedTestCaseErrorVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "ERROR" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "ERROR", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NamedTestCaseErrorVariableValue) MarshalJSON() ([]byte, error) {
+	type embed NamedTestCaseErrorVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+		Type:  "ERROR",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (n *NamedTestCaseErrorVariableValue) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
+// Named Test Case value that is of type FUNCTION_CALL
+type NamedTestCaseFunctionCallVariableValue struct {
+	Value *FunctionCall `json:"value,omitempty" url:"value,omitempty"`
+	Name  string        `json:"name" url:"name"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedTestCaseFunctionCallVariableValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
+}
+
+func (n *NamedTestCaseFunctionCallVariableValue) Type() string {
+	return n.type_
+}
+
+func (n *NamedTestCaseFunctionCallVariableValue) UnmarshalJSON(data []byte) error {
+	type embed NamedTestCaseFunctionCallVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*n = NamedTestCaseFunctionCallVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "FUNCTION_CALL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "FUNCTION_CALL", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NamedTestCaseFunctionCallVariableValue) MarshalJSON() ([]byte, error) {
+	type embed NamedTestCaseFunctionCallVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+		Type:  "FUNCTION_CALL",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (n *NamedTestCaseFunctionCallVariableValue) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
+// Named Test Case value that is of type JSON
+type NamedTestCaseJsonVariableValue struct {
+	Value interface{} `json:"value" url:"value"`
+	Name  string      `json:"name" url:"name"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedTestCaseJsonVariableValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
+}
+
+func (n *NamedTestCaseJsonVariableValue) Type() string {
+	return n.type_
+}
+
+func (n *NamedTestCaseJsonVariableValue) UnmarshalJSON(data []byte) error {
+	type embed NamedTestCaseJsonVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*n = NamedTestCaseJsonVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "JSON", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NamedTestCaseJsonVariableValue) MarshalJSON() ([]byte, error) {
+	type embed NamedTestCaseJsonVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+		Type:  "JSON",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (n *NamedTestCaseJsonVariableValue) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
+// Named Test Case value that is of type NUMBER
+type NamedTestCaseNumberVariableValue struct {
+	Value *float64 `json:"value,omitempty" url:"value,omitempty"`
+	Name  string   `json:"name" url:"name"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedTestCaseNumberVariableValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
+}
+
+func (n *NamedTestCaseNumberVariableValue) Type() string {
+	return n.type_
+}
+
+func (n *NamedTestCaseNumberVariableValue) UnmarshalJSON(data []byte) error {
+	type embed NamedTestCaseNumberVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*n = NamedTestCaseNumberVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "NUMBER" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "NUMBER", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NamedTestCaseNumberVariableValue) MarshalJSON() ([]byte, error) {
+	type embed NamedTestCaseNumberVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+		Type:  "NUMBER",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (n *NamedTestCaseNumberVariableValue) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
+// Named Test Case value that is of type SEARCH_RESULTS
+type NamedTestCaseSearchResultsVariableValue struct {
+	Value []*SearchResult `json:"value,omitempty" url:"value,omitempty"`
+	Name  string          `json:"name" url:"name"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedTestCaseSearchResultsVariableValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
+}
+
+func (n *NamedTestCaseSearchResultsVariableValue) Type() string {
+	return n.type_
+}
+
+func (n *NamedTestCaseSearchResultsVariableValue) UnmarshalJSON(data []byte) error {
+	type embed NamedTestCaseSearchResultsVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*n = NamedTestCaseSearchResultsVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "SEARCH_RESULTS" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "SEARCH_RESULTS", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NamedTestCaseSearchResultsVariableValue) MarshalJSON() ([]byte, error) {
+	type embed NamedTestCaseSearchResultsVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+		Type:  "SEARCH_RESULTS",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (n *NamedTestCaseSearchResultsVariableValue) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
+// Named Test Case value that is of type STRING
+type NamedTestCaseStringVariableValue struct {
+	Value *string `json:"value,omitempty" url:"value,omitempty"`
+	Name  string  `json:"name" url:"name"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedTestCaseStringVariableValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
+}
+
+func (n *NamedTestCaseStringVariableValue) Type() string {
+	return n.type_
+}
+
+func (n *NamedTestCaseStringVariableValue) UnmarshalJSON(data []byte) error {
+	type embed NamedTestCaseStringVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*n = NamedTestCaseStringVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "STRING", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NamedTestCaseStringVariableValue) MarshalJSON() ([]byte, error) {
+	type embed NamedTestCaseStringVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+		Type:  "STRING",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (n *NamedTestCaseStringVariableValue) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
+type NamedTestCaseVariableValue struct {
+	NamedTestCaseStringVariableValue        *NamedTestCaseStringVariableValue
+	NamedTestCaseNumberVariableValue        *NamedTestCaseNumberVariableValue
+	NamedTestCaseJsonVariableValue          *NamedTestCaseJsonVariableValue
+	NamedTestCaseChatHistoryVariableValue   *NamedTestCaseChatHistoryVariableValue
+	NamedTestCaseSearchResultsVariableValue *NamedTestCaseSearchResultsVariableValue
+	NamedTestCaseErrorVariableValue         *NamedTestCaseErrorVariableValue
+	NamedTestCaseFunctionCallVariableValue  *NamedTestCaseFunctionCallVariableValue
+	NamedTestCaseArrayVariableValue         *NamedTestCaseArrayVariableValue
+}
+
+func (n *NamedTestCaseVariableValue) UnmarshalJSON(data []byte) error {
+	valueNamedTestCaseStringVariableValue := new(NamedTestCaseStringVariableValue)
+	if err := json.Unmarshal(data, &valueNamedTestCaseStringVariableValue); err == nil {
+		n.NamedTestCaseStringVariableValue = valueNamedTestCaseStringVariableValue
+		return nil
+	}
+	valueNamedTestCaseNumberVariableValue := new(NamedTestCaseNumberVariableValue)
+	if err := json.Unmarshal(data, &valueNamedTestCaseNumberVariableValue); err == nil {
+		n.NamedTestCaseNumberVariableValue = valueNamedTestCaseNumberVariableValue
+		return nil
+	}
+	valueNamedTestCaseJsonVariableValue := new(NamedTestCaseJsonVariableValue)
+	if err := json.Unmarshal(data, &valueNamedTestCaseJsonVariableValue); err == nil {
+		n.NamedTestCaseJsonVariableValue = valueNamedTestCaseJsonVariableValue
+		return nil
+	}
+	valueNamedTestCaseChatHistoryVariableValue := new(NamedTestCaseChatHistoryVariableValue)
+	if err := json.Unmarshal(data, &valueNamedTestCaseChatHistoryVariableValue); err == nil {
+		n.NamedTestCaseChatHistoryVariableValue = valueNamedTestCaseChatHistoryVariableValue
+		return nil
+	}
+	valueNamedTestCaseSearchResultsVariableValue := new(NamedTestCaseSearchResultsVariableValue)
+	if err := json.Unmarshal(data, &valueNamedTestCaseSearchResultsVariableValue); err == nil {
+		n.NamedTestCaseSearchResultsVariableValue = valueNamedTestCaseSearchResultsVariableValue
+		return nil
+	}
+	valueNamedTestCaseErrorVariableValue := new(NamedTestCaseErrorVariableValue)
+	if err := json.Unmarshal(data, &valueNamedTestCaseErrorVariableValue); err == nil {
+		n.NamedTestCaseErrorVariableValue = valueNamedTestCaseErrorVariableValue
+		return nil
+	}
+	valueNamedTestCaseFunctionCallVariableValue := new(NamedTestCaseFunctionCallVariableValue)
+	if err := json.Unmarshal(data, &valueNamedTestCaseFunctionCallVariableValue); err == nil {
+		n.NamedTestCaseFunctionCallVariableValue = valueNamedTestCaseFunctionCallVariableValue
+		return nil
+	}
+	valueNamedTestCaseArrayVariableValue := new(NamedTestCaseArrayVariableValue)
+	if err := json.Unmarshal(data, &valueNamedTestCaseArrayVariableValue); err == nil {
+		n.NamedTestCaseArrayVariableValue = valueNamedTestCaseArrayVariableValue
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, n)
+}
+
+func (n NamedTestCaseVariableValue) MarshalJSON() ([]byte, error) {
+	if n.NamedTestCaseStringVariableValue != nil {
+		return json.Marshal(n.NamedTestCaseStringVariableValue)
+	}
+	if n.NamedTestCaseNumberVariableValue != nil {
+		return json.Marshal(n.NamedTestCaseNumberVariableValue)
+	}
+	if n.NamedTestCaseJsonVariableValue != nil {
+		return json.Marshal(n.NamedTestCaseJsonVariableValue)
+	}
+	if n.NamedTestCaseChatHistoryVariableValue != nil {
+		return json.Marshal(n.NamedTestCaseChatHistoryVariableValue)
+	}
+	if n.NamedTestCaseSearchResultsVariableValue != nil {
+		return json.Marshal(n.NamedTestCaseSearchResultsVariableValue)
+	}
+	if n.NamedTestCaseErrorVariableValue != nil {
+		return json.Marshal(n.NamedTestCaseErrorVariableValue)
+	}
+	if n.NamedTestCaseFunctionCallVariableValue != nil {
+		return json.Marshal(n.NamedTestCaseFunctionCallVariableValue)
+	}
+	if n.NamedTestCaseArrayVariableValue != nil {
+		return json.Marshal(n.NamedTestCaseArrayVariableValue)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", n)
+}
+
+type NamedTestCaseVariableValueVisitor interface {
+	VisitNamedTestCaseStringVariableValue(*NamedTestCaseStringVariableValue) error
+	VisitNamedTestCaseNumberVariableValue(*NamedTestCaseNumberVariableValue) error
+	VisitNamedTestCaseJsonVariableValue(*NamedTestCaseJsonVariableValue) error
+	VisitNamedTestCaseChatHistoryVariableValue(*NamedTestCaseChatHistoryVariableValue) error
+	VisitNamedTestCaseSearchResultsVariableValue(*NamedTestCaseSearchResultsVariableValue) error
+	VisitNamedTestCaseErrorVariableValue(*NamedTestCaseErrorVariableValue) error
+	VisitNamedTestCaseFunctionCallVariableValue(*NamedTestCaseFunctionCallVariableValue) error
+	VisitNamedTestCaseArrayVariableValue(*NamedTestCaseArrayVariableValue) error
+}
+
+func (n *NamedTestCaseVariableValue) Accept(visitor NamedTestCaseVariableValueVisitor) error {
+	if n.NamedTestCaseStringVariableValue != nil {
+		return visitor.VisitNamedTestCaseStringVariableValue(n.NamedTestCaseStringVariableValue)
+	}
+	if n.NamedTestCaseNumberVariableValue != nil {
+		return visitor.VisitNamedTestCaseNumberVariableValue(n.NamedTestCaseNumberVariableValue)
+	}
+	if n.NamedTestCaseJsonVariableValue != nil {
+		return visitor.VisitNamedTestCaseJsonVariableValue(n.NamedTestCaseJsonVariableValue)
+	}
+	if n.NamedTestCaseChatHistoryVariableValue != nil {
+		return visitor.VisitNamedTestCaseChatHistoryVariableValue(n.NamedTestCaseChatHistoryVariableValue)
+	}
+	if n.NamedTestCaseSearchResultsVariableValue != nil {
+		return visitor.VisitNamedTestCaseSearchResultsVariableValue(n.NamedTestCaseSearchResultsVariableValue)
+	}
+	if n.NamedTestCaseErrorVariableValue != nil {
+		return visitor.VisitNamedTestCaseErrorVariableValue(n.NamedTestCaseErrorVariableValue)
+	}
+	if n.NamedTestCaseFunctionCallVariableValue != nil {
+		return visitor.VisitNamedTestCaseFunctionCallVariableValue(n.NamedTestCaseFunctionCallVariableValue)
+	}
+	if n.NamedTestCaseArrayVariableValue != nil {
+		return visitor.VisitNamedTestCaseArrayVariableValue(n.NamedTestCaseArrayVariableValue)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", n)
+}
+
+type PaginatedTestSuiteRunExecutionList struct {
+	Count    int                      `json:"count" url:"count"`
+	Next     *string                  `json:"next,omitempty" url:"next,omitempty"`
+	Previous *string                  `json:"previous,omitempty" url:"previous,omitempty"`
+	Results  []*TestSuiteRunExecution `json:"results" url:"results"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaginatedTestSuiteRunExecutionList) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaginatedTestSuiteRunExecutionList) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaginatedTestSuiteRunExecutionList
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaginatedTestSuiteRunExecutionList(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaginatedTestSuiteRunExecutionList) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+// Execution configuration for running a Test Suite against a Prompt Deployment
+type TestSuiteRunDeploymentReleaseTagExecConfig struct {
+	Data *TestSuiteRunDeploymentReleaseTagExecConfigData `json:"data" url:"data"`
+	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
+	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
+	type_       string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunDeploymentReleaseTagExecConfig) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunDeploymentReleaseTagExecConfig) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteRunDeploymentReleaseTagExecConfig) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteRunDeploymentReleaseTagExecConfig
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteRunDeploymentReleaseTagExecConfig(unmarshaler.embed)
+	if unmarshaler.Type != "DEPLOYMENT_RELEASE_TAG" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "DEPLOYMENT_RELEASE_TAG", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunDeploymentReleaseTagExecConfig) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteRunDeploymentReleaseTagExecConfig
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "DEPLOYMENT_RELEASE_TAG",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteRunDeploymentReleaseTagExecConfig) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestSuiteRunDeploymentReleaseTagExecConfigData struct {
+	// The ID of the Prompt Deployment to run the Test Suite against.
+	DeploymentId string `json:"deployment_id" url:"deployment_id"`
+	// A tag identifying which release of the Prompt Deployment to run the Test Suite against. Useful for testing past versions of the Prompt Deployment
+	Tag *string `json:"tag,omitempty" url:"tag,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunDeploymentReleaseTagExecConfigData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunDeploymentReleaseTagExecConfigData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteRunDeploymentReleaseTagExecConfigData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteRunDeploymentReleaseTagExecConfigData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunDeploymentReleaseTagExecConfigData) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestSuiteRunDeploymentReleaseTagExecConfigDataRequest struct {
+	// The ID of the Prompt Deployment to run the Test Suite against.
+	DeploymentId string `json:"deployment_id" url:"deployment_id"`
+	// A tag identifying which release of the Prompt Deployment to run the Test Suite against. Useful for testing past versions of the Prompt Deployment
+	Tag *string `json:"tag,omitempty" url:"tag,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunDeploymentReleaseTagExecConfigDataRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunDeploymentReleaseTagExecConfigDataRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteRunDeploymentReleaseTagExecConfigDataRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteRunDeploymentReleaseTagExecConfigDataRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunDeploymentReleaseTagExecConfigDataRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Execution configuration for running a Test Suite against a Prompt Deployment
+type TestSuiteRunDeploymentReleaseTagExecConfigRequest struct {
+	Data *TestSuiteRunDeploymentReleaseTagExecConfigDataRequest `json:"data" url:"data"`
+	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
+	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
+	type_       string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunDeploymentReleaseTagExecConfigRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunDeploymentReleaseTagExecConfigRequest) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteRunDeploymentReleaseTagExecConfigRequest) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteRunDeploymentReleaseTagExecConfigRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteRunDeploymentReleaseTagExecConfigRequest(unmarshaler.embed)
+	if unmarshaler.Type != "DEPLOYMENT_RELEASE_TAG" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "DEPLOYMENT_RELEASE_TAG", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunDeploymentReleaseTagExecConfigRequest) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteRunDeploymentReleaseTagExecConfigRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "DEPLOYMENT_RELEASE_TAG",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteRunDeploymentReleaseTagExecConfigRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestSuiteRunExecConfig struct {
+	TestSuiteRunDeploymentReleaseTagExecConfig *TestSuiteRunDeploymentReleaseTagExecConfig
+	TestSuiteRunWorkflowReleaseTagExecConfig   *TestSuiteRunWorkflowReleaseTagExecConfig
+	TestSuiteRunExternalExecConfig             *TestSuiteRunExternalExecConfig
+}
+
+func (t *TestSuiteRunExecConfig) UnmarshalJSON(data []byte) error {
+	valueTestSuiteRunDeploymentReleaseTagExecConfig := new(TestSuiteRunDeploymentReleaseTagExecConfig)
+	if err := json.Unmarshal(data, &valueTestSuiteRunDeploymentReleaseTagExecConfig); err == nil {
+		t.TestSuiteRunDeploymentReleaseTagExecConfig = valueTestSuiteRunDeploymentReleaseTagExecConfig
+		return nil
+	}
+	valueTestSuiteRunWorkflowReleaseTagExecConfig := new(TestSuiteRunWorkflowReleaseTagExecConfig)
+	if err := json.Unmarshal(data, &valueTestSuiteRunWorkflowReleaseTagExecConfig); err == nil {
+		t.TestSuiteRunWorkflowReleaseTagExecConfig = valueTestSuiteRunWorkflowReleaseTagExecConfig
+		return nil
+	}
+	valueTestSuiteRunExternalExecConfig := new(TestSuiteRunExternalExecConfig)
+	if err := json.Unmarshal(data, &valueTestSuiteRunExternalExecConfig); err == nil {
+		t.TestSuiteRunExternalExecConfig = valueTestSuiteRunExternalExecConfig
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, t)
+}
+
+func (t TestSuiteRunExecConfig) MarshalJSON() ([]byte, error) {
+	if t.TestSuiteRunDeploymentReleaseTagExecConfig != nil {
+		return json.Marshal(t.TestSuiteRunDeploymentReleaseTagExecConfig)
+	}
+	if t.TestSuiteRunWorkflowReleaseTagExecConfig != nil {
+		return json.Marshal(t.TestSuiteRunWorkflowReleaseTagExecConfig)
+	}
+	if t.TestSuiteRunExternalExecConfig != nil {
+		return json.Marshal(t.TestSuiteRunExternalExecConfig)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", t)
+}
+
+type TestSuiteRunExecConfigVisitor interface {
+	VisitTestSuiteRunDeploymentReleaseTagExecConfig(*TestSuiteRunDeploymentReleaseTagExecConfig) error
+	VisitTestSuiteRunWorkflowReleaseTagExecConfig(*TestSuiteRunWorkflowReleaseTagExecConfig) error
+	VisitTestSuiteRunExternalExecConfig(*TestSuiteRunExternalExecConfig) error
+}
+
+func (t *TestSuiteRunExecConfig) Accept(visitor TestSuiteRunExecConfigVisitor) error {
+	if t.TestSuiteRunDeploymentReleaseTagExecConfig != nil {
+		return visitor.VisitTestSuiteRunDeploymentReleaseTagExecConfig(t.TestSuiteRunDeploymentReleaseTagExecConfig)
+	}
+	if t.TestSuiteRunWorkflowReleaseTagExecConfig != nil {
+		return visitor.VisitTestSuiteRunWorkflowReleaseTagExecConfig(t.TestSuiteRunWorkflowReleaseTagExecConfig)
+	}
+	if t.TestSuiteRunExternalExecConfig != nil {
+		return visitor.VisitTestSuiteRunExternalExecConfig(t.TestSuiteRunExternalExecConfig)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", t)
+}
+
+type TestSuiteRunExecConfigRequest struct {
+	TestSuiteRunDeploymentReleaseTagExecConfigRequest *TestSuiteRunDeploymentReleaseTagExecConfigRequest
+	TestSuiteRunWorkflowReleaseTagExecConfigRequest   *TestSuiteRunWorkflowReleaseTagExecConfigRequest
+	TestSuiteRunExternalExecConfigRequest             *TestSuiteRunExternalExecConfigRequest
+}
+
+func (t *TestSuiteRunExecConfigRequest) UnmarshalJSON(data []byte) error {
+	valueTestSuiteRunDeploymentReleaseTagExecConfigRequest := new(TestSuiteRunDeploymentReleaseTagExecConfigRequest)
+	if err := json.Unmarshal(data, &valueTestSuiteRunDeploymentReleaseTagExecConfigRequest); err == nil {
+		t.TestSuiteRunDeploymentReleaseTagExecConfigRequest = valueTestSuiteRunDeploymentReleaseTagExecConfigRequest
+		return nil
+	}
+	valueTestSuiteRunWorkflowReleaseTagExecConfigRequest := new(TestSuiteRunWorkflowReleaseTagExecConfigRequest)
+	if err := json.Unmarshal(data, &valueTestSuiteRunWorkflowReleaseTagExecConfigRequest); err == nil {
+		t.TestSuiteRunWorkflowReleaseTagExecConfigRequest = valueTestSuiteRunWorkflowReleaseTagExecConfigRequest
+		return nil
+	}
+	valueTestSuiteRunExternalExecConfigRequest := new(TestSuiteRunExternalExecConfigRequest)
+	if err := json.Unmarshal(data, &valueTestSuiteRunExternalExecConfigRequest); err == nil {
+		t.TestSuiteRunExternalExecConfigRequest = valueTestSuiteRunExternalExecConfigRequest
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, t)
+}
+
+func (t TestSuiteRunExecConfigRequest) MarshalJSON() ([]byte, error) {
+	if t.TestSuiteRunDeploymentReleaseTagExecConfigRequest != nil {
+		return json.Marshal(t.TestSuiteRunDeploymentReleaseTagExecConfigRequest)
+	}
+	if t.TestSuiteRunWorkflowReleaseTagExecConfigRequest != nil {
+		return json.Marshal(t.TestSuiteRunWorkflowReleaseTagExecConfigRequest)
+	}
+	if t.TestSuiteRunExternalExecConfigRequest != nil {
+		return json.Marshal(t.TestSuiteRunExternalExecConfigRequest)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", t)
+}
+
+type TestSuiteRunExecConfigRequestVisitor interface {
+	VisitTestSuiteRunDeploymentReleaseTagExecConfigRequest(*TestSuiteRunDeploymentReleaseTagExecConfigRequest) error
+	VisitTestSuiteRunWorkflowReleaseTagExecConfigRequest(*TestSuiteRunWorkflowReleaseTagExecConfigRequest) error
+	VisitTestSuiteRunExternalExecConfigRequest(*TestSuiteRunExternalExecConfigRequest) error
+}
+
+func (t *TestSuiteRunExecConfigRequest) Accept(visitor TestSuiteRunExecConfigRequestVisitor) error {
+	if t.TestSuiteRunDeploymentReleaseTagExecConfigRequest != nil {
+		return visitor.VisitTestSuiteRunDeploymentReleaseTagExecConfigRequest(t.TestSuiteRunDeploymentReleaseTagExecConfigRequest)
+	}
+	if t.TestSuiteRunWorkflowReleaseTagExecConfigRequest != nil {
+		return visitor.VisitTestSuiteRunWorkflowReleaseTagExecConfigRequest(t.TestSuiteRunWorkflowReleaseTagExecConfigRequest)
+	}
+	if t.TestSuiteRunExternalExecConfigRequest != nil {
+		return visitor.VisitTestSuiteRunExternalExecConfigRequest(t.TestSuiteRunExternalExecConfigRequest)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", t)
+}
+
+type TestSuiteRunExecution struct {
+	Id            string                               `json:"id" url:"id"`
+	TestCaseId    string                               `json:"test_case_id" url:"test_case_id"`
+	Outputs       []*TestSuiteRunExecutionOutput       `json:"outputs" url:"outputs"`
+	MetricResults []*TestSuiteRunExecutionMetricResult `json:"metric_results" url:"metric_results"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExecution) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunExecution) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteRunExecution
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteRunExecution(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunExecution) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Execution output of an entity evaluated during a Test Suite Run that is of type ARRAY
+type TestSuiteRunExecutionArrayOutput struct {
+	Name             string         `json:"name" url:"name"`
+	Value            []*VellumValue `json:"value,omitempty" url:"value,omitempty"`
+	OutputVariableId string         `json:"output_variable_id" url:"output_variable_id"`
+	type_            string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExecutionArrayOutput) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunExecutionArrayOutput) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteRunExecutionArrayOutput) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteRunExecutionArrayOutput
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteRunExecutionArrayOutput(unmarshaler.embed)
+	if unmarshaler.Type != "ARRAY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "ARRAY", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunExecutionArrayOutput) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteRunExecutionArrayOutput
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "ARRAY",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteRunExecutionArrayOutput) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Execution output of an entity evaluated during a Test Suite Run that is of type CHAT_HISTORY
+type TestSuiteRunExecutionChatHistoryOutput struct {
+	Name             string         `json:"name" url:"name"`
+	Value            []*ChatMessage `json:"value,omitempty" url:"value,omitempty"`
+	OutputVariableId string         `json:"output_variable_id" url:"output_variable_id"`
+	type_            string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExecutionChatHistoryOutput) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunExecutionChatHistoryOutput) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteRunExecutionChatHistoryOutput) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteRunExecutionChatHistoryOutput
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteRunExecutionChatHistoryOutput(unmarshaler.embed)
+	if unmarshaler.Type != "CHAT_HISTORY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "CHAT_HISTORY", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunExecutionChatHistoryOutput) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteRunExecutionChatHistoryOutput
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "CHAT_HISTORY",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteRunExecutionChatHistoryOutput) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Execution output of an entity evaluated during a Test Suite Run that is of type ERROR
+type TestSuiteRunExecutionErrorOutput struct {
+	Name             string       `json:"name" url:"name"`
+	Value            *VellumError `json:"value,omitempty" url:"value,omitempty"`
+	OutputVariableId string       `json:"output_variable_id" url:"output_variable_id"`
+	type_            string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExecutionErrorOutput) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunExecutionErrorOutput) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteRunExecutionErrorOutput) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteRunExecutionErrorOutput
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteRunExecutionErrorOutput(unmarshaler.embed)
+	if unmarshaler.Type != "ERROR" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "ERROR", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunExecutionErrorOutput) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteRunExecutionErrorOutput
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "ERROR",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteRunExecutionErrorOutput) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Execution output of an entity evaluated during a Test Suite Run that is of type FUNCTION_CALL
+type TestSuiteRunExecutionFunctionCallOutput struct {
+	Name             string        `json:"name" url:"name"`
+	Value            *FunctionCall `json:"value,omitempty" url:"value,omitempty"`
+	OutputVariableId string        `json:"output_variable_id" url:"output_variable_id"`
+	type_            string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExecutionFunctionCallOutput) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunExecutionFunctionCallOutput) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteRunExecutionFunctionCallOutput) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteRunExecutionFunctionCallOutput
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteRunExecutionFunctionCallOutput(unmarshaler.embed)
+	if unmarshaler.Type != "FUNCTION_CALL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "FUNCTION_CALL", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunExecutionFunctionCallOutput) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteRunExecutionFunctionCallOutput
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "FUNCTION_CALL",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteRunExecutionFunctionCallOutput) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Execution output of an entity evaluated during a Test Suite Run that is of type JSON
+type TestSuiteRunExecutionJsonOutput struct {
+	Name             string      `json:"name" url:"name"`
+	Value            interface{} `json:"value" url:"value"`
+	OutputVariableId string      `json:"output_variable_id" url:"output_variable_id"`
+	type_            string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExecutionJsonOutput) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunExecutionJsonOutput) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteRunExecutionJsonOutput) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteRunExecutionJsonOutput
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteRunExecutionJsonOutput(unmarshaler.embed)
+	if unmarshaler.Type != "JSON" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "JSON", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunExecutionJsonOutput) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteRunExecutionJsonOutput
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "JSON",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteRunExecutionJsonOutput) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestSuiteRunExecutionMetricDefinition struct {
+	Id    *string `json:"id,omitempty" url:"id,omitempty"`
+	Label *string `json:"label,omitempty" url:"label,omitempty"`
+	Name  *string `json:"name,omitempty" url:"name,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExecutionMetricDefinition) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunExecutionMetricDefinition) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteRunExecutionMetricDefinition
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteRunExecutionMetricDefinition(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunExecutionMetricDefinition) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestSuiteRunExecutionMetricResult struct {
+	MetricId         string                                 `json:"metric_id" url:"metric_id"`
+	Outputs          []*TestSuiteRunMetricOutput            `json:"outputs" url:"outputs"`
+	MetricLabel      *string                                `json:"metric_label,omitempty" url:"metric_label,omitempty"`
+	MetricDefinition *TestSuiteRunExecutionMetricDefinition `json:"metric_definition,omitempty" url:"metric_definition,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExecutionMetricResult) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunExecutionMetricResult) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteRunExecutionMetricResult
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteRunExecutionMetricResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunExecutionMetricResult) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Execution output of an entity evaluated during a Test Suite Run that is of type NUMBER
+type TestSuiteRunExecutionNumberOutput struct {
+	Name             string   `json:"name" url:"name"`
+	Value            *float64 `json:"value,omitempty" url:"value,omitempty"`
+	OutputVariableId string   `json:"output_variable_id" url:"output_variable_id"`
+	type_            string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExecutionNumberOutput) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunExecutionNumberOutput) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteRunExecutionNumberOutput) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteRunExecutionNumberOutput
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteRunExecutionNumberOutput(unmarshaler.embed)
+	if unmarshaler.Type != "NUMBER" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "NUMBER", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunExecutionNumberOutput) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteRunExecutionNumberOutput
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "NUMBER",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteRunExecutionNumberOutput) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestSuiteRunExecutionOutput struct {
+	TestSuiteRunExecutionStringOutput        *TestSuiteRunExecutionStringOutput
+	TestSuiteRunExecutionNumberOutput        *TestSuiteRunExecutionNumberOutput
+	TestSuiteRunExecutionJsonOutput          *TestSuiteRunExecutionJsonOutput
+	TestSuiteRunExecutionChatHistoryOutput   *TestSuiteRunExecutionChatHistoryOutput
+	TestSuiteRunExecutionSearchResultsOutput *TestSuiteRunExecutionSearchResultsOutput
+	TestSuiteRunExecutionErrorOutput         *TestSuiteRunExecutionErrorOutput
+	TestSuiteRunExecutionFunctionCallOutput  *TestSuiteRunExecutionFunctionCallOutput
+	TestSuiteRunExecutionArrayOutput         *TestSuiteRunExecutionArrayOutput
+}
+
+func (t *TestSuiteRunExecutionOutput) UnmarshalJSON(data []byte) error {
+	valueTestSuiteRunExecutionStringOutput := new(TestSuiteRunExecutionStringOutput)
+	if err := json.Unmarshal(data, &valueTestSuiteRunExecutionStringOutput); err == nil {
+		t.TestSuiteRunExecutionStringOutput = valueTestSuiteRunExecutionStringOutput
+		return nil
+	}
+	valueTestSuiteRunExecutionNumberOutput := new(TestSuiteRunExecutionNumberOutput)
+	if err := json.Unmarshal(data, &valueTestSuiteRunExecutionNumberOutput); err == nil {
+		t.TestSuiteRunExecutionNumberOutput = valueTestSuiteRunExecutionNumberOutput
+		return nil
+	}
+	valueTestSuiteRunExecutionJsonOutput := new(TestSuiteRunExecutionJsonOutput)
+	if err := json.Unmarshal(data, &valueTestSuiteRunExecutionJsonOutput); err == nil {
+		t.TestSuiteRunExecutionJsonOutput = valueTestSuiteRunExecutionJsonOutput
+		return nil
+	}
+	valueTestSuiteRunExecutionChatHistoryOutput := new(TestSuiteRunExecutionChatHistoryOutput)
+	if err := json.Unmarshal(data, &valueTestSuiteRunExecutionChatHistoryOutput); err == nil {
+		t.TestSuiteRunExecutionChatHistoryOutput = valueTestSuiteRunExecutionChatHistoryOutput
+		return nil
+	}
+	valueTestSuiteRunExecutionSearchResultsOutput := new(TestSuiteRunExecutionSearchResultsOutput)
+	if err := json.Unmarshal(data, &valueTestSuiteRunExecutionSearchResultsOutput); err == nil {
+		t.TestSuiteRunExecutionSearchResultsOutput = valueTestSuiteRunExecutionSearchResultsOutput
+		return nil
+	}
+	valueTestSuiteRunExecutionErrorOutput := new(TestSuiteRunExecutionErrorOutput)
+	if err := json.Unmarshal(data, &valueTestSuiteRunExecutionErrorOutput); err == nil {
+		t.TestSuiteRunExecutionErrorOutput = valueTestSuiteRunExecutionErrorOutput
+		return nil
+	}
+	valueTestSuiteRunExecutionFunctionCallOutput := new(TestSuiteRunExecutionFunctionCallOutput)
+	if err := json.Unmarshal(data, &valueTestSuiteRunExecutionFunctionCallOutput); err == nil {
+		t.TestSuiteRunExecutionFunctionCallOutput = valueTestSuiteRunExecutionFunctionCallOutput
+		return nil
+	}
+	valueTestSuiteRunExecutionArrayOutput := new(TestSuiteRunExecutionArrayOutput)
+	if err := json.Unmarshal(data, &valueTestSuiteRunExecutionArrayOutput); err == nil {
+		t.TestSuiteRunExecutionArrayOutput = valueTestSuiteRunExecutionArrayOutput
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, t)
+}
+
+func (t TestSuiteRunExecutionOutput) MarshalJSON() ([]byte, error) {
+	if t.TestSuiteRunExecutionStringOutput != nil {
+		return json.Marshal(t.TestSuiteRunExecutionStringOutput)
+	}
+	if t.TestSuiteRunExecutionNumberOutput != nil {
+		return json.Marshal(t.TestSuiteRunExecutionNumberOutput)
+	}
+	if t.TestSuiteRunExecutionJsonOutput != nil {
+		return json.Marshal(t.TestSuiteRunExecutionJsonOutput)
+	}
+	if t.TestSuiteRunExecutionChatHistoryOutput != nil {
+		return json.Marshal(t.TestSuiteRunExecutionChatHistoryOutput)
+	}
+	if t.TestSuiteRunExecutionSearchResultsOutput != nil {
+		return json.Marshal(t.TestSuiteRunExecutionSearchResultsOutput)
+	}
+	if t.TestSuiteRunExecutionErrorOutput != nil {
+		return json.Marshal(t.TestSuiteRunExecutionErrorOutput)
+	}
+	if t.TestSuiteRunExecutionFunctionCallOutput != nil {
+		return json.Marshal(t.TestSuiteRunExecutionFunctionCallOutput)
+	}
+	if t.TestSuiteRunExecutionArrayOutput != nil {
+		return json.Marshal(t.TestSuiteRunExecutionArrayOutput)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", t)
+}
+
+type TestSuiteRunExecutionOutputVisitor interface {
+	VisitTestSuiteRunExecutionStringOutput(*TestSuiteRunExecutionStringOutput) error
+	VisitTestSuiteRunExecutionNumberOutput(*TestSuiteRunExecutionNumberOutput) error
+	VisitTestSuiteRunExecutionJsonOutput(*TestSuiteRunExecutionJsonOutput) error
+	VisitTestSuiteRunExecutionChatHistoryOutput(*TestSuiteRunExecutionChatHistoryOutput) error
+	VisitTestSuiteRunExecutionSearchResultsOutput(*TestSuiteRunExecutionSearchResultsOutput) error
+	VisitTestSuiteRunExecutionErrorOutput(*TestSuiteRunExecutionErrorOutput) error
+	VisitTestSuiteRunExecutionFunctionCallOutput(*TestSuiteRunExecutionFunctionCallOutput) error
+	VisitTestSuiteRunExecutionArrayOutput(*TestSuiteRunExecutionArrayOutput) error
+}
+
+func (t *TestSuiteRunExecutionOutput) Accept(visitor TestSuiteRunExecutionOutputVisitor) error {
+	if t.TestSuiteRunExecutionStringOutput != nil {
+		return visitor.VisitTestSuiteRunExecutionStringOutput(t.TestSuiteRunExecutionStringOutput)
+	}
+	if t.TestSuiteRunExecutionNumberOutput != nil {
+		return visitor.VisitTestSuiteRunExecutionNumberOutput(t.TestSuiteRunExecutionNumberOutput)
+	}
+	if t.TestSuiteRunExecutionJsonOutput != nil {
+		return visitor.VisitTestSuiteRunExecutionJsonOutput(t.TestSuiteRunExecutionJsonOutput)
+	}
+	if t.TestSuiteRunExecutionChatHistoryOutput != nil {
+		return visitor.VisitTestSuiteRunExecutionChatHistoryOutput(t.TestSuiteRunExecutionChatHistoryOutput)
+	}
+	if t.TestSuiteRunExecutionSearchResultsOutput != nil {
+		return visitor.VisitTestSuiteRunExecutionSearchResultsOutput(t.TestSuiteRunExecutionSearchResultsOutput)
+	}
+	if t.TestSuiteRunExecutionErrorOutput != nil {
+		return visitor.VisitTestSuiteRunExecutionErrorOutput(t.TestSuiteRunExecutionErrorOutput)
+	}
+	if t.TestSuiteRunExecutionFunctionCallOutput != nil {
+		return visitor.VisitTestSuiteRunExecutionFunctionCallOutput(t.TestSuiteRunExecutionFunctionCallOutput)
+	}
+	if t.TestSuiteRunExecutionArrayOutput != nil {
+		return visitor.VisitTestSuiteRunExecutionArrayOutput(t.TestSuiteRunExecutionArrayOutput)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", t)
+}
+
+// Execution output of an entity evaluated during a Test Suite Run that is of type SEARCH_RESULTS
+type TestSuiteRunExecutionSearchResultsOutput struct {
+	Name             string          `json:"name" url:"name"`
+	Value            []*SearchResult `json:"value,omitempty" url:"value,omitempty"`
+	OutputVariableId string          `json:"output_variable_id" url:"output_variable_id"`
+	type_            string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExecutionSearchResultsOutput) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunExecutionSearchResultsOutput) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteRunExecutionSearchResultsOutput) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteRunExecutionSearchResultsOutput
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteRunExecutionSearchResultsOutput(unmarshaler.embed)
+	if unmarshaler.Type != "SEARCH_RESULTS" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "SEARCH_RESULTS", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunExecutionSearchResultsOutput) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteRunExecutionSearchResultsOutput
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "SEARCH_RESULTS",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteRunExecutionSearchResultsOutput) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Execution output of an entity evaluated during a Test Suite Run that is of type STRING
+type TestSuiteRunExecutionStringOutput struct {
+	Name             string  `json:"name" url:"name"`
+	Value            *string `json:"value,omitempty" url:"value,omitempty"`
+	OutputVariableId string  `json:"output_variable_id" url:"output_variable_id"`
+	type_            string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExecutionStringOutput) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunExecutionStringOutput) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteRunExecutionStringOutput) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteRunExecutionStringOutput
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteRunExecutionStringOutput(unmarshaler.embed)
+	if unmarshaler.Type != "STRING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "STRING", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunExecutionStringOutput) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteRunExecutionStringOutput
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "STRING",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteRunExecutionStringOutput) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Execution configuration for running a Vellum Test Suite against an external callable
+type TestSuiteRunExternalExecConfig struct {
+	Data *TestSuiteRunExternalExecConfigData `json:"data" url:"data"`
+	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
+	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
+	type_       string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExternalExecConfig) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunExternalExecConfig) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteRunExternalExecConfig) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteRunExternalExecConfig
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteRunExternalExecConfig(unmarshaler.embed)
+	if unmarshaler.Type != "EXTERNAL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "EXTERNAL", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunExternalExecConfig) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteRunExternalExecConfig
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "EXTERNAL",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteRunExternalExecConfig) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestSuiteRunExternalExecConfigData struct {
+	// The executions of some callable external to Vellum whose outputs you would like to evaluate.
+	Executions []*ExternalTestCaseExecution `json:"executions" url:"executions"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExternalExecConfigData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunExternalExecConfigData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteRunExternalExecConfigData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteRunExternalExecConfigData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunExternalExecConfigData) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestSuiteRunExternalExecConfigDataRequest struct {
+	// The executions of some callable external to Vellum whose outputs you would like to evaluate.
+	Executions []*ExternalTestCaseExecutionRequest `json:"executions" url:"executions"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExternalExecConfigDataRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunExternalExecConfigDataRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteRunExternalExecConfigDataRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteRunExternalExecConfigDataRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunExternalExecConfigDataRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Execution configuration for running a Vellum Test Suite against an external callable
+type TestSuiteRunExternalExecConfigRequest struct {
+	Data *TestSuiteRunExternalExecConfigDataRequest `json:"data" url:"data"`
+	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
+	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
+	type_       string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunExternalExecConfigRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunExternalExecConfigRequest) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteRunExternalExecConfigRequest) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteRunExternalExecConfigRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteRunExternalExecConfigRequest(unmarshaler.embed)
+	if unmarshaler.Type != "EXTERNAL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "EXTERNAL", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunExternalExecConfigRequest) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteRunExternalExecConfigRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "EXTERNAL",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteRunExternalExecConfigRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestSuiteRunRead struct {
+	Id        string                 `json:"id" url:"id"`
+	Created   time.Time              `json:"created" url:"created"`
+	TestSuite *TestSuiteRunTestSuite `json:"test_suite" url:"test_suite"`
+	// The current state of this run
+	//
+	// - `QUEUED` - Queued
+	// - `RUNNING` - Running
+	// - `COMPLETE` - Complete
+	// - `FAILED` - Failed
+	// - `CANCELLED` - Cancelled
+	State TestSuiteRunState `json:"state" url:"state"`
+	// Configuration that defines how the Test Suite should be run
+	ExecConfig *TestSuiteRunExecConfig `json:"exec_config,omitempty" url:"exec_config,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunRead) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunRead) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteRunRead
+	var unmarshaler = struct {
+		embed
+		Created *core.DateTime `json:"created"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteRunRead(unmarshaler.embed)
+	t.Created = unmarshaler.Created.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunRead) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteRunRead
+	var marshaler = struct {
+		embed
+		Created *core.DateTime `json:"created"`
+	}{
+		embed:   embed(*t),
+		Created: core.NewDateTime(t.Created),
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteRunRead) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// - `QUEUED` - Queued
+// - `RUNNING` - Running
+// - `COMPLETE` - Complete
+// - `FAILED` - Failed
+// - `CANCELLED` - Cancelled
+type TestSuiteRunState string
+
+const (
+	TestSuiteRunStateQueued    TestSuiteRunState = "QUEUED"
+	TestSuiteRunStateRunning   TestSuiteRunState = "RUNNING"
+	TestSuiteRunStateComplete  TestSuiteRunState = "COMPLETE"
+	TestSuiteRunStateFailed    TestSuiteRunState = "FAILED"
+	TestSuiteRunStateCancelled TestSuiteRunState = "CANCELLED"
+)
+
+func NewTestSuiteRunStateFromString(s string) (TestSuiteRunState, error) {
+	switch s {
+	case "QUEUED":
+		return TestSuiteRunStateQueued, nil
+	case "RUNNING":
+		return TestSuiteRunStateRunning, nil
+	case "COMPLETE":
+		return TestSuiteRunStateComplete, nil
+	case "FAILED":
+		return TestSuiteRunStateFailed, nil
+	case "CANCELLED":
+		return TestSuiteRunStateCancelled, nil
+	}
+	var t TestSuiteRunState
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (t TestSuiteRunState) Ptr() *TestSuiteRunState {
+	return &t
+}
+
+type TestSuiteRunTestSuite struct {
+	Id            string `json:"id" url:"id"`
+	HistoryItemId string `json:"history_item_id" url:"history_item_id"`
+	Label         string `json:"label" url:"label"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunTestSuite) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunTestSuite) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteRunTestSuite
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteRunTestSuite(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunTestSuite) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Execution configuration for running a Test Suite against a Workflow Deployment
+type TestSuiteRunWorkflowReleaseTagExecConfig struct {
+	Data *TestSuiteRunWorkflowReleaseTagExecConfigData `json:"data" url:"data"`
+	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
+	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
+	type_       string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunWorkflowReleaseTagExecConfig) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunWorkflowReleaseTagExecConfig) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteRunWorkflowReleaseTagExecConfig) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteRunWorkflowReleaseTagExecConfig
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteRunWorkflowReleaseTagExecConfig(unmarshaler.embed)
+	if unmarshaler.Type != "WORKFLOW_RELEASE_TAG" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "WORKFLOW_RELEASE_TAG", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunWorkflowReleaseTagExecConfig) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteRunWorkflowReleaseTagExecConfig
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "WORKFLOW_RELEASE_TAG",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteRunWorkflowReleaseTagExecConfig) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestSuiteRunWorkflowReleaseTagExecConfigData struct {
+	// The ID of the Workflow Deployment to run the Test Suite against.
+	WorkflowDeploymentId string `json:"workflow_deployment_id" url:"workflow_deployment_id"`
+	// A tag identifying which release of the Workflow Deployment to run the Test Suite against. Useful for testing past versions of the Workflow Deployment
+	Tag *string `json:"tag,omitempty" url:"tag,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunWorkflowReleaseTagExecConfigData) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunWorkflowReleaseTagExecConfigData) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteRunWorkflowReleaseTagExecConfigData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteRunWorkflowReleaseTagExecConfigData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunWorkflowReleaseTagExecConfigData) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestSuiteRunWorkflowReleaseTagExecConfigDataRequest struct {
+	// The ID of the Workflow Deployment to run the Test Suite against.
+	WorkflowDeploymentId string `json:"workflow_deployment_id" url:"workflow_deployment_id"`
+	// A tag identifying which release of the Workflow Deployment to run the Test Suite against. Useful for testing past versions of the Workflow Deployment
+	Tag *string `json:"tag,omitempty" url:"tag,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunWorkflowReleaseTagExecConfigDataRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunWorkflowReleaseTagExecConfigDataRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteRunWorkflowReleaseTagExecConfigDataRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteRunWorkflowReleaseTagExecConfigDataRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunWorkflowReleaseTagExecConfigDataRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Execution configuration for running a Test Suite against a Workflow Deployment
+type TestSuiteRunWorkflowReleaseTagExecConfigRequest struct {
+	Data *TestSuiteRunWorkflowReleaseTagExecConfigDataRequest `json:"data" url:"data"`
+	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
+	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
+	type_       string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunWorkflowReleaseTagExecConfigRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunWorkflowReleaseTagExecConfigRequest) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteRunWorkflowReleaseTagExecConfigRequest) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteRunWorkflowReleaseTagExecConfigRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteRunWorkflowReleaseTagExecConfigRequest(unmarshaler.embed)
+	if unmarshaler.Type != "WORKFLOW_RELEASE_TAG" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "WORKFLOW_RELEASE_TAG", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunWorkflowReleaseTagExecConfigRequest) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteRunWorkflowReleaseTagExecConfigRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "WORKFLOW_RELEASE_TAG",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteRunWorkflowReleaseTagExecConfigRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
 }
