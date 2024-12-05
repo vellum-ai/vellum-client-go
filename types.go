@@ -6785,6 +6785,8 @@ func (j *JsonVellumValueRequest) String() string {
 // - `notBetween` - NOT_BETWEEN
 // - `blank` - BLANK
 // - `notBlank` - NOT_BLANK
+// - `coalesce` - COALESCE
+// - `accessField` - ACCESS_FIELD
 type LogicalOperator string
 
 const (
@@ -6823,9 +6825,11 @@ const (
 	// Between
 	LogicalOperatorBetween LogicalOperator = "between"
 	// Not between
-	LogicalOperatorNotBetween LogicalOperator = "notBetween"
-	LogicalOperatorBlank      LogicalOperator = "blank"
-	LogicalOperatorNotBlank   LogicalOperator = "notBlank"
+	LogicalOperatorNotBetween  LogicalOperator = "notBetween"
+	LogicalOperatorBlank       LogicalOperator = "blank"
+	LogicalOperatorNotBlank    LogicalOperator = "notBlank"
+	LogicalOperatorCoalesce    LogicalOperator = "coalesce"
+	LogicalOperatorAccessField LogicalOperator = "accessField"
 )
 
 func NewLogicalOperatorFromString(s string) (LogicalOperator, error) {
@@ -6870,6 +6874,10 @@ func NewLogicalOperatorFromString(s string) (LogicalOperator, error) {
 		return LogicalOperatorBlank, nil
 	case "notBlank":
 		return LogicalOperatorNotBlank, nil
+	case "coalesce":
+		return LogicalOperatorCoalesce, nil
+	case "accessField":
+		return LogicalOperatorAccessField, nil
 	}
 	var t LogicalOperator
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
