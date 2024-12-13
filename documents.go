@@ -31,6 +31,7 @@ type PatchedDocumentUpdateRequest struct {
 	Metadata map[string]interface{} `json:"metadata,omitempty" url:"-"`
 }
 
+// A detailed representation of the link between a Document and a Document Index it's a member of.
 type DocumentDocumentToDocumentIndex struct {
 	// Vellum-generated ID that uniquely identifies this link.
 	Id string `json:"id" url:"id"`
@@ -43,7 +44,8 @@ type DocumentDocumentToDocumentIndex struct {
 	// - `INDEXING` - Indexing
 	// - `INDEXED` - Indexed
 	// - `FAILED` - Failed
-	IndexingState *IndexingStateEnum `json:"indexing_state,omitempty" url:"indexing_state,omitempty"`
+	IndexingState        *IndexingStateEnum `json:"indexing_state,omitempty" url:"indexing_state,omitempty"`
+	ExtractedTextFileUrl *string            `json:"extracted_text_file_url,omitempty" url:"extracted_text_file_url,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -322,8 +324,8 @@ type SlimDocument struct {
 	// A list of keywords associated with this document. Originally provided when uploading the document.
 	Keywords []string `json:"keywords,omitempty" url:"keywords,omitempty"`
 	// A previously supplied JSON object containing metadata that can be filtered on when searching.
-	Metadata                  map[string]interface{}             `json:"metadata,omitempty" url:"metadata,omitempty"`
-	DocumentToDocumentIndexes []*DocumentDocumentToDocumentIndex `json:"document_to_document_indexes" url:"document_to_document_indexes"`
+	Metadata                  map[string]interface{}                 `json:"metadata,omitempty" url:"metadata,omitempty"`
+	DocumentToDocumentIndexes []*SlimDocumentDocumentToDocumentIndex `json:"document_to_document_indexes" url:"document_to_document_indexes"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -370,6 +372,59 @@ func (s *SlimDocument) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SlimDocument) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+// A slim representation of the link between a Document and a Document Index it's a member of.
+type SlimDocumentDocumentToDocumentIndex struct {
+	// Vellum-generated ID that uniquely identifies this link.
+	Id string `json:"id" url:"id"`
+	// Vellum-generated ID that uniquely identifies the index this document is included in.
+	DocumentIndexId string `json:"document_index_id" url:"document_index_id"`
+	// An enum value representing where this document is along its indexing lifecycle for this index.
+	//
+	// - `AWAITING_PROCESSING` - Awaiting Processing
+	// - `QUEUED` - Queued
+	// - `INDEXING` - Indexing
+	// - `INDEXED` - Indexed
+	// - `FAILED` - Failed
+	IndexingState *IndexingStateEnum `json:"indexing_state,omitempty" url:"indexing_state,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SlimDocumentDocumentToDocumentIndex) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SlimDocumentDocumentToDocumentIndex) UnmarshalJSON(data []byte) error {
+	type unmarshaler SlimDocumentDocumentToDocumentIndex
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SlimDocumentDocumentToDocumentIndex(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SlimDocumentDocumentToDocumentIndex) String() string {
 	if len(s._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
 			return value
