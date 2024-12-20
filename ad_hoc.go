@@ -1024,8 +1024,8 @@ func (p *PromptRequestInput) Accept(visitor PromptRequestInputVisitor) error {
 
 type PromptRequestJsonInput struct {
 	// The variable's name, as defined in the Prompt.
-	Key   string                 `json:"key" url:"key"`
-	Value map[string]interface{} `json:"value" url:"value"`
+	Key   string      `json:"key" url:"key"`
+	Value interface{} `json:"value" url:"value"`
 	type_ string
 
 	extraProperties map[string]interface{}
