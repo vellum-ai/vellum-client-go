@@ -9,7 +9,11 @@ import (
 )
 
 type WorkflowsPullRequest struct {
-	Format *WorkflowsPullRequestFormat `json:"-" url:"format,omitempty"`
+	ExcludeCode    *bool                       `json:"-" url:"exclude_code,omitempty"`
+	Format         *WorkflowsPullRequestFormat `json:"-" url:"format,omitempty"`
+	IncludeJson    *bool                       `json:"-" url:"include_json,omitempty"`
+	IncludeSandbox *bool                       `json:"-" url:"include_sandbox,omitempty"`
+	Strict         *bool                       `json:"-" url:"strict,omitempty"`
 }
 
 type WorkflowPushRequest struct {

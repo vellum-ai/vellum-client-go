@@ -496,15 +496,20 @@ func (f *FulfilledAdHocExecutePromptEvent) String() string {
 	return fmt.Sprintf("%#v", f)
 }
 
-// A block that represents a function definition in a prompt template.
+// The definition of a Function (aka "Tool Call") that a Prompt/Model has access to.
 type FunctionDefinition struct {
 	State       *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
 	CacheConfig *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
-	Name        *string                     `json:"name,omitempty" url:"name,omitempty"`
-	Description *string                     `json:"description,omitempty" url:"description,omitempty"`
-	Parameters  map[string]interface{}      `json:"parameters,omitempty" url:"parameters,omitempty"`
-	Forced      *bool                       `json:"forced,omitempty" url:"forced,omitempty"`
-	Strict      *bool                       `json:"strict,omitempty" url:"strict,omitempty"`
+	// The name identifying the function.
+	Name *string `json:"name,omitempty" url:"name,omitempty"`
+	// A description to help guide the model when to invoke this function.
+	Description *string `json:"description,omitempty" url:"description,omitempty"`
+	// An OpenAPI specification of parameters that are supported by this function.
+	Parameters map[string]interface{} `json:"parameters,omitempty" url:"parameters,omitempty"`
+	// Set this option to true to force the model to return a function call of this function.
+	Forced *bool `json:"forced,omitempty" url:"forced,omitempty"`
+	// Set this option to use strict schema decoding when available.
+	Strict *bool `json:"strict,omitempty" url:"strict,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
