@@ -828,8 +828,8 @@ func (p *PromptBlock) Accept(visitor PromptBlockVisitor) error {
 	return fmt.Errorf("type %T does not include a non-empty union type", p)
 }
 
-// - `ENABLED` - ENABLED
-// - `DISABLED` - DISABLED
+// - `ENABLED` - Enabled
+// - `DISABLED` - Disabled
 type PromptBlockState string
 
 const (
