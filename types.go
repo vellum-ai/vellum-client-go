@@ -118,14 +118,16 @@ type GenerateStreamBodyRequest struct {
 }
 
 type SearchRequestBodyRequest struct {
-	// The ID of the index to search against. Must provide either this or index_name.
+	// The ID of the index to search against. Must provide either this, index_name or document_index.
 	IndexId *string `json:"index_id,omitempty" url:"-"`
-	// The name of the index to search against. Must provide either this or index_id.
+	// The name of the index to search against. Must provide either this, index_id or document_index.
 	IndexName *string `json:"index_name,omitempty" url:"-"`
 	// The query to search for.
 	Query string `json:"query" url:"-"`
 	// Configuration options for the search.
 	Options *SearchRequestOptionsRequest `json:"options,omitempty" url:"-"`
+	// Either the index name or index ID to search against. Must provide either this, index_id or index_name.
+	DocumentIndex *string `json:"document_index,omitempty" url:"-"`
 }
 
 type SubmitCompletionActualsRequest struct {
@@ -14127,6 +14129,75 @@ func (t *TerminalNodeStringResult) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+// Output for a test suite run metric that is of type ARRAY
+type TestSuiteRunMetricArrayOutput struct {
+	Value []*VellumValue `json:"value,omitempty" url:"value,omitempty"`
+	Name  string         `json:"name" url:"name"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunMetricArrayOutput) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunMetricArrayOutput) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteRunMetricArrayOutput) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteRunMetricArrayOutput
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteRunMetricArrayOutput(unmarshaler.embed)
+	if unmarshaler.Type != "ARRAY" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "ARRAY", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunMetricArrayOutput) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteRunMetricArrayOutput
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "ARRAY",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteRunMetricArrayOutput) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
 // Output for a test suite run metric that is of type ERROR
 type TestSuiteRunMetricErrorOutput struct {
 	Value *VellumError `json:"value" url:"value"`
@@ -14339,6 +14410,7 @@ type TestSuiteRunMetricOutput struct {
 	TestSuiteRunMetricNumberOutput *TestSuiteRunMetricNumberOutput
 	TestSuiteRunMetricJsonOutput   *TestSuiteRunMetricJsonOutput
 	TestSuiteRunMetricErrorOutput  *TestSuiteRunMetricErrorOutput
+	TestSuiteRunMetricArrayOutput  *TestSuiteRunMetricArrayOutput
 }
 
 func (t *TestSuiteRunMetricOutput) UnmarshalJSON(data []byte) error {
@@ -14362,6 +14434,11 @@ func (t *TestSuiteRunMetricOutput) UnmarshalJSON(data []byte) error {
 		t.TestSuiteRunMetricErrorOutput = valueTestSuiteRunMetricErrorOutput
 		return nil
 	}
+	valueTestSuiteRunMetricArrayOutput := new(TestSuiteRunMetricArrayOutput)
+	if err := json.Unmarshal(data, &valueTestSuiteRunMetricArrayOutput); err == nil {
+		t.TestSuiteRunMetricArrayOutput = valueTestSuiteRunMetricArrayOutput
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, t)
 }
 
@@ -14378,6 +14455,9 @@ func (t TestSuiteRunMetricOutput) MarshalJSON() ([]byte, error) {
 	if t.TestSuiteRunMetricErrorOutput != nil {
 		return json.Marshal(t.TestSuiteRunMetricErrorOutput)
 	}
+	if t.TestSuiteRunMetricArrayOutput != nil {
+		return json.Marshal(t.TestSuiteRunMetricArrayOutput)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", t)
 }
 
@@ -14386,6 +14466,7 @@ type TestSuiteRunMetricOutputVisitor interface {
 	VisitTestSuiteRunMetricNumberOutput(*TestSuiteRunMetricNumberOutput) error
 	VisitTestSuiteRunMetricJsonOutput(*TestSuiteRunMetricJsonOutput) error
 	VisitTestSuiteRunMetricErrorOutput(*TestSuiteRunMetricErrorOutput) error
+	VisitTestSuiteRunMetricArrayOutput(*TestSuiteRunMetricArrayOutput) error
 }
 
 func (t *TestSuiteRunMetricOutput) Accept(visitor TestSuiteRunMetricOutputVisitor) error {
@@ -14400,6 +14481,9 @@ func (t *TestSuiteRunMetricOutput) Accept(visitor TestSuiteRunMetricOutputVisito
 	}
 	if t.TestSuiteRunMetricErrorOutput != nil {
 		return visitor.VisitTestSuiteRunMetricErrorOutput(t.TestSuiteRunMetricErrorOutput)
+	}
+	if t.TestSuiteRunMetricArrayOutput != nil {
+		return visitor.VisitTestSuiteRunMetricArrayOutput(t.TestSuiteRunMetricArrayOutput)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", t)
 }
