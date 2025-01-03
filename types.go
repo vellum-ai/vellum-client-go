@@ -4548,8 +4548,6 @@ func (f FinishReasonEnum) Ptr() *FinishReasonEnum {
 	return &f
 }
 
-type FulfilledEnum = string
-
 // The final data event returned indicating that the stream has ended and all final resolved values from the model can be found.
 type FulfilledExecutePromptEvent struct {
 	Outputs     []*PromptOutput               `json:"outputs" url:"outputs"`
@@ -4895,7 +4893,6 @@ type FunctionCall struct {
 	Arguments map[string]interface{} `json:"arguments" url:"arguments"`
 	Id        *string                `json:"id,omitempty" url:"id,omitempty"`
 	Name      string                 `json:"name" url:"name"`
-	State     *FulfilledEnum         `json:"state,omitempty" url:"state,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -5234,7 +5231,6 @@ type FunctionCallRequest struct {
 	Arguments map[string]interface{} `json:"arguments" url:"arguments"`
 	Id        *string                `json:"id,omitempty" url:"id,omitempty"`
 	Name      string                 `json:"name" url:"name"`
-	State     *FulfilledEnum         `json:"state,omitempty" url:"state,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
