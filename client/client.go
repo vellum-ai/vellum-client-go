@@ -80,7 +80,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
 func (c *Client) ExecuteCode(
 	ctx context.Context,
 	request *vellumclientgo.CodeExecutor,
@@ -88,7 +87,7 @@ func (c *Client) ExecuteCode(
 ) (*vellumclientgo.CodeExecutorResponse, error) {
 	options := core.NewRequestOptions(opts...)
 
-	baseURL := "https://api.vellum.ai"
+	baseURL := "https://predict.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}

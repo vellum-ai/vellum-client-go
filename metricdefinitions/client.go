@@ -30,7 +30,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
 func (c *Client) ExecuteMetricDefinition(
 	ctx context.Context,
 	// Either the Metric Definition's ID or its unique name
@@ -40,7 +39,7 @@ func (c *Client) ExecuteMetricDefinition(
 ) (*vellumclientgo.MetricDefinitionExecution, error) {
 	options := core.NewRequestOptions(opts...)
 
-	baseURL := "https://api.vellum.ai"
+	baseURL := "https://predict.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}

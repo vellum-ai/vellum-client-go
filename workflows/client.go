@@ -36,7 +36,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
 func (c *Client) Pull(
 	ctx context.Context,
 	// The ID of the Workflow to pull from
@@ -104,7 +103,6 @@ func (c *Client) Pull(
 	return response, nil
 }
 
-// An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
 func (c *Client) Push(
 	ctx context.Context,
 	artifact io.Reader,
@@ -153,6 +151,11 @@ func (c *Client) Push(
 	}
 	if request.DeploymentConfig != nil {
 		if err := core.WriteMultipartJSON(writer, "deployment_config", request.DeploymentConfig); err != nil {
+			return nil, err
+		}
+	}
+	if request.DryRun != nil {
+		if err := writer.WriteField("dry_run", fmt.Sprintf("%v", *request.DryRun)); err != nil {
 			return nil, err
 		}
 	}
