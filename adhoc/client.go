@@ -34,7 +34,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
 func (c *Client) AdhocExecutePromptStream(
 	ctx context.Context,
 	request *vellumclientgo.AdHocExecutePromptStream,
@@ -42,7 +41,7 @@ func (c *Client) AdhocExecutePromptStream(
 ) (*core.Stream[vellumclientgo.AdHocExecutePromptEvent], error) {
 	options := core.NewRequestOptions(opts...)
 
-	baseURL := "https://api.vellum.ai"
+	baseURL := "https://predict.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
