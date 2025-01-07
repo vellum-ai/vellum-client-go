@@ -22,6 +22,7 @@ type WorkflowPushRequest struct {
 	Label             string                               `json:"label" url:"-"`
 	WorkflowSandboxId *string                              `json:"workflow_sandbox_id,omitempty" url:"-"`
 	DeploymentConfig  *WorkflowPushDeploymentConfigRequest `json:"deployment_config,omitempty" url:"-"`
+	DryRun            *bool                                `json:"dry_run,omitempty" url:"-"`
 }
 
 type WorkflowPushDeploymentConfigRequest struct {
@@ -71,8 +72,9 @@ func (w *WorkflowPushDeploymentConfigRequest) String() string {
 type WorkflowPushExecConfig = string
 
 type WorkflowPushResponse struct {
-	WorkflowSandboxId    string  `json:"workflow_sandbox_id" url:"workflow_sandbox_id"`
-	WorkflowDeploymentId *string `json:"workflow_deployment_id,omitempty" url:"workflow_deployment_id,omitempty"`
+	WorkflowSandboxId    string                 `json:"workflow_sandbox_id" url:"workflow_sandbox_id"`
+	WorkflowDeploymentId *string                `json:"workflow_deployment_id,omitempty" url:"workflow_deployment_id,omitempty"`
+	ProposedDiffs        map[string]interface{} `json:"proposed_diffs,omitempty" url:"proposed_diffs,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
