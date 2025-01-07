@@ -115,7 +115,6 @@ func (c *Client) Retrieve(
 	return response, nil
 }
 
-// An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
 func (c *Client) DockerServiceToken(
 	ctx context.Context,
 	opts ...option.RequestOption,
@@ -152,7 +151,6 @@ func (c *Client) DockerServiceToken(
 	return response, nil
 }
 
-// An internal-only endpoint that's subject to breaking changes without notice. Not intended for public use.
 func (c *Client) PushContainerImage(
 	ctx context.Context,
 	request *vellumclientgo.PushContainerImageRequest,
