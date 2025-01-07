@@ -309,6 +309,77 @@ func (a *AdHocStreamingPromptExecutionMeta) String() string {
 	return fmt.Sprintf("%#v", a)
 }
 
+// A block that represents an audio file in a prompt template.
+type AudioPromptBlock struct {
+	State       *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	Src         string                      `json:"src" url:"src"`
+	Metadata    map[string]interface{}      `json:"metadata,omitempty" url:"metadata,omitempty"`
+	blockType   string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (a *AudioPromptBlock) GetExtraProperties() map[string]interface{} {
+	return a.extraProperties
+}
+
+func (a *AudioPromptBlock) BlockType() string {
+	return a.blockType
+}
+
+func (a *AudioPromptBlock) UnmarshalJSON(data []byte) error {
+	type embed AudioPromptBlock
+	var unmarshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed: embed(*a),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*a = AudioPromptBlock(unmarshaler.embed)
+	if unmarshaler.BlockType != "AUDIO" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", a, "AUDIO", unmarshaler.BlockType)
+	}
+	a.blockType = unmarshaler.BlockType
+
+	extraProperties, err := core.ExtractExtraProperties(data, *a, "block_type")
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+
+	a._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *AudioPromptBlock) MarshalJSON() ([]byte, error) {
+	type embed AudioPromptBlock
+	var marshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed:     embed(*a),
+		BlockType: "AUDIO",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (a *AudioPromptBlock) String() string {
+	if len(a._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(a._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
+
 // A block that represents a chat message in a prompt template.
 type ChatMessagePromptBlock struct {
 	State                   *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
@@ -496,6 +567,78 @@ func (f *FulfilledAdHocExecutePromptEvent) String() string {
 	return fmt.Sprintf("%#v", f)
 }
 
+// A block that represents a function call in a prompt template.
+type FunctionCallPromptBlock struct {
+	State       *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	Id          *string                     `json:"id,omitempty" url:"id,omitempty"`
+	Name        string                      `json:"name" url:"name"`
+	Arguments   map[string]interface{}      `json:"arguments" url:"arguments"`
+	blockType   string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (f *FunctionCallPromptBlock) GetExtraProperties() map[string]interface{} {
+	return f.extraProperties
+}
+
+func (f *FunctionCallPromptBlock) BlockType() string {
+	return f.blockType
+}
+
+func (f *FunctionCallPromptBlock) UnmarshalJSON(data []byte) error {
+	type embed FunctionCallPromptBlock
+	var unmarshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed: embed(*f),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*f = FunctionCallPromptBlock(unmarshaler.embed)
+	if unmarshaler.BlockType != "FUNCTION_CALL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "FUNCTION_CALL", unmarshaler.BlockType)
+	}
+	f.blockType = unmarshaler.BlockType
+
+	extraProperties, err := core.ExtractExtraProperties(data, *f, "block_type")
+	if err != nil {
+		return err
+	}
+	f.extraProperties = extraProperties
+
+	f._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (f *FunctionCallPromptBlock) MarshalJSON() ([]byte, error) {
+	type embed FunctionCallPromptBlock
+	var marshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed:     embed(*f),
+		BlockType: "FUNCTION_CALL",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (f *FunctionCallPromptBlock) String() string {
+	if len(f._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(f._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(f); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", f)
+}
+
 // The definition of a Function (aka "Tool Call") that a Prompt/Model has access to.
 type FunctionDefinition struct {
 	State       *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
@@ -547,6 +690,77 @@ func (f *FunctionDefinition) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", f)
+}
+
+// A block that represents an image in a prompt template.
+type ImagePromptBlock struct {
+	State       *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	Src         string                      `json:"src" url:"src"`
+	Metadata    map[string]interface{}      `json:"metadata,omitempty" url:"metadata,omitempty"`
+	blockType   string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *ImagePromptBlock) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *ImagePromptBlock) BlockType() string {
+	return i.blockType
+}
+
+func (i *ImagePromptBlock) UnmarshalJSON(data []byte) error {
+	type embed ImagePromptBlock
+	var unmarshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed: embed(*i),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*i = ImagePromptBlock(unmarshaler.embed)
+	if unmarshaler.BlockType != "IMAGE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", i, "IMAGE", unmarshaler.BlockType)
+	}
+	i.blockType = unmarshaler.BlockType
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i, "block_type")
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *ImagePromptBlock) MarshalJSON() ([]byte, error) {
+	type embed ImagePromptBlock
+	var marshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed:     embed(*i),
+		BlockType: "IMAGE",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (i *ImagePromptBlock) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
 }
 
 // The initial data returned indicating that the response from the model has returned and begun streaming.
@@ -759,10 +973,13 @@ func (p *PlainTextPromptBlock) String() string {
 }
 
 type PromptBlock struct {
-	JinjaPromptBlock       *JinjaPromptBlock
-	ChatMessagePromptBlock *ChatMessagePromptBlock
-	VariablePromptBlock    *VariablePromptBlock
-	RichTextPromptBlock    *RichTextPromptBlock
+	JinjaPromptBlock        *JinjaPromptBlock
+	ChatMessagePromptBlock  *ChatMessagePromptBlock
+	VariablePromptBlock     *VariablePromptBlock
+	RichTextPromptBlock     *RichTextPromptBlock
+	AudioPromptBlock        *AudioPromptBlock
+	FunctionCallPromptBlock *FunctionCallPromptBlock
+	ImagePromptBlock        *ImagePromptBlock
 }
 
 func (p *PromptBlock) UnmarshalJSON(data []byte) error {
@@ -786,6 +1003,21 @@ func (p *PromptBlock) UnmarshalJSON(data []byte) error {
 		p.RichTextPromptBlock = valueRichTextPromptBlock
 		return nil
 	}
+	valueAudioPromptBlock := new(AudioPromptBlock)
+	if err := json.Unmarshal(data, &valueAudioPromptBlock); err == nil {
+		p.AudioPromptBlock = valueAudioPromptBlock
+		return nil
+	}
+	valueFunctionCallPromptBlock := new(FunctionCallPromptBlock)
+	if err := json.Unmarshal(data, &valueFunctionCallPromptBlock); err == nil {
+		p.FunctionCallPromptBlock = valueFunctionCallPromptBlock
+		return nil
+	}
+	valueImagePromptBlock := new(ImagePromptBlock)
+	if err := json.Unmarshal(data, &valueImagePromptBlock); err == nil {
+		p.ImagePromptBlock = valueImagePromptBlock
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, p)
 }
 
@@ -802,6 +1034,15 @@ func (p PromptBlock) MarshalJSON() ([]byte, error) {
 	if p.RichTextPromptBlock != nil {
 		return json.Marshal(p.RichTextPromptBlock)
 	}
+	if p.AudioPromptBlock != nil {
+		return json.Marshal(p.AudioPromptBlock)
+	}
+	if p.FunctionCallPromptBlock != nil {
+		return json.Marshal(p.FunctionCallPromptBlock)
+	}
+	if p.ImagePromptBlock != nil {
+		return json.Marshal(p.ImagePromptBlock)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", p)
 }
 
@@ -810,6 +1051,9 @@ type PromptBlockVisitor interface {
 	VisitChatMessagePromptBlock(*ChatMessagePromptBlock) error
 	VisitVariablePromptBlock(*VariablePromptBlock) error
 	VisitRichTextPromptBlock(*RichTextPromptBlock) error
+	VisitAudioPromptBlock(*AudioPromptBlock) error
+	VisitFunctionCallPromptBlock(*FunctionCallPromptBlock) error
+	VisitImagePromptBlock(*ImagePromptBlock) error
 }
 
 func (p *PromptBlock) Accept(visitor PromptBlockVisitor) error {
@@ -824,6 +1068,15 @@ func (p *PromptBlock) Accept(visitor PromptBlockVisitor) error {
 	}
 	if p.RichTextPromptBlock != nil {
 		return visitor.VisitRichTextPromptBlock(p.RichTextPromptBlock)
+	}
+	if p.AudioPromptBlock != nil {
+		return visitor.VisitAudioPromptBlock(p.AudioPromptBlock)
+	}
+	if p.FunctionCallPromptBlock != nil {
+		return visitor.VisitFunctionCallPromptBlock(p.FunctionCallPromptBlock)
+	}
+	if p.ImagePromptBlock != nil {
+		return visitor.VisitImagePromptBlock(p.ImagePromptBlock)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", p)
 }
