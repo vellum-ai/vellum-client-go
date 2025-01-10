@@ -18,12 +18,14 @@ import (
 	metricdefinitions "github.com/vellum-ai/vellum-client-go/metricdefinitions"
 	mlmodels "github.com/vellum-ai/vellum-client-go/mlmodels"
 	option "github.com/vellum-ai/vellum-client-go/option"
+	organizations "github.com/vellum-ai/vellum-client-go/organizations"
 	sandboxes "github.com/vellum-ai/vellum-client-go/sandboxes"
 	testsuiteruns "github.com/vellum-ai/vellum-client-go/testsuiteruns"
 	testsuites "github.com/vellum-ai/vellum-client-go/testsuites"
 	workflowdeployments "github.com/vellum-ai/vellum-client-go/workflowdeployments"
 	workflows "github.com/vellum-ai/vellum-client-go/workflows"
 	workflowsandboxes "github.com/vellum-ai/vellum-client-go/workflowsandboxes"
+	workspaces "github.com/vellum-ai/vellum-client-go/workspaces"
 	workspacesecrets "github.com/vellum-ai/vellum-client-go/workspacesecrets"
 	io "io"
 	http "net/http"
@@ -42,6 +44,7 @@ type Client struct {
 	FolderEntities      *folderentities.Client
 	MetricDefinitions   *metricdefinitions.Client
 	MlModels            *mlmodels.Client
+	Organizations       *organizations.Client
 	Sandboxes           *sandboxes.Client
 	TestSuiteRuns       *testsuiteruns.Client
 	TestSuites          *testsuites.Client
@@ -49,6 +52,7 @@ type Client struct {
 	WorkflowSandboxes   *workflowsandboxes.Client
 	Workflows           *workflows.Client
 	WorkspaceSecrets    *workspacesecrets.Client
+	Workspaces          *workspaces.Client
 }
 
 func NewClient(opts ...option.RequestOption) *Client {
@@ -70,6 +74,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 		FolderEntities:      folderentities.NewClient(opts...),
 		MetricDefinitions:   metricdefinitions.NewClient(opts...),
 		MlModels:            mlmodels.NewClient(opts...),
+		Organizations:       organizations.NewClient(opts...),
 		Sandboxes:           sandboxes.NewClient(opts...),
 		TestSuiteRuns:       testsuiteruns.NewClient(opts...),
 		TestSuites:          testsuites.NewClient(opts...),
@@ -77,6 +82,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 		WorkflowSandboxes:   workflowsandboxes.NewClient(opts...),
 		Workflows:           workflows.NewClient(opts...),
 		WorkspaceSecrets:    workspacesecrets.NewClient(opts...),
+		Workspaces:          workspaces.NewClient(opts...),
 	}
 }
 
