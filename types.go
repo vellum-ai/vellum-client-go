@@ -6166,6 +6166,8 @@ func (j *JsonVellumValueRequest) String() string {
 // - `notBlank` - NOT_BLANK
 // - `coalesce` - COALESCE
 // - `accessField` - ACCESS_FIELD
+// - `and` - AND
+// - `or` - OR
 type LogicalOperator string
 
 const (
@@ -6209,6 +6211,8 @@ const (
 	LogicalOperatorNotBlank    LogicalOperator = "notBlank"
 	LogicalOperatorCoalesce    LogicalOperator = "coalesce"
 	LogicalOperatorAccessField LogicalOperator = "accessField"
+	LogicalOperatorAnd         LogicalOperator = "and"
+	LogicalOperatorOr          LogicalOperator = "or"
 )
 
 func NewLogicalOperatorFromString(s string) (LogicalOperator, error) {
@@ -6257,6 +6261,10 @@ func NewLogicalOperatorFromString(s string) (LogicalOperator, error) {
 		return LogicalOperatorCoalesce, nil
 	case "accessField":
 		return LogicalOperatorAccessField, nil
+	case "and":
+		return LogicalOperatorAnd, nil
+	case "or":
+		return LogicalOperatorOr, nil
 	}
 	var t LogicalOperator
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
