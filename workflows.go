@@ -23,6 +23,7 @@ type WorkflowPushRequest struct {
 	WorkflowSandboxId *string                              `json:"workflow_sandbox_id,omitempty" url:"-"`
 	DeploymentConfig  *WorkflowPushDeploymentConfigRequest `json:"deployment_config,omitempty" url:"-"`
 	DryRun            *bool                                `json:"dry_run,omitempty" url:"-"`
+	Strict            *bool                                `json:"strict,omitempty" url:"-"`
 }
 
 type WorkflowPushDeploymentConfigRequest struct {
