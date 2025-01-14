@@ -159,6 +159,11 @@ func (c *Client) Push(
 			return nil, err
 		}
 	}
+	if request.Strict != nil {
+		if err := writer.WriteField("strict", fmt.Sprintf("%v", *request.Strict)); err != nil {
+			return nil, err
+		}
+	}
 	if err := writer.Close(); err != nil {
 		return nil, err
 	}
