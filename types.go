@@ -9459,7 +9459,9 @@ func (p *PromptExecutionMeta) String() string {
 
 // The subset of the metadata tracked by Vellum during prompt execution that the request opted into with `expand_meta`.
 type PromptNodeExecutionMeta struct {
-	Usage *MlModelUsage `json:"usage,omitempty" url:"usage,omitempty"`
+	Usage     *MlModelUsage `json:"usage,omitempty" url:"usage,omitempty"`
+	Cost      *Price        `json:"cost,omitempty" url:"cost,omitempty"`
+	ModelName *string       `json:"model_name,omitempty" url:"model_name,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -15247,6 +15249,10 @@ func (w *WorkflowExecutionWorkflowResultEvent) String() string {
 type WorkflowExpandMetaRequest struct {
 	// If enabled, the Prompt Node FULFILLED events will include model host usage tracking. This may increase latency for some model hosts.
 	Usage *bool `json:"usage,omitempty" url:"usage,omitempty"`
+	// If enabled, the Prompt Node FULFILLED events will include model host cost tracking. This may increase latency for some model hosts.
+	Cost *bool `json:"cost,omitempty" url:"cost,omitempty"`
+	// If enabled, the Prompt Node FULFILLED events will include model host name
+	ModelName *bool `json:"model_name,omitempty" url:"model_name,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
