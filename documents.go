@@ -18,6 +18,8 @@ type DocumentsListRequest struct {
 	Offset *int `json:"-" url:"offset,omitempty"`
 	// Which field to use when ordering the results.
 	Ordering *string `json:"-" url:"ordering,omitempty"`
+	// A search term.
+	Search *string `json:"-" url:"search,omitempty"`
 }
 
 type PatchedDocumentUpdateRequest struct {
