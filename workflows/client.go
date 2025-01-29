@@ -141,9 +141,6 @@ func (c *Client) Push(
 	if err := core.WriteMultipartJSON(writer, "exec_config", request.ExecConfig); err != nil {
 		return nil, err
 	}
-	if err := writer.WriteField("label", fmt.Sprintf("%v", request.Label)); err != nil {
-		return nil, err
-	}
 	if request.WorkflowSandboxId != nil {
 		if err := writer.WriteField("workflow_sandbox_id", fmt.Sprintf("%v", *request.WorkflowSandboxId)); err != nil {
 			return nil, err
