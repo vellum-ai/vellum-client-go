@@ -24,15 +24,75 @@ type PushContainerImageRequest struct {
 	Tags []string `json:"tags,omitempty" url:"-"`
 }
 
+type ContainerImageContainerImageTag struct {
+	Name     string    `json:"name" url:"name"`
+	Modified time.Time `json:"modified" url:"modified"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *ContainerImageContainerImageTag) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *ContainerImageContainerImageTag) UnmarshalJSON(data []byte) error {
+	type embed ContainerImageContainerImageTag
+	var unmarshaler = struct {
+		embed
+		Modified *core.DateTime `json:"modified"`
+	}{
+		embed: embed(*c),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*c = ContainerImageContainerImageTag(unmarshaler.embed)
+	c.Modified = unmarshaler.Modified.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *ContainerImageContainerImageTag) MarshalJSON() ([]byte, error) {
+	type embed ContainerImageContainerImageTag
+	var marshaler = struct {
+		embed
+		Modified *core.DateTime `json:"modified"`
+	}{
+		embed:    embed(*c),
+		Modified: core.NewDateTime(c.Modified),
+	}
+	return json.Marshal(marshaler)
+}
+
+func (c *ContainerImageContainerImageTag) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
 type ContainerImageRead struct {
-	Id         string           `json:"id" url:"id"`
-	Name       string           `json:"name" url:"name"`
-	Visibility EntityVisibility `json:"visibility" url:"visibility"`
-	Created    time.Time        `json:"created" url:"created"`
-	Modified   time.Time        `json:"modified" url:"modified"`
-	Repository string           `json:"repository" url:"repository"`
-	Sha        string           `json:"sha" url:"sha"`
-	Tags       []string         `json:"tags" url:"tags"`
+	Id         string                             `json:"id" url:"id"`
+	Name       string                             `json:"name" url:"name"`
+	Visibility EntityVisibility                   `json:"visibility" url:"visibility"`
+	Created    time.Time                          `json:"created" url:"created"`
+	Modified   time.Time                          `json:"modified" url:"modified"`
+	Repository string                             `json:"repository" url:"repository"`
+	Sha        string                             `json:"sha" url:"sha"`
+	Tags       []*ContainerImageContainerImageTag `json:"tags" url:"tags"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
