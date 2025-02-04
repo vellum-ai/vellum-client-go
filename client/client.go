@@ -86,6 +86,44 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
+func (c *Client) ExecuteApi(
+	ctx context.Context,
+	request *vellumclientgo.ExecuteApiRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.ExecuteApiResponse, error) {
+	options := core.NewRequestOptions(opts...)
+
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := baseURL + "/v1/execute-api"
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
+	var response *vellumclientgo.ExecuteApiResponse
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			MaxAttempts:     options.MaxAttempts,
+			Headers:         headers,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
 func (c *Client) ExecuteCode(
 	ctx context.Context,
 	request *vellumclientgo.CodeExecutor,
