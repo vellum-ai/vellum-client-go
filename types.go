@@ -9,6 +9,14 @@ import (
 	time "time"
 )
 
+type ExecuteApiRequest struct {
+	Url         string                                    `json:"url" url:"-"`
+	Method      *MethodEnum                               `json:"method,omitempty" url:"-"`
+	Body        *ExecuteApiRequestBody                    `json:"body,omitempty" url:"-"`
+	Headers     map[string]*ExecuteApiRequestHeadersValue `json:"headers,omitempty" url:"-"`
+	BearerToken *ExecuteApiRequestBearerToken             `json:"bearer_token,omitempty" url:"-"`
+}
+
 type CodeExecutor struct {
 	Code        string                  `json:"code" url:"-"`
 	Runtime     CodeExecutionRuntime    `json:"runtime" url:"-"`
@@ -3200,6 +3208,182 @@ func (e *ErrorVellumValueRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (e *ErrorVellumValueRequest) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+type ExecuteApiRequestBearerToken struct {
+	String       string
+	VellumSecret *VellumSecret
+}
+
+func (e *ExecuteApiRequestBearerToken) UnmarshalJSON(data []byte) error {
+	var valueString string
+	if err := json.Unmarshal(data, &valueString); err == nil {
+		e.String = valueString
+		return nil
+	}
+	valueVellumSecret := new(VellumSecret)
+	if err := json.Unmarshal(data, &valueVellumSecret); err == nil {
+		e.VellumSecret = valueVellumSecret
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, e)
+}
+
+func (e ExecuteApiRequestBearerToken) MarshalJSON() ([]byte, error) {
+	if e.String != "" {
+		return json.Marshal(e.String)
+	}
+	if e.VellumSecret != nil {
+		return json.Marshal(e.VellumSecret)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", e)
+}
+
+type ExecuteApiRequestBearerTokenVisitor interface {
+	VisitString(string) error
+	VisitVellumSecret(*VellumSecret) error
+}
+
+func (e *ExecuteApiRequestBearerToken) Accept(visitor ExecuteApiRequestBearerTokenVisitor) error {
+	if e.String != "" {
+		return visitor.VisitString(e.String)
+	}
+	if e.VellumSecret != nil {
+		return visitor.VisitVellumSecret(e.VellumSecret)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", e)
+}
+
+type ExecuteApiRequestBody struct {
+	String           string
+	StringUnknownMap map[string]interface{}
+}
+
+func (e *ExecuteApiRequestBody) UnmarshalJSON(data []byte) error {
+	var valueString string
+	if err := json.Unmarshal(data, &valueString); err == nil {
+		e.String = valueString
+		return nil
+	}
+	var valueStringUnknownMap map[string]interface{}
+	if err := json.Unmarshal(data, &valueStringUnknownMap); err == nil {
+		e.StringUnknownMap = valueStringUnknownMap
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, e)
+}
+
+func (e ExecuteApiRequestBody) MarshalJSON() ([]byte, error) {
+	if e.String != "" {
+		return json.Marshal(e.String)
+	}
+	if e.StringUnknownMap != nil {
+		return json.Marshal(e.StringUnknownMap)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", e)
+}
+
+type ExecuteApiRequestBodyVisitor interface {
+	VisitString(string) error
+	VisitStringUnknownMap(map[string]interface{}) error
+}
+
+func (e *ExecuteApiRequestBody) Accept(visitor ExecuteApiRequestBodyVisitor) error {
+	if e.String != "" {
+		return visitor.VisitString(e.String)
+	}
+	if e.StringUnknownMap != nil {
+		return visitor.VisitStringUnknownMap(e.StringUnknownMap)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", e)
+}
+
+type ExecuteApiRequestHeadersValue struct {
+	String       string
+	VellumSecret *VellumSecret
+}
+
+func (e *ExecuteApiRequestHeadersValue) UnmarshalJSON(data []byte) error {
+	var valueString string
+	if err := json.Unmarshal(data, &valueString); err == nil {
+		e.String = valueString
+		return nil
+	}
+	valueVellumSecret := new(VellumSecret)
+	if err := json.Unmarshal(data, &valueVellumSecret); err == nil {
+		e.VellumSecret = valueVellumSecret
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, e)
+}
+
+func (e ExecuteApiRequestHeadersValue) MarshalJSON() ([]byte, error) {
+	if e.String != "" {
+		return json.Marshal(e.String)
+	}
+	if e.VellumSecret != nil {
+		return json.Marshal(e.VellumSecret)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", e)
+}
+
+type ExecuteApiRequestHeadersValueVisitor interface {
+	VisitString(string) error
+	VisitVellumSecret(*VellumSecret) error
+}
+
+func (e *ExecuteApiRequestHeadersValue) Accept(visitor ExecuteApiRequestHeadersValueVisitor) error {
+	if e.String != "" {
+		return visitor.VisitString(e.String)
+	}
+	if e.VellumSecret != nil {
+		return visitor.VisitVellumSecret(e.VellumSecret)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", e)
+}
+
+type ExecuteApiResponse struct {
+	StatusCode int                    `json:"status_code" url:"status_code"`
+	Text       string                 `json:"text" url:"text"`
+	Json       map[string]interface{} `json:"json" url:"json"`
+	Headers    map[string]string      `json:"headers" url:"headers"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ExecuteApiResponse) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
+}
+
+func (e *ExecuteApiResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ExecuteApiResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = ExecuteApiResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ExecuteApiResponse) String() string {
 	if len(e._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
 			return value
@@ -6676,6 +6860,42 @@ func (m *MetadataFiltersRequest) Accept(visitor MetadataFiltersRequestVisitor) e
 		return visitor.VisitVellumValueLogicalExpressionRequest(m.VellumValueLogicalExpressionRequest)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", m)
+}
+
+// - `POST` - POST
+// - `GET` - GET
+// - `PATCH` - PATCH
+// - `PUT` - PUT
+// - `DELETE` - DELETE
+type MethodEnum string
+
+const (
+	MethodEnumPost   MethodEnum = "POST"
+	MethodEnumGet    MethodEnum = "GET"
+	MethodEnumPatch  MethodEnum = "PATCH"
+	MethodEnumPut    MethodEnum = "PUT"
+	MethodEnumDelete MethodEnum = "DELETE"
+)
+
+func NewMethodEnumFromString(s string) (MethodEnum, error) {
+	switch s {
+	case "POST":
+		return MethodEnumPost, nil
+	case "GET":
+		return MethodEnumGet, nil
+	case "PATCH":
+		return MethodEnumPatch, nil
+	case "PUT":
+		return MethodEnumPut, nil
+	case "DELETE":
+		return MethodEnumDelete, nil
+	}
+	var t MethodEnum
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (m MethodEnum) Ptr() *MethodEnum {
+	return &m
 }
 
 // A Node Result Event emitted from a Metric Node.
@@ -14029,6 +14249,47 @@ func (v *VellumImageRequest) UnmarshalJSON(data []byte) error {
 }
 
 func (v *VellumImageRequest) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+type VellumSecret struct {
+	Name string `json:"name" url:"name"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VellumSecret) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VellumSecret) UnmarshalJSON(data []byte) error {
+	type unmarshaler VellumSecret
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = VellumSecret(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VellumSecret) String() string {
 	if len(v._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
 			return value
