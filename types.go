@@ -3354,7 +3354,7 @@ func (e *ExecuteApiRequestHeadersValue) Accept(visitor ExecuteApiRequestHeadersV
 type ExecuteApiResponse struct {
 	StatusCode int                    `json:"status_code" url:"status_code"`
 	Text       string                 `json:"text" url:"text"`
-	Json       map[string]interface{} `json:"json" url:"json"`
+	Json       map[string]interface{} `json:"json,omitempty" url:"json,omitempty"`
 	Headers    map[string]string      `json:"headers" url:"headers"`
 
 	extraProperties map[string]interface{}
