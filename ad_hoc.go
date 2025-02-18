@@ -494,7 +494,7 @@ func (e *EphemeralPromptCacheConfig) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
-// - `EPHEMERAL` - EPHEMERAL
+// * `EPHEMERAL` - EPHEMERAL
 type EphemeralPromptCacheConfigTypeEnum = string
 
 // The final data event returned indicating that the stream has ended and all final resolved values from the model can be found.
@@ -1081,8 +1081,8 @@ func (p *PromptBlock) Accept(visitor PromptBlockVisitor) error {
 	return fmt.Errorf("type %T does not include a non-empty union type", p)
 }
 
-// - `ENABLED` - Enabled
-// - `DISABLED` - Disabled
+// * `ENABLED` - Enabled
+// * `DISABLED` - Disabled
 type PromptBlockState string
 
 const (

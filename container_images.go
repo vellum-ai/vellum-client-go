@@ -197,10 +197,10 @@ func (d *DockerServiceToken) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// - `DEFAULT` - Default
-// - `PUBLIC` - Public
-// - `PRIVATE` - Private
-// - `DISABLED` - Disabled
+// * `DEFAULT` - Default
+// * `PUBLIC` - Public
+// * `PRIVATE` - Private
+// * `DISABLED` - Disabled
 type EntityVisibility string
 
 const (

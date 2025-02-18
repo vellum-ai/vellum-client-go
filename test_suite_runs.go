@@ -20,7 +20,6 @@ type TestSuiteRunCreateRequest struct {
 
 type TestSuiteRunsListExecutionsRequest struct {
 	// The response fields to expand for more information.
-	//
 	// - 'results.metric_results.metric_label' expands the metric label for each metric result.
 	// - 'results.metric_results.metric_definition' expands the metric definition for each metric result.
 	// - 'results.metric_results.metric_definition.name' expands the metric definition name for each metric result.
@@ -2500,11 +2499,11 @@ type TestSuiteRunRead struct {
 	TestSuite *TestSuiteRunTestSuite `json:"test_suite" url:"test_suite"`
 	// The current state of this run
 	//
-	// - `QUEUED` - Queued
-	// - `RUNNING` - Running
-	// - `COMPLETE` - Complete
-	// - `FAILED` - Failed
-	// - `CANCELLED` - Cancelled
+	// * `QUEUED` - Queued
+	// * `RUNNING` - Running
+	// * `COMPLETE` - Complete
+	// * `FAILED` - Failed
+	// * `CANCELLED` - Cancelled
 	State TestSuiteRunState `json:"state" url:"state"`
 	// Configuration that defines how the Test Suite should be run
 	ExecConfig *TestSuiteRunExecConfig `json:"exec_config,omitempty" url:"exec_config,omitempty"`
@@ -2565,11 +2564,11 @@ func (t *TestSuiteRunRead) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
-// - `QUEUED` - Queued
-// - `RUNNING` - Running
-// - `COMPLETE` - Complete
-// - `FAILED` - Failed
-// - `CANCELLED` - Cancelled
+// * `QUEUED` - Queued
+// * `RUNNING` - Running
+// * `COMPLETE` - Complete
+// * `FAILED` - Failed
+// * `CANCELLED` - Cancelled
 type TestSuiteRunState string
 
 const (
