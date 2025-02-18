@@ -8,9 +8,9 @@ import (
 	core "github.com/vellum-ai/vellum-client-go/core"
 )
 
-// - `AUTO_ACCEPT_FROM_SHARED_DOMAIN` - Auto-Accept from Shared Domain
-// - `ALLOW_REQUESTS_FROM_SHARED_DOMAIN` - Allows Requests from Shared Domains
-// - `REQUIRE_EXPLICIT_INVITE` - Require Explicit Invite
+// * `AUTO_ACCEPT_FROM_SHARED_DOMAIN` - Auto-Accept from Shared Domain
+// * `ALLOW_REQUESTS_FROM_SHARED_DOMAIN` - Allows Requests from Shared Domains
+// * `REQUIRE_EXPLICIT_INVITE` - Require Explicit Invite
 type NewMemberJoinBehaviorEnum string
 
 const (

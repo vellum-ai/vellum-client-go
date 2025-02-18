@@ -14,9 +14,9 @@ type PatchedWorkspaceSecretUpdateRequest struct {
 	Value *string `json:"value,omitempty" url:"-"`
 }
 
-// - `USER_DEFINED` - User Defined
-// - `HMAC` - Hmac
-// - `INTERNAL_API_KEY` - Internal Api Key
+// * `USER_DEFINED` - User Defined
+// * `HMAC` - Hmac
+// * `INTERNAL_API_KEY` - Internal Api Key
 type SecretTypeEnum string
 
 const (

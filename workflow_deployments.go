@@ -126,14 +126,14 @@ type SlimWorkflowDeployment struct {
 	Label string `json:"label" url:"label"`
 	// The current status of the workflow deployment
 	//
-	// - `ACTIVE` - Active
-	// - `ARCHIVED` - Archived
+	// * `ACTIVE` - Active
+	// * `ARCHIVED` - Archived
 	Status *EntityStatus `json:"status,omitempty" url:"status,omitempty"`
 	// The environment this workflow deployment is used in
 	//
-	// - `DEVELOPMENT` - Development
-	// - `STAGING` - Staging
-	// - `PRODUCTION` - Production
+	// * `DEVELOPMENT` - Development
+	// * `STAGING` - Staging
+	// * `PRODUCTION` - Production
 	Environment    *EnvironmentEnum `json:"environment,omitempty" url:"environment,omitempty"`
 	Created        time.Time        `json:"created" url:"created"`
 	LastDeployedOn time.Time        `json:"last_deployed_on" url:"last_deployed_on"`
@@ -278,8 +278,8 @@ type WorkflowReleaseTagRead struct {
 	Name string `json:"name" url:"name"`
 	// The source of how the Release Tag was originally created
 	//
-	// - `SYSTEM` - System
-	// - `USER` - User
+	// * `SYSTEM` - System
+	// * `USER` - User
 	Source ReleaseTagSource `json:"source" url:"source"`
 	// The Workflow Deployment History Item that this Release Tag is associated with
 	HistoryItem *WorkflowReleaseTagWorkflowDeploymentHistoryItem `json:"history_item" url:"history_item"`

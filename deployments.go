@@ -351,8 +351,8 @@ type DeploymentReleaseTagRead struct {
 	Name string `json:"name" url:"name"`
 	// The source of how the Release Tag was originally created
 	//
-	// - `SYSTEM` - System
-	// - `USER` - User
+	// * `SYSTEM` - System
+	// * `USER` - User
 	Source ReleaseTagSource `json:"source" url:"source"`
 	// The Deployment History Item that this Release Tag is associated with
 	HistoryItem *DeploymentReleaseTagDeploymentHistoryItem `json:"history_item" url:"history_item"`
@@ -492,14 +492,14 @@ type SlimDeploymentRead struct {
 	Name string `json:"name" url:"name"`
 	// The current status of the deployment
 	//
-	// - `ACTIVE` - Active
-	// - `ARCHIVED` - Archived
+	// * `ACTIVE` - Active
+	// * `ARCHIVED` - Archived
 	Status *EntityStatus `json:"status,omitempty" url:"status,omitempty"`
 	// The environment this deployment is used in
 	//
-	// - `DEVELOPMENT` - Development
-	// - `STAGING` - Staging
-	// - `PRODUCTION` - Production
+	// * `DEVELOPMENT` - Development
+	// * `STAGING` - Staging
+	// * `PRODUCTION` - Production
 	Environment    *EnvironmentEnum  `json:"environment,omitempty" url:"environment,omitempty"`
 	LastDeployedOn time.Time         `json:"last_deployed_on" url:"last_deployed_on"`
 	InputVariables []*VellumVariable `json:"input_variables" url:"input_variables"`

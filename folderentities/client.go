@@ -83,7 +83,6 @@ func (c *Client) AddEntityToFolder(
 	ctx context.Context,
 	// The ID of the folder to which the entity should be added. This can be a UUID of a folder, or the name of a root
 	// directory. Supported root directories include:
-	//
 	// - PROMPT_SANDBOX
 	// - WORKFLOW_SANDBOX
 	// - DOCUMENT_INDEX

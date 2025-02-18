@@ -17,8 +17,8 @@ type AddEntityToFolderRequest struct {
 type FolderEntitiesListRequest struct {
 	// Filter down to only those objects whose entities have a status matching the status specified.
 	//
-	// - `ACTIVE` - Active
-	// - `ARCHIVED` - Archived
+	// * `ACTIVE` - Active
+	// * `ARCHIVED` - Archived
 	EntityStatus *FolderEntitiesListRequestEntityStatus `json:"-" url:"entity_status,omitempty"`
 	// Number of results to return per page.
 	Limit *int `json:"-" url:"limit,omitempty"`
@@ -30,7 +30,6 @@ type FolderEntitiesListRequest struct {
 	//
 	// To filter by an entity's parent folder, provide the ID of the parent folder. To filter by the root directory, provide
 	// a string representing the entity type of the root directory. Supported root directories include:
-	//
 	// - PROMPT_SANDBOX
 	// - WORKFLOW_SANDBOX
 	// - DOCUMENT_INDEX
