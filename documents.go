@@ -41,11 +41,11 @@ type DocumentDocumentToDocumentIndex struct {
 	DocumentIndexId string `json:"document_index_id" url:"document_index_id"`
 	// An enum value representing where this document is along its indexing lifecycle for this index.
 	//
-	// - `AWAITING_PROCESSING` - Awaiting Processing
-	// - `QUEUED` - Queued
-	// - `INDEXING` - Indexing
-	// - `INDEXED` - Indexed
-	// - `FAILED` - Failed
+	// * `AWAITING_PROCESSING` - Awaiting Processing
+	// * `QUEUED` - Queued
+	// * `INDEXING` - Indexing
+	// * `INDEXED` - Indexed
+	// * `FAILED` - Failed
 	IndexingState        *IndexingStateEnum `json:"indexing_state,omitempty" url:"indexing_state,omitempty"`
 	ExtractedTextFileUrl *string            `json:"extracted_text_file_url,omitempty" url:"extracted_text_file_url,omitempty"`
 
@@ -87,11 +87,11 @@ func (d *DocumentDocumentToDocumentIndex) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// - `QUEUED` - Queued
-// - `PROCESSING` - Processing
-// - `PROCESSED` - Processed
-// - `FAILED` - Failed
-// - `UNKNOWN` - Unknown
+// * `QUEUED` - Queued
+// * `PROCESSING` - Processing
+// * `PROCESSED` - Processed
+// * `FAILED` - Failed
+// * `UNKNOWN` - Unknown
 type DocumentProcessingState string
 
 const (
@@ -133,7 +133,7 @@ type DocumentRead struct {
 	ProcessingState DocumentProcessingState `json:"processing_state" url:"processing_state"`
 	// The current status of the document
 	//
-	// - `ACTIVE` - Active
+	// * `ACTIVE` - Active
 	Status                    *DocumentStatus                    `json:"status,omitempty" url:"status,omitempty"`
 	OriginalFileUrl           *string                            `json:"original_file_url,omitempty" url:"original_file_url,omitempty"`
 	ProcessedFileUrl          *string                            `json:"processed_file_url,omitempty" url:"processed_file_url,omitempty"`
@@ -197,14 +197,14 @@ func (d *DocumentRead) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
-// - `ACTIVE` - Active
+// * `ACTIVE` - Active
 type DocumentStatus = string
 
-// - `AWAITING_PROCESSING` - Awaiting Processing
-// - `QUEUED` - Queued
-// - `INDEXING` - Indexing
-// - `INDEXED` - Indexed
-// - `FAILED` - Failed
+// * `AWAITING_PROCESSING` - Awaiting Processing
+// * `QUEUED` - Queued
+// * `INDEXING` - Indexing
+// * `INDEXED` - Indexed
+// * `FAILED` - Failed
 type IndexingStateEnum string
 
 const (
@@ -280,8 +280,8 @@ func (p *PaginatedSlimDocumentList) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
-// - `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit
-// - `INVALID_FILE` - Invalid File
+// * `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit
+// * `INVALID_FILE` - Invalid File
 type ProcessingFailureReasonEnum string
 
 const (
@@ -316,12 +316,12 @@ type SlimDocument struct {
 	ProcessingState DocumentProcessingState `json:"processing_state" url:"processing_state"`
 	// An enum value representing why the document could not be processed. Is null unless processing_state is FAILED.
 	//
-	// - `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit
-	// - `INVALID_FILE` - Invalid File
+	// * `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit
+	// * `INVALID_FILE` - Invalid File
 	ProcessingFailureReason *ProcessingFailureReasonEnum `json:"processing_failure_reason,omitempty" url:"processing_failure_reason,omitempty"`
 	// The document's current status.
 	//
-	// - `ACTIVE` - Active
+	// * `ACTIVE` - Active
 	Status *DocumentStatus `json:"status,omitempty" url:"status,omitempty"`
 	// A list of keywords associated with this document. Originally provided when uploading the document.
 	Keywords []string `json:"keywords,omitempty" url:"keywords,omitempty"`
@@ -393,11 +393,11 @@ type SlimDocumentDocumentToDocumentIndex struct {
 	DocumentIndexId string `json:"document_index_id" url:"document_index_id"`
 	// An enum value representing where this document is along its indexing lifecycle for this index.
 	//
-	// - `AWAITING_PROCESSING` - Awaiting Processing
-	// - `QUEUED` - Queued
-	// - `INDEXING` - Indexing
-	// - `INDEXED` - Indexed
-	// - `FAILED` - Failed
+	// * `AWAITING_PROCESSING` - Awaiting Processing
+	// * `QUEUED` - Queued
+	// * `INDEXING` - Indexing
+	// * `INDEXED` - Indexed
+	// * `FAILED` - Failed
 	IndexingState *IndexingStateEnum `json:"indexing_state,omitempty" url:"indexing_state,omitempty"`
 
 	extraProperties map[string]interface{}

@@ -1556,10 +1556,10 @@ func (c *ChatMessageRequest) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// - `SYSTEM` - System
-// - `ASSISTANT` - Assistant
-// - `USER` - User
-// - `FUNCTION` - Function
+// * `SYSTEM` - System
+// * `ASSISTANT` - Assistant
+// * `USER` - User
+// * `FUNCTION` - Function
 type ChatMessageRole string
 
 const (
@@ -2406,8 +2406,8 @@ func (c *CodeExecutionPackage) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// - `PYTHON_3_11_6` - PYTHON_3_11_6
-// - `TYPESCRIPT_5_3_3` - TYPESCRIPT_5_3_3
+// * `PYTHON_3_11_6` - PYTHON_3_11_6
+// * `TYPESCRIPT_5_3_3` - TYPESCRIPT_5_3_3
 type CodeExecutionRuntime string
 
 const (
@@ -2681,8 +2681,8 @@ type ComponentsSchemasPdfSearchResultMetaSource = *PdfSearchResultMetaSource
 
 type ComponentsSchemasPdfSearchResultMetaSourceRequest = *PdfSearchResultMetaSourceRequest
 
-// - `OR` - OR
-// - `AND` - AND
+// * `OR` - OR
+// * `AND` - AND
 type ConditionCombinator string
 
 const (
@@ -2823,14 +2823,14 @@ type DeploymentRead struct {
 	Name string `json:"name" url:"name"`
 	// The current status of the deployment
 	//
-	// - `ACTIVE` - Active
-	// - `ARCHIVED` - Archived
+	// * `ACTIVE` - Active
+	// * `ARCHIVED` - Archived
 	Status *EntityStatus `json:"status,omitempty" url:"status,omitempty"`
 	// The environment this deployment is used in
 	//
-	// - `DEVELOPMENT` - Development
-	// - `STAGING` - Staging
-	// - `PRODUCTION` - Production
+	// * `DEVELOPMENT` - Development
+	// * `STAGING` - Staging
+	// * `PRODUCTION` - Production
 	Environment    *EnvironmentEnum  `json:"environment,omitempty" url:"environment,omitempty"`
 	LastDeployedOn time.Time         `json:"last_deployed_on" url:"last_deployed_on"`
 	InputVariables []*VellumVariable `json:"input_variables" url:"input_variables"`
@@ -2910,9 +2910,9 @@ type EnrichedNormalizedCompletion struct {
 	Text string `json:"text" url:"text"`
 	// The reason the generation finished.
 	//
-	// - `LENGTH` - LENGTH
-	// - `STOP` - STOP
-	// - `UNKNOWN` - UNKNOWN
+	// * `LENGTH` - LENGTH
+	// * `STOP` - STOP
+	// * `UNKNOWN` - UNKNOWN
 	FinishReason *FinishReasonEnum `json:"finish_reason,omitempty" url:"finish_reason,omitempty"`
 	// The logprobs of the completion. Only present if specified in the original request options.
 	Logprobs *NormalizedLogProbs `json:"logprobs,omitempty" url:"logprobs,omitempty"`
@@ -2961,8 +2961,8 @@ func (e *EnrichedNormalizedCompletion) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
-// - `ACTIVE` - Active
-// - `ARCHIVED` - Archived
+// * `ACTIVE` - Active
+// * `ARCHIVED` - Archived
 type EntityStatus string
 
 const (
@@ -2985,9 +2985,9 @@ func (e EntityStatus) Ptr() *EntityStatus {
 	return &e
 }
 
-// - `DEVELOPMENT` - Development
-// - `STAGING` - Staging
-// - `PRODUCTION` - Production
+// * `DEVELOPMENT` - Development
+// * `STAGING` - Staging
+// * `PRODUCTION` - Production
 type EnvironmentEnum string
 
 const (
@@ -4287,9 +4287,9 @@ func (e *ExecutionVellumValue) Accept(visitor ExecutionVellumValueVisitor) error
 	return fmt.Errorf("type %T does not include a non-empty union type", e)
 }
 
-// - `LENGTH` - LENGTH
-// - `STOP` - STOP
-// - `UNKNOWN` - UNKNOWN
+// * `LENGTH` - LENGTH
+// * `STOP` - STOP
+// * `UNKNOWN` - UNKNOWN
 type FinishReasonEnum string
 
 const (
@@ -5176,8 +5176,8 @@ func (f *FunctionCallVellumValueRequest) String() string {
 type GenerateOptionsRequest struct {
 	// Which logprobs to include, if any. Defaults to NONE.
 	//
-	// - `ALL` - ALL
-	// - `NONE` - NONE
+	// * `ALL` - ALL
+	// * `NONE` - NONE
 	Logprobs *LogprobsEnum `json:"logprobs,omitempty" url:"logprobs,omitempty"`
 
 	extraProperties map[string]interface{}
@@ -6024,9 +6024,9 @@ func (i *InitiatedWorkflowNodeResultEvent) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
-// - `INITIATED` - INITIATED
-// - `FULFILLED` - FULFILLED
-// - `REJECTED` - REJECTED
+// * `INITIATED` - INITIATED
+// * `FULFILLED` - FULFILLED
+// * `REJECTED` - REJECTED
 type IterationStateEnum string
 
 const (
@@ -6328,30 +6328,30 @@ func (j *JsonVellumValueRequest) String() string {
 	return fmt.Sprintf("%#v", j)
 }
 
-// - `=` - EQUALS
-// - `!=` - DOES_NOT_EQUAL
-// - `<` - LESS_THAN
-// - `>` - GREATER_THAN
-// - `<=` - LESS_THAN_OR_EQUAL_TO
-// - `>=` - GREATER_THAN_OR_EQUAL_TO
-// - `contains` - CONTAINS
-// - `beginsWith` - BEGINS_WITH
-// - `endsWith` - ENDS_WITH
-// - `doesNotContain` - DOES_NOT_CONTAIN
-// - `doesNotBeginWith` - DOES_NOT_BEGIN_WITH
-// - `doesNotEndWith` - DOES_NOT_END_WITH
-// - `null` - NULL
-// - `notNull` - NOT_NULL
-// - `in` - IN
-// - `notIn` - NOT_IN
-// - `between` - BETWEEN
-// - `notBetween` - NOT_BETWEEN
-// - `blank` - BLANK
-// - `notBlank` - NOT_BLANK
-// - `coalesce` - COALESCE
-// - `accessField` - ACCESS_FIELD
-// - `and` - AND
-// - `or` - OR
+// * `=` - EQUALS
+// * `!=` - DOES_NOT_EQUAL
+// * `<` - LESS_THAN
+// * `>` - GREATER_THAN
+// * `<=` - LESS_THAN_OR_EQUAL_TO
+// * `>=` - GREATER_THAN_OR_EQUAL_TO
+// * `contains` - CONTAINS
+// * `beginsWith` - BEGINS_WITH
+// * `endsWith` - ENDS_WITH
+// * `doesNotContain` - DOES_NOT_CONTAIN
+// * `doesNotBeginWith` - DOES_NOT_BEGIN_WITH
+// * `doesNotEndWith` - DOES_NOT_END_WITH
+// * `null` - NULL
+// * `notNull` - NOT_NULL
+// * `in` - IN
+// * `notIn` - NOT_IN
+// * `between` - BETWEEN
+// * `notBetween` - NOT_BETWEEN
+// * `blank` - BLANK
+// * `notBlank` - NOT_BLANK
+// * `coalesce` - COALESCE
+// * `accessField` - ACCESS_FIELD
+// * `and` - AND
+// * `or` - OR
 type LogicalOperator string
 
 const (
@@ -6458,8 +6458,8 @@ func (l LogicalOperator) Ptr() *LogicalOperator {
 	return &l
 }
 
-// - `ALL` - ALL
-// - `NONE` - NONE
+// * `ALL` - ALL
+// * `NONE` - NONE
 type LogprobsEnum string
 
 const (
@@ -6748,8 +6748,8 @@ func (m *MetadataFilterConfigRequest) String() string {
 	return fmt.Sprintf("%#v", m)
 }
 
-// - `and` - AND
-// - `or` - OR
+// * `and` - AND
+// * `or` - OR
 type MetadataFilterRuleCombinator string
 
 const (
@@ -6862,11 +6862,11 @@ func (m *MetadataFiltersRequest) Accept(visitor MetadataFiltersRequestVisitor) e
 	return fmt.Errorf("type %T does not include a non-empty union type", m)
 }
 
-// - `POST` - POST
-// - `GET` - GET
-// - `PATCH` - PATCH
-// - `PUT` - PUT
-// - `DELETE` - DELETE
+// * `POST` - POST
+// * `GET` - GET
+// * `PATCH` - PATCH
+// * `PUT` - PUT
+// * `DELETE` - DELETE
 type MethodEnum string
 
 const (
@@ -10288,8 +10288,8 @@ func (r *RejectedWorkflowNodeResultEvent) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
-// - `SYSTEM` - System
-// - `USER` - User
+// * `SYSTEM` - System
+// * `USER` - User
 type ReleaseTagSource string
 
 const (
@@ -13963,7 +13963,7 @@ func (t *TestSuiteRunMetricStringOutput) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
-// - `USD` - USD
+// * `USD` - USD
 type UnitEnum = string
 
 type VellumAudio struct {
@@ -14094,12 +14094,12 @@ func (v *VellumError) String() string {
 	return fmt.Sprintf("%#v", v)
 }
 
-// - `INVALID_REQUEST` - INVALID_REQUEST
-// - `INVALID_INPUTS` - INVALID_INPUTS
-// - `PROVIDER_ERROR` - PROVIDER_ERROR
-// - `REQUEST_TIMEOUT` - REQUEST_TIMEOUT
-// - `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
-// - `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
+// * `INVALID_REQUEST` - INVALID_REQUEST
+// * `INVALID_INPUTS` - INVALID_INPUTS
+// * `PROVIDER_ERROR` - PROVIDER_ERROR
+// * `REQUEST_TIMEOUT` - REQUEST_TIMEOUT
+// * `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
+// * `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
 type VellumErrorCodeEnum string
 
 const (
@@ -14869,17 +14869,17 @@ func (v *VellumVariableExtensions) String() string {
 	return fmt.Sprintf("%#v", v)
 }
 
-// - `STRING` - STRING
-// - `NUMBER` - NUMBER
-// - `JSON` - JSON
-// - `CHAT_HISTORY` - CHAT_HISTORY
-// - `SEARCH_RESULTS` - SEARCH_RESULTS
-// - `ERROR` - ERROR
-// - `ARRAY` - ARRAY
-// - `FUNCTION_CALL` - FUNCTION_CALL
-// - `IMAGE` - IMAGE
-// - `AUDIO` - AUDIO
-// - `NULL` - NULL
+// * `STRING` - STRING
+// * `NUMBER` - NUMBER
+// * `JSON` - JSON
+// * `CHAT_HISTORY` - CHAT_HISTORY
+// * `SEARCH_RESULTS` - SEARCH_RESULTS
+// * `ERROR` - ERROR
+// * `ARRAY` - ARRAY
+// * `FUNCTION_CALL` - FUNCTION_CALL
+// * `IMAGE` - IMAGE
+// * `AUDIO` - AUDIO
+// * `NULL` - NULL
 type VellumVariableType string
 
 const (
@@ -14937,14 +14937,14 @@ type WorkflowDeploymentRead struct {
 	Label string `json:"label" url:"label"`
 	// The current status of the workflow deployment
 	//
-	// - `ACTIVE` - Active
-	// - `ARCHIVED` - Archived
+	// * `ACTIVE` - Active
+	// * `ARCHIVED` - Archived
 	Status *EntityStatus `json:"status,omitempty" url:"status,omitempty"`
 	// The environment this workflow deployment is used in
 	//
-	// - `DEVELOPMENT` - Development
-	// - `STAGING` - Staging
-	// - `PRODUCTION` - Production
+	// * `DEVELOPMENT` - Development
+	// * `STAGING` - Staging
+	// * `PRODUCTION` - Production
 	Environment    *EnvironmentEnum `json:"environment,omitempty" url:"environment,omitempty"`
 	Created        time.Time        `json:"created" url:"created"`
 	LastDeployedOn time.Time        `json:"last_deployed_on" url:"last_deployed_on"`
@@ -15293,14 +15293,14 @@ func (w *WorkflowExecutionActualStringRequest) String() string {
 	return fmt.Sprintf("%#v", w)
 }
 
-// - `WORKFLOW_INITIALIZATION` - WORKFLOW_INITIALIZATION
-// - `WORKFLOW_CANCELLED` - WORKFLOW_CANCELLED
-// - `NODE_EXECUTION_COUNT_LIMIT_REACHED` - NODE_EXECUTION_COUNT_LIMIT_REACHED
-// - `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
-// - `NODE_EXECUTION` - NODE_EXECUTION
-// - `LLM_PROVIDER` - LLM_PROVIDER
-// - `INVALID_TEMPLATE` - INVALID_TEMPLATE
-// - `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
+// * `WORKFLOW_INITIALIZATION` - WORKFLOW_INITIALIZATION
+// * `WORKFLOW_CANCELLED` - WORKFLOW_CANCELLED
+// * `NODE_EXECUTION_COUNT_LIMIT_REACHED` - NODE_EXECUTION_COUNT_LIMIT_REACHED
+// * `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
+// * `NODE_EXECUTION` - NODE_EXECUTION
+// * `LLM_PROVIDER` - LLM_PROVIDER
+// * `INVALID_TEMPLATE` - INVALID_TEMPLATE
+// * `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
 type WorkflowExecutionEventErrorCode string
 
 const (
@@ -15341,8 +15341,8 @@ func (w WorkflowExecutionEventErrorCode) Ptr() *WorkflowExecutionEventErrorCode 
 	return &w
 }
 
-// - `NODE` - NODE
-// - `WORKFLOW` - WORKFLOW
+// * `NODE` - NODE
+// * `WORKFLOW` - WORKFLOW
 type WorkflowExecutionEventType string
 
 const (
@@ -15784,10 +15784,10 @@ func (w *WorkflowNodeResultEvent) Accept(visitor WorkflowNodeResultEventVisitor)
 	return fmt.Errorf("type %T does not include a non-empty union type", w)
 }
 
-// - `INITIATED` - INITIATED
-// - `STREAMING` - STREAMING
-// - `FULFILLED` - FULFILLED
-// - `REJECTED` - REJECTED
+// * `INITIATED` - INITIATED
+// * `STREAMING` - STREAMING
+// * `FULFILLED` - FULFILLED
+// * `REJECTED` - REJECTED
 type WorkflowNodeResultEventState string
 
 const (

@@ -41,8 +41,8 @@ type DocumentIndexesListRequest struct {
 	Search *string `json:"-" url:"search,omitempty"`
 	// Filter down to only document indices that have a status matching the status specified
 	//
-	// - `ACTIVE` - Active
-	// - `ARCHIVED` - Archived
+	// * `ACTIVE` - Active
+	// * `ARCHIVED` - Archived
 	Status *DocumentIndexesListRequestStatus `json:"-" url:"status,omitempty"`
 }
 
@@ -62,7 +62,7 @@ type PatchedDocumentIndexUpdateRequest struct {
 	Environment *EnvironmentEnum `json:"environment,omitempty" url:"-"`
 }
 
-// - `True` - True
+// * `True` - True
 type AddOpenaiApiKeyEnum = bool
 
 // Basic vectorizer for intfloat/multilingual-e5-large.
@@ -680,14 +680,14 @@ type DocumentIndexRead struct {
 	Name string `json:"name" url:"name"`
 	// The current status of the document index
 	//
-	// - `ACTIVE` - Active
-	// - `ARCHIVED` - Archived
+	// * `ACTIVE` - Active
+	// * `ARCHIVED` - Archived
 	Status *EntityStatus `json:"status,omitempty" url:"status,omitempty"`
 	// The environment this document index is used in
 	//
-	// - `DEVELOPMENT` - Development
-	// - `STAGING` - Staging
-	// - `PRODUCTION` - Production
+	// * `DEVELOPMENT` - Development
+	// * `STAGING` - Staging
+	// * `PRODUCTION` - Production
 	Environment    *EnvironmentEnum             `json:"environment,omitempty" url:"environment,omitempty"`
 	IndexingConfig *DocumentIndexIndexingConfig `json:"indexing_config" url:"indexing_config"`
 
