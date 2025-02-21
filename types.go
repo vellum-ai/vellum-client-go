@@ -34,7 +34,7 @@ type ExecutePromptRequest struct {
 	PromptDeploymentName *string `json:"prompt_deployment_name,omitempty" url:"-"`
 	// Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
 	ReleaseTag *string `json:"release_tag,omitempty" url:"-"`
-	// Optionally include a unique identifier for tracking purposes. Must be unique within a given Prompt Deployment.
+	// Optionally include a unique identifier for tracking purposes. Must be unique within a given Workspace.
 	ExternalId *string `json:"external_id,omitempty" url:"-"`
 	// An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
 	ExpandMeta *PromptDeploymentExpandMetaRequest `json:"expand_meta,omitempty" url:"-"`
@@ -55,7 +55,7 @@ type ExecutePromptStreamRequest struct {
 	PromptDeploymentName *string `json:"prompt_deployment_name,omitempty" url:"-"`
 	// Optionally specify a release tag if you want to pin to a specific release of the Prompt Deployment
 	ReleaseTag *string `json:"release_tag,omitempty" url:"-"`
-	// Optionally include a unique identifier for tracking purposes. Must be unique within a given Prompt Deployment.
+	// Optionally include a unique identifier for tracking purposes. Must be unique within a given Workspace.
 	ExternalId *string `json:"external_id,omitempty" url:"-"`
 	// An optionally specified configuration used to opt in to including additional metadata about this prompt execution in the API response. Corresponding values will be returned under the `meta` key of the API response.
 	ExpandMeta *PromptDeploymentExpandMetaRequest `json:"expand_meta,omitempty" url:"-"`
@@ -78,7 +78,7 @@ type ExecuteWorkflowRequest struct {
 	WorkflowDeploymentName *string `json:"workflow_deployment_name,omitempty" url:"-"`
 	// Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
 	ReleaseTag *string `json:"release_tag,omitempty" url:"-"`
-	// Optionally include a unique identifier for tracking purposes. Must be unique for a given workflow deployment.
+	// Optionally include a unique identifier for tracking purposes. Must be unique within a given Workspace.
 	ExternalId *string `json:"external_id,omitempty" url:"-"`
 	// Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
 	Metadata map[string]interface{} `json:"metadata,omitempty" url:"-"`
@@ -95,7 +95,7 @@ type ExecuteWorkflowStreamRequest struct {
 	WorkflowDeploymentName *string `json:"workflow_deployment_name,omitempty" url:"-"`
 	// Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
 	ReleaseTag *string `json:"release_tag,omitempty" url:"-"`
-	// Optionally include a unique identifier for tracking purposes. Must be unique for a given workflow deployment.
+	// Optionally include a unique identifier for tracking purposes. Must be unique within a given Workspace.
 	ExternalId *string `json:"external_id,omitempty" url:"-"`
 	// Optionally specify which events you want to receive. Defaults to only WORKFLOW events. Note that the schema of non-WORKFLOW events is unstable and should be used with caution.
 	EventTypes []WorkflowExecutionEventType `json:"event_types,omitempty" url:"-"`
