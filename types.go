@@ -343,6 +343,7 @@ type ArrayChatMessageContentItem struct {
 	FunctionCallChatMessageContent *FunctionCallChatMessageContent
 	ImageChatMessageContent        *ImageChatMessageContent
 	AudioChatMessageContent        *AudioChatMessageContent
+	DocumentChatMessageContent     *DocumentChatMessageContent
 }
 
 func (a *ArrayChatMessageContentItem) UnmarshalJSON(data []byte) error {
@@ -366,6 +367,11 @@ func (a *ArrayChatMessageContentItem) UnmarshalJSON(data []byte) error {
 		a.AudioChatMessageContent = valueAudioChatMessageContent
 		return nil
 	}
+	valueDocumentChatMessageContent := new(DocumentChatMessageContent)
+	if err := json.Unmarshal(data, &valueDocumentChatMessageContent); err == nil {
+		a.DocumentChatMessageContent = valueDocumentChatMessageContent
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, a)
 }
 
@@ -382,6 +388,9 @@ func (a ArrayChatMessageContentItem) MarshalJSON() ([]byte, error) {
 	if a.AudioChatMessageContent != nil {
 		return json.Marshal(a.AudioChatMessageContent)
 	}
+	if a.DocumentChatMessageContent != nil {
+		return json.Marshal(a.DocumentChatMessageContent)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", a)
 }
 
@@ -390,6 +399,7 @@ type ArrayChatMessageContentItemVisitor interface {
 	VisitFunctionCallChatMessageContent(*FunctionCallChatMessageContent) error
 	VisitImageChatMessageContent(*ImageChatMessageContent) error
 	VisitAudioChatMessageContent(*AudioChatMessageContent) error
+	VisitDocumentChatMessageContent(*DocumentChatMessageContent) error
 }
 
 func (a *ArrayChatMessageContentItem) Accept(visitor ArrayChatMessageContentItemVisitor) error {
@@ -405,6 +415,9 @@ func (a *ArrayChatMessageContentItem) Accept(visitor ArrayChatMessageContentItem
 	if a.AudioChatMessageContent != nil {
 		return visitor.VisitAudioChatMessageContent(a.AudioChatMessageContent)
 	}
+	if a.DocumentChatMessageContent != nil {
+		return visitor.VisitDocumentChatMessageContent(a.DocumentChatMessageContent)
+	}
 	return fmt.Errorf("type %T does not include a non-empty union type", a)
 }
 
@@ -413,6 +426,7 @@ type ArrayChatMessageContentItemRequest struct {
 	FunctionCallChatMessageContentRequest *FunctionCallChatMessageContentRequest
 	ImageChatMessageContentRequest        *ImageChatMessageContentRequest
 	AudioChatMessageContentRequest        *AudioChatMessageContentRequest
+	DocumentChatMessageContentRequest     *DocumentChatMessageContentRequest
 }
 
 func (a *ArrayChatMessageContentItemRequest) UnmarshalJSON(data []byte) error {
@@ -436,6 +450,11 @@ func (a *ArrayChatMessageContentItemRequest) UnmarshalJSON(data []byte) error {
 		a.AudioChatMessageContentRequest = valueAudioChatMessageContentRequest
 		return nil
 	}
+	valueDocumentChatMessageContentRequest := new(DocumentChatMessageContentRequest)
+	if err := json.Unmarshal(data, &valueDocumentChatMessageContentRequest); err == nil {
+		a.DocumentChatMessageContentRequest = valueDocumentChatMessageContentRequest
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, a)
 }
 
@@ -452,6 +471,9 @@ func (a ArrayChatMessageContentItemRequest) MarshalJSON() ([]byte, error) {
 	if a.AudioChatMessageContentRequest != nil {
 		return json.Marshal(a.AudioChatMessageContentRequest)
 	}
+	if a.DocumentChatMessageContentRequest != nil {
+		return json.Marshal(a.DocumentChatMessageContentRequest)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", a)
 }
 
@@ -460,6 +482,7 @@ type ArrayChatMessageContentItemRequestVisitor interface {
 	VisitFunctionCallChatMessageContentRequest(*FunctionCallChatMessageContentRequest) error
 	VisitImageChatMessageContentRequest(*ImageChatMessageContentRequest) error
 	VisitAudioChatMessageContentRequest(*AudioChatMessageContentRequest) error
+	VisitDocumentChatMessageContentRequest(*DocumentChatMessageContentRequest) error
 }
 
 func (a *ArrayChatMessageContentItemRequest) Accept(visitor ArrayChatMessageContentItemRequestVisitor) error {
@@ -474,6 +497,9 @@ func (a *ArrayChatMessageContentItemRequest) Accept(visitor ArrayChatMessageCont
 	}
 	if a.AudioChatMessageContentRequest != nil {
 		return visitor.VisitAudioChatMessageContentRequest(a.AudioChatMessageContentRequest)
+	}
+	if a.DocumentChatMessageContentRequest != nil {
+		return visitor.VisitDocumentChatMessageContentRequest(a.DocumentChatMessageContentRequest)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", a)
 }
@@ -1351,6 +1377,7 @@ type ChatMessageContent struct {
 	ArrayChatMessageContent        *ArrayChatMessageContent
 	ImageChatMessageContent        *ImageChatMessageContent
 	AudioChatMessageContent        *AudioChatMessageContent
+	DocumentChatMessageContent     *DocumentChatMessageContent
 }
 
 func (c *ChatMessageContent) UnmarshalJSON(data []byte) error {
@@ -1379,6 +1406,11 @@ func (c *ChatMessageContent) UnmarshalJSON(data []byte) error {
 		c.AudioChatMessageContent = valueAudioChatMessageContent
 		return nil
 	}
+	valueDocumentChatMessageContent := new(DocumentChatMessageContent)
+	if err := json.Unmarshal(data, &valueDocumentChatMessageContent); err == nil {
+		c.DocumentChatMessageContent = valueDocumentChatMessageContent
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, c)
 }
 
@@ -1398,6 +1430,9 @@ func (c ChatMessageContent) MarshalJSON() ([]byte, error) {
 	if c.AudioChatMessageContent != nil {
 		return json.Marshal(c.AudioChatMessageContent)
 	}
+	if c.DocumentChatMessageContent != nil {
+		return json.Marshal(c.DocumentChatMessageContent)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", c)
 }
 
@@ -1407,6 +1442,7 @@ type ChatMessageContentVisitor interface {
 	VisitArrayChatMessageContent(*ArrayChatMessageContent) error
 	VisitImageChatMessageContent(*ImageChatMessageContent) error
 	VisitAudioChatMessageContent(*AudioChatMessageContent) error
+	VisitDocumentChatMessageContent(*DocumentChatMessageContent) error
 }
 
 func (c *ChatMessageContent) Accept(visitor ChatMessageContentVisitor) error {
@@ -1425,6 +1461,9 @@ func (c *ChatMessageContent) Accept(visitor ChatMessageContentVisitor) error {
 	if c.AudioChatMessageContent != nil {
 		return visitor.VisitAudioChatMessageContent(c.AudioChatMessageContent)
 	}
+	if c.DocumentChatMessageContent != nil {
+		return visitor.VisitDocumentChatMessageContent(c.DocumentChatMessageContent)
+	}
 	return fmt.Errorf("type %T does not include a non-empty union type", c)
 }
 
@@ -1434,6 +1473,7 @@ type ChatMessageContentRequest struct {
 	ArrayChatMessageContentRequest        *ArrayChatMessageContentRequest
 	ImageChatMessageContentRequest        *ImageChatMessageContentRequest
 	AudioChatMessageContentRequest        *AudioChatMessageContentRequest
+	DocumentChatMessageContentRequest     *DocumentChatMessageContentRequest
 }
 
 func (c *ChatMessageContentRequest) UnmarshalJSON(data []byte) error {
@@ -1462,6 +1502,11 @@ func (c *ChatMessageContentRequest) UnmarshalJSON(data []byte) error {
 		c.AudioChatMessageContentRequest = valueAudioChatMessageContentRequest
 		return nil
 	}
+	valueDocumentChatMessageContentRequest := new(DocumentChatMessageContentRequest)
+	if err := json.Unmarshal(data, &valueDocumentChatMessageContentRequest); err == nil {
+		c.DocumentChatMessageContentRequest = valueDocumentChatMessageContentRequest
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, c)
 }
 
@@ -1481,6 +1526,9 @@ func (c ChatMessageContentRequest) MarshalJSON() ([]byte, error) {
 	if c.AudioChatMessageContentRequest != nil {
 		return json.Marshal(c.AudioChatMessageContentRequest)
 	}
+	if c.DocumentChatMessageContentRequest != nil {
+		return json.Marshal(c.DocumentChatMessageContentRequest)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", c)
 }
 
@@ -1490,6 +1538,7 @@ type ChatMessageContentRequestVisitor interface {
 	VisitArrayChatMessageContentRequest(*ArrayChatMessageContentRequest) error
 	VisitImageChatMessageContentRequest(*ImageChatMessageContentRequest) error
 	VisitAudioChatMessageContentRequest(*AudioChatMessageContentRequest) error
+	VisitDocumentChatMessageContentRequest(*DocumentChatMessageContentRequest) error
 }
 
 func (c *ChatMessageContentRequest) Accept(visitor ChatMessageContentRequestVisitor) error {
@@ -1507,6 +1556,9 @@ func (c *ChatMessageContentRequest) Accept(visitor ChatMessageContentRequestVisi
 	}
 	if c.AudioChatMessageContentRequest != nil {
 		return visitor.VisitAudioChatMessageContentRequest(c.AudioChatMessageContentRequest)
+	}
+	if c.DocumentChatMessageContentRequest != nil {
+		return visitor.VisitDocumentChatMessageContentRequest(c.DocumentChatMessageContentRequest)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", c)
 }
@@ -2890,6 +2942,278 @@ func (d *DeploymentRead) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DeploymentRead) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// A document value that is used in a chat message.
+type DocumentChatMessageContent struct {
+	Value *VellumDocument `json:"value" url:"value"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DocumentChatMessageContent) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DocumentChatMessageContent) Type() string {
+	return d.type_
+}
+
+func (d *DocumentChatMessageContent) UnmarshalJSON(data []byte) error {
+	type embed DocumentChatMessageContent
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*d),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*d = DocumentChatMessageContent(unmarshaler.embed)
+	if unmarshaler.Type != "DOCUMENT" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", d, "DOCUMENT", unmarshaler.Type)
+	}
+	d.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d, "type")
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DocumentChatMessageContent) MarshalJSON() ([]byte, error) {
+	type embed DocumentChatMessageContent
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*d),
+		Type:  "DOCUMENT",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (d *DocumentChatMessageContent) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// A document value that is used in a chat message.
+type DocumentChatMessageContentRequest struct {
+	Value *VellumDocumentRequest `json:"value" url:"value"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DocumentChatMessageContentRequest) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DocumentChatMessageContentRequest) Type() string {
+	return d.type_
+}
+
+func (d *DocumentChatMessageContentRequest) UnmarshalJSON(data []byte) error {
+	type embed DocumentChatMessageContentRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*d),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*d = DocumentChatMessageContentRequest(unmarshaler.embed)
+	if unmarshaler.Type != "DOCUMENT" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", d, "DOCUMENT", unmarshaler.Type)
+	}
+	d.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d, "type")
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DocumentChatMessageContentRequest) MarshalJSON() ([]byte, error) {
+	type embed DocumentChatMessageContentRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*d),
+		Type:  "DOCUMENT",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (d *DocumentChatMessageContentRequest) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// A base Vellum primitive value representing a document.
+type DocumentVellumValue struct {
+	Value *VellumDocument `json:"value,omitempty" url:"value,omitempty"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DocumentVellumValue) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DocumentVellumValue) Type() string {
+	return d.type_
+}
+
+func (d *DocumentVellumValue) UnmarshalJSON(data []byte) error {
+	type embed DocumentVellumValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*d),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*d = DocumentVellumValue(unmarshaler.embed)
+	if unmarshaler.Type != "DOCUMENT" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", d, "DOCUMENT", unmarshaler.Type)
+	}
+	d.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d, "type")
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DocumentVellumValue) MarshalJSON() ([]byte, error) {
+	type embed DocumentVellumValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*d),
+		Type:  "DOCUMENT",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (d *DocumentVellumValue) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// A base Vellum primitive value representing a document.
+type DocumentVellumValueRequest struct {
+	Value *VellumDocumentRequest `json:"value,omitempty" url:"value,omitempty"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DocumentVellumValueRequest) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DocumentVellumValueRequest) Type() string {
+	return d.type_
+}
+
+func (d *DocumentVellumValueRequest) UnmarshalJSON(data []byte) error {
+	type embed DocumentVellumValueRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*d),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*d = DocumentVellumValueRequest(unmarshaler.embed)
+	if unmarshaler.Type != "DOCUMENT" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", d, "DOCUMENT", unmarshaler.Type)
+	}
+	d.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d, "type")
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DocumentVellumValueRequest) MarshalJSON() ([]byte, error) {
+	type embed DocumentVellumValueRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*d),
+		Type:  "DOCUMENT",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (d *DocumentVellumValueRequest) String() string {
 	if len(d._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
 			return value
@@ -14052,6 +14376,90 @@ func (v *VellumAudioRequest) String() string {
 	return fmt.Sprintf("%#v", v)
 }
 
+type VellumDocument struct {
+	Src      string                 `json:"src" url:"src"`
+	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VellumDocument) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VellumDocument) UnmarshalJSON(data []byte) error {
+	type unmarshaler VellumDocument
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = VellumDocument(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VellumDocument) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+type VellumDocumentRequest struct {
+	Src      string                 `json:"src" url:"src"`
+	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VellumDocumentRequest) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VellumDocumentRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler VellumDocumentRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = VellumDocumentRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VellumDocumentRequest) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
 type VellumError struct {
 	Message string              `json:"message" url:"message"`
 	Code    VellumErrorCodeEnum `json:"code" url:"code"`
@@ -14307,6 +14715,7 @@ type VellumValue struct {
 	JsonVellumValue          *JsonVellumValue
 	ImageVellumValue         *ImageVellumValue
 	AudioVellumValue         *AudioVellumValue
+	DocumentVellumValue      *DocumentVellumValue
 	FunctionCallVellumValue  *FunctionCallVellumValue
 	ErrorVellumValue         *ErrorVellumValue
 	ArrayVellumValue         *ArrayVellumValue
@@ -14338,6 +14747,11 @@ func (v *VellumValue) UnmarshalJSON(data []byte) error {
 	valueAudioVellumValue := new(AudioVellumValue)
 	if err := json.Unmarshal(data, &valueAudioVellumValue); err == nil {
 		v.AudioVellumValue = valueAudioVellumValue
+		return nil
+	}
+	valueDocumentVellumValue := new(DocumentVellumValue)
+	if err := json.Unmarshal(data, &valueDocumentVellumValue); err == nil {
+		v.DocumentVellumValue = valueDocumentVellumValue
 		return nil
 	}
 	valueFunctionCallVellumValue := new(FunctionCallVellumValue)
@@ -14384,6 +14798,9 @@ func (v VellumValue) MarshalJSON() ([]byte, error) {
 	if v.AudioVellumValue != nil {
 		return json.Marshal(v.AudioVellumValue)
 	}
+	if v.DocumentVellumValue != nil {
+		return json.Marshal(v.DocumentVellumValue)
+	}
 	if v.FunctionCallVellumValue != nil {
 		return json.Marshal(v.FunctionCallVellumValue)
 	}
@@ -14408,6 +14825,7 @@ type VellumValueVisitor interface {
 	VisitJsonVellumValue(*JsonVellumValue) error
 	VisitImageVellumValue(*ImageVellumValue) error
 	VisitAudioVellumValue(*AudioVellumValue) error
+	VisitDocumentVellumValue(*DocumentVellumValue) error
 	VisitFunctionCallVellumValue(*FunctionCallVellumValue) error
 	VisitErrorVellumValue(*ErrorVellumValue) error
 	VisitArrayVellumValue(*ArrayVellumValue) error
@@ -14430,6 +14848,9 @@ func (v *VellumValue) Accept(visitor VellumValueVisitor) error {
 	}
 	if v.AudioVellumValue != nil {
 		return visitor.VisitAudioVellumValue(v.AudioVellumValue)
+	}
+	if v.DocumentVellumValue != nil {
+		return visitor.VisitDocumentVellumValue(v.DocumentVellumValue)
 	}
 	if v.FunctionCallVellumValue != nil {
 		return visitor.VisitFunctionCallVellumValue(v.FunctionCallVellumValue)
@@ -14639,6 +15060,7 @@ type VellumValueRequest struct {
 	JsonVellumValueRequest          *JsonVellumValueRequest
 	ImageVellumValueRequest         *ImageVellumValueRequest
 	AudioVellumValueRequest         *AudioVellumValueRequest
+	DocumentVellumValueRequest      *DocumentVellumValueRequest
 	FunctionCallVellumValueRequest  *FunctionCallVellumValueRequest
 	ErrorVellumValueRequest         *ErrorVellumValueRequest
 	ArrayVellumValueRequest         *ArrayVellumValueRequest
@@ -14670,6 +15092,11 @@ func (v *VellumValueRequest) UnmarshalJSON(data []byte) error {
 	valueAudioVellumValueRequest := new(AudioVellumValueRequest)
 	if err := json.Unmarshal(data, &valueAudioVellumValueRequest); err == nil {
 		v.AudioVellumValueRequest = valueAudioVellumValueRequest
+		return nil
+	}
+	valueDocumentVellumValueRequest := new(DocumentVellumValueRequest)
+	if err := json.Unmarshal(data, &valueDocumentVellumValueRequest); err == nil {
+		v.DocumentVellumValueRequest = valueDocumentVellumValueRequest
 		return nil
 	}
 	valueFunctionCallVellumValueRequest := new(FunctionCallVellumValueRequest)
@@ -14716,6 +15143,9 @@ func (v VellumValueRequest) MarshalJSON() ([]byte, error) {
 	if v.AudioVellumValueRequest != nil {
 		return json.Marshal(v.AudioVellumValueRequest)
 	}
+	if v.DocumentVellumValueRequest != nil {
+		return json.Marshal(v.DocumentVellumValueRequest)
+	}
 	if v.FunctionCallVellumValueRequest != nil {
 		return json.Marshal(v.FunctionCallVellumValueRequest)
 	}
@@ -14740,6 +15170,7 @@ type VellumValueRequestVisitor interface {
 	VisitJsonVellumValueRequest(*JsonVellumValueRequest) error
 	VisitImageVellumValueRequest(*ImageVellumValueRequest) error
 	VisitAudioVellumValueRequest(*AudioVellumValueRequest) error
+	VisitDocumentVellumValueRequest(*DocumentVellumValueRequest) error
 	VisitFunctionCallVellumValueRequest(*FunctionCallVellumValueRequest) error
 	VisitErrorVellumValueRequest(*ErrorVellumValueRequest) error
 	VisitArrayVellumValueRequest(*ArrayVellumValueRequest) error
@@ -14762,6 +15193,9 @@ func (v *VellumValueRequest) Accept(visitor VellumValueRequestVisitor) error {
 	}
 	if v.AudioVellumValueRequest != nil {
 		return visitor.VisitAudioVellumValueRequest(v.AudioVellumValueRequest)
+	}
+	if v.DocumentVellumValueRequest != nil {
+		return visitor.VisitDocumentVellumValueRequest(v.DocumentVellumValueRequest)
 	}
 	if v.FunctionCallVellumValueRequest != nil {
 		return visitor.VisitFunctionCallVellumValueRequest(v.FunctionCallVellumValueRequest)
@@ -14879,6 +15313,7 @@ func (v *VellumVariableExtensions) String() string {
 // * `FUNCTION_CALL` - FUNCTION_CALL
 // * `IMAGE` - IMAGE
 // * `AUDIO` - AUDIO
+// * `DOCUMENT` - DOCUMENT
 // * `NULL` - NULL
 type VellumVariableType string
 
@@ -14893,6 +15328,7 @@ const (
 	VellumVariableTypeFunctionCall  VellumVariableType = "FUNCTION_CALL"
 	VellumVariableTypeImage         VellumVariableType = "IMAGE"
 	VellumVariableTypeAudio         VellumVariableType = "AUDIO"
+	VellumVariableTypeDocument      VellumVariableType = "DOCUMENT"
 	VellumVariableTypeNull          VellumVariableType = "NULL"
 )
 
@@ -14918,6 +15354,8 @@ func NewVellumVariableTypeFromString(s string) (VellumVariableType, error) {
 		return VellumVariableTypeImage, nil
 	case "AUDIO":
 		return VellumVariableTypeAudio, nil
+	case "DOCUMENT":
+		return VellumVariableTypeDocument, nil
 	case "NULL":
 		return VellumVariableTypeNull, nil
 	}
