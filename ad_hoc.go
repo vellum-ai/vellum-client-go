@@ -453,6 +453,77 @@ func (c *ChatMessagePromptBlock) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+// A block that represents a document in a prompt template.
+type DocumentPromptBlock struct {
+	State       *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	Src         string                      `json:"src" url:"src"`
+	Metadata    map[string]interface{}      `json:"metadata,omitempty" url:"metadata,omitempty"`
+	blockType   string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DocumentPromptBlock) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DocumentPromptBlock) BlockType() string {
+	return d.blockType
+}
+
+func (d *DocumentPromptBlock) UnmarshalJSON(data []byte) error {
+	type embed DocumentPromptBlock
+	var unmarshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed: embed(*d),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*d = DocumentPromptBlock(unmarshaler.embed)
+	if unmarshaler.BlockType != "DOCUMENT" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", d, "DOCUMENT", unmarshaler.BlockType)
+	}
+	d.blockType = unmarshaler.BlockType
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d, "block_type")
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DocumentPromptBlock) MarshalJSON() ([]byte, error) {
+	type embed DocumentPromptBlock
+	var marshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed:     embed(*d),
+		BlockType: "DOCUMENT",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (d *DocumentPromptBlock) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
 type EphemeralPromptCacheConfig struct {
 	Type *EphemeralPromptCacheConfigTypeEnum `json:"type,omitempty" url:"type,omitempty"`
 
@@ -980,6 +1051,7 @@ type PromptBlock struct {
 	AudioPromptBlock        *AudioPromptBlock
 	FunctionCallPromptBlock *FunctionCallPromptBlock
 	ImagePromptBlock        *ImagePromptBlock
+	DocumentPromptBlock     *DocumentPromptBlock
 }
 
 func (p *PromptBlock) UnmarshalJSON(data []byte) error {
@@ -1018,6 +1090,11 @@ func (p *PromptBlock) UnmarshalJSON(data []byte) error {
 		p.ImagePromptBlock = valueImagePromptBlock
 		return nil
 	}
+	valueDocumentPromptBlock := new(DocumentPromptBlock)
+	if err := json.Unmarshal(data, &valueDocumentPromptBlock); err == nil {
+		p.DocumentPromptBlock = valueDocumentPromptBlock
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, p)
 }
 
@@ -1043,6 +1120,9 @@ func (p PromptBlock) MarshalJSON() ([]byte, error) {
 	if p.ImagePromptBlock != nil {
 		return json.Marshal(p.ImagePromptBlock)
 	}
+	if p.DocumentPromptBlock != nil {
+		return json.Marshal(p.DocumentPromptBlock)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", p)
 }
 
@@ -1054,6 +1134,7 @@ type PromptBlockVisitor interface {
 	VisitAudioPromptBlock(*AudioPromptBlock) error
 	VisitFunctionCallPromptBlock(*FunctionCallPromptBlock) error
 	VisitImagePromptBlock(*ImagePromptBlock) error
+	VisitDocumentPromptBlock(*DocumentPromptBlock) error
 }
 
 func (p *PromptBlock) Accept(visitor PromptBlockVisitor) error {
@@ -1077,6 +1158,9 @@ func (p *PromptBlock) Accept(visitor PromptBlockVisitor) error {
 	}
 	if p.ImagePromptBlock != nil {
 		return visitor.VisitImagePromptBlock(p.ImagePromptBlock)
+	}
+	if p.DocumentPromptBlock != nil {
+		return visitor.VisitDocumentPromptBlock(p.DocumentPromptBlock)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", p)
 }
