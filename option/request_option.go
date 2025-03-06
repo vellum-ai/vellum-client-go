@@ -69,3 +69,10 @@ func WithApiKey(apiKey string) *core.ApiKeyOption {
 		ApiKey: apiKey,
 	}
 }
+
+// WithXApiKey sets the xApiKey request header.
+func WithXApiKey(xApiKey string) *core.XApiKeyOption {
+	return &core.XApiKeyOption{
+		XApiKey: xApiKey,
+	}
+}
