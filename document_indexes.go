@@ -18,13 +18,7 @@ type DocumentIndexCreateRequest struct {
 	//
 	// * `ACTIVE` - Active
 	// * `ARCHIVED` - Archived
-	Status *EntityStatus `json:"status,omitempty" url:"-"`
-	// The environment this document index is used in
-	//
-	// * `DEVELOPMENT` - Development
-	// * `STAGING` - Staging
-	// * `PRODUCTION` - Production
-	Environment    *EnvironmentEnum                    `json:"environment,omitempty" url:"-"`
+	Status         *EntityStatus                       `json:"status,omitempty" url:"-"`
 	IndexingConfig *DocumentIndexIndexingConfigRequest `json:"indexing_config,omitempty" url:"-"`
 	// Optionally specify the id of a document index from which you'd like to copy and re-index its documents into this newly created index
 	CopyDocumentsFromIndexId *string `json:"copy_documents_from_index_id,omitempty" url:"-"`
@@ -54,12 +48,6 @@ type PatchedDocumentIndexUpdateRequest struct {
 	// * `ACTIVE` - Active
 	// * `ARCHIVED` - Archived
 	Status *EntityStatus `json:"status,omitempty" url:"-"`
-	// The environment this document index is used in
-	//
-	// * `DEVELOPMENT` - Development
-	// * `STAGING` - Staging
-	// * `PRODUCTION` - Production
-	Environment *EnvironmentEnum `json:"environment,omitempty" url:"-"`
 }
 
 // * `True` - True
@@ -682,13 +670,7 @@ type DocumentIndexRead struct {
 	//
 	// * `ACTIVE` - Active
 	// * `ARCHIVED` - Archived
-	Status *EntityStatus `json:"status,omitempty" url:"status,omitempty"`
-	// The environment this document index is used in
-	//
-	// * `DEVELOPMENT` - Development
-	// * `STAGING` - Staging
-	// * `PRODUCTION` - Production
-	Environment    *EnvironmentEnum             `json:"environment,omitempty" url:"environment,omitempty"`
+	Status         *EntityStatus                `json:"status,omitempty" url:"status,omitempty"`
 	IndexingConfig *DocumentIndexIndexingConfig `json:"indexing_config" url:"indexing_config"`
 
 	extraProperties map[string]interface{}
@@ -2823,10 +2805,4 @@ type DocumentIndexUpdateRequest struct {
 	// * `ACTIVE` - Active
 	// * `ARCHIVED` - Archived
 	Status *EntityStatus `json:"status,omitempty" url:"-"`
-	// The environment this document index is used in
-	//
-	// * `DEVELOPMENT` - Development
-	// * `STAGING` - Staging
-	// * `PRODUCTION` - Production
-	Environment *EnvironmentEnum `json:"environment,omitempty" url:"-"`
 }
