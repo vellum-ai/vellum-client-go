@@ -6674,6 +6674,7 @@ func (j *JsonVellumValueRequest) String() string {
 // * `notBlank` - NOT_BLANK
 // * `coalesce` - COALESCE
 // * `accessField` - ACCESS_FIELD
+// * `parseJson` - PARSE_JSON
 // * `and` - AND
 // * `or` - OR
 type LogicalOperator string
@@ -6719,6 +6720,7 @@ const (
 	LogicalOperatorNotBlank    LogicalOperator = "notBlank"
 	LogicalOperatorCoalesce    LogicalOperator = "coalesce"
 	LogicalOperatorAccessField LogicalOperator = "accessField"
+	LogicalOperatorParseJson   LogicalOperator = "parseJson"
 	LogicalOperatorAnd         LogicalOperator = "and"
 	LogicalOperatorOr          LogicalOperator = "or"
 )
@@ -6769,6 +6771,8 @@ func NewLogicalOperatorFromString(s string) (LogicalOperator, error) {
 		return LogicalOperatorCoalesce, nil
 	case "accessField":
 		return LogicalOperatorAccessField, nil
+	case "parseJson":
+		return LogicalOperatorParseJson, nil
 	case "and":
 		return LogicalOperatorAnd, nil
 	case "or":
