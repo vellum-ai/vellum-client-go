@@ -6720,9 +6720,10 @@ const (
 	LogicalOperatorNotBlank    LogicalOperator = "notBlank"
 	LogicalOperatorCoalesce    LogicalOperator = "coalesce"
 	LogicalOperatorAccessField LogicalOperator = "accessField"
-	LogicalOperatorParseJson   LogicalOperator = "parseJson"
-	LogicalOperatorAnd         LogicalOperator = "and"
-	LogicalOperatorOr          LogicalOperator = "or"
+	// Parse JSON
+	LogicalOperatorParseJson LogicalOperator = "parseJson"
+	LogicalOperatorAnd       LogicalOperator = "and"
+	LogicalOperatorOr        LogicalOperator = "or"
 )
 
 func NewLogicalOperatorFromString(s string) (LogicalOperator, error) {
