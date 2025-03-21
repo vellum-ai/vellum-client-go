@@ -8498,6 +8498,75 @@ func (n *NodeInputCompiledSearchResultsValue) String() string {
 	return fmt.Sprintf("%#v", n)
 }
 
+type NodeInputCompiledSecretValue struct {
+	NodeInputId string        `json:"node_input_id" url:"node_input_id"`
+	Key         string        `json:"key" url:"key"`
+	Value       *VellumSecret `json:"value" url:"value"`
+	type_       string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NodeInputCompiledSecretValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
+}
+
+func (n *NodeInputCompiledSecretValue) Type() string {
+	return n.type_
+}
+
+func (n *NodeInputCompiledSecretValue) UnmarshalJSON(data []byte) error {
+	type embed NodeInputCompiledSecretValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*n = NodeInputCompiledSecretValue(unmarshaler.embed)
+	if unmarshaler.Type != "SECRET" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "SECRET", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NodeInputCompiledSecretValue) MarshalJSON() ([]byte, error) {
+	type embed NodeInputCompiledSecretValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+		Type:  "SECRET",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (n *NodeInputCompiledSecretValue) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
 type NodeInputCompiledStringValue struct {
 	NodeInputId string  `json:"node_input_id" url:"node_input_id"`
 	Key         string  `json:"key" url:"key"`
@@ -8576,6 +8645,7 @@ type NodeInputVariableCompiledValue struct {
 	NodeInputCompiledErrorValue         *NodeInputCompiledErrorValue
 	NodeInputCompiledArrayValue         *NodeInputCompiledArrayValue
 	NodeInputCompiledFunctionCallValue  *NodeInputCompiledFunctionCallValue
+	NodeInputCompiledSecretValue        *NodeInputCompiledSecretValue
 }
 
 func (n *NodeInputVariableCompiledValue) UnmarshalJSON(data []byte) error {
@@ -8619,6 +8689,11 @@ func (n *NodeInputVariableCompiledValue) UnmarshalJSON(data []byte) error {
 		n.NodeInputCompiledFunctionCallValue = valueNodeInputCompiledFunctionCallValue
 		return nil
 	}
+	valueNodeInputCompiledSecretValue := new(NodeInputCompiledSecretValue)
+	if err := json.Unmarshal(data, &valueNodeInputCompiledSecretValue); err == nil {
+		n.NodeInputCompiledSecretValue = valueNodeInputCompiledSecretValue
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, n)
 }
 
@@ -8647,6 +8722,9 @@ func (n NodeInputVariableCompiledValue) MarshalJSON() ([]byte, error) {
 	if n.NodeInputCompiledFunctionCallValue != nil {
 		return json.Marshal(n.NodeInputCompiledFunctionCallValue)
 	}
+	if n.NodeInputCompiledSecretValue != nil {
+		return json.Marshal(n.NodeInputCompiledSecretValue)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", n)
 }
 
@@ -8659,6 +8737,7 @@ type NodeInputVariableCompiledValueVisitor interface {
 	VisitNodeInputCompiledErrorValue(*NodeInputCompiledErrorValue) error
 	VisitNodeInputCompiledArrayValue(*NodeInputCompiledArrayValue) error
 	VisitNodeInputCompiledFunctionCallValue(*NodeInputCompiledFunctionCallValue) error
+	VisitNodeInputCompiledSecretValue(*NodeInputCompiledSecretValue) error
 }
 
 func (n *NodeInputVariableCompiledValue) Accept(visitor NodeInputVariableCompiledValueVisitor) error {
@@ -8685,6 +8764,9 @@ func (n *NodeInputVariableCompiledValue) Accept(visitor NodeInputVariableCompile
 	}
 	if n.NodeInputCompiledFunctionCallValue != nil {
 		return visitor.VisitNodeInputCompiledFunctionCallValue(n.NodeInputCompiledFunctionCallValue)
+	}
+	if n.NodeInputCompiledSecretValue != nil {
+		return visitor.VisitNodeInputCompiledSecretValue(n.NodeInputCompiledSecretValue)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", n)
 }
