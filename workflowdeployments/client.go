@@ -115,6 +115,94 @@ func (c *Client) Retrieve(
 	return response, nil
 }
 
+func (c *Client) ListWorkflowDeploymentEventExecutions(
+	ctx context.Context,
+	id string,
+	request *vellumclientgo.ListWorkflowDeploymentEventExecutionsRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.WorkflowDeploymentEventExecutionsResponse, error) {
+	options := core.NewRequestOptions(opts...)
+
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(baseURL+"/v1/workflow-deployments/%v/execution-events", id)
+
+	queryParams, err := core.QueryValues(request)
+	if err != nil {
+		return nil, err
+	}
+	if len(queryParams) > 0 {
+		endpointURL += "?" + queryParams.Encode()
+	}
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
+	var response *vellumclientgo.WorkflowDeploymentEventExecutionsResponse
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodGet,
+			MaxAttempts:     options.MaxAttempts,
+			Headers:         headers,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+func (c *Client) WorkflowDeploymentEventExecution(
+	ctx context.Context,
+	executionId string,
+	id string,
+	opts ...option.RequestOption,
+) (*vellumclientgo.WorkflowEventExecutionRead, error) {
+	options := core.NewRequestOptions(opts...)
+
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(
+		baseURL+"/v1/workflow-deployments/%v/execution-events/%v",
+		id,
+		executionId,
+	)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
+	var response *vellumclientgo.WorkflowEventExecutionRead
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodGet,
+			MaxAttempts:     options.MaxAttempts,
+			Headers:         headers,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
 // Retrieve a specific Workflow Deployment History Item by either its UUID or the name of a Release Tag that points to it.
 func (c *Client) WorkflowDeploymentHistoryItemRetrieve(
 	ctx context.Context,
