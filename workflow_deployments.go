@@ -1946,8 +1946,8 @@ func (v *VellumNodeExecutionEvent) Accept(visitor VellumNodeExecutionEventVisito
 }
 
 type VellumSdkError struct {
-	Code    VellumSdkErrorCodeEnum `json:"code" url:"code"`
 	Message string                 `json:"message" url:"message"`
+	Code    VellumSdkErrorCodeEnum `json:"code" url:"code"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
