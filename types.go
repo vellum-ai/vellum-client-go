@@ -15825,6 +15825,7 @@ func (w *WorkflowExecutionActualStringRequest) String() string {
 // * `NODE_EXECUTION` - NODE_EXECUTION
 // * `LLM_PROVIDER` - LLM_PROVIDER
 // * `INVALID_TEMPLATE` - INVALID_TEMPLATE
+// * `INVALID_INPUTS` - INVALID_INPUTS
 // * `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
 type WorkflowExecutionEventErrorCode string
 
@@ -15836,6 +15837,7 @@ const (
 	WorkflowExecutionEventErrorCodeNodeExecution                  WorkflowExecutionEventErrorCode = "NODE_EXECUTION"
 	WorkflowExecutionEventErrorCodeLlmProvider                    WorkflowExecutionEventErrorCode = "LLM_PROVIDER"
 	WorkflowExecutionEventErrorCodeInvalidTemplate                WorkflowExecutionEventErrorCode = "INVALID_TEMPLATE"
+	WorkflowExecutionEventErrorCodeInvalidInputs                  WorkflowExecutionEventErrorCode = "INVALID_INPUTS"
 	WorkflowExecutionEventErrorCodeUserDefinedError               WorkflowExecutionEventErrorCode = "USER_DEFINED_ERROR"
 )
 
@@ -15855,6 +15857,8 @@ func NewWorkflowExecutionEventErrorCodeFromString(s string) (WorkflowExecutionEv
 		return WorkflowExecutionEventErrorCodeLlmProvider, nil
 	case "INVALID_TEMPLATE":
 		return WorkflowExecutionEventErrorCodeInvalidTemplate, nil
+	case "INVALID_INPUTS":
+		return WorkflowExecutionEventErrorCodeInvalidInputs, nil
 	case "USER_DEFINED_ERROR":
 		return WorkflowExecutionEventErrorCodeUserDefinedError, nil
 	}
