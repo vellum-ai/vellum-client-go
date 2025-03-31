@@ -10699,6 +10699,66 @@ func (r *RejectedWorkflowNodeResultEvent) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
+type ReleaseTagRelease struct {
+	Id        string    `json:"id" url:"id"`
+	Timestamp time.Time `json:"timestamp" url:"timestamp"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *ReleaseTagRelease) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *ReleaseTagRelease) UnmarshalJSON(data []byte) error {
+	type embed ReleaseTagRelease
+	var unmarshaler = struct {
+		embed
+		Timestamp *core.DateTime `json:"timestamp"`
+	}{
+		embed: embed(*r),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*r = ReleaseTagRelease(unmarshaler.embed)
+	r.Timestamp = unmarshaler.Timestamp.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *ReleaseTagRelease) MarshalJSON() ([]byte, error) {
+	type embed ReleaseTagRelease
+	var marshaler = struct {
+		embed
+		Timestamp *core.DateTime `json:"timestamp"`
+	}{
+		embed:     embed(*r),
+		Timestamp: core.NewDateTime(r.Timestamp),
+	}
+	return json.Marshal(marshaler)
+}
+
+func (r *ReleaseTagRelease) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
 // * `SYSTEM` - System
 // * `USER` - User
 type ReleaseTagSource string

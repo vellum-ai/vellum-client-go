@@ -354,8 +354,10 @@ type DeploymentReleaseTagRead struct {
 	// * `SYSTEM` - System
 	// * `USER` - User
 	Source ReleaseTagSource `json:"source" url:"source"`
-	// The Deployment History Item that this Release Tag is associated with
+	// Deprecated. Reference the `release` field instead.
 	HistoryItem *DeploymentReleaseTagDeploymentHistoryItem `json:"history_item" url:"history_item"`
+	// The Release that this Release Tag points to.
+	Release *ReleaseTagRelease `json:"release" url:"release"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
