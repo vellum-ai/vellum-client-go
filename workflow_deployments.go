@@ -1541,66 +1541,6 @@ func (p *PromptDeploymentParentContext) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
-type Release struct {
-	Id        string    `json:"id" url:"id"`
-	Timestamp time.Time `json:"timestamp" url:"timestamp"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (r *Release) GetExtraProperties() map[string]interface{} {
-	return r.extraProperties
-}
-
-func (r *Release) UnmarshalJSON(data []byte) error {
-	type embed Release
-	var unmarshaler = struct {
-		embed
-		Timestamp *core.DateTime `json:"timestamp"`
-	}{
-		embed: embed(*r),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
-		return err
-	}
-	*r = Release(unmarshaler.embed)
-	r.Timestamp = unmarshaler.Timestamp.Time()
-
-	extraProperties, err := core.ExtractExtraProperties(data, *r)
-	if err != nil {
-		return err
-	}
-	r.extraProperties = extraProperties
-
-	r._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (r *Release) MarshalJSON() ([]byte, error) {
-	type embed Release
-	var marshaler = struct {
-		embed
-		Timestamp *core.DateTime `json:"timestamp"`
-	}{
-		embed:     embed(*r),
-		Timestamp: core.NewDateTime(r.Timestamp),
-	}
-	return json.Marshal(marshaler)
-}
-
-func (r *Release) String() string {
-	if len(r._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(r); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", r)
-}
-
 type SlimWorkflowDeployment struct {
 	Id string `json:"id" url:"id"`
 	// A name that uniquely identifies this workflow deployment within its workspace
@@ -3780,7 +3720,7 @@ type WorkflowReleaseTagRead struct {
 	// Deprecated. Reference the `release` field instead.
 	HistoryItem *WorkflowReleaseTagWorkflowDeploymentHistoryItem `json:"history_item" url:"history_item"`
 	// The Release that this Release Tag points to.
-	Release *Release `json:"release" url:"release"`
+	Release *ReleaseTagRelease `json:"release" url:"release"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -3821,9 +3761,7 @@ func (w *WorkflowReleaseTagRead) String() string {
 }
 
 type WorkflowReleaseTagWorkflowDeploymentHistoryItem struct {
-	// The ID of the Workflow Deployment History Item
-	Id string `json:"id" url:"id"`
-	// The timestamp representing when this History Item was created
+	Id        string    `json:"id" url:"id"`
 	Timestamp time.Time `json:"timestamp" url:"timestamp"`
 
 	extraProperties map[string]interface{}
