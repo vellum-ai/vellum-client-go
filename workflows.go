@@ -9,11 +9,10 @@ import (
 )
 
 type WorkflowsPullRequest struct {
-	ExcludeCode    *bool                       `json:"-" url:"exclude_code,omitempty"`
-	Format         *WorkflowsPullRequestFormat `json:"-" url:"format,omitempty"`
-	IncludeJson    *bool                       `json:"-" url:"include_json,omitempty"`
-	IncludeSandbox *bool                       `json:"-" url:"include_sandbox,omitempty"`
-	Strict         *bool                       `json:"-" url:"strict,omitempty"`
+	ExcludeCode    *bool `json:"-" url:"exclude_code,omitempty"`
+	IncludeJson    *bool `json:"-" url:"include_json,omitempty"`
+	IncludeSandbox *bool `json:"-" url:"include_sandbox,omitempty"`
+	Strict         *bool `json:"-" url:"strict,omitempty"`
 }
 
 type WorkflowPushRequest struct {
@@ -112,26 +111,4 @@ func (w *WorkflowPushResponse) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", w)
-}
-
-type WorkflowsPullRequestFormat string
-
-const (
-	WorkflowsPullRequestFormatJson WorkflowsPullRequestFormat = "json"
-	WorkflowsPullRequestFormatZip  WorkflowsPullRequestFormat = "zip"
-)
-
-func NewWorkflowsPullRequestFormatFromString(s string) (WorkflowsPullRequestFormat, error) {
-	switch s {
-	case "json":
-		return WorkflowsPullRequestFormatJson, nil
-	case "zip":
-		return WorkflowsPullRequestFormatZip, nil
-	}
-	var t WorkflowsPullRequestFormat
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (w WorkflowsPullRequestFormat) Ptr() *WorkflowsPullRequestFormat {
-	return &w
 }
