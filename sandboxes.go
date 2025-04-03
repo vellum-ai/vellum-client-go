@@ -17,6 +17,8 @@ type DeploySandboxPromptRequest struct {
 	Label *string `json:"label,omitempty" url:"-"`
 	// Optionally provide the release tags that you'd like to be associated with the latest release of the created/updated Prompt Deployment.
 	ReleaseTags []string `json:"release_tags,omitempty" url:"-"`
+	// Optionally provide a description that details what's new in this Release.
+	ReleaseDescription *string `json:"release_description,omitempty" url:"-"`
 }
 
 // Named Prompt Sandbox Scenario input value that is of type CHAT_HISTORY
