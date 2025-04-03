@@ -916,10 +916,10 @@ func (a *AudioChatMessageContentRequest) String() string {
 
 // A block that represents an audio file in a prompt template.
 type AudioPromptBlock struct {
-	State       *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
-	CacheConfig *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
-	Src         string                      `json:"src" url:"src"`
-	Metadata    map[string]interface{}      `json:"metadata,omitempty" url:"metadata,omitempty"`
+	State       *PromptBlockState                            `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *ComponentsSchemasEphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	Src         string                                       `json:"src" url:"src"`
+	Metadata    map[string]interface{}                       `json:"metadata,omitempty" url:"metadata,omitempty"`
 	blockType   string
 
 	extraProperties map[string]interface{}
@@ -1636,12 +1636,12 @@ func (c *ChatMessageContentRequest) Accept(visitor ChatMessageContentRequestVisi
 
 // A block that represents a chat message in a prompt template.
 type ChatMessagePromptBlock struct {
-	State                   *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
-	CacheConfig             *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
-	ChatRole                ChatMessageRole             `json:"chat_role" url:"chat_role"`
-	ChatSource              *string                     `json:"chat_source,omitempty" url:"chat_source,omitempty"`
-	ChatMessageUnterminated *bool                       `json:"chat_message_unterminated,omitempty" url:"chat_message_unterminated,omitempty"`
-	Blocks                  []*PromptBlock              `json:"blocks" url:"blocks"`
+	State                   *PromptBlockState                            `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig             *ComponentsSchemasEphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	ChatRole                ChatMessageRole                              `json:"chat_role" url:"chat_role"`
+	ChatSource              *string                                      `json:"chat_source,omitempty" url:"chat_source,omitempty"`
+	ChatMessageUnterminated *bool                                        `json:"chat_message_unterminated,omitempty" url:"chat_message_unterminated,omitempty"`
+	Blocks                  []*PromptBlock                               `json:"blocks" url:"blocks"`
 	blockType               string
 
 	extraProperties map[string]interface{}
@@ -2873,6 +2873,8 @@ func (c *CodeExecutorSecretInput) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+type ComponentsSchemasEphemeralPromptCacheConfig = *EphemeralPromptCacheConfig
+
 type ComponentsSchemasPdfSearchResultMetaSource = *PdfSearchResultMetaSource
 
 type ComponentsSchemasPdfSearchResultMetaSourceRequest = *PdfSearchResultMetaSourceRequest
@@ -3235,10 +3237,10 @@ func (d *DocumentChatMessageContentRequest) String() string {
 
 // A block that represents a document in a prompt template.
 type DocumentPromptBlock struct {
-	State       *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
-	CacheConfig *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
-	Src         string                      `json:"src" url:"src"`
-	Metadata    map[string]interface{}      `json:"metadata,omitempty" url:"metadata,omitempty"`
+	State       *PromptBlockState                            `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *ComponentsSchemasEphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	Src         string                                       `json:"src" url:"src"`
+	Metadata    map[string]interface{}                       `json:"metadata,omitempty" url:"metadata,omitempty"`
 	blockType   string
 
 	extraProperties map[string]interface{}
@@ -3553,7 +3555,7 @@ func (e EnvironmentEnum) Ptr() *EnvironmentEnum {
 }
 
 type EphemeralPromptCacheConfig struct {
-	Type *EphemeralPromptCacheConfigTypeEnum `json:"type,omitempty" url:"type,omitempty"`
+	type_ string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -3563,15 +3565,28 @@ func (e *EphemeralPromptCacheConfig) GetExtraProperties() map[string]interface{}
 	return e.extraProperties
 }
 
+func (e *EphemeralPromptCacheConfig) Type() string {
+	return e.type_
+}
+
 func (e *EphemeralPromptCacheConfig) UnmarshalJSON(data []byte) error {
-	type unmarshaler EphemeralPromptCacheConfig
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed EphemeralPromptCacheConfig
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*e),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*e = EphemeralPromptCacheConfig(value)
+	*e = EphemeralPromptCacheConfig(unmarshaler.embed)
+	if unmarshaler.Type != "EPHEMERAL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", e, "EPHEMERAL", unmarshaler.Type)
+	}
+	e.type_ = unmarshaler.Type
 
-	extraProperties, err := core.ExtractExtraProperties(data, *e)
+	extraProperties, err := core.ExtractExtraProperties(data, *e, "type")
 	if err != nil {
 		return err
 	}
@@ -3579,6 +3594,18 @@ func (e *EphemeralPromptCacheConfig) UnmarshalJSON(data []byte) error {
 
 	e._rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (e *EphemeralPromptCacheConfig) MarshalJSON() ([]byte, error) {
+	type embed EphemeralPromptCacheConfig
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*e),
+		Type:  "EPHEMERAL",
+	}
+	return json.Marshal(marshaler)
 }
 
 func (e *EphemeralPromptCacheConfig) String() string {
@@ -3592,9 +3619,6 @@ func (e *EphemeralPromptCacheConfig) String() string {
 	}
 	return fmt.Sprintf("%#v", e)
 }
-
-// * `EPHEMERAL` - EPHEMERAL
-type EphemeralPromptCacheConfigTypeEnum = string
 
 // A user input representing a Vellum Error value
 type ErrorInput struct {
@@ -5578,11 +5602,11 @@ func (f *FunctionCallInput) String() string {
 
 // A block that represents a function call in a prompt template.
 type FunctionCallPromptBlock struct {
-	State       *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
-	CacheConfig *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
-	Id          *string                     `json:"id,omitempty" url:"id,omitempty"`
-	Name        string                      `json:"name" url:"name"`
-	Arguments   map[string]interface{}      `json:"arguments" url:"arguments"`
+	State       *PromptBlockState                            `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *ComponentsSchemasEphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	Id          *string                                      `json:"id,omitempty" url:"id,omitempty"`
+	Name        string                                       `json:"name" url:"name"`
+	Arguments   map[string]interface{}                       `json:"arguments" url:"arguments"`
 	blockType   string
 
 	extraProperties map[string]interface{}
@@ -5830,8 +5854,8 @@ func (f *FunctionCallVellumValueRequest) String() string {
 
 // The definition of a Function (aka "Tool Call") that a Prompt/Model has access to.
 type FunctionDefinition struct {
-	State       *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
-	CacheConfig *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	State       *PromptBlockState                            `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *ComponentsSchemasEphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
 	// The name identifying the function.
 	Name *string `json:"name,omitempty" url:"name,omitempty"`
 	// A description to help guide the model when to invoke this function.
@@ -6406,10 +6430,10 @@ func (i *ImageChatMessageContentRequest) String() string {
 
 // A block that represents an image in a prompt template.
 type ImagePromptBlock struct {
-	State       *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
-	CacheConfig *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
-	Src         string                      `json:"src" url:"src"`
-	Metadata    map[string]interface{}      `json:"metadata,omitempty" url:"metadata,omitempty"`
+	State       *PromptBlockState                            `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *ComponentsSchemasEphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	Src         string                                       `json:"src" url:"src"`
+	Metadata    map[string]interface{}                       `json:"metadata,omitempty" url:"metadata,omitempty"`
 	blockType   string
 
 	extraProperties map[string]interface{}
@@ -6833,9 +6857,9 @@ func (i IterationStateEnum) Ptr() *IterationStateEnum {
 
 // A block of Jinja template code that is used to generate a prompt
 type JinjaPromptBlock struct {
-	State       *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
-	CacheConfig *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
-	Template    string                      `json:"template" url:"template"`
+	State       *PromptBlockState                            `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *ComponentsSchemasEphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	Template    string                                       `json:"template" url:"template"`
 	blockType   string
 
 	extraProperties map[string]interface{}
@@ -10414,9 +10438,9 @@ func (p *PdfSearchResultMetaSourceRequest) String() string {
 
 // A block that holds a plain text string value.
 type PlainTextPromptBlock struct {
-	State       *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
-	CacheConfig *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
-	Text        string                      `json:"text" url:"text"`
+	State       *PromptBlockState                            `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *ComponentsSchemasEphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	Text        string                                       `json:"text" url:"text"`
 	blockType   string
 
 	extraProperties map[string]interface{}
@@ -11660,9 +11684,9 @@ func (r *RichTextChildBlock) Accept(visitor RichTextChildBlockVisitor) error {
 
 // A block that includes a combination of plain text and variable blocks.
 type RichTextPromptBlock struct {
-	State       *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
-	CacheConfig *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
-	Blocks      []*RichTextChildBlock       `json:"blocks" url:"blocks"`
+	State       *PromptBlockState                            `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *ComponentsSchemasEphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	Blocks      []*RichTextChildBlock                        `json:"blocks" url:"blocks"`
 	blockType   string
 
 	extraProperties map[string]interface{}
@@ -15384,9 +15408,9 @@ type UnitEnum = string
 
 // A block that represents a variable in a prompt template.
 type VariablePromptBlock struct {
-	State         *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
-	CacheConfig   *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
-	InputVariable string                      `json:"input_variable" url:"input_variable"`
+	State         *PromptBlockState                            `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig   *ComponentsSchemasEphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	InputVariable string                                       `json:"input_variable" url:"input_variable"`
 	blockType     string
 
 	extraProperties map[string]interface{}
