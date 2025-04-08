@@ -341,7 +341,9 @@ func (w *WorkflowDeploymentRelease) String() string {
 }
 
 type WorkflowDeploymentReleaseWorkflowVersion struct {
-	Id string `json:"id" url:"id"`
+	Id              string            `json:"id" url:"id"`
+	InputVariables  []*VellumVariable `json:"input_variables" url:"input_variables"`
+	OutputVariables []*VellumVariable `json:"output_variables" url:"output_variables"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
