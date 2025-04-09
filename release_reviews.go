@@ -275,14 +275,15 @@ func (s *SlimReleaseReview) String() string {
 }
 
 type WorkflowDeploymentRelease struct {
-	Id              string                                    `json:"id" url:"id"`
-	Created         time.Time                                 `json:"created" url:"created"`
-	Environment     *ReleaseEnvironment                       `json:"environment" url:"environment"`
-	CreatedBy       *ReleaseCreatedBy                         `json:"created_by,omitempty" url:"created_by,omitempty"`
-	WorkflowVersion *WorkflowDeploymentReleaseWorkflowVersion `json:"workflow_version" url:"workflow_version"`
-	Description     *string                                   `json:"description,omitempty" url:"description,omitempty"`
-	ReleaseTags     []*ReleaseReleaseTag                      `json:"release_tags" url:"release_tags"`
-	Reviews         []*SlimReleaseReview                      `json:"reviews" url:"reviews"`
+	Id              string                                       `json:"id" url:"id"`
+	Created         time.Time                                    `json:"created" url:"created"`
+	Environment     *ReleaseEnvironment                          `json:"environment" url:"environment"`
+	CreatedBy       *ReleaseCreatedBy                            `json:"created_by,omitempty" url:"created_by,omitempty"`
+	WorkflowVersion *WorkflowDeploymentReleaseWorkflowVersion    `json:"workflow_version" url:"workflow_version"`
+	Deployment      *WorkflowDeploymentReleaseWorkflowDeployment `json:"deployment" url:"deployment"`
+	Description     *string                                      `json:"description,omitempty" url:"description,omitempty"`
+	ReleaseTags     []*ReleaseReleaseTag                         `json:"release_tags" url:"release_tags"`
+	Reviews         []*SlimReleaseReview                         `json:"reviews" url:"reviews"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -329,6 +330,47 @@ func (w *WorkflowDeploymentRelease) MarshalJSON() ([]byte, error) {
 }
 
 func (w *WorkflowDeploymentRelease) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
+}
+
+type WorkflowDeploymentReleaseWorkflowDeployment struct {
+	Name string `json:"name" url:"name"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowDeploymentReleaseWorkflowDeployment) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkflowDeploymentReleaseWorkflowDeployment) UnmarshalJSON(data []byte) error {
+	type unmarshaler WorkflowDeploymentReleaseWorkflowDeployment
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*w = WorkflowDeploymentReleaseWorkflowDeployment(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowDeploymentReleaseWorkflowDeployment) String() string {
 	if len(w._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
 			return value
