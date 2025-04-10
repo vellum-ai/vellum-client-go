@@ -41,6 +41,7 @@ type Client struct {
 	AdHoc               *adhoc.Client
 	ContainerImages     *containerimages.Client
 	Deployments         *deployments.Client
+	ReleaseReviews      *releasereviews.Client
 	DocumentIndexes     *documentindexes.Client
 	Documents           *documents.Client
 	FolderEntities      *folderentities.Client
@@ -52,7 +53,6 @@ type Client struct {
 	TestSuiteRuns       *testsuiteruns.Client
 	TestSuites          *testsuites.Client
 	WorkflowDeployments *workflowdeployments.Client
-	ReleaseReviews      *releasereviews.Client
 	WorkflowSandboxes   *workflowsandboxes.Client
 	Workflows           *workflows.Client
 	WorkspaceSecrets    *workspacesecrets.Client
@@ -73,6 +73,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 		AdHoc:               adhoc.NewClient(opts...),
 		ContainerImages:     containerimages.NewClient(opts...),
 		Deployments:         deployments.NewClient(opts...),
+		ReleaseReviews:      releasereviews.NewClient(opts...),
 		DocumentIndexes:     documentindexes.NewClient(opts...),
 		Documents:           documents.NewClient(opts...),
 		FolderEntities:      folderentities.NewClient(opts...),
@@ -84,7 +85,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 		TestSuiteRuns:       testsuiteruns.NewClient(opts...),
 		TestSuites:          testsuites.NewClient(opts...),
 		WorkflowDeployments: workflowdeployments.NewClient(opts...),
-		ReleaseReviews:      releasereviews.NewClient(opts...),
 		WorkflowSandboxes:   workflowsandboxes.NewClient(opts...),
 		Workflows:           workflows.NewClient(opts...),
 		WorkspaceSecrets:    workspacesecrets.NewClient(opts...),
