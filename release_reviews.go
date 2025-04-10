@@ -9,6 +9,155 @@ import (
 	time "time"
 )
 
+type PromptDeploymentRelease struct {
+	Id            string                                   `json:"id" url:"id"`
+	Created       time.Time                                `json:"created" url:"created"`
+	Environment   *ReleaseEnvironment                      `json:"environment" url:"environment"`
+	CreatedBy     *ReleaseCreatedBy                        `json:"created_by,omitempty" url:"created_by,omitempty"`
+	PromptVersion *PromptDeploymentReleasePromptVersion    `json:"prompt_version" url:"prompt_version"`
+	Deployment    *PromptDeploymentReleasePromptDeployment `json:"deployment" url:"deployment"`
+	Description   *string                                  `json:"description,omitempty" url:"description,omitempty"`
+	ReleaseTags   []*ReleaseReleaseTag                     `json:"release_tags" url:"release_tags"`
+	Reviews       []*SlimReleaseReview                     `json:"reviews" url:"reviews"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PromptDeploymentRelease) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PromptDeploymentRelease) UnmarshalJSON(data []byte) error {
+	type embed PromptDeploymentRelease
+	var unmarshaler = struct {
+		embed
+		Created *core.DateTime `json:"created"`
+	}{
+		embed: embed(*p),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*p = PromptDeploymentRelease(unmarshaler.embed)
+	p.Created = unmarshaler.Created.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PromptDeploymentRelease) MarshalJSON() ([]byte, error) {
+	type embed PromptDeploymentRelease
+	var marshaler = struct {
+		embed
+		Created *core.DateTime `json:"created"`
+	}{
+		embed:   embed(*p),
+		Created: core.NewDateTime(p.Created),
+	}
+	return json.Marshal(marshaler)
+}
+
+func (p *PromptDeploymentRelease) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PromptDeploymentReleasePromptDeployment struct {
+	Name string `json:"name" url:"name"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PromptDeploymentReleasePromptDeployment) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PromptDeploymentReleasePromptDeployment) UnmarshalJSON(data []byte) error {
+	type unmarshaler PromptDeploymentReleasePromptDeployment
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PromptDeploymentReleasePromptDeployment(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PromptDeploymentReleasePromptDeployment) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PromptDeploymentReleasePromptVersion struct {
+	Id string `json:"id" url:"id"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PromptDeploymentReleasePromptVersion) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PromptDeploymentReleasePromptVersion) UnmarshalJSON(data []byte) error {
+	type unmarshaler PromptDeploymentReleasePromptVersion
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PromptDeploymentReleasePromptVersion(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PromptDeploymentReleasePromptVersion) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
 type ReleaseCreatedBy struct {
 	Id       string  `json:"id" url:"id"`
 	FullName *string `json:"full_name,omitempty" url:"full_name,omitempty"`
