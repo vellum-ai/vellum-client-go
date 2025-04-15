@@ -1147,8 +1147,10 @@ func (t *TestSuiteRunExecConfig) Accept(visitor TestSuiteRunExecConfigVisitor) e
 
 type TestSuiteRunExecConfigRequest struct {
 	TestSuiteRunDeploymentReleaseTagExecConfigRequest       *TestSuiteRunDeploymentReleaseTagExecConfigRequest
+	TestSuiteRunPromptSandboxExecConfigRequest              *TestSuiteRunPromptSandboxExecConfigRequest
 	TestSuiteRunPromptSandboxHistoryItemExecConfigRequest   *TestSuiteRunPromptSandboxHistoryItemExecConfigRequest
 	TestSuiteRunWorkflowReleaseTagExecConfigRequest         *TestSuiteRunWorkflowReleaseTagExecConfigRequest
+	TestSuiteRunWorkflowSandboxExecConfigRequest            *TestSuiteRunWorkflowSandboxExecConfigRequest
 	TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest *TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest
 	TestSuiteRunExternalExecConfigRequest                   *TestSuiteRunExternalExecConfigRequest
 }
@@ -1159,6 +1161,11 @@ func (t *TestSuiteRunExecConfigRequest) UnmarshalJSON(data []byte) error {
 		t.TestSuiteRunDeploymentReleaseTagExecConfigRequest = valueTestSuiteRunDeploymentReleaseTagExecConfigRequest
 		return nil
 	}
+	valueTestSuiteRunPromptSandboxExecConfigRequest := new(TestSuiteRunPromptSandboxExecConfigRequest)
+	if err := json.Unmarshal(data, &valueTestSuiteRunPromptSandboxExecConfigRequest); err == nil {
+		t.TestSuiteRunPromptSandboxExecConfigRequest = valueTestSuiteRunPromptSandboxExecConfigRequest
+		return nil
+	}
 	valueTestSuiteRunPromptSandboxHistoryItemExecConfigRequest := new(TestSuiteRunPromptSandboxHistoryItemExecConfigRequest)
 	if err := json.Unmarshal(data, &valueTestSuiteRunPromptSandboxHistoryItemExecConfigRequest); err == nil {
 		t.TestSuiteRunPromptSandboxHistoryItemExecConfigRequest = valueTestSuiteRunPromptSandboxHistoryItemExecConfigRequest
@@ -1167,6 +1174,11 @@ func (t *TestSuiteRunExecConfigRequest) UnmarshalJSON(data []byte) error {
 	valueTestSuiteRunWorkflowReleaseTagExecConfigRequest := new(TestSuiteRunWorkflowReleaseTagExecConfigRequest)
 	if err := json.Unmarshal(data, &valueTestSuiteRunWorkflowReleaseTagExecConfigRequest); err == nil {
 		t.TestSuiteRunWorkflowReleaseTagExecConfigRequest = valueTestSuiteRunWorkflowReleaseTagExecConfigRequest
+		return nil
+	}
+	valueTestSuiteRunWorkflowSandboxExecConfigRequest := new(TestSuiteRunWorkflowSandboxExecConfigRequest)
+	if err := json.Unmarshal(data, &valueTestSuiteRunWorkflowSandboxExecConfigRequest); err == nil {
+		t.TestSuiteRunWorkflowSandboxExecConfigRequest = valueTestSuiteRunWorkflowSandboxExecConfigRequest
 		return nil
 	}
 	valueTestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest := new(TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest)
@@ -1186,11 +1198,17 @@ func (t TestSuiteRunExecConfigRequest) MarshalJSON() ([]byte, error) {
 	if t.TestSuiteRunDeploymentReleaseTagExecConfigRequest != nil {
 		return json.Marshal(t.TestSuiteRunDeploymentReleaseTagExecConfigRequest)
 	}
+	if t.TestSuiteRunPromptSandboxExecConfigRequest != nil {
+		return json.Marshal(t.TestSuiteRunPromptSandboxExecConfigRequest)
+	}
 	if t.TestSuiteRunPromptSandboxHistoryItemExecConfigRequest != nil {
 		return json.Marshal(t.TestSuiteRunPromptSandboxHistoryItemExecConfigRequest)
 	}
 	if t.TestSuiteRunWorkflowReleaseTagExecConfigRequest != nil {
 		return json.Marshal(t.TestSuiteRunWorkflowReleaseTagExecConfigRequest)
+	}
+	if t.TestSuiteRunWorkflowSandboxExecConfigRequest != nil {
+		return json.Marshal(t.TestSuiteRunWorkflowSandboxExecConfigRequest)
 	}
 	if t.TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest != nil {
 		return json.Marshal(t.TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest)
@@ -1203,8 +1221,10 @@ func (t TestSuiteRunExecConfigRequest) MarshalJSON() ([]byte, error) {
 
 type TestSuiteRunExecConfigRequestVisitor interface {
 	VisitTestSuiteRunDeploymentReleaseTagExecConfigRequest(*TestSuiteRunDeploymentReleaseTagExecConfigRequest) error
+	VisitTestSuiteRunPromptSandboxExecConfigRequest(*TestSuiteRunPromptSandboxExecConfigRequest) error
 	VisitTestSuiteRunPromptSandboxHistoryItemExecConfigRequest(*TestSuiteRunPromptSandboxHistoryItemExecConfigRequest) error
 	VisitTestSuiteRunWorkflowReleaseTagExecConfigRequest(*TestSuiteRunWorkflowReleaseTagExecConfigRequest) error
+	VisitTestSuiteRunWorkflowSandboxExecConfigRequest(*TestSuiteRunWorkflowSandboxExecConfigRequest) error
 	VisitTestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest(*TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest) error
 	VisitTestSuiteRunExternalExecConfigRequest(*TestSuiteRunExternalExecConfigRequest) error
 }
@@ -1213,11 +1233,17 @@ func (t *TestSuiteRunExecConfigRequest) Accept(visitor TestSuiteRunExecConfigReq
 	if t.TestSuiteRunDeploymentReleaseTagExecConfigRequest != nil {
 		return visitor.VisitTestSuiteRunDeploymentReleaseTagExecConfigRequest(t.TestSuiteRunDeploymentReleaseTagExecConfigRequest)
 	}
+	if t.TestSuiteRunPromptSandboxExecConfigRequest != nil {
+		return visitor.VisitTestSuiteRunPromptSandboxExecConfigRequest(t.TestSuiteRunPromptSandboxExecConfigRequest)
+	}
 	if t.TestSuiteRunPromptSandboxHistoryItemExecConfigRequest != nil {
 		return visitor.VisitTestSuiteRunPromptSandboxHistoryItemExecConfigRequest(t.TestSuiteRunPromptSandboxHistoryItemExecConfigRequest)
 	}
 	if t.TestSuiteRunWorkflowReleaseTagExecConfigRequest != nil {
 		return visitor.VisitTestSuiteRunWorkflowReleaseTagExecConfigRequest(t.TestSuiteRunWorkflowReleaseTagExecConfigRequest)
+	}
+	if t.TestSuiteRunWorkflowSandboxExecConfigRequest != nil {
+		return visitor.VisitTestSuiteRunWorkflowSandboxExecConfigRequest(t.TestSuiteRunWorkflowSandboxExecConfigRequest)
 	}
 	if t.TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest != nil {
 		return visitor.VisitTestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest(t.TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest)
@@ -2265,6 +2291,120 @@ func (t *TestSuiteRunExternalExecConfigRequest) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+type TestSuiteRunPromptSandboxExecConfigDataRequest struct {
+	// The ID of the Prompt Sandbox to run the Test Suite against.
+	PromptSandboxId string `json:"prompt_sandbox_id" url:"prompt_sandbox_id"`
+	// The ID of the Prompt Variant within the Prompt Sandbox that you'd like to run the Test Suite against.
+	PromptVariantId string `json:"prompt_variant_id" url:"prompt_variant_id"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunPromptSandboxExecConfigDataRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunPromptSandboxExecConfigDataRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteRunPromptSandboxExecConfigDataRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteRunPromptSandboxExecConfigDataRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunPromptSandboxExecConfigDataRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Execution configuration for running a Test Suite against a Prompt Sandbox
+type TestSuiteRunPromptSandboxExecConfigRequest struct {
+	Data *TestSuiteRunPromptSandboxExecConfigDataRequest `json:"data" url:"data"`
+	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
+	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
+	type_       string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunPromptSandboxExecConfigRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunPromptSandboxExecConfigRequest) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteRunPromptSandboxExecConfigRequest) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteRunPromptSandboxExecConfigRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteRunPromptSandboxExecConfigRequest(unmarshaler.embed)
+	if unmarshaler.Type != "PROMPT_SANDBOX" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "PROMPT_SANDBOX", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunPromptSandboxExecConfigRequest) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteRunPromptSandboxExecConfigRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "PROMPT_SANDBOX",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteRunPromptSandboxExecConfigRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
 // Execution configuration for running a Test Suite against a Prompt Sandbox History Item
 type TestSuiteRunPromptSandboxHistoryItemExecConfig struct {
 	Data *TestSuiteRunPromptSandboxHistoryItemExecConfigData `json:"data" url:"data"`
@@ -2860,6 +3000,118 @@ func (t *TestSuiteRunWorkflowReleaseTagExecConfigRequest) MarshalJSON() ([]byte,
 }
 
 func (t *TestSuiteRunWorkflowReleaseTagExecConfigRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type TestSuiteRunWorkflowSandboxExecConfigDataRequest struct {
+	// The ID of the Workflow Sandbox to run the Test Suite against.
+	WorkflowSandboxId string `json:"workflow_sandbox_id" url:"workflow_sandbox_id"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunWorkflowSandboxExecConfigDataRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunWorkflowSandboxExecConfigDataRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteRunWorkflowSandboxExecConfigDataRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteRunWorkflowSandboxExecConfigDataRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunWorkflowSandboxExecConfigDataRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// Execution configuration for running a Test Suite against a Workflow Sandbox
+type TestSuiteRunWorkflowSandboxExecConfigRequest struct {
+	Data *TestSuiteRunWorkflowSandboxExecConfigDataRequest `json:"data" url:"data"`
+	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
+	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
+	type_       string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunWorkflowSandboxExecConfigRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunWorkflowSandboxExecConfigRequest) Type() string {
+	return t.type_
+}
+
+func (t *TestSuiteRunWorkflowSandboxExecConfigRequest) UnmarshalJSON(data []byte) error {
+	type embed TestSuiteRunWorkflowSandboxExecConfigRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = TestSuiteRunWorkflowSandboxExecConfigRequest(unmarshaler.embed)
+	if unmarshaler.Type != "WORKFLOW_SANDBOX" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "WORKFLOW_SANDBOX", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunWorkflowSandboxExecConfigRequest) MarshalJSON() ([]byte, error) {
+	type embed TestSuiteRunWorkflowSandboxExecConfigRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "WORKFLOW_SANDBOX",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *TestSuiteRunWorkflowSandboxExecConfigRequest) String() string {
 	if len(t._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
 			return value
