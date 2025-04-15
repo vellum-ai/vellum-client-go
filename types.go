@@ -5120,6 +5120,7 @@ type FulfilledPromptExecutionMeta struct {
 	Latency      *int              `json:"latency,omitempty" url:"latency,omitempty"`
 	FinishReason *FinishReasonEnum `json:"finish_reason,omitempty" url:"finish_reason,omitempty"`
 	Usage        *MlModelUsage     `json:"usage,omitempty" url:"usage,omitempty"`
+	Cost         *Price            `json:"cost,omitempty" url:"cost,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
