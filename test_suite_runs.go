@@ -2291,6 +2291,48 @@ func (t *TestSuiteRunExternalExecConfigRequest) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+type TestSuiteRunProgress struct {
+	NumberOfRequestedTestCases int `json:"number_of_requested_test_cases" url:"number_of_requested_test_cases"`
+	NumberOfCompletedTestCases int `json:"number_of_completed_test_cases" url:"number_of_completed_test_cases"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *TestSuiteRunProgress) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *TestSuiteRunProgress) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteRunProgress
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = TestSuiteRunProgress(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *TestSuiteRunProgress) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
 type TestSuiteRunPromptSandboxExecConfigDataRequest struct {
 	// The ID of the Prompt Sandbox to run the Test Suite against.
 	PromptSandboxId string `json:"prompt_sandbox_id" url:"prompt_sandbox_id"`
@@ -2647,6 +2689,7 @@ type TestSuiteRunRead struct {
 	State TestSuiteRunState `json:"state" url:"state"`
 	// Configuration that defines how the Test Suite should be run
 	ExecConfig *TestSuiteRunExecConfig `json:"exec_config,omitempty" url:"exec_config,omitempty"`
+	Progress   *TestSuiteRunProgress   `json:"progress,omitempty" url:"progress,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage

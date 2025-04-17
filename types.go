@@ -16900,6 +16900,7 @@ func (w *WorkflowExecutionActualStringRequest) String() string {
 
 // * `WORKFLOW_INITIALIZATION` - WORKFLOW_INITIALIZATION
 // * `WORKFLOW_CANCELLED` - WORKFLOW_CANCELLED
+// * `PROVIDER_CREDENTIALS_UNAVAILABLE` - PROVIDER_CREDENTIALS_UNAVAILABLE
 // * `NODE_EXECUTION_COUNT_LIMIT_REACHED` - NODE_EXECUTION_COUNT_LIMIT_REACHED
 // * `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
 // * `NODE_EXECUTION` - NODE_EXECUTION
@@ -16912,6 +16913,7 @@ type WorkflowExecutionEventErrorCode string
 const (
 	WorkflowExecutionEventErrorCodeWorkflowInitialization         WorkflowExecutionEventErrorCode = "WORKFLOW_INITIALIZATION"
 	WorkflowExecutionEventErrorCodeWorkflowCancelled              WorkflowExecutionEventErrorCode = "WORKFLOW_CANCELLED"
+	WorkflowExecutionEventErrorCodeProviderCredentialsUnavailable WorkflowExecutionEventErrorCode = "PROVIDER_CREDENTIALS_UNAVAILABLE"
 	WorkflowExecutionEventErrorCodeNodeExecutionCountLimitReached WorkflowExecutionEventErrorCode = "NODE_EXECUTION_COUNT_LIMIT_REACHED"
 	WorkflowExecutionEventErrorCodeInternalServerError            WorkflowExecutionEventErrorCode = "INTERNAL_SERVER_ERROR"
 	WorkflowExecutionEventErrorCodeNodeExecution                  WorkflowExecutionEventErrorCode = "NODE_EXECUTION"
@@ -16927,6 +16929,8 @@ func NewWorkflowExecutionEventErrorCodeFromString(s string) (WorkflowExecutionEv
 		return WorkflowExecutionEventErrorCodeWorkflowInitialization, nil
 	case "WORKFLOW_CANCELLED":
 		return WorkflowExecutionEventErrorCodeWorkflowCancelled, nil
+	case "PROVIDER_CREDENTIALS_UNAVAILABLE":
+		return WorkflowExecutionEventErrorCodeProviderCredentialsUnavailable, nil
 	case "NODE_EXECUTION_COUNT_LIMIT_REACHED":
 		return WorkflowExecutionEventErrorCodeNodeExecutionCountLimitReached, nil
 	case "INTERNAL_SERVER_ERROR":
