@@ -1934,6 +1934,7 @@ func (v *VellumSdkError) String() string {
 // * `INVALID_CODE` - INVALID_CODE
 // * `INVALID_TEMPLATE` - INVALID_TEMPLATE
 // * `INTERNAL_ERROR` - INTERNAL_ERROR
+// * `PROVIDER_CREDENTIALS_UNAVAILABLE` - PROVIDER_CREDENTIALS_UNAVAILABLE
 // * `PROVIDER_ERROR` - PROVIDER_ERROR
 // * `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
 // * `WORKFLOW_CANCELLED` - WORKFLOW_CANCELLED
@@ -1941,17 +1942,18 @@ func (v *VellumSdkError) String() string {
 type VellumSdkErrorCodeEnum string
 
 const (
-	VellumSdkErrorCodeEnumInvalidWorkflow   VellumSdkErrorCodeEnum = "INVALID_WORKFLOW"
-	VellumSdkErrorCodeEnumInvalidInputs     VellumSdkErrorCodeEnum = "INVALID_INPUTS"
-	VellumSdkErrorCodeEnumInvalidOutputs    VellumSdkErrorCodeEnum = "INVALID_OUTPUTS"
-	VellumSdkErrorCodeEnumInvalidState      VellumSdkErrorCodeEnum = "INVALID_STATE"
-	VellumSdkErrorCodeEnumInvalidCode       VellumSdkErrorCodeEnum = "INVALID_CODE"
-	VellumSdkErrorCodeEnumInvalidTemplate   VellumSdkErrorCodeEnum = "INVALID_TEMPLATE"
-	VellumSdkErrorCodeEnumInternalError     VellumSdkErrorCodeEnum = "INTERNAL_ERROR"
-	VellumSdkErrorCodeEnumProviderError     VellumSdkErrorCodeEnum = "PROVIDER_ERROR"
-	VellumSdkErrorCodeEnumUserDefinedError  VellumSdkErrorCodeEnum = "USER_DEFINED_ERROR"
-	VellumSdkErrorCodeEnumWorkflowCancelled VellumSdkErrorCodeEnum = "WORKFLOW_CANCELLED"
-	VellumSdkErrorCodeEnumNodeExecution     VellumSdkErrorCodeEnum = "NODE_EXECUTION"
+	VellumSdkErrorCodeEnumInvalidWorkflow                VellumSdkErrorCodeEnum = "INVALID_WORKFLOW"
+	VellumSdkErrorCodeEnumInvalidInputs                  VellumSdkErrorCodeEnum = "INVALID_INPUTS"
+	VellumSdkErrorCodeEnumInvalidOutputs                 VellumSdkErrorCodeEnum = "INVALID_OUTPUTS"
+	VellumSdkErrorCodeEnumInvalidState                   VellumSdkErrorCodeEnum = "INVALID_STATE"
+	VellumSdkErrorCodeEnumInvalidCode                    VellumSdkErrorCodeEnum = "INVALID_CODE"
+	VellumSdkErrorCodeEnumInvalidTemplate                VellumSdkErrorCodeEnum = "INVALID_TEMPLATE"
+	VellumSdkErrorCodeEnumInternalError                  VellumSdkErrorCodeEnum = "INTERNAL_ERROR"
+	VellumSdkErrorCodeEnumProviderCredentialsUnavailable VellumSdkErrorCodeEnum = "PROVIDER_CREDENTIALS_UNAVAILABLE"
+	VellumSdkErrorCodeEnumProviderError                  VellumSdkErrorCodeEnum = "PROVIDER_ERROR"
+	VellumSdkErrorCodeEnumUserDefinedError               VellumSdkErrorCodeEnum = "USER_DEFINED_ERROR"
+	VellumSdkErrorCodeEnumWorkflowCancelled              VellumSdkErrorCodeEnum = "WORKFLOW_CANCELLED"
+	VellumSdkErrorCodeEnumNodeExecution                  VellumSdkErrorCodeEnum = "NODE_EXECUTION"
 )
 
 func NewVellumSdkErrorCodeEnumFromString(s string) (VellumSdkErrorCodeEnum, error) {
@@ -1970,6 +1972,8 @@ func NewVellumSdkErrorCodeEnumFromString(s string) (VellumSdkErrorCodeEnum, erro
 		return VellumSdkErrorCodeEnumInvalidTemplate, nil
 	case "INTERNAL_ERROR":
 		return VellumSdkErrorCodeEnumInternalError, nil
+	case "PROVIDER_CREDENTIALS_UNAVAILABLE":
+		return VellumSdkErrorCodeEnumProviderCredentialsUnavailable, nil
 	case "PROVIDER_ERROR":
 		return VellumSdkErrorCodeEnumProviderError, nil
 	case "USER_DEFINED_ERROR":
