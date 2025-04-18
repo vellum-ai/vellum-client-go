@@ -613,6 +613,6 @@ func (l ListDeploymentReleaseTagsRequestSource) Ptr() *ListDeploymentReleaseTags
 }
 
 type PatchedDeploymentReleaseTagUpdateRequest struct {
-	// The ID of the Deployment History Item to tag
+	// The ID of the Release to tag
 	HistoryItemId *string `json:"history_item_id,omitempty" url:"-"`
 }
