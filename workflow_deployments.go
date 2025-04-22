@@ -2678,6 +2678,7 @@ type WorkflowExecutionInitiatedBody struct {
 	WorkflowDefinition *VellumCodeResourceDefinition `json:"workflow_definition" url:"workflow_definition"`
 	DisplayContext     *WorkflowEventDisplayContext  `json:"display_context,omitempty" url:"display_context,omitempty"`
 	Inputs             map[string]interface{}        `json:"inputs" url:"inputs"`
+	InitialState       *WorkflowState                `json:"initial_state,omitempty" url:"initial_state,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -3885,6 +3886,131 @@ func (w *WorkflowSandboxParentContext) MarshalJSON() ([]byte, error) {
 }
 
 func (w *WorkflowSandboxParentContext) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
+}
+
+type WorkflowState struct {
+	Meta *WorkflowStateMeta `json:"meta" url:"meta"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowState) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkflowState) UnmarshalJSON(data []byte) error {
+	type unmarshaler WorkflowState
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*w = WorkflowState(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowState) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
+}
+
+type WorkflowStateMeta struct {
+	NodeOutputs        map[string]interface{}               `json:"node_outputs" url:"node_outputs"`
+	NodeExecutionCache *WorkflowStateMetaNodeExecutionCache `json:"node_execution_cache" url:"node_execution_cache"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowStateMeta) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkflowStateMeta) UnmarshalJSON(data []byte) error {
+	type unmarshaler WorkflowStateMeta
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*w = WorkflowStateMeta(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowStateMeta) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
+}
+
+type WorkflowStateMetaNodeExecutionCache struct {
+	NodeExecutionsFulfilled map[string][]string `json:"node_executions_fulfilled" url:"node_executions_fulfilled"`
+	NodeExecutionsInitiated map[string][]string `json:"node_executions_initiated" url:"node_executions_initiated"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowStateMetaNodeExecutionCache) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkflowStateMetaNodeExecutionCache) UnmarshalJSON(data []byte) error {
+	type unmarshaler WorkflowStateMetaNodeExecutionCache
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*w = WorkflowStateMetaNodeExecutionCache(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowStateMetaNodeExecutionCache) String() string {
 	if len(w._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
 			return value
