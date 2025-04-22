@@ -3935,10 +3935,10 @@ func (e *ExecuteApiRequestHeadersValue) Accept(visitor ExecuteApiRequestHeadersV
 }
 
 type ExecuteApiResponse struct {
-	StatusCode int                    `json:"status_code" url:"status_code"`
-	Text       string                 `json:"text" url:"text"`
-	Json       map[string]interface{} `json:"json,omitempty" url:"json,omitempty"`
-	Headers    map[string]string      `json:"headers" url:"headers"`
+	StatusCode int                     `json:"status_code" url:"status_code"`
+	Text       string                  `json:"text" url:"text"`
+	Json       *ExecuteApiResponseJson `json:"json" url:"json"`
+	Headers    map[string]string       `json:"headers" url:"headers"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -3976,6 +3976,50 @@ func (e *ExecuteApiResponse) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", e)
+}
+
+type ExecuteApiResponseJson struct {
+	StringUnknownMap map[string]interface{}
+	UnknownList      []interface{}
+}
+
+func (e *ExecuteApiResponseJson) UnmarshalJSON(data []byte) error {
+	var valueStringUnknownMap map[string]interface{}
+	if err := json.Unmarshal(data, &valueStringUnknownMap); err == nil {
+		e.StringUnknownMap = valueStringUnknownMap
+		return nil
+	}
+	var valueUnknownList []interface{}
+	if err := json.Unmarshal(data, &valueUnknownList); err == nil {
+		e.UnknownList = valueUnknownList
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, e)
+}
+
+func (e ExecuteApiResponseJson) MarshalJSON() ([]byte, error) {
+	if e.StringUnknownMap != nil {
+		return json.Marshal(e.StringUnknownMap)
+	}
+	if e.UnknownList != nil {
+		return json.Marshal(e.UnknownList)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", e)
+}
+
+type ExecuteApiResponseJsonVisitor interface {
+	VisitStringUnknownMap(map[string]interface{}) error
+	VisitUnknownList([]interface{}) error
+}
+
+func (e *ExecuteApiResponseJson) Accept(visitor ExecuteApiResponseJsonVisitor) error {
+	if e.StringUnknownMap != nil {
+		return visitor.VisitStringUnknownMap(e.StringUnknownMap)
+	}
+	if e.UnknownList != nil {
+		return visitor.VisitUnknownList(e.UnknownList)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", e)
 }
 
 type ExecutePromptEvent struct {
@@ -11112,7 +11156,8 @@ func (p *PromptParameters) String() string {
 }
 
 type PromptSettings struct {
-	Timeout *float64 `json:"timeout,omitempty" url:"timeout,omitempty"`
+	Timeout       *float64 `json:"timeout,omitempty" url:"timeout,omitempty"`
+	StreamEnabled *bool    `json:"stream_enabled,omitempty" url:"stream_enabled,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
