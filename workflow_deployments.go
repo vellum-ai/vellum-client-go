@@ -325,50 +325,6 @@ func (m *MlModelUsageWrapper) String() string {
 	return fmt.Sprintf("%#v", m)
 }
 
-type NodeEventDisplayContext struct {
-	InputDisplay       map[string]string            `json:"input_display" url:"input_display"`
-	OutputDisplay      map[string]string            `json:"output_display" url:"output_display"`
-	PortDisplay        map[string]string            `json:"port_display" url:"port_display"`
-	SubworkflowDisplay *WorkflowEventDisplayContext `json:"subworkflow_display,omitempty" url:"subworkflow_display,omitempty"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (n *NodeEventDisplayContext) GetExtraProperties() map[string]interface{} {
-	return n.extraProperties
-}
-
-func (n *NodeEventDisplayContext) UnmarshalJSON(data []byte) error {
-	type unmarshaler NodeEventDisplayContext
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*n = NodeEventDisplayContext(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *n)
-	if err != nil {
-		return err
-	}
-	n.extraProperties = extraProperties
-
-	n._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (n *NodeEventDisplayContext) String() string {
-	if len(n._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(n); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", n)
-}
-
 type NodeExecutionFulfilledBody struct {
 	NodeDefinition *VellumCodeResourceDefinition `json:"node_definition" url:"node_definition"`
 	InvokedPorts   []*InvokedPort                `json:"invoked_ports,omitempty" url:"invoked_ports,omitempty"`
@@ -2376,49 +2332,6 @@ func (w *WorkflowError) Accept(visitor WorkflowErrorVisitor) error {
 	return fmt.Errorf("type %T does not include a non-empty union type", w)
 }
 
-type WorkflowEventDisplayContext struct {
-	NodeDisplays    map[string]*NodeEventDisplayContext `json:"node_displays" url:"node_displays"`
-	WorkflowInputs  map[string]string                   `json:"workflow_inputs" url:"workflow_inputs"`
-	WorkflowOutputs map[string]string                   `json:"workflow_outputs" url:"workflow_outputs"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (w *WorkflowEventDisplayContext) GetExtraProperties() map[string]interface{} {
-	return w.extraProperties
-}
-
-func (w *WorkflowEventDisplayContext) UnmarshalJSON(data []byte) error {
-	type unmarshaler WorkflowEventDisplayContext
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*w = WorkflowEventDisplayContext(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *w)
-	if err != nil {
-		return err
-	}
-	w.extraProperties = extraProperties
-
-	w._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (w *WorkflowEventDisplayContext) String() string {
-	if len(w._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(w); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", w)
-}
-
 type WorkflowEventExecutionRead struct {
 	SpanId        string                                            `json:"span_id" url:"span_id"`
 	ParentContext *WorkflowDeploymentParentContext                  `json:"parent_context,omitempty" url:"parent_context,omitempty"`
@@ -2676,7 +2589,6 @@ func (w *WorkflowExecutionFulfilledEvent) String() string {
 
 type WorkflowExecutionInitiatedBody struct {
 	WorkflowDefinition *VellumCodeResourceDefinition `json:"workflow_definition" url:"workflow_definition"`
-	DisplayContext     *WorkflowEventDisplayContext  `json:"display_context,omitempty" url:"display_context,omitempty"`
 	Inputs             map[string]interface{}        `json:"inputs" url:"inputs"`
 
 	extraProperties map[string]interface{}
