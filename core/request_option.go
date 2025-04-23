@@ -48,7 +48,7 @@ func NewRequestOptions(opts ...RequestOption) *RequestOptions {
 func (r *RequestOptions) ToHeader() http.Header {
 	header := r.cloneHeader()
 	if r.ApiKey != "" {
-		header.Set("X_API_KEY", fmt.Sprintf("%v", r.ApiKey))
+		header.Set("X-API-KEY", fmt.Sprintf("%v", r.ApiKey))
 	}
 	return header
 }
@@ -57,7 +57,7 @@ func (r *RequestOptions) cloneHeader() http.Header {
 	headers := r.HTTPHeader.Clone()
 	headers.Set("X-Fern-Language", "Go")
 	headers.Set("X-Fern-SDK-Name", "github.com/vellum-ai/vellum-client-go")
-	headers.Set("X-Fern-SDK-Version", "v0.14.42")
+	headers.Set("X-Fern-SDK-Version", "v0.14.43")
 	return headers
 }
 
