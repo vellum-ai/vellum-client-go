@@ -19,6 +19,12 @@ func (p *PromptsPullRequest) Accept() string {
 	return p.accept
 }
 
+type PromptPush struct {
+	ExecConfig      *PromptExecConfig `json:"exec_config,omitempty" url:"-"`
+	PromptVariantId *string           `json:"prompt_variant_id,omitempty" url:"-"`
+	PromptSandboxId *string           `json:"prompt_sandbox_id,omitempty" url:"-"`
+}
+
 type PromptExecConfig struct {
 	MlModel        string                `json:"ml_model" url:"ml_model"`
 	InputVariables []*VellumVariable     `json:"input_variables" url:"input_variables"`
@@ -54,6 +60,48 @@ func (p *PromptExecConfig) UnmarshalJSON(data []byte) error {
 }
 
 func (p *PromptExecConfig) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PromptPushResponse struct {
+	PromptVariantId string `json:"prompt_variant_id" url:"prompt_variant_id"`
+	PromptSandboxId string `json:"prompt_sandbox_id" url:"prompt_sandbox_id"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PromptPushResponse) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PromptPushResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler PromptPushResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PromptPushResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PromptPushResponse) String() string {
 	if len(p._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
 			return value
