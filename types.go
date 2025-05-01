@@ -3032,7 +3032,7 @@ type DeploymentRead struct {
 	InputVariables []*VellumVariable `json:"input_variables" url:"input_variables"`
 	// A human-readable description of the deployment
 	Description *string `json:"description,omitempty" url:"description,omitempty"`
-	// Deprecated. This now always returns a null value.
+	// Deprecated. This now always returns an empty array.
 	ActiveModelVersionIds []string `json:"active_model_version_ids,omitempty" url:"active_model_version_ids,omitempty"`
 	// The ID of the history item associated with this Deployment's LATEST Release Tag
 	LastDeployedHistoryItemId string `json:"last_deployed_history_item_id" url:"last_deployed_history_item_id"`
