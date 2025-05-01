@@ -1584,16 +1584,16 @@ func (s *SlimWorkflowDeployment) String() string {
 }
 
 type SlimWorkflowExecutionRead struct {
-	SpanId        string                                            `json:"span_id" url:"span_id"`
-	ParentContext *WorkflowDeploymentParentContext                  `json:"parent_context,omitempty" url:"parent_context,omitempty"`
-	Start         time.Time                                         `json:"start" url:"start"`
-	End           *time.Time                                        `json:"end,omitempty" url:"end,omitempty"`
-	Inputs        []*ExecutionVellumValue                           `json:"inputs" url:"inputs"`
-	Outputs       []*ExecutionVellumValue                           `json:"outputs" url:"outputs"`
-	Error         *WorkflowError                                    `json:"error,omitempty" url:"error,omitempty"`
-	LatestActual  *WorkflowExecutionActual                          `json:"latest_actual,omitempty" url:"latest_actual,omitempty"`
-	MetricResults []*WorkflowExecutionViewOnlineEvalMetricResult    `json:"metric_results" url:"metric_results"`
-	UsageResults  []*WorkflowExecutionUsageCalculationFulfilledBody `json:"usage_results" url:"usage_results"`
+	SpanId        string                                         `json:"span_id" url:"span_id"`
+	ParentContext *WorkflowDeploymentParentContext               `json:"parent_context,omitempty" url:"parent_context,omitempty"`
+	Start         time.Time                                      `json:"start" url:"start"`
+	End           *time.Time                                     `json:"end,omitempty" url:"end,omitempty"`
+	Inputs        []*ExecutionVellumValue                        `json:"inputs" url:"inputs"`
+	Outputs       []*ExecutionVellumValue                        `json:"outputs" url:"outputs"`
+	Error         *WorkflowError                                 `json:"error,omitempty" url:"error,omitempty"`
+	LatestActual  *WorkflowExecutionActual                       `json:"latest_actual,omitempty" url:"latest_actual,omitempty"`
+	MetricResults []*WorkflowExecutionViewOnlineEvalMetricResult `json:"metric_results" url:"metric_results"`
+	UsageResults  []*WorkflowExecutionUsageResult                `json:"usage_results,omitempty" url:"usage_results,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -2333,17 +2333,17 @@ func (w *WorkflowError) Accept(visitor WorkflowErrorVisitor) error {
 }
 
 type WorkflowEventExecutionRead struct {
-	SpanId        string                                            `json:"span_id" url:"span_id"`
-	ParentContext *WorkflowDeploymentParentContext                  `json:"parent_context,omitempty" url:"parent_context,omitempty"`
-	Start         time.Time                                         `json:"start" url:"start"`
-	End           *time.Time                                        `json:"end,omitempty" url:"end,omitempty"`
-	Inputs        []*ExecutionVellumValue                           `json:"inputs" url:"inputs"`
-	Outputs       []*ExecutionVellumValue                           `json:"outputs" url:"outputs"`
-	Error         *WorkflowError                                    `json:"error,omitempty" url:"error,omitempty"`
-	LatestActual  *WorkflowExecutionActual                          `json:"latest_actual,omitempty" url:"latest_actual,omitempty"`
-	MetricResults []*WorkflowExecutionViewOnlineEvalMetricResult    `json:"metric_results" url:"metric_results"`
-	UsageResults  []*WorkflowExecutionUsageCalculationFulfilledBody `json:"usage_results" url:"usage_results"`
-	Spans         []*VellumSpan                                     `json:"spans" url:"spans"`
+	SpanId        string                                         `json:"span_id" url:"span_id"`
+	ParentContext *WorkflowDeploymentParentContext               `json:"parent_context,omitempty" url:"parent_context,omitempty"`
+	Start         time.Time                                      `json:"start" url:"start"`
+	End           *time.Time                                     `json:"end,omitempty" url:"end,omitempty"`
+	Inputs        []*ExecutionVellumValue                        `json:"inputs" url:"inputs"`
+	Outputs       []*ExecutionVellumValue                        `json:"outputs" url:"outputs"`
+	Error         *WorkflowError                                 `json:"error,omitempty" url:"error,omitempty"`
+	LatestActual  *WorkflowExecutionActual                       `json:"latest_actual,omitempty" url:"latest_actual,omitempty"`
+	MetricResults []*WorkflowExecutionViewOnlineEvalMetricResult `json:"metric_results" url:"metric_results"`
+	UsageResults  []*WorkflowExecutionUsageResult                `json:"usage_results,omitempty" url:"usage_results,omitempty"`
+	Spans         []*VellumSpan                                  `json:"spans" url:"spans"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -3427,25 +3427,25 @@ func (w *WorkflowExecutionStreamingEvent) String() string {
 	return fmt.Sprintf("%#v", w)
 }
 
-type WorkflowExecutionUsageCalculationFulfilledBody struct {
-	Usage []*MlModelUsageWrapper `json:"usage" url:"usage"`
-	Cost  []*Price               `json:"cost" url:"cost"`
+type WorkflowExecutionUsageCalculationError struct {
+	Code    WorkflowExecutionUsageCalculationErrorCodeEnum `json:"code" url:"code"`
+	Message string                                         `json:"message" url:"message"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
 }
 
-func (w *WorkflowExecutionUsageCalculationFulfilledBody) GetExtraProperties() map[string]interface{} {
+func (w *WorkflowExecutionUsageCalculationError) GetExtraProperties() map[string]interface{} {
 	return w.extraProperties
 }
 
-func (w *WorkflowExecutionUsageCalculationFulfilledBody) UnmarshalJSON(data []byte) error {
-	type unmarshaler WorkflowExecutionUsageCalculationFulfilledBody
+func (w *WorkflowExecutionUsageCalculationError) UnmarshalJSON(data []byte) error {
+	type unmarshaler WorkflowExecutionUsageCalculationError
 	var value unmarshaler
 	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*w = WorkflowExecutionUsageCalculationFulfilledBody(value)
+	*w = WorkflowExecutionUsageCalculationError(value)
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w)
 	if err != nil {
@@ -3457,7 +3457,82 @@ func (w *WorkflowExecutionUsageCalculationFulfilledBody) UnmarshalJSON(data []by
 	return nil
 }
 
-func (w *WorkflowExecutionUsageCalculationFulfilledBody) String() string {
+func (w *WorkflowExecutionUsageCalculationError) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
+}
+
+// * `UNKNOWN` - UNKNOWN
+// * `DEPENDENCIES_FAILED` - DEPENDENCIES_FAILED
+// * `NO_USAGE_CALCULATED` - NO_USAGE_CALCULATED
+// * `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
+type WorkflowExecutionUsageCalculationErrorCodeEnum string
+
+const (
+	WorkflowExecutionUsageCalculationErrorCodeEnumUnknown             WorkflowExecutionUsageCalculationErrorCodeEnum = "UNKNOWN"
+	WorkflowExecutionUsageCalculationErrorCodeEnumDependenciesFailed  WorkflowExecutionUsageCalculationErrorCodeEnum = "DEPENDENCIES_FAILED"
+	WorkflowExecutionUsageCalculationErrorCodeEnumNoUsageCalculated   WorkflowExecutionUsageCalculationErrorCodeEnum = "NO_USAGE_CALCULATED"
+	WorkflowExecutionUsageCalculationErrorCodeEnumInternalServerError WorkflowExecutionUsageCalculationErrorCodeEnum = "INTERNAL_SERVER_ERROR"
+)
+
+func NewWorkflowExecutionUsageCalculationErrorCodeEnumFromString(s string) (WorkflowExecutionUsageCalculationErrorCodeEnum, error) {
+	switch s {
+	case "UNKNOWN":
+		return WorkflowExecutionUsageCalculationErrorCodeEnumUnknown, nil
+	case "DEPENDENCIES_FAILED":
+		return WorkflowExecutionUsageCalculationErrorCodeEnumDependenciesFailed, nil
+	case "NO_USAGE_CALCULATED":
+		return WorkflowExecutionUsageCalculationErrorCodeEnumNoUsageCalculated, nil
+	case "INTERNAL_SERVER_ERROR":
+		return WorkflowExecutionUsageCalculationErrorCodeEnumInternalServerError, nil
+	}
+	var t WorkflowExecutionUsageCalculationErrorCodeEnum
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (w WorkflowExecutionUsageCalculationErrorCodeEnum) Ptr() *WorkflowExecutionUsageCalculationErrorCodeEnum {
+	return &w
+}
+
+type WorkflowExecutionUsageResult struct {
+	Usage []*MlModelUsageWrapper                  `json:"usage,omitempty" url:"usage,omitempty"`
+	Cost  []*Price                                `json:"cost,omitempty" url:"cost,omitempty"`
+	Error *WorkflowExecutionUsageCalculationError `json:"error,omitempty" url:"error,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowExecutionUsageResult) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkflowExecutionUsageResult) UnmarshalJSON(data []byte) error {
+	type unmarshaler WorkflowExecutionUsageResult
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*w = WorkflowExecutionUsageResult(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowExecutionUsageResult) String() string {
 	if len(w._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
 			return value
