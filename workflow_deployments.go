@@ -284,8 +284,8 @@ func (i *InvokedPort) String() string {
 }
 
 type MlModelUsageWrapper struct {
-	MlModelUsage *MlModelUsage `json:"ml_model_usage" url:"ml_model_usage"`
 	MlModelName  string        `json:"ml_model_name" url:"ml_model_name"`
+	MlModelUsage *MlModelUsage `json:"ml_model_usage" url:"ml_model_usage"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
