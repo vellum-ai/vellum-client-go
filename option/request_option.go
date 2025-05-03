@@ -69,3 +69,10 @@ func WithApiKey(apiKey string) *core.ApiKeyOption {
 		ApiKey: apiKey,
 	}
 }
+
+// WithApiKey sets the apiKey request header.
+func WithApiKey(apiKey string) *core.ApiKeyOption {
+	return &core.ApiKeyOption{
+		ApiKey: apiKey,
+	}
+}
