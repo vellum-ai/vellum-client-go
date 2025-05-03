@@ -25,6 +25,7 @@ type RequestOptions struct {
 	QueryParameters url.Values
 	MaxAttempts     uint
 	ApiKey          string
+	ApiKey          string
 }
 
 // NewRequestOptions returns a new *RequestOptions value.
@@ -50,6 +51,7 @@ func (r *RequestOptions) ToHeader() http.Header {
 	if r.ApiKey != "" {
 		header.Set("X-API-KEY", fmt.Sprintf("%v", r.ApiKey))
 	}
+	header.Set("X-API-KEY", fmt.Sprintf("%v", r.ApiKey))
 	return header
 }
 
@@ -57,7 +59,7 @@ func (r *RequestOptions) cloneHeader() http.Header {
 	headers := r.HTTPHeader.Clone()
 	headers.Set("X-Fern-Language", "Go")
 	headers.Set("X-Fern-SDK-Name", "github.com/vellum-ai/vellum-client-go")
-	headers.Set("X-Fern-SDK-Version", "v0.14.53")
+	headers.Set("X-Fern-SDK-Version", "v0.0.2530")
 	return headers
 }
 
@@ -113,6 +115,15 @@ type MaxAttemptsOption struct {
 
 func (m *MaxAttemptsOption) applyRequestOptions(opts *RequestOptions) {
 	opts.MaxAttempts = m.MaxAttempts
+}
+
+// ApiKeyOption implements the RequestOption interface.
+type ApiKeyOption struct {
+	ApiKey string
+}
+
+func (a *ApiKeyOption) applyRequestOptions(opts *RequestOptions) {
+	opts.ApiKey = a.ApiKey
 }
 
 // ApiKeyOption implements the RequestOption interface.
