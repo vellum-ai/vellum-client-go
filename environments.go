@@ -7,13 +7,13 @@ package api
 // RequestOption to override the client's default environment,
 // if any.
 var Environments = struct {
-	Default struct {
+	Production struct {
 		Base      string
 		Documents string
 		Predict   string
 	}
 }{
-	Default: struct {
+	Production: struct {
 		Base      string
 		Documents string
 		Predict   string
