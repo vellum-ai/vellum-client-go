@@ -7,18 +7,18 @@ package api
 // RequestOption to override the client's default environment,
 // if any.
 var Environments = struct {
-	Default struct {
-		Base      string
+	Production struct {
+		Default   string
 		Documents string
 		Predict   string
 	}
 }{
-	Default: struct {
-		Base      string
+	Production: struct {
+		Default   string
 		Documents string
 		Predict   string
 	}{
-		Base:      "https://api.vellum.ai",
+		Default:   "https://api.vellum.ai",
 		Documents: "https://documents.vellum.ai",
 		Predict:   "https://predict.vellum.ai",
 	},
