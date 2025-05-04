@@ -12,6 +12,7 @@ import (
 	option "github.com/vellum-ai/vellum-client-go/option"
 	io "io"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -22,6 +23,12 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
+	if options.EnvironmentApiKey == "" {
+		options.EnvironmentApiKey = os.Getenv("VELLUM_API_KEY")
+	}
+	if options.WorkspaceApiKey == "" {
+		options.WorkspaceApiKey = os.Getenv("VELLUM_API_KEY")
+	}
 	return &Client{
 		baseURL: options.BaseURL,
 		caller: core.NewCaller(

@@ -63,9 +63,16 @@ func WithMaxAttempts(attempts uint) *core.MaxAttemptsOption {
 	}
 }
 
-// WithApiKey sets the apiKey auth request header.
-func WithApiKey(apiKey string) *core.ApiKeyOption {
-	return &core.ApiKeyOption{
-		ApiKey: apiKey,
+// WithEnvironmentApiKey sets the environmentApiKey auth request header.
+func WithEnvironmentApiKey(environmentApiKey string) *core.EnvironmentApiKeyOption {
+	return &core.EnvironmentApiKeyOption{
+		EnvironmentApiKey: environmentApiKey,
+	}
+}
+
+// WithWorkspaceApiKey sets the workspaceApiKey request header.
+func WithWorkspaceApiKey(workspaceApiKey string) *core.WorkspaceApiKeyOption {
+	return &core.WorkspaceApiKeyOption{
+		WorkspaceApiKey: workspaceApiKey,
 	}
 }

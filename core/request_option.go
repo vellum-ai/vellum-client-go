@@ -18,13 +18,14 @@ type RequestOption interface {
 // This type is primarily used by the generated code and is not meant
 // to be used directly; use the option package instead.
 type RequestOptions struct {
-	BaseURL         string
-	HTTPClient      HTTPClient
-	HTTPHeader      http.Header
-	BodyProperties  map[string]interface{}
-	QueryParameters url.Values
-	MaxAttempts     uint
-	ApiKey          string
+	BaseURL           string
+	HTTPClient        HTTPClient
+	HTTPHeader        http.Header
+	BodyProperties    map[string]interface{}
+	QueryParameters   url.Values
+	MaxAttempts       uint
+	EnvironmentApiKey string
+	WorkspaceApiKey   string
 }
 
 // NewRequestOptions returns a new *RequestOptions value.
@@ -47,9 +48,10 @@ func NewRequestOptions(opts ...RequestOption) *RequestOptions {
 // for the request(s).
 func (r *RequestOptions) ToHeader() http.Header {
 	header := r.cloneHeader()
-	if r.ApiKey != "" {
-		header.Set("X-API-KEY", fmt.Sprintf("%v", r.ApiKey))
+	if r.EnvironmentApiKey != "" {
+		header.Set("X-API-KEY", fmt.Sprintf("%v", r.EnvironmentApiKey))
 	}
+	header.Set("X-API-KEY", fmt.Sprintf("%v", r.WorkspaceApiKey))
 	return header
 }
 
@@ -57,7 +59,7 @@ func (r *RequestOptions) cloneHeader() http.Header {
 	headers := r.HTTPHeader.Clone()
 	headers.Set("X-Fern-Language", "Go")
 	headers.Set("X-Fern-SDK-Name", "github.com/vellum-ai/vellum-client-go")
-	headers.Set("X-Fern-SDK-Version", "v0.14.53")
+	headers.Set("X-Fern-SDK-Version", "v0.0.2532")
 	return headers
 }
 
@@ -115,11 +117,20 @@ func (m *MaxAttemptsOption) applyRequestOptions(opts *RequestOptions) {
 	opts.MaxAttempts = m.MaxAttempts
 }
 
-// ApiKeyOption implements the RequestOption interface.
-type ApiKeyOption struct {
-	ApiKey string
+// EnvironmentApiKeyOption implements the RequestOption interface.
+type EnvironmentApiKeyOption struct {
+	EnvironmentApiKey string
 }
 
-func (a *ApiKeyOption) applyRequestOptions(opts *RequestOptions) {
-	opts.ApiKey = a.ApiKey
+func (e *EnvironmentApiKeyOption) applyRequestOptions(opts *RequestOptions) {
+	opts.EnvironmentApiKey = e.EnvironmentApiKey
+}
+
+// WorkspaceApiKeyOption implements the RequestOption interface.
+type WorkspaceApiKeyOption struct {
+	WorkspaceApiKey string
+}
+
+func (w *WorkspaceApiKeyOption) applyRequestOptions(opts *RequestOptions) {
+	opts.WorkspaceApiKey = w.WorkspaceApiKey
 }
