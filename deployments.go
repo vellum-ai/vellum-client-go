@@ -485,6 +485,418 @@ func (p *PaginatedSlimDeploymentReadList) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
+type PromptDeploymentRelease struct {
+	Id            string                                   `json:"id" url:"id"`
+	Created       time.Time                                `json:"created" url:"created"`
+	Environment   *ReleaseEnvironment                      `json:"environment" url:"environment"`
+	CreatedBy     *ReleaseCreatedBy                        `json:"created_by,omitempty" url:"created_by,omitempty"`
+	PromptVersion *PromptDeploymentReleasePromptVersion    `json:"prompt_version" url:"prompt_version"`
+	Deployment    *PromptDeploymentReleasePromptDeployment `json:"deployment" url:"deployment"`
+	Description   *string                                  `json:"description,omitempty" url:"description,omitempty"`
+	ReleaseTags   []*ReleaseReleaseTag                     `json:"release_tags" url:"release_tags"`
+	Reviews       []*SlimReleaseReview                     `json:"reviews" url:"reviews"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PromptDeploymentRelease) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PromptDeploymentRelease) UnmarshalJSON(data []byte) error {
+	type embed PromptDeploymentRelease
+	var unmarshaler = struct {
+		embed
+		Created *core.DateTime `json:"created"`
+	}{
+		embed: embed(*p),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*p = PromptDeploymentRelease(unmarshaler.embed)
+	p.Created = unmarshaler.Created.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PromptDeploymentRelease) MarshalJSON() ([]byte, error) {
+	type embed PromptDeploymentRelease
+	var marshaler = struct {
+		embed
+		Created *core.DateTime `json:"created"`
+	}{
+		embed:   embed(*p),
+		Created: core.NewDateTime(p.Created),
+	}
+	return json.Marshal(marshaler)
+}
+
+func (p *PromptDeploymentRelease) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PromptDeploymentReleasePromptDeployment struct {
+	Name string `json:"name" url:"name"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PromptDeploymentReleasePromptDeployment) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PromptDeploymentReleasePromptDeployment) UnmarshalJSON(data []byte) error {
+	type unmarshaler PromptDeploymentReleasePromptDeployment
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PromptDeploymentReleasePromptDeployment(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PromptDeploymentReleasePromptDeployment) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PromptDeploymentReleasePromptVersion struct {
+	Id string `json:"id" url:"id"`
+	// Configuration used to build this prompt version.
+	BuildConfig *PromptVersionBuildConfig `json:"build_config" url:"build_config"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PromptDeploymentReleasePromptVersion) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PromptDeploymentReleasePromptVersion) UnmarshalJSON(data []byte) error {
+	type unmarshaler PromptDeploymentReleasePromptVersion
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PromptDeploymentReleasePromptVersion(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PromptDeploymentReleasePromptVersion) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PromptVersionBuildConfig struct {
+	PromptVersionBuildConfigSandbox         *PromptVersionBuildConfigSandbox
+	PromptVersionBuildConfigPromptNode      *PromptVersionBuildConfigPromptNode
+	PromptVersionBuildConfigUnknownResponse *PromptVersionBuildConfigUnknownResponse
+}
+
+func (p *PromptVersionBuildConfig) UnmarshalJSON(data []byte) error {
+	valuePromptVersionBuildConfigSandbox := new(PromptVersionBuildConfigSandbox)
+	if err := json.Unmarshal(data, &valuePromptVersionBuildConfigSandbox); err == nil {
+		p.PromptVersionBuildConfigSandbox = valuePromptVersionBuildConfigSandbox
+		return nil
+	}
+	valuePromptVersionBuildConfigPromptNode := new(PromptVersionBuildConfigPromptNode)
+	if err := json.Unmarshal(data, &valuePromptVersionBuildConfigPromptNode); err == nil {
+		p.PromptVersionBuildConfigPromptNode = valuePromptVersionBuildConfigPromptNode
+		return nil
+	}
+	valuePromptVersionBuildConfigUnknownResponse := new(PromptVersionBuildConfigUnknownResponse)
+	if err := json.Unmarshal(data, &valuePromptVersionBuildConfigUnknownResponse); err == nil {
+		p.PromptVersionBuildConfigUnknownResponse = valuePromptVersionBuildConfigUnknownResponse
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, p)
+}
+
+func (p PromptVersionBuildConfig) MarshalJSON() ([]byte, error) {
+	if p.PromptVersionBuildConfigSandbox != nil {
+		return json.Marshal(p.PromptVersionBuildConfigSandbox)
+	}
+	if p.PromptVersionBuildConfigPromptNode != nil {
+		return json.Marshal(p.PromptVersionBuildConfigPromptNode)
+	}
+	if p.PromptVersionBuildConfigUnknownResponse != nil {
+		return json.Marshal(p.PromptVersionBuildConfigUnknownResponse)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", p)
+}
+
+type PromptVersionBuildConfigVisitor interface {
+	VisitPromptVersionBuildConfigSandbox(*PromptVersionBuildConfigSandbox) error
+	VisitPromptVersionBuildConfigPromptNode(*PromptVersionBuildConfigPromptNode) error
+	VisitPromptVersionBuildConfigUnknownResponse(*PromptVersionBuildConfigUnknownResponse) error
+}
+
+func (p *PromptVersionBuildConfig) Accept(visitor PromptVersionBuildConfigVisitor) error {
+	if p.PromptVersionBuildConfigSandbox != nil {
+		return visitor.VisitPromptVersionBuildConfigSandbox(p.PromptVersionBuildConfigSandbox)
+	}
+	if p.PromptVersionBuildConfigPromptNode != nil {
+		return visitor.VisitPromptVersionBuildConfigPromptNode(p.PromptVersionBuildConfigPromptNode)
+	}
+	if p.PromptVersionBuildConfigUnknownResponse != nil {
+		return visitor.VisitPromptVersionBuildConfigUnknownResponse(p.PromptVersionBuildConfigUnknownResponse)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", p)
+}
+
+type PromptVersionBuildConfigPromptNode struct {
+	PromptNodeId      string `json:"prompt_node_id" url:"prompt_node_id"`
+	WorkflowSandboxId string `json:"workflow_sandbox_id" url:"workflow_sandbox_id"`
+	WorkflowId        string `json:"workflow_id" url:"workflow_id"`
+	source            string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PromptVersionBuildConfigPromptNode) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PromptVersionBuildConfigPromptNode) Source() string {
+	return p.source
+}
+
+func (p *PromptVersionBuildConfigPromptNode) UnmarshalJSON(data []byte) error {
+	type embed PromptVersionBuildConfigPromptNode
+	var unmarshaler = struct {
+		embed
+		Source string `json:"source"`
+	}{
+		embed: embed(*p),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*p = PromptVersionBuildConfigPromptNode(unmarshaler.embed)
+	if unmarshaler.Source != "PROMPT_NODE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", p, "PROMPT_NODE", unmarshaler.Source)
+	}
+	p.source = unmarshaler.Source
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p, "source")
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PromptVersionBuildConfigPromptNode) MarshalJSON() ([]byte, error) {
+	type embed PromptVersionBuildConfigPromptNode
+	var marshaler = struct {
+		embed
+		Source string `json:"source"`
+	}{
+		embed:  embed(*p),
+		Source: "PROMPT_NODE",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (p *PromptVersionBuildConfigPromptNode) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PromptVersionBuildConfigSandbox struct {
+	SandboxId         string `json:"sandbox_id" url:"sandbox_id"`
+	SandboxSnapshotId string `json:"sandbox_snapshot_id" url:"sandbox_snapshot_id"`
+	PromptId          string `json:"prompt_id" url:"prompt_id"`
+	source            string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PromptVersionBuildConfigSandbox) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PromptVersionBuildConfigSandbox) Source() string {
+	return p.source
+}
+
+func (p *PromptVersionBuildConfigSandbox) UnmarshalJSON(data []byte) error {
+	type embed PromptVersionBuildConfigSandbox
+	var unmarshaler = struct {
+		embed
+		Source string `json:"source"`
+	}{
+		embed: embed(*p),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*p = PromptVersionBuildConfigSandbox(unmarshaler.embed)
+	if unmarshaler.Source != "SANDBOX" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", p, "SANDBOX", unmarshaler.Source)
+	}
+	p.source = unmarshaler.Source
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p, "source")
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PromptVersionBuildConfigSandbox) MarshalJSON() ([]byte, error) {
+	type embed PromptVersionBuildConfigSandbox
+	var marshaler = struct {
+		embed
+		Source string `json:"source"`
+	}{
+		embed:  embed(*p),
+		Source: "SANDBOX",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (p *PromptVersionBuildConfigSandbox) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PromptVersionBuildConfigUnknownResponse struct {
+	source string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PromptVersionBuildConfigUnknownResponse) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PromptVersionBuildConfigUnknownResponse) Source() string {
+	return p.source
+}
+
+func (p *PromptVersionBuildConfigUnknownResponse) UnmarshalJSON(data []byte) error {
+	type embed PromptVersionBuildConfigUnknownResponse
+	var unmarshaler = struct {
+		embed
+		Source string `json:"source"`
+	}{
+		embed: embed(*p),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*p = PromptVersionBuildConfigUnknownResponse(unmarshaler.embed)
+	if unmarshaler.Source != "UNKNOWN" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", p, "UNKNOWN", unmarshaler.Source)
+	}
+	p.source = unmarshaler.Source
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p, "source")
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PromptVersionBuildConfigUnknownResponse) MarshalJSON() ([]byte, error) {
+	type embed PromptVersionBuildConfigUnknownResponse
+	var marshaler = struct {
+		embed
+		Source string `json:"source"`
+	}{
+		embed:  embed(*p),
+		Source: "UNKNOWN",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (p *PromptVersionBuildConfigUnknownResponse) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
 type SlimDeploymentRead struct {
 	Id      string    `json:"id" url:"id"`
 	Created time.Time `json:"created" url:"created"`
