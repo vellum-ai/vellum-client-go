@@ -3848,6 +3848,7 @@ func (e *ExecuteApiRequestBearerToken) Accept(visitor ExecuteApiRequestBearerTok
 
 type ExecuteApiRequestBody struct {
 	String           string
+	UnknownList      []interface{}
 	StringUnknownMap map[string]interface{}
 }
 
@@ -3855,6 +3856,11 @@ func (e *ExecuteApiRequestBody) UnmarshalJSON(data []byte) error {
 	var valueString string
 	if err := json.Unmarshal(data, &valueString); err == nil {
 		e.String = valueString
+		return nil
+	}
+	var valueUnknownList []interface{}
+	if err := json.Unmarshal(data, &valueUnknownList); err == nil {
+		e.UnknownList = valueUnknownList
 		return nil
 	}
 	var valueStringUnknownMap map[string]interface{}
@@ -3869,6 +3875,9 @@ func (e ExecuteApiRequestBody) MarshalJSON() ([]byte, error) {
 	if e.String != "" {
 		return json.Marshal(e.String)
 	}
+	if e.UnknownList != nil {
+		return json.Marshal(e.UnknownList)
+	}
 	if e.StringUnknownMap != nil {
 		return json.Marshal(e.StringUnknownMap)
 	}
@@ -3877,12 +3886,16 @@ func (e ExecuteApiRequestBody) MarshalJSON() ([]byte, error) {
 
 type ExecuteApiRequestBodyVisitor interface {
 	VisitString(string) error
+	VisitUnknownList([]interface{}) error
 	VisitStringUnknownMap(map[string]interface{}) error
 }
 
 func (e *ExecuteApiRequestBody) Accept(visitor ExecuteApiRequestBodyVisitor) error {
 	if e.String != "" {
 		return visitor.VisitString(e.String)
+	}
+	if e.UnknownList != nil {
+		return visitor.VisitUnknownList(e.UnknownList)
 	}
 	if e.StringUnknownMap != nil {
 		return visitor.VisitStringUnknownMap(e.StringUnknownMap)
@@ -11580,6 +11593,209 @@ func (r *RejectedWorkflowNodeResultEvent) String() string {
 	return fmt.Sprintf("%#v", r)
 }
 
+type ReleaseCreatedBy struct {
+	Id       string  `json:"id" url:"id"`
+	FullName *string `json:"full_name,omitempty" url:"full_name,omitempty"`
+	Email    string  `json:"email" url:"email"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *ReleaseCreatedBy) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *ReleaseCreatedBy) UnmarshalJSON(data []byte) error {
+	type unmarshaler ReleaseCreatedBy
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = ReleaseCreatedBy(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *ReleaseCreatedBy) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+type ReleaseEnvironment struct {
+	Id    string `json:"id" url:"id"`
+	Name  string `json:"name" url:"name"`
+	Label string `json:"label" url:"label"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *ReleaseEnvironment) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *ReleaseEnvironment) UnmarshalJSON(data []byte) error {
+	type unmarshaler ReleaseEnvironment
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = ReleaseEnvironment(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *ReleaseEnvironment) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+type ReleaseReleaseTag struct {
+	// The name of the Release Tag
+	Name string `json:"name" url:"name"`
+	// The source of how the Release Tag was originally created
+	//
+	// * `SYSTEM` - System
+	// * `USER` - User
+	Source ReleaseTagSource `json:"source" url:"source"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *ReleaseReleaseTag) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *ReleaseReleaseTag) UnmarshalJSON(data []byte) error {
+	type unmarshaler ReleaseReleaseTag
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = ReleaseReleaseTag(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *ReleaseReleaseTag) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+type ReleaseReviewReviewer struct {
+	Id       string  `json:"id" url:"id"`
+	FullName *string `json:"full_name,omitempty" url:"full_name,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *ReleaseReviewReviewer) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *ReleaseReviewReviewer) UnmarshalJSON(data []byte) error {
+	type unmarshaler ReleaseReviewReviewer
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = ReleaseReviewReviewer(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *ReleaseReviewReviewer) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
+}
+
+// * `APPROVED` - Approved
+// * `CHANGES_REQUESTED` - Changes Requested
+// * `COMMENTED` - Commented
+type ReleaseReviewState string
+
+const (
+	ReleaseReviewStateApproved         ReleaseReviewState = "APPROVED"
+	ReleaseReviewStateChangesRequested ReleaseReviewState = "CHANGES_REQUESTED"
+	ReleaseReviewStateCommented        ReleaseReviewState = "COMMENTED"
+)
+
+func NewReleaseReviewStateFromString(s string) (ReleaseReviewState, error) {
+	switch s {
+	case "APPROVED":
+		return ReleaseReviewStateApproved, nil
+	case "CHANGES_REQUESTED":
+		return ReleaseReviewStateChangesRequested, nil
+	case "COMMENTED":
+		return ReleaseReviewStateCommented, nil
+	}
+	var t ReleaseReviewState
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (r ReleaseReviewState) Ptr() *ReleaseReviewState {
+	return &r
+}
+
 type ReleaseTagRelease struct {
 	Id        string    `json:"id" url:"id"`
 	Timestamp time.Time `json:"timestamp" url:"timestamp"`
@@ -12582,6 +12798,68 @@ func (s *SearchWeightsRequest) UnmarshalJSON(data []byte) error {
 }
 
 func (s *SearchWeightsRequest) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type SlimReleaseReview struct {
+	Id       string                 `json:"id" url:"id"`
+	Created  time.Time              `json:"created" url:"created"`
+	Reviewer *ReleaseReviewReviewer `json:"reviewer" url:"reviewer"`
+	State    ReleaseReviewState     `json:"state" url:"state"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SlimReleaseReview) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SlimReleaseReview) UnmarshalJSON(data []byte) error {
+	type embed SlimReleaseReview
+	var unmarshaler = struct {
+		embed
+		Created *core.DateTime `json:"created"`
+	}{
+		embed: embed(*s),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*s = SlimReleaseReview(unmarshaler.embed)
+	s.Created = unmarshaler.Created.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SlimReleaseReview) MarshalJSON() ([]byte, error) {
+	type embed SlimReleaseReview
+	var marshaler = struct {
+		embed
+		Created *core.DateTime `json:"created"`
+	}{
+		embed:   embed(*s),
+		Created: core.NewDateTime(s.Created),
+	}
+	return json.Marshal(marshaler)
+}
+
+func (s *SlimReleaseReview) String() string {
 	if len(s._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
 			return value
