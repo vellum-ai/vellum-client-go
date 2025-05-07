@@ -30,51 +30,6 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Retrieve a specific Prompt Deployment Release by either its UUID or the name of a Release Tag that points to it.
-func (c *Client) RetrievePromptDeploymentRelease(
-	ctx context.Context,
-	// A UUID string identifying this deployment.
-	id string,
-	// Either the UUID of Prompt Deployment Release you'd like to retrieve, or the name of a Release Tag that's pointing to the Prompt Deployment Release you'd like to retrieve.
-	releaseIdOrReleaseTag string,
-	opts ...option.RequestOption,
-) (*vellumclientgo.PromptDeploymentRelease, error) {
-	options := core.NewRequestOptions(opts...)
-
-	baseURL := "https://api.vellum.ai"
-	if c.baseURL != "" {
-		baseURL = c.baseURL
-	}
-	if options.BaseURL != "" {
-		baseURL = options.BaseURL
-	}
-	endpointURL := core.EncodeURL(
-		baseURL+"/v1/deployments/%v/releases/%v",
-		id,
-		releaseIdOrReleaseTag,
-	)
-
-	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
-
-	var response *vellumclientgo.PromptDeploymentRelease
-	if err := c.caller.Call(
-		ctx,
-		&core.CallParams{
-			URL:             endpointURL,
-			Method:          http.MethodGet,
-			MaxAttempts:     options.MaxAttempts,
-			Headers:         headers,
-			BodyProperties:  options.BodyProperties,
-			QueryParameters: options.QueryParameters,
-			Client:          options.HTTPClient,
-			Response:        &response,
-		},
-	); err != nil {
-		return nil, err
-	}
-	return response, nil
-}
-
 // Retrieve a specific Workflow Deployment Release by either its UUID or the name of a Release Tag that points to it.
 func (c *Client) RetrieveWorkflowDeploymentRelease(
 	ctx context.Context,

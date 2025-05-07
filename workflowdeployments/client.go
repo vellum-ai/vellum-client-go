@@ -203,7 +203,8 @@ func (c *Client) WorkflowDeploymentEventExecution(
 	return response, nil
 }
 
-// Retrieve a specific Workflow Deployment History Item by either its UUID or the name of a Release Tag that points to it.
+// DEPRECATED: This endpoint is deprecated and will be removed in a future release. Please use the
+// `retrieve_workflow_deployment_release` endpoint instead.
 func (c *Client) WorkflowDeploymentHistoryItemRetrieve(
 	ctx context.Context,
 	// Either the UUID of Workflow Deployment History Item you'd like to retrieve, or the name of a Release Tag that's pointing to the Workflow Deployment History Item you'd like to retrieve.
