@@ -33,7 +33,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Retrieve a specific Workflow Deployment Release by either its UUID or the name of a Release Tag that points to it.
 func (c *Client) RetrieveWorkflowDeploymentRelease(
 	ctx context.Context,
-	// A UUID string identifying this workflow deployment.
+	// Either the Workflow Deployment's ID or its unique name
 	id string,
 	// Either the UUID of Workflow Deployment Release you'd like to retrieve, or the name of a Release Tag that's pointing to the Workflow Deployment Release you'd like to retrieve.
 	releaseIdOrReleaseTag string,
