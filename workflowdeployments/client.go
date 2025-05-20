@@ -209,7 +209,7 @@ func (c *Client) WorkflowDeploymentHistoryItemRetrieve(
 	ctx context.Context,
 	// Either the UUID of Workflow Deployment History Item you'd like to retrieve, or the name of a Release Tag that's pointing to the Workflow Deployment History Item you'd like to retrieve.
 	historyIdOrReleaseTag string,
-	// A UUID string identifying this workflow deployment.
+	// Either the Workflow Deployment's ID or its unique name
 	id string,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.WorkflowDeploymentHistoryItem, error) {
@@ -300,7 +300,7 @@ func (c *Client) ListWorkflowReleaseTags(
 // Retrieve a Workflow Release Tag by tag name, associated with a specified Workflow Deployment.
 func (c *Client) RetrieveWorkflowReleaseTag(
 	ctx context.Context,
-	// A UUID string identifying this workflow deployment.
+	// Either the Workflow Deployment's ID or its unique name
 	id string,
 	// The name of the Release Tag associated with this Workflow Deployment that you'd like to retrieve.
 	name string,
@@ -345,7 +345,7 @@ func (c *Client) RetrieveWorkflowReleaseTag(
 // Updates an existing Release Tag associated with the specified Workflow Deployment.
 func (c *Client) UpdateWorkflowReleaseTag(
 	ctx context.Context,
-	// A UUID string identifying this workflow deployment.
+	// Either the Workflow Deployment's ID or its unique name
 	id string,
 	// The name of the Release Tag associated with this Workflow Deployment that you'd like to update.
 	name string,
