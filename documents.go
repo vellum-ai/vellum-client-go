@@ -37,6 +37,8 @@ type PatchedDocumentUpdateRequest struct {
 type DocumentDocumentToDocumentIndex struct {
 	// Vellum-generated ID that uniquely identifies this link.
 	Id string `json:"id" url:"id"`
+	// Vellum-generated ID that uniquely identifies the environment index this document is included in.
+	EnvironmentDocumentIndexId string `json:"environment_document_index_id" url:"environment_document_index_id"`
 	// Vellum-generated ID that uniquely identifies the index this document is included in.
 	DocumentIndexId string `json:"document_index_id" url:"document_index_id"`
 	// An enum value representing where this document is along its indexing lifecycle for this index.
@@ -389,6 +391,8 @@ func (s *SlimDocument) String() string {
 type SlimDocumentDocumentToDocumentIndex struct {
 	// Vellum-generated ID that uniquely identifies this link.
 	Id string `json:"id" url:"id"`
+	// Vellum-generated ID that uniquely identifies the environment index this document is included in.
+	EnvironmentDocumentIndexId string `json:"environment_document_index_id" url:"environment_document_index_id"`
 	// Vellum-generated ID that uniquely identifies the index this document is included in.
 	DocumentIndexId string `json:"document_index_id" url:"document_index_id"`
 	// An enum value representing where this document is along its indexing lifecycle for this index.
