@@ -83,7 +83,7 @@ func (c *Client) List(
 // Used to retrieve a Prompt Deployment given its ID or name.
 func (c *Client) Retrieve(
 	ctx context.Context,
-	// Either the Deployment's ID or its unique name
+	// Either the Prompt Deployment's ID or its unique name
 	id string,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.DeploymentRead, error) {
@@ -125,7 +125,7 @@ func (c *Client) DeploymentHistoryItemRetrieve(
 	ctx context.Context,
 	// Either the UUID of Deployment History Item you'd like to retrieve, or the name of a Release Tag that's pointing to the Deployment History Item you'd like to retrieve.
 	historyIdOrReleaseTag string,
-	// A UUID string identifying this deployment.
+	// Either the Prompt Deployment's ID or its unique name
 	id string,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.DeploymentHistoryItem, error) {
@@ -216,7 +216,7 @@ func (c *Client) ListDeploymentReleaseTags(
 // Retrieve a Deployment Release Tag by tag name, associated with a specified Deployment.
 func (c *Client) RetrieveDeploymentReleaseTag(
 	ctx context.Context,
-	// A UUID string identifying this deployment.
+	// Either the Prompt Deployment's ID or its unique name
 	id string,
 	// The name of the Release Tag associated with this Deployment that you'd like to retrieve.
 	name string,
@@ -261,7 +261,7 @@ func (c *Client) RetrieveDeploymentReleaseTag(
 // Updates an existing Release Tag associated with the specified Prompt Deployment.
 func (c *Client) UpdateDeploymentReleaseTag(
 	ctx context.Context,
-	// A UUID string identifying this deployment.
+	// Either the Prompt Deployment's ID or its unique name
 	id string,
 	// The name of the Release Tag associated with this Deployment that you'd like to update.
 	name string,
@@ -308,7 +308,7 @@ func (c *Client) UpdateDeploymentReleaseTag(
 // Retrieve a specific Prompt Deployment Release by either its UUID or the name of a Release Tag that points to it.
 func (c *Client) RetrievePromptDeploymentRelease(
 	ctx context.Context,
-	// A UUID string identifying this deployment.
+	// Either the Prompt Deployment's ID or its unique name
 	id string,
 	// Either the UUID of Prompt Deployment Release you'd like to retrieve, or the name of a Release Tag that's pointing to the Prompt Deployment Release you'd like to retrieve.
 	releaseIdOrReleaseTag string,
