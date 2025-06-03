@@ -467,6 +467,7 @@ type FolderEntityPromptSandboxData struct {
 	Created        time.Time    `json:"created" url:"created"`
 	Modified       time.Time    `json:"modified" url:"modified"`
 	Status         EntityStatus `json:"status" url:"status"`
+	Description    *string      `json:"description,omitempty" url:"description,omitempty"`
 	LastDeployedOn *time.Time   `json:"last_deployed_on,omitempty" url:"last_deployed_on,omitempty"`
 
 	extraProperties map[string]interface{}
@@ -744,6 +745,7 @@ type FolderEntityWorkflowSandboxData struct {
 	Created        time.Time    `json:"created" url:"created"`
 	Modified       time.Time    `json:"modified" url:"modified"`
 	Status         EntityStatus `json:"status" url:"status"`
+	Description    *string      `json:"description,omitempty" url:"description,omitempty"`
 	LastDeployedOn *time.Time   `json:"last_deployed_on,omitempty" url:"last_deployed_on,omitempty"`
 
 	extraProperties map[string]interface{}

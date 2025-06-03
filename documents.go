@@ -138,7 +138,6 @@ type DocumentRead struct {
 	// * `ACTIVE` - Active
 	Status                    *DocumentStatus                    `json:"status,omitempty" url:"status,omitempty"`
 	OriginalFileUrl           *string                            `json:"original_file_url,omitempty" url:"original_file_url,omitempty"`
-	ProcessedFileUrl          *string                            `json:"processed_file_url,omitempty" url:"processed_file_url,omitempty"`
 	DocumentToDocumentIndexes []*DocumentDocumentToDocumentIndex `json:"document_to_document_indexes" url:"document_to_document_indexes"`
 	// A previously supplied JSON object containing metadata that can be filtered on when searching.
 	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
