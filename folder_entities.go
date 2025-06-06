@@ -190,11 +190,12 @@ func (f *FolderEntityDocumentIndex) String() string {
 }
 
 type FolderEntityDocumentIndexData struct {
-	Id       string       `json:"id" url:"id"`
-	Label    string       `json:"label" url:"label"`
-	Created  time.Time    `json:"created" url:"created"`
-	Modified time.Time    `json:"modified" url:"modified"`
-	Status   EntityStatus `json:"status" url:"status"`
+	Id             string                       `json:"id" url:"id"`
+	Label          string                       `json:"label" url:"label"`
+	Created        time.Time                    `json:"created" url:"created"`
+	Modified       time.Time                    `json:"modified" url:"modified"`
+	Status         EntityStatus                 `json:"status" url:"status"`
+	IndexingConfig *DocumentIndexIndexingConfig `json:"indexing_config" url:"indexing_config"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
