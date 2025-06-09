@@ -36,11 +36,11 @@ type PatchedDocumentUpdateRequest struct {
 // A detailed representation of the link between a Document and a Document Index it's a member of.
 type DocumentDocumentToDocumentIndex struct {
 	// Vellum-generated ID that uniquely identifies this link.
-	Id string `json:"id" url:"id"`
+	Id *string `json:"id,omitempty" url:"id,omitempty"`
 	// Vellum-generated ID that uniquely identifies the environment index this document is included in.
-	EnvironmentDocumentIndexId string `json:"environment_document_index_id" url:"environment_document_index_id"`
+	EnvironmentDocumentIndexId *string `json:"environment_document_index_id,omitempty" url:"environment_document_index_id,omitempty"`
 	// Vellum-generated ID that uniquely identifies the index this document is included in.
-	DocumentIndexId string `json:"document_index_id" url:"document_index_id"`
+	DocumentIndexId *string `json:"document_index_id,omitempty" url:"document_index_id,omitempty"`
 	// An enum value representing where this document is along its indexing lifecycle for this index.
 	//
 	// * `AWAITING_PROCESSING` - Awaiting Processing
@@ -126,7 +126,7 @@ func (d DocumentProcessingState) Ptr() *DocumentProcessingState {
 }
 
 type DocumentRead struct {
-	Id string `json:"id" url:"id"`
+	Id *string `json:"id,omitempty" url:"id,omitempty"`
 	// The unique id of this document as it exists in the user's system.
 	ExternalId     *string   `json:"external_id,omitempty" url:"external_id,omitempty"`
 	LastUploadedAt time.Time `json:"last_uploaded_at" url:"last_uploaded_at"`
@@ -307,7 +307,7 @@ func (p ProcessingFailureReasonEnum) Ptr() *ProcessingFailureReasonEnum {
 
 type SlimDocument struct {
 	// Vellum-generated ID that uniquely identifies this document.
-	Id string `json:"id" url:"id"`
+	Id *string `json:"id,omitempty" url:"id,omitempty"`
 	// The external ID that was originally provided when uploading the document.
 	ExternalId *string `json:"external_id,omitempty" url:"external_id,omitempty"`
 	// A timestamp representing when this document was most recently uploaded.
@@ -389,11 +389,11 @@ func (s *SlimDocument) String() string {
 // A slim representation of the link between a Document and a Document Index it's a member of.
 type SlimDocumentDocumentToDocumentIndex struct {
 	// Vellum-generated ID that uniquely identifies this link.
-	Id string `json:"id" url:"id"`
+	Id *string `json:"id,omitempty" url:"id,omitempty"`
 	// Vellum-generated ID that uniquely identifies the environment index this document is included in.
-	EnvironmentDocumentIndexId string `json:"environment_document_index_id" url:"environment_document_index_id"`
+	EnvironmentDocumentIndexId *string `json:"environment_document_index_id,omitempty" url:"environment_document_index_id,omitempty"`
 	// Vellum-generated ID that uniquely identifies the index this document is included in.
-	DocumentIndexId string `json:"document_index_id" url:"document_index_id"`
+	DocumentIndexId *string `json:"document_index_id,omitempty" url:"document_index_id,omitempty"`
 	// An enum value representing where this document is along its indexing lifecycle for this index.
 	//
 	// * `AWAITING_PROCESSING` - Awaiting Processing

@@ -162,7 +162,7 @@ func (r *ReplaceTestSuiteTestCaseRequest) String() string {
 // An Array value for a variable in a Test Case.
 type TestCaseArrayVariableValue struct {
 	VariableId string         `json:"variable_id" url:"variable_id"`
-	Name       string         `json:"name" url:"name"`
+	Name       *string        `json:"name,omitempty" url:"name,omitempty"`
 	Value      []*VellumValue `json:"value,omitempty" url:"value,omitempty"`
 	type_      string
 
@@ -232,7 +232,7 @@ func (t *TestCaseArrayVariableValue) String() string {
 // A chat history value for a variable in a Test Case.
 type TestCaseChatHistoryVariableValue struct {
 	VariableId string         `json:"variable_id" url:"variable_id"`
-	Name       string         `json:"name" url:"name"`
+	Name       *string        `json:"name,omitempty" url:"name,omitempty"`
 	Value      []*ChatMessage `json:"value,omitempty" url:"value,omitempty"`
 	type_      string
 
@@ -302,7 +302,7 @@ func (t *TestCaseChatHistoryVariableValue) String() string {
 // An error value for a variable in a Test Case.
 type TestCaseErrorVariableValue struct {
 	VariableId string       `json:"variable_id" url:"variable_id"`
-	Name       string       `json:"name" url:"name"`
+	Name       *string      `json:"name,omitempty" url:"name,omitempty"`
 	Value      *VellumError `json:"value,omitempty" url:"value,omitempty"`
 	type_      string
 
@@ -372,7 +372,7 @@ func (t *TestCaseErrorVariableValue) String() string {
 // A function call value for a variable in a Test Case.
 type TestCaseFunctionCallVariableValue struct {
 	VariableId string        `json:"variable_id" url:"variable_id"`
-	Name       string        `json:"name" url:"name"`
+	Name       *string       `json:"name,omitempty" url:"name,omitempty"`
 	Value      *FunctionCall `json:"value,omitempty" url:"value,omitempty"`
 	type_      string
 
@@ -442,7 +442,7 @@ func (t *TestCaseFunctionCallVariableValue) String() string {
 // A JSON value for a variable in a Test Case.
 type TestCaseJsonVariableValue struct {
 	VariableId string      `json:"variable_id" url:"variable_id"`
-	Name       string      `json:"name" url:"name"`
+	Name       *string     `json:"name,omitempty" url:"name,omitempty"`
 	Value      interface{} `json:"value" url:"value"`
 	type_      string
 
@@ -512,7 +512,7 @@ func (t *TestCaseJsonVariableValue) String() string {
 // A numerical value for a variable in a Test Case.
 type TestCaseNumberVariableValue struct {
 	VariableId string   `json:"variable_id" url:"variable_id"`
-	Name       string   `json:"name" url:"name"`
+	Name       *string  `json:"name,omitempty" url:"name,omitempty"`
 	Value      *float64 `json:"value,omitempty" url:"value,omitempty"`
 	type_      string
 
@@ -582,7 +582,7 @@ func (t *TestCaseNumberVariableValue) String() string {
 // A search results value for a variable in a Test Case.
 type TestCaseSearchResultsVariableValue struct {
 	VariableId string          `json:"variable_id" url:"variable_id"`
-	Name       string          `json:"name" url:"name"`
+	Name       *string         `json:"name,omitempty" url:"name,omitempty"`
 	Value      []*SearchResult `json:"value,omitempty" url:"value,omitempty"`
 	type_      string
 
@@ -652,7 +652,7 @@ func (t *TestCaseSearchResultsVariableValue) String() string {
 // A string value for a variable in a Test Case.
 type TestCaseStringVariableValue struct {
 	VariableId string  `json:"variable_id" url:"variable_id"`
-	Name       string  `json:"name" url:"name"`
+	Name       *string `json:"name,omitempty" url:"name,omitempty"`
 	Value      *string `json:"value,omitempty" url:"value,omitempty"`
 	type_      string
 
