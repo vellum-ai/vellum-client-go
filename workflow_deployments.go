@@ -1498,7 +1498,7 @@ func (p *PromptDeploymentParentContext) String() string {
 }
 
 type SlimWorkflowDeployment struct {
-	Id string `json:"id" url:"id"`
+	Id *string `json:"id,omitempty" url:"id,omitempty"`
 	// A name that uniquely identifies this workflow deployment within its workspace
 	Name string `json:"name" url:"name"`
 	// A human-readable label for the workflow deployment
@@ -1514,7 +1514,7 @@ type SlimWorkflowDeployment struct {
 	// * `STAGING` - Staging
 	// * `PRODUCTION` - Production
 	Environment    *EnvironmentEnum `json:"environment,omitempty" url:"environment,omitempty"`
-	Created        time.Time        `json:"created" url:"created"`
+	Created        *time.Time       `json:"created,omitempty" url:"created,omitempty"`
 	LastDeployedOn time.Time        `json:"last_deployed_on" url:"last_deployed_on"`
 	// The input variables this Workflow Deployment expects to receive values for when it is executed.
 	InputVariables []*VellumVariable `json:"input_variables" url:"input_variables"`
@@ -1535,7 +1535,7 @@ func (s *SlimWorkflowDeployment) UnmarshalJSON(data []byte) error {
 	type embed SlimWorkflowDeployment
 	var unmarshaler = struct {
 		embed
-		Created        *core.DateTime `json:"created"`
+		Created        *core.DateTime `json:"created,omitempty"`
 		LastDeployedOn *core.DateTime `json:"last_deployed_on"`
 	}{
 		embed: embed(*s),
@@ -1544,7 +1544,7 @@ func (s *SlimWorkflowDeployment) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SlimWorkflowDeployment(unmarshaler.embed)
-	s.Created = unmarshaler.Created.Time()
+	s.Created = unmarshaler.Created.TimePtr()
 	s.LastDeployedOn = unmarshaler.LastDeployedOn.Time()
 
 	extraProperties, err := core.ExtractExtraProperties(data, *s)
@@ -1561,11 +1561,11 @@ func (s *SlimWorkflowDeployment) MarshalJSON() ([]byte, error) {
 	type embed SlimWorkflowDeployment
 	var marshaler = struct {
 		embed
-		Created        *core.DateTime `json:"created"`
+		Created        *core.DateTime `json:"created,omitempty"`
 		LastDeployedOn *core.DateTime `json:"last_deployed_on"`
 	}{
 		embed:          embed(*s),
-		Created:        core.NewDateTime(s.Created),
+		Created:        core.NewOptionalDateTime(s.Created),
 		LastDeployedOn: core.NewDateTime(s.LastDeployedOn),
 	}
 	return json.Marshal(marshaler)
