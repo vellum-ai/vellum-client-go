@@ -2676,8 +2676,8 @@ func (t *TestSuiteRunPromptSandboxHistoryItemExecConfigRequest) String() string 
 }
 
 type TestSuiteRunRead struct {
-	Id        string                 `json:"id" url:"id"`
-	Created   time.Time              `json:"created" url:"created"`
+	Id        *string                `json:"id,omitempty" url:"id,omitempty"`
+	Created   *time.Time             `json:"created,omitempty" url:"created,omitempty"`
 	TestSuite *TestSuiteRunTestSuite `json:"test_suite" url:"test_suite"`
 	// The current state of this run
 	//
@@ -2703,7 +2703,7 @@ func (t *TestSuiteRunRead) UnmarshalJSON(data []byte) error {
 	type embed TestSuiteRunRead
 	var unmarshaler = struct {
 		embed
-		Created *core.DateTime `json:"created"`
+		Created *core.DateTime `json:"created,omitempty"`
 	}{
 		embed: embed(*t),
 	}
@@ -2711,7 +2711,7 @@ func (t *TestSuiteRunRead) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*t = TestSuiteRunRead(unmarshaler.embed)
-	t.Created = unmarshaler.Created.Time()
+	t.Created = unmarshaler.Created.TimePtr()
 
 	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
@@ -2727,10 +2727,10 @@ func (t *TestSuiteRunRead) MarshalJSON() ([]byte, error) {
 	type embed TestSuiteRunRead
 	var marshaler = struct {
 		embed
-		Created *core.DateTime `json:"created"`
+		Created *core.DateTime `json:"created,omitempty"`
 	}{
 		embed:   embed(*t),
-		Created: core.NewDateTime(t.Created),
+		Created: core.NewOptionalDateTime(t.Created),
 	}
 	return json.Marshal(marshaler)
 }
