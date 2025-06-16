@@ -488,8 +488,8 @@ func (p *PaginatedSlimDeploymentReadList) String() string {
 }
 
 type PromptDeploymentRelease struct {
-	Id            string                                   `json:"id" url:"id"`
-	Created       time.Time                                `json:"created" url:"created"`
+	Id            *string                                  `json:"id,omitempty" url:"id,omitempty"`
+	Created       *time.Time                               `json:"created,omitempty" url:"created,omitempty"`
 	Environment   *ReleaseEnvironment                      `json:"environment" url:"environment"`
 	CreatedBy     *ReleaseCreatedBy                        `json:"created_by,omitempty" url:"created_by,omitempty"`
 	PromptVersion *PromptDeploymentReleasePromptVersion    `json:"prompt_version" url:"prompt_version"`
@@ -510,7 +510,7 @@ func (p *PromptDeploymentRelease) UnmarshalJSON(data []byte) error {
 	type embed PromptDeploymentRelease
 	var unmarshaler = struct {
 		embed
-		Created *core.DateTime `json:"created"`
+		Created *core.DateTime `json:"created,omitempty"`
 	}{
 		embed: embed(*p),
 	}
@@ -518,7 +518,7 @@ func (p *PromptDeploymentRelease) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*p = PromptDeploymentRelease(unmarshaler.embed)
-	p.Created = unmarshaler.Created.Time()
+	p.Created = unmarshaler.Created.TimePtr()
 
 	extraProperties, err := core.ExtractExtraProperties(data, *p)
 	if err != nil {
@@ -534,10 +534,10 @@ func (p *PromptDeploymentRelease) MarshalJSON() ([]byte, error) {
 	type embed PromptDeploymentRelease
 	var marshaler = struct {
 		embed
-		Created *core.DateTime `json:"created"`
+		Created *core.DateTime `json:"created,omitempty"`
 	}{
 		embed:   embed(*p),
-		Created: core.NewDateTime(p.Created),
+		Created: core.NewOptionalDateTime(p.Created),
 	}
 	return json.Marshal(marshaler)
 }
@@ -555,7 +555,7 @@ func (p *PromptDeploymentRelease) String() string {
 }
 
 type PromptDeploymentReleasePromptDeployment struct {
-	Name string `json:"name" url:"name"`
+	Name *string `json:"name,omitempty" url:"name,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -596,9 +596,9 @@ func (p *PromptDeploymentReleasePromptDeployment) String() string {
 }
 
 type PromptDeploymentReleasePromptVersion struct {
-	Id string `json:"id" url:"id"`
+	Id *string `json:"id,omitempty" url:"id,omitempty"`
 	// Configuration used to build this prompt version.
-	BuildConfig ComponentsSchemasPromptVersionBuildConfigSandbox `json:"build_config" url:"build_config"`
+	BuildConfig *ComponentsSchemasPromptVersionBuildConfigSandbox `json:"build_config,omitempty" url:"build_config,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -708,8 +708,8 @@ func (p *PromptVersionBuildConfigSandbox) String() string {
 }
 
 type SlimDeploymentRead struct {
-	Id      string    `json:"id" url:"id"`
-	Created time.Time `json:"created" url:"created"`
+	Id      *string    `json:"id,omitempty" url:"id,omitempty"`
+	Created *time.Time `json:"created,omitempty" url:"created,omitempty"`
 	// A human-readable label for the deployment
 	Label string `json:"label" url:"label"`
 	// A name that uniquely identifies this deployment within its workspace
@@ -742,7 +742,7 @@ func (s *SlimDeploymentRead) UnmarshalJSON(data []byte) error {
 	type embed SlimDeploymentRead
 	var unmarshaler = struct {
 		embed
-		Created        *core.DateTime `json:"created"`
+		Created        *core.DateTime `json:"created,omitempty"`
 		LastDeployedOn *core.DateTime `json:"last_deployed_on"`
 	}{
 		embed: embed(*s),
@@ -751,7 +751,7 @@ func (s *SlimDeploymentRead) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SlimDeploymentRead(unmarshaler.embed)
-	s.Created = unmarshaler.Created.Time()
+	s.Created = unmarshaler.Created.TimePtr()
 	s.LastDeployedOn = unmarshaler.LastDeployedOn.Time()
 
 	extraProperties, err := core.ExtractExtraProperties(data, *s)
@@ -768,11 +768,11 @@ func (s *SlimDeploymentRead) MarshalJSON() ([]byte, error) {
 	type embed SlimDeploymentRead
 	var marshaler = struct {
 		embed
-		Created        *core.DateTime `json:"created"`
+		Created        *core.DateTime `json:"created,omitempty"`
 		LastDeployedOn *core.DateTime `json:"last_deployed_on"`
 	}{
 		embed:          embed(*s),
-		Created:        core.NewDateTime(s.Created),
+		Created:        core.NewOptionalDateTime(s.Created),
 		LastDeployedOn: core.NewDateTime(s.LastDeployedOn),
 	}
 	return json.Marshal(marshaler)
