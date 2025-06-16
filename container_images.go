@@ -85,7 +85,7 @@ func (c *ContainerImageContainerImageTag) String() string {
 }
 
 type ContainerImageRead struct {
-	Id         string                             `json:"id" url:"id"`
+	Id         *string                            `json:"id,omitempty" url:"id,omitempty"`
 	Name       string                             `json:"name" url:"name"`
 	Visibility EntityVisibility                   `json:"visibility" url:"visibility"`
 	Created    time.Time                          `json:"created" url:"created"`
