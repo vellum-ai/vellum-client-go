@@ -43,8 +43,8 @@ func (s SecretTypeEnum) Ptr() *SecretTypeEnum {
 }
 
 type WorkspaceSecretRead struct {
-	Id         string         `json:"id" url:"id"`
-	Modified   time.Time      `json:"modified" url:"modified"`
+	Id         *string        `json:"id,omitempty" url:"id,omitempty"`
+	Modified   *time.Time     `json:"modified,omitempty" url:"modified,omitempty"`
 	Name       string         `json:"name" url:"name"`
 	Label      string         `json:"label" url:"label"`
 	SecretType SecretTypeEnum `json:"secret_type" url:"secret_type"`
@@ -61,7 +61,7 @@ func (w *WorkspaceSecretRead) UnmarshalJSON(data []byte) error {
 	type embed WorkspaceSecretRead
 	var unmarshaler = struct {
 		embed
-		Modified *core.DateTime `json:"modified"`
+		Modified *core.DateTime `json:"modified,omitempty"`
 	}{
 		embed: embed(*w),
 	}
@@ -69,7 +69,7 @@ func (w *WorkspaceSecretRead) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkspaceSecretRead(unmarshaler.embed)
-	w.Modified = unmarshaler.Modified.Time()
+	w.Modified = unmarshaler.Modified.TimePtr()
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w)
 	if err != nil {
@@ -85,10 +85,10 @@ func (w *WorkspaceSecretRead) MarshalJSON() ([]byte, error) {
 	type embed WorkspaceSecretRead
 	var marshaler = struct {
 		embed
-		Modified *core.DateTime `json:"modified"`
+		Modified *core.DateTime `json:"modified,omitempty"`
 	}{
 		embed:    embed(*w),
-		Modified: core.NewDateTime(w.Modified),
+		Modified: core.NewOptionalDateTime(w.Modified),
 	}
 	return json.Marshal(marshaler)
 }

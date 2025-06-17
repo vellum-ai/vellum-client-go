@@ -354,8 +354,8 @@ func (d *DocumentIndexIndexingConfigRequest) String() string {
 }
 
 type DocumentIndexRead struct {
-	Id      string    `json:"id" url:"id"`
-	Created time.Time `json:"created" url:"created"`
+	Id      *string    `json:"id,omitempty" url:"id,omitempty"`
+	Created *time.Time `json:"created,omitempty" url:"created,omitempty"`
 	// A human-readable label for the document index
 	Label string `json:"label" url:"label"`
 	// A name that uniquely identifies this index within its workspace
@@ -379,7 +379,7 @@ func (d *DocumentIndexRead) UnmarshalJSON(data []byte) error {
 	type embed DocumentIndexRead
 	var unmarshaler = struct {
 		embed
-		Created *core.DateTime `json:"created"`
+		Created *core.DateTime `json:"created,omitempty"`
 	}{
 		embed: embed(*d),
 	}
@@ -387,7 +387,7 @@ func (d *DocumentIndexRead) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = DocumentIndexRead(unmarshaler.embed)
-	d.Created = unmarshaler.Created.Time()
+	d.Created = unmarshaler.Created.TimePtr()
 
 	extraProperties, err := core.ExtractExtraProperties(data, *d)
 	if err != nil {
@@ -403,10 +403,10 @@ func (d *DocumentIndexRead) MarshalJSON() ([]byte, error) {
 	type embed DocumentIndexRead
 	var marshaler = struct {
 		embed
-		Created *core.DateTime `json:"created"`
+		Created *core.DateTime `json:"created,omitempty"`
 	}{
 		embed:   embed(*d),
-		Created: core.NewDateTime(d.Created),
+		Created: core.NewOptionalDateTime(d.Created),
 	}
 	return json.Marshal(marshaler)
 }
