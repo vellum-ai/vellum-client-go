@@ -37,7 +37,7 @@ func (n NewMemberJoinBehaviorEnum) Ptr() *NewMemberJoinBehaviorEnum {
 }
 
 type OrganizationRead struct {
-	Id                    *string                   `json:"id,omitempty" url:"id,omitempty"`
+	Id                    string                    `json:"id" url:"id"`
 	Name                  string                    `json:"name" url:"name"`
 	AllowStaffAccess      *bool                     `json:"allow_staff_access,omitempty" url:"allow_staff_access,omitempty"`
 	NewMemberJoinBehavior NewMemberJoinBehaviorEnum `json:"new_member_join_behavior" url:"new_member_join_behavior"`
