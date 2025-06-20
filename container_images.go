@@ -24,6 +24,83 @@ type PushContainerImageRequest struct {
 	Tags []string `json:"tags,omitempty" url:"-"`
 }
 
+// * `QUEUED` - Queued
+// * `BUILDING` - Building
+// * `AVAILABLE` - Available
+// * `FAILED` - Failed
+// * `UNKNOWN` - Unknown
+type BuildStatusEnum string
+
+const (
+	BuildStatusEnumQueued    BuildStatusEnum = "QUEUED"
+	BuildStatusEnumBuilding  BuildStatusEnum = "BUILDING"
+	BuildStatusEnumAvailable BuildStatusEnum = "AVAILABLE"
+	BuildStatusEnumFailed    BuildStatusEnum = "FAILED"
+	BuildStatusEnumUnknown   BuildStatusEnum = "UNKNOWN"
+)
+
+func NewBuildStatusEnumFromString(s string) (BuildStatusEnum, error) {
+	switch s {
+	case "QUEUED":
+		return BuildStatusEnumQueued, nil
+	case "BUILDING":
+		return BuildStatusEnumBuilding, nil
+	case "AVAILABLE":
+		return BuildStatusEnumAvailable, nil
+	case "FAILED":
+		return BuildStatusEnumFailed, nil
+	case "UNKNOWN":
+		return BuildStatusEnumUnknown, nil
+	}
+	var t BuildStatusEnum
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (b BuildStatusEnum) Ptr() *BuildStatusEnum {
+	return &b
+}
+
+type ContainerImageBuildConfig struct {
+	Packages []*CodeExecutionPackage `json:"packages" url:"packages"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *ContainerImageBuildConfig) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *ContainerImageBuildConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler ContainerImageBuildConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = ContainerImageBuildConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *ContainerImageBuildConfig) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
 type ContainerImageContainerImageTag struct {
 	Name     string    `json:"name" url:"name"`
 	Modified time.Time `json:"modified" url:"modified"`
@@ -85,14 +162,16 @@ func (c *ContainerImageContainerImageTag) String() string {
 }
 
 type ContainerImageRead struct {
-	Id         *string                            `json:"id,omitempty" url:"id,omitempty"`
-	Name       string                             `json:"name" url:"name"`
-	Visibility EntityVisibility                   `json:"visibility" url:"visibility"`
-	Created    time.Time                          `json:"created" url:"created"`
-	Modified   time.Time                          `json:"modified" url:"modified"`
-	Repository string                             `json:"repository" url:"repository"`
-	Sha        string                             `json:"sha" url:"sha"`
-	Tags       []*ContainerImageContainerImageTag `json:"tags" url:"tags"`
+	Id          string                             `json:"id" url:"id"`
+	Name        string                             `json:"name" url:"name"`
+	Visibility  EntityVisibility                   `json:"visibility" url:"visibility"`
+	Created     time.Time                          `json:"created" url:"created"`
+	Modified    time.Time                          `json:"modified" url:"modified"`
+	Repository  string                             `json:"repository" url:"repository"`
+	Sha         string                             `json:"sha" url:"sha"`
+	Tags        []*ContainerImageContainerImageTag `json:"tags" url:"tags"`
+	BuildStatus *BuildStatusEnum                   `json:"build_status,omitempty" url:"build_status,omitempty"`
+	BuildConfig *ContainerImageBuildConfig         `json:"build_config,omitempty" url:"build_config,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage

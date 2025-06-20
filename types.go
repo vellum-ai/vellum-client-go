@@ -3218,8 +3218,8 @@ func (c *ConditionalNodeResultData) String() string {
 }
 
 type DeploymentRead struct {
-	Id      *string    `json:"id,omitempty" url:"id,omitempty"`
-	Created *time.Time `json:"created,omitempty" url:"created,omitempty"`
+	Id      string    `json:"id" url:"id"`
+	Created time.Time `json:"created" url:"created"`
 	// A human-readable label for the deployment
 	Label string `json:"label" url:"label"`
 	// A name that uniquely identifies this deployment within its workspace
@@ -3256,7 +3256,7 @@ func (d *DeploymentRead) UnmarshalJSON(data []byte) error {
 	type embed DeploymentRead
 	var unmarshaler = struct {
 		embed
-		Created        *core.DateTime `json:"created,omitempty"`
+		Created        *core.DateTime `json:"created"`
 		LastDeployedOn *core.DateTime `json:"last_deployed_on"`
 	}{
 		embed: embed(*d),
@@ -3265,7 +3265,7 @@ func (d *DeploymentRead) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*d = DeploymentRead(unmarshaler.embed)
-	d.Created = unmarshaler.Created.TimePtr()
+	d.Created = unmarshaler.Created.Time()
 	d.LastDeployedOn = unmarshaler.LastDeployedOn.Time()
 
 	extraProperties, err := core.ExtractExtraProperties(data, *d)
@@ -3282,11 +3282,11 @@ func (d *DeploymentRead) MarshalJSON() ([]byte, error) {
 	type embed DeploymentRead
 	var marshaler = struct {
 		embed
-		Created        *core.DateTime `json:"created,omitempty"`
+		Created        *core.DateTime `json:"created"`
 		LastDeployedOn *core.DateTime `json:"last_deployed_on"`
 	}{
 		embed:          embed(*d),
-		Created:        core.NewOptionalDateTime(d.Created),
+		Created:        core.NewDateTime(d.Created),
 		LastDeployedOn: core.NewDateTime(d.LastDeployedOn),
 	}
 	return json.Marshal(marshaler)
@@ -4256,7 +4256,7 @@ func (e *ExecuteApiRequestHeadersValue) Accept(visitor ExecuteApiRequestHeadersV
 type ExecuteApiResponse struct {
 	StatusCode int                     `json:"status_code" url:"status_code"`
 	Text       string                  `json:"text" url:"text"`
-	Json       *ExecuteApiResponseJson `json:"json" url:"json"`
+	Json       *ExecuteApiResponseJson `json:"json,omitempty" url:"json,omitempty"`
 	Headers    map[string]string       `json:"headers" url:"headers"`
 
 	extraProperties map[string]interface{}
