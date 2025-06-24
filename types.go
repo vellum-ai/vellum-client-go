@@ -12759,7 +12759,7 @@ func (r *RejectedWorkflowNodeResultEvent) String() string {
 }
 
 type ReleaseCreatedBy struct {
-	Id       *string `json:"id,omitempty" url:"id,omitempty"`
+	Id       string  `json:"id" url:"id"`
 	FullName *string `json:"full_name,omitempty" url:"full_name,omitempty"`
 	Email    string  `json:"email" url:"email"`
 
@@ -12802,9 +12802,9 @@ func (r *ReleaseCreatedBy) String() string {
 }
 
 type ReleaseEnvironment struct {
-	Id    *string `json:"id,omitempty" url:"id,omitempty"`
-	Name  string  `json:"name" url:"name"`
-	Label string  `json:"label" url:"label"`
+	Id    string `json:"id" url:"id"`
+	Name  string `json:"name" url:"name"`
+	Label string `json:"label" url:"label"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -12892,7 +12892,7 @@ func (r *ReleaseReleaseTag) String() string {
 }
 
 type ReleaseReviewReviewer struct {
-	Id       *string `json:"id,omitempty" url:"id,omitempty"`
+	Id       string  `json:"id" url:"id"`
 	FullName *string `json:"full_name,omitempty" url:"full_name,omitempty"`
 
 	extraProperties map[string]interface{}
@@ -14086,8 +14086,8 @@ func (s *SentenceChunking) String() string {
 }
 
 type SlimReleaseReview struct {
-	Id       *string                `json:"id,omitempty" url:"id,omitempty"`
-	Created  *time.Time             `json:"created,omitempty" url:"created,omitempty"`
+	Id       string                 `json:"id" url:"id"`
+	Created  time.Time              `json:"created" url:"created"`
 	Reviewer *ReleaseReviewReviewer `json:"reviewer" url:"reviewer"`
 	State    ReleaseReviewState     `json:"state" url:"state"`
 
@@ -14103,7 +14103,7 @@ func (s *SlimReleaseReview) UnmarshalJSON(data []byte) error {
 	type embed SlimReleaseReview
 	var unmarshaler = struct {
 		embed
-		Created *core.DateTime `json:"created,omitempty"`
+		Created *core.DateTime `json:"created"`
 	}{
 		embed: embed(*s),
 	}
@@ -14111,7 +14111,7 @@ func (s *SlimReleaseReview) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*s = SlimReleaseReview(unmarshaler.embed)
-	s.Created = unmarshaler.Created.TimePtr()
+	s.Created = unmarshaler.Created.Time()
 
 	extraProperties, err := core.ExtractExtraProperties(data, *s)
 	if err != nil {
@@ -14127,10 +14127,10 @@ func (s *SlimReleaseReview) MarshalJSON() ([]byte, error) {
 	type embed SlimReleaseReview
 	var marshaler = struct {
 		embed
-		Created *core.DateTime `json:"created,omitempty"`
+		Created *core.DateTime `json:"created"`
 	}{
 		embed:   embed(*s),
-		Created: core.NewOptionalDateTime(s.Created),
+		Created: core.NewDateTime(s.Created),
 	}
 	return json.Marshal(marshaler)
 }
@@ -18245,7 +18245,7 @@ func (v VellumVariableType) Ptr() *VellumVariableType {
 }
 
 type WorkflowDeploymentRead struct {
-	Id *string `json:"id,omitempty" url:"id,omitempty"`
+	Id string `json:"id" url:"id"`
 	// A name that uniquely identifies this workflow deployment within its workspace
 	Name string `json:"name" url:"name"`
 	// A human-readable label for the workflow deployment
@@ -18261,7 +18261,7 @@ type WorkflowDeploymentRead struct {
 	// * `STAGING` - Staging
 	// * `PRODUCTION` - Production
 	Environment    *EnvironmentEnum `json:"environment,omitempty" url:"environment,omitempty"`
-	Created        *time.Time       `json:"created,omitempty" url:"created,omitempty"`
+	Created        time.Time        `json:"created" url:"created"`
 	LastDeployedOn time.Time        `json:"last_deployed_on" url:"last_deployed_on"`
 	// The ID of the history item associated with this Workflow Deployment's LATEST Release Tag
 	LastDeployedHistoryItemId string `json:"last_deployed_history_item_id" url:"last_deployed_history_item_id"`
@@ -18284,7 +18284,7 @@ func (w *WorkflowDeploymentRead) UnmarshalJSON(data []byte) error {
 	type embed WorkflowDeploymentRead
 	var unmarshaler = struct {
 		embed
-		Created        *core.DateTime `json:"created,omitempty"`
+		Created        *core.DateTime `json:"created"`
 		LastDeployedOn *core.DateTime `json:"last_deployed_on"`
 	}{
 		embed: embed(*w),
@@ -18293,7 +18293,7 @@ func (w *WorkflowDeploymentRead) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowDeploymentRead(unmarshaler.embed)
-	w.Created = unmarshaler.Created.TimePtr()
+	w.Created = unmarshaler.Created.Time()
 	w.LastDeployedOn = unmarshaler.LastDeployedOn.Time()
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w)
@@ -18310,11 +18310,11 @@ func (w *WorkflowDeploymentRead) MarshalJSON() ([]byte, error) {
 	type embed WorkflowDeploymentRead
 	var marshaler = struct {
 		embed
-		Created        *core.DateTime `json:"created,omitempty"`
+		Created        *core.DateTime `json:"created"`
 		LastDeployedOn *core.DateTime `json:"last_deployed_on"`
 	}{
 		embed:          embed(*w),
-		Created:        core.NewOptionalDateTime(w.Created),
+		Created:        core.NewDateTime(w.Created),
 		LastDeployedOn: core.NewDateTime(w.LastDeployedOn),
 	}
 	return json.Marshal(marshaler)

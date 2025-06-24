@@ -61,8 +61,8 @@ type MetricDefinitionHistoryItem struct {
 	// A name that uniquely identifies this metric within its workspace
 	Name            string            `json:"name" url:"name"`
 	Description     string            `json:"description" url:"description"`
-	InputVariables  []*VellumVariable `json:"input_variables,omitempty" url:"input_variables,omitempty"`
-	OutputVariables []*VellumVariable `json:"output_variables,omitempty" url:"output_variables,omitempty"`
+	InputVariables  []*VellumVariable `json:"input_variables" url:"input_variables"`
+	OutputVariables []*VellumVariable `json:"output_variables" url:"output_variables"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage

@@ -10,8 +10,8 @@ import (
 )
 
 type WorkflowDeploymentRelease struct {
-	Id              *string                                      `json:"id,omitempty" url:"id,omitempty"`
-	Created         *time.Time                                   `json:"created,omitempty" url:"created,omitempty"`
+	Id              string                                       `json:"id" url:"id"`
+	Created         time.Time                                    `json:"created" url:"created"`
 	Environment     *ReleaseEnvironment                          `json:"environment" url:"environment"`
 	CreatedBy       *ReleaseCreatedBy                            `json:"created_by,omitempty" url:"created_by,omitempty"`
 	WorkflowVersion *WorkflowDeploymentReleaseWorkflowVersion    `json:"workflow_version" url:"workflow_version"`
@@ -32,7 +32,7 @@ func (w *WorkflowDeploymentRelease) UnmarshalJSON(data []byte) error {
 	type embed WorkflowDeploymentRelease
 	var unmarshaler = struct {
 		embed
-		Created *core.DateTime `json:"created,omitempty"`
+		Created *core.DateTime `json:"created"`
 	}{
 		embed: embed(*w),
 	}
@@ -40,7 +40,7 @@ func (w *WorkflowDeploymentRelease) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowDeploymentRelease(unmarshaler.embed)
-	w.Created = unmarshaler.Created.TimePtr()
+	w.Created = unmarshaler.Created.Time()
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w)
 	if err != nil {
@@ -56,10 +56,10 @@ func (w *WorkflowDeploymentRelease) MarshalJSON() ([]byte, error) {
 	type embed WorkflowDeploymentRelease
 	var marshaler = struct {
 		embed
-		Created *core.DateTime `json:"created,omitempty"`
+		Created *core.DateTime `json:"created"`
 	}{
 		embed:   embed(*w),
-		Created: core.NewOptionalDateTime(w.Created),
+		Created: core.NewDateTime(w.Created),
 	}
 	return json.Marshal(marshaler)
 }
@@ -77,7 +77,7 @@ func (w *WorkflowDeploymentRelease) String() string {
 }
 
 type WorkflowDeploymentReleaseWorkflowDeployment struct {
-	Name *string `json:"name,omitempty" url:"name,omitempty"`
+	Name string `json:"name" url:"name"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -118,9 +118,9 @@ func (w *WorkflowDeploymentReleaseWorkflowDeployment) String() string {
 }
 
 type WorkflowDeploymentReleaseWorkflowVersion struct {
-	Id              *string           `json:"id,omitempty" url:"id,omitempty"`
-	InputVariables  []*VellumVariable `json:"input_variables,omitempty" url:"input_variables,omitempty"`
-	OutputVariables []*VellumVariable `json:"output_variables,omitempty" url:"output_variables,omitempty"`
+	Id              string            `json:"id" url:"id"`
+	InputVariables  []*VellumVariable `json:"input_variables" url:"input_variables"`
+	OutputVariables []*VellumVariable `json:"output_variables" url:"output_variables"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage

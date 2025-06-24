@@ -10,11 +10,11 @@ import (
 )
 
 type WorkspaceRead struct {
-	Id *string `json:"id,omitempty" url:"id,omitempty"`
+	Id string `json:"id" url:"id"`
 	// The name of the Workspace.
-	Name    string     `json:"name" url:"name"`
-	Label   *string    `json:"label,omitempty" url:"label,omitempty"`
-	Created *time.Time `json:"created,omitempty" url:"created,omitempty"`
+	Name    string    `json:"name" url:"name"`
+	Label   string    `json:"label" url:"label"`
+	Created time.Time `json:"created" url:"created"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -28,7 +28,7 @@ func (w *WorkspaceRead) UnmarshalJSON(data []byte) error {
 	type embed WorkspaceRead
 	var unmarshaler = struct {
 		embed
-		Created *core.DateTime `json:"created,omitempty"`
+		Created *core.DateTime `json:"created"`
 	}{
 		embed: embed(*w),
 	}
@@ -36,7 +36,7 @@ func (w *WorkspaceRead) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkspaceRead(unmarshaler.embed)
-	w.Created = unmarshaler.Created.TimePtr()
+	w.Created = unmarshaler.Created.Time()
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w)
 	if err != nil {
@@ -52,10 +52,10 @@ func (w *WorkspaceRead) MarshalJSON() ([]byte, error) {
 	type embed WorkspaceRead
 	var marshaler = struct {
 		embed
-		Created *core.DateTime `json:"created,omitempty"`
+		Created *core.DateTime `json:"created"`
 	}{
 		embed:   embed(*w),
-		Created: core.NewOptionalDateTime(w.Created),
+		Created: core.NewDateTime(w.Created),
 	}
 	return json.Marshal(marshaler)
 }
