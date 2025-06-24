@@ -17,12 +17,14 @@ type PatchedWorkspaceSecretUpdateRequest struct {
 // * `USER_DEFINED` - User Defined
 // * `HMAC` - Hmac
 // * `INTERNAL_API_KEY` - Internal Api Key
+// * `EXTERNALLY_PROVISIONED` - Externally Provisioned
 type SecretTypeEnum string
 
 const (
-	SecretTypeEnumUserDefined    SecretTypeEnum = "USER_DEFINED"
-	SecretTypeEnumHmac           SecretTypeEnum = "HMAC"
-	SecretTypeEnumInternalApiKey SecretTypeEnum = "INTERNAL_API_KEY"
+	SecretTypeEnumUserDefined           SecretTypeEnum = "USER_DEFINED"
+	SecretTypeEnumHmac                  SecretTypeEnum = "HMAC"
+	SecretTypeEnumInternalApiKey        SecretTypeEnum = "INTERNAL_API_KEY"
+	SecretTypeEnumExternallyProvisioned SecretTypeEnum = "EXTERNALLY_PROVISIONED"
 )
 
 func NewSecretTypeEnumFromString(s string) (SecretTypeEnum, error) {
@@ -33,6 +35,8 @@ func NewSecretTypeEnumFromString(s string) (SecretTypeEnum, error) {
 		return SecretTypeEnumHmac, nil
 	case "INTERNAL_API_KEY":
 		return SecretTypeEnumInternalApiKey, nil
+	case "EXTERNALLY_PROVISIONED":
+		return SecretTypeEnumExternallyProvisioned, nil
 	}
 	var t SecretTypeEnum
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -43,8 +47,8 @@ func (s SecretTypeEnum) Ptr() *SecretTypeEnum {
 }
 
 type WorkspaceSecretRead struct {
-	Id         *string        `json:"id,omitempty" url:"id,omitempty"`
-	Modified   *time.Time     `json:"modified,omitempty" url:"modified,omitempty"`
+	Id         string         `json:"id" url:"id"`
+	Modified   time.Time      `json:"modified" url:"modified"`
 	Name       string         `json:"name" url:"name"`
 	Label      string         `json:"label" url:"label"`
 	SecretType SecretTypeEnum `json:"secret_type" url:"secret_type"`
@@ -61,7 +65,7 @@ func (w *WorkspaceSecretRead) UnmarshalJSON(data []byte) error {
 	type embed WorkspaceSecretRead
 	var unmarshaler = struct {
 		embed
-		Modified *core.DateTime `json:"modified,omitempty"`
+		Modified *core.DateTime `json:"modified"`
 	}{
 		embed: embed(*w),
 	}
@@ -69,7 +73,7 @@ func (w *WorkspaceSecretRead) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkspaceSecretRead(unmarshaler.embed)
-	w.Modified = unmarshaler.Modified.TimePtr()
+	w.Modified = unmarshaler.Modified.Time()
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w)
 	if err != nil {
@@ -85,10 +89,10 @@ func (w *WorkspaceSecretRead) MarshalJSON() ([]byte, error) {
 	type embed WorkspaceSecretRead
 	var marshaler = struct {
 		embed
-		Modified *core.DateTime `json:"modified,omitempty"`
+		Modified *core.DateTime `json:"modified"`
 	}{
 		embed:    embed(*w),
-		Modified: core.NewOptionalDateTime(w.Modified),
+		Modified: core.NewDateTime(w.Modified),
 	}
 	return json.Marshal(marshaler)
 }

@@ -488,8 +488,8 @@ func (p *PaginatedSlimDeploymentReadList) String() string {
 }
 
 type PromptDeploymentRelease struct {
-	Id            *string                                  `json:"id,omitempty" url:"id,omitempty"`
-	Created       *time.Time                               `json:"created,omitempty" url:"created,omitempty"`
+	Id            string                                   `json:"id" url:"id"`
+	Created       time.Time                                `json:"created" url:"created"`
 	Environment   *ReleaseEnvironment                      `json:"environment" url:"environment"`
 	CreatedBy     *ReleaseCreatedBy                        `json:"created_by,omitempty" url:"created_by,omitempty"`
 	PromptVersion *PromptDeploymentReleasePromptVersion    `json:"prompt_version" url:"prompt_version"`
@@ -510,7 +510,7 @@ func (p *PromptDeploymentRelease) UnmarshalJSON(data []byte) error {
 	type embed PromptDeploymentRelease
 	var unmarshaler = struct {
 		embed
-		Created *core.DateTime `json:"created,omitempty"`
+		Created *core.DateTime `json:"created"`
 	}{
 		embed: embed(*p),
 	}
@@ -518,7 +518,7 @@ func (p *PromptDeploymentRelease) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*p = PromptDeploymentRelease(unmarshaler.embed)
-	p.Created = unmarshaler.Created.TimePtr()
+	p.Created = unmarshaler.Created.Time()
 
 	extraProperties, err := core.ExtractExtraProperties(data, *p)
 	if err != nil {
@@ -534,10 +534,10 @@ func (p *PromptDeploymentRelease) MarshalJSON() ([]byte, error) {
 	type embed PromptDeploymentRelease
 	var marshaler = struct {
 		embed
-		Created *core.DateTime `json:"created,omitempty"`
+		Created *core.DateTime `json:"created"`
 	}{
 		embed:   embed(*p),
-		Created: core.NewOptionalDateTime(p.Created),
+		Created: core.NewDateTime(p.Created),
 	}
 	return json.Marshal(marshaler)
 }
@@ -555,7 +555,7 @@ func (p *PromptDeploymentRelease) String() string {
 }
 
 type PromptDeploymentReleasePromptDeployment struct {
-	Name *string `json:"name,omitempty" url:"name,omitempty"`
+	Name string `json:"name" url:"name"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -596,9 +596,9 @@ func (p *PromptDeploymentReleasePromptDeployment) String() string {
 }
 
 type PromptDeploymentReleasePromptVersion struct {
-	Id *string `json:"id,omitempty" url:"id,omitempty"`
+	Id string `json:"id" url:"id"`
 	// Configuration used to build this prompt version.
-	BuildConfig *ComponentsSchemasPromptVersionBuildConfigSandbox `json:"build_config,omitempty" url:"build_config,omitempty"`
+	BuildConfig ComponentsSchemasPromptVersionBuildConfigSandbox `json:"build_config" url:"build_config"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage

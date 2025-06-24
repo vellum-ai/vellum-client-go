@@ -10,7 +10,7 @@ import (
 
 // An ML Model that your Workspace has access to.
 type MlModelRead struct {
-	Id *string `json:"id,omitempty" url:"id,omitempty"`
+	Id string `json:"id" url:"id"`
 	// The unique name of the ML Model.
 	Name string `json:"name" url:"name"`
 
