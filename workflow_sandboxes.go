@@ -77,7 +77,7 @@ func (p *PaginatedWorkflowSandboxExampleList) String() string {
 
 type WorkflowSandboxExample struct {
 	Id          string  `json:"id" url:"id"`
-	Label       *string `json:"label,omitempty" url:"label,omitempty"`
+	Label       string  `json:"label" url:"label"`
 	Description *string `json:"description,omitempty" url:"description,omitempty"`
 	IconName    *string `json:"icon_name,omitempty" url:"icon_name,omitempty"`
 
