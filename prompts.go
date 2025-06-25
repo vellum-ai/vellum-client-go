@@ -20,9 +20,12 @@ func (p *PromptsPullRequest) Accept() string {
 }
 
 type PromptPush struct {
-	ExecConfig      *PromptExecConfig `json:"exec_config,omitempty" url:"-"`
-	PromptVariantId *string           `json:"prompt_variant_id,omitempty" url:"-"`
-	PromptSandboxId *string           `json:"prompt_sandbox_id,omitempty" url:"-"`
+	// If specified, an existing Prompt Variant by the provided ID will be updated. Otherwise, a new Prompt Variant will be created and an ID generated.
+	PromptVariantId *string `json:"prompt_variant_id,omitempty" url:"-"`
+	// If provided, then the created/updated Prompt Variant will have this label.
+	PromptVariantLabel *string           `json:"prompt_variant_label,omitempty" url:"-"`
+	PromptSandboxId    *string           `json:"prompt_sandbox_id,omitempty" url:"-"`
+	ExecConfig         *PromptExecConfig `json:"exec_config,omitempty" url:"-"`
 }
 
 type PromptExecConfig struct {
