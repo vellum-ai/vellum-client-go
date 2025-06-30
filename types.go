@@ -2768,8 +2768,9 @@ func (c *CodeExecutionNodeStringResult) String() string {
 }
 
 type CodeExecutionPackage struct {
-	Version string `json:"version" url:"version"`
-	Name    string `json:"name" url:"name"`
+	Version    string  `json:"version" url:"version"`
+	Name       string  `json:"name" url:"name"`
+	Repository *string `json:"repository,omitempty" url:"repository,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
