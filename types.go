@@ -5112,6 +5112,77 @@ func (e *ExecutionStringVellumValue) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
+// A value representing Thinking mode output.
+type ExecutionThinkingVellumValue struct {
+	// The variable's uniquely identifying internal id.
+	Id    string               `json:"id" url:"id"`
+	Name  string               `json:"name" url:"name"`
+	Value []*StringVellumValue `json:"value" url:"value"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ExecutionThinkingVellumValue) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
+}
+
+func (e *ExecutionThinkingVellumValue) Type() string {
+	return e.type_
+}
+
+func (e *ExecutionThinkingVellumValue) UnmarshalJSON(data []byte) error {
+	type embed ExecutionThinkingVellumValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*e),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*e = ExecutionThinkingVellumValue(unmarshaler.embed)
+	if unmarshaler.Type != "THINKING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", e, "THINKING", unmarshaler.Type)
+	}
+	e.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e, "type")
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ExecutionThinkingVellumValue) MarshalJSON() ([]byte, error) {
+	type embed ExecutionThinkingVellumValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*e),
+		Type:  "THINKING",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (e *ExecutionThinkingVellumValue) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
 type ExecutionVellumValue struct {
 	ExecutionStringVellumValue        *ExecutionStringVellumValue
 	ExecutionNumberVellumValue        *ExecutionNumberVellumValue
@@ -5121,6 +5192,7 @@ type ExecutionVellumValue struct {
 	ExecutionErrorVellumValue         *ExecutionErrorVellumValue
 	ExecutionArrayVellumValue         *ExecutionArrayVellumValue
 	ExecutionFunctionCallVellumValue  *ExecutionFunctionCallVellumValue
+	ExecutionThinkingVellumValue      *ExecutionThinkingVellumValue
 }
 
 func (e *ExecutionVellumValue) UnmarshalJSON(data []byte) error {
@@ -5164,6 +5236,11 @@ func (e *ExecutionVellumValue) UnmarshalJSON(data []byte) error {
 		e.ExecutionFunctionCallVellumValue = valueExecutionFunctionCallVellumValue
 		return nil
 	}
+	valueExecutionThinkingVellumValue := new(ExecutionThinkingVellumValue)
+	if err := json.Unmarshal(data, &valueExecutionThinkingVellumValue); err == nil {
+		e.ExecutionThinkingVellumValue = valueExecutionThinkingVellumValue
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, e)
 }
 
@@ -5192,6 +5269,9 @@ func (e ExecutionVellumValue) MarshalJSON() ([]byte, error) {
 	if e.ExecutionFunctionCallVellumValue != nil {
 		return json.Marshal(e.ExecutionFunctionCallVellumValue)
 	}
+	if e.ExecutionThinkingVellumValue != nil {
+		return json.Marshal(e.ExecutionThinkingVellumValue)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", e)
 }
 
@@ -5204,6 +5284,7 @@ type ExecutionVellumValueVisitor interface {
 	VisitExecutionErrorVellumValue(*ExecutionErrorVellumValue) error
 	VisitExecutionArrayVellumValue(*ExecutionArrayVellumValue) error
 	VisitExecutionFunctionCallVellumValue(*ExecutionFunctionCallVellumValue) error
+	VisitExecutionThinkingVellumValue(*ExecutionThinkingVellumValue) error
 }
 
 func (e *ExecutionVellumValue) Accept(visitor ExecutionVellumValueVisitor) error {
@@ -5230,6 +5311,9 @@ func (e *ExecutionVellumValue) Accept(visitor ExecutionVellumValueVisitor) error
 	}
 	if e.ExecutionFunctionCallVellumValue != nil {
 		return visitor.VisitExecutionFunctionCallVellumValue(e.ExecutionFunctionCallVellumValue)
+	}
+	if e.ExecutionThinkingVellumValue != nil {
+		return visitor.VisitExecutionThinkingVellumValue(e.ExecutionThinkingVellumValue)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", e)
 }
@@ -12110,6 +12194,7 @@ type PromptOutput struct {
 	JsonVellumValue         *JsonVellumValue
 	ErrorVellumValue        *ErrorVellumValue
 	FunctionCallVellumValue *FunctionCallVellumValue
+	ThinkingVellumValue     *ThinkingVellumValue
 }
 
 func (p *PromptOutput) UnmarshalJSON(data []byte) error {
@@ -12133,6 +12218,11 @@ func (p *PromptOutput) UnmarshalJSON(data []byte) error {
 		p.FunctionCallVellumValue = valueFunctionCallVellumValue
 		return nil
 	}
+	valueThinkingVellumValue := new(ThinkingVellumValue)
+	if err := json.Unmarshal(data, &valueThinkingVellumValue); err == nil {
+		p.ThinkingVellumValue = valueThinkingVellumValue
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, p)
 }
 
@@ -12149,6 +12239,9 @@ func (p PromptOutput) MarshalJSON() ([]byte, error) {
 	if p.FunctionCallVellumValue != nil {
 		return json.Marshal(p.FunctionCallVellumValue)
 	}
+	if p.ThinkingVellumValue != nil {
+		return json.Marshal(p.ThinkingVellumValue)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", p)
 }
 
@@ -12157,6 +12250,7 @@ type PromptOutputVisitor interface {
 	VisitJsonVellumValue(*JsonVellumValue) error
 	VisitErrorVellumValue(*ErrorVellumValue) error
 	VisitFunctionCallVellumValue(*FunctionCallVellumValue) error
+	VisitThinkingVellumValue(*ThinkingVellumValue) error
 }
 
 func (p *PromptOutput) Accept(visitor PromptOutputVisitor) error {
@@ -12171,6 +12265,9 @@ func (p *PromptOutput) Accept(visitor PromptOutputVisitor) error {
 	}
 	if p.FunctionCallVellumValue != nil {
 		return visitor.VisitFunctionCallVellumValue(p.FunctionCallVellumValue)
+	}
+	if p.ThinkingVellumValue != nil {
+		return visitor.VisitThinkingVellumValue(p.ThinkingVellumValue)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", p)
 }
@@ -16984,6 +17081,142 @@ func (t *TestSuiteRunMetricStringOutput) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
+// A value representing Thinking mode output.
+type ThinkingVellumValue struct {
+	Value []*StringVellumValue `json:"value" url:"value"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *ThinkingVellumValue) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *ThinkingVellumValue) Type() string {
+	return t.type_
+}
+
+func (t *ThinkingVellumValue) UnmarshalJSON(data []byte) error {
+	type embed ThinkingVellumValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = ThinkingVellumValue(unmarshaler.embed)
+	if unmarshaler.Type != "THINKING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "THINKING", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *ThinkingVellumValue) MarshalJSON() ([]byte, error) {
+	type embed ThinkingVellumValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "THINKING",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *ThinkingVellumValue) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+// A value representing Thinking mode output.
+type ThinkingVellumValueRequest struct {
+	Value []*StringVellumValueRequest `json:"value" url:"value"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *ThinkingVellumValueRequest) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *ThinkingVellumValueRequest) Type() string {
+	return t.type_
+}
+
+func (t *ThinkingVellumValueRequest) UnmarshalJSON(data []byte) error {
+	type embed ThinkingVellumValueRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*t = ThinkingVellumValueRequest(unmarshaler.embed)
+	if unmarshaler.Type != "THINKING" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "THINKING", unmarshaler.Type)
+	}
+	t.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *ThinkingVellumValueRequest) MarshalJSON() ([]byte, error) {
+	type embed ThinkingVellumValueRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*t),
+		Type:  "THINKING",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (t *ThinkingVellumValueRequest) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
 // Configuration for token overlapping window chunking
 type TokenOverlappingWindowChunkerConfig struct {
 	TokenLimit   *int     `json:"token_limit,omitempty" url:"token_limit,omitempty"`
@@ -17599,6 +17832,7 @@ type VellumValue struct {
 	ArrayVellumValue         *ArrayVellumValue
 	ChatHistoryVellumValue   *ChatHistoryVellumValue
 	SearchResultsVellumValue *SearchResultsVellumValue
+	ThinkingVellumValue      *ThinkingVellumValue
 }
 
 func (v *VellumValue) UnmarshalJSON(data []byte) error {
@@ -17657,6 +17891,11 @@ func (v *VellumValue) UnmarshalJSON(data []byte) error {
 		v.SearchResultsVellumValue = valueSearchResultsVellumValue
 		return nil
 	}
+	valueThinkingVellumValue := new(ThinkingVellumValue)
+	if err := json.Unmarshal(data, &valueThinkingVellumValue); err == nil {
+		v.ThinkingVellumValue = valueThinkingVellumValue
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, v)
 }
 
@@ -17694,6 +17933,9 @@ func (v VellumValue) MarshalJSON() ([]byte, error) {
 	if v.SearchResultsVellumValue != nil {
 		return json.Marshal(v.SearchResultsVellumValue)
 	}
+	if v.ThinkingVellumValue != nil {
+		return json.Marshal(v.ThinkingVellumValue)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", v)
 }
 
@@ -17709,6 +17951,7 @@ type VellumValueVisitor interface {
 	VisitArrayVellumValue(*ArrayVellumValue) error
 	VisitChatHistoryVellumValue(*ChatHistoryVellumValue) error
 	VisitSearchResultsVellumValue(*SearchResultsVellumValue) error
+	VisitThinkingVellumValue(*ThinkingVellumValue) error
 }
 
 func (v *VellumValue) Accept(visitor VellumValueVisitor) error {
@@ -17744,6 +17987,9 @@ func (v *VellumValue) Accept(visitor VellumValueVisitor) error {
 	}
 	if v.SearchResultsVellumValue != nil {
 		return visitor.VisitSearchResultsVellumValue(v.SearchResultsVellumValue)
+	}
+	if v.ThinkingVellumValue != nil {
+		return visitor.VisitThinkingVellumValue(v.ThinkingVellumValue)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", v)
 }
@@ -17944,6 +18190,7 @@ type VellumValueRequest struct {
 	ArrayVellumValueRequest         *ArrayVellumValueRequest
 	ChatHistoryVellumValueRequest   *ChatHistoryVellumValueRequest
 	SearchResultsVellumValueRequest *SearchResultsVellumValueRequest
+	ThinkingVellumValueRequest      *ThinkingVellumValueRequest
 }
 
 func (v *VellumValueRequest) UnmarshalJSON(data []byte) error {
@@ -18002,6 +18249,11 @@ func (v *VellumValueRequest) UnmarshalJSON(data []byte) error {
 		v.SearchResultsVellumValueRequest = valueSearchResultsVellumValueRequest
 		return nil
 	}
+	valueThinkingVellumValueRequest := new(ThinkingVellumValueRequest)
+	if err := json.Unmarshal(data, &valueThinkingVellumValueRequest); err == nil {
+		v.ThinkingVellumValueRequest = valueThinkingVellumValueRequest
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, v)
 }
 
@@ -18039,6 +18291,9 @@ func (v VellumValueRequest) MarshalJSON() ([]byte, error) {
 	if v.SearchResultsVellumValueRequest != nil {
 		return json.Marshal(v.SearchResultsVellumValueRequest)
 	}
+	if v.ThinkingVellumValueRequest != nil {
+		return json.Marshal(v.ThinkingVellumValueRequest)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", v)
 }
 
@@ -18054,6 +18309,7 @@ type VellumValueRequestVisitor interface {
 	VisitArrayVellumValueRequest(*ArrayVellumValueRequest) error
 	VisitChatHistoryVellumValueRequest(*ChatHistoryVellumValueRequest) error
 	VisitSearchResultsVellumValueRequest(*SearchResultsVellumValueRequest) error
+	VisitThinkingVellumValueRequest(*ThinkingVellumValueRequest) error
 }
 
 func (v *VellumValueRequest) Accept(visitor VellumValueRequestVisitor) error {
@@ -18089,6 +18345,9 @@ func (v *VellumValueRequest) Accept(visitor VellumValueRequestVisitor) error {
 	}
 	if v.SearchResultsVellumValueRequest != nil {
 		return visitor.VisitSearchResultsVellumValueRequest(v.SearchResultsVellumValueRequest)
+	}
+	if v.ThinkingVellumValueRequest != nil {
+		return visitor.VisitThinkingVellumValueRequest(v.ThinkingVellumValueRequest)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", v)
 }
@@ -18193,6 +18452,7 @@ func (v *VellumVariableExtensions) String() string {
 // * `AUDIO` - AUDIO
 // * `DOCUMENT` - DOCUMENT
 // * `NULL` - NULL
+// * `THINKING` - THINKING
 type VellumVariableType string
 
 const (
@@ -18208,6 +18468,7 @@ const (
 	VellumVariableTypeAudio         VellumVariableType = "AUDIO"
 	VellumVariableTypeDocument      VellumVariableType = "DOCUMENT"
 	VellumVariableTypeNull          VellumVariableType = "NULL"
+	VellumVariableTypeThinking      VellumVariableType = "THINKING"
 )
 
 func NewVellumVariableTypeFromString(s string) (VellumVariableType, error) {
@@ -18236,6 +18497,8 @@ func NewVellumVariableTypeFromString(s string) (VellumVariableType, error) {
 		return VellumVariableTypeDocument, nil
 	case "NULL":
 		return VellumVariableTypeNull, nil
+	case "THINKING":
+		return VellumVariableTypeThinking, nil
 	}
 	var t VellumVariableType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
