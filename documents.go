@@ -29,6 +29,8 @@ type PatchedDocumentUpdateRequest struct {
 	//
 	// * `ACTIVE` - Active
 	Status *DocumentStatus `json:"status,omitempty" url:"-"`
+	// A list of keywords that'll be associated with the document. Used as part of keyword search.
+	Keywords []string `json:"keywords,omitempty" url:"-"`
 	// A JSON object containing any metadata associated with the document that you'd like to filter upon later.
 	Metadata map[string]interface{} `json:"metadata,omitempty" url:"-"`
 }
@@ -136,7 +138,9 @@ type DocumentRead struct {
 	// The current status of the document
 	//
 	// * `ACTIVE` - Active
-	Status                    *DocumentStatus                    `json:"status,omitempty" url:"status,omitempty"`
+	Status *DocumentStatus `json:"status,omitempty" url:"status,omitempty"`
+	// A list of keywords that'll be associated with the document. Used as part of keyword search.
+	Keywords                  []string                           `json:"keywords,omitempty" url:"keywords,omitempty"`
 	OriginalFileUrl           *string                            `json:"original_file_url,omitempty" url:"original_file_url,omitempty"`
 	DocumentToDocumentIndexes []*DocumentDocumentToDocumentIndex `json:"document_to_document_indexes" url:"document_to_document_indexes"`
 	// A previously supplied JSON object containing metadata that can be filtered on when searching.
