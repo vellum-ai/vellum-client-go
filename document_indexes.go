@@ -532,6 +532,73 @@ func (g *GoogleVertexAiVectorizerConfigRequest) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
+type GoogleVertexAiVectorizerGeminiEmbedding001Request struct {
+	Config    *GoogleVertexAiVectorizerConfigRequest `json:"config" url:"config"`
+	modelName string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GoogleVertexAiVectorizerGeminiEmbedding001Request) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GoogleVertexAiVectorizerGeminiEmbedding001Request) ModelName() string {
+	return g.modelName
+}
+
+func (g *GoogleVertexAiVectorizerGeminiEmbedding001Request) UnmarshalJSON(data []byte) error {
+	type embed GoogleVertexAiVectorizerGeminiEmbedding001Request
+	var unmarshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed: embed(*g),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*g = GoogleVertexAiVectorizerGeminiEmbedding001Request(unmarshaler.embed)
+	if unmarshaler.ModelName != "gemini-embedding-001" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", g, "gemini-embedding-001", unmarshaler.ModelName)
+	}
+	g.modelName = unmarshaler.ModelName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g, "model_name")
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GoogleVertexAiVectorizerGeminiEmbedding001Request) MarshalJSON() ([]byte, error) {
+	type embed GoogleVertexAiVectorizerGeminiEmbedding001Request
+	var marshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed:     embed(*g),
+		ModelName: "gemini-embedding-001",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (g *GoogleVertexAiVectorizerGeminiEmbedding001Request) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
 type GoogleVertexAiVectorizerTextEmbedding004Request struct {
 	Config    *GoogleVertexAiVectorizerConfigRequest `json:"config" url:"config"`
 	modelName string
@@ -744,6 +811,7 @@ type IndexingConfigVectorizerRequest struct {
 	HkunlpInstructorXlVectorizerRequest                             *HkunlpInstructorXlVectorizerRequest
 	GoogleVertexAiVectorizerTextEmbedding004Request                 *GoogleVertexAiVectorizerTextEmbedding004Request
 	GoogleVertexAiVectorizerTextMultilingualEmbedding002Request     *GoogleVertexAiVectorizerTextMultilingualEmbedding002Request
+	GoogleVertexAiVectorizerGeminiEmbedding001Request               *GoogleVertexAiVectorizerGeminiEmbedding001Request
 	FastEmbedVectorizerBaaiBgeSmallEnV15Request                     *FastEmbedVectorizerBaaiBgeSmallEnV15Request
 }
 
@@ -793,6 +861,11 @@ func (i *IndexingConfigVectorizerRequest) UnmarshalJSON(data []byte) error {
 		i.GoogleVertexAiVectorizerTextMultilingualEmbedding002Request = valueGoogleVertexAiVectorizerTextMultilingualEmbedding002Request
 		return nil
 	}
+	valueGoogleVertexAiVectorizerGeminiEmbedding001Request := new(GoogleVertexAiVectorizerGeminiEmbedding001Request)
+	if err := json.Unmarshal(data, &valueGoogleVertexAiVectorizerGeminiEmbedding001Request); err == nil {
+		i.GoogleVertexAiVectorizerGeminiEmbedding001Request = valueGoogleVertexAiVectorizerGeminiEmbedding001Request
+		return nil
+	}
 	valueFastEmbedVectorizerBaaiBgeSmallEnV15Request := new(FastEmbedVectorizerBaaiBgeSmallEnV15Request)
 	if err := json.Unmarshal(data, &valueFastEmbedVectorizerBaaiBgeSmallEnV15Request); err == nil {
 		i.FastEmbedVectorizerBaaiBgeSmallEnV15Request = valueFastEmbedVectorizerBaaiBgeSmallEnV15Request
@@ -829,6 +902,9 @@ func (i IndexingConfigVectorizerRequest) MarshalJSON() ([]byte, error) {
 	if i.GoogleVertexAiVectorizerTextMultilingualEmbedding002Request != nil {
 		return json.Marshal(i.GoogleVertexAiVectorizerTextMultilingualEmbedding002Request)
 	}
+	if i.GoogleVertexAiVectorizerGeminiEmbedding001Request != nil {
+		return json.Marshal(i.GoogleVertexAiVectorizerGeminiEmbedding001Request)
+	}
 	if i.FastEmbedVectorizerBaaiBgeSmallEnV15Request != nil {
 		return json.Marshal(i.FastEmbedVectorizerBaaiBgeSmallEnV15Request)
 	}
@@ -845,6 +921,7 @@ type IndexingConfigVectorizerRequestVisitor interface {
 	VisitHkunlpInstructorXlVectorizerRequest(*HkunlpInstructorXlVectorizerRequest) error
 	VisitGoogleVertexAiVectorizerTextEmbedding004Request(*GoogleVertexAiVectorizerTextEmbedding004Request) error
 	VisitGoogleVertexAiVectorizerTextMultilingualEmbedding002Request(*GoogleVertexAiVectorizerTextMultilingualEmbedding002Request) error
+	VisitGoogleVertexAiVectorizerGeminiEmbedding001Request(*GoogleVertexAiVectorizerGeminiEmbedding001Request) error
 	VisitFastEmbedVectorizerBaaiBgeSmallEnV15Request(*FastEmbedVectorizerBaaiBgeSmallEnV15Request) error
 }
 
@@ -875,6 +952,9 @@ func (i *IndexingConfigVectorizerRequest) Accept(visitor IndexingConfigVectorize
 	}
 	if i.GoogleVertexAiVectorizerTextMultilingualEmbedding002Request != nil {
 		return visitor.VisitGoogleVertexAiVectorizerTextMultilingualEmbedding002Request(i.GoogleVertexAiVectorizerTextMultilingualEmbedding002Request)
+	}
+	if i.GoogleVertexAiVectorizerGeminiEmbedding001Request != nil {
+		return visitor.VisitGoogleVertexAiVectorizerGeminiEmbedding001Request(i.GoogleVertexAiVectorizerGeminiEmbedding001Request)
 	}
 	if i.FastEmbedVectorizerBaaiBgeSmallEnV15Request != nil {
 		return visitor.VisitFastEmbedVectorizerBaaiBgeSmallEnV15Request(i.FastEmbedVectorizerBaaiBgeSmallEnV15Request)

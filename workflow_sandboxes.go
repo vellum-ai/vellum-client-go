@@ -76,10 +76,12 @@ func (p *PaginatedWorkflowSandboxExampleList) String() string {
 }
 
 type WorkflowSandboxExample struct {
-	Id          string  `json:"id" url:"id"`
-	Label       string  `json:"label" url:"label"`
-	Description *string `json:"description,omitempty" url:"description,omitempty"`
-	IconName    *string `json:"icon_name,omitempty" url:"icon_name,omitempty"`
+	Id           string  `json:"id" url:"id"`
+	Label        string  `json:"label" url:"label"`
+	Description  *string `json:"description,omitempty" url:"description,omitempty"`
+	IconName     *string `json:"icon_name,omitempty" url:"icon_name,omitempty"`
+	UiImageUrl   *string `json:"ui_image_url,omitempty" url:"ui_image_url,omitempty"`
+	CodeImageUrl *string `json:"code_image_url,omitempty" url:"code_image_url,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage

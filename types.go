@@ -5115,9 +5115,9 @@ func (e *ExecutionStringVellumValue) String() string {
 // A value representing Thinking mode output.
 type ExecutionThinkingVellumValue struct {
 	// The variable's uniquely identifying internal id.
-	Id    string               `json:"id" url:"id"`
-	Name  string               `json:"name" url:"name"`
-	Value []*StringVellumValue `json:"value" url:"value"`
+	Id    string             `json:"id" url:"id"`
+	Name  string             `json:"name" url:"name"`
+	Value *StringVellumValue `json:"value" url:"value"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -6826,6 +6826,73 @@ func (g *GoogleVertexAiVectorizerConfig) String() string {
 	return fmt.Sprintf("%#v", g)
 }
 
+type GoogleVertexAiVectorizerGeminiEmbedding001 struct {
+	Config    *GoogleVertexAiVectorizerConfig `json:"config" url:"config"`
+	modelName string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (g *GoogleVertexAiVectorizerGeminiEmbedding001) GetExtraProperties() map[string]interface{} {
+	return g.extraProperties
+}
+
+func (g *GoogleVertexAiVectorizerGeminiEmbedding001) ModelName() string {
+	return g.modelName
+}
+
+func (g *GoogleVertexAiVectorizerGeminiEmbedding001) UnmarshalJSON(data []byte) error {
+	type embed GoogleVertexAiVectorizerGeminiEmbedding001
+	var unmarshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed: embed(*g),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*g = GoogleVertexAiVectorizerGeminiEmbedding001(unmarshaler.embed)
+	if unmarshaler.ModelName != "gemini-embedding-001" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", g, "gemini-embedding-001", unmarshaler.ModelName)
+	}
+	g.modelName = unmarshaler.ModelName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *g, "model_name")
+	if err != nil {
+		return err
+	}
+	g.extraProperties = extraProperties
+
+	g._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (g *GoogleVertexAiVectorizerGeminiEmbedding001) MarshalJSON() ([]byte, error) {
+	type embed GoogleVertexAiVectorizerGeminiEmbedding001
+	var marshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed:     embed(*g),
+		ModelName: "gemini-embedding-001",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (g *GoogleVertexAiVectorizerGeminiEmbedding001) String() string {
+	if len(g._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(g._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(g); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", g)
+}
+
 type GoogleVertexAiVectorizerTextEmbedding004 struct {
 	Config    *GoogleVertexAiVectorizerConfig `json:"config" url:"config"`
 	modelName string
@@ -7381,6 +7448,7 @@ type IndexingConfigVectorizer struct {
 	HkunlpInstructorXlVectorizer                             *HkunlpInstructorXlVectorizer
 	GoogleVertexAiVectorizerTextEmbedding004                 *GoogleVertexAiVectorizerTextEmbedding004
 	GoogleVertexAiVectorizerTextMultilingualEmbedding002     *GoogleVertexAiVectorizerTextMultilingualEmbedding002
+	GoogleVertexAiVectorizerGeminiEmbedding001               *GoogleVertexAiVectorizerGeminiEmbedding001
 	FastEmbedVectorizerBaaiBgeSmallEnV15                     *FastEmbedVectorizerBaaiBgeSmallEnV15
 }
 
@@ -7430,6 +7498,11 @@ func (i *IndexingConfigVectorizer) UnmarshalJSON(data []byte) error {
 		i.GoogleVertexAiVectorizerTextMultilingualEmbedding002 = valueGoogleVertexAiVectorizerTextMultilingualEmbedding002
 		return nil
 	}
+	valueGoogleVertexAiVectorizerGeminiEmbedding001 := new(GoogleVertexAiVectorizerGeminiEmbedding001)
+	if err := json.Unmarshal(data, &valueGoogleVertexAiVectorizerGeminiEmbedding001); err == nil {
+		i.GoogleVertexAiVectorizerGeminiEmbedding001 = valueGoogleVertexAiVectorizerGeminiEmbedding001
+		return nil
+	}
 	valueFastEmbedVectorizerBaaiBgeSmallEnV15 := new(FastEmbedVectorizerBaaiBgeSmallEnV15)
 	if err := json.Unmarshal(data, &valueFastEmbedVectorizerBaaiBgeSmallEnV15); err == nil {
 		i.FastEmbedVectorizerBaaiBgeSmallEnV15 = valueFastEmbedVectorizerBaaiBgeSmallEnV15
@@ -7466,6 +7539,9 @@ func (i IndexingConfigVectorizer) MarshalJSON() ([]byte, error) {
 	if i.GoogleVertexAiVectorizerTextMultilingualEmbedding002 != nil {
 		return json.Marshal(i.GoogleVertexAiVectorizerTextMultilingualEmbedding002)
 	}
+	if i.GoogleVertexAiVectorizerGeminiEmbedding001 != nil {
+		return json.Marshal(i.GoogleVertexAiVectorizerGeminiEmbedding001)
+	}
 	if i.FastEmbedVectorizerBaaiBgeSmallEnV15 != nil {
 		return json.Marshal(i.FastEmbedVectorizerBaaiBgeSmallEnV15)
 	}
@@ -7482,6 +7558,7 @@ type IndexingConfigVectorizerVisitor interface {
 	VisitHkunlpInstructorXlVectorizer(*HkunlpInstructorXlVectorizer) error
 	VisitGoogleVertexAiVectorizerTextEmbedding004(*GoogleVertexAiVectorizerTextEmbedding004) error
 	VisitGoogleVertexAiVectorizerTextMultilingualEmbedding002(*GoogleVertexAiVectorizerTextMultilingualEmbedding002) error
+	VisitGoogleVertexAiVectorizerGeminiEmbedding001(*GoogleVertexAiVectorizerGeminiEmbedding001) error
 	VisitFastEmbedVectorizerBaaiBgeSmallEnV15(*FastEmbedVectorizerBaaiBgeSmallEnV15) error
 }
 
@@ -7512,6 +7589,9 @@ func (i *IndexingConfigVectorizer) Accept(visitor IndexingConfigVectorizerVisito
 	}
 	if i.GoogleVertexAiVectorizerTextMultilingualEmbedding002 != nil {
 		return visitor.VisitGoogleVertexAiVectorizerTextMultilingualEmbedding002(i.GoogleVertexAiVectorizerTextMultilingualEmbedding002)
+	}
+	if i.GoogleVertexAiVectorizerGeminiEmbedding001 != nil {
+		return visitor.VisitGoogleVertexAiVectorizerGeminiEmbedding001(i.GoogleVertexAiVectorizerGeminiEmbedding001)
 	}
 	if i.FastEmbedVectorizerBaaiBgeSmallEnV15 != nil {
 		return visitor.VisitFastEmbedVectorizerBaaiBgeSmallEnV15(i.FastEmbedVectorizerBaaiBgeSmallEnV15)
@@ -17083,7 +17163,7 @@ func (t *TestSuiteRunMetricStringOutput) String() string {
 
 // A value representing Thinking mode output.
 type ThinkingVellumValue struct {
-	Value []*StringVellumValue `json:"value" url:"value"`
+	Value *StringVellumValue `json:"value" url:"value"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -17151,7 +17231,7 @@ func (t *ThinkingVellumValue) String() string {
 
 // A value representing Thinking mode output.
 type ThinkingVellumValueRequest struct {
-	Value []*StringVellumValueRequest `json:"value" url:"value"`
+	Value *StringVellumValueRequest `json:"value" url:"value"`
 	type_ string
 
 	extraProperties map[string]interface{}
