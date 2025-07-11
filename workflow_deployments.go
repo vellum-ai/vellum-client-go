@@ -107,8 +107,29 @@ func (a *ApiRequestParentContext) String() string {
 	return fmt.Sprintf("%#v", a)
 }
 
-// * `2024-10-25` - 2024-10-25
-type ApiVersionEnum = string
+// * `2024-10-25` - V2024_10_25
+// * `2025-07-30` - V2025_07_30
+type ApiVersionEnum string
+
+const (
+	ApiVersionEnumTwoThousandTwentyFour1025 ApiVersionEnum = "2024-10-25"
+	ApiVersionEnumTwoThousandTwentyFive0730 ApiVersionEnum = "2025-07-30"
+)
+
+func NewApiVersionEnumFromString(s string) (ApiVersionEnum, error) {
+	switch s {
+	case "2024-10-25":
+		return ApiVersionEnumTwoThousandTwentyFour1025, nil
+	case "2025-07-30":
+		return ApiVersionEnumTwoThousandTwentyFive0730, nil
+	}
+	var t ApiVersionEnum
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (a ApiVersionEnum) Ptr() *ApiVersionEnum {
+	return &a
+}
 
 type BaseOutput struct {
 	Value map[string]interface{} `json:"value,omitempty" url:"value,omitempty"`
@@ -2344,6 +2365,7 @@ type WorkflowEventExecutionRead struct {
 	MetricResults []*WorkflowExecutionViewOnlineEvalMetricResult `json:"metric_results" url:"metric_results"`
 	UsageResults  []*WorkflowExecutionUsageResult                `json:"usage_results,omitempty" url:"usage_results,omitempty"`
 	Spans         []*VellumSpan                                  `json:"spans" url:"spans"`
+	State         map[string]interface{}                         `json:"state,omitempty" url:"state,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
