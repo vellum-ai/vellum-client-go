@@ -5115,9 +5115,9 @@ func (e *ExecutionStringVellumValue) String() string {
 // A value representing Thinking mode output.
 type ExecutionThinkingVellumValue struct {
 	// The variable's uniquely identifying internal id.
-	Id    string               `json:"id" url:"id"`
-	Name  string               `json:"name" url:"name"`
-	Value []*StringVellumValue `json:"value" url:"value"`
+	Id    string             `json:"id" url:"id"`
+	Name  string             `json:"name" url:"name"`
+	Value *StringVellumValue `json:"value" url:"value"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -17163,7 +17163,7 @@ func (t *TestSuiteRunMetricStringOutput) String() string {
 
 // A value representing Thinking mode output.
 type ThinkingVellumValue struct {
-	Value []*StringVellumValue `json:"value" url:"value"`
+	Value *StringVellumValue `json:"value" url:"value"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -17231,7 +17231,7 @@ func (t *ThinkingVellumValue) String() string {
 
 // A value representing Thinking mode output.
 type ThinkingVellumValueRequest struct {
-	Value []*StringVellumValueRequest `json:"value" url:"value"`
+	Value *StringVellumValueRequest `json:"value" url:"value"`
 	type_ string
 
 	extraProperties map[string]interface{}
