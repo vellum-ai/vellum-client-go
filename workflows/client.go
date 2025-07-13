@@ -14,6 +14,7 @@ import (
 	io "io"
 	multipart "mime/multipart"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -24,6 +25,9 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
+	if options.ApiVersion == "" {
+		options.ApiVersion = os.Getenv("VELLUM_API_VERSION")
+	}
 	return &Client{
 		baseURL: options.BaseURL,
 		caller: core.NewCaller(
