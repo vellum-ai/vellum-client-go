@@ -25,6 +25,9 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
+	if options.ApiVersion == nil || *options.ApiVersion == "" {
+		options.ApiVersion = core.GetDefaultApiVersion()
+	}
 	return &Client{
 		baseURL: options.BaseURL,
 		caller: core.NewCaller(
