@@ -28,6 +28,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 	if options.ApiVersion == nil || *options.ApiVersion == "" {
 		options.ApiVersion = core.GetDefaultApiVersion()
 	}
+	}
 	return &Client{
 		baseURL: options.BaseURL,
 		caller: core.NewCaller(
@@ -48,7 +49,7 @@ func (c *Client) List(
 ) (*vellumclientgo.PaginatedSlimDocumentList, error) {
 	options := core.NewRequestOptions(opts...)
 
-	baseURL := "https://api.vellum.ai"
+	baseURL := "https://documents.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
@@ -95,7 +96,7 @@ func (c *Client) Retrieve(
 ) (*vellumclientgo.DocumentRead, error) {
 	options := core.NewRequestOptions(opts...)
 
-	baseURL := "https://api.vellum.ai"
+	baseURL := "https://documents.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
@@ -172,7 +173,7 @@ func (c *Client) PartialUpdate(
 ) (*vellumclientgo.DocumentRead, error) {
 	options := core.NewRequestOptions(opts...)
 
-	baseURL := "https://api.vellum.ai"
+	baseURL := "https://documents.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}

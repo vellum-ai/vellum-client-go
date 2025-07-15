@@ -43,7 +43,7 @@ func (c *Client) ExecuteMetricDefinition(
 ) (*vellumclientgo.MetricDefinitionExecution, error) {
 	options := core.NewRequestOptions(opts...)
 
-	baseURL := "https://predict.vellum.ai"
+	baseURL := "https://api.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
