@@ -4,9 +4,9 @@ package core
 
 import (
 	fmt "fmt"
+	"os"
 	http "net/http"
 	url "net/url"
-	"os"
 )
 
 // * `2024-10-25` - V2024_10_25
@@ -71,7 +71,7 @@ func (r *RequestOptions) cloneHeader() http.Header {
 	headers := r.HTTPHeader.Clone()
 	headers.Set("X-Fern-Language", "Go")
 	headers.Set("X-Fern-SDK-Name", "github.com/vellum-ai/vellum-client-go")
-	headers.Set("X-Fern-SDK-Version", "v1.0.0")
+	headers.Set("X-Fern-SDK-Version", "v1.0.1")
 	return headers
 }
 

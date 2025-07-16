@@ -7,9 +7,6 @@ import (
 	context "context"
 	json "encoding/json"
 	errors "errors"
-	io "io"
-	http "net/http"
-
 	vellumclientgo "github.com/vellum-ai/vellum-client-go"
 	adhoc "github.com/vellum-ai/vellum-client-go/adhoc"
 	containerimages "github.com/vellum-ai/vellum-client-go/containerimages"
@@ -32,6 +29,8 @@ import (
 	workflowsandboxes "github.com/vellum-ai/vellum-client-go/workflowsandboxes"
 	workspaces "github.com/vellum-ai/vellum-client-go/workspaces"
 	workspacesecrets "github.com/vellum-ai/vellum-client-go/workspacesecrets"
+	io "io"
+	http "net/http"
 )
 
 type Client struct {

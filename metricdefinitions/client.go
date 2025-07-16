@@ -4,11 +4,10 @@ package metricdefinitions
 
 import (
 	context "context"
-	http "net/http"
-
 	vellumclientgo "github.com/vellum-ai/vellum-client-go"
 	core "github.com/vellum-ai/vellum-client-go/core"
 	option "github.com/vellum-ai/vellum-client-go/option"
+	http "net/http"
 )
 
 type Client struct {
