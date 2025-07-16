@@ -19,8 +19,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == "" {
-		options.ApiVersion = os.Getenv("VELLUM_API_VERSION")
+	if options.ApiVersion == nil || *options.ApiVersion == "" {
+		options.ApiVersion = core.GetDefaultApiVersion()
 	}
 	return &Client{
 		baseURL: options.BaseURL,
