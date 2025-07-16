@@ -2430,7 +2430,7 @@ func (w *WorkflowEventExecutionRead) String() string {
 type WorkflowExecutionActual struct {
 	Output    *ExecutionVellumValue  `json:"output" url:"output"`
 	Timestamp time.Time              `json:"timestamp" url:"timestamp"`
-	Quality   float64                `json:"quality" url:"quality"`
+	Quality   *float64               `json:"quality,omitempty" url:"quality,omitempty"`
 	Metadata  map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
 
 	extraProperties map[string]interface{}
