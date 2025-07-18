@@ -25,12 +25,14 @@ import (
 	testsuiteruns "github.com/vellum-ai/vellum-client-go/testsuiteruns"
 	testsuites "github.com/vellum-ai/vellum-client-go/testsuites"
 	workflowdeployments "github.com/vellum-ai/vellum-client-go/workflowdeployments"
+	workflowexecutions "github.com/vellum-ai/vellum-client-go/workflowexecutions"
 	workflows "github.com/vellum-ai/vellum-client-go/workflows"
 	workflowsandboxes "github.com/vellum-ai/vellum-client-go/workflowsandboxes"
 	workspaces "github.com/vellum-ai/vellum-client-go/workspaces"
 	workspacesecrets "github.com/vellum-ai/vellum-client-go/workspacesecrets"
 	io "io"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -53,6 +55,7 @@ type Client struct {
 	TestSuites          *testsuites.Client
 	WorkflowDeployments *workflowdeployments.Client
 	ReleaseReviews      *releasereviews.Client
+	WorkflowExecutions  *workflowexecutions.Client
 	WorkflowSandboxes   *workflowsandboxes.Client
 	Workflows           *workflows.Client
 	WorkspaceSecrets    *workspacesecrets.Client
@@ -61,8 +64,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.ApiVersion == "" {
+		options.ApiVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -88,6 +91,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 		TestSuites:          testsuites.NewClient(opts...),
 		WorkflowDeployments: workflowdeployments.NewClient(opts...),
 		ReleaseReviews:      releasereviews.NewClient(opts...),
+		WorkflowExecutions:  workflowexecutions.NewClient(opts...),
 		WorkflowSandboxes:   workflowsandboxes.NewClient(opts...),
 		Workflows:           workflows.NewClient(opts...),
 		WorkspaceSecrets:    workspacesecrets.NewClient(opts...),
