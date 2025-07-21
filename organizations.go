@@ -41,6 +41,7 @@ type OrganizationLimitConfig struct {
 	PromptExecutionsQuota       *Quota                 `json:"prompt_executions_quota,omitempty" url:"prompt_executions_quota,omitempty"`
 	WorkflowExecutionsQuota     *Quota                 `json:"workflow_executions_quota,omitempty" url:"workflow_executions_quota,omitempty"`
 	WorkflowRuntimeSecondsQuota *Quota                 `json:"workflow_runtime_seconds_quota,omitempty" url:"workflow_runtime_seconds_quota,omitempty"`
+	MaxWorkflowRuntimeSeconds   *int                   `json:"max_workflow_runtime_seconds,omitempty" url:"max_workflow_runtime_seconds,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
