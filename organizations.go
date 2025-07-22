@@ -8,6 +8,34 @@ import (
 	core "github.com/vellum-ai/vellum-client-go/core"
 )
 
+// * `workflow_executions` - WORKFLOW_EXECUTIONS
+// * `prompt_executions` - PROMPT_EXECUTIONS
+// * `workflow_runtime_seconds` - WORKFLOW_RUNTIME_SECONDS
+type NameEnum string
+
+const (
+	NameEnumWorkflowExecutions     NameEnum = "workflow_executions"
+	NameEnumPromptExecutions       NameEnum = "prompt_executions"
+	NameEnumWorkflowRuntimeSeconds NameEnum = "workflow_runtime_seconds"
+)
+
+func NewNameEnumFromString(s string) (NameEnum, error) {
+	switch s {
+	case "workflow_executions":
+		return NameEnumWorkflowExecutions, nil
+	case "prompt_executions":
+		return NameEnumPromptExecutions, nil
+	case "workflow_runtime_seconds":
+		return NameEnumWorkflowRuntimeSeconds, nil
+	}
+	var t NameEnum
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (n NameEnum) Ptr() *NameEnum {
+	return &n
+}
+
 // * `AUTO_ACCEPT_FROM_SHARED_DOMAIN` - Auto-Accept from Shared Domain
 // * `ALLOW_REQUESTS_FROM_SHARED_DOMAIN` - Allows Requests from Shared Domains
 // * `REQUIRE_EXPLICIT_INVITE` - Require Explicit Invite
@@ -127,9 +155,9 @@ func (o *OrganizationRead) String() string {
 }
 
 type Quota struct {
-	Name          string `json:"name" url:"name"`
-	Value         *int   `json:"value,omitempty" url:"value,omitempty"`
-	PeriodSeconds *int   `json:"period_seconds,omitempty" url:"period_seconds,omitempty"`
+	Name          NameEnum `json:"name" url:"name"`
+	Value         *int     `json:"value,omitempty" url:"value,omitempty"`
+	PeriodSeconds *int     `json:"period_seconds,omitempty" url:"period_seconds,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
