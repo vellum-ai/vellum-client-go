@@ -8,34 +8,6 @@ import (
 	core "github.com/vellum-ai/vellum-client-go/core"
 )
 
-// * `workflow_executions` - WORKFLOW_EXECUTIONS
-// * `prompt_executions` - PROMPT_EXECUTIONS
-// * `workflow_runtime_seconds` - WORKFLOW_RUNTIME_SECONDS
-type NameEnum string
-
-const (
-	NameEnumWorkflowExecutions     NameEnum = "workflow_executions"
-	NameEnumPromptExecutions       NameEnum = "prompt_executions"
-	NameEnumWorkflowRuntimeSeconds NameEnum = "workflow_runtime_seconds"
-)
-
-func NewNameEnumFromString(s string) (NameEnum, error) {
-	switch s {
-	case "workflow_executions":
-		return NameEnumWorkflowExecutions, nil
-	case "prompt_executions":
-		return NameEnumPromptExecutions, nil
-	case "workflow_runtime_seconds":
-		return NameEnumWorkflowRuntimeSeconds, nil
-	}
-	var t NameEnum
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (n NameEnum) Ptr() *NameEnum {
-	return &n
-}
-
 // * `AUTO_ACCEPT_FROM_SHARED_DOMAIN` - Auto-Accept from Shared Domain
 // * `ALLOW_REQUESTS_FROM_SHARED_DOMAIN` - Allows Requests from Shared Domains
 // * `REQUIRE_EXPLICIT_INVITE` - Require Explicit Invite
@@ -64,57 +36,12 @@ func (n NewMemberJoinBehaviorEnum) Ptr() *NewMemberJoinBehaviorEnum {
 	return &n
 }
 
-type OrganizationLimitConfig struct {
-	VembdaServiceTier           *VembdaServiceTierEnum `json:"vembda_service_tier,omitempty" url:"vembda_service_tier,omitempty"`
-	PromptExecutionsQuota       *Quota                 `json:"prompt_executions_quota,omitempty" url:"prompt_executions_quota,omitempty"`
-	WorkflowExecutionsQuota     *Quota                 `json:"workflow_executions_quota,omitempty" url:"workflow_executions_quota,omitempty"`
-	WorkflowRuntimeSecondsQuota *Quota                 `json:"workflow_runtime_seconds_quota,omitempty" url:"workflow_runtime_seconds_quota,omitempty"`
-	MaxWorkflowRuntimeSeconds   *int                   `json:"max_workflow_runtime_seconds,omitempty" url:"max_workflow_runtime_seconds,omitempty"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (o *OrganizationLimitConfig) GetExtraProperties() map[string]interface{} {
-	return o.extraProperties
-}
-
-func (o *OrganizationLimitConfig) UnmarshalJSON(data []byte) error {
-	type unmarshaler OrganizationLimitConfig
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*o = OrganizationLimitConfig(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *o)
-	if err != nil {
-		return err
-	}
-	o.extraProperties = extraProperties
-
-	o._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (o *OrganizationLimitConfig) String() string {
-	if len(o._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(o._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(o); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", o)
-}
-
 type OrganizationRead struct {
 	Id                    string                    `json:"id" url:"id"`
 	Name                  string                    `json:"name" url:"name"`
 	AllowStaffAccess      *bool                     `json:"allow_staff_access,omitempty" url:"allow_staff_access,omitempty"`
 	NewMemberJoinBehavior NewMemberJoinBehaviorEnum `json:"new_member_join_behavior" url:"new_member_join_behavior"`
-	LimitConfig           *OrganizationLimitConfig  `json:"limit_config" url:"limit_config"`
+	LimitConfig           map[string]interface{}    `json:"limit_config,omitempty" url:"limit_config,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -152,71 +79,4 @@ func (o *OrganizationRead) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", o)
-}
-
-type Quota struct {
-	Name          NameEnum `json:"name" url:"name"`
-	Value         *int     `json:"value,omitempty" url:"value,omitempty"`
-	PeriodSeconds *int     `json:"period_seconds,omitempty" url:"period_seconds,omitempty"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (q *Quota) GetExtraProperties() map[string]interface{} {
-	return q.extraProperties
-}
-
-func (q *Quota) UnmarshalJSON(data []byte) error {
-	type unmarshaler Quota
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*q = Quota(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *q)
-	if err != nil {
-		return err
-	}
-	q.extraProperties = extraProperties
-
-	q._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (q *Quota) String() string {
-	if len(q._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(q._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(q); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", q)
-}
-
-// * `FREE` - FREE
-// * `PAID` - PAID
-type VembdaServiceTierEnum string
-
-const (
-	VembdaServiceTierEnumFree VembdaServiceTierEnum = "FREE"
-	VembdaServiceTierEnumPaid VembdaServiceTierEnum = "PAID"
-)
-
-func NewVembdaServiceTierEnumFromString(s string) (VembdaServiceTierEnum, error) {
-	switch s {
-	case "FREE":
-		return VembdaServiceTierEnumFree, nil
-	case "PAID":
-		return VembdaServiceTierEnumPaid, nil
-	}
-	var t VembdaServiceTierEnum
-	return "", fmt.Errorf("%s is not a valid %T", s, t)
-}
-
-func (v VembdaServiceTierEnum) Ptr() *VembdaServiceTierEnum {
-	return &v
 }
