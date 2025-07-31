@@ -6,6 +6,7 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	core "github.com/vellum-ai/vellum-client-go/core"
+	time "time"
 )
 
 // * `AUTO_ACCEPT_FROM_SHARED_DOMAIN` - Auto-Accept from Shared Domain
@@ -39,6 +40,7 @@ func (n NewMemberJoinBehaviorEnum) Ptr() *NewMemberJoinBehaviorEnum {
 type OrganizationRead struct {
 	Id                    string                    `json:"id" url:"id"`
 	Name                  string                    `json:"name" url:"name"`
+	Created               *time.Time                `json:"created,omitempty" url:"created,omitempty"`
 	AllowStaffAccess      *bool                     `json:"allow_staff_access,omitempty" url:"allow_staff_access,omitempty"`
 	NewMemberJoinBehavior NewMemberJoinBehaviorEnum `json:"new_member_join_behavior" url:"new_member_join_behavior"`
 	LimitConfig           map[string]interface{}    `json:"limit_config,omitempty" url:"limit_config,omitempty"`
@@ -52,12 +54,18 @@ func (o *OrganizationRead) GetExtraProperties() map[string]interface{} {
 }
 
 func (o *OrganizationRead) UnmarshalJSON(data []byte) error {
-	type unmarshaler OrganizationRead
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed OrganizationRead
+	var unmarshaler = struct {
+		embed
+		Created *core.DateTime `json:"created,omitempty"`
+	}{
+		embed: embed(*o),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*o = OrganizationRead(value)
+	*o = OrganizationRead(unmarshaler.embed)
+	o.Created = unmarshaler.Created.TimePtr()
 
 	extraProperties, err := core.ExtractExtraProperties(data, *o)
 	if err != nil {
@@ -67,6 +75,18 @@ func (o *OrganizationRead) UnmarshalJSON(data []byte) error {
 
 	o._rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (o *OrganizationRead) MarshalJSON() ([]byte, error) {
+	type embed OrganizationRead
+	var marshaler = struct {
+		embed
+		Created *core.DateTime `json:"created,omitempty"`
+	}{
+		embed:   embed(*o),
+		Created: core.NewOptionalDateTime(o.Created),
+	}
+	return json.Marshal(marshaler)
 }
 
 func (o *OrganizationRead) String() string {

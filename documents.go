@@ -42,7 +42,7 @@ type DocumentDocumentToDocumentIndex struct {
 	// Vellum-generated ID that uniquely identifies the environment index this document is included in.
 	EnvironmentDocumentIndexId string `json:"environment_document_index_id" url:"environment_document_index_id"`
 	// Vellum-generated ID that uniquely identifies the index this document is included in.
-	DocumentIndexId string `json:"document_index_id" url:"document_index_id"`
+	DocumentIndexId *string `json:"document_index_id,omitempty" url:"document_index_id,omitempty"`
 	// An enum value representing where this document is along its indexing lifecycle for this index.
 	//
 	// * `AWAITING_PROCESSING` - Awaiting Processing
@@ -397,7 +397,7 @@ type SlimDocumentDocumentToDocumentIndex struct {
 	// Vellum-generated ID that uniquely identifies the environment index this document is included in.
 	EnvironmentDocumentIndexId string `json:"environment_document_index_id" url:"environment_document_index_id"`
 	// Vellum-generated ID that uniquely identifies the index this document is included in.
-	DocumentIndexId string `json:"document_index_id" url:"document_index_id"`
+	DocumentIndexId *string `json:"document_index_id,omitempty" url:"document_index_id,omitempty"`
 	// An enum value representing where this document is along its indexing lifecycle for this index.
 	//
 	// * `AWAITING_PROCESSING` - Awaiting Processing
