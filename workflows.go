@@ -10,6 +10,7 @@ import (
 
 type WorkflowsPullRequest struct {
 	ExcludeCode    *bool `json:"-" url:"exclude_code,omitempty"`
+	ExcludeDisplay *bool `json:"-" url:"exclude_display,omitempty"`
 	IncludeJson    *bool `json:"-" url:"include_json,omitempty"`
 	IncludeSandbox *bool `json:"-" url:"include_sandbox,omitempty"`
 	Strict         *bool `json:"-" url:"strict,omitempty"`
