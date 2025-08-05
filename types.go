@@ -5543,6 +5543,75 @@ func (e *ExternalInputDescriptor) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
+type ExternalParentContext struct {
+	Parent *ParentContext `json:"parent,omitempty" url:"parent,omitempty"`
+	Links  []*SpanLink    `json:"links,omitempty" url:"links,omitempty"`
+	SpanId string         `json:"span_id" url:"span_id"`
+	type_  string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ExternalParentContext) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
+}
+
+func (e *ExternalParentContext) Type() string {
+	return e.type_
+}
+
+func (e *ExternalParentContext) UnmarshalJSON(data []byte) error {
+	type embed ExternalParentContext
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*e),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*e = ExternalParentContext(unmarshaler.embed)
+	if unmarshaler.Type != "EXTERNAL" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", e, "EXTERNAL", unmarshaler.Type)
+	}
+	e.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e, "type")
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ExternalParentContext) MarshalJSON() ([]byte, error) {
+	type embed ExternalParentContext
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*e),
+		Type:  "EXTERNAL",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (e *ExternalParentContext) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
 // FastEmbed vectorizer for BAAI/bge-small-en-v1.5.
 type FastEmbedVectorizerBaaiBgeSmallEnV15 struct {
 	modelName string
@@ -10565,6 +10634,7 @@ func (n *NodeExecutionSpan) String() string {
 }
 
 type NodeExecutionSpanAttributes struct {
+	Label  string `json:"label" url:"label"`
 	NodeId string `json:"node_id" url:"node_id"`
 
 	extraProperties map[string]interface{}
@@ -12861,6 +12931,7 @@ type ParentContext struct {
 	WorkflowSandboxParentContext    *WorkflowSandboxParentContext
 	PromptDeploymentParentContext   *PromptDeploymentParentContext
 	ApiRequestParentContext         *ApiRequestParentContext
+	ExternalParentContext           *ExternalParentContext
 }
 
 func (p *ParentContext) UnmarshalJSON(data []byte) error {
@@ -12894,6 +12965,11 @@ func (p *ParentContext) UnmarshalJSON(data []byte) error {
 		p.ApiRequestParentContext = valueApiRequestParentContext
 		return nil
 	}
+	valueExternalParentContext := new(ExternalParentContext)
+	if err := json.Unmarshal(data, &valueExternalParentContext); err == nil {
+		p.ExternalParentContext = valueExternalParentContext
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, p)
 }
 
@@ -12916,6 +12992,9 @@ func (p ParentContext) MarshalJSON() ([]byte, error) {
 	if p.ApiRequestParentContext != nil {
 		return json.Marshal(p.ApiRequestParentContext)
 	}
+	if p.ExternalParentContext != nil {
+		return json.Marshal(p.ExternalParentContext)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", p)
 }
 
@@ -12926,6 +13005,7 @@ type ParentContextVisitor interface {
 	VisitWorkflowSandboxParentContext(*WorkflowSandboxParentContext) error
 	VisitPromptDeploymentParentContext(*PromptDeploymentParentContext) error
 	VisitApiRequestParentContext(*ApiRequestParentContext) error
+	VisitExternalParentContext(*ExternalParentContext) error
 }
 
 func (p *ParentContext) Accept(visitor ParentContextVisitor) error {
@@ -12946,6 +13026,9 @@ func (p *ParentContext) Accept(visitor ParentContextVisitor) error {
 	}
 	if p.ApiRequestParentContext != nil {
 		return visitor.VisitApiRequestParentContext(p.ApiRequestParentContext)
+	}
+	if p.ExternalParentContext != nil {
+		return visitor.VisitExternalParentContext(p.ExternalParentContext)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", p)
 }
@@ -21944,7 +22027,8 @@ func (w *WorkflowExecutionSpan) String() string {
 }
 
 type WorkflowExecutionSpanAttributes struct {
-	Label string `json:"label" url:"label"`
+	Label      string `json:"label" url:"label"`
+	WorkflowId string `json:"workflow_id" url:"workflow_id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
