@@ -16,7 +16,7 @@ export function getVersion() {
   const manifestContent = fs.readFileSync(manifestPath, 'utf8');
 
   // Extract version using regex from environment variable
-  const versionRegexPattern = "module\\s+[^\\s]+\\s+v([0-9]+\\.[0-9]+\\.[0-9]+)";
+  const versionRegexPattern = "// Version: \\s+[^\\s]+\\s+v([0-9]+\\.[0-9]+\\.[0-9]+)";
   if (!versionRegexPattern) {
     throw new Error('FERN_VERSION_REGEX environment variable is required');
   }
