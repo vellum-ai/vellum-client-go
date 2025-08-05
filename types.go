@@ -10566,6 +10566,7 @@ func (n *NodeExecutionSpan) String() string {
 
 type NodeExecutionSpanAttributes struct {
 	NodeId string `json:"node_id" url:"node_id"`
+	Label  string `json:"label" url:"label"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -21944,7 +21945,8 @@ func (w *WorkflowExecutionSpan) String() string {
 }
 
 type WorkflowExecutionSpanAttributes struct {
-	Label string `json:"label" url:"label"`
+	Label      string `json:"label" url:"label"`
+	WorkflowId string `json:"workflow_id" url:"workflow_id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
