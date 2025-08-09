@@ -437,8 +437,9 @@ func (a *ArrayChatMessageContent) String() string {
 type ArrayChatMessageContentItem struct {
 	StringChatMessageContent       *StringChatMessageContent
 	FunctionCallChatMessageContent *FunctionCallChatMessageContent
-	ImageChatMessageContent        *ImageChatMessageContent
 	AudioChatMessageContent        *AudioChatMessageContent
+	VideoChatMessageContent        *VideoChatMessageContent
+	ImageChatMessageContent        *ImageChatMessageContent
 	DocumentChatMessageContent     *DocumentChatMessageContent
 }
 
@@ -453,14 +454,19 @@ func (a *ArrayChatMessageContentItem) UnmarshalJSON(data []byte) error {
 		a.FunctionCallChatMessageContent = valueFunctionCallChatMessageContent
 		return nil
 	}
-	valueImageChatMessageContent := new(ImageChatMessageContent)
-	if err := json.Unmarshal(data, &valueImageChatMessageContent); err == nil {
-		a.ImageChatMessageContent = valueImageChatMessageContent
-		return nil
-	}
 	valueAudioChatMessageContent := new(AudioChatMessageContent)
 	if err := json.Unmarshal(data, &valueAudioChatMessageContent); err == nil {
 		a.AudioChatMessageContent = valueAudioChatMessageContent
+		return nil
+	}
+	valueVideoChatMessageContent := new(VideoChatMessageContent)
+	if err := json.Unmarshal(data, &valueVideoChatMessageContent); err == nil {
+		a.VideoChatMessageContent = valueVideoChatMessageContent
+		return nil
+	}
+	valueImageChatMessageContent := new(ImageChatMessageContent)
+	if err := json.Unmarshal(data, &valueImageChatMessageContent); err == nil {
+		a.ImageChatMessageContent = valueImageChatMessageContent
 		return nil
 	}
 	valueDocumentChatMessageContent := new(DocumentChatMessageContent)
@@ -478,11 +484,14 @@ func (a ArrayChatMessageContentItem) MarshalJSON() ([]byte, error) {
 	if a.FunctionCallChatMessageContent != nil {
 		return json.Marshal(a.FunctionCallChatMessageContent)
 	}
-	if a.ImageChatMessageContent != nil {
-		return json.Marshal(a.ImageChatMessageContent)
-	}
 	if a.AudioChatMessageContent != nil {
 		return json.Marshal(a.AudioChatMessageContent)
+	}
+	if a.VideoChatMessageContent != nil {
+		return json.Marshal(a.VideoChatMessageContent)
+	}
+	if a.ImageChatMessageContent != nil {
+		return json.Marshal(a.ImageChatMessageContent)
 	}
 	if a.DocumentChatMessageContent != nil {
 		return json.Marshal(a.DocumentChatMessageContent)
@@ -493,8 +502,9 @@ func (a ArrayChatMessageContentItem) MarshalJSON() ([]byte, error) {
 type ArrayChatMessageContentItemVisitor interface {
 	VisitStringChatMessageContent(*StringChatMessageContent) error
 	VisitFunctionCallChatMessageContent(*FunctionCallChatMessageContent) error
-	VisitImageChatMessageContent(*ImageChatMessageContent) error
 	VisitAudioChatMessageContent(*AudioChatMessageContent) error
+	VisitVideoChatMessageContent(*VideoChatMessageContent) error
+	VisitImageChatMessageContent(*ImageChatMessageContent) error
 	VisitDocumentChatMessageContent(*DocumentChatMessageContent) error
 }
 
@@ -505,11 +515,14 @@ func (a *ArrayChatMessageContentItem) Accept(visitor ArrayChatMessageContentItem
 	if a.FunctionCallChatMessageContent != nil {
 		return visitor.VisitFunctionCallChatMessageContent(a.FunctionCallChatMessageContent)
 	}
-	if a.ImageChatMessageContent != nil {
-		return visitor.VisitImageChatMessageContent(a.ImageChatMessageContent)
-	}
 	if a.AudioChatMessageContent != nil {
 		return visitor.VisitAudioChatMessageContent(a.AudioChatMessageContent)
+	}
+	if a.VideoChatMessageContent != nil {
+		return visitor.VisitVideoChatMessageContent(a.VideoChatMessageContent)
+	}
+	if a.ImageChatMessageContent != nil {
+		return visitor.VisitImageChatMessageContent(a.ImageChatMessageContent)
 	}
 	if a.DocumentChatMessageContent != nil {
 		return visitor.VisitDocumentChatMessageContent(a.DocumentChatMessageContent)
@@ -520,8 +533,9 @@ func (a *ArrayChatMessageContentItem) Accept(visitor ArrayChatMessageContentItem
 type ArrayChatMessageContentItemRequest struct {
 	StringChatMessageContentRequest       *StringChatMessageContentRequest
 	FunctionCallChatMessageContentRequest *FunctionCallChatMessageContentRequest
-	ImageChatMessageContentRequest        *ImageChatMessageContentRequest
 	AudioChatMessageContentRequest        *AudioChatMessageContentRequest
+	VideoChatMessageContentRequest        *VideoChatMessageContentRequest
+	ImageChatMessageContentRequest        *ImageChatMessageContentRequest
 	DocumentChatMessageContentRequest     *DocumentChatMessageContentRequest
 }
 
@@ -536,14 +550,19 @@ func (a *ArrayChatMessageContentItemRequest) UnmarshalJSON(data []byte) error {
 		a.FunctionCallChatMessageContentRequest = valueFunctionCallChatMessageContentRequest
 		return nil
 	}
-	valueImageChatMessageContentRequest := new(ImageChatMessageContentRequest)
-	if err := json.Unmarshal(data, &valueImageChatMessageContentRequest); err == nil {
-		a.ImageChatMessageContentRequest = valueImageChatMessageContentRequest
-		return nil
-	}
 	valueAudioChatMessageContentRequest := new(AudioChatMessageContentRequest)
 	if err := json.Unmarshal(data, &valueAudioChatMessageContentRequest); err == nil {
 		a.AudioChatMessageContentRequest = valueAudioChatMessageContentRequest
+		return nil
+	}
+	valueVideoChatMessageContentRequest := new(VideoChatMessageContentRequest)
+	if err := json.Unmarshal(data, &valueVideoChatMessageContentRequest); err == nil {
+		a.VideoChatMessageContentRequest = valueVideoChatMessageContentRequest
+		return nil
+	}
+	valueImageChatMessageContentRequest := new(ImageChatMessageContentRequest)
+	if err := json.Unmarshal(data, &valueImageChatMessageContentRequest); err == nil {
+		a.ImageChatMessageContentRequest = valueImageChatMessageContentRequest
 		return nil
 	}
 	valueDocumentChatMessageContentRequest := new(DocumentChatMessageContentRequest)
@@ -561,11 +580,14 @@ func (a ArrayChatMessageContentItemRequest) MarshalJSON() ([]byte, error) {
 	if a.FunctionCallChatMessageContentRequest != nil {
 		return json.Marshal(a.FunctionCallChatMessageContentRequest)
 	}
-	if a.ImageChatMessageContentRequest != nil {
-		return json.Marshal(a.ImageChatMessageContentRequest)
-	}
 	if a.AudioChatMessageContentRequest != nil {
 		return json.Marshal(a.AudioChatMessageContentRequest)
+	}
+	if a.VideoChatMessageContentRequest != nil {
+		return json.Marshal(a.VideoChatMessageContentRequest)
+	}
+	if a.ImageChatMessageContentRequest != nil {
+		return json.Marshal(a.ImageChatMessageContentRequest)
 	}
 	if a.DocumentChatMessageContentRequest != nil {
 		return json.Marshal(a.DocumentChatMessageContentRequest)
@@ -576,8 +598,9 @@ func (a ArrayChatMessageContentItemRequest) MarshalJSON() ([]byte, error) {
 type ArrayChatMessageContentItemRequestVisitor interface {
 	VisitStringChatMessageContentRequest(*StringChatMessageContentRequest) error
 	VisitFunctionCallChatMessageContentRequest(*FunctionCallChatMessageContentRequest) error
-	VisitImageChatMessageContentRequest(*ImageChatMessageContentRequest) error
 	VisitAudioChatMessageContentRequest(*AudioChatMessageContentRequest) error
+	VisitVideoChatMessageContentRequest(*VideoChatMessageContentRequest) error
+	VisitImageChatMessageContentRequest(*ImageChatMessageContentRequest) error
 	VisitDocumentChatMessageContentRequest(*DocumentChatMessageContentRequest) error
 }
 
@@ -588,11 +611,14 @@ func (a *ArrayChatMessageContentItemRequest) Accept(visitor ArrayChatMessageCont
 	if a.FunctionCallChatMessageContentRequest != nil {
 		return visitor.VisitFunctionCallChatMessageContentRequest(a.FunctionCallChatMessageContentRequest)
 	}
-	if a.ImageChatMessageContentRequest != nil {
-		return visitor.VisitImageChatMessageContentRequest(a.ImageChatMessageContentRequest)
-	}
 	if a.AudioChatMessageContentRequest != nil {
 		return visitor.VisitAudioChatMessageContentRequest(a.AudioChatMessageContentRequest)
+	}
+	if a.VideoChatMessageContentRequest != nil {
+		return visitor.VisitVideoChatMessageContentRequest(a.VideoChatMessageContentRequest)
+	}
+	if a.ImageChatMessageContentRequest != nil {
+		return visitor.VisitImageChatMessageContentRequest(a.ImageChatMessageContentRequest)
 	}
 	if a.DocumentChatMessageContentRequest != nil {
 		return visitor.VisitDocumentChatMessageContentRequest(a.DocumentChatMessageContentRequest)
@@ -1789,8 +1815,9 @@ type ChatMessageContent struct {
 	StringChatMessageContent       *StringChatMessageContent
 	FunctionCallChatMessageContent *FunctionCallChatMessageContent
 	ArrayChatMessageContent        *ArrayChatMessageContent
-	ImageChatMessageContent        *ImageChatMessageContent
 	AudioChatMessageContent        *AudioChatMessageContent
+	VideoChatMessageContent        *VideoChatMessageContent
+	ImageChatMessageContent        *ImageChatMessageContent
 	DocumentChatMessageContent     *DocumentChatMessageContent
 }
 
@@ -1810,14 +1837,19 @@ func (c *ChatMessageContent) UnmarshalJSON(data []byte) error {
 		c.ArrayChatMessageContent = valueArrayChatMessageContent
 		return nil
 	}
-	valueImageChatMessageContent := new(ImageChatMessageContent)
-	if err := json.Unmarshal(data, &valueImageChatMessageContent); err == nil {
-		c.ImageChatMessageContent = valueImageChatMessageContent
-		return nil
-	}
 	valueAudioChatMessageContent := new(AudioChatMessageContent)
 	if err := json.Unmarshal(data, &valueAudioChatMessageContent); err == nil {
 		c.AudioChatMessageContent = valueAudioChatMessageContent
+		return nil
+	}
+	valueVideoChatMessageContent := new(VideoChatMessageContent)
+	if err := json.Unmarshal(data, &valueVideoChatMessageContent); err == nil {
+		c.VideoChatMessageContent = valueVideoChatMessageContent
+		return nil
+	}
+	valueImageChatMessageContent := new(ImageChatMessageContent)
+	if err := json.Unmarshal(data, &valueImageChatMessageContent); err == nil {
+		c.ImageChatMessageContent = valueImageChatMessageContent
 		return nil
 	}
 	valueDocumentChatMessageContent := new(DocumentChatMessageContent)
@@ -1838,11 +1870,14 @@ func (c ChatMessageContent) MarshalJSON() ([]byte, error) {
 	if c.ArrayChatMessageContent != nil {
 		return json.Marshal(c.ArrayChatMessageContent)
 	}
-	if c.ImageChatMessageContent != nil {
-		return json.Marshal(c.ImageChatMessageContent)
-	}
 	if c.AudioChatMessageContent != nil {
 		return json.Marshal(c.AudioChatMessageContent)
+	}
+	if c.VideoChatMessageContent != nil {
+		return json.Marshal(c.VideoChatMessageContent)
+	}
+	if c.ImageChatMessageContent != nil {
+		return json.Marshal(c.ImageChatMessageContent)
 	}
 	if c.DocumentChatMessageContent != nil {
 		return json.Marshal(c.DocumentChatMessageContent)
@@ -1854,8 +1889,9 @@ type ChatMessageContentVisitor interface {
 	VisitStringChatMessageContent(*StringChatMessageContent) error
 	VisitFunctionCallChatMessageContent(*FunctionCallChatMessageContent) error
 	VisitArrayChatMessageContent(*ArrayChatMessageContent) error
-	VisitImageChatMessageContent(*ImageChatMessageContent) error
 	VisitAudioChatMessageContent(*AudioChatMessageContent) error
+	VisitVideoChatMessageContent(*VideoChatMessageContent) error
+	VisitImageChatMessageContent(*ImageChatMessageContent) error
 	VisitDocumentChatMessageContent(*DocumentChatMessageContent) error
 }
 
@@ -1869,11 +1905,14 @@ func (c *ChatMessageContent) Accept(visitor ChatMessageContentVisitor) error {
 	if c.ArrayChatMessageContent != nil {
 		return visitor.VisitArrayChatMessageContent(c.ArrayChatMessageContent)
 	}
-	if c.ImageChatMessageContent != nil {
-		return visitor.VisitImageChatMessageContent(c.ImageChatMessageContent)
-	}
 	if c.AudioChatMessageContent != nil {
 		return visitor.VisitAudioChatMessageContent(c.AudioChatMessageContent)
+	}
+	if c.VideoChatMessageContent != nil {
+		return visitor.VisitVideoChatMessageContent(c.VideoChatMessageContent)
+	}
+	if c.ImageChatMessageContent != nil {
+		return visitor.VisitImageChatMessageContent(c.ImageChatMessageContent)
 	}
 	if c.DocumentChatMessageContent != nil {
 		return visitor.VisitDocumentChatMessageContent(c.DocumentChatMessageContent)
@@ -1885,8 +1924,9 @@ type ChatMessageContentRequest struct {
 	StringChatMessageContentRequest       *StringChatMessageContentRequest
 	FunctionCallChatMessageContentRequest *FunctionCallChatMessageContentRequest
 	ArrayChatMessageContentRequest        *ArrayChatMessageContentRequest
-	ImageChatMessageContentRequest        *ImageChatMessageContentRequest
 	AudioChatMessageContentRequest        *AudioChatMessageContentRequest
+	VideoChatMessageContentRequest        *VideoChatMessageContentRequest
+	ImageChatMessageContentRequest        *ImageChatMessageContentRequest
 	DocumentChatMessageContentRequest     *DocumentChatMessageContentRequest
 }
 
@@ -1906,14 +1946,19 @@ func (c *ChatMessageContentRequest) UnmarshalJSON(data []byte) error {
 		c.ArrayChatMessageContentRequest = valueArrayChatMessageContentRequest
 		return nil
 	}
-	valueImageChatMessageContentRequest := new(ImageChatMessageContentRequest)
-	if err := json.Unmarshal(data, &valueImageChatMessageContentRequest); err == nil {
-		c.ImageChatMessageContentRequest = valueImageChatMessageContentRequest
-		return nil
-	}
 	valueAudioChatMessageContentRequest := new(AudioChatMessageContentRequest)
 	if err := json.Unmarshal(data, &valueAudioChatMessageContentRequest); err == nil {
 		c.AudioChatMessageContentRequest = valueAudioChatMessageContentRequest
+		return nil
+	}
+	valueVideoChatMessageContentRequest := new(VideoChatMessageContentRequest)
+	if err := json.Unmarshal(data, &valueVideoChatMessageContentRequest); err == nil {
+		c.VideoChatMessageContentRequest = valueVideoChatMessageContentRequest
+		return nil
+	}
+	valueImageChatMessageContentRequest := new(ImageChatMessageContentRequest)
+	if err := json.Unmarshal(data, &valueImageChatMessageContentRequest); err == nil {
+		c.ImageChatMessageContentRequest = valueImageChatMessageContentRequest
 		return nil
 	}
 	valueDocumentChatMessageContentRequest := new(DocumentChatMessageContentRequest)
@@ -1934,11 +1979,14 @@ func (c ChatMessageContentRequest) MarshalJSON() ([]byte, error) {
 	if c.ArrayChatMessageContentRequest != nil {
 		return json.Marshal(c.ArrayChatMessageContentRequest)
 	}
-	if c.ImageChatMessageContentRequest != nil {
-		return json.Marshal(c.ImageChatMessageContentRequest)
-	}
 	if c.AudioChatMessageContentRequest != nil {
 		return json.Marshal(c.AudioChatMessageContentRequest)
+	}
+	if c.VideoChatMessageContentRequest != nil {
+		return json.Marshal(c.VideoChatMessageContentRequest)
+	}
+	if c.ImageChatMessageContentRequest != nil {
+		return json.Marshal(c.ImageChatMessageContentRequest)
 	}
 	if c.DocumentChatMessageContentRequest != nil {
 		return json.Marshal(c.DocumentChatMessageContentRequest)
@@ -1950,8 +1998,9 @@ type ChatMessageContentRequestVisitor interface {
 	VisitStringChatMessageContentRequest(*StringChatMessageContentRequest) error
 	VisitFunctionCallChatMessageContentRequest(*FunctionCallChatMessageContentRequest) error
 	VisitArrayChatMessageContentRequest(*ArrayChatMessageContentRequest) error
-	VisitImageChatMessageContentRequest(*ImageChatMessageContentRequest) error
 	VisitAudioChatMessageContentRequest(*AudioChatMessageContentRequest) error
+	VisitVideoChatMessageContentRequest(*VideoChatMessageContentRequest) error
+	VisitImageChatMessageContentRequest(*ImageChatMessageContentRequest) error
 	VisitDocumentChatMessageContentRequest(*DocumentChatMessageContentRequest) error
 }
 
@@ -1965,11 +2014,14 @@ func (c *ChatMessageContentRequest) Accept(visitor ChatMessageContentRequestVisi
 	if c.ArrayChatMessageContentRequest != nil {
 		return visitor.VisitArrayChatMessageContentRequest(c.ArrayChatMessageContentRequest)
 	}
-	if c.ImageChatMessageContentRequest != nil {
-		return visitor.VisitImageChatMessageContentRequest(c.ImageChatMessageContentRequest)
-	}
 	if c.AudioChatMessageContentRequest != nil {
 		return visitor.VisitAudioChatMessageContentRequest(c.AudioChatMessageContentRequest)
+	}
+	if c.VideoChatMessageContentRequest != nil {
+		return visitor.VisitVideoChatMessageContentRequest(c.VideoChatMessageContentRequest)
+	}
+	if c.ImageChatMessageContentRequest != nil {
+		return visitor.VisitImageChatMessageContentRequest(c.ImageChatMessageContentRequest)
 	}
 	if c.DocumentChatMessageContentRequest != nil {
 		return visitor.VisitDocumentChatMessageContentRequest(c.DocumentChatMessageContentRequest)
@@ -10554,12 +10606,13 @@ func (n *NodeExecutionResumedEvent) String() string {
 }
 
 type NodeExecutionSpan struct {
-	Events       []*VellumNodeExecutionEvent  `json:"events" url:"events"`
-	Attributes   *NodeExecutionSpanAttributes `json:"attributes" url:"attributes"`
-	SpanId       string                       `json:"span_id" url:"span_id"`
-	StartTs      time.Time                    `json:"start_ts" url:"start_ts"`
-	EndTs        time.Time                    `json:"end_ts" url:"end_ts"`
-	ParentSpanId *string                      `json:"parent_span_id,omitempty" url:"parent_span_id,omitempty"`
+	Events       []*VellumNodeExecutionEvent                     `json:"events" url:"events"`
+	Attributes   *NodeExecutionSpanAttributes                    `json:"attributes" url:"attributes"`
+	UsageResult  *WorkflowExecutionUsageCalculationFulfilledBody `json:"usage_result,omitempty" url:"usage_result,omitempty"`
+	SpanId       string                                          `json:"span_id" url:"span_id"`
+	StartTs      time.Time                                       `json:"start_ts" url:"start_ts"`
+	EndTs        time.Time                                       `json:"end_ts" url:"end_ts"`
+	ParentSpanId *string                                         `json:"parent_span_id,omitempty" url:"parent_span_id,omitempty"`
 	name         string
 
 	extraProperties map[string]interface{}
@@ -13292,8 +13345,9 @@ type PromptBlock struct {
 	ChatMessagePromptBlock  *ChatMessagePromptBlock
 	VariablePromptBlock     *VariablePromptBlock
 	RichTextPromptBlock     *RichTextPromptBlock
-	AudioPromptBlock        *AudioPromptBlock
 	FunctionCallPromptBlock *FunctionCallPromptBlock
+	AudioPromptBlock        *AudioPromptBlock
+	VideoPromptBlock        *VideoPromptBlock
 	ImagePromptBlock        *ImagePromptBlock
 	DocumentPromptBlock     *DocumentPromptBlock
 }
@@ -13319,14 +13373,19 @@ func (p *PromptBlock) UnmarshalJSON(data []byte) error {
 		p.RichTextPromptBlock = valueRichTextPromptBlock
 		return nil
 	}
+	valueFunctionCallPromptBlock := new(FunctionCallPromptBlock)
+	if err := json.Unmarshal(data, &valueFunctionCallPromptBlock); err == nil {
+		p.FunctionCallPromptBlock = valueFunctionCallPromptBlock
+		return nil
+	}
 	valueAudioPromptBlock := new(AudioPromptBlock)
 	if err := json.Unmarshal(data, &valueAudioPromptBlock); err == nil {
 		p.AudioPromptBlock = valueAudioPromptBlock
 		return nil
 	}
-	valueFunctionCallPromptBlock := new(FunctionCallPromptBlock)
-	if err := json.Unmarshal(data, &valueFunctionCallPromptBlock); err == nil {
-		p.FunctionCallPromptBlock = valueFunctionCallPromptBlock
+	valueVideoPromptBlock := new(VideoPromptBlock)
+	if err := json.Unmarshal(data, &valueVideoPromptBlock); err == nil {
+		p.VideoPromptBlock = valueVideoPromptBlock
 		return nil
 	}
 	valueImagePromptBlock := new(ImagePromptBlock)
@@ -13355,11 +13414,14 @@ func (p PromptBlock) MarshalJSON() ([]byte, error) {
 	if p.RichTextPromptBlock != nil {
 		return json.Marshal(p.RichTextPromptBlock)
 	}
+	if p.FunctionCallPromptBlock != nil {
+		return json.Marshal(p.FunctionCallPromptBlock)
+	}
 	if p.AudioPromptBlock != nil {
 		return json.Marshal(p.AudioPromptBlock)
 	}
-	if p.FunctionCallPromptBlock != nil {
-		return json.Marshal(p.FunctionCallPromptBlock)
+	if p.VideoPromptBlock != nil {
+		return json.Marshal(p.VideoPromptBlock)
 	}
 	if p.ImagePromptBlock != nil {
 		return json.Marshal(p.ImagePromptBlock)
@@ -13375,8 +13437,9 @@ type PromptBlockVisitor interface {
 	VisitChatMessagePromptBlock(*ChatMessagePromptBlock) error
 	VisitVariablePromptBlock(*VariablePromptBlock) error
 	VisitRichTextPromptBlock(*RichTextPromptBlock) error
-	VisitAudioPromptBlock(*AudioPromptBlock) error
 	VisitFunctionCallPromptBlock(*FunctionCallPromptBlock) error
+	VisitAudioPromptBlock(*AudioPromptBlock) error
+	VisitVideoPromptBlock(*VideoPromptBlock) error
 	VisitImagePromptBlock(*ImagePromptBlock) error
 	VisitDocumentPromptBlock(*DocumentPromptBlock) error
 }
@@ -13394,11 +13457,14 @@ func (p *PromptBlock) Accept(visitor PromptBlockVisitor) error {
 	if p.RichTextPromptBlock != nil {
 		return visitor.VisitRichTextPromptBlock(p.RichTextPromptBlock)
 	}
+	if p.FunctionCallPromptBlock != nil {
+		return visitor.VisitFunctionCallPromptBlock(p.FunctionCallPromptBlock)
+	}
 	if p.AudioPromptBlock != nil {
 		return visitor.VisitAudioPromptBlock(p.AudioPromptBlock)
 	}
-	if p.FunctionCallPromptBlock != nil {
-		return visitor.VisitFunctionCallPromptBlock(p.FunctionCallPromptBlock)
+	if p.VideoPromptBlock != nil {
+		return visitor.VisitVideoPromptBlock(p.VideoPromptBlock)
 	}
 	if p.ImagePromptBlock != nil {
 		return visitor.VisitImagePromptBlock(p.ImagePromptBlock)
@@ -19798,8 +19864,9 @@ type VellumValue struct {
 	StringVellumValue        *StringVellumValue
 	NumberVellumValue        *NumberVellumValue
 	JsonVellumValue          *JsonVellumValue
-	ImageVellumValue         *ImageVellumValue
 	AudioVellumValue         *AudioVellumValue
+	VideoVellumValue         *VideoVellumValue
+	ImageVellumValue         *ImageVellumValue
 	DocumentVellumValue      *DocumentVellumValue
 	FunctionCallVellumValue  *FunctionCallVellumValue
 	ErrorVellumValue         *ErrorVellumValue
@@ -19825,14 +19892,19 @@ func (v *VellumValue) UnmarshalJSON(data []byte) error {
 		v.JsonVellumValue = valueJsonVellumValue
 		return nil
 	}
-	valueImageVellumValue := new(ImageVellumValue)
-	if err := json.Unmarshal(data, &valueImageVellumValue); err == nil {
-		v.ImageVellumValue = valueImageVellumValue
-		return nil
-	}
 	valueAudioVellumValue := new(AudioVellumValue)
 	if err := json.Unmarshal(data, &valueAudioVellumValue); err == nil {
 		v.AudioVellumValue = valueAudioVellumValue
+		return nil
+	}
+	valueVideoVellumValue := new(VideoVellumValue)
+	if err := json.Unmarshal(data, &valueVideoVellumValue); err == nil {
+		v.VideoVellumValue = valueVideoVellumValue
+		return nil
+	}
+	valueImageVellumValue := new(ImageVellumValue)
+	if err := json.Unmarshal(data, &valueImageVellumValue); err == nil {
+		v.ImageVellumValue = valueImageVellumValue
 		return nil
 	}
 	valueDocumentVellumValue := new(DocumentVellumValue)
@@ -19883,11 +19955,14 @@ func (v VellumValue) MarshalJSON() ([]byte, error) {
 	if v.JsonVellumValue != nil {
 		return json.Marshal(v.JsonVellumValue)
 	}
-	if v.ImageVellumValue != nil {
-		return json.Marshal(v.ImageVellumValue)
-	}
 	if v.AudioVellumValue != nil {
 		return json.Marshal(v.AudioVellumValue)
+	}
+	if v.VideoVellumValue != nil {
+		return json.Marshal(v.VideoVellumValue)
+	}
+	if v.ImageVellumValue != nil {
+		return json.Marshal(v.ImageVellumValue)
 	}
 	if v.DocumentVellumValue != nil {
 		return json.Marshal(v.DocumentVellumValue)
@@ -19917,8 +19992,9 @@ type VellumValueVisitor interface {
 	VisitStringVellumValue(*StringVellumValue) error
 	VisitNumberVellumValue(*NumberVellumValue) error
 	VisitJsonVellumValue(*JsonVellumValue) error
-	VisitImageVellumValue(*ImageVellumValue) error
 	VisitAudioVellumValue(*AudioVellumValue) error
+	VisitVideoVellumValue(*VideoVellumValue) error
+	VisitImageVellumValue(*ImageVellumValue) error
 	VisitDocumentVellumValue(*DocumentVellumValue) error
 	VisitFunctionCallVellumValue(*FunctionCallVellumValue) error
 	VisitErrorVellumValue(*ErrorVellumValue) error
@@ -19938,11 +20014,14 @@ func (v *VellumValue) Accept(visitor VellumValueVisitor) error {
 	if v.JsonVellumValue != nil {
 		return visitor.VisitJsonVellumValue(v.JsonVellumValue)
 	}
-	if v.ImageVellumValue != nil {
-		return visitor.VisitImageVellumValue(v.ImageVellumValue)
-	}
 	if v.AudioVellumValue != nil {
 		return visitor.VisitAudioVellumValue(v.AudioVellumValue)
+	}
+	if v.VideoVellumValue != nil {
+		return visitor.VisitVideoVellumValue(v.VideoVellumValue)
+	}
+	if v.ImageVellumValue != nil {
+		return visitor.VisitImageVellumValue(v.ImageVellumValue)
 	}
 	if v.DocumentVellumValue != nil {
 		return visitor.VisitDocumentVellumValue(v.DocumentVellumValue)
@@ -20156,8 +20235,9 @@ type VellumValueRequest struct {
 	StringVellumValueRequest        *StringVellumValueRequest
 	NumberVellumValueRequest        *NumberVellumValueRequest
 	JsonVellumValueRequest          *JsonVellumValueRequest
-	ImageVellumValueRequest         *ImageVellumValueRequest
 	AudioVellumValueRequest         *AudioVellumValueRequest
+	VideoVellumValueRequest         *VideoVellumValueRequest
+	ImageVellumValueRequest         *ImageVellumValueRequest
 	DocumentVellumValueRequest      *DocumentVellumValueRequest
 	FunctionCallVellumValueRequest  *FunctionCallVellumValueRequest
 	ErrorVellumValueRequest         *ErrorVellumValueRequest
@@ -20183,14 +20263,19 @@ func (v *VellumValueRequest) UnmarshalJSON(data []byte) error {
 		v.JsonVellumValueRequest = valueJsonVellumValueRequest
 		return nil
 	}
-	valueImageVellumValueRequest := new(ImageVellumValueRequest)
-	if err := json.Unmarshal(data, &valueImageVellumValueRequest); err == nil {
-		v.ImageVellumValueRequest = valueImageVellumValueRequest
-		return nil
-	}
 	valueAudioVellumValueRequest := new(AudioVellumValueRequest)
 	if err := json.Unmarshal(data, &valueAudioVellumValueRequest); err == nil {
 		v.AudioVellumValueRequest = valueAudioVellumValueRequest
+		return nil
+	}
+	valueVideoVellumValueRequest := new(VideoVellumValueRequest)
+	if err := json.Unmarshal(data, &valueVideoVellumValueRequest); err == nil {
+		v.VideoVellumValueRequest = valueVideoVellumValueRequest
+		return nil
+	}
+	valueImageVellumValueRequest := new(ImageVellumValueRequest)
+	if err := json.Unmarshal(data, &valueImageVellumValueRequest); err == nil {
+		v.ImageVellumValueRequest = valueImageVellumValueRequest
 		return nil
 	}
 	valueDocumentVellumValueRequest := new(DocumentVellumValueRequest)
@@ -20241,11 +20326,14 @@ func (v VellumValueRequest) MarshalJSON() ([]byte, error) {
 	if v.JsonVellumValueRequest != nil {
 		return json.Marshal(v.JsonVellumValueRequest)
 	}
-	if v.ImageVellumValueRequest != nil {
-		return json.Marshal(v.ImageVellumValueRequest)
-	}
 	if v.AudioVellumValueRequest != nil {
 		return json.Marshal(v.AudioVellumValueRequest)
+	}
+	if v.VideoVellumValueRequest != nil {
+		return json.Marshal(v.VideoVellumValueRequest)
+	}
+	if v.ImageVellumValueRequest != nil {
+		return json.Marshal(v.ImageVellumValueRequest)
 	}
 	if v.DocumentVellumValueRequest != nil {
 		return json.Marshal(v.DocumentVellumValueRequest)
@@ -20275,8 +20363,9 @@ type VellumValueRequestVisitor interface {
 	VisitStringVellumValueRequest(*StringVellumValueRequest) error
 	VisitNumberVellumValueRequest(*NumberVellumValueRequest) error
 	VisitJsonVellumValueRequest(*JsonVellumValueRequest) error
-	VisitImageVellumValueRequest(*ImageVellumValueRequest) error
 	VisitAudioVellumValueRequest(*AudioVellumValueRequest) error
+	VisitVideoVellumValueRequest(*VideoVellumValueRequest) error
+	VisitImageVellumValueRequest(*ImageVellumValueRequest) error
 	VisitDocumentVellumValueRequest(*DocumentVellumValueRequest) error
 	VisitFunctionCallVellumValueRequest(*FunctionCallVellumValueRequest) error
 	VisitErrorVellumValueRequest(*ErrorVellumValueRequest) error
@@ -20296,11 +20385,14 @@ func (v *VellumValueRequest) Accept(visitor VellumValueRequestVisitor) error {
 	if v.JsonVellumValueRequest != nil {
 		return visitor.VisitJsonVellumValueRequest(v.JsonVellumValueRequest)
 	}
-	if v.ImageVellumValueRequest != nil {
-		return visitor.VisitImageVellumValueRequest(v.ImageVellumValueRequest)
-	}
 	if v.AudioVellumValueRequest != nil {
 		return visitor.VisitAudioVellumValueRequest(v.AudioVellumValueRequest)
+	}
+	if v.VideoVellumValueRequest != nil {
+		return visitor.VisitVideoVellumValueRequest(v.VideoVellumValueRequest)
+	}
+	if v.ImageVellumValueRequest != nil {
+		return visitor.VisitImageVellumValueRequest(v.ImageVellumValueRequest)
 	}
 	if v.DocumentVellumValueRequest != nil {
 		return visitor.VisitDocumentVellumValueRequest(v.DocumentVellumValueRequest)
@@ -20422,8 +20514,9 @@ func (v *VellumVariableExtensions) String() string {
 // * `ERROR` - ERROR
 // * `ARRAY` - ARRAY
 // * `FUNCTION_CALL` - FUNCTION_CALL
-// * `IMAGE` - IMAGE
 // * `AUDIO` - AUDIO
+// * `VIDEO` - VIDEO
+// * `IMAGE` - IMAGE
 // * `DOCUMENT` - DOCUMENT
 // * `NULL` - NULL
 // * `THINKING` - THINKING
@@ -20438,8 +20531,9 @@ const (
 	VellumVariableTypeError         VellumVariableType = "ERROR"
 	VellumVariableTypeArray         VellumVariableType = "ARRAY"
 	VellumVariableTypeFunctionCall  VellumVariableType = "FUNCTION_CALL"
-	VellumVariableTypeImage         VellumVariableType = "IMAGE"
 	VellumVariableTypeAudio         VellumVariableType = "AUDIO"
+	VellumVariableTypeVideo         VellumVariableType = "VIDEO"
+	VellumVariableTypeImage         VellumVariableType = "IMAGE"
 	VellumVariableTypeDocument      VellumVariableType = "DOCUMENT"
 	VellumVariableTypeNull          VellumVariableType = "NULL"
 	VellumVariableTypeThinking      VellumVariableType = "THINKING"
@@ -20463,10 +20557,12 @@ func NewVellumVariableTypeFromString(s string) (VellumVariableType, error) {
 		return VellumVariableTypeArray, nil
 	case "FUNCTION_CALL":
 		return VellumVariableTypeFunctionCall, nil
-	case "IMAGE":
-		return VellumVariableTypeImage, nil
 	case "AUDIO":
 		return VellumVariableTypeAudio, nil
+	case "VIDEO":
+		return VellumVariableTypeVideo, nil
+	case "IMAGE":
+		return VellumVariableTypeImage, nil
 	case "DOCUMENT":
 		return VellumVariableTypeDocument, nil
 	case "NULL":
@@ -20480,6 +20576,92 @@ func NewVellumVariableTypeFromString(s string) (VellumVariableType, error) {
 
 func (v VellumVariableType) Ptr() *VellumVariableType {
 	return &v
+}
+
+type VellumVideo struct {
+	// A valid data URL containing the video data.
+	Src      string                 `json:"src" url:"src"`
+	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VellumVideo) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VellumVideo) UnmarshalJSON(data []byte) error {
+	type unmarshaler VellumVideo
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = VellumVideo(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VellumVideo) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+type VellumVideoRequest struct {
+	// A valid data URL containing the video data.
+	Src      string                 `json:"src" url:"src"`
+	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VellumVideoRequest) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VellumVideoRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler VellumVideoRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*v = VellumVideoRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v)
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VellumVideoRequest) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
 }
 
 type VellumWorkflowExecutionEvent struct {
@@ -20589,6 +20771,349 @@ func (v *VellumWorkflowExecutionEvent) Accept(visitor VellumWorkflowExecutionEve
 		return visitor.VisitWorkflowExecutionSnapshottedEvent(v.WorkflowExecutionSnapshottedEvent)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", v)
+}
+
+// A video value that is used in a chat message.
+type VideoChatMessageContent struct {
+	Value *VellumVideo `json:"value" url:"value"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VideoChatMessageContent) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VideoChatMessageContent) Type() string {
+	return v.type_
+}
+
+func (v *VideoChatMessageContent) UnmarshalJSON(data []byte) error {
+	type embed VideoChatMessageContent
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*v),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*v = VideoChatMessageContent(unmarshaler.embed)
+	if unmarshaler.Type != "VIDEO" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", v, "VIDEO", unmarshaler.Type)
+	}
+	v.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v, "type")
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VideoChatMessageContent) MarshalJSON() ([]byte, error) {
+	type embed VideoChatMessageContent
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*v),
+		Type:  "VIDEO",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (v *VideoChatMessageContent) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// A video value that is used in a chat message.
+type VideoChatMessageContentRequest struct {
+	Value *VellumVideoRequest `json:"value" url:"value"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VideoChatMessageContentRequest) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VideoChatMessageContentRequest) Type() string {
+	return v.type_
+}
+
+func (v *VideoChatMessageContentRequest) UnmarshalJSON(data []byte) error {
+	type embed VideoChatMessageContentRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*v),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*v = VideoChatMessageContentRequest(unmarshaler.embed)
+	if unmarshaler.Type != "VIDEO" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", v, "VIDEO", unmarshaler.Type)
+	}
+	v.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v, "type")
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VideoChatMessageContentRequest) MarshalJSON() ([]byte, error) {
+	type embed VideoChatMessageContentRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*v),
+		Type:  "VIDEO",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (v *VideoChatMessageContentRequest) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// A block that represents an video file in a prompt template.
+type VideoPromptBlock struct {
+	State       *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
+	CacheConfig *EphemeralPromptCacheConfig `json:"cache_config,omitempty" url:"cache_config,omitempty"`
+	Src         string                      `json:"src" url:"src"`
+	Metadata    map[string]interface{}      `json:"metadata,omitempty" url:"metadata,omitempty"`
+	blockType   string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VideoPromptBlock) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VideoPromptBlock) BlockType() string {
+	return v.blockType
+}
+
+func (v *VideoPromptBlock) UnmarshalJSON(data []byte) error {
+	type embed VideoPromptBlock
+	var unmarshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed: embed(*v),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*v = VideoPromptBlock(unmarshaler.embed)
+	if unmarshaler.BlockType != "VIDEO" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", v, "VIDEO", unmarshaler.BlockType)
+	}
+	v.blockType = unmarshaler.BlockType
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v, "block_type")
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VideoPromptBlock) MarshalJSON() ([]byte, error) {
+	type embed VideoPromptBlock
+	var marshaler = struct {
+		embed
+		BlockType string `json:"block_type"`
+	}{
+		embed:     embed(*v),
+		BlockType: "VIDEO",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (v *VideoPromptBlock) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// A base Vellum primitive value representing a video.
+type VideoVellumValue struct {
+	Value *VellumVideo `json:"value,omitempty" url:"value,omitempty"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VideoVellumValue) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VideoVellumValue) Type() string {
+	return v.type_
+}
+
+func (v *VideoVellumValue) UnmarshalJSON(data []byte) error {
+	type embed VideoVellumValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*v),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*v = VideoVellumValue(unmarshaler.embed)
+	if unmarshaler.Type != "VIDEO" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", v, "VIDEO", unmarshaler.Type)
+	}
+	v.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v, "type")
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VideoVellumValue) MarshalJSON() ([]byte, error) {
+	type embed VideoVellumValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*v),
+		Type:  "VIDEO",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (v *VideoVellumValue) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// A base Vellum primitive value representing a video.
+type VideoVellumValueRequest struct {
+	Value *VellumVideoRequest `json:"value,omitempty" url:"value,omitempty"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VideoVellumValueRequest) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VideoVellumValueRequest) Type() string {
+	return v.type_
+}
+
+func (v *VideoVellumValueRequest) UnmarshalJSON(data []byte) error {
+	type embed VideoVellumValueRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*v),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*v = VideoVellumValueRequest(unmarshaler.embed)
+	if unmarshaler.Type != "VIDEO" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", v, "VIDEO", unmarshaler.Type)
+	}
+	v.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v, "type")
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VideoVellumValueRequest) MarshalJSON() ([]byte, error) {
+	type embed VideoVellumValueRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*v),
+		Type:  "VIDEO",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (v *VideoVellumValueRequest) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
 }
 
 type WorkflowDeploymentParentContext struct {
@@ -21947,12 +22472,13 @@ func (w *WorkflowExecutionSnapshottedEvent) String() string {
 }
 
 type WorkflowExecutionSpan struct {
-	Events       []*VellumWorkflowExecutionEvent  `json:"events" url:"events"`
-	Attributes   *WorkflowExecutionSpanAttributes `json:"attributes" url:"attributes"`
-	SpanId       string                           `json:"span_id" url:"span_id"`
-	StartTs      time.Time                        `json:"start_ts" url:"start_ts"`
-	EndTs        time.Time                        `json:"end_ts" url:"end_ts"`
-	ParentSpanId *string                          `json:"parent_span_id,omitempty" url:"parent_span_id,omitempty"`
+	Events       []*VellumWorkflowExecutionEvent                 `json:"events" url:"events"`
+	Attributes   *WorkflowExecutionSpanAttributes                `json:"attributes" url:"attributes"`
+	UsageResult  *WorkflowExecutionUsageCalculationFulfilledBody `json:"usage_result,omitempty" url:"usage_result,omitempty"`
+	SpanId       string                                          `json:"span_id" url:"span_id"`
+	StartTs      time.Time                                       `json:"start_ts" url:"start_ts"`
+	EndTs        time.Time                                       `json:"end_ts" url:"end_ts"`
+	ParentSpanId *string                                         `json:"parent_span_id,omitempty" url:"parent_span_id,omitempty"`
 	name         string
 
 	extraProperties map[string]interface{}
@@ -22260,6 +22786,48 @@ func NewWorkflowExecutionUsageCalculationErrorCodeEnumFromString(s string) (Work
 
 func (w WorkflowExecutionUsageCalculationErrorCodeEnum) Ptr() *WorkflowExecutionUsageCalculationErrorCodeEnum {
 	return &w
+}
+
+type WorkflowExecutionUsageCalculationFulfilledBody struct {
+	Usage []*MlModelUsageWrapper `json:"usage" url:"usage"`
+	Cost  []*Price               `json:"cost" url:"cost"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowExecutionUsageCalculationFulfilledBody) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkflowExecutionUsageCalculationFulfilledBody) UnmarshalJSON(data []byte) error {
+	type unmarshaler WorkflowExecutionUsageCalculationFulfilledBody
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*w = WorkflowExecutionUsageCalculationFulfilledBody(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowExecutionUsageCalculationFulfilledBody) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
 }
 
 type WorkflowExecutionUsageResult struct {
