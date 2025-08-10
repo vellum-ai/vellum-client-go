@@ -6,13 +6,15 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	core "github.com/vellum-ai/vellum-client-go/core"
+	time "time"
 )
 
 // An ML Model that your Workspace has access to.
 type MlModelRead struct {
 	Id string `json:"id" url:"id"`
 	// The unique name of the ML Model.
-	Name string `json:"name" url:"name"`
+	Name         string    `json:"name" url:"name"`
+	IntroducedOn time.Time `json:"introduced_on" url:"introduced_on"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -23,12 +25,18 @@ func (m *MlModelRead) GetExtraProperties() map[string]interface{} {
 }
 
 func (m *MlModelRead) UnmarshalJSON(data []byte) error {
-	type unmarshaler MlModelRead
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
+	type embed MlModelRead
+	var unmarshaler = struct {
+		embed
+		IntroducedOn *core.DateTime `json:"introduced_on"`
+	}{
+		embed: embed(*m),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*m = MlModelRead(value)
+	*m = MlModelRead(unmarshaler.embed)
+	m.IntroducedOn = unmarshaler.IntroducedOn.Time()
 
 	extraProperties, err := core.ExtractExtraProperties(data, *m)
 	if err != nil {
@@ -38,6 +46,18 @@ func (m *MlModelRead) UnmarshalJSON(data []byte) error {
 
 	m._rawJSON = json.RawMessage(data)
 	return nil
+}
+
+func (m *MlModelRead) MarshalJSON() ([]byte, error) {
+	type embed MlModelRead
+	var marshaler = struct {
+		embed
+		IntroducedOn *core.DateTime `json:"introduced_on"`
+	}{
+		embed:        embed(*m),
+		IntroducedOn: core.NewDateTime(m.IntroducedOn),
+	}
+	return json.Marshal(marshaler)
 }
 
 func (m *MlModelRead) String() string {
