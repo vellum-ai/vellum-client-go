@@ -14,6 +14,7 @@ import (
 	deployments "github.com/vellum-ai/vellum-client-go/deployments"
 	documentindexes "github.com/vellum-ai/vellum-client-go/documentindexes"
 	documents "github.com/vellum-ai/vellum-client-go/documents"
+	events "github.com/vellum-ai/vellum-client-go/events"
 	folderentities "github.com/vellum-ai/vellum-client-go/folderentities"
 	metricdefinitions "github.com/vellum-ai/vellum-client-go/metricdefinitions"
 	mlmodels "github.com/vellum-ai/vellum-client-go/mlmodels"
@@ -38,6 +39,7 @@ type Client struct {
 	caller  *core.Caller
 	header  http.Header
 
+	Events              *events.Client
 	AdHoc               *adhoc.Client
 	ContainerImages     *containerimages.Client
 	Deployments         *deployments.Client
@@ -73,6 +75,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 			},
 		),
 		header:              options.ToHeader(),
+		Events:              events.NewClient(opts...),
 		AdHoc:               adhoc.NewClient(opts...),
 		ContainerImages:     containerimages.NewClient(opts...),
 		Deployments:         deployments.NewClient(opts...),

@@ -4136,6 +4136,48 @@ func (e *EphemeralPromptCacheConfig) String() string {
 // * `EPHEMERAL` - EPHEMERAL
 type EphemeralPromptCacheConfigTypeEnum = string
 
+type ErrorDetailResponse struct {
+	// Message informing the user of the error.
+	Detail string `json:"detail" url:"detail"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ErrorDetailResponse) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
+}
+
+func (e *ErrorDetailResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ErrorDetailResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = ErrorDetailResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ErrorDetailResponse) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
 // A user input representing a Vellum Error value
 type ErrorInput struct {
 	// The variable's name
@@ -5350,7 +5392,7 @@ type ExecutionThinkingVellumValue struct {
 	// The variable's uniquely identifying internal id.
 	Id    string             `json:"id" url:"id"`
 	Name  string             `json:"name" url:"name"`
-	Value *StringVellumValue `json:"value" url:"value"`
+	Value *StringVellumValue `json:"value,omitempty" url:"value,omitempty"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -18833,7 +18875,7 @@ func (t *TestSuiteRunMetricStringOutput) String() string {
 
 // A value representing Thinking mode output.
 type ThinkingVellumValue struct {
-	Value *StringVellumValue `json:"value" url:"value"`
+	Value *StringVellumValue `json:"value,omitempty" url:"value,omitempty"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -18901,7 +18943,7 @@ func (t *ThinkingVellumValue) String() string {
 
 // A value representing Thinking mode output.
 type ThinkingVellumValueRequest struct {
-	Value *StringVellumValueRequest `json:"value" url:"value"`
+	Value *StringVellumValueRequest `json:"value,omitempty" url:"value,omitempty"`
 	type_ string
 
 	extraProperties map[string]interface{}
