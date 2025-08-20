@@ -1036,6 +1036,76 @@ func (a *AudioChatMessageContentRequest) String() string {
 	return fmt.Sprintf("%#v", a)
 }
 
+// A user input representing a Vellum Audio value
+type AudioInputRequest struct {
+	// The variable's name
+	Name  string              `json:"name" url:"name"`
+	Value *VellumAudioRequest `json:"value" url:"value"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (a *AudioInputRequest) GetExtraProperties() map[string]interface{} {
+	return a.extraProperties
+}
+
+func (a *AudioInputRequest) Type() string {
+	return a.type_
+}
+
+func (a *AudioInputRequest) UnmarshalJSON(data []byte) error {
+	type embed AudioInputRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*a),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*a = AudioInputRequest(unmarshaler.embed)
+	if unmarshaler.Type != "AUDIO" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", a, "AUDIO", unmarshaler.Type)
+	}
+	a.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *a, "type")
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+
+	a._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *AudioInputRequest) MarshalJSON() ([]byte, error) {
+	type embed AudioInputRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*a),
+		Type:  "AUDIO",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (a *AudioInputRequest) String() string {
+	if len(a._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(a._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
+
 // A block that represents an audio file in a prompt template.
 type AudioPromptBlock struct {
 	State       *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
@@ -3451,6 +3521,115 @@ func (c *ConditionalNodeResultData) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+type DelimiterChunkerConfig struct {
+	Delimiter *string `json:"delimiter,omitempty" url:"delimiter,omitempty"`
+	IsRegex   *bool   `json:"is_regex,omitempty" url:"is_regex,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DelimiterChunkerConfig) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DelimiterChunkerConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler DelimiterChunkerConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DelimiterChunkerConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DelimiterChunkerConfig) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DelimiterChunking struct {
+	ChunkerConfig *DelimiterChunkerConfig `json:"chunker_config,omitempty" url:"chunker_config,omitempty"`
+	chunkerName   string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DelimiterChunking) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DelimiterChunking) ChunkerName() string {
+	return d.chunkerName
+}
+
+func (d *DelimiterChunking) UnmarshalJSON(data []byte) error {
+	type embed DelimiterChunking
+	var unmarshaler = struct {
+		embed
+		ChunkerName string `json:"chunker_name"`
+	}{
+		embed: embed(*d),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*d = DelimiterChunking(unmarshaler.embed)
+	if unmarshaler.ChunkerName != "delimiter-chunker" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", d, "delimiter-chunker", unmarshaler.ChunkerName)
+	}
+	d.chunkerName = unmarshaler.ChunkerName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d, "chunker_name")
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DelimiterChunking) MarshalJSON() ([]byte, error) {
+	type embed DelimiterChunking
+	var marshaler = struct {
+		embed
+		ChunkerName string `json:"chunker_name"`
+	}{
+		embed:       embed(*d),
+		ChunkerName: "delimiter-chunker",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (d *DelimiterChunking) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
 type DeploymentRead struct {
 	Id      string    `json:"id" url:"id"`
 	Created time.Time `json:"created" url:"created"`
@@ -3678,6 +3857,7 @@ type DocumentIndexChunking struct {
 	ReductoChunking                *ReductoChunking
 	SentenceChunking               *SentenceChunking
 	TokenOverlappingWindowChunking *TokenOverlappingWindowChunking
+	DelimiterChunking              *DelimiterChunking
 }
 
 func (d *DocumentIndexChunking) UnmarshalJSON(data []byte) error {
@@ -3696,6 +3876,11 @@ func (d *DocumentIndexChunking) UnmarshalJSON(data []byte) error {
 		d.TokenOverlappingWindowChunking = valueTokenOverlappingWindowChunking
 		return nil
 	}
+	valueDelimiterChunking := new(DelimiterChunking)
+	if err := json.Unmarshal(data, &valueDelimiterChunking); err == nil {
+		d.DelimiterChunking = valueDelimiterChunking
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, d)
 }
 
@@ -3709,6 +3894,9 @@ func (d DocumentIndexChunking) MarshalJSON() ([]byte, error) {
 	if d.TokenOverlappingWindowChunking != nil {
 		return json.Marshal(d.TokenOverlappingWindowChunking)
 	}
+	if d.DelimiterChunking != nil {
+		return json.Marshal(d.DelimiterChunking)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", d)
 }
 
@@ -3716,6 +3904,7 @@ type DocumentIndexChunkingVisitor interface {
 	VisitReductoChunking(*ReductoChunking) error
 	VisitSentenceChunking(*SentenceChunking) error
 	VisitTokenOverlappingWindowChunking(*TokenOverlappingWindowChunking) error
+	VisitDelimiterChunking(*DelimiterChunking) error
 }
 
 func (d *DocumentIndexChunking) Accept(visitor DocumentIndexChunkingVisitor) error {
@@ -3727,6 +3916,9 @@ func (d *DocumentIndexChunking) Accept(visitor DocumentIndexChunkingVisitor) err
 	}
 	if d.TokenOverlappingWindowChunking != nil {
 		return visitor.VisitTokenOverlappingWindowChunking(d.TokenOverlappingWindowChunking)
+	}
+	if d.DelimiterChunking != nil {
+		return visitor.VisitDelimiterChunking(d.DelimiterChunking)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", d)
 }
@@ -3762,6 +3954,76 @@ func (d *DocumentIndexIndexingConfig) UnmarshalJSON(data []byte) error {
 }
 
 func (d *DocumentIndexIndexingConfig) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// A user input representing a Vellum Document value
+type DocumentInputRequest struct {
+	// The variable's name
+	Name  string                 `json:"name" url:"name"`
+	Value *VellumDocumentRequest `json:"value" url:"value"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DocumentInputRequest) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DocumentInputRequest) Type() string {
+	return d.type_
+}
+
+func (d *DocumentInputRequest) UnmarshalJSON(data []byte) error {
+	type embed DocumentInputRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*d),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*d = DocumentInputRequest(unmarshaler.embed)
+	if unmarshaler.Type != "DOCUMENT" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", d, "DOCUMENT", unmarshaler.Type)
+	}
+	d.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d, "type")
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DocumentInputRequest) MarshalJSON() ([]byte, error) {
+	type embed DocumentInputRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*d),
+		Type:  "DOCUMENT",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (d *DocumentInputRequest) String() string {
 	if len(d._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
 			return value
@@ -4890,6 +5152,77 @@ func (e *ExecutionArrayVellumValue) String() string {
 	return fmt.Sprintf("%#v", e)
 }
 
+// A base Vellum primitive value representing audio.
+type ExecutionAudioVellumValue struct {
+	// The variable's uniquely identifying internal id.
+	Id    string       `json:"id" url:"id"`
+	Name  string       `json:"name" url:"name"`
+	Value *VellumAudio `json:"value,omitempty" url:"value,omitempty"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ExecutionAudioVellumValue) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
+}
+
+func (e *ExecutionAudioVellumValue) Type() string {
+	return e.type_
+}
+
+func (e *ExecutionAudioVellumValue) UnmarshalJSON(data []byte) error {
+	type embed ExecutionAudioVellumValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*e),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*e = ExecutionAudioVellumValue(unmarshaler.embed)
+	if unmarshaler.Type != "AUDIO" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", e, "AUDIO", unmarshaler.Type)
+	}
+	e.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e, "type")
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ExecutionAudioVellumValue) MarshalJSON() ([]byte, error) {
+	type embed ExecutionAudioVellumValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*e),
+		Type:  "AUDIO",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (e *ExecutionAudioVellumValue) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
 // A value representing Chat History.
 type ExecutionChatHistoryVellumValue struct {
 	// The variable's uniquely identifying internal id.
@@ -4950,6 +5283,77 @@ func (e *ExecutionChatHistoryVellumValue) MarshalJSON() ([]byte, error) {
 }
 
 func (e *ExecutionChatHistoryVellumValue) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+// A base Vellum primitive value representing a document.
+type ExecutionDocumentVellumValue struct {
+	// The variable's uniquely identifying internal id.
+	Id    string          `json:"id" url:"id"`
+	Name  string          `json:"name" url:"name"`
+	Value *VellumDocument `json:"value,omitempty" url:"value,omitempty"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ExecutionDocumentVellumValue) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
+}
+
+func (e *ExecutionDocumentVellumValue) Type() string {
+	return e.type_
+}
+
+func (e *ExecutionDocumentVellumValue) UnmarshalJSON(data []byte) error {
+	type embed ExecutionDocumentVellumValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*e),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*e = ExecutionDocumentVellumValue(unmarshaler.embed)
+	if unmarshaler.Type != "DOCUMENT" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", e, "DOCUMENT", unmarshaler.Type)
+	}
+	e.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e, "type")
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ExecutionDocumentVellumValue) MarshalJSON() ([]byte, error) {
+	type embed ExecutionDocumentVellumValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*e),
+		Type:  "DOCUMENT",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (e *ExecutionDocumentVellumValue) String() string {
 	if len(e._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
 			return value
@@ -5092,6 +5496,77 @@ func (e *ExecutionFunctionCallVellumValue) MarshalJSON() ([]byte, error) {
 }
 
 func (e *ExecutionFunctionCallVellumValue) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+// A base Vellum primitive value representing an image.
+type ExecutionImageVellumValue struct {
+	// The variable's uniquely identifying internal id.
+	Id    string       `json:"id" url:"id"`
+	Name  string       `json:"name" url:"name"`
+	Value *VellumImage `json:"value,omitempty" url:"value,omitempty"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ExecutionImageVellumValue) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
+}
+
+func (e *ExecutionImageVellumValue) Type() string {
+	return e.type_
+}
+
+func (e *ExecutionImageVellumValue) UnmarshalJSON(data []byte) error {
+	type embed ExecutionImageVellumValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*e),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*e = ExecutionImageVellumValue(unmarshaler.embed)
+	if unmarshaler.Type != "IMAGE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", e, "IMAGE", unmarshaler.Type)
+	}
+	e.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e, "type")
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ExecutionImageVellumValue) MarshalJSON() ([]byte, error) {
+	type embed ExecutionImageVellumValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*e),
+		Type:  "IMAGE",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (e *ExecutionImageVellumValue) String() string {
 	if len(e._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
 			return value
@@ -5468,6 +5943,10 @@ type ExecutionVellumValue struct {
 	ExecutionArrayVellumValue         *ExecutionArrayVellumValue
 	ExecutionFunctionCallVellumValue  *ExecutionFunctionCallVellumValue
 	ExecutionThinkingVellumValue      *ExecutionThinkingVellumValue
+	ExecutionAudioVellumValue         *ExecutionAudioVellumValue
+	ExecutionVideoVellumValue         *ExecutionVideoVellumValue
+	ExecutionImageVellumValue         *ExecutionImageVellumValue
+	ExecutionDocumentVellumValue      *ExecutionDocumentVellumValue
 }
 
 func (e *ExecutionVellumValue) UnmarshalJSON(data []byte) error {
@@ -5516,6 +5995,26 @@ func (e *ExecutionVellumValue) UnmarshalJSON(data []byte) error {
 		e.ExecutionThinkingVellumValue = valueExecutionThinkingVellumValue
 		return nil
 	}
+	valueExecutionAudioVellumValue := new(ExecutionAudioVellumValue)
+	if err := json.Unmarshal(data, &valueExecutionAudioVellumValue); err == nil {
+		e.ExecutionAudioVellumValue = valueExecutionAudioVellumValue
+		return nil
+	}
+	valueExecutionVideoVellumValue := new(ExecutionVideoVellumValue)
+	if err := json.Unmarshal(data, &valueExecutionVideoVellumValue); err == nil {
+		e.ExecutionVideoVellumValue = valueExecutionVideoVellumValue
+		return nil
+	}
+	valueExecutionImageVellumValue := new(ExecutionImageVellumValue)
+	if err := json.Unmarshal(data, &valueExecutionImageVellumValue); err == nil {
+		e.ExecutionImageVellumValue = valueExecutionImageVellumValue
+		return nil
+	}
+	valueExecutionDocumentVellumValue := new(ExecutionDocumentVellumValue)
+	if err := json.Unmarshal(data, &valueExecutionDocumentVellumValue); err == nil {
+		e.ExecutionDocumentVellumValue = valueExecutionDocumentVellumValue
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, e)
 }
 
@@ -5547,6 +6046,18 @@ func (e ExecutionVellumValue) MarshalJSON() ([]byte, error) {
 	if e.ExecutionThinkingVellumValue != nil {
 		return json.Marshal(e.ExecutionThinkingVellumValue)
 	}
+	if e.ExecutionAudioVellumValue != nil {
+		return json.Marshal(e.ExecutionAudioVellumValue)
+	}
+	if e.ExecutionVideoVellumValue != nil {
+		return json.Marshal(e.ExecutionVideoVellumValue)
+	}
+	if e.ExecutionImageVellumValue != nil {
+		return json.Marshal(e.ExecutionImageVellumValue)
+	}
+	if e.ExecutionDocumentVellumValue != nil {
+		return json.Marshal(e.ExecutionDocumentVellumValue)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", e)
 }
 
@@ -5560,6 +6071,10 @@ type ExecutionVellumValueVisitor interface {
 	VisitExecutionArrayVellumValue(*ExecutionArrayVellumValue) error
 	VisitExecutionFunctionCallVellumValue(*ExecutionFunctionCallVellumValue) error
 	VisitExecutionThinkingVellumValue(*ExecutionThinkingVellumValue) error
+	VisitExecutionAudioVellumValue(*ExecutionAudioVellumValue) error
+	VisitExecutionVideoVellumValue(*ExecutionVideoVellumValue) error
+	VisitExecutionImageVellumValue(*ExecutionImageVellumValue) error
+	VisitExecutionDocumentVellumValue(*ExecutionDocumentVellumValue) error
 }
 
 func (e *ExecutionVellumValue) Accept(visitor ExecutionVellumValueVisitor) error {
@@ -5590,7 +6105,90 @@ func (e *ExecutionVellumValue) Accept(visitor ExecutionVellumValueVisitor) error
 	if e.ExecutionThinkingVellumValue != nil {
 		return visitor.VisitExecutionThinkingVellumValue(e.ExecutionThinkingVellumValue)
 	}
+	if e.ExecutionAudioVellumValue != nil {
+		return visitor.VisitExecutionAudioVellumValue(e.ExecutionAudioVellumValue)
+	}
+	if e.ExecutionVideoVellumValue != nil {
+		return visitor.VisitExecutionVideoVellumValue(e.ExecutionVideoVellumValue)
+	}
+	if e.ExecutionImageVellumValue != nil {
+		return visitor.VisitExecutionImageVellumValue(e.ExecutionImageVellumValue)
+	}
+	if e.ExecutionDocumentVellumValue != nil {
+		return visitor.VisitExecutionDocumentVellumValue(e.ExecutionDocumentVellumValue)
+	}
 	return fmt.Errorf("type %T does not include a non-empty union type", e)
+}
+
+// A base Vellum primitive value representing a video.
+type ExecutionVideoVellumValue struct {
+	// The variable's uniquely identifying internal id.
+	Id    string       `json:"id" url:"id"`
+	Name  string       `json:"name" url:"name"`
+	Value *VellumVideo `json:"value,omitempty" url:"value,omitempty"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ExecutionVideoVellumValue) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
+}
+
+func (e *ExecutionVideoVellumValue) Type() string {
+	return e.type_
+}
+
+func (e *ExecutionVideoVellumValue) UnmarshalJSON(data []byte) error {
+	type embed ExecutionVideoVellumValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*e),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*e = ExecutionVideoVellumValue(unmarshaler.embed)
+	if unmarshaler.Type != "VIDEO" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", e, "VIDEO", unmarshaler.Type)
+	}
+	e.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e, "type")
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ExecutionVideoVellumValue) MarshalJSON() ([]byte, error) {
+	type embed ExecutionVideoVellumValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*e),
+		Type:  "VIDEO",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (e *ExecutionVideoVellumValue) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
 }
 
 type ExternalInputDescriptor struct {
@@ -7619,6 +8217,76 @@ func (i *ImageChatMessageContentRequest) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
+// A user input representing a Vellum Image value
+type ImageInputRequest struct {
+	// The variable's name
+	Name  string              `json:"name" url:"name"`
+	Value *VellumImageRequest `json:"value" url:"value"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *ImageInputRequest) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *ImageInputRequest) Type() string {
+	return i.type_
+}
+
+func (i *ImageInputRequest) UnmarshalJSON(data []byte) error {
+	type embed ImageInputRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*i),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*i = ImageInputRequest(unmarshaler.embed)
+	if unmarshaler.Type != "IMAGE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", i, "IMAGE", unmarshaler.Type)
+	}
+	i.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i, "type")
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *ImageInputRequest) MarshalJSON() ([]byte, error) {
+	type embed ImageInputRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*i),
+		Type:  "IMAGE",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (i *ImageInputRequest) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
 // A block that represents an image in a prompt template.
 type ImagePromptBlock struct {
 	State       *PromptBlockState           `json:"state,omitempty" url:"state,omitempty"`
@@ -8664,6 +9332,7 @@ func (j *JsonVellumValueRequest) String() string {
 // * `and` - AND
 // * `or` - OR
 // * `isError` - IS_ERROR
+// * `length` - LENGTH
 type LogicalOperator string
 
 const (
@@ -8712,6 +9381,7 @@ const (
 	LogicalOperatorAnd       LogicalOperator = "and"
 	LogicalOperatorOr        LogicalOperator = "or"
 	LogicalOperatorIsError   LogicalOperator = "isError"
+	LogicalOperatorLength    LogicalOperator = "length"
 )
 
 func NewLogicalOperatorFromString(s string) (LogicalOperator, error) {
@@ -8768,6 +9438,8 @@ func NewLogicalOperatorFromString(s string) (LogicalOperator, error) {
 		return LogicalOperatorOr, nil
 	case "isError":
 		return LogicalOperatorIsError, nil
+	case "length":
+		return LogicalOperatorLength, nil
 	}
 	var t LogicalOperator
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -10959,6 +11631,75 @@ func (n *NodeInputCompiledArrayValue) String() string {
 	return fmt.Sprintf("%#v", n)
 }
 
+type NodeInputCompiledAudioValue struct {
+	NodeInputId string       `json:"node_input_id" url:"node_input_id"`
+	Key         string       `json:"key" url:"key"`
+	Value       *VellumAudio `json:"value,omitempty" url:"value,omitempty"`
+	type_       string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NodeInputCompiledAudioValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
+}
+
+func (n *NodeInputCompiledAudioValue) Type() string {
+	return n.type_
+}
+
+func (n *NodeInputCompiledAudioValue) UnmarshalJSON(data []byte) error {
+	type embed NodeInputCompiledAudioValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*n = NodeInputCompiledAudioValue(unmarshaler.embed)
+	if unmarshaler.Type != "AUDIO" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "AUDIO", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NodeInputCompiledAudioValue) MarshalJSON() ([]byte, error) {
+	type embed NodeInputCompiledAudioValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+		Type:  "AUDIO",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (n *NodeInputCompiledAudioValue) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
 type NodeInputCompiledChatHistoryValue struct {
 	NodeInputId string         `json:"node_input_id" url:"node_input_id"`
 	Key         string         `json:"key" url:"key"`
@@ -11017,6 +11758,75 @@ func (n *NodeInputCompiledChatHistoryValue) MarshalJSON() ([]byte, error) {
 }
 
 func (n *NodeInputCompiledChatHistoryValue) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
+type NodeInputCompiledDocumentValue struct {
+	NodeInputId string          `json:"node_input_id" url:"node_input_id"`
+	Key         string          `json:"key" url:"key"`
+	Value       *VellumDocument `json:"value,omitempty" url:"value,omitempty"`
+	type_       string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NodeInputCompiledDocumentValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
+}
+
+func (n *NodeInputCompiledDocumentValue) Type() string {
+	return n.type_
+}
+
+func (n *NodeInputCompiledDocumentValue) UnmarshalJSON(data []byte) error {
+	type embed NodeInputCompiledDocumentValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*n = NodeInputCompiledDocumentValue(unmarshaler.embed)
+	if unmarshaler.Type != "DOCUMENT" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "DOCUMENT", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NodeInputCompiledDocumentValue) MarshalJSON() ([]byte, error) {
+	type embed NodeInputCompiledDocumentValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+		Type:  "DOCUMENT",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (n *NodeInputCompiledDocumentValue) String() string {
 	if len(n._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
 			return value
@@ -11155,6 +11965,75 @@ func (n *NodeInputCompiledFunctionCallValue) MarshalJSON() ([]byte, error) {
 }
 
 func (n *NodeInputCompiledFunctionCallValue) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
+type NodeInputCompiledImageValue struct {
+	NodeInputId string       `json:"node_input_id" url:"node_input_id"`
+	Key         string       `json:"key" url:"key"`
+	Value       *VellumImage `json:"value,omitempty" url:"value,omitempty"`
+	type_       string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NodeInputCompiledImageValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
+}
+
+func (n *NodeInputCompiledImageValue) Type() string {
+	return n.type_
+}
+
+func (n *NodeInputCompiledImageValue) UnmarshalJSON(data []byte) error {
+	type embed NodeInputCompiledImageValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*n = NodeInputCompiledImageValue(unmarshaler.embed)
+	if unmarshaler.Type != "IMAGE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "IMAGE", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NodeInputCompiledImageValue) MarshalJSON() ([]byte, error) {
+	type embed NodeInputCompiledImageValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+		Type:  "IMAGE",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (n *NodeInputCompiledImageValue) String() string {
 	if len(n._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
 			return value
@@ -11511,6 +12390,75 @@ func (n *NodeInputCompiledStringValue) String() string {
 	return fmt.Sprintf("%#v", n)
 }
 
+type NodeInputCompiledVideoValue struct {
+	NodeInputId string       `json:"node_input_id" url:"node_input_id"`
+	Key         string       `json:"key" url:"key"`
+	Value       *VellumVideo `json:"value,omitempty" url:"value,omitempty"`
+	type_       string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NodeInputCompiledVideoValue) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
+}
+
+func (n *NodeInputCompiledVideoValue) Type() string {
+	return n.type_
+}
+
+func (n *NodeInputCompiledVideoValue) UnmarshalJSON(data []byte) error {
+	type embed NodeInputCompiledVideoValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*n = NodeInputCompiledVideoValue(unmarshaler.embed)
+	if unmarshaler.Type != "VIDEO" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "VIDEO", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NodeInputCompiledVideoValue) MarshalJSON() ([]byte, error) {
+	type embed NodeInputCompiledVideoValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+		Type:  "VIDEO",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (n *NodeInputCompiledVideoValue) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
 type NodeInputVariableCompiledValue struct {
 	NodeInputCompiledStringValue        *NodeInputCompiledStringValue
 	NodeInputCompiledNumberValue        *NodeInputCompiledNumberValue
@@ -11521,6 +12469,10 @@ type NodeInputVariableCompiledValue struct {
 	NodeInputCompiledArrayValue         *NodeInputCompiledArrayValue
 	NodeInputCompiledFunctionCallValue  *NodeInputCompiledFunctionCallValue
 	NodeInputCompiledSecretValue        *NodeInputCompiledSecretValue
+	NodeInputCompiledAudioValue         *NodeInputCompiledAudioValue
+	NodeInputCompiledVideoValue         *NodeInputCompiledVideoValue
+	NodeInputCompiledImageValue         *NodeInputCompiledImageValue
+	NodeInputCompiledDocumentValue      *NodeInputCompiledDocumentValue
 }
 
 func (n *NodeInputVariableCompiledValue) UnmarshalJSON(data []byte) error {
@@ -11569,6 +12521,26 @@ func (n *NodeInputVariableCompiledValue) UnmarshalJSON(data []byte) error {
 		n.NodeInputCompiledSecretValue = valueNodeInputCompiledSecretValue
 		return nil
 	}
+	valueNodeInputCompiledAudioValue := new(NodeInputCompiledAudioValue)
+	if err := json.Unmarshal(data, &valueNodeInputCompiledAudioValue); err == nil {
+		n.NodeInputCompiledAudioValue = valueNodeInputCompiledAudioValue
+		return nil
+	}
+	valueNodeInputCompiledVideoValue := new(NodeInputCompiledVideoValue)
+	if err := json.Unmarshal(data, &valueNodeInputCompiledVideoValue); err == nil {
+		n.NodeInputCompiledVideoValue = valueNodeInputCompiledVideoValue
+		return nil
+	}
+	valueNodeInputCompiledImageValue := new(NodeInputCompiledImageValue)
+	if err := json.Unmarshal(data, &valueNodeInputCompiledImageValue); err == nil {
+		n.NodeInputCompiledImageValue = valueNodeInputCompiledImageValue
+		return nil
+	}
+	valueNodeInputCompiledDocumentValue := new(NodeInputCompiledDocumentValue)
+	if err := json.Unmarshal(data, &valueNodeInputCompiledDocumentValue); err == nil {
+		n.NodeInputCompiledDocumentValue = valueNodeInputCompiledDocumentValue
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, n)
 }
 
@@ -11600,6 +12572,18 @@ func (n NodeInputVariableCompiledValue) MarshalJSON() ([]byte, error) {
 	if n.NodeInputCompiledSecretValue != nil {
 		return json.Marshal(n.NodeInputCompiledSecretValue)
 	}
+	if n.NodeInputCompiledAudioValue != nil {
+		return json.Marshal(n.NodeInputCompiledAudioValue)
+	}
+	if n.NodeInputCompiledVideoValue != nil {
+		return json.Marshal(n.NodeInputCompiledVideoValue)
+	}
+	if n.NodeInputCompiledImageValue != nil {
+		return json.Marshal(n.NodeInputCompiledImageValue)
+	}
+	if n.NodeInputCompiledDocumentValue != nil {
+		return json.Marshal(n.NodeInputCompiledDocumentValue)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", n)
 }
 
@@ -11613,6 +12597,10 @@ type NodeInputVariableCompiledValueVisitor interface {
 	VisitNodeInputCompiledArrayValue(*NodeInputCompiledArrayValue) error
 	VisitNodeInputCompiledFunctionCallValue(*NodeInputCompiledFunctionCallValue) error
 	VisitNodeInputCompiledSecretValue(*NodeInputCompiledSecretValue) error
+	VisitNodeInputCompiledAudioValue(*NodeInputCompiledAudioValue) error
+	VisitNodeInputCompiledVideoValue(*NodeInputCompiledVideoValue) error
+	VisitNodeInputCompiledImageValue(*NodeInputCompiledImageValue) error
+	VisitNodeInputCompiledDocumentValue(*NodeInputCompiledDocumentValue) error
 }
 
 func (n *NodeInputVariableCompiledValue) Accept(visitor NodeInputVariableCompiledValueVisitor) error {
@@ -11642,6 +12630,18 @@ func (n *NodeInputVariableCompiledValue) Accept(visitor NodeInputVariableCompile
 	}
 	if n.NodeInputCompiledSecretValue != nil {
 		return visitor.VisitNodeInputCompiledSecretValue(n.NodeInputCompiledSecretValue)
+	}
+	if n.NodeInputCompiledAudioValue != nil {
+		return visitor.VisitNodeInputCompiledAudioValue(n.NodeInputCompiledAudioValue)
+	}
+	if n.NodeInputCompiledVideoValue != nil {
+		return visitor.VisitNodeInputCompiledVideoValue(n.NodeInputCompiledVideoValue)
+	}
+	if n.NodeInputCompiledImageValue != nil {
+		return visitor.VisitNodeInputCompiledImageValue(n.NodeInputCompiledImageValue)
+	}
+	if n.NodeInputCompiledDocumentValue != nil {
+		return visitor.VisitNodeInputCompiledDocumentValue(n.NodeInputCompiledDocumentValue)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", n)
 }
@@ -13599,6 +14599,10 @@ type PromptDeploymentInputRequest struct {
 	StringInputRequest      *StringInputRequest
 	JsonInputRequest        *JsonInputRequest
 	ChatHistoryInputRequest *ChatHistoryInputRequest
+	AudioInputRequest       *AudioInputRequest
+	VideoInputRequest       *VideoInputRequest
+	ImageInputRequest       *ImageInputRequest
+	DocumentInputRequest    *DocumentInputRequest
 }
 
 func (p *PromptDeploymentInputRequest) UnmarshalJSON(data []byte) error {
@@ -13617,6 +14621,26 @@ func (p *PromptDeploymentInputRequest) UnmarshalJSON(data []byte) error {
 		p.ChatHistoryInputRequest = valueChatHistoryInputRequest
 		return nil
 	}
+	valueAudioInputRequest := new(AudioInputRequest)
+	if err := json.Unmarshal(data, &valueAudioInputRequest); err == nil {
+		p.AudioInputRequest = valueAudioInputRequest
+		return nil
+	}
+	valueVideoInputRequest := new(VideoInputRequest)
+	if err := json.Unmarshal(data, &valueVideoInputRequest); err == nil {
+		p.VideoInputRequest = valueVideoInputRequest
+		return nil
+	}
+	valueImageInputRequest := new(ImageInputRequest)
+	if err := json.Unmarshal(data, &valueImageInputRequest); err == nil {
+		p.ImageInputRequest = valueImageInputRequest
+		return nil
+	}
+	valueDocumentInputRequest := new(DocumentInputRequest)
+	if err := json.Unmarshal(data, &valueDocumentInputRequest); err == nil {
+		p.DocumentInputRequest = valueDocumentInputRequest
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, p)
 }
 
@@ -13630,6 +14654,18 @@ func (p PromptDeploymentInputRequest) MarshalJSON() ([]byte, error) {
 	if p.ChatHistoryInputRequest != nil {
 		return json.Marshal(p.ChatHistoryInputRequest)
 	}
+	if p.AudioInputRequest != nil {
+		return json.Marshal(p.AudioInputRequest)
+	}
+	if p.VideoInputRequest != nil {
+		return json.Marshal(p.VideoInputRequest)
+	}
+	if p.ImageInputRequest != nil {
+		return json.Marshal(p.ImageInputRequest)
+	}
+	if p.DocumentInputRequest != nil {
+		return json.Marshal(p.DocumentInputRequest)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", p)
 }
 
@@ -13637,6 +14673,10 @@ type PromptDeploymentInputRequestVisitor interface {
 	VisitStringInputRequest(*StringInputRequest) error
 	VisitJsonInputRequest(*JsonInputRequest) error
 	VisitChatHistoryInputRequest(*ChatHistoryInputRequest) error
+	VisitAudioInputRequest(*AudioInputRequest) error
+	VisitVideoInputRequest(*VideoInputRequest) error
+	VisitImageInputRequest(*ImageInputRequest) error
+	VisitDocumentInputRequest(*DocumentInputRequest) error
 }
 
 func (p *PromptDeploymentInputRequest) Accept(visitor PromptDeploymentInputRequestVisitor) error {
@@ -13648,6 +14688,18 @@ func (p *PromptDeploymentInputRequest) Accept(visitor PromptDeploymentInputReque
 	}
 	if p.ChatHistoryInputRequest != nil {
 		return visitor.VisitChatHistoryInputRequest(p.ChatHistoryInputRequest)
+	}
+	if p.AudioInputRequest != nil {
+		return visitor.VisitAudioInputRequest(p.AudioInputRequest)
+	}
+	if p.VideoInputRequest != nil {
+		return visitor.VisitVideoInputRequest(p.VideoInputRequest)
+	}
+	if p.ImageInputRequest != nil {
+		return visitor.VisitImageInputRequest(p.ImageInputRequest)
+	}
+	if p.DocumentInputRequest != nil {
+		return visitor.VisitDocumentInputRequest(p.DocumentInputRequest)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", p)
 }
@@ -20940,6 +21992,76 @@ func (v *VideoChatMessageContentRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (v *VideoChatMessageContentRequest) String() string {
+	if len(v._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(v); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", v)
+}
+
+// A user input representing a Vellum Video value
+type VideoInputRequest struct {
+	// The variable's name
+	Name  string              `json:"name" url:"name"`
+	Value *VellumVideoRequest `json:"value" url:"value"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (v *VideoInputRequest) GetExtraProperties() map[string]interface{} {
+	return v.extraProperties
+}
+
+func (v *VideoInputRequest) Type() string {
+	return v.type_
+}
+
+func (v *VideoInputRequest) UnmarshalJSON(data []byte) error {
+	type embed VideoInputRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*v),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*v = VideoInputRequest(unmarshaler.embed)
+	if unmarshaler.Type != "VIDEO" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", v, "VIDEO", unmarshaler.Type)
+	}
+	v.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *v, "type")
+	if err != nil {
+		return err
+	}
+	v.extraProperties = extraProperties
+
+	v._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (v *VideoInputRequest) MarshalJSON() ([]byte, error) {
+	type embed VideoInputRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*v),
+		Type:  "VIDEO",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (v *VideoInputRequest) String() string {
 	if len(v._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(v._rawJSON); err == nil {
 			return value
