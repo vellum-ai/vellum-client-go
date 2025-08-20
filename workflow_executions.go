@@ -9,6 +9,13 @@ import (
 	time "time"
 )
 
+type RetrieveWorkflowExecutionDetailRequest struct {
+	// Optional keyset cursor span_id to continue from (exclusive)
+	PrevSpanId *string `json:"-" url:"prev_span_id,omitempty"`
+	// Maximum number of spans to return (for lazy loading)
+	SpanLimit *int `json:"-" url:"span_limit,omitempty"`
+}
+
 type WorkflowExecutionDetail struct {
 	SpanId        string                          `json:"span_id" url:"span_id"`
 	ParentContext *ParentContext                  `json:"parent_context,omitempty" url:"parent_context,omitempty"`

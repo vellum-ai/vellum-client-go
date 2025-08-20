@@ -254,10 +254,120 @@ func (b *BasicVectorizerSentenceTransformersMultiQaMpnetBaseDotV1Request) String
 	return fmt.Sprintf("%#v", b)
 }
 
+type DelimiterChunkerConfigRequest struct {
+	Delimiter *string `json:"delimiter,omitempty" url:"delimiter,omitempty"`
+	IsRegex   *bool   `json:"is_regex,omitempty" url:"is_regex,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DelimiterChunkerConfigRequest) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DelimiterChunkerConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler DelimiterChunkerConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DelimiterChunkerConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DelimiterChunkerConfigRequest) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+type DelimiterChunkingRequest struct {
+	ChunkerConfig *DelimiterChunkerConfigRequest `json:"chunker_config,omitempty" url:"chunker_config,omitempty"`
+	chunkerName   string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DelimiterChunkingRequest) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DelimiterChunkingRequest) ChunkerName() string {
+	return d.chunkerName
+}
+
+func (d *DelimiterChunkingRequest) UnmarshalJSON(data []byte) error {
+	type embed DelimiterChunkingRequest
+	var unmarshaler = struct {
+		embed
+		ChunkerName string `json:"chunker_name"`
+	}{
+		embed: embed(*d),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*d = DelimiterChunkingRequest(unmarshaler.embed)
+	if unmarshaler.ChunkerName != "delimiter-chunker" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", d, "delimiter-chunker", unmarshaler.ChunkerName)
+	}
+	d.chunkerName = unmarshaler.ChunkerName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d, "chunker_name")
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DelimiterChunkingRequest) MarshalJSON() ([]byte, error) {
+	type embed DelimiterChunkingRequest
+	var marshaler = struct {
+		embed
+		ChunkerName string `json:"chunker_name"`
+	}{
+		embed:       embed(*d),
+		ChunkerName: "delimiter-chunker",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (d *DelimiterChunkingRequest) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
 type DocumentIndexChunkingRequest struct {
 	ReductoChunkingRequest                *ReductoChunkingRequest
 	SentenceChunkingRequest               *SentenceChunkingRequest
 	TokenOverlappingWindowChunkingRequest *TokenOverlappingWindowChunkingRequest
+	DelimiterChunkingRequest              *DelimiterChunkingRequest
 }
 
 func (d *DocumentIndexChunkingRequest) UnmarshalJSON(data []byte) error {
@@ -276,6 +386,11 @@ func (d *DocumentIndexChunkingRequest) UnmarshalJSON(data []byte) error {
 		d.TokenOverlappingWindowChunkingRequest = valueTokenOverlappingWindowChunkingRequest
 		return nil
 	}
+	valueDelimiterChunkingRequest := new(DelimiterChunkingRequest)
+	if err := json.Unmarshal(data, &valueDelimiterChunkingRequest); err == nil {
+		d.DelimiterChunkingRequest = valueDelimiterChunkingRequest
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, d)
 }
 
@@ -289,6 +404,9 @@ func (d DocumentIndexChunkingRequest) MarshalJSON() ([]byte, error) {
 	if d.TokenOverlappingWindowChunkingRequest != nil {
 		return json.Marshal(d.TokenOverlappingWindowChunkingRequest)
 	}
+	if d.DelimiterChunkingRequest != nil {
+		return json.Marshal(d.DelimiterChunkingRequest)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", d)
 }
 
@@ -296,6 +414,7 @@ type DocumentIndexChunkingRequestVisitor interface {
 	VisitReductoChunkingRequest(*ReductoChunkingRequest) error
 	VisitSentenceChunkingRequest(*SentenceChunkingRequest) error
 	VisitTokenOverlappingWindowChunkingRequest(*TokenOverlappingWindowChunkingRequest) error
+	VisitDelimiterChunkingRequest(*DelimiterChunkingRequest) error
 }
 
 func (d *DocumentIndexChunkingRequest) Accept(visitor DocumentIndexChunkingRequestVisitor) error {
@@ -307,6 +426,9 @@ func (d *DocumentIndexChunkingRequest) Accept(visitor DocumentIndexChunkingReque
 	}
 	if d.TokenOverlappingWindowChunkingRequest != nil {
 		return visitor.VisitTokenOverlappingWindowChunkingRequest(d.TokenOverlappingWindowChunkingRequest)
+	}
+	if d.DelimiterChunkingRequest != nil {
+		return visitor.VisitDelimiterChunkingRequest(d.DelimiterChunkingRequest)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", d)
 }
