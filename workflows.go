@@ -13,7 +13,11 @@ type WorkflowsPullRequest struct {
 	ExcludeDisplay *bool `json:"-" url:"exclude_display,omitempty"`
 	IncludeJson    *bool `json:"-" url:"include_json,omitempty"`
 	IncludeSandbox *bool `json:"-" url:"include_sandbox,omitempty"`
-	Strict         *bool `json:"-" url:"strict,omitempty"`
+	// Release tag to use when pulling from deployment (implies deployment-only lookup)
+	ReleaseTag *string `json:"-" url:"release_tag,omitempty"`
+	Strict     *bool   `json:"-" url:"strict,omitempty"`
+	// Semantic version range to validate against the Workflow SDK version (e.g., '>=1.0.0,<1.2.3')
+	Version *string `json:"-" url:"version,omitempty"`
 }
 
 type WorkflowPushRequest struct {
@@ -26,10 +30,11 @@ type WorkflowPushRequest struct {
 }
 
 type WorkflowPushDeploymentConfigRequest struct {
-	Label       *string  `json:"label,omitempty" url:"label,omitempty"`
-	Name        *string  `json:"name,omitempty" url:"name,omitempty"`
-	Description *string  `json:"description,omitempty" url:"description,omitempty"`
-	ReleaseTags []string `json:"release_tags,omitempty" url:"release_tags,omitempty"`
+	Label              *string  `json:"label,omitempty" url:"label,omitempty"`
+	Name               *string  `json:"name,omitempty" url:"name,omitempty"`
+	Description        *string  `json:"description,omitempty" url:"description,omitempty"`
+	ReleaseTags        []string `json:"release_tags,omitempty" url:"release_tags,omitempty"`
+	ReleaseDescription *string  `json:"release_description,omitempty" url:"release_description,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
