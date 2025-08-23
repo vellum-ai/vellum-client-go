@@ -21,6 +21,74 @@ type DeploySandboxPromptRequest struct {
 	ReleaseDescription *string `json:"release_description,omitempty" url:"-"`
 }
 
+type NamedScenarioInputAudioVariableValueRequest struct {
+	Value *VellumAudioRequest `json:"value" url:"value"`
+	Name  string              `json:"name" url:"name"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedScenarioInputAudioVariableValueRequest) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
+}
+
+func (n *NamedScenarioInputAudioVariableValueRequest) Type() string {
+	return n.type_
+}
+
+func (n *NamedScenarioInputAudioVariableValueRequest) UnmarshalJSON(data []byte) error {
+	type embed NamedScenarioInputAudioVariableValueRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*n = NamedScenarioInputAudioVariableValueRequest(unmarshaler.embed)
+	if unmarshaler.Type != "AUDIO" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "AUDIO", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NamedScenarioInputAudioVariableValueRequest) MarshalJSON() ([]byte, error) {
+	type embed NamedScenarioInputAudioVariableValueRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+		Type:  "AUDIO",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (n *NamedScenarioInputAudioVariableValueRequest) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
 // Named Prompt Sandbox Scenario input value that is of type CHAT_HISTORY
 type NamedScenarioInputChatHistoryVariableValueRequest struct {
 	Value []*ChatMessageRequest `json:"value,omitempty" url:"value,omitempty"`
@@ -79,6 +147,142 @@ func (n *NamedScenarioInputChatHistoryVariableValueRequest) MarshalJSON() ([]byt
 }
 
 func (n *NamedScenarioInputChatHistoryVariableValueRequest) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
+type NamedScenarioInputDocumentVariableValueRequest struct {
+	Value *VellumDocumentRequest `json:"value" url:"value"`
+	Name  string                 `json:"name" url:"name"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedScenarioInputDocumentVariableValueRequest) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
+}
+
+func (n *NamedScenarioInputDocumentVariableValueRequest) Type() string {
+	return n.type_
+}
+
+func (n *NamedScenarioInputDocumentVariableValueRequest) UnmarshalJSON(data []byte) error {
+	type embed NamedScenarioInputDocumentVariableValueRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*n = NamedScenarioInputDocumentVariableValueRequest(unmarshaler.embed)
+	if unmarshaler.Type != "DOCUMENT" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "DOCUMENT", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NamedScenarioInputDocumentVariableValueRequest) MarshalJSON() ([]byte, error) {
+	type embed NamedScenarioInputDocumentVariableValueRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+		Type:  "DOCUMENT",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (n *NamedScenarioInputDocumentVariableValueRequest) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
+type NamedScenarioInputImageVariableValueRequest struct {
+	Value *VellumImageRequest `json:"value" url:"value"`
+	Name  string              `json:"name" url:"name"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedScenarioInputImageVariableValueRequest) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
+}
+
+func (n *NamedScenarioInputImageVariableValueRequest) Type() string {
+	return n.type_
+}
+
+func (n *NamedScenarioInputImageVariableValueRequest) UnmarshalJSON(data []byte) error {
+	type embed NamedScenarioInputImageVariableValueRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*n = NamedScenarioInputImageVariableValueRequest(unmarshaler.embed)
+	if unmarshaler.Type != "IMAGE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "IMAGE", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NamedScenarioInputImageVariableValueRequest) MarshalJSON() ([]byte, error) {
+	type embed NamedScenarioInputImageVariableValueRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+		Type:  "IMAGE",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (n *NamedScenarioInputImageVariableValueRequest) String() string {
 	if len(n._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
 			return value
@@ -163,6 +367,10 @@ type NamedScenarioInputRequest struct {
 	NamedScenarioInputStringVariableValueRequest      *NamedScenarioInputStringVariableValueRequest
 	NamedScenarioInputJsonVariableValueRequest        *NamedScenarioInputJsonVariableValueRequest
 	NamedScenarioInputChatHistoryVariableValueRequest *NamedScenarioInputChatHistoryVariableValueRequest
+	NamedScenarioInputAudioVariableValueRequest       *NamedScenarioInputAudioVariableValueRequest
+	NamedScenarioInputVideoVariableValueRequest       *NamedScenarioInputVideoVariableValueRequest
+	NamedScenarioInputImageVariableValueRequest       *NamedScenarioInputImageVariableValueRequest
+	NamedScenarioInputDocumentVariableValueRequest    *NamedScenarioInputDocumentVariableValueRequest
 }
 
 func (n *NamedScenarioInputRequest) UnmarshalJSON(data []byte) error {
@@ -181,6 +389,26 @@ func (n *NamedScenarioInputRequest) UnmarshalJSON(data []byte) error {
 		n.NamedScenarioInputChatHistoryVariableValueRequest = valueNamedScenarioInputChatHistoryVariableValueRequest
 		return nil
 	}
+	valueNamedScenarioInputAudioVariableValueRequest := new(NamedScenarioInputAudioVariableValueRequest)
+	if err := json.Unmarshal(data, &valueNamedScenarioInputAudioVariableValueRequest); err == nil {
+		n.NamedScenarioInputAudioVariableValueRequest = valueNamedScenarioInputAudioVariableValueRequest
+		return nil
+	}
+	valueNamedScenarioInputVideoVariableValueRequest := new(NamedScenarioInputVideoVariableValueRequest)
+	if err := json.Unmarshal(data, &valueNamedScenarioInputVideoVariableValueRequest); err == nil {
+		n.NamedScenarioInputVideoVariableValueRequest = valueNamedScenarioInputVideoVariableValueRequest
+		return nil
+	}
+	valueNamedScenarioInputImageVariableValueRequest := new(NamedScenarioInputImageVariableValueRequest)
+	if err := json.Unmarshal(data, &valueNamedScenarioInputImageVariableValueRequest); err == nil {
+		n.NamedScenarioInputImageVariableValueRequest = valueNamedScenarioInputImageVariableValueRequest
+		return nil
+	}
+	valueNamedScenarioInputDocumentVariableValueRequest := new(NamedScenarioInputDocumentVariableValueRequest)
+	if err := json.Unmarshal(data, &valueNamedScenarioInputDocumentVariableValueRequest); err == nil {
+		n.NamedScenarioInputDocumentVariableValueRequest = valueNamedScenarioInputDocumentVariableValueRequest
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, n)
 }
 
@@ -194,6 +422,18 @@ func (n NamedScenarioInputRequest) MarshalJSON() ([]byte, error) {
 	if n.NamedScenarioInputChatHistoryVariableValueRequest != nil {
 		return json.Marshal(n.NamedScenarioInputChatHistoryVariableValueRequest)
 	}
+	if n.NamedScenarioInputAudioVariableValueRequest != nil {
+		return json.Marshal(n.NamedScenarioInputAudioVariableValueRequest)
+	}
+	if n.NamedScenarioInputVideoVariableValueRequest != nil {
+		return json.Marshal(n.NamedScenarioInputVideoVariableValueRequest)
+	}
+	if n.NamedScenarioInputImageVariableValueRequest != nil {
+		return json.Marshal(n.NamedScenarioInputImageVariableValueRequest)
+	}
+	if n.NamedScenarioInputDocumentVariableValueRequest != nil {
+		return json.Marshal(n.NamedScenarioInputDocumentVariableValueRequest)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", n)
 }
 
@@ -201,6 +441,10 @@ type NamedScenarioInputRequestVisitor interface {
 	VisitNamedScenarioInputStringVariableValueRequest(*NamedScenarioInputStringVariableValueRequest) error
 	VisitNamedScenarioInputJsonVariableValueRequest(*NamedScenarioInputJsonVariableValueRequest) error
 	VisitNamedScenarioInputChatHistoryVariableValueRequest(*NamedScenarioInputChatHistoryVariableValueRequest) error
+	VisitNamedScenarioInputAudioVariableValueRequest(*NamedScenarioInputAudioVariableValueRequest) error
+	VisitNamedScenarioInputVideoVariableValueRequest(*NamedScenarioInputVideoVariableValueRequest) error
+	VisitNamedScenarioInputImageVariableValueRequest(*NamedScenarioInputImageVariableValueRequest) error
+	VisitNamedScenarioInputDocumentVariableValueRequest(*NamedScenarioInputDocumentVariableValueRequest) error
 }
 
 func (n *NamedScenarioInputRequest) Accept(visitor NamedScenarioInputRequestVisitor) error {
@@ -212,6 +456,18 @@ func (n *NamedScenarioInputRequest) Accept(visitor NamedScenarioInputRequestVisi
 	}
 	if n.NamedScenarioInputChatHistoryVariableValueRequest != nil {
 		return visitor.VisitNamedScenarioInputChatHistoryVariableValueRequest(n.NamedScenarioInputChatHistoryVariableValueRequest)
+	}
+	if n.NamedScenarioInputAudioVariableValueRequest != nil {
+		return visitor.VisitNamedScenarioInputAudioVariableValueRequest(n.NamedScenarioInputAudioVariableValueRequest)
+	}
+	if n.NamedScenarioInputVideoVariableValueRequest != nil {
+		return visitor.VisitNamedScenarioInputVideoVariableValueRequest(n.NamedScenarioInputVideoVariableValueRequest)
+	}
+	if n.NamedScenarioInputImageVariableValueRequest != nil {
+		return visitor.VisitNamedScenarioInputImageVariableValueRequest(n.NamedScenarioInputImageVariableValueRequest)
+	}
+	if n.NamedScenarioInputDocumentVariableValueRequest != nil {
+		return visitor.VisitNamedScenarioInputDocumentVariableValueRequest(n.NamedScenarioInputDocumentVariableValueRequest)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", n)
 }
@@ -285,6 +541,74 @@ func (n *NamedScenarioInputStringVariableValueRequest) String() string {
 	return fmt.Sprintf("%#v", n)
 }
 
+type NamedScenarioInputVideoVariableValueRequest struct {
+	Value *VellumVideoRequest `json:"value" url:"value"`
+	Name  string              `json:"name" url:"name"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NamedScenarioInputVideoVariableValueRequest) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
+}
+
+func (n *NamedScenarioInputVideoVariableValueRequest) Type() string {
+	return n.type_
+}
+
+func (n *NamedScenarioInputVideoVariableValueRequest) UnmarshalJSON(data []byte) error {
+	type embed NamedScenarioInputVideoVariableValueRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*n = NamedScenarioInputVideoVariableValueRequest(unmarshaler.embed)
+	if unmarshaler.Type != "VIDEO" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "VIDEO", unmarshaler.Type)
+	}
+	n.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NamedScenarioInputVideoVariableValueRequest) MarshalJSON() ([]byte, error) {
+	type embed NamedScenarioInputVideoVariableValueRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*n),
+		Type:  "VIDEO",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (n *NamedScenarioInputVideoVariableValueRequest) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
 // Sandbox Scenario
 type SandboxScenario struct {
 	Label *string `json:"label,omitempty" url:"label,omitempty"`
@@ -335,6 +659,10 @@ type ScenarioInput struct {
 	ScenarioInputStringVariableValue      *ScenarioInputStringVariableValue
 	ScenarioInputJsonVariableValue        *ScenarioInputJsonVariableValue
 	ScenarioInputChatHistoryVariableValue *ScenarioInputChatHistoryVariableValue
+	ScenarioInputAudioVariableValue       *ScenarioInputAudioVariableValue
+	ScenarioInputVideoVariableValue       *ScenarioInputVideoVariableValue
+	ScenarioInputImageVariableValue       *ScenarioInputImageVariableValue
+	ScenarioInputDocumentVariableValue    *ScenarioInputDocumentVariableValue
 }
 
 func (s *ScenarioInput) UnmarshalJSON(data []byte) error {
@@ -353,6 +681,26 @@ func (s *ScenarioInput) UnmarshalJSON(data []byte) error {
 		s.ScenarioInputChatHistoryVariableValue = valueScenarioInputChatHistoryVariableValue
 		return nil
 	}
+	valueScenarioInputAudioVariableValue := new(ScenarioInputAudioVariableValue)
+	if err := json.Unmarshal(data, &valueScenarioInputAudioVariableValue); err == nil {
+		s.ScenarioInputAudioVariableValue = valueScenarioInputAudioVariableValue
+		return nil
+	}
+	valueScenarioInputVideoVariableValue := new(ScenarioInputVideoVariableValue)
+	if err := json.Unmarshal(data, &valueScenarioInputVideoVariableValue); err == nil {
+		s.ScenarioInputVideoVariableValue = valueScenarioInputVideoVariableValue
+		return nil
+	}
+	valueScenarioInputImageVariableValue := new(ScenarioInputImageVariableValue)
+	if err := json.Unmarshal(data, &valueScenarioInputImageVariableValue); err == nil {
+		s.ScenarioInputImageVariableValue = valueScenarioInputImageVariableValue
+		return nil
+	}
+	valueScenarioInputDocumentVariableValue := new(ScenarioInputDocumentVariableValue)
+	if err := json.Unmarshal(data, &valueScenarioInputDocumentVariableValue); err == nil {
+		s.ScenarioInputDocumentVariableValue = valueScenarioInputDocumentVariableValue
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, s)
 }
 
@@ -366,6 +714,18 @@ func (s ScenarioInput) MarshalJSON() ([]byte, error) {
 	if s.ScenarioInputChatHistoryVariableValue != nil {
 		return json.Marshal(s.ScenarioInputChatHistoryVariableValue)
 	}
+	if s.ScenarioInputAudioVariableValue != nil {
+		return json.Marshal(s.ScenarioInputAudioVariableValue)
+	}
+	if s.ScenarioInputVideoVariableValue != nil {
+		return json.Marshal(s.ScenarioInputVideoVariableValue)
+	}
+	if s.ScenarioInputImageVariableValue != nil {
+		return json.Marshal(s.ScenarioInputImageVariableValue)
+	}
+	if s.ScenarioInputDocumentVariableValue != nil {
+		return json.Marshal(s.ScenarioInputDocumentVariableValue)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", s)
 }
 
@@ -373,6 +733,10 @@ type ScenarioInputVisitor interface {
 	VisitScenarioInputStringVariableValue(*ScenarioInputStringVariableValue) error
 	VisitScenarioInputJsonVariableValue(*ScenarioInputJsonVariableValue) error
 	VisitScenarioInputChatHistoryVariableValue(*ScenarioInputChatHistoryVariableValue) error
+	VisitScenarioInputAudioVariableValue(*ScenarioInputAudioVariableValue) error
+	VisitScenarioInputVideoVariableValue(*ScenarioInputVideoVariableValue) error
+	VisitScenarioInputImageVariableValue(*ScenarioInputImageVariableValue) error
+	VisitScenarioInputDocumentVariableValue(*ScenarioInputDocumentVariableValue) error
 }
 
 func (s *ScenarioInput) Accept(visitor ScenarioInputVisitor) error {
@@ -385,7 +749,87 @@ func (s *ScenarioInput) Accept(visitor ScenarioInputVisitor) error {
 	if s.ScenarioInputChatHistoryVariableValue != nil {
 		return visitor.VisitScenarioInputChatHistoryVariableValue(s.ScenarioInputChatHistoryVariableValue)
 	}
+	if s.ScenarioInputAudioVariableValue != nil {
+		return visitor.VisitScenarioInputAudioVariableValue(s.ScenarioInputAudioVariableValue)
+	}
+	if s.ScenarioInputVideoVariableValue != nil {
+		return visitor.VisitScenarioInputVideoVariableValue(s.ScenarioInputVideoVariableValue)
+	}
+	if s.ScenarioInputImageVariableValue != nil {
+		return visitor.VisitScenarioInputImageVariableValue(s.ScenarioInputImageVariableValue)
+	}
+	if s.ScenarioInputDocumentVariableValue != nil {
+		return visitor.VisitScenarioInputDocumentVariableValue(s.ScenarioInputDocumentVariableValue)
+	}
 	return fmt.Errorf("type %T does not include a non-empty union type", s)
+}
+
+type ScenarioInputAudioVariableValue struct {
+	Value           *VellumAudio `json:"value" url:"value"`
+	InputVariableId string       `json:"input_variable_id" url:"input_variable_id"`
+	type_           string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *ScenarioInputAudioVariableValue) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *ScenarioInputAudioVariableValue) Type() string {
+	return s.type_
+}
+
+func (s *ScenarioInputAudioVariableValue) UnmarshalJSON(data []byte) error {
+	type embed ScenarioInputAudioVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*s),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*s = ScenarioInputAudioVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "AUDIO" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "AUDIO", unmarshaler.Type)
+	}
+	s.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s, "type")
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *ScenarioInputAudioVariableValue) MarshalJSON() ([]byte, error) {
+	type embed ScenarioInputAudioVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*s),
+		Type:  "AUDIO",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (s *ScenarioInputAudioVariableValue) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
 }
 
 // Prompt Sandbox Scenario input value that is of type CHAT_HISTORY
@@ -446,6 +890,142 @@ func (s *ScenarioInputChatHistoryVariableValue) MarshalJSON() ([]byte, error) {
 }
 
 func (s *ScenarioInputChatHistoryVariableValue) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type ScenarioInputDocumentVariableValue struct {
+	Value           *VellumDocument `json:"value" url:"value"`
+	InputVariableId string          `json:"input_variable_id" url:"input_variable_id"`
+	type_           string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *ScenarioInputDocumentVariableValue) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *ScenarioInputDocumentVariableValue) Type() string {
+	return s.type_
+}
+
+func (s *ScenarioInputDocumentVariableValue) UnmarshalJSON(data []byte) error {
+	type embed ScenarioInputDocumentVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*s),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*s = ScenarioInputDocumentVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "DOCUMENT" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "DOCUMENT", unmarshaler.Type)
+	}
+	s.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s, "type")
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *ScenarioInputDocumentVariableValue) MarshalJSON() ([]byte, error) {
+	type embed ScenarioInputDocumentVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*s),
+		Type:  "DOCUMENT",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (s *ScenarioInputDocumentVariableValue) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type ScenarioInputImageVariableValue struct {
+	Value           *VellumImage `json:"value" url:"value"`
+	InputVariableId string       `json:"input_variable_id" url:"input_variable_id"`
+	type_           string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *ScenarioInputImageVariableValue) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *ScenarioInputImageVariableValue) Type() string {
+	return s.type_
+}
+
+func (s *ScenarioInputImageVariableValue) UnmarshalJSON(data []byte) error {
+	type embed ScenarioInputImageVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*s),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*s = ScenarioInputImageVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "IMAGE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "IMAGE", unmarshaler.Type)
+	}
+	s.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s, "type")
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *ScenarioInputImageVariableValue) MarshalJSON() ([]byte, error) {
+	type embed ScenarioInputImageVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*s),
+		Type:  "IMAGE",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (s *ScenarioInputImageVariableValue) String() string {
 	if len(s._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
 			return value
@@ -584,6 +1164,74 @@ func (s *ScenarioInputStringVariableValue) MarshalJSON() ([]byte, error) {
 }
 
 func (s *ScenarioInputStringVariableValue) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
+
+type ScenarioInputVideoVariableValue struct {
+	Value           *VellumVideo `json:"value" url:"value"`
+	InputVariableId string       `json:"input_variable_id" url:"input_variable_id"`
+	type_           string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *ScenarioInputVideoVariableValue) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *ScenarioInputVideoVariableValue) Type() string {
+	return s.type_
+}
+
+func (s *ScenarioInputVideoVariableValue) UnmarshalJSON(data []byte) error {
+	type embed ScenarioInputVideoVariableValue
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*s),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*s = ScenarioInputVideoVariableValue(unmarshaler.embed)
+	if unmarshaler.Type != "VIDEO" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "VIDEO", unmarshaler.Type)
+	}
+	s.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s, "type")
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *ScenarioInputVideoVariableValue) MarshalJSON() ([]byte, error) {
+	type embed ScenarioInputVideoVariableValue
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*s),
+		Type:  "VIDEO",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (s *ScenarioInputVideoVariableValue) String() string {
 	if len(s._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
 			return value
