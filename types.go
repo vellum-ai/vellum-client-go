@@ -3752,6 +3752,7 @@ func (d *DelimiterChunking) String() string {
 	return fmt.Sprintf("%#v", d)
 }
 
+// A Prompt Deployment's full details.
 type DeploymentRead struct {
 	Id      string    `json:"id" url:"id"`
 	Created time.Time `json:"created" url:"created"`
@@ -3764,11 +3765,7 @@ type DeploymentRead struct {
 	// * `ACTIVE` - Active
 	// * `ARCHIVED` - Archived
 	Status *EntityStatus `json:"status,omitempty" url:"status,omitempty"`
-	// The environment this deployment is used in
-	//
-	// * `DEVELOPMENT` - Development
-	// * `STAGING` - Staging
-	// * `PRODUCTION` - Production
+	// Deprecated. The value returned will always be 'PRODUCTION'.
 	Environment    *EnvironmentEnum  `json:"environment,omitempty" url:"environment,omitempty"`
 	LastDeployedOn time.Time         `json:"last_deployed_on" url:"last_deployed_on"`
 	InputVariables []*VellumVariable `json:"input_variables" url:"input_variables"`
@@ -4518,9 +4515,6 @@ func (e EntityStatus) Ptr() *EntityStatus {
 	return &e
 }
 
-// * `DEVELOPMENT` - Development
-// * `STAGING` - Staging
-// * `PRODUCTION` - Production
 type EnvironmentEnum string
 
 const (
@@ -23040,6 +23034,7 @@ func (w *WorkflowDeploymentParentContext) String() string {
 	return fmt.Sprintf("%#v", w)
 }
 
+// A Workflow Deployment's full details.
 type WorkflowDeploymentRead struct {
 	Id string `json:"id" url:"id"`
 	// A name that uniquely identifies this workflow deployment within its workspace
@@ -23051,11 +23046,7 @@ type WorkflowDeploymentRead struct {
 	// * `ACTIVE` - Active
 	// * `ARCHIVED` - Archived
 	Status *EntityStatus `json:"status,omitempty" url:"status,omitempty"`
-	// The environment this workflow deployment is used in
-	//
-	// * `DEVELOPMENT` - Development
-	// * `STAGING` - Staging
-	// * `PRODUCTION` - Production
+	// Deprecated. The value returned will always be 'PRODUCTION'.
 	Environment    *EnvironmentEnum `json:"environment,omitempty" url:"environment,omitempty"`
 	Created        time.Time        `json:"created" url:"created"`
 	LastDeployedOn time.Time        `json:"last_deployed_on" url:"last_deployed_on"`
@@ -25987,6 +25978,76 @@ func (w *WorkflowParentContext) String() string {
 	return fmt.Sprintf("%#v", w)
 }
 
+// The input for an audio variable in a Workflow.
+type WorkflowRequestAudioInputRequest struct {
+	// The variable's name, as defined in the Workflow.
+	Name  string              `json:"name" url:"name"`
+	Value *VellumAudioRequest `json:"value" url:"value"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowRequestAudioInputRequest) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkflowRequestAudioInputRequest) Type() string {
+	return w.type_
+}
+
+func (w *WorkflowRequestAudioInputRequest) UnmarshalJSON(data []byte) error {
+	type embed WorkflowRequestAudioInputRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*w),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*w = WorkflowRequestAudioInputRequest(unmarshaler.embed)
+	if unmarshaler.Type != "AUDIO" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "AUDIO", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowRequestAudioInputRequest) MarshalJSON() ([]byte, error) {
+	type embed WorkflowRequestAudioInputRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*w),
+		Type:  "AUDIO",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (w *WorkflowRequestAudioInputRequest) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
+}
+
 // The input for a chat history variable in a Workflow.
 type WorkflowRequestChatHistoryInputRequest struct {
 	// The variable's name, as defined in the Workflow.
@@ -26057,11 +26118,155 @@ func (w *WorkflowRequestChatHistoryInputRequest) String() string {
 	return fmt.Sprintf("%#v", w)
 }
 
+// The input for a document variable in a Workflow.
+type WorkflowRequestDocumentInputRequest struct {
+	// The variable's name, as defined in the Workflow.
+	Name  string                 `json:"name" url:"name"`
+	Value *VellumDocumentRequest `json:"value" url:"value"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowRequestDocumentInputRequest) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkflowRequestDocumentInputRequest) Type() string {
+	return w.type_
+}
+
+func (w *WorkflowRequestDocumentInputRequest) UnmarshalJSON(data []byte) error {
+	type embed WorkflowRequestDocumentInputRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*w),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*w = WorkflowRequestDocumentInputRequest(unmarshaler.embed)
+	if unmarshaler.Type != "DOCUMENT" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "DOCUMENT", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowRequestDocumentInputRequest) MarshalJSON() ([]byte, error) {
+	type embed WorkflowRequestDocumentInputRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*w),
+		Type:  "DOCUMENT",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (w *WorkflowRequestDocumentInputRequest) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
+}
+
+// The input for an image variable in a Workflow.
+type WorkflowRequestImageInputRequest struct {
+	// The variable's name, as defined in the Workflow.
+	Name  string              `json:"name" url:"name"`
+	Value *VellumImageRequest `json:"value" url:"value"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowRequestImageInputRequest) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkflowRequestImageInputRequest) Type() string {
+	return w.type_
+}
+
+func (w *WorkflowRequestImageInputRequest) UnmarshalJSON(data []byte) error {
+	type embed WorkflowRequestImageInputRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*w),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*w = WorkflowRequestImageInputRequest(unmarshaler.embed)
+	if unmarshaler.Type != "IMAGE" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "IMAGE", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowRequestImageInputRequest) MarshalJSON() ([]byte, error) {
+	type embed WorkflowRequestImageInputRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*w),
+		Type:  "IMAGE",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (w *WorkflowRequestImageInputRequest) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
+}
+
 type WorkflowRequestInputRequest struct {
 	WorkflowRequestStringInputRequest      *WorkflowRequestStringInputRequest
 	WorkflowRequestJsonInputRequest        *WorkflowRequestJsonInputRequest
 	WorkflowRequestChatHistoryInputRequest *WorkflowRequestChatHistoryInputRequest
 	WorkflowRequestNumberInputRequest      *WorkflowRequestNumberInputRequest
+	WorkflowRequestAudioInputRequest       *WorkflowRequestAudioInputRequest
+	WorkflowRequestVideoInputRequest       *WorkflowRequestVideoInputRequest
+	WorkflowRequestImageInputRequest       *WorkflowRequestImageInputRequest
+	WorkflowRequestDocumentInputRequest    *WorkflowRequestDocumentInputRequest
 }
 
 func (w *WorkflowRequestInputRequest) UnmarshalJSON(data []byte) error {
@@ -26085,6 +26290,26 @@ func (w *WorkflowRequestInputRequest) UnmarshalJSON(data []byte) error {
 		w.WorkflowRequestNumberInputRequest = valueWorkflowRequestNumberInputRequest
 		return nil
 	}
+	valueWorkflowRequestAudioInputRequest := new(WorkflowRequestAudioInputRequest)
+	if err := json.Unmarshal(data, &valueWorkflowRequestAudioInputRequest); err == nil {
+		w.WorkflowRequestAudioInputRequest = valueWorkflowRequestAudioInputRequest
+		return nil
+	}
+	valueWorkflowRequestVideoInputRequest := new(WorkflowRequestVideoInputRequest)
+	if err := json.Unmarshal(data, &valueWorkflowRequestVideoInputRequest); err == nil {
+		w.WorkflowRequestVideoInputRequest = valueWorkflowRequestVideoInputRequest
+		return nil
+	}
+	valueWorkflowRequestImageInputRequest := new(WorkflowRequestImageInputRequest)
+	if err := json.Unmarshal(data, &valueWorkflowRequestImageInputRequest); err == nil {
+		w.WorkflowRequestImageInputRequest = valueWorkflowRequestImageInputRequest
+		return nil
+	}
+	valueWorkflowRequestDocumentInputRequest := new(WorkflowRequestDocumentInputRequest)
+	if err := json.Unmarshal(data, &valueWorkflowRequestDocumentInputRequest); err == nil {
+		w.WorkflowRequestDocumentInputRequest = valueWorkflowRequestDocumentInputRequest
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, w)
 }
 
@@ -26101,6 +26326,18 @@ func (w WorkflowRequestInputRequest) MarshalJSON() ([]byte, error) {
 	if w.WorkflowRequestNumberInputRequest != nil {
 		return json.Marshal(w.WorkflowRequestNumberInputRequest)
 	}
+	if w.WorkflowRequestAudioInputRequest != nil {
+		return json.Marshal(w.WorkflowRequestAudioInputRequest)
+	}
+	if w.WorkflowRequestVideoInputRequest != nil {
+		return json.Marshal(w.WorkflowRequestVideoInputRequest)
+	}
+	if w.WorkflowRequestImageInputRequest != nil {
+		return json.Marshal(w.WorkflowRequestImageInputRequest)
+	}
+	if w.WorkflowRequestDocumentInputRequest != nil {
+		return json.Marshal(w.WorkflowRequestDocumentInputRequest)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", w)
 }
 
@@ -26109,6 +26346,10 @@ type WorkflowRequestInputRequestVisitor interface {
 	VisitWorkflowRequestJsonInputRequest(*WorkflowRequestJsonInputRequest) error
 	VisitWorkflowRequestChatHistoryInputRequest(*WorkflowRequestChatHistoryInputRequest) error
 	VisitWorkflowRequestNumberInputRequest(*WorkflowRequestNumberInputRequest) error
+	VisitWorkflowRequestAudioInputRequest(*WorkflowRequestAudioInputRequest) error
+	VisitWorkflowRequestVideoInputRequest(*WorkflowRequestVideoInputRequest) error
+	VisitWorkflowRequestImageInputRequest(*WorkflowRequestImageInputRequest) error
+	VisitWorkflowRequestDocumentInputRequest(*WorkflowRequestDocumentInputRequest) error
 }
 
 func (w *WorkflowRequestInputRequest) Accept(visitor WorkflowRequestInputRequestVisitor) error {
@@ -26123,6 +26364,18 @@ func (w *WorkflowRequestInputRequest) Accept(visitor WorkflowRequestInputRequest
 	}
 	if w.WorkflowRequestNumberInputRequest != nil {
 		return visitor.VisitWorkflowRequestNumberInputRequest(w.WorkflowRequestNumberInputRequest)
+	}
+	if w.WorkflowRequestAudioInputRequest != nil {
+		return visitor.VisitWorkflowRequestAudioInputRequest(w.WorkflowRequestAudioInputRequest)
+	}
+	if w.WorkflowRequestVideoInputRequest != nil {
+		return visitor.VisitWorkflowRequestVideoInputRequest(w.WorkflowRequestVideoInputRequest)
+	}
+	if w.WorkflowRequestImageInputRequest != nil {
+		return visitor.VisitWorkflowRequestImageInputRequest(w.WorkflowRequestImageInputRequest)
+	}
+	if w.WorkflowRequestDocumentInputRequest != nil {
+		return visitor.VisitWorkflowRequestDocumentInputRequest(w.WorkflowRequestDocumentInputRequest)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", w)
 }
@@ -26326,6 +26579,76 @@ func (w *WorkflowRequestStringInputRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (w *WorkflowRequestStringInputRequest) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
+}
+
+// The input for a video variable in a Workflow.
+type WorkflowRequestVideoInputRequest struct {
+	// The variable's name, as defined in the Workflow.
+	Name  string              `json:"name" url:"name"`
+	Value *VellumVideoRequest `json:"value" url:"value"`
+	type_ string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowRequestVideoInputRequest) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkflowRequestVideoInputRequest) Type() string {
+	return w.type_
+}
+
+func (w *WorkflowRequestVideoInputRequest) UnmarshalJSON(data []byte) error {
+	type embed WorkflowRequestVideoInputRequest
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*w),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*w = WorkflowRequestVideoInputRequest(unmarshaler.embed)
+	if unmarshaler.Type != "VIDEO" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "VIDEO", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowRequestVideoInputRequest) MarshalJSON() ([]byte, error) {
+	type embed WorkflowRequestVideoInputRequest
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*w),
+		Type:  "VIDEO",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (w *WorkflowRequestVideoInputRequest) String() string {
 	if len(w._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
 			return value

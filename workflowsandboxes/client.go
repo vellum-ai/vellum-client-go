@@ -8,6 +8,7 @@ import (
 	core "github.com/vellum-ai/vellum-client-go/core"
 	option "github.com/vellum-ai/vellum-client-go/option"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -18,8 +19,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.ApiVersion == "" {
+		options.ApiVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -37,8 +38,6 @@ func (c *Client) DeployWorkflow(
 	ctx context.Context,
 	// A UUID string identifying this workflow sandbox.
 	id string,
-	// An ID identifying the Workflow you'd like to deploy.
-	workflowId string,
 	request *vellumclientgo.DeploySandboxWorkflowRequest,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.WorkflowDeploymentRead, error) {
@@ -51,11 +50,7 @@ func (c *Client) DeployWorkflow(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(
-		baseURL+"/v1/workflow-sandboxes/%v/workflows/%v/deploy",
-		id,
-		workflowId,
-	)
+	endpointURL := core.EncodeURL(baseURL+"/v1/workflow-sandboxes/%v/deploy", id)
 
 	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
