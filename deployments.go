@@ -707,6 +707,7 @@ func (p *PromptVersionBuildConfigSandbox) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
+// A subset of a Prompt Deployment's full details.
 type SlimDeploymentRead struct {
 	Id      string    `json:"id" url:"id"`
 	Created time.Time `json:"created" url:"created"`
@@ -719,11 +720,7 @@ type SlimDeploymentRead struct {
 	// * `ACTIVE` - Active
 	// * `ARCHIVED` - Archived
 	Status *EntityStatus `json:"status,omitempty" url:"status,omitempty"`
-	// The environment this deployment is used in
-	//
-	// * `DEVELOPMENT` - Development
-	// * `STAGING` - Staging
-	// * `PRODUCTION` - Production
+	// Deprecated. The value returned will always be 'PRODUCTION'.
 	Environment    *EnvironmentEnum  `json:"environment,omitempty" url:"environment,omitempty"`
 	LastDeployedOn time.Time         `json:"last_deployed_on" url:"last_deployed_on"`
 	InputVariables []*VellumVariable `json:"input_variables" url:"input_variables"`
