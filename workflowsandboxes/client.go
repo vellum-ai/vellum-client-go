@@ -37,8 +37,6 @@ func (c *Client) DeployWorkflow(
 	ctx context.Context,
 	// A UUID string identifying this workflow sandbox.
 	id string,
-	// An ID identifying the Workflow you'd like to deploy.
-	workflowId string,
 	request *vellumclientgo.DeploySandboxWorkflowRequest,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.WorkflowDeploymentRead, error) {
@@ -51,11 +49,7 @@ func (c *Client) DeployWorkflow(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(
-		baseURL+"/v1/workflow-sandboxes/%v/workflows/%v/deploy",
-		id,
-		workflowId,
-	)
+	endpointURL := core.EncodeURL(baseURL+"/v1/workflow-sandboxes/%v/deploy", id)
 
 	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
