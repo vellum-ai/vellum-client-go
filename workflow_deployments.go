@@ -126,6 +126,7 @@ func (p *PaginatedWorkflowReleaseTagReadList) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
+// A subset of a Workflow Deployment's full details.
 type SlimWorkflowDeployment struct {
 	Id string `json:"id" url:"id"`
 	// A name that uniquely identifies this workflow deployment within its workspace
@@ -137,11 +138,7 @@ type SlimWorkflowDeployment struct {
 	// * `ACTIVE` - Active
 	// * `ARCHIVED` - Archived
 	Status *EntityStatus `json:"status,omitempty" url:"status,omitempty"`
-	// The environment this workflow deployment is used in
-	//
-	// * `DEVELOPMENT` - Development
-	// * `STAGING` - Staging
-	// * `PRODUCTION` - Production
+	// Deprecated. The value returned will always be 'PRODUCTION'.
 	Environment    *EnvironmentEnum `json:"environment,omitempty" url:"environment,omitempty"`
 	Created        time.Time        `json:"created" url:"created"`
 	LastDeployedOn time.Time        `json:"last_deployed_on" url:"last_deployed_on"`
