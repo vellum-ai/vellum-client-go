@@ -9,25 +9,25 @@ import (
 )
 
 type AdHocExecutePrompt struct {
-	MlModel        string                `json:"ml_model" url:"-"`
-	InputValues    []*PromptRequestInput `json:"input_values,omitempty" url:"-"`
-	InputVariables []*VellumVariable     `json:"input_variables,omitempty" url:"-"`
-	Parameters     *PromptParameters     `json:"parameters,omitempty" url:"-"`
-	Settings       *PromptSettings       `json:"settings,omitempty" url:"-"`
-	Blocks         []*PromptBlock        `json:"blocks,omitempty" url:"-"`
-	Functions      []*FunctionDefinition `json:"functions,omitempty" url:"-"`
-	ExpandMeta     *AdHocExpandMeta      `json:"expand_meta,omitempty" url:"-"`
+	MlModel        string                          `json:"ml_model" url:"-"`
+	InputValues    []*DeprecatedPromptRequestInput `json:"input_values,omitempty" url:"-"`
+	InputVariables []*VellumVariable               `json:"input_variables,omitempty" url:"-"`
+	Parameters     *PromptParameters               `json:"parameters,omitempty" url:"-"`
+	Settings       *PromptSettings                 `json:"settings,omitempty" url:"-"`
+	Blocks         []*PromptBlock                  `json:"blocks,omitempty" url:"-"`
+	Functions      []*FunctionDefinition           `json:"functions,omitempty" url:"-"`
+	ExpandMeta     *AdHocExpandMeta                `json:"expand_meta,omitempty" url:"-"`
 }
 
 type AdHocExecutePromptStream struct {
-	MlModel        string                `json:"ml_model" url:"-"`
-	InputValues    []*PromptRequestInput `json:"input_values,omitempty" url:"-"`
-	InputVariables []*VellumVariable     `json:"input_variables,omitempty" url:"-"`
-	Parameters     *PromptParameters     `json:"parameters,omitempty" url:"-"`
-	Settings       *PromptSettings       `json:"settings,omitempty" url:"-"`
-	Blocks         []*PromptBlock        `json:"blocks,omitempty" url:"-"`
-	Functions      []*FunctionDefinition `json:"functions,omitempty" url:"-"`
-	ExpandMeta     *AdHocExpandMeta      `json:"expand_meta,omitempty" url:"-"`
+	MlModel        string                          `json:"ml_model" url:"-"`
+	InputValues    []*DeprecatedPromptRequestInput `json:"input_values,omitempty" url:"-"`
+	InputVariables []*VellumVariable               `json:"input_variables,omitempty" url:"-"`
+	Parameters     *PromptParameters               `json:"parameters,omitempty" url:"-"`
+	Settings       *PromptSettings                 `json:"settings,omitempty" url:"-"`
+	Blocks         []*PromptBlock                  `json:"blocks,omitempty" url:"-"`
+	Functions      []*FunctionDefinition           `json:"functions,omitempty" url:"-"`
+	ExpandMeta     *AdHocExpandMeta                `json:"expand_meta,omitempty" url:"-"`
 }
 
 type AdHocExecutePromptEvent struct {
@@ -319,6 +319,50 @@ func (a *AdHocStreamingPromptExecutionMeta) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", a)
+}
+
+type DeprecatedPromptRequestInput struct {
+	WorkflowInput      *WorkflowInput
+	PromptRequestInput *PromptRequestInput
+}
+
+func (d *DeprecatedPromptRequestInput) UnmarshalJSON(data []byte) error {
+	valueWorkflowInput := new(WorkflowInput)
+	if err := json.Unmarshal(data, &valueWorkflowInput); err == nil {
+		d.WorkflowInput = valueWorkflowInput
+		return nil
+	}
+	valuePromptRequestInput := new(PromptRequestInput)
+	if err := json.Unmarshal(data, &valuePromptRequestInput); err == nil {
+		d.PromptRequestInput = valuePromptRequestInput
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, d)
+}
+
+func (d DeprecatedPromptRequestInput) MarshalJSON() ([]byte, error) {
+	if d.WorkflowInput != nil {
+		return json.Marshal(d.WorkflowInput)
+	}
+	if d.PromptRequestInput != nil {
+		return json.Marshal(d.PromptRequestInput)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", d)
+}
+
+type DeprecatedPromptRequestInputVisitor interface {
+	VisitWorkflowInput(*WorkflowInput) error
+	VisitPromptRequestInput(*PromptRequestInput) error
+}
+
+func (d *DeprecatedPromptRequestInput) Accept(visitor DeprecatedPromptRequestInputVisitor) error {
+	if d.WorkflowInput != nil {
+		return visitor.VisitWorkflowInput(d.WorkflowInput)
+	}
+	if d.PromptRequestInput != nil {
+		return visitor.VisitPromptRequestInput(d.PromptRequestInput)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", d)
 }
 
 // The final data event returned indicating that the stream has ended and all final resolved values from the model can be found.
@@ -1193,4 +1237,178 @@ func (s *StreamingAdHocExecutePromptEvent) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", s)
+}
+
+type WorkflowInput struct {
+	StringInput        *StringInput
+	JsonInput          *JsonInput
+	ChatHistoryInput   *ChatHistoryInput
+	NumberInput        *NumberInput
+	SearchResultsInput *SearchResultsInput
+	ErrorInput         *ErrorInput
+	ArrayInput         *ArrayInput
+	FunctionCallInput  *FunctionCallInput
+	AudioInput         *AudioInput
+	VideoInput         *VideoInput
+	ImageInput         *ImageInput
+	DocumentInput      *DocumentInput
+}
+
+func (w *WorkflowInput) UnmarshalJSON(data []byte) error {
+	valueStringInput := new(StringInput)
+	if err := json.Unmarshal(data, &valueStringInput); err == nil {
+		w.StringInput = valueStringInput
+		return nil
+	}
+	valueJsonInput := new(JsonInput)
+	if err := json.Unmarshal(data, &valueJsonInput); err == nil {
+		w.JsonInput = valueJsonInput
+		return nil
+	}
+	valueChatHistoryInput := new(ChatHistoryInput)
+	if err := json.Unmarshal(data, &valueChatHistoryInput); err == nil {
+		w.ChatHistoryInput = valueChatHistoryInput
+		return nil
+	}
+	valueNumberInput := new(NumberInput)
+	if err := json.Unmarshal(data, &valueNumberInput); err == nil {
+		w.NumberInput = valueNumberInput
+		return nil
+	}
+	valueSearchResultsInput := new(SearchResultsInput)
+	if err := json.Unmarshal(data, &valueSearchResultsInput); err == nil {
+		w.SearchResultsInput = valueSearchResultsInput
+		return nil
+	}
+	valueErrorInput := new(ErrorInput)
+	if err := json.Unmarshal(data, &valueErrorInput); err == nil {
+		w.ErrorInput = valueErrorInput
+		return nil
+	}
+	valueArrayInput := new(ArrayInput)
+	if err := json.Unmarshal(data, &valueArrayInput); err == nil {
+		w.ArrayInput = valueArrayInput
+		return nil
+	}
+	valueFunctionCallInput := new(FunctionCallInput)
+	if err := json.Unmarshal(data, &valueFunctionCallInput); err == nil {
+		w.FunctionCallInput = valueFunctionCallInput
+		return nil
+	}
+	valueAudioInput := new(AudioInput)
+	if err := json.Unmarshal(data, &valueAudioInput); err == nil {
+		w.AudioInput = valueAudioInput
+		return nil
+	}
+	valueVideoInput := new(VideoInput)
+	if err := json.Unmarshal(data, &valueVideoInput); err == nil {
+		w.VideoInput = valueVideoInput
+		return nil
+	}
+	valueImageInput := new(ImageInput)
+	if err := json.Unmarshal(data, &valueImageInput); err == nil {
+		w.ImageInput = valueImageInput
+		return nil
+	}
+	valueDocumentInput := new(DocumentInput)
+	if err := json.Unmarshal(data, &valueDocumentInput); err == nil {
+		w.DocumentInput = valueDocumentInput
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, w)
+}
+
+func (w WorkflowInput) MarshalJSON() ([]byte, error) {
+	if w.StringInput != nil {
+		return json.Marshal(w.StringInput)
+	}
+	if w.JsonInput != nil {
+		return json.Marshal(w.JsonInput)
+	}
+	if w.ChatHistoryInput != nil {
+		return json.Marshal(w.ChatHistoryInput)
+	}
+	if w.NumberInput != nil {
+		return json.Marshal(w.NumberInput)
+	}
+	if w.SearchResultsInput != nil {
+		return json.Marshal(w.SearchResultsInput)
+	}
+	if w.ErrorInput != nil {
+		return json.Marshal(w.ErrorInput)
+	}
+	if w.ArrayInput != nil {
+		return json.Marshal(w.ArrayInput)
+	}
+	if w.FunctionCallInput != nil {
+		return json.Marshal(w.FunctionCallInput)
+	}
+	if w.AudioInput != nil {
+		return json.Marshal(w.AudioInput)
+	}
+	if w.VideoInput != nil {
+		return json.Marshal(w.VideoInput)
+	}
+	if w.ImageInput != nil {
+		return json.Marshal(w.ImageInput)
+	}
+	if w.DocumentInput != nil {
+		return json.Marshal(w.DocumentInput)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", w)
+}
+
+type WorkflowInputVisitor interface {
+	VisitStringInput(*StringInput) error
+	VisitJsonInput(*JsonInput) error
+	VisitChatHistoryInput(*ChatHistoryInput) error
+	VisitNumberInput(*NumberInput) error
+	VisitSearchResultsInput(*SearchResultsInput) error
+	VisitErrorInput(*ErrorInput) error
+	VisitArrayInput(*ArrayInput) error
+	VisitFunctionCallInput(*FunctionCallInput) error
+	VisitAudioInput(*AudioInput) error
+	VisitVideoInput(*VideoInput) error
+	VisitImageInput(*ImageInput) error
+	VisitDocumentInput(*DocumentInput) error
+}
+
+func (w *WorkflowInput) Accept(visitor WorkflowInputVisitor) error {
+	if w.StringInput != nil {
+		return visitor.VisitStringInput(w.StringInput)
+	}
+	if w.JsonInput != nil {
+		return visitor.VisitJsonInput(w.JsonInput)
+	}
+	if w.ChatHistoryInput != nil {
+		return visitor.VisitChatHistoryInput(w.ChatHistoryInput)
+	}
+	if w.NumberInput != nil {
+		return visitor.VisitNumberInput(w.NumberInput)
+	}
+	if w.SearchResultsInput != nil {
+		return visitor.VisitSearchResultsInput(w.SearchResultsInput)
+	}
+	if w.ErrorInput != nil {
+		return visitor.VisitErrorInput(w.ErrorInput)
+	}
+	if w.ArrayInput != nil {
+		return visitor.VisitArrayInput(w.ArrayInput)
+	}
+	if w.FunctionCallInput != nil {
+		return visitor.VisitFunctionCallInput(w.FunctionCallInput)
+	}
+	if w.AudioInput != nil {
+		return visitor.VisitAudioInput(w.AudioInput)
+	}
+	if w.VideoInput != nil {
+		return visitor.VisitVideoInput(w.VideoInput)
+	}
+	if w.ImageInput != nil {
+		return visitor.VisitImageInput(w.ImageInput)
+	}
+	if w.DocumentInput != nil {
+		return visitor.VisitDocumentInput(w.DocumentInput)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", w)
 }

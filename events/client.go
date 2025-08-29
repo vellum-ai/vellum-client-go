@@ -12,6 +12,7 @@ import (
 	option "github.com/vellum-ai/vellum-client-go/option"
 	io "io"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -22,8 +23,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.ApiVersion == "" {
+		options.ApiVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -37,10 +38,10 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Accept an event and publish it to ClickHouse for analytics processing.
+// Accept an event or list of events and publish them to ClickHouse for analytics processing.
 func (c *Client) Create(
 	ctx context.Context,
-	request *vellumclientgo.WorkflowEvent,
+	request *vellumclientgo.CreateWorkflowEventRequest,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.EventCreateResponse, error) {
 	options := core.NewRequestOptions(opts...)

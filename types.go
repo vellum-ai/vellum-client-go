@@ -82,6 +82,8 @@ type ExecuteWorkflowRequest struct {
 	ExternalId *string `json:"external_id,omitempty" url:"-"`
 	// Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
 	Metadata map[string]interface{} `json:"metadata,omitempty" url:"-"`
+	// The ID of a previous Workflow Execution to reference for initial State loading.
+	PreviousExecutionId *string `json:"previous_execution_id,omitempty" url:"-"`
 }
 
 type ExecuteWorkflowStreamRequest struct {
@@ -101,6 +103,8 @@ type ExecuteWorkflowStreamRequest struct {
 	EventTypes []WorkflowExecutionEventType `json:"event_types,omitempty" url:"-"`
 	// Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
 	Metadata map[string]interface{} `json:"metadata,omitempty" url:"-"`
+	// The ID of a previous Workflow Execution to reference for initial State loading.
+	PreviousExecutionId *string `json:"previous_execution_id,omitempty" url:"-"`
 }
 
 type GenerateBodyRequest struct {
@@ -9580,6 +9584,7 @@ func (j *JsonVellumValueRequest) String() string {
 // * `notIn` - NOT_IN
 // * `between` - BETWEEN
 // * `notBetween` - NOT_BETWEEN
+// * `concat` - CONCAT
 // * `blank` - BLANK
 // * `notBlank` - NOT_BLANK
 // * `coalesce` - COALESCE
@@ -9628,6 +9633,7 @@ const (
 	LogicalOperatorBetween LogicalOperator = "between"
 	// Not between
 	LogicalOperatorNotBetween  LogicalOperator = "notBetween"
+	LogicalOperatorConcat      LogicalOperator = "concat"
 	LogicalOperatorBlank       LogicalOperator = "blank"
 	LogicalOperatorNotBlank    LogicalOperator = "notBlank"
 	LogicalOperatorCoalesce    LogicalOperator = "coalesce"
@@ -9678,6 +9684,8 @@ func NewLogicalOperatorFromString(s string) (LogicalOperator, error) {
 		return LogicalOperatorBetween, nil
 	case "notBetween":
 		return LogicalOperatorNotBetween, nil
+	case "concat":
+		return LogicalOperatorConcat, nil
 	case "blank":
 		return LogicalOperatorBlank, nil
 	case "notBlank":
