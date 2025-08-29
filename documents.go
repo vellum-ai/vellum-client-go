@@ -287,11 +287,13 @@ func (p *PaginatedSlimDocumentList) String() string {
 
 // * `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit
 // * `INVALID_FILE` - Invalid File
+// * `INVALID_CREDENTIALS` - Invalid Credentials
 type ProcessingFailureReasonEnum string
 
 const (
 	ProcessingFailureReasonEnumExceededCharacterLimit ProcessingFailureReasonEnum = "EXCEEDED_CHARACTER_LIMIT"
 	ProcessingFailureReasonEnumInvalidFile            ProcessingFailureReasonEnum = "INVALID_FILE"
+	ProcessingFailureReasonEnumInvalidCredentials     ProcessingFailureReasonEnum = "INVALID_CREDENTIALS"
 )
 
 func NewProcessingFailureReasonEnumFromString(s string) (ProcessingFailureReasonEnum, error) {
@@ -300,6 +302,8 @@ func NewProcessingFailureReasonEnumFromString(s string) (ProcessingFailureReason
 		return ProcessingFailureReasonEnumExceededCharacterLimit, nil
 	case "INVALID_FILE":
 		return ProcessingFailureReasonEnumInvalidFile, nil
+	case "INVALID_CREDENTIALS":
+		return ProcessingFailureReasonEnumInvalidCredentials, nil
 	}
 	var t ProcessingFailureReasonEnum
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -323,6 +327,7 @@ type SlimDocument struct {
 	//
 	// * `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit
 	// * `INVALID_FILE` - Invalid File
+	// * `INVALID_CREDENTIALS` - Invalid Credentials
 	ProcessingFailureReason *ProcessingFailureReasonEnum `json:"processing_failure_reason,omitempty" url:"processing_failure_reason,omitempty"`
 	// The document's current status.
 	//
