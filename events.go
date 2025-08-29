@@ -8,10 +8,56 @@ import (
 	core "github.com/vellum-ai/vellum-client-go/core"
 )
 
+type CreateWorkflowEventRequest struct {
+	WorkflowEventList []*WorkflowEvent
+	WorkflowEvent     *WorkflowEvent
+}
+
+func (c *CreateWorkflowEventRequest) UnmarshalJSON(data []byte) error {
+	var valueWorkflowEventList []*WorkflowEvent
+	if err := json.Unmarshal(data, &valueWorkflowEventList); err == nil {
+		c.WorkflowEventList = valueWorkflowEventList
+		return nil
+	}
+	valueWorkflowEvent := new(WorkflowEvent)
+	if err := json.Unmarshal(data, &valueWorkflowEvent); err == nil {
+		c.WorkflowEvent = valueWorkflowEvent
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, c)
+}
+
+func (c CreateWorkflowEventRequest) MarshalJSON() ([]byte, error) {
+	if c.WorkflowEventList != nil {
+		return json.Marshal(c.WorkflowEventList)
+	}
+	if c.WorkflowEvent != nil {
+		return json.Marshal(c.WorkflowEvent)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", c)
+}
+
+type CreateWorkflowEventRequestVisitor interface {
+	VisitWorkflowEventList([]*WorkflowEvent) error
+	VisitWorkflowEvent(*WorkflowEvent) error
+}
+
+func (c *CreateWorkflowEventRequest) Accept(visitor CreateWorkflowEventRequestVisitor) error {
+	if c.WorkflowEventList != nil {
+		return visitor.VisitWorkflowEventList(c.WorkflowEventList)
+	}
+	if c.WorkflowEvent != nil {
+		return visitor.VisitWorkflowEvent(c.WorkflowEvent)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", c)
+}
+
 // Response serializer for successful event creation.
 type EventCreateResponse struct {
 	// Indicates whether the event was published successfully.
 	Success *bool `json:"success,omitempty" url:"success,omitempty"`
+	// Number of events processed
+	Count int `json:"count" url:"count"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage

@@ -37,10 +37,10 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-// Accept an event and publish it to ClickHouse for analytics processing.
+// Accept an event or list of events and publish them to ClickHouse for analytics processing.
 func (c *Client) Create(
 	ctx context.Context,
-	request *vellumclientgo.WorkflowEvent,
+	request *vellumclientgo.CreateWorkflowEventRequest,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.EventCreateResponse, error) {
 	options := core.NewRequestOptions(opts...)
