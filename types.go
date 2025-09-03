@@ -7530,6 +7530,8 @@ type FunctionDefinition struct {
 	Description *string `json:"description,omitempty" url:"description,omitempty"`
 	// An OpenAPI specification of parameters that are supported by this function.
 	Parameters map[string]interface{} `json:"parameters,omitempty" url:"parameters,omitempty"`
+	// Optional user defined input mappings for this function.
+	Inputs map[string]interface{} `json:"inputs,omitempty" url:"inputs,omitempty"`
 	// Set this option to true to force the model to return a function call of this function.
 	Forced *bool `json:"forced,omitempty" url:"forced,omitempty"`
 	// Set this option to use strict schema decoding when available.
@@ -22222,6 +22224,7 @@ func (v *VellumVariableExtensions) String() string {
 // * `SEARCH_RESULTS` - SEARCH_RESULTS
 // * `ERROR` - ERROR
 // * `ARRAY` - ARRAY
+//
 // * `FUNCTION_CALL` - FUNCTION_CALL
 // * `AUDIO` - AUDIO
 // * `VIDEO` - VIDEO
