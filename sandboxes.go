@@ -765,7 +765,7 @@ func (s *ScenarioInput) Accept(visitor ScenarioInputVisitor) error {
 }
 
 type ScenarioInputAudioVariableValue struct {
-	Value           *VellumAudio `json:"value" url:"value"`
+	Value           *VellumAudio `json:"value,omitempty" url:"value,omitempty"`
 	InputVariableId string       `json:"input_variable_id" url:"input_variable_id"`
 	type_           string
 
@@ -902,7 +902,7 @@ func (s *ScenarioInputChatHistoryVariableValue) String() string {
 }
 
 type ScenarioInputDocumentVariableValue struct {
-	Value           *VellumDocument `json:"value" url:"value"`
+	Value           *VellumDocument `json:"value,omitempty" url:"value,omitempty"`
 	InputVariableId string          `json:"input_variable_id" url:"input_variable_id"`
 	type_           string
 
@@ -970,7 +970,7 @@ func (s *ScenarioInputDocumentVariableValue) String() string {
 }
 
 type ScenarioInputImageVariableValue struct {
-	Value           *VellumImage `json:"value" url:"value"`
+	Value           *VellumImage `json:"value,omitempty" url:"value,omitempty"`
 	InputVariableId string       `json:"input_variable_id" url:"input_variable_id"`
 	type_           string
 
@@ -1176,7 +1176,7 @@ func (s *ScenarioInputStringVariableValue) String() string {
 }
 
 type ScenarioInputVideoVariableValue struct {
-	Value           *VellumVideo `json:"value" url:"value"`
+	Value           *VellumVideo `json:"value,omitempty" url:"value,omitempty"`
 	InputVariableId string       `json:"input_variable_id" url:"input_variable_id"`
 	type_           string
 
