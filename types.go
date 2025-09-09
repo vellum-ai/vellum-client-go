@@ -11674,6 +11674,7 @@ func (n *NodeExecutionPausedEvent) String() string {
 type NodeExecutionRejectedBody struct {
 	NodeDefinition *VellumCodeResourceDefinition `json:"node_definition" url:"node_definition"`
 	Error          *VellumSdkError               `json:"error" url:"error"`
+	Stacktrace     *string                       `json:"stacktrace,omitempty" url:"stacktrace,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -23175,8 +23176,9 @@ func (w *WorkflowError) Accept(visitor WorkflowErrorVisitor) error {
 }
 
 type WorkflowEventError struct {
-	Message string                          `json:"message" url:"message"`
-	Code    WorkflowExecutionEventErrorCode `json:"code" url:"code"`
+	Message    string                          `json:"message" url:"message"`
+	Code       WorkflowExecutionEventErrorCode `json:"code" url:"code"`
+	Stacktrace *string                         `json:"stacktrace,omitempty" url:"stacktrace,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -23964,6 +23966,7 @@ func (w *WorkflowExecutionPausedEvent) String() string {
 type WorkflowExecutionRejectedBody struct {
 	WorkflowDefinition *VellumCodeResourceDefinition `json:"workflow_definition" url:"workflow_definition"`
 	Error              *VellumSdkError               `json:"error" url:"error"`
+	Stacktrace         *string                       `json:"stacktrace,omitempty" url:"stacktrace,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
