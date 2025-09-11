@@ -29,6 +29,10 @@ type WorkflowPushRequest struct {
 	Strict            *bool                                `json:"strict,omitempty" url:"-"`
 }
 
+type SerializeWorkflowFilesRequest struct {
+	Files map[string]interface{} `json:"files,omitempty" url:"-"`
+}
+
 type WorkflowPushDeploymentConfigRequest struct {
 	Label              *string  `json:"label,omitempty" url:"label,omitempty"`
 	Name               *string  `json:"name,omitempty" url:"name,omitempty"`
