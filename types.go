@@ -21078,8 +21078,9 @@ func (v *VellumDocumentRequest) String() string {
 }
 
 type VellumError struct {
-	Message string              `json:"message" url:"message"`
-	Code    VellumErrorCodeEnum `json:"code" url:"code"`
+	Code    VellumErrorCodeEnum    `json:"code" url:"code"`
+	Message string                 `json:"message" url:"message"`
+	RawData map[string]interface{} `json:"raw_data,omitempty" url:"raw_data,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -21160,8 +21161,9 @@ func (v VellumErrorCodeEnum) Ptr() *VellumErrorCodeEnum {
 }
 
 type VellumErrorRequest struct {
-	Message string              `json:"message" url:"message"`
-	Code    VellumErrorCodeEnum `json:"code" url:"code"`
+	Code    VellumErrorCodeEnum    `json:"code" url:"code"`
+	Message string                 `json:"message" url:"message"`
+	RawData map[string]interface{} `json:"raw_data,omitempty" url:"raw_data,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage

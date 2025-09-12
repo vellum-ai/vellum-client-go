@@ -187,3 +187,42 @@ func (c *Client) Push(
 	}
 	return response, nil
 }
+
+// Serialize files
+func (c *Client) SerializeWorkflowFiles(
+	ctx context.Context,
+	request *vellumclientgo.SerializeWorkflowFilesRequest,
+	opts ...option.RequestOption,
+) (map[string]interface{}, error) {
+	options := core.NewRequestOptions(opts...)
+
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := baseURL + "/v1/workflows/serialize"
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
+	var response map[string]interface{}
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			MaxAttempts:     options.MaxAttempts,
+			Headers:         headers,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
