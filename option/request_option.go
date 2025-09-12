@@ -3,6 +3,7 @@
 package option
 
 import (
+	vellumclientgo "github.com/vellum-ai/vellum-client-go"
 	core "github.com/vellum-ai/vellum-client-go/core"
 	http "net/http"
 	url "net/url"
@@ -71,7 +72,7 @@ func WithApiKey(apiKey string) *core.ApiKeyOption {
 }
 
 // WithApiVersion sets the apiVersion request header.
-func WithApiVersion(apiVersion *core.ApiVersionEnum) *core.ApiVersionOption {
+func WithApiVersion(apiVersion *vellumclientgo.ApiVersionEnum) *core.ApiVersionOption {
 	return &core.ApiVersionOption{
 		ApiVersion: apiVersion,
 	}
