@@ -16,6 +16,7 @@ import (
 	documents "github.com/vellum-ai/vellum-client-go/documents"
 	events "github.com/vellum-ai/vellum-client-go/events"
 	folderentities "github.com/vellum-ai/vellum-client-go/folderentities"
+	integrations "github.com/vellum-ai/vellum-client-go/integrations"
 	metricdefinitions "github.com/vellum-ai/vellum-client-go/metricdefinitions"
 	mlmodels "github.com/vellum-ai/vellum-client-go/mlmodels"
 	option "github.com/vellum-ai/vellum-client-go/option"
@@ -32,6 +33,7 @@ import (
 	workspacesecrets "github.com/vellum-ai/vellum-client-go/workspacesecrets"
 	io "io"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -39,6 +41,7 @@ type Client struct {
 	caller  *core.Caller
 	header  http.Header
 
+	Integrations        *integrations.Client
 	Events              *events.Client
 	AdHoc               *adhoc.Client
 	ContainerImages     *containerimages.Client
@@ -63,8 +66,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.ApiVersion == "" {
+		options.ApiVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -75,6 +78,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 			},
 		),
 		header:              options.ToHeader(),
+		Integrations:        integrations.NewClient(opts...),
 		Events:              events.NewClient(opts...),
 		AdHoc:               adhoc.NewClient(opts...),
 		ContainerImages:     containerimages.NewClient(opts...),
