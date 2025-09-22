@@ -21123,18 +21123,22 @@ func (v *VellumError) String() string {
 // * `INVALID_REQUEST` - INVALID_REQUEST
 // * `INVALID_INPUTS` - INVALID_INPUTS
 // * `PROVIDER_ERROR` - PROVIDER_ERROR
+// * `PROVIDER_CREDENTIALS_AVAILABLE` - PROVIDER_CREDENTIALS_UNAVAILABLE
 // * `REQUEST_TIMEOUT` - REQUEST_TIMEOUT
 // * `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
 // * `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
+// * `WORKFLOW_CANCELLED` - WORKFLOW_CANCELLED
 type VellumErrorCodeEnum string
 
 const (
-	VellumErrorCodeEnumInvalidRequest      VellumErrorCodeEnum = "INVALID_REQUEST"
-	VellumErrorCodeEnumInvalidInputs       VellumErrorCodeEnum = "INVALID_INPUTS"
-	VellumErrorCodeEnumProviderError       VellumErrorCodeEnum = "PROVIDER_ERROR"
-	VellumErrorCodeEnumRequestTimeout      VellumErrorCodeEnum = "REQUEST_TIMEOUT"
-	VellumErrorCodeEnumInternalServerError VellumErrorCodeEnum = "INTERNAL_SERVER_ERROR"
-	VellumErrorCodeEnumUserDefinedError    VellumErrorCodeEnum = "USER_DEFINED_ERROR"
+	VellumErrorCodeEnumInvalidRequest               VellumErrorCodeEnum = "INVALID_REQUEST"
+	VellumErrorCodeEnumInvalidInputs                VellumErrorCodeEnum = "INVALID_INPUTS"
+	VellumErrorCodeEnumProviderError                VellumErrorCodeEnum = "PROVIDER_ERROR"
+	VellumErrorCodeEnumProviderCredentialsAvailable VellumErrorCodeEnum = "PROVIDER_CREDENTIALS_AVAILABLE"
+	VellumErrorCodeEnumRequestTimeout               VellumErrorCodeEnum = "REQUEST_TIMEOUT"
+	VellumErrorCodeEnumInternalServerError          VellumErrorCodeEnum = "INTERNAL_SERVER_ERROR"
+	VellumErrorCodeEnumUserDefinedError             VellumErrorCodeEnum = "USER_DEFINED_ERROR"
+	VellumErrorCodeEnumWorkflowCancelled            VellumErrorCodeEnum = "WORKFLOW_CANCELLED"
 )
 
 func NewVellumErrorCodeEnumFromString(s string) (VellumErrorCodeEnum, error) {
@@ -21145,12 +21149,16 @@ func NewVellumErrorCodeEnumFromString(s string) (VellumErrorCodeEnum, error) {
 		return VellumErrorCodeEnumInvalidInputs, nil
 	case "PROVIDER_ERROR":
 		return VellumErrorCodeEnumProviderError, nil
+	case "PROVIDER_CREDENTIALS_AVAILABLE":
+		return VellumErrorCodeEnumProviderCredentialsAvailable, nil
 	case "REQUEST_TIMEOUT":
 		return VellumErrorCodeEnumRequestTimeout, nil
 	case "INTERNAL_SERVER_ERROR":
 		return VellumErrorCodeEnumInternalServerError, nil
 	case "USER_DEFINED_ERROR":
 		return VellumErrorCodeEnumUserDefinedError, nil
+	case "WORKFLOW_CANCELLED":
+		return VellumErrorCodeEnumWorkflowCancelled, nil
 	}
 	var t VellumErrorCodeEnum
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -21386,6 +21394,7 @@ func (v *VellumNodeExecutionEvent) Accept(visitor VellumNodeExecutionEventVisito
 type VellumSdkError struct {
 	Message string                 `json:"message" url:"message"`
 	Code    VellumSdkErrorCodeEnum `json:"code" url:"code"`
+	RawData map[string]interface{} `json:"raw_data,omitempty" url:"raw_data,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -23180,6 +23189,7 @@ func (w *WorkflowError) Accept(visitor WorkflowErrorVisitor) error {
 type WorkflowEventError struct {
 	Message    string                          `json:"message" url:"message"`
 	Code       WorkflowExecutionEventErrorCode `json:"code" url:"code"`
+	RawData    map[string]interface{}          `json:"raw_data,omitempty" url:"raw_data,omitempty"`
 	Stacktrace *string                         `json:"stacktrace,omitempty" url:"stacktrace,omitempty"`
 
 	extraProperties map[string]interface{}
