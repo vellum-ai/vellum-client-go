@@ -123,6 +123,7 @@ func (c *Client) Retrieve(
 	ctx context.Context,
 	// Either the Document Index's ID or its unique name
 	id string,
+	request *vellumclientgo.DocumentIndexesRetrieveRequest,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.DocumentIndexRead, error) {
 	options := core.NewRequestOptions(opts...)
@@ -135,6 +136,14 @@ func (c *Client) Retrieve(
 		baseURL = options.BaseURL
 	}
 	endpointURL := core.EncodeURL(baseURL+"/v1/document-indexes/%v", id)
+
+	queryParams, err := core.QueryValues(request)
+	if err != nil {
+		return nil, err
+	}
+	if len(queryParams) > 0 {
+		endpointURL += "?" + queryParams.Encode()
+	}
 
 	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 

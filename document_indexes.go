@@ -50,6 +50,11 @@ type PatchedDocumentIndexUpdateRequest struct {
 	Status *EntityStatus `json:"status,omitempty" url:"-"`
 }
 
+type DocumentIndexesRetrieveRequest struct {
+	// Whether to mask the indexing configuration in the response
+	MaskIndexingConfig *bool `json:"-" url:"mask_indexing_config,omitempty"`
+}
+
 // Basic vectorizer for intfloat/multilingual-e5-large.
 type BasicVectorizerIntfloatMultilingualE5LargeRequest struct {
 	Config    map[string]interface{} `json:"config,omitempty" url:"config,omitempty"`
@@ -935,6 +940,7 @@ type IndexingConfigVectorizerRequest struct {
 	GoogleVertexAiVectorizerTextMultilingualEmbedding002Request     *GoogleVertexAiVectorizerTextMultilingualEmbedding002Request
 	GoogleVertexAiVectorizerGeminiEmbedding001Request               *GoogleVertexAiVectorizerGeminiEmbedding001Request
 	FastEmbedVectorizerBaaiBgeSmallEnV15Request                     *FastEmbedVectorizerBaaiBgeSmallEnV15Request
+	PrivateVectorizerRequest                                        *PrivateVectorizerRequest
 }
 
 func (i *IndexingConfigVectorizerRequest) UnmarshalJSON(data []byte) error {
@@ -993,6 +999,11 @@ func (i *IndexingConfigVectorizerRequest) UnmarshalJSON(data []byte) error {
 		i.FastEmbedVectorizerBaaiBgeSmallEnV15Request = valueFastEmbedVectorizerBaaiBgeSmallEnV15Request
 		return nil
 	}
+	valuePrivateVectorizerRequest := new(PrivateVectorizerRequest)
+	if err := json.Unmarshal(data, &valuePrivateVectorizerRequest); err == nil {
+		i.PrivateVectorizerRequest = valuePrivateVectorizerRequest
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, i)
 }
 
@@ -1030,6 +1041,9 @@ func (i IndexingConfigVectorizerRequest) MarshalJSON() ([]byte, error) {
 	if i.FastEmbedVectorizerBaaiBgeSmallEnV15Request != nil {
 		return json.Marshal(i.FastEmbedVectorizerBaaiBgeSmallEnV15Request)
 	}
+	if i.PrivateVectorizerRequest != nil {
+		return json.Marshal(i.PrivateVectorizerRequest)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", i)
 }
 
@@ -1045,6 +1059,7 @@ type IndexingConfigVectorizerRequestVisitor interface {
 	VisitGoogleVertexAiVectorizerTextMultilingualEmbedding002Request(*GoogleVertexAiVectorizerTextMultilingualEmbedding002Request) error
 	VisitGoogleVertexAiVectorizerGeminiEmbedding001Request(*GoogleVertexAiVectorizerGeminiEmbedding001Request) error
 	VisitFastEmbedVectorizerBaaiBgeSmallEnV15Request(*FastEmbedVectorizerBaaiBgeSmallEnV15Request) error
+	VisitPrivateVectorizerRequest(*PrivateVectorizerRequest) error
 }
 
 func (i *IndexingConfigVectorizerRequest) Accept(visitor IndexingConfigVectorizerRequestVisitor) error {
@@ -1080,6 +1095,9 @@ func (i *IndexingConfigVectorizerRequest) Accept(visitor IndexingConfigVectorize
 	}
 	if i.FastEmbedVectorizerBaaiBgeSmallEnV15Request != nil {
 		return visitor.VisitFastEmbedVectorizerBaaiBgeSmallEnV15Request(i.FastEmbedVectorizerBaaiBgeSmallEnV15Request)
+	}
+	if i.PrivateVectorizerRequest != nil {
+		return visitor.VisitPrivateVectorizerRequest(i.PrivateVectorizerRequest)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", i)
 }
@@ -1407,6 +1425,73 @@ func (p *PaginatedDocumentIndexReadList) UnmarshalJSON(data []byte) error {
 }
 
 func (p *PaginatedDocumentIndexReadList) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+// Serializer for private vectorizer.
+type PrivateVectorizerRequest struct {
+	modelName string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PrivateVectorizerRequest) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PrivateVectorizerRequest) ModelName() string {
+	return p.modelName
+}
+
+func (p *PrivateVectorizerRequest) UnmarshalJSON(data []byte) error {
+	type embed PrivateVectorizerRequest
+	var unmarshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed: embed(*p),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*p = PrivateVectorizerRequest(unmarshaler.embed)
+	if unmarshaler.ModelName != "private-vectorizer" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", p, "private-vectorizer", unmarshaler.ModelName)
+	}
+	p.modelName = unmarshaler.ModelName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p, "model_name")
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PrivateVectorizerRequest) MarshalJSON() ([]byte, error) {
+	type embed PrivateVectorizerRequest
+	var marshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed:     embed(*p),
+		ModelName: "private-vectorizer",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (p *PrivateVectorizerRequest) String() string {
 	if len(p._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
 			return value
