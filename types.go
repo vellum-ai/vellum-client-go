@@ -8768,6 +8768,7 @@ type IndexingConfigVectorizer struct {
 	GoogleVertexAiVectorizerTextMultilingualEmbedding002     *GoogleVertexAiVectorizerTextMultilingualEmbedding002
 	GoogleVertexAiVectorizerGeminiEmbedding001               *GoogleVertexAiVectorizerGeminiEmbedding001
 	FastEmbedVectorizerBaaiBgeSmallEnV15                     *FastEmbedVectorizerBaaiBgeSmallEnV15
+	PrivateVectorizer                                        *PrivateVectorizer
 }
 
 func (i *IndexingConfigVectorizer) UnmarshalJSON(data []byte) error {
@@ -8826,6 +8827,11 @@ func (i *IndexingConfigVectorizer) UnmarshalJSON(data []byte) error {
 		i.FastEmbedVectorizerBaaiBgeSmallEnV15 = valueFastEmbedVectorizerBaaiBgeSmallEnV15
 		return nil
 	}
+	valuePrivateVectorizer := new(PrivateVectorizer)
+	if err := json.Unmarshal(data, &valuePrivateVectorizer); err == nil {
+		i.PrivateVectorizer = valuePrivateVectorizer
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, i)
 }
 
@@ -8863,6 +8869,9 @@ func (i IndexingConfigVectorizer) MarshalJSON() ([]byte, error) {
 	if i.FastEmbedVectorizerBaaiBgeSmallEnV15 != nil {
 		return json.Marshal(i.FastEmbedVectorizerBaaiBgeSmallEnV15)
 	}
+	if i.PrivateVectorizer != nil {
+		return json.Marshal(i.PrivateVectorizer)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", i)
 }
 
@@ -8878,6 +8887,7 @@ type IndexingConfigVectorizerVisitor interface {
 	VisitGoogleVertexAiVectorizerTextMultilingualEmbedding002(*GoogleVertexAiVectorizerTextMultilingualEmbedding002) error
 	VisitGoogleVertexAiVectorizerGeminiEmbedding001(*GoogleVertexAiVectorizerGeminiEmbedding001) error
 	VisitFastEmbedVectorizerBaaiBgeSmallEnV15(*FastEmbedVectorizerBaaiBgeSmallEnV15) error
+	VisitPrivateVectorizer(*PrivateVectorizer) error
 }
 
 func (i *IndexingConfigVectorizer) Accept(visitor IndexingConfigVectorizerVisitor) error {
@@ -8913,6 +8923,9 @@ func (i *IndexingConfigVectorizer) Accept(visitor IndexingConfigVectorizerVisito
 	}
 	if i.FastEmbedVectorizerBaaiBgeSmallEnV15 != nil {
 		return visitor.VisitFastEmbedVectorizerBaaiBgeSmallEnV15(i.FastEmbedVectorizerBaaiBgeSmallEnV15)
+	}
+	if i.PrivateVectorizer != nil {
+		return visitor.VisitPrivateVectorizer(i.PrivateVectorizer)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", i)
 }
@@ -14964,6 +14977,73 @@ func (p *Price) UnmarshalJSON(data []byte) error {
 }
 
 func (p *Price) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+// Serializer for private vectorizer.
+type PrivateVectorizer struct {
+	modelName string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PrivateVectorizer) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PrivateVectorizer) ModelName() string {
+	return p.modelName
+}
+
+func (p *PrivateVectorizer) UnmarshalJSON(data []byte) error {
+	type embed PrivateVectorizer
+	var unmarshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed: embed(*p),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*p = PrivateVectorizer(unmarshaler.embed)
+	if unmarshaler.ModelName != "private-vectorizer" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", p, "private-vectorizer", unmarshaler.ModelName)
+	}
+	p.modelName = unmarshaler.ModelName
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p, "model_name")
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PrivateVectorizer) MarshalJSON() ([]byte, error) {
+	type embed PrivateVectorizer
+	var marshaler = struct {
+		embed
+		ModelName string `json:"model_name"`
+	}{
+		embed:     embed(*p),
+		ModelName: "private-vectorizer",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (p *PrivateVectorizer) String() string {
 	if len(p._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
 			return value
@@ -21123,7 +21203,7 @@ func (v *VellumError) String() string {
 // * `INVALID_REQUEST` - INVALID_REQUEST
 // * `INVALID_INPUTS` - INVALID_INPUTS
 // * `PROVIDER_ERROR` - PROVIDER_ERROR
-// * `PROVIDER_CREDENTIALS_AVAILABLE` - PROVIDER_CREDENTIALS_UNAVAILABLE
+// * `PROVIDER_CREDENTIALS_UNAVAILABLE` - PROVIDER_CREDENTIALS_UNAVAILABLE
 // * `REQUEST_TIMEOUT` - REQUEST_TIMEOUT
 // * `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
 // * `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
@@ -21131,14 +21211,14 @@ func (v *VellumError) String() string {
 type VellumErrorCodeEnum string
 
 const (
-	VellumErrorCodeEnumInvalidRequest               VellumErrorCodeEnum = "INVALID_REQUEST"
-	VellumErrorCodeEnumInvalidInputs                VellumErrorCodeEnum = "INVALID_INPUTS"
-	VellumErrorCodeEnumProviderError                VellumErrorCodeEnum = "PROVIDER_ERROR"
-	VellumErrorCodeEnumProviderCredentialsAvailable VellumErrorCodeEnum = "PROVIDER_CREDENTIALS_AVAILABLE"
-	VellumErrorCodeEnumRequestTimeout               VellumErrorCodeEnum = "REQUEST_TIMEOUT"
-	VellumErrorCodeEnumInternalServerError          VellumErrorCodeEnum = "INTERNAL_SERVER_ERROR"
-	VellumErrorCodeEnumUserDefinedError             VellumErrorCodeEnum = "USER_DEFINED_ERROR"
-	VellumErrorCodeEnumWorkflowCancelled            VellumErrorCodeEnum = "WORKFLOW_CANCELLED"
+	VellumErrorCodeEnumInvalidRequest                 VellumErrorCodeEnum = "INVALID_REQUEST"
+	VellumErrorCodeEnumInvalidInputs                  VellumErrorCodeEnum = "INVALID_INPUTS"
+	VellumErrorCodeEnumProviderError                  VellumErrorCodeEnum = "PROVIDER_ERROR"
+	VellumErrorCodeEnumProviderCredentialsUnavailable VellumErrorCodeEnum = "PROVIDER_CREDENTIALS_UNAVAILABLE"
+	VellumErrorCodeEnumRequestTimeout                 VellumErrorCodeEnum = "REQUEST_TIMEOUT"
+	VellumErrorCodeEnumInternalServerError            VellumErrorCodeEnum = "INTERNAL_SERVER_ERROR"
+	VellumErrorCodeEnumUserDefinedError               VellumErrorCodeEnum = "USER_DEFINED_ERROR"
+	VellumErrorCodeEnumWorkflowCancelled              VellumErrorCodeEnum = "WORKFLOW_CANCELLED"
 )
 
 func NewVellumErrorCodeEnumFromString(s string) (VellumErrorCodeEnum, error) {
@@ -21149,8 +21229,8 @@ func NewVellumErrorCodeEnumFromString(s string) (VellumErrorCodeEnum, error) {
 		return VellumErrorCodeEnumInvalidInputs, nil
 	case "PROVIDER_ERROR":
 		return VellumErrorCodeEnumProviderError, nil
-	case "PROVIDER_CREDENTIALS_AVAILABLE":
-		return VellumErrorCodeEnumProviderCredentialsAvailable, nil
+	case "PROVIDER_CREDENTIALS_UNAVAILABLE":
+		return VellumErrorCodeEnumProviderCredentialsUnavailable, nil
 	case "REQUEST_TIMEOUT":
 		return VellumErrorCodeEnumRequestTimeout, nil
 	case "INTERNAL_SERVER_ERROR":

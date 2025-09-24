@@ -25,7 +25,8 @@ type ListWorkflowDeploymentEventExecutionsRequest struct {
 	// Number of executions to return per page.
 	Limit *int `json:"-" url:"limit,omitempty"`
 	// The initial index from which to return the executions.
-	Offset *int `json:"-" url:"offset,omitempty"`
+	Offset   *int    `json:"-" url:"offset,omitempty"`
+	Ordering *string `json:"-" url:"ordering,omitempty"`
 }
 
 type ListWorkflowReleaseTagsRequest struct {
