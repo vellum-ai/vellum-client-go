@@ -231,7 +231,7 @@ func (c *ComposioIntegrationExecConfig) String() string {
 }
 
 type IntegrationRead struct {
-	Id       *string             `json:"id,omitempty" url:"id,omitempty"`
+	Id       string              `json:"id" url:"id"`
 	Label    *string             `json:"label,omitempty" url:"label,omitempty"`
 	IconUrl  string              `json:"icon_url" url:"icon_url"`
 	Name     IntegrationName     `json:"name" url:"name"`
@@ -322,7 +322,7 @@ func (p *PaginatedSlimIntegrationReadList) String() string {
 }
 
 type SlimIntegrationRead struct {
-	Id       *string             `json:"id,omitempty" url:"id,omitempty"`
+	Id       string              `json:"id" url:"id"`
 	Label    *string             `json:"label,omitempty" url:"label,omitempty"`
 	IconUrl  string              `json:"icon_url" url:"icon_url"`
 	Name     IntegrationName     `json:"name" url:"name"`
