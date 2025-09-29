@@ -3510,9 +3510,83 @@ func (c *CodeResourceDefinition) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+type ComponentsSchemasComposioToolDefinition = *ComposioToolDefinition
+
 type ComponentsSchemasPdfSearchResultMetaSource = *PdfSearchResultMetaSource
 
 type ComponentsSchemasPdfSearchResultMetaSourceRequest = *PdfSearchResultMetaSourceRequest
+
+// Serializer for Composio tool definition response.
+type ComposioToolDefinition struct {
+	Integration      *ToolDefinitionIntegration `json:"integration" url:"integration"`
+	Name             string                     `json:"name" url:"name"`
+	Description      string                     `json:"description" url:"description"`
+	InputParameters  map[string]interface{}     `json:"input_parameters" url:"input_parameters"`
+	OutputParameters map[string]interface{}     `json:"output_parameters" url:"output_parameters"`
+	provider         string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *ComposioToolDefinition) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *ComposioToolDefinition) Provider() string {
+	return c.provider
+}
+
+func (c *ComposioToolDefinition) UnmarshalJSON(data []byte) error {
+	type embed ComposioToolDefinition
+	var unmarshaler = struct {
+		embed
+		Provider string `json:"provider"`
+	}{
+		embed: embed(*c),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*c = ComposioToolDefinition(unmarshaler.embed)
+	if unmarshaler.Provider != "COMPOSIO" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", c, "COMPOSIO", unmarshaler.Provider)
+	}
+	c.provider = unmarshaler.Provider
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c, "provider")
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *ComposioToolDefinition) MarshalJSON() ([]byte, error) {
+	type embed ComposioToolDefinition
+	var marshaler = struct {
+		embed
+		Provider string `json:"provider"`
+	}{
+		embed:    embed(*c),
+		Provider: "COMPOSIO",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (c *ComposioToolDefinition) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
 
 // * `OR` - OR
 // * `AND` - AND
@@ -9165,6 +9239,69 @@ func (i *InstructorVectorizerConfig) String() string {
 	}
 	return fmt.Sprintf("%#v", i)
 }
+
+// * `SLACK` - Slack
+// * `NOTION` - Notion
+// * `GOOGLE` - Google
+// * `CALENDLY` - Calendly
+// * `HUBSPOT` - Hubspot
+// * `LINEAR` - Linear
+// * `GITHUB` - Github
+// * `GOOGLE_SHEETS` - Google Sheets
+// * `GOOGLE_CALENDAR` - Google Calendar
+// * `GOOGLE_DRIVE` - Google Drive
+// * `GMAIL` - Gmail
+type IntegrationName string
+
+const (
+	IntegrationNameSlack          IntegrationName = "SLACK"
+	IntegrationNameNotion         IntegrationName = "NOTION"
+	IntegrationNameGoogle         IntegrationName = "GOOGLE"
+	IntegrationNameCalendly       IntegrationName = "CALENDLY"
+	IntegrationNameHubspot        IntegrationName = "HUBSPOT"
+	IntegrationNameLinear         IntegrationName = "LINEAR"
+	IntegrationNameGithub         IntegrationName = "GITHUB"
+	IntegrationNameGoogleSheets   IntegrationName = "GOOGLE_SHEETS"
+	IntegrationNameGoogleCalendar IntegrationName = "GOOGLE_CALENDAR"
+	IntegrationNameGoogleDrive    IntegrationName = "GOOGLE_DRIVE"
+	IntegrationNameGmail          IntegrationName = "GMAIL"
+)
+
+func NewIntegrationNameFromString(s string) (IntegrationName, error) {
+	switch s {
+	case "SLACK":
+		return IntegrationNameSlack, nil
+	case "NOTION":
+		return IntegrationNameNotion, nil
+	case "GOOGLE":
+		return IntegrationNameGoogle, nil
+	case "CALENDLY":
+		return IntegrationNameCalendly, nil
+	case "HUBSPOT":
+		return IntegrationNameHubspot, nil
+	case "LINEAR":
+		return IntegrationNameLinear, nil
+	case "GITHUB":
+		return IntegrationNameGithub, nil
+	case "GOOGLE_SHEETS":
+		return IntegrationNameGoogleSheets, nil
+	case "GOOGLE_CALENDAR":
+		return IntegrationNameGoogleCalendar, nil
+	case "GOOGLE_DRIVE":
+		return IntegrationNameGoogleDrive, nil
+	case "GMAIL":
+		return IntegrationNameGmail, nil
+	}
+	var t IntegrationName
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (i IntegrationName) Ptr() *IntegrationName {
+	return &i
+}
+
+// * `COMPOSIO` - Composio
+type IntegrationProvider = string
 
 type InvokedPort struct {
 	Name string `json:"name" url:"name"`
@@ -20859,6 +20996,49 @@ func (t *TokenOverlappingWindowChunking) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TokenOverlappingWindowChunking) String() string {
+	if len(t._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(t); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", t)
+}
+
+type ToolDefinitionIntegration struct {
+	Id       *string             `json:"id,omitempty" url:"id,omitempty"`
+	Provider IntegrationProvider `json:"provider" url:"provider"`
+	Name     IntegrationName     `json:"name" url:"name"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (t *ToolDefinitionIntegration) GetExtraProperties() map[string]interface{} {
+	return t.extraProperties
+}
+
+func (t *ToolDefinitionIntegration) UnmarshalJSON(data []byte) error {
+	type unmarshaler ToolDefinitionIntegration
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*t = ToolDefinitionIntegration(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
+	if err != nil {
+		return err
+	}
+	t.extraProperties = extraProperties
+
+	t._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (t *ToolDefinitionIntegration) String() string {
 	if len(t._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
 			return value

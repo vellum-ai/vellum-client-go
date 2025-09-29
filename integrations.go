@@ -8,11 +8,24 @@ import (
 	core "github.com/vellum-ai/vellum-client-go/core"
 )
 
+type IntegrationsListRequest struct {
+	// * `COMPOSIO` - Composio
+	IntegrationProvider *string `json:"-" url:"integration_provider,omitempty"`
+	// Number of results to return per page.
+	Limit *int `json:"-" url:"limit,omitempty"`
+	// The initial index from which to return the results.
+	Offset *int `json:"-" url:"offset,omitempty"`
+	// Which field to use when ordering the results.
+	Ordering *string `json:"-" url:"ordering,omitempty"`
+	// A search term.
+	Search *string `json:"-" url:"search,omitempty"`
+}
+
 type ComponentsSchemasComposioExecuteToolRequest = *ComposioExecuteToolRequest
 
 type ComponentsSchemasComposioExecuteToolResponse = *ComposioExecuteToolResponse
 
-type ComponentsSchemasComposioToolDefinition = *ComposioToolDefinition
+type ComponentsSchemasComposioIntegrationExecConfig = *ComposioIntegrationExecConfig
 
 // Payload for executing a Composio tool with provider id and tool arguments.
 type ComposioExecuteToolRequest struct {
@@ -150,43 +163,40 @@ func (c *ComposioExecuteToolResponse) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
-// Serializer for Composio tool definition response.
-type ComposioToolDefinition struct {
-	Name        string                 `json:"name" url:"name"`
-	Description string                 `json:"description" url:"description"`
-	Parameters  map[string]interface{} `json:"parameters" url:"parameters"`
-	provider    string
+type ComposioIntegrationExecConfig struct {
+	Slug  string `json:"slug" url:"slug"`
+	type_ string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
 }
 
-func (c *ComposioToolDefinition) GetExtraProperties() map[string]interface{} {
+func (c *ComposioIntegrationExecConfig) GetExtraProperties() map[string]interface{} {
 	return c.extraProperties
 }
 
-func (c *ComposioToolDefinition) Provider() string {
-	return c.provider
+func (c *ComposioIntegrationExecConfig) Type() string {
+	return c.type_
 }
 
-func (c *ComposioToolDefinition) UnmarshalJSON(data []byte) error {
-	type embed ComposioToolDefinition
+func (c *ComposioIntegrationExecConfig) UnmarshalJSON(data []byte) error {
+	type embed ComposioIntegrationExecConfig
 	var unmarshaler = struct {
 		embed
-		Provider string `json:"provider"`
+		Type string `json:"type"`
 	}{
 		embed: embed(*c),
 	}
 	if err := json.Unmarshal(data, &unmarshaler); err != nil {
 		return err
 	}
-	*c = ComposioToolDefinition(unmarshaler.embed)
-	if unmarshaler.Provider != "COMPOSIO" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", c, "COMPOSIO", unmarshaler.Provider)
+	*c = ComposioIntegrationExecConfig(unmarshaler.embed)
+	if unmarshaler.Type != "COMPOSIO" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", c, "COMPOSIO", unmarshaler.Type)
 	}
-	c.provider = unmarshaler.Provider
+	c.type_ = unmarshaler.Type
 
-	extraProperties, err := core.ExtractExtraProperties(data, *c, "provider")
+	extraProperties, err := core.ExtractExtraProperties(data, *c, "type")
 	if err != nil {
 		return err
 	}
@@ -196,19 +206,19 @@ func (c *ComposioToolDefinition) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (c *ComposioToolDefinition) MarshalJSON() ([]byte, error) {
-	type embed ComposioToolDefinition
+func (c *ComposioIntegrationExecConfig) MarshalJSON() ([]byte, error) {
+	type embed ComposioIntegrationExecConfig
 	var marshaler = struct {
 		embed
-		Provider string `json:"provider"`
+		Type string `json:"type"`
 	}{
-		embed:    embed(*c),
-		Provider: "COMPOSIO",
+		embed: embed(*c),
+		Type:  "COMPOSIO",
 	}
 	return json.Marshal(marshaler)
 }
 
-func (c *ComposioToolDefinition) String() string {
+func (c *ComposioIntegrationExecConfig) String() string {
 	if len(c._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
 			return value
@@ -218,4 +228,140 @@ func (c *ComposioToolDefinition) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", c)
+}
+
+type IntegrationRead struct {
+	Id       *string             `json:"id,omitempty" url:"id,omitempty"`
+	Label    *string             `json:"label,omitempty" url:"label,omitempty"`
+	IconUrl  string              `json:"icon_url" url:"icon_url"`
+	Name     IntegrationName     `json:"name" url:"name"`
+	Provider IntegrationProvider `json:"provider" url:"provider"`
+	// Integration provider specific information needed for filtering tools.
+	ExecConfig ComponentsSchemasComposioIntegrationExecConfig `json:"exec_config" url:"exec_config"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *IntegrationRead) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *IntegrationRead) UnmarshalJSON(data []byte) error {
+	type unmarshaler IntegrationRead
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = IntegrationRead(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *IntegrationRead) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
+type PaginatedSlimIntegrationReadList struct {
+	Count    *int                   `json:"count,omitempty" url:"count,omitempty"`
+	Next     *string                `json:"next,omitempty" url:"next,omitempty"`
+	Previous *string                `json:"previous,omitempty" url:"previous,omitempty"`
+	Results  []*SlimIntegrationRead `json:"results,omitempty" url:"results,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaginatedSlimIntegrationReadList) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaginatedSlimIntegrationReadList) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaginatedSlimIntegrationReadList
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaginatedSlimIntegrationReadList(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaginatedSlimIntegrationReadList) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type SlimIntegrationRead struct {
+	Id       *string             `json:"id,omitempty" url:"id,omitempty"`
+	Label    *string             `json:"label,omitempty" url:"label,omitempty"`
+	IconUrl  string              `json:"icon_url" url:"icon_url"`
+	Name     IntegrationName     `json:"name" url:"name"`
+	Provider IntegrationProvider `json:"provider" url:"provider"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *SlimIntegrationRead) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *SlimIntegrationRead) UnmarshalJSON(data []byte) error {
+	type unmarshaler SlimIntegrationRead
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = SlimIntegrationRead(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *SlimIntegrationRead) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
 }
