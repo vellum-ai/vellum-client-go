@@ -40,9 +40,9 @@ func NewClient(opts ...option.RequestOption) *Client {
 func (c *Client) RetrieveIntegrationToolDefinition(
 	ctx context.Context,
 	// The integration name
-	integration string,
+	integrationName string,
 	// The integration provider name
-	provider string,
+	integrationProvider string,
 	// The tool's unique name, as specified by the integration provider
 	toolName string,
 	opts ...option.RequestOption,
@@ -58,8 +58,8 @@ func (c *Client) RetrieveIntegrationToolDefinition(
 	}
 	endpointURL := core.EncodeURL(
 		baseURL+"/integrations/v1/providers/%v/integrations/%v/tools/%v",
-		provider,
-		integration,
+		integrationProvider,
+		integrationName,
 		toolName,
 	)
 
@@ -87,9 +87,9 @@ func (c *Client) RetrieveIntegrationToolDefinition(
 func (c *Client) ExecuteIntegrationTool(
 	ctx context.Context,
 	// The integration name
-	integration string,
+	integrationName string,
 	// The integration provider name
-	provider string,
+	integrationProvider string,
 	// The tool's unique name, as specified by the integration provider
 	toolName string,
 	request vellumclientgo.ComponentsSchemasComposioExecuteToolRequest,
@@ -106,8 +106,8 @@ func (c *Client) ExecuteIntegrationTool(
 	}
 	endpointURL := core.EncodeURL(
 		baseURL+"/integrations/v1/providers/%v/integrations/%v/tools/%v/execute",
-		provider,
-		integration,
+		integrationProvider,
+		integrationName,
 		toolName,
 	)
 
@@ -123,6 +123,13 @@ func (c *Client) ExecuteIntegrationTool(
 		switch statusCode {
 		case 400:
 			value := new(vellumclientgo.BadRequestError)
+			value.APIError = apiError
+			if err := decoder.Decode(value); err != nil {
+				return apiError
+			}
+			return value
+		case 403:
+			value := new(vellumclientgo.ForbiddenError)
 			value.APIError = apiError
 			if err := decoder.Decode(value); err != nil {
 				return apiError
@@ -146,6 +153,91 @@ func (c *Client) ExecuteIntegrationTool(
 			Request:         request,
 			Response:        &response,
 			ErrorDecoder:    errorDecoder,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// List all integrations
+func (c *Client) List(
+	ctx context.Context,
+	request *vellumclientgo.IntegrationsListRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.PaginatedSlimIntegrationReadList, error) {
+	options := core.NewRequestOptions(opts...)
+
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := baseURL + "/v1/integrations"
+
+	queryParams, err := core.QueryValues(request)
+	if err != nil {
+		return nil, err
+	}
+	if len(queryParams) > 0 {
+		endpointURL += "?" + queryParams.Encode()
+	}
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
+	var response *vellumclientgo.PaginatedSlimIntegrationReadList
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodGet,
+			MaxAttempts:     options.MaxAttempts,
+			Headers:         headers,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Retrieve an integration
+func (c *Client) Retrieve(
+	ctx context.Context,
+	// A UUID string identifying this integration.
+	id string,
+	opts ...option.RequestOption,
+) (*vellumclientgo.IntegrationRead, error) {
+	options := core.NewRequestOptions(opts...)
+
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(baseURL+"/v1/integrations/%v", id)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
+	var response *vellumclientgo.IntegrationRead
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodGet,
+			MaxAttempts:     options.MaxAttempts,
+			Headers:         headers,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        &response,
 		},
 	); err != nil {
 		return nil, err

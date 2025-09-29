@@ -20,9 +20,9 @@ type TestSuiteRunCreateRequest struct {
 
 type TestSuiteRunsListExecutionsRequest struct {
 	// The response fields to expand for more information.
-	// - 'results.metric_results.metric_label' expands the metric label for each metric result.
-	// - 'results.metric_results.metric_definition' expands the metric definition for each metric result.
-	// - 'results.metric_results.metric_definition.name' expands the metric definition name for each metric result.
+	// - 'metric_results.metric_label' expands the metric label for each metric result.
+	// - 'metric_results.metric_definition' expands the metric definition for each metric result.
+	// - 'metric_results.metric_definition.name' expands the metric definition name for each metric result.
 	Expand []*string `json:"-" url:"expand,omitempty"`
 	// Number of results to return per page.
 	Limit *int `json:"-" url:"limit,omitempty"`

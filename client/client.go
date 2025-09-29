@@ -16,6 +16,8 @@ import (
 	documents "github.com/vellum-ai/vellum-client-go/documents"
 	events "github.com/vellum-ai/vellum-client-go/events"
 	folderentities "github.com/vellum-ai/vellum-client-go/folderentities"
+	integrationauthconfigs "github.com/vellum-ai/vellum-client-go/integrationauthconfigs"
+	integrationproviders "github.com/vellum-ai/vellum-client-go/integrationproviders"
 	integrations "github.com/vellum-ai/vellum-client-go/integrations"
 	metricdefinitions "github.com/vellum-ai/vellum-client-go/metricdefinitions"
 	mlmodels "github.com/vellum-ai/vellum-client-go/mlmodels"
@@ -40,27 +42,29 @@ type Client struct {
 	caller  *core.Caller
 	header  http.Header
 
-	Integrations        *integrations.Client
-	Events              *events.Client
-	AdHoc               *adhoc.Client
-	ContainerImages     *containerimages.Client
-	Deployments         *deployments.Client
-	DocumentIndexes     *documentindexes.Client
-	Documents           *documents.Client
-	FolderEntities      *folderentities.Client
-	MetricDefinitions   *metricdefinitions.Client
-	MlModels            *mlmodels.Client
-	Organizations       *organizations.Client
-	Prompts             *prompts.Client
-	Sandboxes           *sandboxes.Client
-	TestSuiteRuns       *testsuiteruns.Client
-	TestSuites          *testsuites.Client
-	WorkflowDeployments *workflowdeployments.Client
-	WorkflowExecutions  *workflowexecutions.Client
-	WorkflowSandboxes   *workflowsandboxes.Client
-	Workflows           *workflows.Client
-	WorkspaceSecrets    *workspacesecrets.Client
-	Workspaces          *workspaces.Client
+	Integrations           *integrations.Client
+	Events                 *events.Client
+	AdHoc                  *adhoc.Client
+	ContainerImages        *containerimages.Client
+	Deployments            *deployments.Client
+	DocumentIndexes        *documentindexes.Client
+	Documents              *documents.Client
+	FolderEntities         *folderentities.Client
+	IntegrationAuthConfigs *integrationauthconfigs.Client
+	IntegrationProviders   *integrationproviders.Client
+	MetricDefinitions      *metricdefinitions.Client
+	MlModels               *mlmodels.Client
+	Organizations          *organizations.Client
+	Prompts                *prompts.Client
+	Sandboxes              *sandboxes.Client
+	TestSuiteRuns          *testsuiteruns.Client
+	TestSuites             *testsuites.Client
+	WorkflowDeployments    *workflowdeployments.Client
+	WorkflowExecutions     *workflowexecutions.Client
+	WorkflowSandboxes      *workflowsandboxes.Client
+	Workflows              *workflows.Client
+	WorkspaceSecrets       *workspacesecrets.Client
+	Workspaces             *workspaces.Client
 }
 
 func NewClient(opts ...option.RequestOption) *Client {
@@ -76,28 +80,30 @@ func NewClient(opts ...option.RequestOption) *Client {
 				MaxAttempts: options.MaxAttempts,
 			},
 		),
-		header:              options.ToHeader(),
-		Integrations:        integrations.NewClient(opts...),
-		Events:              events.NewClient(opts...),
-		AdHoc:               adhoc.NewClient(opts...),
-		ContainerImages:     containerimages.NewClient(opts...),
-		Deployments:         deployments.NewClient(opts...),
-		DocumentIndexes:     documentindexes.NewClient(opts...),
-		Documents:           documents.NewClient(opts...),
-		FolderEntities:      folderentities.NewClient(opts...),
-		MetricDefinitions:   metricdefinitions.NewClient(opts...),
-		MlModels:            mlmodels.NewClient(opts...),
-		Organizations:       organizations.NewClient(opts...),
-		Prompts:             prompts.NewClient(opts...),
-		Sandboxes:           sandboxes.NewClient(opts...),
-		TestSuiteRuns:       testsuiteruns.NewClient(opts...),
-		TestSuites:          testsuites.NewClient(opts...),
-		WorkflowDeployments: workflowdeployments.NewClient(opts...),
-		WorkflowExecutions:  workflowexecutions.NewClient(opts...),
-		WorkflowSandboxes:   workflowsandboxes.NewClient(opts...),
-		Workflows:           workflows.NewClient(opts...),
-		WorkspaceSecrets:    workspacesecrets.NewClient(opts...),
-		Workspaces:          workspaces.NewClient(opts...),
+		header:                 options.ToHeader(),
+		Integrations:           integrations.NewClient(opts...),
+		Events:                 events.NewClient(opts...),
+		AdHoc:                  adhoc.NewClient(opts...),
+		ContainerImages:        containerimages.NewClient(opts...),
+		Deployments:            deployments.NewClient(opts...),
+		DocumentIndexes:        documentindexes.NewClient(opts...),
+		Documents:              documents.NewClient(opts...),
+		FolderEntities:         folderentities.NewClient(opts...),
+		IntegrationAuthConfigs: integrationauthconfigs.NewClient(opts...),
+		IntegrationProviders:   integrationproviders.NewClient(opts...),
+		MetricDefinitions:      metricdefinitions.NewClient(opts...),
+		MlModels:               mlmodels.NewClient(opts...),
+		Organizations:          organizations.NewClient(opts...),
+		Prompts:                prompts.NewClient(opts...),
+		Sandboxes:              sandboxes.NewClient(opts...),
+		TestSuiteRuns:          testsuiteruns.NewClient(opts...),
+		TestSuites:             testsuites.NewClient(opts...),
+		WorkflowDeployments:    workflowdeployments.NewClient(opts...),
+		WorkflowExecutions:     workflowexecutions.NewClient(opts...),
+		WorkflowSandboxes:      workflowsandboxes.NewClient(opts...),
+		Workflows:              workflows.NewClient(opts...),
+		WorkspaceSecrets:       workspacesecrets.NewClient(opts...),
+		Workspaces:             workspaces.NewClient(opts...),
 	}
 }
 
