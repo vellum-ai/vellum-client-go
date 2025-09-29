@@ -21008,7 +21008,7 @@ func (t *TokenOverlappingWindowChunking) String() string {
 }
 
 type ToolDefinitionIntegration struct {
-	Id       *string             `json:"id,omitempty" url:"id,omitempty"`
+	Id       string              `json:"id" url:"id"`
 	Provider IntegrationProvider `json:"provider" url:"provider"`
 	Name     IntegrationName     `json:"name" url:"name"`
 

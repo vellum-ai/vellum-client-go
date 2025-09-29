@@ -24,6 +24,49 @@ type ListIntegrationAuthConfigsRequest struct {
 	Search *string `json:"-" url:"search,omitempty"`
 }
 
+type IntegrationAuthConfigIntegration struct {
+	Id       string              `json:"id" url:"id"`
+	Provider IntegrationProvider `json:"provider" url:"provider"`
+	Name     IntegrationName     `json:"name" url:"name"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *IntegrationAuthConfigIntegration) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *IntegrationAuthConfigIntegration) UnmarshalJSON(data []byte) error {
+	type unmarshaler IntegrationAuthConfigIntegration
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = IntegrationAuthConfigIntegration(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *IntegrationAuthConfigIntegration) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
 type IntegrationAuthConfigIntegrationCredential struct {
 	Id *string `json:"id,omitempty" url:"id,omitempty"`
 
@@ -136,6 +179,7 @@ func (p *PaginatedSlimIntegrationAuthConfigReadList) String() string {
 // A slim representation of an Integration Auth Config.
 type SlimIntegrationAuthConfigRead struct {
 	Id                     *string                                       `json:"id,omitempty" url:"id,omitempty"`
+	Integration            *IntegrationAuthConfigIntegration             `json:"integration" url:"integration"`
 	IntegrationCredentials []*IntegrationAuthConfigIntegrationCredential `json:"integration_credentials,omitempty" url:"integration_credentials,omitempty"`
 	DefaultAccessType      *IntegrationCredentialAccessType              `json:"default_access_type,omitempty" url:"default_access_type,omitempty"`
 
