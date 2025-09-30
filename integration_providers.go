@@ -68,6 +68,7 @@ func (p *PaginatedSlimToolDefinitionList) String() string {
 type SlimComposioToolDefinition struct {
 	Integration *ToolDefinitionIntegration `json:"integration" url:"integration"`
 	Name        string                     `json:"name" url:"name"`
+	Label       string                     `json:"label" url:"label"`
 	Description string                     `json:"description" url:"description"`
 	provider    string
 
