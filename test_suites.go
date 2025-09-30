@@ -233,7 +233,7 @@ func (t *TestCaseArrayVariableValue) String() string {
 type TestCaseAudioVariableValue struct {
 	VariableId string       `json:"variable_id" url:"variable_id"`
 	Name       *string      `json:"name,omitempty" url:"name,omitempty"`
-	Value      *VellumAudio `json:"value" url:"value"`
+	Value      *VellumAudio `json:"value,omitempty" url:"value,omitempty"`
 	type_      string
 
 	extraProperties map[string]interface{}
@@ -373,7 +373,7 @@ func (t *TestCaseChatHistoryVariableValue) String() string {
 type TestCaseDocumentVariableValue struct {
 	VariableId string          `json:"variable_id" url:"variable_id"`
 	Name       *string         `json:"name,omitempty" url:"name,omitempty"`
-	Value      *VellumDocument `json:"value" url:"value"`
+	Value      *VellumDocument `json:"value,omitempty" url:"value,omitempty"`
 	type_      string
 
 	extraProperties map[string]interface{}
@@ -583,7 +583,7 @@ func (t *TestCaseFunctionCallVariableValue) String() string {
 type TestCaseImageVariableValue struct {
 	VariableId string       `json:"variable_id" url:"variable_id"`
 	Name       *string      `json:"name,omitempty" url:"name,omitempty"`
-	Value      *VellumImage `json:"value" url:"value"`
+	Value      *VellumImage `json:"value,omitempty" url:"value,omitempty"`
 	type_      string
 
 	extraProperties map[string]interface{}
@@ -1107,7 +1107,7 @@ func (t *TestCaseVariableValue) Accept(visitor TestCaseVariableValueVisitor) err
 type TestCaseVideoVariableValue struct {
 	VariableId string       `json:"variable_id" url:"variable_id"`
 	Name       *string      `json:"name,omitempty" url:"name,omitempty"`
-	Value      *VellumVideo `json:"value" url:"value"`
+	Value      *VellumVideo `json:"value,omitempty" url:"value,omitempty"`
 	type_      string
 
 	extraProperties map[string]interface{}

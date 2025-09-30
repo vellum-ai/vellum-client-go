@@ -3520,6 +3520,7 @@ type ComponentsSchemasPdfSearchResultMetaSourceRequest = *PdfSearchResultMetaSou
 type ComposioToolDefinition struct {
 	Integration      *ToolDefinitionIntegration `json:"integration" url:"integration"`
 	Name             string                     `json:"name" url:"name"`
+	Label            string                     `json:"label" url:"label"`
 	Description      string                     `json:"description" url:"description"`
 	InputParameters  map[string]interface{}     `json:"input_parameters" url:"input_parameters"`
 	OutputParameters map[string]interface{}     `json:"output_parameters" url:"output_parameters"`
@@ -10532,7 +10533,7 @@ func (n *NamedTestCaseArrayVariableValueRequest) String() string {
 
 // Named Test Case value that is of type AUDIO
 type NamedTestCaseAudioVariableValueRequest struct {
-	Value *VellumAudioRequest `json:"value" url:"value"`
+	Value *VellumAudioRequest `json:"value,omitempty" url:"value,omitempty"`
 	Name  string              `json:"name" url:"name"`
 	type_ string
 
@@ -10669,7 +10670,7 @@ func (n *NamedTestCaseChatHistoryVariableValueRequest) String() string {
 }
 
 type NamedTestCaseDocumentVariableValueRequest struct {
-	Value *VellumDocumentRequest `json:"value" url:"value"`
+	Value *VellumDocumentRequest `json:"value,omitempty" url:"value,omitempty"`
 	Name  string                 `json:"name" url:"name"`
 	type_ string
 
@@ -10875,7 +10876,7 @@ func (n *NamedTestCaseFunctionCallVariableValueRequest) String() string {
 }
 
 type NamedTestCaseImageVariableValueRequest struct {
-	Value *VellumImageRequest `json:"value" url:"value"`
+	Value *VellumImageRequest `json:"value,omitempty" url:"value,omitempty"`
 	Name  string              `json:"name" url:"name"`
 	type_ string
 
@@ -11393,7 +11394,7 @@ func (n *NamedTestCaseVariableValueRequest) Accept(visitor NamedTestCaseVariable
 }
 
 type NamedTestCaseVideoVariableValueRequest struct {
-	Value *VellumVideoRequest `json:"value" url:"value"`
+	Value *VellumVideoRequest `json:"value,omitempty" url:"value,omitempty"`
 	Name  string              `json:"name" url:"name"`
 	type_ string
 
