@@ -187,7 +187,7 @@ func (n *NamedTestCaseArrayVariableValue) String() string {
 
 // Named Test Case value that is of type AUDIO
 type NamedTestCaseAudioVariableValue struct {
-	Value *VellumAudio `json:"value" url:"value"`
+	Value *VellumAudio `json:"value,omitempty" url:"value,omitempty"`
 	Name  string       `json:"name" url:"name"`
 	type_ string
 
@@ -324,7 +324,7 @@ func (n *NamedTestCaseChatHistoryVariableValue) String() string {
 }
 
 type NamedTestCaseDocumentVariableValue struct {
-	Value *VellumDocument `json:"value" url:"value"`
+	Value *VellumDocument `json:"value,omitempty" url:"value,omitempty"`
 	Name  string          `json:"name" url:"name"`
 	type_ string
 
@@ -530,7 +530,7 @@ func (n *NamedTestCaseFunctionCallVariableValue) String() string {
 }
 
 type NamedTestCaseImageVariableValue struct {
-	Value *VellumImage `json:"value" url:"value"`
+	Value *VellumImage `json:"value,omitempty" url:"value,omitempty"`
 	Name  string       `json:"name" url:"name"`
 	type_ string
 
@@ -1048,7 +1048,7 @@ func (n *NamedTestCaseVariableValue) Accept(visitor NamedTestCaseVariableValueVi
 }
 
 type NamedTestCaseVideoVariableValue struct {
-	Value *VellumVideo `json:"value" url:"value"`
+	Value *VellumVideo `json:"value,omitempty" url:"value,omitempty"`
 	Name  string       `json:"name" url:"name"`
 	type_ string
 
