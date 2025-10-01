@@ -22,10 +22,10 @@ type ListIntegrationToolsRequest struct {
 type ComponentsSchemasSlimComposioToolDefinition = *SlimComposioToolDefinition
 
 type PaginatedSlimToolDefinitionList struct {
-	Count    *int                                          `json:"count,omitempty" url:"count,omitempty"`
+	Count    int                                           `json:"count" url:"count"`
 	Next     *string                                       `json:"next,omitempty" url:"next,omitempty"`
 	Previous *string                                       `json:"previous,omitempty" url:"previous,omitempty"`
-	Results  []ComponentsSchemasSlimComposioToolDefinition `json:"results,omitempty" url:"results,omitempty"`
+	Results  []ComponentsSchemasSlimComposioToolDefinition `json:"results" url:"results"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
