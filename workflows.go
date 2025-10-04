@@ -6,6 +6,7 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 	core "github.com/vellum-ai/vellum-client-go/core"
+	time "time"
 )
 
 type WorkflowsPullRequest struct {
@@ -112,6 +113,73 @@ func (w *WorkflowPushResponse) UnmarshalJSON(data []byte) error {
 }
 
 func (w *WorkflowPushResponse) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
+}
+
+// The latest execution state of a given Workflow Execution
+type WorkflowResolvedState struct {
+	TraceId         string                 `json:"trace_id" url:"trace_id"`
+	Timestamp       time.Time              `json:"timestamp" url:"timestamp"`
+	SpanId          string                 `json:"span_id" url:"span_id"`
+	State           map[string]interface{} `json:"state" url:"state"`
+	PreviousSpanId  *string                `json:"previous_span_id,omitempty" url:"previous_span_id,omitempty"`
+	PreviousTraceId *string                `json:"previous_trace_id,omitempty" url:"previous_trace_id,omitempty"`
+	RootSpanId      *string                `json:"root_span_id,omitempty" url:"root_span_id,omitempty"`
+	RootTraceId     *string                `json:"root_trace_id,omitempty" url:"root_trace_id,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowResolvedState) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkflowResolvedState) UnmarshalJSON(data []byte) error {
+	type embed WorkflowResolvedState
+	var unmarshaler = struct {
+		embed
+		Timestamp *core.DateTime `json:"timestamp"`
+	}{
+		embed: embed(*w),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*w = WorkflowResolvedState(unmarshaler.embed)
+	w.Timestamp = unmarshaler.Timestamp.Time()
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowResolvedState) MarshalJSON() ([]byte, error) {
+	type embed WorkflowResolvedState
+	var marshaler = struct {
+		embed
+		Timestamp *core.DateTime `json:"timestamp"`
+	}{
+		embed:     embed(*w),
+		Timestamp: core.NewDateTime(w.Timestamp),
+	}
+	return json.Marshal(marshaler)
+}
+
+func (w *WorkflowResolvedState) String() string {
 	if len(w._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
 			return value
