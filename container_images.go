@@ -19,9 +19,10 @@ type ContainerImagesListRequest struct {
 }
 
 type PushContainerImageRequest struct {
-	Name string   `json:"name" url:"-"`
-	Sha  string   `json:"sha" url:"-"`
-	Tags []string `json:"tags,omitempty" url:"-"`
+	Name  string   `json:"name" url:"-"`
+	Sha   string   `json:"sha" url:"-"`
+	Tags  []string `json:"tags,omitempty" url:"-"`
+	Force *bool    `json:"force,omitempty" url:"-"`
 }
 
 // * `QUEUED` - Queued

@@ -14,6 +14,7 @@ import (
 	io "io"
 	multipart "mime/multipart"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -24,8 +25,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.ApiVersion == "" {
+		options.ApiVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -99,6 +100,47 @@ func (c *Client) Pull(
 			Client:          options.HTTPClient,
 			Response:        response,
 			ErrorDecoder:    errorDecoder,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Retrieve the current state of a workflow execution.
+//
+// **Note:** Uses a base url of `https://predict.vellum.ai`.
+func (c *Client) RetrieveState(
+	ctx context.Context,
+	// The span ID of the workflow execution to retrieve state for
+	spanId string,
+	opts ...option.RequestOption,
+) (*vellumclientgo.WorkflowResolvedState, error) {
+	options := core.NewRequestOptions(opts...)
+
+	baseURL := "https://predict.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(baseURL+"/v1/workflows/%v/state", spanId)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
+	var response *vellumclientgo.WorkflowResolvedState
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodGet,
+			MaxAttempts:     options.MaxAttempts,
+			Headers:         headers,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        &response,
 		},
 	); err != nil {
 		return nil, err
