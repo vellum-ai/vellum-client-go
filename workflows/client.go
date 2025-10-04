@@ -106,6 +106,47 @@ func (c *Client) Pull(
 	return response, nil
 }
 
+// Retrieve the current state of a workflow execution.
+//
+// **Note:** Uses a base url of `https://predict.vellum.ai`.
+func (c *Client) RetrieveState(
+	ctx context.Context,
+	// The span ID of the workflow execution to retrieve state for
+	spanId string,
+	opts ...option.RequestOption,
+) (*vellumclientgo.WorkflowResolvedState, error) {
+	options := core.NewRequestOptions(opts...)
+
+	baseURL := "https://predict.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(baseURL+"/v1/workflows/%v/state", spanId)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
+	var response *vellumclientgo.WorkflowResolvedState
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodGet,
+			MaxAttempts:     options.MaxAttempts,
+			Headers:         headers,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
 func (c *Client) Push(
 	ctx context.Context,
 	artifact io.Reader,
