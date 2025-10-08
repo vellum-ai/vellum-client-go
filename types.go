@@ -21607,21 +21607,25 @@ func (v *VellumError) String() string {
 // * `INVALID_INPUTS` - INVALID_INPUTS
 // * `PROVIDER_ERROR` - PROVIDER_ERROR
 // * `PROVIDER_CREDENTIALS_UNAVAILABLE` - PROVIDER_CREDENTIALS_UNAVAILABLE
+// * `INTEGRATION_CREDENTIALS_UNAVAILABLE` - INTEGRATION_CREDENTIALS_UNAVAILABLE
 // * `REQUEST_TIMEOUT` - REQUEST_TIMEOUT
 // * `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
 // * `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
 // * `WORKFLOW_CANCELLED` - WORKFLOW_CANCELLED
+// * `NODE_CANCELLED` - NODE_CANCELLED
 type VellumErrorCodeEnum string
 
 const (
-	VellumErrorCodeEnumInvalidRequest                 VellumErrorCodeEnum = "INVALID_REQUEST"
-	VellumErrorCodeEnumInvalidInputs                  VellumErrorCodeEnum = "INVALID_INPUTS"
-	VellumErrorCodeEnumProviderError                  VellumErrorCodeEnum = "PROVIDER_ERROR"
-	VellumErrorCodeEnumProviderCredentialsUnavailable VellumErrorCodeEnum = "PROVIDER_CREDENTIALS_UNAVAILABLE"
-	VellumErrorCodeEnumRequestTimeout                 VellumErrorCodeEnum = "REQUEST_TIMEOUT"
-	VellumErrorCodeEnumInternalServerError            VellumErrorCodeEnum = "INTERNAL_SERVER_ERROR"
-	VellumErrorCodeEnumUserDefinedError               VellumErrorCodeEnum = "USER_DEFINED_ERROR"
-	VellumErrorCodeEnumWorkflowCancelled              VellumErrorCodeEnum = "WORKFLOW_CANCELLED"
+	VellumErrorCodeEnumInvalidRequest                    VellumErrorCodeEnum = "INVALID_REQUEST"
+	VellumErrorCodeEnumInvalidInputs                     VellumErrorCodeEnum = "INVALID_INPUTS"
+	VellumErrorCodeEnumProviderError                     VellumErrorCodeEnum = "PROVIDER_ERROR"
+	VellumErrorCodeEnumProviderCredentialsUnavailable    VellumErrorCodeEnum = "PROVIDER_CREDENTIALS_UNAVAILABLE"
+	VellumErrorCodeEnumIntegrationCredentialsUnavailable VellumErrorCodeEnum = "INTEGRATION_CREDENTIALS_UNAVAILABLE"
+	VellumErrorCodeEnumRequestTimeout                    VellumErrorCodeEnum = "REQUEST_TIMEOUT"
+	VellumErrorCodeEnumInternalServerError               VellumErrorCodeEnum = "INTERNAL_SERVER_ERROR"
+	VellumErrorCodeEnumUserDefinedError                  VellumErrorCodeEnum = "USER_DEFINED_ERROR"
+	VellumErrorCodeEnumWorkflowCancelled                 VellumErrorCodeEnum = "WORKFLOW_CANCELLED"
+	VellumErrorCodeEnumNodeCancelled                     VellumErrorCodeEnum = "NODE_CANCELLED"
 )
 
 func NewVellumErrorCodeEnumFromString(s string) (VellumErrorCodeEnum, error) {
@@ -21634,6 +21638,8 @@ func NewVellumErrorCodeEnumFromString(s string) (VellumErrorCodeEnum, error) {
 		return VellumErrorCodeEnumProviderError, nil
 	case "PROVIDER_CREDENTIALS_UNAVAILABLE":
 		return VellumErrorCodeEnumProviderCredentialsUnavailable, nil
+	case "INTEGRATION_CREDENTIALS_UNAVAILABLE":
+		return VellumErrorCodeEnumIntegrationCredentialsUnavailable, nil
 	case "REQUEST_TIMEOUT":
 		return VellumErrorCodeEnumRequestTimeout, nil
 	case "INTERNAL_SERVER_ERROR":
@@ -21642,6 +21648,8 @@ func NewVellumErrorCodeEnumFromString(s string) (VellumErrorCodeEnum, error) {
 		return VellumErrorCodeEnumUserDefinedError, nil
 	case "WORKFLOW_CANCELLED":
 		return VellumErrorCodeEnumWorkflowCancelled, nil
+	case "NODE_CANCELLED":
+		return VellumErrorCodeEnumNodeCancelled, nil
 	}
 	var t VellumErrorCodeEnum
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -21925,25 +21933,29 @@ func (v *VellumSdkError) String() string {
 // * `INVALID_TEMPLATE` - INVALID_TEMPLATE
 // * `INTERNAL_ERROR` - INTERNAL_ERROR
 // * `PROVIDER_CREDENTIALS_UNAVAILABLE` - PROVIDER_CREDENTIALS_UNAVAILABLE
+// * `INTEGRATION_CREDENTIALS_UNAVAILABLE` - INTEGRATION_CREDENTIALS_UNAVAILABLE
 // * `PROVIDER_ERROR` - PROVIDER_ERROR
 // * `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
 // * `WORKFLOW_CANCELLED` - WORKFLOW_CANCELLED
+// * `NODE_CANCELLED` - NODE_CANCELLED
 // * `NODE_EXECUTION` - NODE_EXECUTION
 type VellumSdkErrorCodeEnum string
 
 const (
-	VellumSdkErrorCodeEnumInvalidWorkflow                VellumSdkErrorCodeEnum = "INVALID_WORKFLOW"
-	VellumSdkErrorCodeEnumInvalidInputs                  VellumSdkErrorCodeEnum = "INVALID_INPUTS"
-	VellumSdkErrorCodeEnumInvalidOutputs                 VellumSdkErrorCodeEnum = "INVALID_OUTPUTS"
-	VellumSdkErrorCodeEnumInvalidState                   VellumSdkErrorCodeEnum = "INVALID_STATE"
-	VellumSdkErrorCodeEnumInvalidCode                    VellumSdkErrorCodeEnum = "INVALID_CODE"
-	VellumSdkErrorCodeEnumInvalidTemplate                VellumSdkErrorCodeEnum = "INVALID_TEMPLATE"
-	VellumSdkErrorCodeEnumInternalError                  VellumSdkErrorCodeEnum = "INTERNAL_ERROR"
-	VellumSdkErrorCodeEnumProviderCredentialsUnavailable VellumSdkErrorCodeEnum = "PROVIDER_CREDENTIALS_UNAVAILABLE"
-	VellumSdkErrorCodeEnumProviderError                  VellumSdkErrorCodeEnum = "PROVIDER_ERROR"
-	VellumSdkErrorCodeEnumUserDefinedError               VellumSdkErrorCodeEnum = "USER_DEFINED_ERROR"
-	VellumSdkErrorCodeEnumWorkflowCancelled              VellumSdkErrorCodeEnum = "WORKFLOW_CANCELLED"
-	VellumSdkErrorCodeEnumNodeExecution                  VellumSdkErrorCodeEnum = "NODE_EXECUTION"
+	VellumSdkErrorCodeEnumInvalidWorkflow                   VellumSdkErrorCodeEnum = "INVALID_WORKFLOW"
+	VellumSdkErrorCodeEnumInvalidInputs                     VellumSdkErrorCodeEnum = "INVALID_INPUTS"
+	VellumSdkErrorCodeEnumInvalidOutputs                    VellumSdkErrorCodeEnum = "INVALID_OUTPUTS"
+	VellumSdkErrorCodeEnumInvalidState                      VellumSdkErrorCodeEnum = "INVALID_STATE"
+	VellumSdkErrorCodeEnumInvalidCode                       VellumSdkErrorCodeEnum = "INVALID_CODE"
+	VellumSdkErrorCodeEnumInvalidTemplate                   VellumSdkErrorCodeEnum = "INVALID_TEMPLATE"
+	VellumSdkErrorCodeEnumInternalError                     VellumSdkErrorCodeEnum = "INTERNAL_ERROR"
+	VellumSdkErrorCodeEnumProviderCredentialsUnavailable    VellumSdkErrorCodeEnum = "PROVIDER_CREDENTIALS_UNAVAILABLE"
+	VellumSdkErrorCodeEnumIntegrationCredentialsUnavailable VellumSdkErrorCodeEnum = "INTEGRATION_CREDENTIALS_UNAVAILABLE"
+	VellumSdkErrorCodeEnumProviderError                     VellumSdkErrorCodeEnum = "PROVIDER_ERROR"
+	VellumSdkErrorCodeEnumUserDefinedError                  VellumSdkErrorCodeEnum = "USER_DEFINED_ERROR"
+	VellumSdkErrorCodeEnumWorkflowCancelled                 VellumSdkErrorCodeEnum = "WORKFLOW_CANCELLED"
+	VellumSdkErrorCodeEnumNodeCancelled                     VellumSdkErrorCodeEnum = "NODE_CANCELLED"
+	VellumSdkErrorCodeEnumNodeExecution                     VellumSdkErrorCodeEnum = "NODE_EXECUTION"
 )
 
 func NewVellumSdkErrorCodeEnumFromString(s string) (VellumSdkErrorCodeEnum, error) {
@@ -21964,12 +21976,16 @@ func NewVellumSdkErrorCodeEnumFromString(s string) (VellumSdkErrorCodeEnum, erro
 		return VellumSdkErrorCodeEnumInternalError, nil
 	case "PROVIDER_CREDENTIALS_UNAVAILABLE":
 		return VellumSdkErrorCodeEnumProviderCredentialsUnavailable, nil
+	case "INTEGRATION_CREDENTIALS_UNAVAILABLE":
+		return VellumSdkErrorCodeEnumIntegrationCredentialsUnavailable, nil
 	case "PROVIDER_ERROR":
 		return VellumSdkErrorCodeEnumProviderError, nil
 	case "USER_DEFINED_ERROR":
 		return VellumSdkErrorCodeEnumUserDefinedError, nil
 	case "WORKFLOW_CANCELLED":
 		return VellumSdkErrorCodeEnumWorkflowCancelled, nil
+	case "NODE_CANCELLED":
+		return VellumSdkErrorCodeEnumNodeCancelled, nil
 	case "NODE_EXECUTION":
 		return VellumSdkErrorCodeEnumNodeExecution, nil
 	}
@@ -23950,9 +23966,11 @@ func (w *WorkflowExecutionActualStringRequest) String() string {
 // * `WORKFLOW_INITIALIZATION` - WORKFLOW_INITIALIZATION
 // * `WORKFLOW_CANCELLED` - WORKFLOW_CANCELLED
 // * `PROVIDER_CREDENTIALS_UNAVAILABLE` - PROVIDER_CREDENTIALS_UNAVAILABLE
+// * `INTEGRATION_CREDENTIALS_UNAVAILABLE` - INTEGRATION_CREDENTIALS_UNAVAILABLE
 // * `NODE_EXECUTION_COUNT_LIMIT_REACHED` - NODE_EXECUTION_COUNT_LIMIT_REACHED
 // * `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
 // * `NODE_EXECUTION` - NODE_EXECUTION
+// * `NODE_CANCELLED` - NODE_CANCELLED
 // * `LLM_PROVIDER` - LLM_PROVIDER
 // * `INVALID_TEMPLATE` - INVALID_TEMPLATE
 // * `INVALID_INPUTS` - INVALID_INPUTS
@@ -23960,16 +23978,18 @@ func (w *WorkflowExecutionActualStringRequest) String() string {
 type WorkflowExecutionEventErrorCode string
 
 const (
-	WorkflowExecutionEventErrorCodeWorkflowInitialization         WorkflowExecutionEventErrorCode = "WORKFLOW_INITIALIZATION"
-	WorkflowExecutionEventErrorCodeWorkflowCancelled              WorkflowExecutionEventErrorCode = "WORKFLOW_CANCELLED"
-	WorkflowExecutionEventErrorCodeProviderCredentialsUnavailable WorkflowExecutionEventErrorCode = "PROVIDER_CREDENTIALS_UNAVAILABLE"
-	WorkflowExecutionEventErrorCodeNodeExecutionCountLimitReached WorkflowExecutionEventErrorCode = "NODE_EXECUTION_COUNT_LIMIT_REACHED"
-	WorkflowExecutionEventErrorCodeInternalServerError            WorkflowExecutionEventErrorCode = "INTERNAL_SERVER_ERROR"
-	WorkflowExecutionEventErrorCodeNodeExecution                  WorkflowExecutionEventErrorCode = "NODE_EXECUTION"
-	WorkflowExecutionEventErrorCodeLlmProvider                    WorkflowExecutionEventErrorCode = "LLM_PROVIDER"
-	WorkflowExecutionEventErrorCodeInvalidTemplate                WorkflowExecutionEventErrorCode = "INVALID_TEMPLATE"
-	WorkflowExecutionEventErrorCodeInvalidInputs                  WorkflowExecutionEventErrorCode = "INVALID_INPUTS"
-	WorkflowExecutionEventErrorCodeUserDefinedError               WorkflowExecutionEventErrorCode = "USER_DEFINED_ERROR"
+	WorkflowExecutionEventErrorCodeWorkflowInitialization            WorkflowExecutionEventErrorCode = "WORKFLOW_INITIALIZATION"
+	WorkflowExecutionEventErrorCodeWorkflowCancelled                 WorkflowExecutionEventErrorCode = "WORKFLOW_CANCELLED"
+	WorkflowExecutionEventErrorCodeProviderCredentialsUnavailable    WorkflowExecutionEventErrorCode = "PROVIDER_CREDENTIALS_UNAVAILABLE"
+	WorkflowExecutionEventErrorCodeIntegrationCredentialsUnavailable WorkflowExecutionEventErrorCode = "INTEGRATION_CREDENTIALS_UNAVAILABLE"
+	WorkflowExecutionEventErrorCodeNodeExecutionCountLimitReached    WorkflowExecutionEventErrorCode = "NODE_EXECUTION_COUNT_LIMIT_REACHED"
+	WorkflowExecutionEventErrorCodeInternalServerError               WorkflowExecutionEventErrorCode = "INTERNAL_SERVER_ERROR"
+	WorkflowExecutionEventErrorCodeNodeExecution                     WorkflowExecutionEventErrorCode = "NODE_EXECUTION"
+	WorkflowExecutionEventErrorCodeNodeCancelled                     WorkflowExecutionEventErrorCode = "NODE_CANCELLED"
+	WorkflowExecutionEventErrorCodeLlmProvider                       WorkflowExecutionEventErrorCode = "LLM_PROVIDER"
+	WorkflowExecutionEventErrorCodeInvalidTemplate                   WorkflowExecutionEventErrorCode = "INVALID_TEMPLATE"
+	WorkflowExecutionEventErrorCodeInvalidInputs                     WorkflowExecutionEventErrorCode = "INVALID_INPUTS"
+	WorkflowExecutionEventErrorCodeUserDefinedError                  WorkflowExecutionEventErrorCode = "USER_DEFINED_ERROR"
 )
 
 func NewWorkflowExecutionEventErrorCodeFromString(s string) (WorkflowExecutionEventErrorCode, error) {
@@ -23980,12 +24000,16 @@ func NewWorkflowExecutionEventErrorCodeFromString(s string) (WorkflowExecutionEv
 		return WorkflowExecutionEventErrorCodeWorkflowCancelled, nil
 	case "PROVIDER_CREDENTIALS_UNAVAILABLE":
 		return WorkflowExecutionEventErrorCodeProviderCredentialsUnavailable, nil
+	case "INTEGRATION_CREDENTIALS_UNAVAILABLE":
+		return WorkflowExecutionEventErrorCodeIntegrationCredentialsUnavailable, nil
 	case "NODE_EXECUTION_COUNT_LIMIT_REACHED":
 		return WorkflowExecutionEventErrorCodeNodeExecutionCountLimitReached, nil
 	case "INTERNAL_SERVER_ERROR":
 		return WorkflowExecutionEventErrorCodeInternalServerError, nil
 	case "NODE_EXECUTION":
 		return WorkflowExecutionEventErrorCodeNodeExecution, nil
+	case "NODE_CANCELLED":
+		return WorkflowExecutionEventErrorCodeNodeCancelled, nil
 	case "LLM_PROVIDER":
 		return WorkflowExecutionEventErrorCodeLlmProvider, nil
 	case "INVALID_TEMPLATE":

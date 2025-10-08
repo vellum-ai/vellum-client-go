@@ -392,6 +392,54 @@ func (c *Client) UpdateWorkflowReleaseTag(
 	return response, nil
 }
 
+// List the Releases of the specified Workflow Deployment for the current Environment.
+func (c *Client) ListWorkflowDeploymentReleases(
+	ctx context.Context,
+	// Either the Workflow Deployment's ID or its unique name
+	id string,
+	request *vellumclientgo.ListWorkflowDeploymentReleasesRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.PaginatedWorkflowDeploymentReleaseList, error) {
+	options := core.NewRequestOptions(opts...)
+
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(baseURL+"/v1/workflow-deployments/%v/releases", id)
+
+	queryParams, err := core.QueryValues(request)
+	if err != nil {
+		return nil, err
+	}
+	if len(queryParams) > 0 {
+		endpointURL += "?" + queryParams.Encode()
+	}
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
+	var response *vellumclientgo.PaginatedWorkflowDeploymentReleaseList
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodGet,
+			MaxAttempts:     options.MaxAttempts,
+			Headers:         headers,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
 // Retrieve a specific Workflow Deployment Release by either its UUID or the name of a Release Tag that points to it.
 func (c *Client) RetrieveWorkflowDeploymentRelease(
 	ctx context.Context,
