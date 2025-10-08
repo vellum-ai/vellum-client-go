@@ -29,6 +29,15 @@ type ListWorkflowDeploymentEventExecutionsRequest struct {
 	Ordering *string `json:"-" url:"ordering,omitempty"`
 }
 
+type ListWorkflowDeploymentReleasesRequest struct {
+	// Number of results to return per page.
+	Limit *int `json:"-" url:"limit,omitempty"`
+	// The initial index from which to return the results.
+	Offset *int `json:"-" url:"offset,omitempty"`
+	// Which field to use when ordering the results.
+	Ordering *string `json:"-" url:"ordering,omitempty"`
+}
+
 type ListWorkflowReleaseTagsRequest struct {
 	// Number of results to return per page.
 	Limit *int `json:"-" url:"limit,omitempty"`
@@ -72,6 +81,50 @@ func (p *PaginatedSlimWorkflowDeploymentList) UnmarshalJSON(data []byte) error {
 }
 
 func (p *PaginatedSlimWorkflowDeploymentList) String() string {
+	if len(p._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(p); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", p)
+}
+
+type PaginatedWorkflowDeploymentReleaseList struct {
+	Count    *int                         `json:"count,omitempty" url:"count,omitempty"`
+	Next     *string                      `json:"next,omitempty" url:"next,omitempty"`
+	Previous *string                      `json:"previous,omitempty" url:"previous,omitempty"`
+	Results  []*WorkflowDeploymentRelease `json:"results,omitempty" url:"results,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (p *PaginatedWorkflowDeploymentReleaseList) GetExtraProperties() map[string]interface{} {
+	return p.extraProperties
+}
+
+func (p *PaginatedWorkflowDeploymentReleaseList) UnmarshalJSON(data []byte) error {
+	type unmarshaler PaginatedWorkflowDeploymentReleaseList
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*p = PaginatedWorkflowDeploymentReleaseList(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *p)
+	if err != nil {
+		return err
+	}
+	p.extraProperties = extraProperties
+
+	p._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (p *PaginatedWorkflowDeploymentReleaseList) String() string {
 	if len(p._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(p._rawJSON); err == nil {
 			return value
