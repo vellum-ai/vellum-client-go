@@ -9254,6 +9254,7 @@ func (i *InstructorVectorizerConfig) String() string {
 // * `GOOGLE_CALENDAR` - Google Calendar
 // * `GOOGLE_DRIVE` - Google Drive
 // * `GMAIL` - Gmail
+// * `AIRTABLE` - Airtable
 type IntegrationName string
 
 const (
@@ -9268,6 +9269,7 @@ const (
 	IntegrationNameGoogleCalendar IntegrationName = "GOOGLE_CALENDAR"
 	IntegrationNameGoogleDrive    IntegrationName = "GOOGLE_DRIVE"
 	IntegrationNameGmail          IntegrationName = "GMAIL"
+	IntegrationNameAirtable       IntegrationName = "AIRTABLE"
 )
 
 func NewIntegrationNameFromString(s string) (IntegrationName, error) {
@@ -9294,6 +9296,8 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameGoogleDrive, nil
 	case "GMAIL":
 		return IntegrationNameGmail, nil
+	case "AIRTABLE":
+		return IntegrationNameAirtable, nil
 	}
 	var t IntegrationName
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -24054,6 +24058,7 @@ func (w WorkflowExecutionEventType) Ptr() *WorkflowExecutionEventType {
 type WorkflowExecutionFulfilledBody struct {
 	WorkflowDefinition *VellumCodeResourceDefinition `json:"workflow_definition" url:"workflow_definition"`
 	Outputs            map[string]interface{}        `json:"outputs" url:"outputs"`
+	FinalState         map[string]interface{}        `json:"final_state,omitempty" url:"final_state,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage

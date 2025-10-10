@@ -9,6 +9,10 @@ import (
 )
 
 type ListIntegrationToolsRequest struct {
+	// Whether to filter the tools by important
+	Important *bool `json:"-" url:"important,omitempty"`
+	// Whether to include deprecated tools
+	IncludeDeprecated *bool `json:"-" url:"include_deprecated,omitempty"`
 	// The Vellum Integration name
 	IntegrationName *string `json:"-" url:"integration_name,omitempty"`
 	// Number of results to return per page.
