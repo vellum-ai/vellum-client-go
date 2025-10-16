@@ -265,15 +265,15 @@ func (s *SlimWorkflowDeployment) String() string {
 
 type SlimWorkflowExecutionRead struct {
 	SpanId        string                                         `json:"span_id" url:"span_id"`
-	ParentContext *WorkflowDeploymentParentContext               `json:"parent_context,omitempty" url:"parent_context,omitempty"`
 	Start         time.Time                                      `json:"start" url:"start"`
 	End           *time.Time                                     `json:"end,omitempty" url:"end,omitempty"`
 	Inputs        []*ExecutionVellumValue                        `json:"inputs" url:"inputs"`
 	Outputs       []*ExecutionVellumValue                        `json:"outputs" url:"outputs"`
 	Error         *WorkflowError                                 `json:"error,omitempty" url:"error,omitempty"`
+	UsageResults  []*WorkflowExecutionUsageResult                `json:"usage_results,omitempty" url:"usage_results,omitempty"`
+	ParentContext *WorkflowDeploymentParentContext               `json:"parent_context,omitempty" url:"parent_context,omitempty"`
 	LatestActual  *WorkflowExecutionActual                       `json:"latest_actual,omitempty" url:"latest_actual,omitempty"`
 	MetricResults []*WorkflowExecutionViewOnlineEvalMetricResult `json:"metric_results" url:"metric_results"`
-	UsageResults  []*WorkflowExecutionUsageResult                `json:"usage_results,omitempty" url:"usage_results,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -599,15 +599,15 @@ func (w *WorkflowDeploymentReleaseWorkflowVersion) String() string {
 
 type WorkflowEventExecutionRead struct {
 	SpanId        string                                         `json:"span_id" url:"span_id"`
-	ParentContext *WorkflowDeploymentParentContext               `json:"parent_context,omitempty" url:"parent_context,omitempty"`
 	Start         time.Time                                      `json:"start" url:"start"`
 	End           *time.Time                                     `json:"end,omitempty" url:"end,omitempty"`
 	Inputs        []*ExecutionVellumValue                        `json:"inputs" url:"inputs"`
 	Outputs       []*ExecutionVellumValue                        `json:"outputs" url:"outputs"`
 	Error         *WorkflowError                                 `json:"error,omitempty" url:"error,omitempty"`
+	UsageResults  []*WorkflowExecutionUsageResult                `json:"usage_results,omitempty" url:"usage_results,omitempty"`
+	ParentContext *WorkflowDeploymentParentContext               `json:"parent_context,omitempty" url:"parent_context,omitempty"`
 	LatestActual  *WorkflowExecutionActual                       `json:"latest_actual,omitempty" url:"latest_actual,omitempty"`
 	MetricResults []*WorkflowExecutionViewOnlineEvalMetricResult `json:"metric_results" url:"metric_results"`
-	UsageResults  []*WorkflowExecutionUsageResult                `json:"usage_results,omitempty" url:"usage_results,omitempty"`
 	Spans         []*VellumSpan                                  `json:"spans" url:"spans"`
 	State         map[string]interface{}                         `json:"state,omitempty" url:"state,omitempty"`
 

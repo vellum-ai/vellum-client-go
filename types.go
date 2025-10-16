@@ -9255,6 +9255,10 @@ func (i *InstructorVectorizerConfig) String() string {
 // * `GOOGLE_DRIVE` - Google Drive
 // * `GMAIL` - Gmail
 // * `AIRTABLE` - Airtable
+// * `GAMMA` - Gamma
+// * `FIRECRAWL` - Firecrawl
+// * `PERPLEXITY` - Perplexity
+// * `SERPAPI` - Serp Api
 type IntegrationName string
 
 const (
@@ -9270,6 +9274,10 @@ const (
 	IntegrationNameGoogleDrive    IntegrationName = "GOOGLE_DRIVE"
 	IntegrationNameGmail          IntegrationName = "GMAIL"
 	IntegrationNameAirtable       IntegrationName = "AIRTABLE"
+	IntegrationNameGamma          IntegrationName = "GAMMA"
+	IntegrationNameFirecrawl      IntegrationName = "FIRECRAWL"
+	IntegrationNamePerplexity     IntegrationName = "PERPLEXITY"
+	IntegrationNameSerpapi        IntegrationName = "SERPAPI"
 )
 
 func NewIntegrationNameFromString(s string) (IntegrationName, error) {
@@ -9298,6 +9306,14 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameGmail, nil
 	case "AIRTABLE":
 		return IntegrationNameAirtable, nil
+	case "GAMMA":
+		return IntegrationNameGamma, nil
+	case "FIRECRAWL":
+		return IntegrationNameFirecrawl, nil
+	case "PERPLEXITY":
+		return IntegrationNamePerplexity, nil
+	case "SERPAPI":
+		return IntegrationNameSerpapi, nil
 	}
 	var t IntegrationName
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -21617,6 +21633,7 @@ func (v *VellumError) String() string {
 // * `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
 // * `WORKFLOW_CANCELLED` - WORKFLOW_CANCELLED
 // * `NODE_CANCELLED` - NODE_CANCELLED
+// * `PROVIDER_QUOTA_EXCEEDED` - PROVIDER_QUOTA_EXCEEDED
 type VellumErrorCodeEnum string
 
 const (
@@ -21630,6 +21647,7 @@ const (
 	VellumErrorCodeEnumUserDefinedError                  VellumErrorCodeEnum = "USER_DEFINED_ERROR"
 	VellumErrorCodeEnumWorkflowCancelled                 VellumErrorCodeEnum = "WORKFLOW_CANCELLED"
 	VellumErrorCodeEnumNodeCancelled                     VellumErrorCodeEnum = "NODE_CANCELLED"
+	VellumErrorCodeEnumProviderQuotaExceeded             VellumErrorCodeEnum = "PROVIDER_QUOTA_EXCEEDED"
 )
 
 func NewVellumErrorCodeEnumFromString(s string) (VellumErrorCodeEnum, error) {
@@ -21654,6 +21672,8 @@ func NewVellumErrorCodeEnumFromString(s string) (VellumErrorCodeEnum, error) {
 		return VellumErrorCodeEnumWorkflowCancelled, nil
 	case "NODE_CANCELLED":
 		return VellumErrorCodeEnumNodeCancelled, nil
+	case "PROVIDER_QUOTA_EXCEEDED":
+		return VellumErrorCodeEnumProviderQuotaExceeded, nil
 	}
 	var t VellumErrorCodeEnum
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -21939,6 +21959,7 @@ func (v *VellumSdkError) String() string {
 // * `PROVIDER_CREDENTIALS_UNAVAILABLE` - PROVIDER_CREDENTIALS_UNAVAILABLE
 // * `INTEGRATION_CREDENTIALS_UNAVAILABLE` - INTEGRATION_CREDENTIALS_UNAVAILABLE
 // * `PROVIDER_ERROR` - PROVIDER_ERROR
+// * `PROVIDER_QUOTA_EXCEEDED` - PROVIDER_QUOTA_EXCEEDED
 // * `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
 // * `WORKFLOW_CANCELLED` - WORKFLOW_CANCELLED
 // * `NODE_CANCELLED` - NODE_CANCELLED
@@ -21956,6 +21977,7 @@ const (
 	VellumSdkErrorCodeEnumProviderCredentialsUnavailable    VellumSdkErrorCodeEnum = "PROVIDER_CREDENTIALS_UNAVAILABLE"
 	VellumSdkErrorCodeEnumIntegrationCredentialsUnavailable VellumSdkErrorCodeEnum = "INTEGRATION_CREDENTIALS_UNAVAILABLE"
 	VellumSdkErrorCodeEnumProviderError                     VellumSdkErrorCodeEnum = "PROVIDER_ERROR"
+	VellumSdkErrorCodeEnumProviderQuotaExceeded             VellumSdkErrorCodeEnum = "PROVIDER_QUOTA_EXCEEDED"
 	VellumSdkErrorCodeEnumUserDefinedError                  VellumSdkErrorCodeEnum = "USER_DEFINED_ERROR"
 	VellumSdkErrorCodeEnumWorkflowCancelled                 VellumSdkErrorCodeEnum = "WORKFLOW_CANCELLED"
 	VellumSdkErrorCodeEnumNodeCancelled                     VellumSdkErrorCodeEnum = "NODE_CANCELLED"
@@ -21984,6 +22006,8 @@ func NewVellumSdkErrorCodeEnumFromString(s string) (VellumSdkErrorCodeEnum, erro
 		return VellumSdkErrorCodeEnumIntegrationCredentialsUnavailable, nil
 	case "PROVIDER_ERROR":
 		return VellumSdkErrorCodeEnumProviderError, nil
+	case "PROVIDER_QUOTA_EXCEEDED":
+		return VellumSdkErrorCodeEnumProviderQuotaExceeded, nil
 	case "USER_DEFINED_ERROR":
 		return VellumSdkErrorCodeEnumUserDefinedError, nil
 	case "WORKFLOW_CANCELLED":
@@ -23978,6 +24002,7 @@ func (w *WorkflowExecutionActualStringRequest) String() string {
 // * `LLM_PROVIDER` - LLM_PROVIDER
 // * `INVALID_TEMPLATE` - INVALID_TEMPLATE
 // * `INVALID_INPUTS` - INVALID_INPUTS
+// * `PROVIDER_QUOTA_EXCEEDED` - PROVIDER_QUOTA_EXCEEDED
 // * `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
 type WorkflowExecutionEventErrorCode string
 
@@ -23993,6 +24018,7 @@ const (
 	WorkflowExecutionEventErrorCodeLlmProvider                       WorkflowExecutionEventErrorCode = "LLM_PROVIDER"
 	WorkflowExecutionEventErrorCodeInvalidTemplate                   WorkflowExecutionEventErrorCode = "INVALID_TEMPLATE"
 	WorkflowExecutionEventErrorCodeInvalidInputs                     WorkflowExecutionEventErrorCode = "INVALID_INPUTS"
+	WorkflowExecutionEventErrorCodeProviderQuotaExceeded             WorkflowExecutionEventErrorCode = "PROVIDER_QUOTA_EXCEEDED"
 	WorkflowExecutionEventErrorCodeUserDefinedError                  WorkflowExecutionEventErrorCode = "USER_DEFINED_ERROR"
 )
 
@@ -24020,6 +24046,8 @@ func NewWorkflowExecutionEventErrorCodeFromString(s string) (WorkflowExecutionEv
 		return WorkflowExecutionEventErrorCodeInvalidTemplate, nil
 	case "INVALID_INPUTS":
 		return WorkflowExecutionEventErrorCodeInvalidInputs, nil
+	case "PROVIDER_QUOTA_EXCEEDED":
+		return WorkflowExecutionEventErrorCodeProviderQuotaExceeded, nil
 	case "USER_DEFINED_ERROR":
 		return WorkflowExecutionEventErrorCodeUserDefinedError, nil
 	}
@@ -24729,6 +24757,7 @@ func (w *WorkflowExecutionResumedEvent) String() string {
 
 type WorkflowExecutionSnapshottedBody struct {
 	WorkflowDefinition *VellumCodeResourceDefinition `json:"workflow_definition" url:"workflow_definition"`
+	EditedBy           *VellumCodeResourceDefinition `json:"edited_by,omitempty" url:"edited_by,omitempty"`
 	State              map[string]interface{}        `json:"state" url:"state"`
 
 	extraProperties map[string]interface{}
