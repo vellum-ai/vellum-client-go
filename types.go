@@ -9247,18 +9247,33 @@ func (i *InstructorVectorizerConfig) String() string {
 // * `NOTION` - Notion
 // * `GOOGLE` - Google
 // * `CALENDLY` - Calendly
+// * `CANVA` - Canva
 // * `HUBSPOT` - Hubspot
 // * `LINEAR` - Linear
+// * `LINKEDIN` - LinkedIn
+// * `MAILCHIMP` - Mailchimp
 // * `GITHUB` - Github
 // * `GOOGLE_SHEETS` - Google Sheets
 // * `GOOGLE_CALENDAR` - Google Calendar
 // * `GOOGLE_DRIVE` - Google Drive
 // * `GMAIL` - Gmail
 // * `AIRTABLE` - Airtable
+// * `ATLASSIAN` - Atlassian
 // * `GAMMA` - Gamma
+// * `GITLAB` - Gitlab
 // * `FIRECRAWL` - Firecrawl
+// * `FIGMA` - Figma
+// * `PAGERDUTY` - PagerDuty
 // * `PERPLEXITY` - Perplexity
+// * `REDDIT` - Reddit
 // * `SERPAPI` - Serp Api
+// * `SUPABASE` - Supabase
+// * `WEBFLOW` - Webflow
+// * `ZENDESK` - Zendesk
+// * `DROPBOX` - Dropbox
+// * `EVENTBRITE` - Eventbrite
+// * `CONFLUENCE` - Confluence
+// * `DOCUSIGN` - DocuSign
 type IntegrationName string
 
 const (
@@ -9266,18 +9281,33 @@ const (
 	IntegrationNameNotion         IntegrationName = "NOTION"
 	IntegrationNameGoogle         IntegrationName = "GOOGLE"
 	IntegrationNameCalendly       IntegrationName = "CALENDLY"
+	IntegrationNameCanva          IntegrationName = "CANVA"
 	IntegrationNameHubspot        IntegrationName = "HUBSPOT"
 	IntegrationNameLinear         IntegrationName = "LINEAR"
+	IntegrationNameLinkedin       IntegrationName = "LINKEDIN"
+	IntegrationNameMailchimp      IntegrationName = "MAILCHIMP"
 	IntegrationNameGithub         IntegrationName = "GITHUB"
 	IntegrationNameGoogleSheets   IntegrationName = "GOOGLE_SHEETS"
 	IntegrationNameGoogleCalendar IntegrationName = "GOOGLE_CALENDAR"
 	IntegrationNameGoogleDrive    IntegrationName = "GOOGLE_DRIVE"
 	IntegrationNameGmail          IntegrationName = "GMAIL"
 	IntegrationNameAirtable       IntegrationName = "AIRTABLE"
+	IntegrationNameAtlassian      IntegrationName = "ATLASSIAN"
 	IntegrationNameGamma          IntegrationName = "GAMMA"
+	IntegrationNameGitlab         IntegrationName = "GITLAB"
 	IntegrationNameFirecrawl      IntegrationName = "FIRECRAWL"
+	IntegrationNameFigma          IntegrationName = "FIGMA"
+	IntegrationNamePagerduty      IntegrationName = "PAGERDUTY"
 	IntegrationNamePerplexity     IntegrationName = "PERPLEXITY"
+	IntegrationNameReddit         IntegrationName = "REDDIT"
 	IntegrationNameSerpapi        IntegrationName = "SERPAPI"
+	IntegrationNameSupabase       IntegrationName = "SUPABASE"
+	IntegrationNameWebflow        IntegrationName = "WEBFLOW"
+	IntegrationNameZendesk        IntegrationName = "ZENDESK"
+	IntegrationNameDropbox        IntegrationName = "DROPBOX"
+	IntegrationNameEventbrite     IntegrationName = "EVENTBRITE"
+	IntegrationNameConfluence     IntegrationName = "CONFLUENCE"
+	IntegrationNameDocusign       IntegrationName = "DOCUSIGN"
 )
 
 func NewIntegrationNameFromString(s string) (IntegrationName, error) {
@@ -9290,10 +9320,16 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameGoogle, nil
 	case "CALENDLY":
 		return IntegrationNameCalendly, nil
+	case "CANVA":
+		return IntegrationNameCanva, nil
 	case "HUBSPOT":
 		return IntegrationNameHubspot, nil
 	case "LINEAR":
 		return IntegrationNameLinear, nil
+	case "LINKEDIN":
+		return IntegrationNameLinkedin, nil
+	case "MAILCHIMP":
+		return IntegrationNameMailchimp, nil
 	case "GITHUB":
 		return IntegrationNameGithub, nil
 	case "GOOGLE_SHEETS":
@@ -9306,14 +9342,38 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameGmail, nil
 	case "AIRTABLE":
 		return IntegrationNameAirtable, nil
+	case "ATLASSIAN":
+		return IntegrationNameAtlassian, nil
 	case "GAMMA":
 		return IntegrationNameGamma, nil
+	case "GITLAB":
+		return IntegrationNameGitlab, nil
 	case "FIRECRAWL":
 		return IntegrationNameFirecrawl, nil
+	case "FIGMA":
+		return IntegrationNameFigma, nil
+	case "PAGERDUTY":
+		return IntegrationNamePagerduty, nil
 	case "PERPLEXITY":
 		return IntegrationNamePerplexity, nil
+	case "REDDIT":
+		return IntegrationNameReddit, nil
 	case "SERPAPI":
 		return IntegrationNameSerpapi, nil
+	case "SUPABASE":
+		return IntegrationNameSupabase, nil
+	case "WEBFLOW":
+		return IntegrationNameWebflow, nil
+	case "ZENDESK":
+		return IntegrationNameZendesk, nil
+	case "DROPBOX":
+		return IntegrationNameDropbox, nil
+	case "EVENTBRITE":
+		return IntegrationNameEventbrite, nil
+	case "CONFLUENCE":
+		return IntegrationNameConfluence, nil
+	case "DOCUSIGN":
+		return IntegrationNameDocusign, nil
 	}
 	var t IntegrationName
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -21497,6 +21557,7 @@ func (v *VellumCodeResourceDefinition) String() string {
 }
 
 type VellumDocument struct {
+	// A valid data URL containing the document data.
 	Src      string                 `json:"src" url:"src"`
 	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
 
@@ -21539,6 +21600,7 @@ func (v *VellumDocument) String() string {
 }
 
 type VellumDocumentRequest struct {
+	// A valid data URL containing the document data.
 	Src      string                 `json:"src" url:"src"`
 	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
 
@@ -21727,6 +21789,7 @@ func (v *VellumErrorRequest) String() string {
 }
 
 type VellumImage struct {
+	// A valid data URL containing the image data.
 	Src      string                 `json:"src" url:"src"`
 	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
 
@@ -21769,6 +21832,7 @@ func (v *VellumImage) String() string {
 }
 
 type VellumImageRequest struct {
+	// A valid data URL containing the image data.
 	Src      string                 `json:"src" url:"src"`
 	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
 
@@ -24087,6 +24151,7 @@ type WorkflowExecutionFulfilledBody struct {
 	WorkflowDefinition *VellumCodeResourceDefinition `json:"workflow_definition" url:"workflow_definition"`
 	Outputs            map[string]interface{}        `json:"outputs" url:"outputs"`
 	FinalState         map[string]interface{}        `json:"final_state,omitempty" url:"final_state,omitempty"`
+	ServerMetadata     map[string]interface{}        `json:"server_metadata,omitempty" url:"server_metadata,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
