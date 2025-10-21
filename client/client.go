@@ -14,6 +14,7 @@ import (
 	deployments "github.com/vellum-ai/vellum-client-go/deployments"
 	documentindexes "github.com/vellum-ai/vellum-client-go/documentindexes"
 	documents "github.com/vellum-ai/vellum-client-go/documents"
+	environments "github.com/vellum-ai/vellum-client-go/environments"
 	events "github.com/vellum-ai/vellum-client-go/events"
 	folderentities "github.com/vellum-ai/vellum-client-go/folderentities"
 	integrationauthconfigs "github.com/vellum-ai/vellum-client-go/integrationauthconfigs"
@@ -35,6 +36,7 @@ import (
 	workspacesecrets "github.com/vellum-ai/vellum-client-go/workspacesecrets"
 	io "io"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -49,6 +51,7 @@ type Client struct {
 	Deployments            *deployments.Client
 	DocumentIndexes        *documentindexes.Client
 	Documents              *documents.Client
+	Environments           *environments.Client
 	FolderEntities         *folderentities.Client
 	IntegrationAuthConfigs *integrationauthconfigs.Client
 	IntegrationProviders   *integrationproviders.Client
@@ -69,8 +72,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.ApiVersion == "" {
+		options.ApiVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -88,6 +91,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 		Deployments:            deployments.NewClient(opts...),
 		DocumentIndexes:        documentindexes.NewClient(opts...),
 		Documents:              documents.NewClient(opts...),
+		Environments:           environments.NewClient(opts...),
 		FolderEntities:         folderentities.NewClient(opts...),
 		IntegrationAuthConfigs: integrationauthconfigs.NewClient(opts...),
 		IntegrationProviders:   integrationproviders.NewClient(opts...),

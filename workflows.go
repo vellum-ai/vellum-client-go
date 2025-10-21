@@ -26,12 +26,56 @@ type WorkflowPushRequest struct {
 	ExecConfig        WorkflowPushExecConfig               `json:"exec_config" url:"-"`
 	WorkflowSandboxId *string                              `json:"workflow_sandbox_id,omitempty" url:"-"`
 	DeploymentConfig  *WorkflowPushDeploymentConfigRequest `json:"deployment_config,omitempty" url:"-"`
-	DryRun            *bool                                `json:"dry_run,omitempty" url:"-"`
-	Strict            *bool                                `json:"strict,omitempty" url:"-"`
+	// List of dataset rows with inputs for scenarios.
+	Dataset []*DatasetRowPushRequest `json:"dataset,omitempty" url:"-"`
+	DryRun  *bool                    `json:"dry_run,omitempty" url:"-"`
+	Strict  *bool                    `json:"strict,omitempty" url:"-"`
 }
 
 type SerializeWorkflowFilesRequest struct {
 	Files map[string]interface{} `json:"files,omitempty" url:"-"`
+}
+
+type DatasetRowPushRequest struct {
+	Label  string                 `json:"label" url:"label"`
+	Inputs map[string]interface{} `json:"inputs" url:"inputs"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (d *DatasetRowPushRequest) GetExtraProperties() map[string]interface{} {
+	return d.extraProperties
+}
+
+func (d *DatasetRowPushRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler DatasetRowPushRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*d = DatasetRowPushRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+
+	d._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DatasetRowPushRequest) String() string {
+	if len(d._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(d._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
 }
 
 type WorkflowPushDeploymentConfigRequest struct {

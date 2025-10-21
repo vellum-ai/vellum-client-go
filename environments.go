@@ -2,24 +2,93 @@
 
 package api
 
-// Environments defines all of the API environments.
-// These values can be used with the WithBaseURL
-// RequestOption to override the client's default environment,
-// if any.
-var Environments = struct {
-	Production struct {
-		Default   string
-		Documents string
-		Predict   string
+import (
+	json "encoding/json"
+	fmt "fmt"
+	core "github.com/vellum-ai/vellum-client-go/core"
+)
+
+type EnvironmentDisplayConfig struct {
+	Color *string `json:"color,omitempty" url:"color,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *EnvironmentDisplayConfig) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
+}
+
+func (e *EnvironmentDisplayConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler EnvironmentDisplayConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
 	}
-}{
-	Production: struct {
-		Default   string
-		Documents string
-		Predict   string
-	}{
-		Default:   "https://api.vellum.ai",
-		Documents: "https://documents.vellum.ai",
-		Predict:   "https://predict.vellum.ai",
-	},
+	*e = EnvironmentDisplayConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *EnvironmentDisplayConfig) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
+}
+
+type EnvironmentRead struct {
+	Id            *string                   `json:"id,omitempty" url:"id,omitempty"`
+	Name          string                    `json:"name" url:"name"`
+	Label         string                    `json:"label" url:"label"`
+	DisplayConfig *EnvironmentDisplayConfig `json:"display_config,omitempty" url:"display_config,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *EnvironmentRead) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
+}
+
+func (e *EnvironmentRead) UnmarshalJSON(data []byte) error {
+	type unmarshaler EnvironmentRead
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = EnvironmentRead(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *EnvironmentRead) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
 }
