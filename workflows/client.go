@@ -195,6 +195,11 @@ func (c *Client) Push(
 			return nil, err
 		}
 	}
+	if request.Dataset != nil {
+		if err := core.WriteMultipartJSON(writer, "dataset", request.Dataset); err != nil {
+			return nil, err
+		}
+	}
 	if request.DryRun != nil {
 		if err := writer.WriteField("dry_run", fmt.Sprintf("%v", *request.DryRun)); err != nil {
 			return nil, err

@@ -14,6 +14,7 @@ import (
 	deployments "github.com/vellum-ai/vellum-client-go/deployments"
 	documentindexes "github.com/vellum-ai/vellum-client-go/documentindexes"
 	documents "github.com/vellum-ai/vellum-client-go/documents"
+	environments "github.com/vellum-ai/vellum-client-go/environments"
 	events "github.com/vellum-ai/vellum-client-go/events"
 	folderentities "github.com/vellum-ai/vellum-client-go/folderentities"
 	integrationauthconfigs "github.com/vellum-ai/vellum-client-go/integrationauthconfigs"
@@ -49,6 +50,7 @@ type Client struct {
 	Deployments            *deployments.Client
 	DocumentIndexes        *documentindexes.Client
 	Documents              *documents.Client
+	Environments           *environments.Client
 	FolderEntities         *folderentities.Client
 	IntegrationAuthConfigs *integrationauthconfigs.Client
 	IntegrationProviders   *integrationproviders.Client
@@ -88,6 +90,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 		Deployments:            deployments.NewClient(opts...),
 		DocumentIndexes:        documentindexes.NewClient(opts...),
 		Documents:              documents.NewClient(opts...),
+		Environments:           environments.NewClient(opts...),
 		FolderEntities:         folderentities.NewClient(opts...),
 		IntegrationAuthConfigs: integrationauthconfigs.NewClient(opts...),
 		IntegrationProviders:   integrationproviders.NewClient(opts...),
