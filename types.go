@@ -3520,12 +3520,12 @@ type ComponentsSchemasPromptVersionBuildConfigSandbox = *PromptVersionBuildConfi
 
 // Serializer for Composio tool definition response.
 type ComposioToolDefinition struct {
-	Integration      *ToolDefinitionIntegration `json:"integration" url:"integration"`
-	Name             string                     `json:"name" url:"name"`
-	Label            string                     `json:"label" url:"label"`
-	Description      string                     `json:"description" url:"description"`
-	InputParameters  map[string]interface{}     `json:"input_parameters" url:"input_parameters"`
-	OutputParameters map[string]interface{}     `json:"output_parameters" url:"output_parameters"`
+	Integration      *Integration           `json:"integration" url:"integration"`
+	Name             string                 `json:"name" url:"name"`
+	Label            string                 `json:"label" url:"label"`
+	Description      string                 `json:"description" url:"description"`
+	InputParameters  map[string]interface{} `json:"input_parameters" url:"input_parameters"`
+	OutputParameters map[string]interface{} `json:"output_parameters" url:"output_parameters"`
 	provider         string
 
 	extraProperties map[string]interface{}
@@ -9243,71 +9243,161 @@ func (i *InstructorVectorizerConfig) String() string {
 	return fmt.Sprintf("%#v", i)
 }
 
+// Serializer for Integration model - used in both tool and trigger definitions.
+type Integration struct {
+	Id       string              `json:"id" url:"id"`
+	Provider IntegrationProvider `json:"provider" url:"provider"`
+	Name     IntegrationName     `json:"name" url:"name"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *Integration) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *Integration) UnmarshalJSON(data []byte) error {
+	type unmarshaler Integration
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*i = Integration(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i)
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *Integration) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
 // * `SLACK` - Slack
 // * `NOTION` - Notion
 // * `GOOGLE` - Google
 // * `CALENDLY` - Calendly
 // * `CANVA` - Canva
+// * `CLICKUP` - ClickUp
 // * `HUBSPOT` - Hubspot
+// * `INTERCOM` - Intercom
 // * `LINEAR` - Linear
 // * `LINKEDIN` - LinkedIn
 // * `MAILCHIMP` - Mailchimp
+// * `MEM0` - Mem0
+// * `NEON` - Neon
 // * `GITHUB` - Github
 // * `GOOGLE_SHEETS` - Google Sheets
 // * `GOOGLE_CALENDAR` - Google Calendar
 // * `GOOGLE_DRIVE` - Google Drive
 // * `GMAIL` - Gmail
 // * `AIRTABLE` - Airtable
+// * `APOLLO` - Apollo
+// * `ASANA` - Asana
 // * `ATLASSIAN` - Atlassian
+// * `BOX` - Box
+// * `BREVO` - Brevo
+// * `BROWSERBASE_TOOL` - Browserbase Tool
+// * `CAL` - Cal
+// * `CANVAS` - Canvas
+// * `ELEVENLABS` - ElevenLabs
+// * `EXA` - Exa
 // * `GAMMA` - Gamma
 // * `GITLAB` - Gitlab
 // * `FIRECRAWL` - Firecrawl
 // * `FIGMA` - Figma
+// * `GOOGLE_MAPS` - Google Maps
+// * `JIRA` - Jira
+// * `KLAVIYO` - Klaviyo
 // * `PAGERDUTY` - PagerDuty
+// * `PEOPLEDATALABS` - People Data Labs
 // * `PERPLEXITY` - Perplexity
+// * `POSTHOG` - PostHog
 // * `REDDIT` - Reddit
+// * `SEMRUSH` - Semrush
 // * `SERPAPI` - Serp Api
+// * `STRIPE` - Stripe
 // * `SUPABASE` - Supabase
+// * `TAVILY` - Tavily
+// * `TRELLO` - Trello
 // * `WEBFLOW` - Webflow
 // * `ZENDESK` - Zendesk
 // * `DROPBOX` - Dropbox
 // * `EVENTBRITE` - Eventbrite
 // * `CONFLUENCE` - Confluence
+// * `DISCORD` - Discord
 // * `DOCUSIGN` - DocuSign
 type IntegrationName string
 
 const (
-	IntegrationNameSlack          IntegrationName = "SLACK"
-	IntegrationNameNotion         IntegrationName = "NOTION"
-	IntegrationNameGoogle         IntegrationName = "GOOGLE"
-	IntegrationNameCalendly       IntegrationName = "CALENDLY"
-	IntegrationNameCanva          IntegrationName = "CANVA"
-	IntegrationNameHubspot        IntegrationName = "HUBSPOT"
-	IntegrationNameLinear         IntegrationName = "LINEAR"
-	IntegrationNameLinkedin       IntegrationName = "LINKEDIN"
-	IntegrationNameMailchimp      IntegrationName = "MAILCHIMP"
-	IntegrationNameGithub         IntegrationName = "GITHUB"
-	IntegrationNameGoogleSheets   IntegrationName = "GOOGLE_SHEETS"
-	IntegrationNameGoogleCalendar IntegrationName = "GOOGLE_CALENDAR"
-	IntegrationNameGoogleDrive    IntegrationName = "GOOGLE_DRIVE"
-	IntegrationNameGmail          IntegrationName = "GMAIL"
-	IntegrationNameAirtable       IntegrationName = "AIRTABLE"
-	IntegrationNameAtlassian      IntegrationName = "ATLASSIAN"
-	IntegrationNameGamma          IntegrationName = "GAMMA"
-	IntegrationNameGitlab         IntegrationName = "GITLAB"
-	IntegrationNameFirecrawl      IntegrationName = "FIRECRAWL"
-	IntegrationNameFigma          IntegrationName = "FIGMA"
-	IntegrationNamePagerduty      IntegrationName = "PAGERDUTY"
-	IntegrationNamePerplexity     IntegrationName = "PERPLEXITY"
-	IntegrationNameReddit         IntegrationName = "REDDIT"
-	IntegrationNameSerpapi        IntegrationName = "SERPAPI"
-	IntegrationNameSupabase       IntegrationName = "SUPABASE"
-	IntegrationNameWebflow        IntegrationName = "WEBFLOW"
-	IntegrationNameZendesk        IntegrationName = "ZENDESK"
-	IntegrationNameDropbox        IntegrationName = "DROPBOX"
-	IntegrationNameEventbrite     IntegrationName = "EVENTBRITE"
-	IntegrationNameConfluence     IntegrationName = "CONFLUENCE"
-	IntegrationNameDocusign       IntegrationName = "DOCUSIGN"
+	IntegrationNameSlack           IntegrationName = "SLACK"
+	IntegrationNameNotion          IntegrationName = "NOTION"
+	IntegrationNameGoogle          IntegrationName = "GOOGLE"
+	IntegrationNameCalendly        IntegrationName = "CALENDLY"
+	IntegrationNameCanva           IntegrationName = "CANVA"
+	IntegrationNameClickup         IntegrationName = "CLICKUP"
+	IntegrationNameHubspot         IntegrationName = "HUBSPOT"
+	IntegrationNameIntercom        IntegrationName = "INTERCOM"
+	IntegrationNameLinear          IntegrationName = "LINEAR"
+	IntegrationNameLinkedin        IntegrationName = "LINKEDIN"
+	IntegrationNameMailchimp       IntegrationName = "MAILCHIMP"
+	IntegrationNameMem0            IntegrationName = "MEM0"
+	IntegrationNameNeon            IntegrationName = "NEON"
+	IntegrationNameGithub          IntegrationName = "GITHUB"
+	IntegrationNameGoogleSheets    IntegrationName = "GOOGLE_SHEETS"
+	IntegrationNameGoogleCalendar  IntegrationName = "GOOGLE_CALENDAR"
+	IntegrationNameGoogleDrive     IntegrationName = "GOOGLE_DRIVE"
+	IntegrationNameGmail           IntegrationName = "GMAIL"
+	IntegrationNameAirtable        IntegrationName = "AIRTABLE"
+	IntegrationNameApollo          IntegrationName = "APOLLO"
+	IntegrationNameAsana           IntegrationName = "ASANA"
+	IntegrationNameAtlassian       IntegrationName = "ATLASSIAN"
+	IntegrationNameBox             IntegrationName = "BOX"
+	IntegrationNameBrevo           IntegrationName = "BREVO"
+	IntegrationNameBrowserbaseTool IntegrationName = "BROWSERBASE_TOOL"
+	IntegrationNameCal             IntegrationName = "CAL"
+	IntegrationNameCanvas          IntegrationName = "CANVAS"
+	IntegrationNameElevenlabs      IntegrationName = "ELEVENLABS"
+	IntegrationNameExa             IntegrationName = "EXA"
+	IntegrationNameGamma           IntegrationName = "GAMMA"
+	IntegrationNameGitlab          IntegrationName = "GITLAB"
+	IntegrationNameFirecrawl       IntegrationName = "FIRECRAWL"
+	IntegrationNameFigma           IntegrationName = "FIGMA"
+	IntegrationNameGoogleMaps      IntegrationName = "GOOGLE_MAPS"
+	IntegrationNameJira            IntegrationName = "JIRA"
+	IntegrationNameKlaviyo         IntegrationName = "KLAVIYO"
+	IntegrationNamePagerduty       IntegrationName = "PAGERDUTY"
+	IntegrationNamePeopledatalabs  IntegrationName = "PEOPLEDATALABS"
+	IntegrationNamePerplexity      IntegrationName = "PERPLEXITY"
+	IntegrationNamePosthog         IntegrationName = "POSTHOG"
+	IntegrationNameReddit          IntegrationName = "REDDIT"
+	IntegrationNameSemrush         IntegrationName = "SEMRUSH"
+	IntegrationNameSerpapi         IntegrationName = "SERPAPI"
+	IntegrationNameStripe          IntegrationName = "STRIPE"
+	IntegrationNameSupabase        IntegrationName = "SUPABASE"
+	IntegrationNameTavily          IntegrationName = "TAVILY"
+	IntegrationNameTrello          IntegrationName = "TRELLO"
+	IntegrationNameWebflow         IntegrationName = "WEBFLOW"
+	IntegrationNameZendesk         IntegrationName = "ZENDESK"
+	IntegrationNameDropbox         IntegrationName = "DROPBOX"
+	IntegrationNameEventbrite      IntegrationName = "EVENTBRITE"
+	IntegrationNameConfluence      IntegrationName = "CONFLUENCE"
+	IntegrationNameDiscord         IntegrationName = "DISCORD"
+	IntegrationNameDocusign        IntegrationName = "DOCUSIGN"
 )
 
 func NewIntegrationNameFromString(s string) (IntegrationName, error) {
@@ -9322,14 +9412,22 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameCalendly, nil
 	case "CANVA":
 		return IntegrationNameCanva, nil
+	case "CLICKUP":
+		return IntegrationNameClickup, nil
 	case "HUBSPOT":
 		return IntegrationNameHubspot, nil
+	case "INTERCOM":
+		return IntegrationNameIntercom, nil
 	case "LINEAR":
 		return IntegrationNameLinear, nil
 	case "LINKEDIN":
 		return IntegrationNameLinkedin, nil
 	case "MAILCHIMP":
 		return IntegrationNameMailchimp, nil
+	case "MEM0":
+		return IntegrationNameMem0, nil
+	case "NEON":
+		return IntegrationNameNeon, nil
 	case "GITHUB":
 		return IntegrationNameGithub, nil
 	case "GOOGLE_SHEETS":
@@ -9342,8 +9440,26 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameGmail, nil
 	case "AIRTABLE":
 		return IntegrationNameAirtable, nil
+	case "APOLLO":
+		return IntegrationNameApollo, nil
+	case "ASANA":
+		return IntegrationNameAsana, nil
 	case "ATLASSIAN":
 		return IntegrationNameAtlassian, nil
+	case "BOX":
+		return IntegrationNameBox, nil
+	case "BREVO":
+		return IntegrationNameBrevo, nil
+	case "BROWSERBASE_TOOL":
+		return IntegrationNameBrowserbaseTool, nil
+	case "CAL":
+		return IntegrationNameCal, nil
+	case "CANVAS":
+		return IntegrationNameCanvas, nil
+	case "ELEVENLABS":
+		return IntegrationNameElevenlabs, nil
+	case "EXA":
+		return IntegrationNameExa, nil
 	case "GAMMA":
 		return IntegrationNameGamma, nil
 	case "GITLAB":
@@ -9352,16 +9468,34 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameFirecrawl, nil
 	case "FIGMA":
 		return IntegrationNameFigma, nil
+	case "GOOGLE_MAPS":
+		return IntegrationNameGoogleMaps, nil
+	case "JIRA":
+		return IntegrationNameJira, nil
+	case "KLAVIYO":
+		return IntegrationNameKlaviyo, nil
 	case "PAGERDUTY":
 		return IntegrationNamePagerduty, nil
+	case "PEOPLEDATALABS":
+		return IntegrationNamePeopledatalabs, nil
 	case "PERPLEXITY":
 		return IntegrationNamePerplexity, nil
+	case "POSTHOG":
+		return IntegrationNamePosthog, nil
 	case "REDDIT":
 		return IntegrationNameReddit, nil
+	case "SEMRUSH":
+		return IntegrationNameSemrush, nil
 	case "SERPAPI":
 		return IntegrationNameSerpapi, nil
+	case "STRIPE":
+		return IntegrationNameStripe, nil
 	case "SUPABASE":
 		return IntegrationNameSupabase, nil
+	case "TAVILY":
+		return IntegrationNameTavily, nil
+	case "TRELLO":
+		return IntegrationNameTrello, nil
 	case "WEBFLOW":
 		return IntegrationNameWebflow, nil
 	case "ZENDESK":
@@ -9372,6 +9506,8 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameEventbrite, nil
 	case "CONFLUENCE":
 		return IntegrationNameConfluence, nil
+	case "DISCORD":
+		return IntegrationNameDiscord, nil
 	case "DOCUSIGN":
 		return IntegrationNameDocusign, nil
 	}
@@ -21310,49 +21446,6 @@ func (t *TokenOverlappingWindowChunking) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
-type ToolDefinitionIntegration struct {
-	Id       string              `json:"id" url:"id"`
-	Provider IntegrationProvider `json:"provider" url:"provider"`
-	Name     IntegrationName     `json:"name" url:"name"`
-
-	extraProperties map[string]interface{}
-	_rawJSON        json.RawMessage
-}
-
-func (t *ToolDefinitionIntegration) GetExtraProperties() map[string]interface{} {
-	return t.extraProperties
-}
-
-func (t *ToolDefinitionIntegration) UnmarshalJSON(data []byte) error {
-	type unmarshaler ToolDefinitionIntegration
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*t = ToolDefinitionIntegration(value)
-
-	extraProperties, err := core.ExtractExtraProperties(data, *t)
-	if err != nil {
-		return err
-	}
-	t.extraProperties = extraProperties
-
-	t._rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (t *ToolDefinitionIntegration) String() string {
-	if len(t._rawJSON) > 0 {
-		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := core.StringifyJSON(t); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", t)
-}
-
 // * `USD` - USD
 type UnitEnum = string
 
@@ -21696,6 +21789,7 @@ func (v *VellumError) String() string {
 // * `WORKFLOW_CANCELLED` - WORKFLOW_CANCELLED
 // * `NODE_CANCELLED` - NODE_CANCELLED
 // * `PROVIDER_QUOTA_EXCEEDED` - PROVIDER_QUOTA_EXCEEDED
+// * `CHAT_QUOTA_EXCEEDED` - CHAT_QUOTA_EXCEEDED
 type VellumErrorCodeEnum string
 
 const (
@@ -21710,6 +21804,7 @@ const (
 	VellumErrorCodeEnumWorkflowCancelled                 VellumErrorCodeEnum = "WORKFLOW_CANCELLED"
 	VellumErrorCodeEnumNodeCancelled                     VellumErrorCodeEnum = "NODE_CANCELLED"
 	VellumErrorCodeEnumProviderQuotaExceeded             VellumErrorCodeEnum = "PROVIDER_QUOTA_EXCEEDED"
+	VellumErrorCodeEnumChatQuotaExceeded                 VellumErrorCodeEnum = "CHAT_QUOTA_EXCEEDED"
 )
 
 func NewVellumErrorCodeEnumFromString(s string) (VellumErrorCodeEnum, error) {
@@ -21736,6 +21831,8 @@ func NewVellumErrorCodeEnumFromString(s string) (VellumErrorCodeEnum, error) {
 		return VellumErrorCodeEnumNodeCancelled, nil
 	case "PROVIDER_QUOTA_EXCEEDED":
 		return VellumErrorCodeEnumProviderQuotaExceeded, nil
+	case "CHAT_QUOTA_EXCEEDED":
+		return VellumErrorCodeEnumChatQuotaExceeded, nil
 	}
 	var t VellumErrorCodeEnum
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -22026,7 +22123,9 @@ func (v *VellumSdkError) String() string {
 // * `PROVIDER_QUOTA_EXCEEDED` - PROVIDER_QUOTA_EXCEEDED
 // * `USER_DEFINED_ERROR` - USER_DEFINED_ERROR
 // * `WORKFLOW_CANCELLED` - WORKFLOW_CANCELLED
+// * `WORKFLOW_TIMEOUT` - WORKFLOW_TIMEOUT
 // * `NODE_CANCELLED` - NODE_CANCELLED
+// * `NODE_TIMEOUT` - NODE_TIMEOUT
 // * `NODE_EXECUTION` - NODE_EXECUTION
 type VellumSdkErrorCodeEnum string
 
@@ -22044,7 +22143,9 @@ const (
 	VellumSdkErrorCodeEnumProviderQuotaExceeded             VellumSdkErrorCodeEnum = "PROVIDER_QUOTA_EXCEEDED"
 	VellumSdkErrorCodeEnumUserDefinedError                  VellumSdkErrorCodeEnum = "USER_DEFINED_ERROR"
 	VellumSdkErrorCodeEnumWorkflowCancelled                 VellumSdkErrorCodeEnum = "WORKFLOW_CANCELLED"
+	VellumSdkErrorCodeEnumWorkflowTimeout                   VellumSdkErrorCodeEnum = "WORKFLOW_TIMEOUT"
 	VellumSdkErrorCodeEnumNodeCancelled                     VellumSdkErrorCodeEnum = "NODE_CANCELLED"
+	VellumSdkErrorCodeEnumNodeTimeout                       VellumSdkErrorCodeEnum = "NODE_TIMEOUT"
 	VellumSdkErrorCodeEnumNodeExecution                     VellumSdkErrorCodeEnum = "NODE_EXECUTION"
 )
 
@@ -22076,8 +22177,12 @@ func NewVellumSdkErrorCodeEnumFromString(s string) (VellumSdkErrorCodeEnum, erro
 		return VellumSdkErrorCodeEnumUserDefinedError, nil
 	case "WORKFLOW_CANCELLED":
 		return VellumSdkErrorCodeEnumWorkflowCancelled, nil
+	case "WORKFLOW_TIMEOUT":
+		return VellumSdkErrorCodeEnumWorkflowTimeout, nil
 	case "NODE_CANCELLED":
 		return VellumSdkErrorCodeEnumNodeCancelled, nil
+	case "NODE_TIMEOUT":
+		return VellumSdkErrorCodeEnumNodeTimeout, nil
 	case "NODE_EXECUTION":
 		return VellumSdkErrorCodeEnumNodeExecution, nil
 	}
@@ -24057,12 +24162,14 @@ func (w *WorkflowExecutionActualStringRequest) String() string {
 
 // * `WORKFLOW_INITIALIZATION` - WORKFLOW_INITIALIZATION
 // * `WORKFLOW_CANCELLED` - WORKFLOW_CANCELLED
+// * `WORKFLOW_TIMEOUT` - WORKFLOW_TIMEOUT
 // * `PROVIDER_CREDENTIALS_UNAVAILABLE` - PROVIDER_CREDENTIALS_UNAVAILABLE
 // * `INTEGRATION_CREDENTIALS_UNAVAILABLE` - INTEGRATION_CREDENTIALS_UNAVAILABLE
 // * `NODE_EXECUTION_COUNT_LIMIT_REACHED` - NODE_EXECUTION_COUNT_LIMIT_REACHED
 // * `INTERNAL_SERVER_ERROR` - INTERNAL_SERVER_ERROR
 // * `NODE_EXECUTION` - NODE_EXECUTION
 // * `NODE_CANCELLED` - NODE_CANCELLED
+// * `NODE_TIMEOUT` - NODE_TIMEOUT
 // * `LLM_PROVIDER` - LLM_PROVIDER
 // * `INVALID_TEMPLATE` - INVALID_TEMPLATE
 // * `INVALID_INPUTS` - INVALID_INPUTS
@@ -24073,12 +24180,14 @@ type WorkflowExecutionEventErrorCode string
 const (
 	WorkflowExecutionEventErrorCodeWorkflowInitialization            WorkflowExecutionEventErrorCode = "WORKFLOW_INITIALIZATION"
 	WorkflowExecutionEventErrorCodeWorkflowCancelled                 WorkflowExecutionEventErrorCode = "WORKFLOW_CANCELLED"
+	WorkflowExecutionEventErrorCodeWorkflowTimeout                   WorkflowExecutionEventErrorCode = "WORKFLOW_TIMEOUT"
 	WorkflowExecutionEventErrorCodeProviderCredentialsUnavailable    WorkflowExecutionEventErrorCode = "PROVIDER_CREDENTIALS_UNAVAILABLE"
 	WorkflowExecutionEventErrorCodeIntegrationCredentialsUnavailable WorkflowExecutionEventErrorCode = "INTEGRATION_CREDENTIALS_UNAVAILABLE"
 	WorkflowExecutionEventErrorCodeNodeExecutionCountLimitReached    WorkflowExecutionEventErrorCode = "NODE_EXECUTION_COUNT_LIMIT_REACHED"
 	WorkflowExecutionEventErrorCodeInternalServerError               WorkflowExecutionEventErrorCode = "INTERNAL_SERVER_ERROR"
 	WorkflowExecutionEventErrorCodeNodeExecution                     WorkflowExecutionEventErrorCode = "NODE_EXECUTION"
 	WorkflowExecutionEventErrorCodeNodeCancelled                     WorkflowExecutionEventErrorCode = "NODE_CANCELLED"
+	WorkflowExecutionEventErrorCodeNodeTimeout                       WorkflowExecutionEventErrorCode = "NODE_TIMEOUT"
 	WorkflowExecutionEventErrorCodeLlmProvider                       WorkflowExecutionEventErrorCode = "LLM_PROVIDER"
 	WorkflowExecutionEventErrorCodeInvalidTemplate                   WorkflowExecutionEventErrorCode = "INVALID_TEMPLATE"
 	WorkflowExecutionEventErrorCodeInvalidInputs                     WorkflowExecutionEventErrorCode = "INVALID_INPUTS"
@@ -24092,6 +24201,8 @@ func NewWorkflowExecutionEventErrorCodeFromString(s string) (WorkflowExecutionEv
 		return WorkflowExecutionEventErrorCodeWorkflowInitialization, nil
 	case "WORKFLOW_CANCELLED":
 		return WorkflowExecutionEventErrorCodeWorkflowCancelled, nil
+	case "WORKFLOW_TIMEOUT":
+		return WorkflowExecutionEventErrorCodeWorkflowTimeout, nil
 	case "PROVIDER_CREDENTIALS_UNAVAILABLE":
 		return WorkflowExecutionEventErrorCodeProviderCredentialsUnavailable, nil
 	case "INTEGRATION_CREDENTIALS_UNAVAILABLE":
@@ -24104,6 +24215,8 @@ func NewWorkflowExecutionEventErrorCodeFromString(s string) (WorkflowExecutionEv
 		return WorkflowExecutionEventErrorCodeNodeExecution, nil
 	case "NODE_CANCELLED":
 		return WorkflowExecutionEventErrorCodeNodeCancelled, nil
+	case "NODE_TIMEOUT":
+		return WorkflowExecutionEventErrorCodeNodeTimeout, nil
 	case "LLM_PROVIDER":
 		return WorkflowExecutionEventErrorCodeLlmProvider, nil
 	case "INVALID_TEMPLATE":

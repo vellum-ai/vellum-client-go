@@ -1,6 +1,6 @@
 module github.com/vellum-ai/vellum-client-go
 
-// Version: v1.7.15
+// Version: v1.8.0
 
 go 1.18
 
