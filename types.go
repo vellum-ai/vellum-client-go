@@ -9330,10 +9330,10 @@ func (i *Integration) String() string {
 // * `REDDIT` - Reddit
 // * `SEMRUSH` - Semrush
 // * `SERPAPI` - Serp Api
+// * `SHARE_POINT` - SharePoint
 // * `STRIPE` - Stripe
 // * `SUPABASE` - Supabase
 // * `TAVILY` - Tavily
-// * `TRELLO` - Trello
 // * `WEBFLOW` - Webflow
 // * `ZENDESK` - Zendesk
 // * `DROPBOX` - Dropbox
@@ -9387,10 +9387,10 @@ const (
 	IntegrationNameReddit          IntegrationName = "REDDIT"
 	IntegrationNameSemrush         IntegrationName = "SEMRUSH"
 	IntegrationNameSerpapi         IntegrationName = "SERPAPI"
+	IntegrationNameSharePoint      IntegrationName = "SHARE_POINT"
 	IntegrationNameStripe          IntegrationName = "STRIPE"
 	IntegrationNameSupabase        IntegrationName = "SUPABASE"
 	IntegrationNameTavily          IntegrationName = "TAVILY"
-	IntegrationNameTrello          IntegrationName = "TRELLO"
 	IntegrationNameWebflow         IntegrationName = "WEBFLOW"
 	IntegrationNameZendesk         IntegrationName = "ZENDESK"
 	IntegrationNameDropbox         IntegrationName = "DROPBOX"
@@ -9488,14 +9488,14 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameSemrush, nil
 	case "SERPAPI":
 		return IntegrationNameSerpapi, nil
+	case "SHARE_POINT":
+		return IntegrationNameSharePoint, nil
 	case "STRIPE":
 		return IntegrationNameStripe, nil
 	case "SUPABASE":
 		return IntegrationNameSupabase, nil
 	case "TAVILY":
 		return IntegrationNameTavily, nil
-	case "TRELLO":
-		return IntegrationNameTrello, nil
 	case "WEBFLOW":
 		return IntegrationNameWebflow, nil
 	case "ZENDESK":
