@@ -9324,6 +9324,7 @@ func (i *Integration) String() string {
 // * `JIRA` - Jira
 // * `KLAVIYO` - Klaviyo
 // * `PAGERDUTY` - PagerDuty
+// * `PARSERA` - Parsera
 // * `PEOPLEDATALABS` - People Data Labs
 // * `PERPLEXITY` - Perplexity
 // * `POSTHOG` - PostHog
@@ -9381,6 +9382,7 @@ const (
 	IntegrationNameJira            IntegrationName = "JIRA"
 	IntegrationNameKlaviyo         IntegrationName = "KLAVIYO"
 	IntegrationNamePagerduty       IntegrationName = "PAGERDUTY"
+	IntegrationNameParsera         IntegrationName = "PARSERA"
 	IntegrationNamePeopledatalabs  IntegrationName = "PEOPLEDATALABS"
 	IntegrationNamePerplexity      IntegrationName = "PERPLEXITY"
 	IntegrationNamePosthog         IntegrationName = "POSTHOG"
@@ -9476,6 +9478,8 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameKlaviyo, nil
 	case "PAGERDUTY":
 		return IntegrationNamePagerduty, nil
+	case "PARSERA":
+		return IntegrationNameParsera, nil
 	case "PEOPLEDATALABS":
 		return IntegrationNamePeopledatalabs, nil
 	case "PERPLEXITY":
