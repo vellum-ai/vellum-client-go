@@ -23680,6 +23680,49 @@ func (v *VideoVellumValueRequest) String() string {
 	return fmt.Sprintf("%#v", v)
 }
 
+// Workflow Deployment display data
+type WorkflowDeploymentDisplayData struct {
+	// The icon associated with this Workflow Deployment.
+	Icon *WorkflowDisplayIcon `json:"icon,omitempty" url:"icon,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowDeploymentDisplayData) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkflowDeploymentDisplayData) UnmarshalJSON(data []byte) error {
+	type unmarshaler WorkflowDeploymentDisplayData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*w = WorkflowDeploymentDisplayData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowDeploymentDisplayData) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
+}
+
 type WorkflowDeploymentParentContext struct {
 	Parent                  *ParentContext         `json:"parent,omitempty" url:"parent,omitempty"`
 	Links                   []*SpanLink            `json:"links,omitempty" url:"links,omitempty"`
@@ -23781,6 +23824,8 @@ type WorkflowDeploymentRead struct {
 	OutputVariables []*VellumVariable `json:"output_variables" url:"output_variables"`
 	// A human-readable description of the workflow deployment
 	Description *string `json:"description,omitempty" url:"description,omitempty"`
+	// Information used to display this Workflow Deployment.
+	DisplayData *WorkflowDeploymentDisplayData `json:"display_data,omitempty" url:"display_data,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -23831,6 +23876,49 @@ func (w *WorkflowDeploymentRead) MarshalJSON() ([]byte, error) {
 }
 
 func (w *WorkflowDeploymentRead) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
+}
+
+// Icon to be used alongside a Workflow
+type WorkflowDisplayIcon struct {
+	Src   *string `json:"src,omitempty" url:"src,omitempty"`
+	Color *string `json:"color,omitempty" url:"color,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowDisplayIcon) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkflowDisplayIcon) UnmarshalJSON(data []byte) error {
+	type unmarshaler WorkflowDisplayIcon
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*w = WorkflowDisplayIcon(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowDisplayIcon) String() string {
 	if len(w._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
 			return value
