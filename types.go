@@ -163,6 +163,38 @@ type SubmitWorkflowExecutionActualsRequest struct {
 // * `True` - True
 type AddOpenaiApiKeyEnum = bool
 
+// * `WORKSPACE_API_KEY` - WORKSPACE_API_KEY
+// * `ENVIRONMENT_API_KEY` - ENVIRONMENT_API_KEY
+// * `JWT` - JWT
+// * `SERVICE_TOKEN` - SERVICE_TOKEN
+type ApiActorTypeEnum string
+
+const (
+	ApiActorTypeEnumWorkspaceApiKey   ApiActorTypeEnum = "WORKSPACE_API_KEY"
+	ApiActorTypeEnumEnvironmentApiKey ApiActorTypeEnum = "ENVIRONMENT_API_KEY"
+	ApiActorTypeEnumJwt               ApiActorTypeEnum = "JWT"
+	ApiActorTypeEnumServiceToken      ApiActorTypeEnum = "SERVICE_TOKEN"
+)
+
+func NewApiActorTypeEnumFromString(s string) (ApiActorTypeEnum, error) {
+	switch s {
+	case "WORKSPACE_API_KEY":
+		return ApiActorTypeEnumWorkspaceApiKey, nil
+	case "ENVIRONMENT_API_KEY":
+		return ApiActorTypeEnumEnvironmentApiKey, nil
+	case "JWT":
+		return ApiActorTypeEnumJwt, nil
+	case "SERVICE_TOKEN":
+		return ApiActorTypeEnumServiceToken, nil
+	}
+	var t ApiActorTypeEnum
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (a ApiActorTypeEnum) Ptr() *ApiActorTypeEnum {
+	return &a
+}
+
 // A Node Result Event emitted from an API Node.
 type ApiNodeResult struct {
 	Data  *ApiNodeResultData `json:"data" url:"data"`
@@ -278,10 +310,13 @@ func (a *ApiNodeResultData) String() string {
 }
 
 type ApiRequestParentContext struct {
-	Parent *ParentContext `json:"parent,omitempty" url:"parent,omitempty"`
-	Links  []*SpanLink    `json:"links,omitempty" url:"links,omitempty"`
-	SpanId string         `json:"span_id" url:"span_id"`
-	type_  string
+	Parent        *ParentContext    `json:"parent,omitempty" url:"parent,omitempty"`
+	Links         []*SpanLink       `json:"links,omitempty" url:"links,omitempty"`
+	SpanId        string            `json:"span_id" url:"span_id"`
+	ApiActorId    *string           `json:"api_actor_id,omitempty" url:"api_actor_id,omitempty"`
+	ApiActorType  *ApiActorTypeEnum `json:"api_actor_type,omitempty" url:"api_actor_type,omitempty"`
+	ApiActorLabel *string           `json:"api_actor_label,omitempty" url:"api_actor_label,omitempty"`
+	type_         string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -9526,6 +9561,75 @@ func (i IntegrationName) Ptr() *IntegrationName {
 // * `COMPOSIO` - Composio
 type IntegrationProvider = string
 
+type IntegrationTriggerContext struct {
+	Parent *ParentContext `json:"parent,omitempty" url:"parent,omitempty"`
+	Links  []*SpanLink    `json:"links,omitempty" url:"links,omitempty"`
+	SpanId string         `json:"span_id" url:"span_id"`
+	type_  string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (i *IntegrationTriggerContext) GetExtraProperties() map[string]interface{} {
+	return i.extraProperties
+}
+
+func (i *IntegrationTriggerContext) Type() string {
+	return i.type_
+}
+
+func (i *IntegrationTriggerContext) UnmarshalJSON(data []byte) error {
+	type embed IntegrationTriggerContext
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*i),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*i = IntegrationTriggerContext(unmarshaler.embed)
+	if unmarshaler.Type != "INTEGRATION" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", i, "INTEGRATION", unmarshaler.Type)
+	}
+	i.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *i, "type")
+	if err != nil {
+		return err
+	}
+	i.extraProperties = extraProperties
+
+	i._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (i *IntegrationTriggerContext) MarshalJSON() ([]byte, error) {
+	type embed IntegrationTriggerContext
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*i),
+		Type:  "INTEGRATION",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (i *IntegrationTriggerContext) String() string {
+	if len(i._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(i._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(i); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", i)
+}
+
 type InvokedPort struct {
 	Name string `json:"name" url:"name"`
 
@@ -14993,6 +15097,8 @@ type ParentContext struct {
 	PromptDeploymentParentContext   *PromptDeploymentParentContext
 	ApiRequestParentContext         *ApiRequestParentContext
 	ExternalParentContext           *ExternalParentContext
+	ScheduledTriggerContext         *ScheduledTriggerContext
+	IntegrationTriggerContext       *IntegrationTriggerContext
 }
 
 func (p *ParentContext) UnmarshalJSON(data []byte) error {
@@ -15031,6 +15137,16 @@ func (p *ParentContext) UnmarshalJSON(data []byte) error {
 		p.ExternalParentContext = valueExternalParentContext
 		return nil
 	}
+	valueScheduledTriggerContext := new(ScheduledTriggerContext)
+	if err := json.Unmarshal(data, &valueScheduledTriggerContext); err == nil {
+		p.ScheduledTriggerContext = valueScheduledTriggerContext
+		return nil
+	}
+	valueIntegrationTriggerContext := new(IntegrationTriggerContext)
+	if err := json.Unmarshal(data, &valueIntegrationTriggerContext); err == nil {
+		p.IntegrationTriggerContext = valueIntegrationTriggerContext
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, p)
 }
 
@@ -15056,6 +15172,12 @@ func (p ParentContext) MarshalJSON() ([]byte, error) {
 	if p.ExternalParentContext != nil {
 		return json.Marshal(p.ExternalParentContext)
 	}
+	if p.ScheduledTriggerContext != nil {
+		return json.Marshal(p.ScheduledTriggerContext)
+	}
+	if p.IntegrationTriggerContext != nil {
+		return json.Marshal(p.IntegrationTriggerContext)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", p)
 }
 
@@ -15067,6 +15189,8 @@ type ParentContextVisitor interface {
 	VisitPromptDeploymentParentContext(*PromptDeploymentParentContext) error
 	VisitApiRequestParentContext(*ApiRequestParentContext) error
 	VisitExternalParentContext(*ExternalParentContext) error
+	VisitScheduledTriggerContext(*ScheduledTriggerContext) error
+	VisitIntegrationTriggerContext(*IntegrationTriggerContext) error
 }
 
 func (p *ParentContext) Accept(visitor ParentContextVisitor) error {
@@ -15090,6 +15214,12 @@ func (p *ParentContext) Accept(visitor ParentContextVisitor) error {
 	}
 	if p.ExternalParentContext != nil {
 		return visitor.VisitExternalParentContext(p.ExternalParentContext)
+	}
+	if p.ScheduledTriggerContext != nil {
+		return visitor.VisitScheduledTriggerContext(p.ScheduledTriggerContext)
+	}
+	if p.IntegrationTriggerContext != nil {
+		return visitor.VisitIntegrationTriggerContext(p.IntegrationTriggerContext)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", p)
 }
@@ -17306,6 +17436,75 @@ func (r *RichTextPromptBlock) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", r)
+}
+
+type ScheduledTriggerContext struct {
+	Parent *ParentContext `json:"parent,omitempty" url:"parent,omitempty"`
+	Links  []*SpanLink    `json:"links,omitempty" url:"links,omitempty"`
+	SpanId string         `json:"span_id" url:"span_id"`
+	type_  string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (s *ScheduledTriggerContext) GetExtraProperties() map[string]interface{} {
+	return s.extraProperties
+}
+
+func (s *ScheduledTriggerContext) Type() string {
+	return s.type_
+}
+
+func (s *ScheduledTriggerContext) UnmarshalJSON(data []byte) error {
+	type embed ScheduledTriggerContext
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*s),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*s = ScheduledTriggerContext(unmarshaler.embed)
+	if unmarshaler.Type != "SCHEDULED" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "SCHEDULED", unmarshaler.Type)
+	}
+	s.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *s, "type")
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+
+	s._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *ScheduledTriggerContext) MarshalJSON() ([]byte, error) {
+	type embed ScheduledTriggerContext
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*s),
+		Type:  "SCHEDULED",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (s *ScheduledTriggerContext) String() string {
+	if len(s._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(s._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
 }
 
 type SearchFiltersRequest struct {
