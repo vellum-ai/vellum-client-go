@@ -9344,6 +9344,7 @@ func (i *Integration) String() string {
 // * `APOLLO` - Apollo
 // * `ASANA` - Asana
 // * `ATLASSIAN` - Atlassian
+// * `BITBUCKET` - Bitbucket
 // * `BOX` - Box
 // * `BREVO` - Brevo
 // * `BROWSERBASE_TOOL` - Browserbase Tool
@@ -9402,6 +9403,7 @@ const (
 	IntegrationNameApollo          IntegrationName = "APOLLO"
 	IntegrationNameAsana           IntegrationName = "ASANA"
 	IntegrationNameAtlassian       IntegrationName = "ATLASSIAN"
+	IntegrationNameBitbucket       IntegrationName = "BITBUCKET"
 	IntegrationNameBox             IntegrationName = "BOX"
 	IntegrationNameBrevo           IntegrationName = "BREVO"
 	IntegrationNameBrowserbaseTool IntegrationName = "BROWSERBASE_TOOL"
@@ -9483,6 +9485,8 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameAsana, nil
 	case "ATLASSIAN":
 		return IntegrationNameAtlassian, nil
+	case "BITBUCKET":
+		return IntegrationNameBitbucket, nil
 	case "BOX":
 		return IntegrationNameBox, nil
 	case "BREVO":
