@@ -10068,6 +10068,8 @@ func (j *JsonVellumValueRequest) String() string {
 // * `between` - BETWEEN
 // * `notBetween` - NOT_BETWEEN
 // * `concat` - CONCAT
+// * `+` - ADD
+// * `-` - MINUS
 // * `blank` - BLANK
 // * `notBlank` - NOT_BLANK
 // * `coalesce` - COALESCE
@@ -10115,8 +10117,12 @@ const (
 	// Between
 	LogicalOperatorBetween LogicalOperator = "between"
 	// Not between
-	LogicalOperatorNotBetween  LogicalOperator = "notBetween"
-	LogicalOperatorConcat      LogicalOperator = "concat"
+	LogicalOperatorNotBetween LogicalOperator = "notBetween"
+	LogicalOperatorConcat     LogicalOperator = "concat"
+	// Add
+	LogicalOperatorAdd LogicalOperator = "+"
+	// Minus
+	LogicalOperatorMinus       LogicalOperator = "-"
 	LogicalOperatorBlank       LogicalOperator = "blank"
 	LogicalOperatorNotBlank    LogicalOperator = "notBlank"
 	LogicalOperatorCoalesce    LogicalOperator = "coalesce"
@@ -10169,6 +10175,10 @@ func NewLogicalOperatorFromString(s string) (LogicalOperator, error) {
 		return LogicalOperatorNotBetween, nil
 	case "concat":
 		return LogicalOperatorConcat, nil
+	case "+":
+		return LogicalOperatorAdd, nil
+	case "-":
+		return LogicalOperatorMinus, nil
 	case "blank":
 		return LogicalOperatorBlank, nil
 	case "notBlank":
