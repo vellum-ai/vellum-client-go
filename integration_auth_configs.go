@@ -204,9 +204,11 @@ func (p *PaginatedSlimIntegrationAuthConfigReadList) String() string {
 type SlimIntegrationAuthConfigRead struct {
 	Id                     string                                        `json:"id" url:"id"`
 	Integration            *IntegrationAuthConfigIntegration             `json:"integration" url:"integration"`
-	IntegrationCredentials []*IntegrationAuthConfigIntegrationCredential `json:"integration_credentials,omitempty" url:"integration_credentials,omitempty"`
 	AuthType               *AuthTypeEnum                                 `json:"auth_type,omitempty" url:"auth_type,omitempty"`
-	DefaultAccessType      *IntegrationCredentialAccessType              `json:"default_access_type,omitempty" url:"default_access_type,omitempty"`
+	IntegrationCredentials []*IntegrationAuthConfigIntegrationCredential `json:"integration_credentials,omitempty" url:"integration_credentials,omitempty"`
+	// Whether or not this auth config is eligible to use Vellum-managed system credentials to authenticate.
+	SystemCredentialEligible *bool                            `json:"system_credential_eligible,omitempty" url:"system_credential_eligible,omitempty"`
+	DefaultAccessType        *IntegrationCredentialAccessType `json:"default_access_type,omitempty" url:"default_access_type,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage

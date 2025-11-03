@@ -891,13 +891,14 @@ func (f *FolderEntityWorkflowSandbox) String() string {
 }
 
 type FolderEntityWorkflowSandboxData struct {
-	Id             string       `json:"id" url:"id"`
-	Label          string       `json:"label" url:"label"`
-	Created        time.Time    `json:"created" url:"created"`
-	Modified       time.Time    `json:"modified" url:"modified"`
-	Status         EntityStatus `json:"status" url:"status"`
-	Description    *string      `json:"description,omitempty" url:"description,omitempty"`
-	LastDeployedOn *time.Time   `json:"last_deployed_on,omitempty" url:"last_deployed_on,omitempty"`
+	Id             string                      `json:"id" url:"id"`
+	Label          string                      `json:"label" url:"label"`
+	Created        time.Time                   `json:"created" url:"created"`
+	Modified       time.Time                   `json:"modified" url:"modified"`
+	Status         EntityStatus                `json:"status" url:"status"`
+	Description    *string                     `json:"description,omitempty" url:"description,omitempty"`
+	LastDeployedOn *time.Time                  `json:"last_deployed_on,omitempty" url:"last_deployed_on,omitempty"`
+	DisplayData    *WorkflowSandboxDisplayData `json:"display_data,omitempty" url:"display_data,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -1005,6 +1006,49 @@ func (p *PaginatedFolderEntityList) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", p)
+}
+
+// Information used to display this Workflow Sandbox.
+type WorkflowSandboxDisplayData struct {
+	// The icon associated with this Workflow Sandbox.
+	Icon *WorkflowDisplayIcon `json:"icon,omitempty" url:"icon,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowSandboxDisplayData) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkflowSandboxDisplayData) UnmarshalJSON(data []byte) error {
+	type unmarshaler WorkflowSandboxDisplayData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*w = WorkflowSandboxDisplayData(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowSandboxDisplayData) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
 }
 
 type FolderEntitiesListRequestEntityStatus string
