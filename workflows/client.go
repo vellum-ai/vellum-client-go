@@ -48,7 +48,7 @@ func (c *Client) Pull(
 ) (io.Reader, error) {
 	options := core.NewRequestOptions(opts...)
 
-	baseURL := "https://api.vellum.ai"
+	baseURL := "https://predict.vellum.ai"
 	if c.baseURL != "" {
 		baseURL = c.baseURL
 	}
