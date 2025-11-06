@@ -9,12 +9,54 @@ import (
 	time "time"
 )
 
+type WorkspaceDisplayConfig struct {
+	Color *string `json:"color,omitempty" url:"color,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkspaceDisplayConfig) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkspaceDisplayConfig) UnmarshalJSON(data []byte) error {
+	type unmarshaler WorkspaceDisplayConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*w = WorkspaceDisplayConfig(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w)
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkspaceDisplayConfig) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
+}
+
 type WorkspaceRead struct {
 	Id string `json:"id" url:"id"`
 	// The name of the Workspace.
-	Name    string    `json:"name" url:"name"`
-	Label   string    `json:"label" url:"label"`
-	Created time.Time `json:"created" url:"created"`
+	Name          string                  `json:"name" url:"name"`
+	Label         string                  `json:"label" url:"label"`
+	Created       time.Time               `json:"created" url:"created"`
+	DisplayConfig *WorkspaceDisplayConfig `json:"display_config,omitempty" url:"display_config,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
