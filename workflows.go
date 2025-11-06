@@ -33,7 +33,8 @@ type WorkflowPushRequest struct {
 }
 
 type SerializeWorkflowFilesRequest struct {
-	Files map[string]interface{} `json:"files,omitempty" url:"-"`
+	Files  map[string]interface{} `json:"files,omitempty" url:"-"`
+	Module *string                `json:"module,omitempty" url:"-"`
 }
 
 type DatasetRowPushRequest struct {
