@@ -76,6 +76,29 @@ func (i *InternalServerError) Unwrap() error {
 	return i.APIError
 }
 
+type MisdirectedRequestError struct {
+	*core.APIError
+	Body *UpdateActiveWorkspaceResponse
+}
+
+func (m *MisdirectedRequestError) UnmarshalJSON(data []byte) error {
+	var body *UpdateActiveWorkspaceResponse
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	m.StatusCode = 421
+	m.Body = body
+	return nil
+}
+
+func (m *MisdirectedRequestError) MarshalJSON() ([]byte, error) {
+	return json.Marshal(m.Body)
+}
+
+func (m *MisdirectedRequestError) Unwrap() error {
+	return m.APIError
+}
+
 type NotFoundError struct {
 	*core.APIError
 	Body interface{}
