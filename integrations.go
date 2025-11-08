@@ -18,7 +18,8 @@ type IntegrationsListRequest struct {
 	// Which field to use when ordering the results.
 	Ordering *string `json:"-" url:"ordering,omitempty"`
 	// A search term.
-	Search *string `json:"-" url:"search,omitempty"`
+	Search                      *string `json:"-" url:"search,omitempty"`
+	SupportsIntegrationTriggers *string `json:"-" url:"supports_integration_triggers,omitempty"`
 }
 
 type ComponentsSchemasComposioExecuteToolRequest = *ComposioExecuteToolRequest
@@ -164,8 +165,9 @@ func (c *ComposioExecuteToolResponse) String() string {
 }
 
 type ComposioIntegrationExecConfig struct {
-	Slug  string `json:"slug" url:"slug"`
-	type_ string
+	Slug                    string `json:"slug" url:"slug"`
+	SupportsWebhookTriggers *bool  `json:"supports_webhook_triggers,omitempty" url:"supports_webhook_triggers,omitempty"`
+	type_                   string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage

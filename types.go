@@ -9328,9 +9328,13 @@ func (i *Integration) String() string {
 // * `CALENDLY` - Calendly
 // * `CANVA` - Canva
 // * `CLICKUP` - ClickUp
+// * `CODA` - Coda
 // * `HUBSPOT` - Hubspot
 // * `INTERCOM` - Intercom
 // * `LINEAR` - Linear
+// * `LINKUP` - Linkup
+// * `LISTENNOTES` - Listen Notes
+// * `LMNT` - LMNT
 // * `LINKEDIN` - LinkedIn
 // * `MAILCHIMP` - Mailchimp
 // * `MEM0` - Mem0
@@ -9340,6 +9344,10 @@ func (i *Integration) String() string {
 // * `GOOGLE_CALENDAR` - Google Calendar
 // * `GOOGLE_DRIVE` - Google Drive
 // * `GMAIL` - Gmail
+// * `ACCULYNX` - AccuLynx
+// * `AFFINITY` - Affinity
+// * `AGENCYZOOM` - AgencyZoom
+// * `AHREFS` - Ahrefs
 // * `AIRTABLE` - Airtable
 // * `APOLLO` - Apollo
 // * `ASANA` - Asana
@@ -9356,8 +9364,11 @@ func (i *Integration) String() string {
 // * `GITLAB` - Gitlab
 // * `FIRECRAWL` - Firecrawl
 // * `FIGMA` - Figma
+// * `FIREFLIES` - Fireflies
 // * `GOOGLE_MAPS` - Google Maps
+// * `HEYGEN` - HeyGen
 // * `JIRA` - Jira
+// * `JUNGLESCOUT` - Jungle Scout
 // * `KLAVIYO` - Klaviyo
 // * `PAGERDUTY` - PagerDuty
 // * `PARSERA` - Parsera
@@ -9366,17 +9377,23 @@ func (i *Integration) String() string {
 // * `POSTHOG` - PostHog
 // * `REDDIT` - Reddit
 // * `SEMRUSH` - Semrush
+// * `SEMANTICSCHOLAR` - Semantic Scholar
+// * `SENDGRID` - SendGrid
 // * `SERPAPI` - Serp Api
 // * `SHARE_POINT` - SharePoint
+// * `SHORTCUT` - Shortcut
 // * `STRIPE` - Stripe
 // * `SUPABASE` - Supabase
 // * `TAVILY` - Tavily
 // * `TELEGRAM` - Telegram
 // * `WEBFLOW` - Webflow
+// * `YOUSEARCH` - You Search
 // * `ZENDESK` - Zendesk
+// * `ZENROWS` - ZenRows
 // * `DROPBOX` - Dropbox
 // * `EVENTBRITE` - Eventbrite
 // * `CONFLUENCE` - Confluence
+// * `COINBASE` - Coinbase
 // * `DISCORD` - Discord
 // * `DOCUSIGN` - DocuSign
 type IntegrationName string
@@ -9388,9 +9405,13 @@ const (
 	IntegrationNameCalendly        IntegrationName = "CALENDLY"
 	IntegrationNameCanva           IntegrationName = "CANVA"
 	IntegrationNameClickup         IntegrationName = "CLICKUP"
+	IntegrationNameCoda            IntegrationName = "CODA"
 	IntegrationNameHubspot         IntegrationName = "HUBSPOT"
 	IntegrationNameIntercom        IntegrationName = "INTERCOM"
 	IntegrationNameLinear          IntegrationName = "LINEAR"
+	IntegrationNameLinkup          IntegrationName = "LINKUP"
+	IntegrationNameListennotes     IntegrationName = "LISTENNOTES"
+	IntegrationNameLmnt            IntegrationName = "LMNT"
 	IntegrationNameLinkedin        IntegrationName = "LINKEDIN"
 	IntegrationNameMailchimp       IntegrationName = "MAILCHIMP"
 	IntegrationNameMem0            IntegrationName = "MEM0"
@@ -9400,6 +9421,10 @@ const (
 	IntegrationNameGoogleCalendar  IntegrationName = "GOOGLE_CALENDAR"
 	IntegrationNameGoogleDrive     IntegrationName = "GOOGLE_DRIVE"
 	IntegrationNameGmail           IntegrationName = "GMAIL"
+	IntegrationNameAcculynx        IntegrationName = "ACCULYNX"
+	IntegrationNameAffinity        IntegrationName = "AFFINITY"
+	IntegrationNameAgencyzoom      IntegrationName = "AGENCYZOOM"
+	IntegrationNameAhrefs          IntegrationName = "AHREFS"
 	IntegrationNameAirtable        IntegrationName = "AIRTABLE"
 	IntegrationNameApollo          IntegrationName = "APOLLO"
 	IntegrationNameAsana           IntegrationName = "ASANA"
@@ -9416,8 +9441,11 @@ const (
 	IntegrationNameGitlab          IntegrationName = "GITLAB"
 	IntegrationNameFirecrawl       IntegrationName = "FIRECRAWL"
 	IntegrationNameFigma           IntegrationName = "FIGMA"
+	IntegrationNameFireflies       IntegrationName = "FIREFLIES"
 	IntegrationNameGoogleMaps      IntegrationName = "GOOGLE_MAPS"
+	IntegrationNameHeygen          IntegrationName = "HEYGEN"
 	IntegrationNameJira            IntegrationName = "JIRA"
+	IntegrationNameJunglescout     IntegrationName = "JUNGLESCOUT"
 	IntegrationNameKlaviyo         IntegrationName = "KLAVIYO"
 	IntegrationNamePagerduty       IntegrationName = "PAGERDUTY"
 	IntegrationNameParsera         IntegrationName = "PARSERA"
@@ -9426,17 +9454,23 @@ const (
 	IntegrationNamePosthog         IntegrationName = "POSTHOG"
 	IntegrationNameReddit          IntegrationName = "REDDIT"
 	IntegrationNameSemrush         IntegrationName = "SEMRUSH"
+	IntegrationNameSemanticscholar IntegrationName = "SEMANTICSCHOLAR"
+	IntegrationNameSendgrid        IntegrationName = "SENDGRID"
 	IntegrationNameSerpapi         IntegrationName = "SERPAPI"
 	IntegrationNameSharePoint      IntegrationName = "SHARE_POINT"
+	IntegrationNameShortcut        IntegrationName = "SHORTCUT"
 	IntegrationNameStripe          IntegrationName = "STRIPE"
 	IntegrationNameSupabase        IntegrationName = "SUPABASE"
 	IntegrationNameTavily          IntegrationName = "TAVILY"
 	IntegrationNameTelegram        IntegrationName = "TELEGRAM"
 	IntegrationNameWebflow         IntegrationName = "WEBFLOW"
+	IntegrationNameYousearch       IntegrationName = "YOUSEARCH"
 	IntegrationNameZendesk         IntegrationName = "ZENDESK"
+	IntegrationNameZenrows         IntegrationName = "ZENROWS"
 	IntegrationNameDropbox         IntegrationName = "DROPBOX"
 	IntegrationNameEventbrite      IntegrationName = "EVENTBRITE"
 	IntegrationNameConfluence      IntegrationName = "CONFLUENCE"
+	IntegrationNameCoinbase        IntegrationName = "COINBASE"
 	IntegrationNameDiscord         IntegrationName = "DISCORD"
 	IntegrationNameDocusign        IntegrationName = "DOCUSIGN"
 )
@@ -9455,12 +9489,20 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameCanva, nil
 	case "CLICKUP":
 		return IntegrationNameClickup, nil
+	case "CODA":
+		return IntegrationNameCoda, nil
 	case "HUBSPOT":
 		return IntegrationNameHubspot, nil
 	case "INTERCOM":
 		return IntegrationNameIntercom, nil
 	case "LINEAR":
 		return IntegrationNameLinear, nil
+	case "LINKUP":
+		return IntegrationNameLinkup, nil
+	case "LISTENNOTES":
+		return IntegrationNameListennotes, nil
+	case "LMNT":
+		return IntegrationNameLmnt, nil
 	case "LINKEDIN":
 		return IntegrationNameLinkedin, nil
 	case "MAILCHIMP":
@@ -9479,6 +9521,14 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameGoogleDrive, nil
 	case "GMAIL":
 		return IntegrationNameGmail, nil
+	case "ACCULYNX":
+		return IntegrationNameAcculynx, nil
+	case "AFFINITY":
+		return IntegrationNameAffinity, nil
+	case "AGENCYZOOM":
+		return IntegrationNameAgencyzoom, nil
+	case "AHREFS":
+		return IntegrationNameAhrefs, nil
 	case "AIRTABLE":
 		return IntegrationNameAirtable, nil
 	case "APOLLO":
@@ -9511,10 +9561,16 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameFirecrawl, nil
 	case "FIGMA":
 		return IntegrationNameFigma, nil
+	case "FIREFLIES":
+		return IntegrationNameFireflies, nil
 	case "GOOGLE_MAPS":
 		return IntegrationNameGoogleMaps, nil
+	case "HEYGEN":
+		return IntegrationNameHeygen, nil
 	case "JIRA":
 		return IntegrationNameJira, nil
+	case "JUNGLESCOUT":
+		return IntegrationNameJunglescout, nil
 	case "KLAVIYO":
 		return IntegrationNameKlaviyo, nil
 	case "PAGERDUTY":
@@ -9531,10 +9587,16 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameReddit, nil
 	case "SEMRUSH":
 		return IntegrationNameSemrush, nil
+	case "SEMANTICSCHOLAR":
+		return IntegrationNameSemanticscholar, nil
+	case "SENDGRID":
+		return IntegrationNameSendgrid, nil
 	case "SERPAPI":
 		return IntegrationNameSerpapi, nil
 	case "SHARE_POINT":
 		return IntegrationNameSharePoint, nil
+	case "SHORTCUT":
+		return IntegrationNameShortcut, nil
 	case "STRIPE":
 		return IntegrationNameStripe, nil
 	case "SUPABASE":
@@ -9545,14 +9607,20 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameTelegram, nil
 	case "WEBFLOW":
 		return IntegrationNameWebflow, nil
+	case "YOUSEARCH":
+		return IntegrationNameYousearch, nil
 	case "ZENDESK":
 		return IntegrationNameZendesk, nil
+	case "ZENROWS":
+		return IntegrationNameZenrows, nil
 	case "DROPBOX":
 		return IntegrationNameDropbox, nil
 	case "EVENTBRITE":
 		return IntegrationNameEventbrite, nil
 	case "CONFLUENCE":
 		return IntegrationNameConfluence, nil
+	case "COINBASE":
+		return IntegrationNameCoinbase, nil
 	case "DISCORD":
 		return IntegrationNameDiscord, nil
 	case "DOCUSIGN":
@@ -21669,6 +21737,52 @@ func (t *TokenOverlappingWindowChunking) String() string {
 
 // * `USD` - USD
 type UnitEnum = string
+
+type UpdateActiveWorkspaceResponse struct {
+	// The id of the workspace that the user should update to, or null if no workspace change needed.
+	UpdateActiveWorkspaceId *string `json:"update_active_workspace_id,omitempty" url:"update_active_workspace_id,omitempty"`
+	// The id of the environment that the user should update to, or null if no environment change needed.
+	UpdateActiveEnvironmentId *string `json:"update_active_environment_id,omitempty" url:"update_active_environment_id,omitempty"`
+	// Whether or not the user is a staff member of Vellum.
+	IsStaff *bool `json:"is_staff,omitempty" url:"is_staff,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (u *UpdateActiveWorkspaceResponse) GetExtraProperties() map[string]interface{} {
+	return u.extraProperties
+}
+
+func (u *UpdateActiveWorkspaceResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpdateActiveWorkspaceResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = UpdateActiveWorkspaceResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+
+	u._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *UpdateActiveWorkspaceResponse) String() string {
+	if len(u._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(u._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
+}
 
 // A block that represents a variable in a prompt template.
 type VariablePromptBlock struct {
