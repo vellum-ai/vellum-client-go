@@ -2632,7 +2632,7 @@ func (c *CodeExecutionNodeFunctionCallResult) String() string {
 
 type CodeExecutionNodeJsonResult struct {
 	Id    string      `json:"id" url:"id"`
-	Value interface{} `json:"value" url:"value"`
+	Value interface{} `json:"value,omitempty" url:"value,omitempty"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -5885,7 +5885,7 @@ type ExecutionJsonVellumValue struct {
 	// The variable's uniquely identifying internal id.
 	Id    string      `json:"id" url:"id"`
 	Name  string      `json:"name" url:"name"`
-	Value interface{} `json:"value" url:"value"`
+	Value interface{} `json:"value,omitempty" url:"value,omitempty"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -9849,7 +9849,7 @@ func (j *JinjaPromptBlock) String() string {
 type JsonInput struct {
 	// The variable's name
 	Name  string      `json:"name" url:"name"`
-	Value interface{} `json:"value" url:"value"`
+	Value interface{} `json:"value,omitempty" url:"value,omitempty"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -9919,7 +9919,7 @@ func (j *JsonInput) String() string {
 type JsonInputRequest struct {
 	// The variable's name
 	Name  string      `json:"name" url:"name"`
-	Value interface{} `json:"value" url:"value"`
+	Value interface{} `json:"value,omitempty" url:"value,omitempty"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -9987,7 +9987,7 @@ func (j *JsonInputRequest) String() string {
 
 // A value representing a JSON object.
 type JsonVellumValue struct {
-	Value interface{} `json:"value" url:"value"`
+	Value interface{} `json:"value,omitempty" url:"value,omitempty"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -10055,7 +10055,7 @@ func (j *JsonVellumValue) String() string {
 
 // A value representing a JSON object.
 type JsonVellumValueRequest struct {
-	Value interface{} `json:"value" url:"value"`
+	Value interface{} `json:"value,omitempty" url:"value,omitempty"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -11357,7 +11357,7 @@ func (n *NamedTestCaseImageVariableValueRequest) String() string {
 
 // Named Test Case value that is of type JSON
 type NamedTestCaseJsonVariableValueRequest struct {
-	Value interface{} `json:"value" url:"value"`
+	Value interface{} `json:"value,omitempty" url:"value,omitempty"`
 	Name  string      `json:"name" url:"name"`
 	type_ string
 
@@ -13204,7 +13204,7 @@ func (n *NodeInputCompiledImageValue) String() string {
 type NodeInputCompiledJsonValue struct {
 	NodeInputId string      `json:"node_input_id" url:"node_input_id"`
 	Key         string      `json:"key" url:"key"`
-	Value       interface{} `json:"value" url:"value"`
+	Value       interface{} `json:"value,omitempty" url:"value,omitempty"`
 	type_       string
 
 	extraProperties map[string]interface{}
@@ -14084,7 +14084,7 @@ func (n *NodeOutputCompiledFunctionCallValue) String() string {
 
 // An output returned by a node that is of type JSON.
 type NodeOutputCompiledJsonValue struct {
-	Value        interface{}                   `json:"value" url:"value"`
+	Value        interface{}                   `json:"value,omitempty" url:"value,omitempty"`
 	NodeOutputId string                        `json:"node_output_id" url:"node_output_id"`
 	State        *WorkflowNodeResultEventState `json:"state,omitempty" url:"state,omitempty"`
 	type_        string
@@ -19768,7 +19768,7 @@ func (t *TemplatingNodeFunctionCallResult) String() string {
 
 type TemplatingNodeJsonResult struct {
 	Id    string      `json:"id" url:"id"`
-	Value interface{} `json:"value" url:"value"`
+	Value interface{} `json:"value,omitempty" url:"value,omitempty"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -20553,7 +20553,7 @@ type TerminalNodeJsonResult struct {
 	Id *string `json:"id,omitempty" url:"id,omitempty"`
 	// The unique name given to the terminal node that produced this output.
 	Name  string      `json:"name" url:"name"`
-	Value interface{} `json:"value" url:"value"`
+	Value interface{} `json:"value,omitempty" url:"value,omitempty"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -21200,7 +21200,7 @@ func (t *TestSuiteRunMetricErrorOutput) String() string {
 
 // Output for a test suite run metric that is of type NUMBER
 type TestSuiteRunMetricJsonOutput struct {
-	Value interface{} `json:"value" url:"value"`
+	Value interface{} `json:"value,omitempty" url:"value,omitempty"`
 	Name  string      `json:"name" url:"name"`
 	type_ string
 
@@ -26797,7 +26797,7 @@ type WorkflowOutputJson struct {
 	Id string `json:"id" url:"id"`
 	// The output's name, as defined in the workflow
 	Name  string      `json:"name" url:"name"`
-	Value interface{} `json:"value" url:"value"`
+	Value interface{} `json:"value,omitempty" url:"value,omitempty"`
 	type_ string
 
 	extraProperties map[string]interface{}
@@ -28319,7 +28319,7 @@ type WorkflowResultEventOutputDataJson struct {
 	NodeId string                       `json:"node_id" url:"node_id"`
 	// The newly output string value. Only relevant for string outputs with a state of STREAMING.
 	Delta *string     `json:"delta,omitempty" url:"delta,omitempty"`
-	Value interface{} `json:"value" url:"value"`
+	Value interface{} `json:"value,omitempty" url:"value,omitempty"`
 	type_ string
 
 	extraProperties map[string]interface{}

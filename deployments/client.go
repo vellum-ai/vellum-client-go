@@ -12,6 +12,7 @@ import (
 	option "github.com/vellum-ai/vellum-client-go/option"
 	io "io"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -22,8 +23,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.ApiVersion == "" {
+		options.ApiVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -126,10 +127,10 @@ func (c *Client) Retrieve(
 // `retrieve_prompt_deployment_release` xendpoint instead.
 func (c *Client) DeploymentHistoryItemRetrieve(
 	ctx context.Context,
-	// Either the UUID of Deployment History Item you'd like to retrieve, or the name of a Release Tag that's pointing to the Deployment History Item you'd like to retrieve.
-	historyIdOrReleaseTag string,
 	// Either the Prompt Deployment's ID or its unique name
 	id string,
+	// Either the UUID of Deployment History Item you'd like to retrieve, or the name of a Release Tag that's pointing to the Deployment History Item you'd like to retrieve.
+	historyIdOrReleaseTag string,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.DeploymentHistoryItem, error) {
 	options := core.NewRequestOptions(opts...)
