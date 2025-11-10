@@ -75,10 +75,10 @@ func (c *Client) ExecuteMetricDefinition(
 
 func (c *Client) MetricDefinitionHistoryItemRetrieve(
 	ctx context.Context,
-	// Either the UUID of Metric Definition History Item you'd like to retrieve, or the name of a Release Tag that's pointing to the Metric Definition History Item you'd like to retrieve.
-	historyIdOrReleaseTag string,
 	// A UUID string identifying this metric definition.
 	id string,
+	// Either the UUID of Metric Definition History Item you'd like to retrieve, or the name of a Release Tag that's pointing to the Metric Definition History Item you'd like to retrieve.
+	historyIdOrReleaseTag string,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.MetricDefinitionHistoryItem, error) {
 	options := core.NewRequestOptions(opts...)

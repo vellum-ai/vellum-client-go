@@ -599,7 +599,7 @@ func (n *NamedTestCaseImageVariableValue) String() string {
 
 // Named Test Case value that is of type JSON
 type NamedTestCaseJsonVariableValue struct {
-	Value interface{} `json:"value" url:"value"`
+	Value interface{} `json:"value,omitempty" url:"value,omitempty"`
 	Name  string      `json:"name" url:"name"`
 	type_ string
 
@@ -1906,7 +1906,7 @@ func (t *TestSuiteRunExecutionFunctionCallOutput) String() string {
 // Execution output of an entity evaluated during a Test Suite Run that is of type JSON
 type TestSuiteRunExecutionJsonOutput struct {
 	Name             string      `json:"name" url:"name"`
-	Value            interface{} `json:"value" url:"value"`
+	Value            interface{} `json:"value,omitempty" url:"value,omitempty"`
 	OutputVariableId string      `json:"output_variable_id" url:"output_variable_id"`
 	type_            string
 

@@ -296,7 +296,7 @@ func (n *NamedScenarioInputImageVariableValueRequest) String() string {
 
 // Named Prompt Sandbox Scenario input value that is of type JSON
 type NamedScenarioInputJsonVariableValueRequest struct {
-	Value interface{} `json:"value" url:"value"`
+	Value interface{} `json:"value,omitempty" url:"value,omitempty"`
 	Name  string      `json:"name" url:"name"`
 	type_ string
 
@@ -1039,7 +1039,7 @@ func (s *ScenarioInputImageVariableValue) String() string {
 
 // Prompt Sandbox Scenario input value that is of type JSON
 type ScenarioInputJsonVariableValue struct {
-	Value           interface{} `json:"value" url:"value"`
+	Value           interface{} `json:"value,omitempty" url:"value,omitempty"`
 	InputVariableId string      `json:"input_variable_id" url:"input_variable_id"`
 	type_           string
 
