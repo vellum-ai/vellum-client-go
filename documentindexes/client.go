@@ -288,10 +288,10 @@ func (c *Client) PartialUpdate(
 // Adds a previously uploaded Document to the specified Document Index.
 func (c *Client) AddDocument(
 	ctx context.Context,
-	// Either the Vellum-generated ID or the originally supplied external_id that uniquely identifies the Document you'd like to add.
-	documentId string,
 	// Either the Vellum-generated ID or the originally specified name that uniquely identifies the Document Index to which you'd like to add the Document.
 	id string,
+	// Either the Vellum-generated ID or the originally supplied external_id that uniquely identifies the Document you'd like to add.
+	documentId string,
 	opts ...option.RequestOption,
 ) error {
 	options := core.NewRequestOptions(opts...)
@@ -331,10 +331,10 @@ func (c *Client) AddDocument(
 // Removes a Document from a Document Index without deleting the Document itself.
 func (c *Client) RemoveDocument(
 	ctx context.Context,
-	// Either the Vellum-generated ID or the originally supplied external_id that uniquely identifies the Document you'd like to remove.
-	documentId string,
 	// Either the Vellum-generated ID or the originally specified name that uniquely identifies the Document Index from which you'd like to remove a Document.
 	id string,
+	// Either the Vellum-generated ID or the originally supplied external_id that uniquely identifies the Document you'd like to remove.
+	documentId string,
 	opts ...option.RequestOption,
 ) error {
 	options := core.NewRequestOptions(opts...)

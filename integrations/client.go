@@ -39,10 +39,10 @@ func NewClient(opts ...option.RequestOption) *Client {
 
 func (c *Client) RetrieveIntegrationToolDefinition(
 	ctx context.Context,
-	// The integration name
-	integrationName string,
 	// The integration provider name
 	integrationProvider string,
+	// The integration name
+	integrationName string,
 	// The tool's unique name, as specified by the integration provider
 	toolName string,
 	opts ...option.RequestOption,
@@ -106,10 +106,10 @@ func (c *Client) RetrieveIntegrationToolDefinition(
 
 func (c *Client) ExecuteIntegrationTool(
 	ctx context.Context,
-	// The integration name
-	integrationName string,
 	// The integration provider name
 	integrationProvider string,
+	// The integration name
+	integrationName string,
 	// The tool's unique name, as specified by the integration provider
 	toolName string,
 	request vellumclientgo.ComponentsSchemasComposioExecuteToolRequest,

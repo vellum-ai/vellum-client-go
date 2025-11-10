@@ -126,10 +126,10 @@ func (c *Client) Retrieve(
 // `retrieve_prompt_deployment_release` xendpoint instead.
 func (c *Client) DeploymentHistoryItemRetrieve(
 	ctx context.Context,
-	// Either the UUID of Deployment History Item you'd like to retrieve, or the name of a Release Tag that's pointing to the Deployment History Item you'd like to retrieve.
-	historyIdOrReleaseTag string,
 	// Either the Prompt Deployment's ID or its unique name
 	id string,
+	// Either the UUID of Deployment History Item you'd like to retrieve, or the name of a Release Tag that's pointing to the Deployment History Item you'd like to retrieve.
+	historyIdOrReleaseTag string,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.DeploymentHistoryItem, error) {
 	options := core.NewRequestOptions(opts...)

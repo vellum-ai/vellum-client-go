@@ -166,8 +166,8 @@ func (c *Client) ListWorkflowDeploymentEventExecutions(
 
 func (c *Client) WorkflowDeploymentEventExecution(
 	ctx context.Context,
-	executionId string,
 	id string,
+	executionId string,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.WorkflowEventExecutionRead, error) {
 	options := core.NewRequestOptions(opts...)
@@ -210,10 +210,10 @@ func (c *Client) WorkflowDeploymentEventExecution(
 // `retrieve_workflow_deployment_release` endpoint instead.
 func (c *Client) WorkflowDeploymentHistoryItemRetrieve(
 	ctx context.Context,
-	// Either the UUID of Workflow Deployment History Item you'd like to retrieve, or the name of a Release Tag that's pointing to the Workflow Deployment History Item you'd like to retrieve.
-	historyIdOrReleaseTag string,
 	// Either the Workflow Deployment's ID or its unique name
 	id string,
+	// Either the UUID of Workflow Deployment History Item you'd like to retrieve, or the name of a Release Tag that's pointing to the Workflow Deployment History Item you'd like to retrieve.
+	historyIdOrReleaseTag string,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.WorkflowDeploymentHistoryItem, error) {
 	options := core.NewRequestOptions(opts...)
