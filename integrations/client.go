@@ -12,6 +12,7 @@ import (
 	option "github.com/vellum-ai/vellum-client-go/option"
 	io "io"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -22,8 +23,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.ApiVersion == "" {
+		options.ApiVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -39,10 +40,10 @@ func NewClient(opts ...option.RequestOption) *Client {
 
 func (c *Client) RetrieveIntegrationToolDefinition(
 	ctx context.Context,
-	// The integration name
-	integrationName string,
 	// The integration provider name
 	integrationProvider string,
+	// The integration name
+	integrationName string,
 	// The tool's unique name, as specified by the integration provider
 	toolName string,
 	opts ...option.RequestOption,
@@ -106,10 +107,10 @@ func (c *Client) RetrieveIntegrationToolDefinition(
 
 func (c *Client) ExecuteIntegrationTool(
 	ctx context.Context,
-	// The integration name
-	integrationName string,
 	// The integration provider name
 	integrationProvider string,
+	// The integration name
+	integrationName string,
 	// The tool's unique name, as specified by the integration provider
 	toolName string,
 	request vellumclientgo.ComponentsSchemasComposioExecuteToolRequest,
