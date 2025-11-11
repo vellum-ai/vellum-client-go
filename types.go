@@ -9396,6 +9396,7 @@ func (i *Integration) String() string {
 // * `COINBASE` - Coinbase
 // * `DISCORD` - Discord
 // * `DOCUSIGN` - DocuSign
+// * `TRELLO` - Trello
 type IntegrationName string
 
 const (
@@ -9473,6 +9474,7 @@ const (
 	IntegrationNameCoinbase        IntegrationName = "COINBASE"
 	IntegrationNameDiscord         IntegrationName = "DISCORD"
 	IntegrationNameDocusign        IntegrationName = "DOCUSIGN"
+	IntegrationNameTrello          IntegrationName = "TRELLO"
 )
 
 func NewIntegrationNameFromString(s string) (IntegrationName, error) {
@@ -9625,6 +9627,8 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameDiscord, nil
 	case "DOCUSIGN":
 		return IntegrationNameDocusign, nil
+	case "TRELLO":
+		return IntegrationNameTrello, nil
 	}
 	var t IntegrationName
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -23220,7 +23224,8 @@ func (v *VellumVariable) String() string {
 
 // A set of fields with additional properties for use in Vellum Variables.
 type VellumVariableExtensions struct {
-	Color *string `json:"color,omitempty" url:"color,omitempty"`
+	Color       *string `json:"color,omitempty" url:"color,omitempty"`
+	Description *string `json:"description,omitempty" url:"description,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
