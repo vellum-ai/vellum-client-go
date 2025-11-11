@@ -892,7 +892,7 @@ func (p *PromptRequestInput) Accept(visitor PromptRequestInputVisitor) error {
 type PromptRequestJsonInput struct {
 	// The variable's name, as defined in the Prompt.
 	Key   string      `json:"key" url:"key"`
-	Value interface{} `json:"value" url:"value"`
+	Value interface{} `json:"value,omitempty" url:"value,omitempty"`
 	type_ string
 
 	extraProperties map[string]interface{}

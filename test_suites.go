@@ -653,7 +653,7 @@ func (t *TestCaseImageVariableValue) String() string {
 type TestCaseJsonVariableValue struct {
 	VariableId string      `json:"variable_id" url:"variable_id"`
 	Name       string      `json:"name" url:"name"`
-	Value      interface{} `json:"value" url:"value"`
+	Value      interface{} `json:"value,omitempty" url:"value,omitempty"`
 	type_      string
 
 	extraProperties map[string]interface{}
