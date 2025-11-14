@@ -28,6 +28,7 @@ import (
 	sandboxes "github.com/vellum-ai/vellum-client-go/sandboxes"
 	testsuiteruns "github.com/vellum-ai/vellum-client-go/testsuiteruns"
 	testsuites "github.com/vellum-ai/vellum-client-go/testsuites"
+	uploadedfiles "github.com/vellum-ai/vellum-client-go/uploadedfiles"
 	workflowdeployments "github.com/vellum-ai/vellum-client-go/workflowdeployments"
 	workflowexecutions "github.com/vellum-ai/vellum-client-go/workflowexecutions"
 	workflows "github.com/vellum-ai/vellum-client-go/workflows"
@@ -61,6 +62,7 @@ type Client struct {
 	Sandboxes              *sandboxes.Client
 	TestSuiteRuns          *testsuiteruns.Client
 	TestSuites             *testsuites.Client
+	UploadedFiles          *uploadedfiles.Client
 	WorkflowDeployments    *workflowdeployments.Client
 	WorkflowExecutions     *workflowexecutions.Client
 	WorkflowSandboxes      *workflowsandboxes.Client
@@ -101,6 +103,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 		Sandboxes:              sandboxes.NewClient(opts...),
 		TestSuiteRuns:          testsuiteruns.NewClient(opts...),
 		TestSuites:             testsuites.NewClient(opts...),
+		UploadedFiles:          uploadedfiles.NewClient(opts...),
 		WorkflowDeployments:    workflowdeployments.NewClient(opts...),
 		WorkflowExecutions:     workflowexecutions.NewClient(opts...),
 		WorkflowSandboxes:      workflowsandboxes.NewClient(opts...),
