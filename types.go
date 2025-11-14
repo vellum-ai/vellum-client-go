@@ -26281,10 +26281,10 @@ func (w *WorkflowNodeResultEvent) Accept(visitor WorkflowNodeResultEventVisitor)
 	return fmt.Errorf("type %T does not include a non-empty union type", w)
 }
 
-// * `INITIATED` - INITIATED
-// * `STREAMING` - STREAMING
-// * `FULFILLED` - FULFILLED
-// * `REJECTED` - REJECTED
+// * `INITIATED` - Initiated
+// * `STREAMING` - Streaming
+// * `FULFILLED` - Fulfilled
+// * `REJECTED` - Rejected
 type WorkflowNodeResultEventState string
 
 const (
