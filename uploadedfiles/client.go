@@ -11,6 +11,7 @@ import (
 	io "io"
 	multipart "mime/multipart"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -21,8 +22,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.ApiVersion == "" {
+		options.ApiVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -124,6 +125,65 @@ func (c *Client) Retrieve(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
+			Response:        &response,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+// Update an uploaded file by its ID
+func (c *Client) Update(
+	ctx context.Context,
+	// A UUID string identifying this uploaded file.
+	id string,
+	file io.Reader,
+	opts ...option.RequestOption,
+) (*vellumclientgo.UploadedFileRead, error) {
+	options := core.NewRequestOptions(opts...)
+
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(baseURL+"/v1/uploaded-files/%v", id)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
+	var response *vellumclientgo.UploadedFileRead
+	requestBuffer := bytes.NewBuffer(nil)
+	writer := multipart.NewWriter(requestBuffer)
+	fileFilename := "file_filename"
+	if named, ok := file.(interface{ Name() string }); ok {
+		fileFilename = named.Name()
+	}
+	filePart, err := writer.CreateFormFile("file", fileFilename)
+	if err != nil {
+		return nil, err
+	}
+	if _, err := io.Copy(filePart, file); err != nil {
+		return nil, err
+	}
+	if err := writer.Close(); err != nil {
+		return nil, err
+	}
+	headers.Set("Content-Type", writer.FormDataContentType())
+
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPut,
+			MaxAttempts:     options.MaxAttempts,
+			Headers:         headers,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         requestBuffer,
 			Response:        &response,
 		},
 	); err != nil {
