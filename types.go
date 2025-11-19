@@ -86,6 +86,23 @@ type ExecuteWorkflowRequest struct {
 	PreviousExecutionId *string `json:"previous_execution_id,omitempty" url:"-"`
 }
 
+type ExecuteWorkflowAsyncRequest struct {
+	// The list of inputs defined in the Workflow's Deployment with their corresponding values.
+	Inputs []*WorkflowRequestInputRequest `json:"inputs,omitempty" url:"-"`
+	// The ID of the Workflow Deployment. Must provide either this or workflow_deployment_name.
+	WorkflowDeploymentId *string `json:"workflow_deployment_id,omitempty" url:"-"`
+	// The name of the Workflow Deployment. Must provide either this or workflow_deployment_id.
+	WorkflowDeploymentName *string `json:"workflow_deployment_name,omitempty" url:"-"`
+	// Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
+	ReleaseTag *string `json:"release_tag,omitempty" url:"-"`
+	// Optionally include a unique identifier for tracking purposes. Must be unique within a given Workspace.
+	ExternalId *string `json:"external_id,omitempty" url:"-"`
+	// The ID of a previous Workflow Execution to reference for initial State loading.
+	PreviousExecutionId *string `json:"previous_execution_id,omitempty" url:"-"`
+	// Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
+	Metadata map[string]interface{} `json:"metadata,omitempty" url:"-"`
+}
+
 type ExecuteWorkflowStreamRequest struct {
 	// The list of inputs defined in the Workflow's Deployment with their corresponding values.
 	Inputs []*WorkflowRequestInputRequest `json:"inputs,omitempty" url:"-"`
@@ -5293,6 +5310,49 @@ func (e *ExecutePromptResponse) Accept(visitor ExecutePromptResponseVisitor) err
 		return visitor.VisitRejectedExecutePromptResponse(e.RejectedExecutePromptResponse)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", e)
+}
+
+// The response from an async Workflow Deployment execution.
+type ExecuteWorkflowAsyncResponse struct {
+	// The ID of the workflow execution.
+	ExecutionId string `json:"execution_id" url:"execution_id"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (e *ExecuteWorkflowAsyncResponse) GetExtraProperties() map[string]interface{} {
+	return e.extraProperties
+}
+
+func (e *ExecuteWorkflowAsyncResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler ExecuteWorkflowAsyncResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*e = ExecuteWorkflowAsyncResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *e)
+	if err != nil {
+		return err
+	}
+	e.extraProperties = extraProperties
+
+	e._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (e *ExecuteWorkflowAsyncResponse) String() string {
+	if len(e._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(e._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(e); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", e)
 }
 
 type ExecuteWorkflowResponse struct {
