@@ -26281,10 +26281,10 @@ func (w *WorkflowNodeResultEvent) Accept(visitor WorkflowNodeResultEventVisitor)
 	return fmt.Errorf("type %T does not include a non-empty union type", w)
 }
 
-// * `INITIATED` - Initiated
-// * `STREAMING` - Streaming
-// * `FULFILLED` - Fulfilled
-// * `REJECTED` - Rejected
+// * `INITIATED` - INITIATED
+// * `STREAMING` - STREAMING
+// * `FULFILLED` - FULFILLED
+// * `REJECTED` - REJECTED
 type WorkflowNodeResultEventState string
 
 const (
@@ -28093,7 +28093,7 @@ func (w *WorkflowRequestVideoInputRequest) String() string {
 
 type WorkflowResultEvent struct {
 	Id      string                         `json:"id" url:"id"`
-	State   WorkflowNodeResultEventState   `json:"state" url:"state"`
+	State   WorkflowResultEventState       `json:"state" url:"state"`
 	Ts      time.Time                      `json:"ts" url:"ts"`
 	Output  *WorkflowResultEventOutputData `json:"output,omitempty" url:"output,omitempty"`
 	Error   *WorkflowEventError            `json:"error,omitempty" url:"error,omitempty"`
@@ -28869,6 +28869,42 @@ func (w *WorkflowResultEventOutputDataString) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", w)
+}
+
+// * `INITIATED` - Initiated
+// * `STREAMING` - Streaming
+// * `FULFILLED` - Fulfilled
+// * `REJECTED` - Rejected
+// * `PENDING` - Pending
+type WorkflowResultEventState string
+
+const (
+	WorkflowResultEventStateInitiated WorkflowResultEventState = "INITIATED"
+	WorkflowResultEventStateStreaming WorkflowResultEventState = "STREAMING"
+	WorkflowResultEventStateFulfilled WorkflowResultEventState = "FULFILLED"
+	WorkflowResultEventStateRejected  WorkflowResultEventState = "REJECTED"
+	WorkflowResultEventStatePending   WorkflowResultEventState = "PENDING"
+)
+
+func NewWorkflowResultEventStateFromString(s string) (WorkflowResultEventState, error) {
+	switch s {
+	case "INITIATED":
+		return WorkflowResultEventStateInitiated, nil
+	case "STREAMING":
+		return WorkflowResultEventStateStreaming, nil
+	case "FULFILLED":
+		return WorkflowResultEventStateFulfilled, nil
+	case "REJECTED":
+		return WorkflowResultEventStateRejected, nil
+	case "PENDING":
+		return WorkflowResultEventStatePending, nil
+	}
+	var t WorkflowResultEventState
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (w WorkflowResultEventState) Ptr() *WorkflowResultEventState {
+	return &w
 }
 
 type WorkflowSandboxParentContext struct {
