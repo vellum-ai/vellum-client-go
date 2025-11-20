@@ -438,6 +438,79 @@ func (c *Client) ExecuteWorkflow(
 	return response, nil
 }
 
+// Executes a deployed Workflow asynchronously and returns the execution ID.
+func (c *Client) ExecuteWorkflowAsync(
+	ctx context.Context,
+	request *vellumclientgo.ExecuteWorkflowAsyncRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.ExecuteWorkflowAsyncResponse, error) {
+	options := core.NewRequestOptions(opts...)
+
+	baseURL := "https://predict.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := baseURL + "/v1/execute-workflow-async"
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
+	errorDecoder := func(statusCode int, body io.Reader) error {
+		raw, err := io.ReadAll(body)
+		if err != nil {
+			return err
+		}
+		apiError := core.NewAPIError(statusCode, errors.New(string(raw)))
+		decoder := json.NewDecoder(bytes.NewReader(raw))
+		switch statusCode {
+		case 400:
+			value := new(vellumclientgo.BadRequestError)
+			value.APIError = apiError
+			if err := decoder.Decode(value); err != nil {
+				return apiError
+			}
+			return value
+		case 404:
+			value := new(vellumclientgo.NotFoundError)
+			value.APIError = apiError
+			if err := decoder.Decode(value); err != nil {
+				return apiError
+			}
+			return value
+		case 500:
+			value := new(vellumclientgo.InternalServerError)
+			value.APIError = apiError
+			if err := decoder.Decode(value); err != nil {
+				return apiError
+			}
+			return value
+		}
+		return apiError
+	}
+
+	var response *vellumclientgo.ExecuteWorkflowAsyncResponse
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			MaxAttempts:     options.MaxAttempts,
+			Headers:         headers,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+			ErrorDecoder:    errorDecoder,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
 // Executes a deployed Workflow and streams back its results.
 func (c *Client) ExecuteWorkflowStream(
 	ctx context.Context,
