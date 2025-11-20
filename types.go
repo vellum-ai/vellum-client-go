@@ -22014,7 +22014,9 @@ type VellumCodeResourceDefinition struct {
 	Name string `json:"name" url:"name"`
 	// The module that this resource is defined in.
 	Module []string `json:"module" url:"module"`
-	Id     string   `json:"id" url:"id"`
+	// Whether this node should be excluded from monitoring views.
+	ExcludeFromMonitoring *bool  `json:"exclude_from_monitoring,omitempty" url:"exclude_from_monitoring,omitempty"`
+	Id                    string `json:"id" url:"id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
