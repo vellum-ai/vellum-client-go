@@ -8,6 +8,11 @@ import (
 	core "github.com/vellum-ai/vellum-client-go/core"
 )
 
+type UploadedFilesRetrieveRequest struct {
+	// The number of seconds until the signed URL expires. Must be > 0 and <= 2592000 (30 days). Non-numeric or out-of-range values fall back to the default (604800 seconds or 7 days).
+	ExpirySeconds *int `json:"-" url:"expiry_seconds,omitempty"`
+}
+
 // Represents a file that has been uploaded to a Vellum Workspace.
 type UploadedFileRead struct {
 	Id *string `json:"id,omitempty" url:"id,omitempty"`
