@@ -9391,6 +9391,7 @@ func (i *Integration) String() string {
 // * `CODA` - Coda
 // * `HUBSPOT` - Hubspot
 // * `INTERCOM` - Intercom
+// * `INSTAGRAM` - Instagram
 // * `LINEAR` - Linear
 // * `LINKUP` - Linkup
 // * `LISTENNOTES` - Listen Notes
@@ -9404,6 +9405,13 @@ func (i *Integration) String() string {
 // * `GOOGLE_CALENDAR` - Google Calendar
 // * `GOOGLE_DRIVE` - Google Drive
 // * `GMAIL` - Gmail
+// * `GOOGLE_ADS` - Google Ads
+// * `GOOGLE_ANALYTICS` - Google Analytics
+// * `GOOGLE_DOCS` - Google Docs
+// * `GOOGLE_PHOTOS` - Google Photos
+// * `GOOGLE_SEARCH_CONSOLE` - Google Search Console
+// * `GOOGLE_SLIDES` - Google Slides
+// * `GOOGLE_TASKS` - Google Tasks
 // * `ACCULYNX` - AccuLynx
 // * `AFFINITY` - Affinity
 // * `AGENCYZOOM` - AgencyZoom
@@ -9453,6 +9461,7 @@ func (i *Integration) String() string {
 // * `ZENROWS` - ZenRows
 // * `DROPBOX` - Dropbox
 // * `EVENTBRITE` - Eventbrite
+// * `FACEBOOK` - Facebook
 // * `CONFLUENCE` - Confluence
 // * `COINBASE` - Coinbase
 // * `DISCORD` - Discord
@@ -9461,82 +9470,91 @@ func (i *Integration) String() string {
 type IntegrationName string
 
 const (
-	IntegrationNameSlack           IntegrationName = "SLACK"
-	IntegrationNameNotion          IntegrationName = "NOTION"
-	IntegrationNameGoogle          IntegrationName = "GOOGLE"
-	IntegrationNameCalendly        IntegrationName = "CALENDLY"
-	IntegrationNameCanva           IntegrationName = "CANVA"
-	IntegrationNameClickup         IntegrationName = "CLICKUP"
-	IntegrationNameCoda            IntegrationName = "CODA"
-	IntegrationNameHubspot         IntegrationName = "HUBSPOT"
-	IntegrationNameIntercom        IntegrationName = "INTERCOM"
-	IntegrationNameLinear          IntegrationName = "LINEAR"
-	IntegrationNameLinkup          IntegrationName = "LINKUP"
-	IntegrationNameListennotes     IntegrationName = "LISTENNOTES"
-	IntegrationNameLmnt            IntegrationName = "LMNT"
-	IntegrationNameLinkedin        IntegrationName = "LINKEDIN"
-	IntegrationNameMailchimp       IntegrationName = "MAILCHIMP"
-	IntegrationNameMem0            IntegrationName = "MEM0"
-	IntegrationNameNeon            IntegrationName = "NEON"
-	IntegrationNameGithub          IntegrationName = "GITHUB"
-	IntegrationNameGoogleSheets    IntegrationName = "GOOGLE_SHEETS"
-	IntegrationNameGoogleCalendar  IntegrationName = "GOOGLE_CALENDAR"
-	IntegrationNameGoogleDrive     IntegrationName = "GOOGLE_DRIVE"
-	IntegrationNameGmail           IntegrationName = "GMAIL"
-	IntegrationNameAcculynx        IntegrationName = "ACCULYNX"
-	IntegrationNameAffinity        IntegrationName = "AFFINITY"
-	IntegrationNameAgencyzoom      IntegrationName = "AGENCYZOOM"
-	IntegrationNameAhrefs          IntegrationName = "AHREFS"
-	IntegrationNameAirtable        IntegrationName = "AIRTABLE"
-	IntegrationNameApollo          IntegrationName = "APOLLO"
-	IntegrationNameAsana           IntegrationName = "ASANA"
-	IntegrationNameAtlassian       IntegrationName = "ATLASSIAN"
-	IntegrationNameBitbucket       IntegrationName = "BITBUCKET"
-	IntegrationNameBox             IntegrationName = "BOX"
-	IntegrationNameBrevo           IntegrationName = "BREVO"
-	IntegrationNameBrowserbaseTool IntegrationName = "BROWSERBASE_TOOL"
-	IntegrationNameCal             IntegrationName = "CAL"
-	IntegrationNameCanvas          IntegrationName = "CANVAS"
-	IntegrationNameElevenlabs      IntegrationName = "ELEVENLABS"
-	IntegrationNameExa             IntegrationName = "EXA"
-	IntegrationNameGamma           IntegrationName = "GAMMA"
-	IntegrationNameGitlab          IntegrationName = "GITLAB"
-	IntegrationNameFirecrawl       IntegrationName = "FIRECRAWL"
-	IntegrationNameFigma           IntegrationName = "FIGMA"
-	IntegrationNameFireflies       IntegrationName = "FIREFLIES"
-	IntegrationNameGoogleMaps      IntegrationName = "GOOGLE_MAPS"
-	IntegrationNameHeygen          IntegrationName = "HEYGEN"
-	IntegrationNameJira            IntegrationName = "JIRA"
-	IntegrationNameJunglescout     IntegrationName = "JUNGLESCOUT"
-	IntegrationNameKlaviyo         IntegrationName = "KLAVIYO"
-	IntegrationNamePagerduty       IntegrationName = "PAGERDUTY"
-	IntegrationNameParsera         IntegrationName = "PARSERA"
-	IntegrationNamePeopledatalabs  IntegrationName = "PEOPLEDATALABS"
-	IntegrationNamePerplexity      IntegrationName = "PERPLEXITY"
-	IntegrationNamePosthog         IntegrationName = "POSTHOG"
-	IntegrationNameProductboard    IntegrationName = "PRODUCTBOARD"
-	IntegrationNameReddit          IntegrationName = "REDDIT"
-	IntegrationNameSemrush         IntegrationName = "SEMRUSH"
-	IntegrationNameSemanticscholar IntegrationName = "SEMANTICSCHOLAR"
-	IntegrationNameSendgrid        IntegrationName = "SENDGRID"
-	IntegrationNameSerpapi         IntegrationName = "SERPAPI"
-	IntegrationNameSharePoint      IntegrationName = "SHARE_POINT"
-	IntegrationNameShortcut        IntegrationName = "SHORTCUT"
-	IntegrationNameStripe          IntegrationName = "STRIPE"
-	IntegrationNameSupabase        IntegrationName = "SUPABASE"
-	IntegrationNameTavily          IntegrationName = "TAVILY"
-	IntegrationNameTelegram        IntegrationName = "TELEGRAM"
-	IntegrationNameWebflow         IntegrationName = "WEBFLOW"
-	IntegrationNameYousearch       IntegrationName = "YOUSEARCH"
-	IntegrationNameZendesk         IntegrationName = "ZENDESK"
-	IntegrationNameZenrows         IntegrationName = "ZENROWS"
-	IntegrationNameDropbox         IntegrationName = "DROPBOX"
-	IntegrationNameEventbrite      IntegrationName = "EVENTBRITE"
-	IntegrationNameConfluence      IntegrationName = "CONFLUENCE"
-	IntegrationNameCoinbase        IntegrationName = "COINBASE"
-	IntegrationNameDiscord         IntegrationName = "DISCORD"
-	IntegrationNameDocusign        IntegrationName = "DOCUSIGN"
-	IntegrationNameTrello          IntegrationName = "TRELLO"
+	IntegrationNameSlack               IntegrationName = "SLACK"
+	IntegrationNameNotion              IntegrationName = "NOTION"
+	IntegrationNameGoogle              IntegrationName = "GOOGLE"
+	IntegrationNameCalendly            IntegrationName = "CALENDLY"
+	IntegrationNameCanva               IntegrationName = "CANVA"
+	IntegrationNameClickup             IntegrationName = "CLICKUP"
+	IntegrationNameCoda                IntegrationName = "CODA"
+	IntegrationNameHubspot             IntegrationName = "HUBSPOT"
+	IntegrationNameIntercom            IntegrationName = "INTERCOM"
+	IntegrationNameInstagram           IntegrationName = "INSTAGRAM"
+	IntegrationNameLinear              IntegrationName = "LINEAR"
+	IntegrationNameLinkup              IntegrationName = "LINKUP"
+	IntegrationNameListennotes         IntegrationName = "LISTENNOTES"
+	IntegrationNameLmnt                IntegrationName = "LMNT"
+	IntegrationNameLinkedin            IntegrationName = "LINKEDIN"
+	IntegrationNameMailchimp           IntegrationName = "MAILCHIMP"
+	IntegrationNameMem0                IntegrationName = "MEM0"
+	IntegrationNameNeon                IntegrationName = "NEON"
+	IntegrationNameGithub              IntegrationName = "GITHUB"
+	IntegrationNameGoogleSheets        IntegrationName = "GOOGLE_SHEETS"
+	IntegrationNameGoogleCalendar      IntegrationName = "GOOGLE_CALENDAR"
+	IntegrationNameGoogleDrive         IntegrationName = "GOOGLE_DRIVE"
+	IntegrationNameGmail               IntegrationName = "GMAIL"
+	IntegrationNameGoogleAds           IntegrationName = "GOOGLE_ADS"
+	IntegrationNameGoogleAnalytics     IntegrationName = "GOOGLE_ANALYTICS"
+	IntegrationNameGoogleDocs          IntegrationName = "GOOGLE_DOCS"
+	IntegrationNameGooglePhotos        IntegrationName = "GOOGLE_PHOTOS"
+	IntegrationNameGoogleSearchConsole IntegrationName = "GOOGLE_SEARCH_CONSOLE"
+	IntegrationNameGoogleSlides        IntegrationName = "GOOGLE_SLIDES"
+	IntegrationNameGoogleTasks         IntegrationName = "GOOGLE_TASKS"
+	IntegrationNameAcculynx            IntegrationName = "ACCULYNX"
+	IntegrationNameAffinity            IntegrationName = "AFFINITY"
+	IntegrationNameAgencyzoom          IntegrationName = "AGENCYZOOM"
+	IntegrationNameAhrefs              IntegrationName = "AHREFS"
+	IntegrationNameAirtable            IntegrationName = "AIRTABLE"
+	IntegrationNameApollo              IntegrationName = "APOLLO"
+	IntegrationNameAsana               IntegrationName = "ASANA"
+	IntegrationNameAtlassian           IntegrationName = "ATLASSIAN"
+	IntegrationNameBitbucket           IntegrationName = "BITBUCKET"
+	IntegrationNameBox                 IntegrationName = "BOX"
+	IntegrationNameBrevo               IntegrationName = "BREVO"
+	IntegrationNameBrowserbaseTool     IntegrationName = "BROWSERBASE_TOOL"
+	IntegrationNameCal                 IntegrationName = "CAL"
+	IntegrationNameCanvas              IntegrationName = "CANVAS"
+	IntegrationNameElevenlabs          IntegrationName = "ELEVENLABS"
+	IntegrationNameExa                 IntegrationName = "EXA"
+	IntegrationNameGamma               IntegrationName = "GAMMA"
+	IntegrationNameGitlab              IntegrationName = "GITLAB"
+	IntegrationNameFirecrawl           IntegrationName = "FIRECRAWL"
+	IntegrationNameFigma               IntegrationName = "FIGMA"
+	IntegrationNameFireflies           IntegrationName = "FIREFLIES"
+	IntegrationNameGoogleMaps          IntegrationName = "GOOGLE_MAPS"
+	IntegrationNameHeygen              IntegrationName = "HEYGEN"
+	IntegrationNameJira                IntegrationName = "JIRA"
+	IntegrationNameJunglescout         IntegrationName = "JUNGLESCOUT"
+	IntegrationNameKlaviyo             IntegrationName = "KLAVIYO"
+	IntegrationNamePagerduty           IntegrationName = "PAGERDUTY"
+	IntegrationNameParsera             IntegrationName = "PARSERA"
+	IntegrationNamePeopledatalabs      IntegrationName = "PEOPLEDATALABS"
+	IntegrationNamePerplexity          IntegrationName = "PERPLEXITY"
+	IntegrationNamePosthog             IntegrationName = "POSTHOG"
+	IntegrationNameProductboard        IntegrationName = "PRODUCTBOARD"
+	IntegrationNameReddit              IntegrationName = "REDDIT"
+	IntegrationNameSemrush             IntegrationName = "SEMRUSH"
+	IntegrationNameSemanticscholar     IntegrationName = "SEMANTICSCHOLAR"
+	IntegrationNameSendgrid            IntegrationName = "SENDGRID"
+	IntegrationNameSerpapi             IntegrationName = "SERPAPI"
+	IntegrationNameSharePoint          IntegrationName = "SHARE_POINT"
+	IntegrationNameShortcut            IntegrationName = "SHORTCUT"
+	IntegrationNameStripe              IntegrationName = "STRIPE"
+	IntegrationNameSupabase            IntegrationName = "SUPABASE"
+	IntegrationNameTavily              IntegrationName = "TAVILY"
+	IntegrationNameTelegram            IntegrationName = "TELEGRAM"
+	IntegrationNameWebflow             IntegrationName = "WEBFLOW"
+	IntegrationNameYousearch           IntegrationName = "YOUSEARCH"
+	IntegrationNameZendesk             IntegrationName = "ZENDESK"
+	IntegrationNameZenrows             IntegrationName = "ZENROWS"
+	IntegrationNameDropbox             IntegrationName = "DROPBOX"
+	IntegrationNameEventbrite          IntegrationName = "EVENTBRITE"
+	IntegrationNameFacebook            IntegrationName = "FACEBOOK"
+	IntegrationNameConfluence          IntegrationName = "CONFLUENCE"
+	IntegrationNameCoinbase            IntegrationName = "COINBASE"
+	IntegrationNameDiscord             IntegrationName = "DISCORD"
+	IntegrationNameDocusign            IntegrationName = "DOCUSIGN"
+	IntegrationNameTrello              IntegrationName = "TRELLO"
 )
 
 func NewIntegrationNameFromString(s string) (IntegrationName, error) {
@@ -9559,6 +9577,8 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameHubspot, nil
 	case "INTERCOM":
 		return IntegrationNameIntercom, nil
+	case "INSTAGRAM":
+		return IntegrationNameInstagram, nil
 	case "LINEAR":
 		return IntegrationNameLinear, nil
 	case "LINKUP":
@@ -9585,6 +9605,20 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameGoogleDrive, nil
 	case "GMAIL":
 		return IntegrationNameGmail, nil
+	case "GOOGLE_ADS":
+		return IntegrationNameGoogleAds, nil
+	case "GOOGLE_ANALYTICS":
+		return IntegrationNameGoogleAnalytics, nil
+	case "GOOGLE_DOCS":
+		return IntegrationNameGoogleDocs, nil
+	case "GOOGLE_PHOTOS":
+		return IntegrationNameGooglePhotos, nil
+	case "GOOGLE_SEARCH_CONSOLE":
+		return IntegrationNameGoogleSearchConsole, nil
+	case "GOOGLE_SLIDES":
+		return IntegrationNameGoogleSlides, nil
+	case "GOOGLE_TASKS":
+		return IntegrationNameGoogleTasks, nil
 	case "ACCULYNX":
 		return IntegrationNameAcculynx, nil
 	case "AFFINITY":
@@ -9683,6 +9717,8 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameDropbox, nil
 	case "EVENTBRITE":
 		return IntegrationNameEventbrite, nil
+	case "FACEBOOK":
+		return IntegrationNameFacebook, nil
 	case "CONFLUENCE":
 		return IntegrationNameConfluence, nil
 	case "COINBASE":
@@ -23251,6 +23287,7 @@ type VellumVariable struct {
 	Required   *bool                     `json:"required,omitempty" url:"required,omitempty"`
 	Default    *VellumValue              `json:"default,omitempty" url:"default,omitempty"`
 	Extensions *VellumVariableExtensions `json:"extensions,omitempty" url:"extensions,omitempty"`
+	Schema     map[string]interface{}    `json:"schema,omitempty" url:"schema,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -23348,6 +23385,7 @@ func (v *VellumVariableExtensions) String() string {
 // * `DOCUMENT` - DOCUMENT
 // * `NULL` - NULL
 // * `THINKING` - THINKING
+// * `REFERENCE` - REFERENCE
 type VellumVariableType string
 
 const (
@@ -23365,6 +23403,7 @@ const (
 	VellumVariableTypeDocument      VellumVariableType = "DOCUMENT"
 	VellumVariableTypeNull          VellumVariableType = "NULL"
 	VellumVariableTypeThinking      VellumVariableType = "THINKING"
+	VellumVariableTypeReference     VellumVariableType = "REFERENCE"
 )
 
 func NewVellumVariableTypeFromString(s string) (VellumVariableType, error) {
@@ -23397,6 +23436,8 @@ func NewVellumVariableTypeFromString(s string) (VellumVariableType, error) {
 		return VellumVariableTypeNull, nil
 	case "THINKING":
 		return VellumVariableTypeThinking, nil
+	case "REFERENCE":
+		return VellumVariableTypeReference, nil
 	}
 	var t VellumVariableType
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
