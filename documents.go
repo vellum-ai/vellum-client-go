@@ -499,6 +499,8 @@ type UploadDocumentBodyRequest struct {
 	ExternalId *string `json:"external_id,omitempty" url:"-"`
 	// A human-friendly name for this document. Typically the filename.
 	Label string `json:"label" url:"-"`
+	// A URL from which the document can be downloaded. Either contents or url must be provided.
+	Url *string `json:"url,omitempty" url:"-"`
 	// Optionally include a list of keywords that'll be associated with this document. Used when performing keyword searches.
 	Keywords []string `json:"keywords,omitempty" url:"-"`
 	// A stringified JSON object containing any metadata associated with the document that you'd like to filter upon later.
