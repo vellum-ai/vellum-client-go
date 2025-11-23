@@ -1,7 +1,5 @@
 module github.com/vellum-ai/vellum-client-go
 
-// Version: v1.11.3
-
 go 1.18
 
 require (
