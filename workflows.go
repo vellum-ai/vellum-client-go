@@ -33,8 +33,9 @@ type WorkflowPushRequest struct {
 }
 
 type SerializeWorkflowFilesRequest struct {
-	Files  map[string]interface{} `json:"files,omitempty" url:"-"`
-	Module *string                `json:"module,omitempty" url:"-"`
+	Files        map[string]interface{} `json:"files,omitempty" url:"-"`
+	Module       *string                `json:"module,omitempty" url:"-"`
+	RunnerConfig *RunnerConfigRequest   `json:"runner_config,omitempty" url:"-"`
 }
 
 type DatasetRowPushRequest struct {
@@ -77,6 +78,51 @@ func (d *DatasetRowPushRequest) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", d)
+}
+
+type RunnerConfigRequest struct {
+	ContainerImageName          *string `json:"container_image_name,omitempty" url:"container_image_name,omitempty"`
+	ContainerImageTag           *string `json:"container_image_tag,omitempty" url:"container_image_tag,omitempty"`
+	CodegenVersion              *string `json:"codegen_version,omitempty" url:"codegen_version,omitempty"`
+	SdkVersion                  *string `json:"sdk_version,omitempty" url:"sdk_version,omitempty"`
+	IsDeploymentInliningEnabled *bool   `json:"is_deployment_inlining_enabled,omitempty" url:"is_deployment_inlining_enabled,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (r *RunnerConfigRequest) GetExtraProperties() map[string]interface{} {
+	return r.extraProperties
+}
+
+func (r *RunnerConfigRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler RunnerConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*r = RunnerConfigRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *r)
+	if err != nil {
+		return err
+	}
+	r.extraProperties = extraProperties
+
+	r._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (r *RunnerConfigRequest) String() string {
+	if len(r._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(r._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(r); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", r)
 }
 
 type WorkflowPushDeploymentConfigRequest struct {
