@@ -3,10 +3,14 @@
 package workflowdeployments
 
 import (
+	bytes "bytes"
 	context "context"
+	json "encoding/json"
+	errors "errors"
 	vellumclientgo "github.com/vellum-ai/vellum-client-go"
 	core "github.com/vellum-ai/vellum-client-go/core"
 	option "github.com/vellum-ai/vellum-client-go/option"
+	io "io"
 	http "net/http"
 )
 
@@ -187,6 +191,32 @@ func (c *Client) WorkflowDeploymentEventExecution(
 
 	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
+	errorDecoder := func(statusCode int, body io.Reader) error {
+		raw, err := io.ReadAll(body)
+		if err != nil {
+			return err
+		}
+		apiError := core.NewAPIError(statusCode, errors.New(string(raw)))
+		decoder := json.NewDecoder(bytes.NewReader(raw))
+		switch statusCode {
+		case 404:
+			value := new(vellumclientgo.NotFoundError)
+			value.APIError = apiError
+			if err := decoder.Decode(value); err != nil {
+				return apiError
+			}
+			return value
+		case 421:
+			value := new(vellumclientgo.MisdirectedRequestError)
+			value.APIError = apiError
+			if err := decoder.Decode(value); err != nil {
+				return apiError
+			}
+			return value
+		}
+		return apiError
+	}
+
 	var response *vellumclientgo.WorkflowEventExecutionRead
 	if err := c.caller.Call(
 		ctx,
@@ -199,6 +229,7 @@ func (c *Client) WorkflowDeploymentEventExecution(
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
 			Response:        &response,
+			ErrorDecoder:    errorDecoder,
 		},
 	); err != nil {
 		return nil, err
