@@ -9398,7 +9398,9 @@ func (i *Integration) String() string {
 // * `LMNT` - LMNT
 // * `LINKEDIN` - LinkedIn
 // * `MAILCHIMP` - Mailchimp
+// * `MIRO` - Miro
 // * `MEM0` - Mem0
+// * `MONDAY` - Monday
 // * `NEON` - Neon
 // * `GITHUB` - Github
 // * `GOOGLE_SHEETS` - Google Sheets
@@ -9451,10 +9453,12 @@ func (i *Integration) String() string {
 // * `SERPAPI` - Serp Api
 // * `SHARE_POINT` - SharePoint
 // * `SHORTCUT` - Shortcut
+// * `SPOTIFY` - Spotify
 // * `STRIPE` - Stripe
 // * `SUPABASE` - Supabase
 // * `TAVILY` - Tavily
 // * `TELEGRAM` - Telegram
+// * `TODOIST` - Todoist
 // * `WEBFLOW` - Webflow
 // * `YOUSEARCH` - You Search
 // * `ZENDESK` - Zendesk
@@ -9486,7 +9490,9 @@ const (
 	IntegrationNameLmnt                IntegrationName = "LMNT"
 	IntegrationNameLinkedin            IntegrationName = "LINKEDIN"
 	IntegrationNameMailchimp           IntegrationName = "MAILCHIMP"
+	IntegrationNameMiro                IntegrationName = "MIRO"
 	IntegrationNameMem0                IntegrationName = "MEM0"
+	IntegrationNameMonday              IntegrationName = "MONDAY"
 	IntegrationNameNeon                IntegrationName = "NEON"
 	IntegrationNameGithub              IntegrationName = "GITHUB"
 	IntegrationNameGoogleSheets        IntegrationName = "GOOGLE_SHEETS"
@@ -9539,10 +9545,12 @@ const (
 	IntegrationNameSerpapi             IntegrationName = "SERPAPI"
 	IntegrationNameSharePoint          IntegrationName = "SHARE_POINT"
 	IntegrationNameShortcut            IntegrationName = "SHORTCUT"
+	IntegrationNameSpotify             IntegrationName = "SPOTIFY"
 	IntegrationNameStripe              IntegrationName = "STRIPE"
 	IntegrationNameSupabase            IntegrationName = "SUPABASE"
 	IntegrationNameTavily              IntegrationName = "TAVILY"
 	IntegrationNameTelegram            IntegrationName = "TELEGRAM"
+	IntegrationNameTodoist             IntegrationName = "TODOIST"
 	IntegrationNameWebflow             IntegrationName = "WEBFLOW"
 	IntegrationNameYousearch           IntegrationName = "YOUSEARCH"
 	IntegrationNameZendesk             IntegrationName = "ZENDESK"
@@ -9591,8 +9599,12 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameLinkedin, nil
 	case "MAILCHIMP":
 		return IntegrationNameMailchimp, nil
+	case "MIRO":
+		return IntegrationNameMiro, nil
 	case "MEM0":
 		return IntegrationNameMem0, nil
+	case "MONDAY":
+		return IntegrationNameMonday, nil
 	case "NEON":
 		return IntegrationNameNeon, nil
 	case "GITHUB":
@@ -9697,6 +9709,8 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameSharePoint, nil
 	case "SHORTCUT":
 		return IntegrationNameShortcut, nil
+	case "SPOTIFY":
+		return IntegrationNameSpotify, nil
 	case "STRIPE":
 		return IntegrationNameStripe, nil
 	case "SUPABASE":
@@ -9705,6 +9719,8 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameTavily, nil
 	case "TELEGRAM":
 		return IntegrationNameTelegram, nil
+	case "TODOIST":
+		return IntegrationNameTodoist, nil
 	case "WEBFLOW":
 		return IntegrationNameWebflow, nil
 	case "YOUSEARCH":
@@ -21961,7 +21977,11 @@ func (v *VariablePromptBlock) String() string {
 }
 
 type VellumAudio struct {
-	// A valid data URL containing the audio data.
+	// The reference to the source data. This can be one of the following formats:
+	//  1. A base64-encoded data URL (e.g., 'data:application/pdf;base64,JVBERi0xLjQKJcfs...').
+	//  2. A url pointing to a file accessible over HTTP or HTTPS.
+	//  3. A reference to a file that's been previously uploaded to Vellum, in the form of 'vellum:uploaded-file:{uploaded_file_id}'.
+	//     You can use the Uploaded Files API to retrieve the url of the uploaded file given its ID. See https://docs.vellum.ai/developers/client-sdk/uploaded-files/retrieve for details.
 	Src      string                 `json:"src" url:"src"`
 	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
 
@@ -22004,7 +22024,11 @@ func (v *VellumAudio) String() string {
 }
 
 type VellumAudioRequest struct {
-	// A valid data URL containing the audio data.
+	// The reference to the source data. This can be one of the following formats:
+	//  1. A base64-encoded data URL (e.g., 'data:application/pdf;base64,JVBERi0xLjQKJcfs...').
+	//  2. A url pointing to a file accessible over HTTP or HTTPS.
+	//  3. A reference to a file that's been previously uploaded to Vellum, in the form of 'vellum:uploaded-file:{uploaded_file_id}'.
+	//     You can use the Uploaded Files API to retrieve the url of the uploaded file given its ID. See https://docs.vellum.ai/developers/client-sdk/uploaded-files/retrieve for details.
 	Src      string                 `json:"src" url:"src"`
 	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
 
@@ -22093,7 +22117,11 @@ func (v *VellumCodeResourceDefinition) String() string {
 }
 
 type VellumDocument struct {
-	// A valid data URL containing the document data.
+	// The reference to the source data. This can be one of the following formats:
+	//  1. A base64-encoded data URL (e.g., 'data:application/pdf;base64,JVBERi0xLjQKJcfs...').
+	//  2. A url pointing to a file accessible over HTTP or HTTPS.
+	//  3. A reference to a file that's been previously uploaded to Vellum, in the form of 'vellum:uploaded-file:{uploaded_file_id}'.
+	//     You can use the Uploaded Files API to retrieve the url of the uploaded file given its ID. See https://docs.vellum.ai/developers/client-sdk/uploaded-files/retrieve for details.
 	Src      string                 `json:"src" url:"src"`
 	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
 
@@ -22136,7 +22164,11 @@ func (v *VellumDocument) String() string {
 }
 
 type VellumDocumentRequest struct {
-	// A valid data URL containing the document data.
+	// The reference to the source data. This can be one of the following formats:
+	//  1. A base64-encoded data URL (e.g., 'data:application/pdf;base64,JVBERi0xLjQKJcfs...').
+	//  2. A url pointing to a file accessible over HTTP or HTTPS.
+	//  3. A reference to a file that's been previously uploaded to Vellum, in the form of 'vellum:uploaded-file:{uploaded_file_id}'.
+	//     You can use the Uploaded Files API to retrieve the url of the uploaded file given its ID. See https://docs.vellum.ai/developers/client-sdk/uploaded-files/retrieve for details.
 	Src      string                 `json:"src" url:"src"`
 	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
 
@@ -22329,7 +22361,11 @@ func (v *VellumErrorRequest) String() string {
 }
 
 type VellumImage struct {
-	// A valid data URL containing the image data.
+	// The reference to the source data. This can be one of the following formats:
+	//  1. A base64-encoded data URL (e.g., 'data:application/pdf;base64,JVBERi0xLjQKJcfs...').
+	//  2. A url pointing to a file accessible over HTTP or HTTPS.
+	//  3. A reference to a file that's been previously uploaded to Vellum, in the form of 'vellum:uploaded-file:{uploaded_file_id}'.
+	//     You can use the Uploaded Files API to retrieve the url of the uploaded file given its ID. See https://docs.vellum.ai/developers/client-sdk/uploaded-files/retrieve for details.
 	Src      string                 `json:"src" url:"src"`
 	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
 
@@ -22372,7 +22408,11 @@ func (v *VellumImage) String() string {
 }
 
 type VellumImageRequest struct {
-	// A valid data URL containing the image data.
+	// The reference to the source data. This can be one of the following formats:
+	//  1. A base64-encoded data URL (e.g., 'data:application/pdf;base64,JVBERi0xLjQKJcfs...').
+	//  2. A url pointing to a file accessible over HTTP or HTTPS.
+	//  3. A reference to a file that's been previously uploaded to Vellum, in the form of 'vellum:uploaded-file:{uploaded_file_id}'.
+	//     You can use the Uploaded Files API to retrieve the url of the uploaded file given its ID. See https://docs.vellum.ai/developers/client-sdk/uploaded-files/retrieve for details.
 	Src      string                 `json:"src" url:"src"`
 	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
 
@@ -23448,7 +23488,11 @@ func (v VellumVariableType) Ptr() *VellumVariableType {
 }
 
 type VellumVideo struct {
-	// A valid data URL containing the video data.
+	// The reference to the source data. This can be one of the following formats:
+	//  1. A base64-encoded data URL (e.g., 'data:application/pdf;base64,JVBERi0xLjQKJcfs...').
+	//  2. A url pointing to a file accessible over HTTP or HTTPS.
+	//  3. A reference to a file that's been previously uploaded to Vellum, in the form of 'vellum:uploaded-file:{uploaded_file_id}'.
+	//     You can use the Uploaded Files API to retrieve the url of the uploaded file given its ID. See https://docs.vellum.ai/developers/client-sdk/uploaded-files/retrieve for details.
 	Src      string                 `json:"src" url:"src"`
 	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
 
@@ -23491,7 +23535,11 @@ func (v *VellumVideo) String() string {
 }
 
 type VellumVideoRequest struct {
-	// A valid data URL containing the video data.
+	// The reference to the source data. This can be one of the following formats:
+	//  1. A base64-encoded data URL (e.g., 'data:application/pdf;base64,JVBERi0xLjQKJcfs...').
+	//  2. A url pointing to a file accessible over HTTP or HTTPS.
+	//  3. A reference to a file that's been previously uploaded to Vellum, in the form of 'vellum:uploaded-file:{uploaded_file_id}'.
+	//     You can use the Uploaded Files API to retrieve the url of the uploaded file given its ID. See https://docs.vellum.ai/developers/client-sdk/uploaded-files/retrieve for details.
 	Src      string                 `json:"src" url:"src"`
 	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
 
