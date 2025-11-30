@@ -12,6 +12,7 @@ import (
 	option "github.com/vellum-ai/vellum-client-go/option"
 	io "io"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -22,8 +23,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.ApiVersion == "" {
+		options.ApiVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -199,6 +200,13 @@ func (c *Client) WorkflowDeploymentEventExecution(
 		apiError := core.NewAPIError(statusCode, errors.New(string(raw)))
 		decoder := json.NewDecoder(bytes.NewReader(raw))
 		switch statusCode {
+		case 400:
+			value := new(vellumclientgo.BadRequestError)
+			value.APIError = apiError
+			if err := decoder.Decode(value); err != nil {
+				return apiError
+			}
+			return value
 		case 404:
 			value := new(vellumclientgo.NotFoundError)
 			value.APIError = apiError
