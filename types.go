@@ -28434,7 +28434,7 @@ type WorkflowResultEventOutputDataArray struct {
 	Id     *string                      `json:"id,omitempty" url:"id,omitempty"`
 	Name   string                       `json:"name" url:"name"`
 	State  WorkflowNodeResultEventState `json:"state" url:"state"`
-	NodeId string                       `json:"node_id" url:"node_id"`
+	NodeId *string                      `json:"node_id,omitempty" url:"node_id,omitempty"`
 	// The newly output string value. Only relevant for string outputs with a state of STREAMING.
 	Delta *string        `json:"delta,omitempty" url:"delta,omitempty"`
 	Value []*VellumValue `json:"value,omitempty" url:"value,omitempty"`
@@ -28508,7 +28508,7 @@ type WorkflowResultEventOutputDataChatHistory struct {
 	Id     *string                      `json:"id,omitempty" url:"id,omitempty"`
 	Name   string                       `json:"name" url:"name"`
 	State  WorkflowNodeResultEventState `json:"state" url:"state"`
-	NodeId string                       `json:"node_id" url:"node_id"`
+	NodeId *string                      `json:"node_id,omitempty" url:"node_id,omitempty"`
 	// The newly output string value. Only relevant for string outputs with a state of STREAMING.
 	Delta *string        `json:"delta,omitempty" url:"delta,omitempty"`
 	Value []*ChatMessage `json:"value,omitempty" url:"value,omitempty"`
@@ -28582,7 +28582,7 @@ type WorkflowResultEventOutputDataError struct {
 	Id     *string                      `json:"id,omitempty" url:"id,omitempty"`
 	Name   string                       `json:"name" url:"name"`
 	State  WorkflowNodeResultEventState `json:"state" url:"state"`
-	NodeId string                       `json:"node_id" url:"node_id"`
+	NodeId *string                      `json:"node_id,omitempty" url:"node_id,omitempty"`
 	// The newly output string value. Only relevant for string outputs with a state of STREAMING.
 	Delta *string      `json:"delta,omitempty" url:"delta,omitempty"`
 	Value *VellumError `json:"value,omitempty" url:"value,omitempty"`
@@ -28656,7 +28656,7 @@ type WorkflowResultEventOutputDataFunctionCall struct {
 	Id     *string                      `json:"id,omitempty" url:"id,omitempty"`
 	Name   string                       `json:"name" url:"name"`
 	State  WorkflowNodeResultEventState `json:"state" url:"state"`
-	NodeId string                       `json:"node_id" url:"node_id"`
+	NodeId *string                      `json:"node_id,omitempty" url:"node_id,omitempty"`
 	// The newly output string value. Only relevant for string outputs with a state of STREAMING.
 	Delta *string       `json:"delta,omitempty" url:"delta,omitempty"`
 	Value *FunctionCall `json:"value,omitempty" url:"value,omitempty"`
@@ -28730,7 +28730,7 @@ type WorkflowResultEventOutputDataJson struct {
 	Id     *string                      `json:"id,omitempty" url:"id,omitempty"`
 	Name   string                       `json:"name" url:"name"`
 	State  WorkflowNodeResultEventState `json:"state" url:"state"`
-	NodeId string                       `json:"node_id" url:"node_id"`
+	NodeId *string                      `json:"node_id,omitempty" url:"node_id,omitempty"`
 	// The newly output string value. Only relevant for string outputs with a state of STREAMING.
 	Delta *string     `json:"delta,omitempty" url:"delta,omitempty"`
 	Value interface{} `json:"value" url:"value"`
@@ -28804,7 +28804,7 @@ type WorkflowResultEventOutputDataNumber struct {
 	Id     *string                      `json:"id,omitempty" url:"id,omitempty"`
 	Name   string                       `json:"name" url:"name"`
 	State  WorkflowNodeResultEventState `json:"state" url:"state"`
-	NodeId string                       `json:"node_id" url:"node_id"`
+	NodeId *string                      `json:"node_id,omitempty" url:"node_id,omitempty"`
 	// The newly output string value. Only relevant for string outputs with a state of STREAMING.
 	Delta *string  `json:"delta,omitempty" url:"delta,omitempty"`
 	Value *float64 `json:"value,omitempty" url:"value,omitempty"`
@@ -28878,7 +28878,7 @@ type WorkflowResultEventOutputDataSearchResults struct {
 	Id     *string                      `json:"id,omitempty" url:"id,omitempty"`
 	Name   string                       `json:"name" url:"name"`
 	State  WorkflowNodeResultEventState `json:"state" url:"state"`
-	NodeId string                       `json:"node_id" url:"node_id"`
+	NodeId *string                      `json:"node_id,omitempty" url:"node_id,omitempty"`
 	// The newly output string value. Only relevant for string outputs with a state of STREAMING.
 	Delta *string         `json:"delta,omitempty" url:"delta,omitempty"`
 	Value []*SearchResult `json:"value,omitempty" url:"value,omitempty"`
@@ -28952,7 +28952,7 @@ type WorkflowResultEventOutputDataString struct {
 	Id     *string                      `json:"id,omitempty" url:"id,omitempty"`
 	Name   string                       `json:"name" url:"name"`
 	State  WorkflowNodeResultEventState `json:"state" url:"state"`
-	NodeId string                       `json:"node_id" url:"node_id"`
+	NodeId *string                      `json:"node_id,omitempty" url:"node_id,omitempty"`
 	// The newly output string value, meant to be concatenated with all previous. Will be non-null for events of state STREAMING.
 	Delta *string `json:"delta,omitempty" url:"delta,omitempty"`
 	// The entire string value. Will be non-null for events of state FULFILLED.
