@@ -62,8 +62,9 @@ func (b BuildStatusEnum) Ptr() *BuildStatusEnum {
 }
 
 type ContainerImageBuildConfig struct {
-	Packages   []*CodeExecutionPackage `json:"packages" url:"packages"`
-	UserScript *string                 `json:"user_script,omitempty" url:"user_script,omitempty"`
+	Packages            []*CodeExecutionPackage `json:"packages" url:"packages"`
+	UserScript          *string                 `json:"user_script,omitempty" url:"user_script,omitempty"`
+	HotswappableVersion *string                 `json:"hotswappable_version,omitempty" url:"hotswappable_version,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage

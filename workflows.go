@@ -39,8 +39,9 @@ type SerializeWorkflowFilesRequest struct {
 }
 
 type DatasetRowPushRequest struct {
-	Label  string                 `json:"label" url:"label"`
-	Inputs map[string]interface{} `json:"inputs" url:"inputs"`
+	Label             string                 `json:"label" url:"label"`
+	Inputs            map[string]interface{} `json:"inputs" url:"inputs"`
+	WorkflowTriggerId *string                `json:"workflow_trigger_id,omitempty" url:"workflow_trigger_id,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -86,6 +87,7 @@ type RunnerConfigRequest struct {
 	CodegenVersion              *string `json:"codegen_version,omitempty" url:"codegen_version,omitempty"`
 	SdkVersion                  *string `json:"sdk_version,omitempty" url:"sdk_version,omitempty"`
 	IsDeploymentInliningEnabled *bool   `json:"is_deployment_inlining_enabled,omitempty" url:"is_deployment_inlining_enabled,omitempty"`
+	ServerVersion               *string `json:"server_version,omitempty" url:"server_version,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage

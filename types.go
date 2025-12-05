@@ -9402,6 +9402,7 @@ func (i *Integration) String() string {
 // * `MEM0` - Mem0
 // * `MONDAY` - Monday
 // * `NEON` - Neon
+// * `OUTLOOK` - Outlook
 // * `GITHUB` - Github
 // * `GOOGLE_SHEETS` - Google Sheets
 // * `GOOGLE_CALENDAR` - Google Calendar
@@ -9494,6 +9495,7 @@ const (
 	IntegrationNameMem0                IntegrationName = "MEM0"
 	IntegrationNameMonday              IntegrationName = "MONDAY"
 	IntegrationNameNeon                IntegrationName = "NEON"
+	IntegrationNameOutlook             IntegrationName = "OUTLOOK"
 	IntegrationNameGithub              IntegrationName = "GITHUB"
 	IntegrationNameGoogleSheets        IntegrationName = "GOOGLE_SHEETS"
 	IntegrationNameGoogleCalendar      IntegrationName = "GOOGLE_CALENDAR"
@@ -9607,6 +9609,8 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameMonday, nil
 	case "NEON":
 		return IntegrationNameNeon, nil
+	case "OUTLOOK":
+		return IntegrationNameOutlook, nil
 	case "GITHUB":
 		return IntegrationNameGithub, nil
 	case "GOOGLE_SHEETS":
