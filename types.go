@@ -9472,6 +9472,10 @@ func (i *Integration) String() string {
 // * `DISCORD` - Discord
 // * `DOCUSIGN` - DocuSign
 // * `TRELLO` - Trello
+// * `HEYREACH` - HeyReach
+// * `ACTIVE_CAMPAIGN` - Active Campaign
+// * `CUSTOMER_IO` - Customer.io
+// * `SEGMENT` - Segment
 type IntegrationName string
 
 const (
@@ -9565,6 +9569,10 @@ const (
 	IntegrationNameDiscord             IntegrationName = "DISCORD"
 	IntegrationNameDocusign            IntegrationName = "DOCUSIGN"
 	IntegrationNameTrello              IntegrationName = "TRELLO"
+	IntegrationNameHeyreach            IntegrationName = "HEYREACH"
+	IntegrationNameActiveCampaign      IntegrationName = "ACTIVE_CAMPAIGN"
+	IntegrationNameCustomerIo          IntegrationName = "CUSTOMER_IO"
+	IntegrationNameSegment             IntegrationName = "SEGMENT"
 )
 
 func NewIntegrationNameFromString(s string) (IntegrationName, error) {
@@ -9749,6 +9757,14 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameDocusign, nil
 	case "TRELLO":
 		return IntegrationNameTrello, nil
+	case "HEYREACH":
+		return IntegrationNameHeyreach, nil
+	case "ACTIVE_CAMPAIGN":
+		return IntegrationNameActiveCampaign, nil
+	case "CUSTOMER_IO":
+		return IntegrationNameCustomerIo, nil
+	case "SEGMENT":
+		return IntegrationNameSegment, nil
 	}
 	var t IntegrationName
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
