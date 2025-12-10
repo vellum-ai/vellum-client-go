@@ -9433,6 +9433,7 @@ func (i *Integration) String() string {
 // * `EXA` - Exa
 // * `GAMMA` - Gamma
 // * `GITLAB` - Gitlab
+// * `GONG` - Gong
 // * `FIRECRAWL` - Firecrawl
 // * `FIGMA` - Figma
 // * `FIREFLIES` - Fireflies
@@ -9530,6 +9531,7 @@ const (
 	IntegrationNameExa                 IntegrationName = "EXA"
 	IntegrationNameGamma               IntegrationName = "GAMMA"
 	IntegrationNameGitlab              IntegrationName = "GITLAB"
+	IntegrationNameGong                IntegrationName = "GONG"
 	IntegrationNameFirecrawl           IntegrationName = "FIRECRAWL"
 	IntegrationNameFigma               IntegrationName = "FIGMA"
 	IntegrationNameFireflies           IntegrationName = "FIREFLIES"
@@ -9679,6 +9681,8 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameGamma, nil
 	case "GITLAB":
 		return IntegrationNameGitlab, nil
+	case "GONG":
+		return IntegrationNameGong, nil
 	case "FIRECRAWL":
 		return IntegrationNameFirecrawl, nil
 	case "FIGMA":
