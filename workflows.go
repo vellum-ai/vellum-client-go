@@ -22,8 +22,8 @@ type WorkflowsPullRequest struct {
 }
 
 type WorkflowPushRequest struct {
-	// The execution configuration of the workflow.
-	ExecConfig        WorkflowPushExecConfig               `json:"exec_config" url:"-"`
+	// The execution configuration of the workflow. If not provided, it will be derived from the artifact.
+	ExecConfig        *WorkflowPushExecConfig              `json:"exec_config,omitempty" url:"-"`
 	WorkflowSandboxId *string                              `json:"workflow_sandbox_id,omitempty" url:"-"`
 	DeploymentConfig  *WorkflowPushDeploymentConfigRequest `json:"deployment_config,omitempty" url:"-"`
 	// List of dataset rows with inputs for scenarios.

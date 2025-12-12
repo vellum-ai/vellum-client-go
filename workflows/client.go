@@ -14,6 +14,7 @@ import (
 	io "io"
 	multipart "mime/multipart"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -24,8 +25,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.ApiVersion == "" {
+		options.ApiVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -182,8 +183,10 @@ func (c *Client) Push(
 			return nil, err
 		}
 	}
-	if err := core.WriteMultipartJSON(writer, "exec_config", request.ExecConfig); err != nil {
-		return nil, err
+	if request.ExecConfig != nil {
+		if err := core.WriteMultipartJSON(writer, "exec_config", *request.ExecConfig); err != nil {
+			return nil, err
+		}
 	}
 	if request.WorkflowSandboxId != nil {
 		if err := writer.WriteField("workflow_sandbox_id", fmt.Sprintf("%v", *request.WorkflowSandboxId)); err != nil {
