@@ -9,6 +9,15 @@ import (
 	time "time"
 )
 
+type CreateContainerImageRequest struct {
+	Name           string                         `json:"name" url:"-"`
+	Packages       []*CodeExecutionPackageRequest `json:"packages,omitempty" url:"-"`
+	Tag            string                         `json:"tag" url:"-"`
+	UserScript     *string                        `json:"user_script,omitempty" url:"-"`
+	IsHotswappable *bool                          `json:"is_hotswappable,omitempty" url:"-"`
+	ServerVersion  *string                        `json:"server_version,omitempty" url:"-"`
+}
+
 type ContainerImagesListRequest struct {
 	// Number of results to return per page.
 	Limit *int `json:"-" url:"limit,omitempty"`
@@ -61,6 +70,49 @@ func (b BuildStatusEnum) Ptr() *BuildStatusEnum {
 	return &b
 }
 
+type CodeExecutionPackageRequest struct {
+	Version    string  `json:"version" url:"version"`
+	Name       string  `json:"name" url:"name"`
+	Repository *string `json:"repository,omitempty" url:"repository,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CodeExecutionPackageRequest) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CodeExecutionPackageRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CodeExecutionPackageRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CodeExecutionPackageRequest(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CodeExecutionPackageRequest) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
 type ContainerImageBuildConfig struct {
 	Packages            []*CodeExecutionPackage `json:"packages" url:"packages"`
 	UserScript          *string                 `json:"user_script,omitempty" url:"user_script,omitempty"`
@@ -105,8 +157,9 @@ func (c *ContainerImageBuildConfig) String() string {
 }
 
 type ContainerImageContainerImageTag struct {
-	Name     string    `json:"name" url:"name"`
-	Modified time.Time `json:"modified" url:"modified"`
+	Name           string    `json:"name" url:"name"`
+	Modified       time.Time `json:"modified" url:"modified"`
+	HistoryItemSha *string   `json:"history_item_sha,omitempty" url:"history_item_sha,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -353,4 +406,12 @@ func (p *PaginatedContainerImageReadList) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", p)
+}
+
+type UpdateContainerImageRequest struct {
+	Packages       []*CodeExecutionPackageRequest `json:"packages,omitempty" url:"-"`
+	Tag            string                         `json:"tag" url:"-"`
+	UserScript     *string                        `json:"user_script,omitempty" url:"-"`
+	IsHotswappable *bool                          `json:"is_hotswappable,omitempty" url:"-"`
+	ServerVersion  *string                        `json:"server_version,omitempty" url:"-"`
 }
