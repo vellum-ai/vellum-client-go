@@ -514,6 +514,7 @@ func (w *WorkflowDeploymentRelease) String() string {
 }
 
 type WorkflowDeploymentReleaseWorkflowDeployment struct {
+	Id   string `json:"id" url:"id"`
 	Name string `json:"name" url:"name"`
 
 	extraProperties map[string]interface{}
