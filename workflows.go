@@ -39,9 +39,11 @@ type SerializeWorkflowFilesRequest struct {
 }
 
 type DatasetRowPushRequest struct {
-	Label             string                 `json:"label" url:"label"`
-	Inputs            map[string]interface{} `json:"inputs" url:"inputs"`
-	WorkflowTriggerId *string                `json:"workflow_trigger_id,omitempty" url:"workflow_trigger_id,omitempty"`
+	Id                *string                  `json:"id,omitempty" url:"id,omitempty"`
+	Label             string                   `json:"label" url:"label"`
+	Inputs            map[string]interface{}   `json:"inputs" url:"inputs"`
+	Mocks             []map[string]interface{} `json:"mocks,omitempty" url:"mocks,omitempty"`
+	WorkflowTriggerId *string                  `json:"workflow_trigger_id,omitempty" url:"workflow_trigger_id,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
