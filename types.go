@@ -23396,6 +23396,7 @@ func (v *VellumVariable) String() string {
 type VellumVariableExtensions struct {
 	Color       *string `json:"color,omitempty" url:"color,omitempty"`
 	Description *string `json:"description,omitempty" url:"description,omitempty"`
+	Title       *string `json:"title,omitempty" url:"title,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
