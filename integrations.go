@@ -8,6 +8,25 @@ import (
 	core "github.com/vellum-ai/vellum-client-go/core"
 )
 
+type ExecuteIntegrationToolRequest struct {
+	// The version of the toolkit to use for execution
+	ToolkitVersion *string                                     `json:"-" url:"toolkit_version,omitempty"`
+	Body           ComponentsSchemasComposioExecuteToolRequest `json:"-" url:"-"`
+}
+
+func (e *ExecuteIntegrationToolRequest) UnmarshalJSON(data []byte) error {
+	var body ComponentsSchemasComposioExecuteToolRequest
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	e.Body = body
+	return nil
+}
+
+func (e *ExecuteIntegrationToolRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(e.Body)
+}
+
 type IntegrationsListRequest struct {
 	// * `COMPOSIO` - Composio
 	IntegrationProvider *string `json:"-" url:"integration_provider,omitempty"`
