@@ -9449,6 +9449,7 @@ func (i *Integration) String() string {
 // * `POSTHOG` - PostHog
 // * `PRODUCTBOARD` - Productboard
 // * `REDDIT` - Reddit
+// * `SALESFORCE` - Salesforce
 // * `SEMRUSH` - Semrush
 // * `SEMANTICSCHOLAR` - Semantic Scholar
 // * `SENDGRID` - SendGrid
@@ -9547,6 +9548,7 @@ const (
 	IntegrationNamePosthog             IntegrationName = "POSTHOG"
 	IntegrationNameProductboard        IntegrationName = "PRODUCTBOARD"
 	IntegrationNameReddit              IntegrationName = "REDDIT"
+	IntegrationNameSalesforce          IntegrationName = "SALESFORCE"
 	IntegrationNameSemrush             IntegrationName = "SEMRUSH"
 	IntegrationNameSemanticscholar     IntegrationName = "SEMANTICSCHOLAR"
 	IntegrationNameSendgrid            IntegrationName = "SENDGRID"
@@ -9713,6 +9715,8 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameProductboard, nil
 	case "REDDIT":
 		return IntegrationNameReddit, nil
+	case "SALESFORCE":
+		return IntegrationNameSalesforce, nil
 	case "SEMRUSH":
 		return IntegrationNameSemrush, nil
 	case "SEMANTICSCHOLAR":
@@ -12249,6 +12253,128 @@ func (n *NodeExecutionInitiatedEvent) MarshalJSON() ([]byte, error) {
 }
 
 func (n *NodeExecutionInitiatedEvent) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
+type NodeExecutionLogBody struct {
+	NodeDefinition *VellumCodeResourceDefinition `json:"node_definition" url:"node_definition"`
+	Attributes     map[string]interface{}        `json:"attributes,omitempty" url:"attributes,omitempty"`
+	Severity       SeverityEnum                  `json:"severity" url:"severity"`
+	Message        string                        `json:"message" url:"message"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NodeExecutionLogBody) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
+}
+
+func (n *NodeExecutionLogBody) UnmarshalJSON(data []byte) error {
+	type unmarshaler NodeExecutionLogBody
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*n = NodeExecutionLogBody(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NodeExecutionLogBody) String() string {
+	if len(n._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(n); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", n)
+}
+
+type NodeExecutionLogEvent struct {
+	Parent     *ParentContext        `json:"parent,omitempty" url:"parent,omitempty"`
+	Links      []*SpanLink           `json:"links,omitempty" url:"links,omitempty"`
+	Body       *NodeExecutionLogBody `json:"body" url:"body"`
+	Id         string                `json:"id" url:"id"`
+	Timestamp  time.Time             `json:"timestamp" url:"timestamp"`
+	ApiVersion *ApiVersionEnum       `json:"api_version,omitempty" url:"api_version,omitempty"`
+	TraceId    string                `json:"trace_id" url:"trace_id"`
+	SpanId     string                `json:"span_id" url:"span_id"`
+	name       string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (n *NodeExecutionLogEvent) GetExtraProperties() map[string]interface{} {
+	return n.extraProperties
+}
+
+func (n *NodeExecutionLogEvent) Name() string {
+	return n.name
+}
+
+func (n *NodeExecutionLogEvent) UnmarshalJSON(data []byte) error {
+	type embed NodeExecutionLogEvent
+	var unmarshaler = struct {
+		embed
+		Timestamp *core.DateTime `json:"timestamp"`
+		Name      string         `json:"name"`
+	}{
+		embed: embed(*n),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*n = NodeExecutionLogEvent(unmarshaler.embed)
+	n.Timestamp = unmarshaler.Timestamp.Time()
+	if unmarshaler.Name != "node.execution.log" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "node.execution.log", unmarshaler.Name)
+	}
+	n.name = unmarshaler.Name
+
+	extraProperties, err := core.ExtractExtraProperties(data, *n, "name")
+	if err != nil {
+		return err
+	}
+	n.extraProperties = extraProperties
+
+	n._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (n *NodeExecutionLogEvent) MarshalJSON() ([]byte, error) {
+	type embed NodeExecutionLogEvent
+	var marshaler = struct {
+		embed
+		Timestamp *core.DateTime `json:"timestamp"`
+		Name      string         `json:"name"`
+	}{
+		embed:     embed(*n),
+		Timestamp: core.NewDateTime(n.Timestamp),
+		Name:      "node.execution.log",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (n *NodeExecutionLogEvent) String() string {
 	if len(n._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
 			return value
@@ -18666,6 +18792,38 @@ func (s *SentenceChunking) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
+// * `DEBUG` - DEBUG
+// * `INFO` - INFO
+// * `WARNING` - WARNING
+// * `ERROR` - ERROR
+type SeverityEnum string
+
+const (
+	SeverityEnumDebug   SeverityEnum = "DEBUG"
+	SeverityEnumInfo    SeverityEnum = "INFO"
+	SeverityEnumWarning SeverityEnum = "WARNING"
+	SeverityEnumError   SeverityEnum = "ERROR"
+)
+
+func NewSeverityEnumFromString(s string) (SeverityEnum, error) {
+	switch s {
+	case "DEBUG":
+		return SeverityEnumDebug, nil
+	case "INFO":
+		return SeverityEnumInfo, nil
+	case "WARNING":
+		return SeverityEnumWarning, nil
+	case "ERROR":
+		return SeverityEnumError, nil
+	}
+	var t SeverityEnum
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (s SeverityEnum) Ptr() *SeverityEnum {
+	return &s
+}
+
 type SlimReleaseReview struct {
 	Id       string                 `json:"id" url:"id"`
 	Created  time.Time              `json:"created" url:"created"`
@@ -22486,6 +22644,7 @@ type VellumNodeExecutionEvent struct {
 	NodeExecutionRejectedEvent  *NodeExecutionRejectedEvent
 	NodeExecutionPausedEvent    *NodeExecutionPausedEvent
 	NodeExecutionResumedEvent   *NodeExecutionResumedEvent
+	NodeExecutionLogEvent       *NodeExecutionLogEvent
 }
 
 func (v *VellumNodeExecutionEvent) UnmarshalJSON(data []byte) error {
@@ -22519,6 +22678,11 @@ func (v *VellumNodeExecutionEvent) UnmarshalJSON(data []byte) error {
 		v.NodeExecutionResumedEvent = valueNodeExecutionResumedEvent
 		return nil
 	}
+	valueNodeExecutionLogEvent := new(NodeExecutionLogEvent)
+	if err := json.Unmarshal(data, &valueNodeExecutionLogEvent); err == nil {
+		v.NodeExecutionLogEvent = valueNodeExecutionLogEvent
+		return nil
+	}
 	return fmt.Errorf("%s cannot be deserialized as a %T", data, v)
 }
 
@@ -22541,6 +22705,9 @@ func (v VellumNodeExecutionEvent) MarshalJSON() ([]byte, error) {
 	if v.NodeExecutionResumedEvent != nil {
 		return json.Marshal(v.NodeExecutionResumedEvent)
 	}
+	if v.NodeExecutionLogEvent != nil {
+		return json.Marshal(v.NodeExecutionLogEvent)
+	}
 	return nil, fmt.Errorf("type %T does not include a non-empty union type", v)
 }
 
@@ -22551,6 +22718,7 @@ type VellumNodeExecutionEventVisitor interface {
 	VisitNodeExecutionRejectedEvent(*NodeExecutionRejectedEvent) error
 	VisitNodeExecutionPausedEvent(*NodeExecutionPausedEvent) error
 	VisitNodeExecutionResumedEvent(*NodeExecutionResumedEvent) error
+	VisitNodeExecutionLogEvent(*NodeExecutionLogEvent) error
 }
 
 func (v *VellumNodeExecutionEvent) Accept(visitor VellumNodeExecutionEventVisitor) error {
@@ -22571,6 +22739,9 @@ func (v *VellumNodeExecutionEvent) Accept(visitor VellumNodeExecutionEventVisito
 	}
 	if v.NodeExecutionResumedEvent != nil {
 		return visitor.VisitNodeExecutionResumedEvent(v.NodeExecutionResumedEvent)
+	}
+	if v.NodeExecutionLogEvent != nil {
+		return visitor.VisitNodeExecutionLogEvent(v.NodeExecutionLogEvent)
 	}
 	return fmt.Errorf("type %T does not include a non-empty union type", v)
 }

@@ -104,6 +104,7 @@ type WorkflowEvent struct {
 	NodeExecutionRejectedEvent        *NodeExecutionRejectedEvent
 	NodeExecutionPausedEvent          *NodeExecutionPausedEvent
 	NodeExecutionResumedEvent         *NodeExecutionResumedEvent
+	NodeExecutionLogEvent             *NodeExecutionLogEvent
 	WorkflowExecutionInitiatedEvent   *WorkflowExecutionInitiatedEvent
 	WorkflowExecutionStreamingEvent   *WorkflowExecutionStreamingEvent
 	WorkflowExecutionRejectedEvent    *WorkflowExecutionRejectedEvent
@@ -142,6 +143,11 @@ func (w *WorkflowEvent) UnmarshalJSON(data []byte) error {
 	valueNodeExecutionResumedEvent := new(NodeExecutionResumedEvent)
 	if err := json.Unmarshal(data, &valueNodeExecutionResumedEvent); err == nil {
 		w.NodeExecutionResumedEvent = valueNodeExecutionResumedEvent
+		return nil
+	}
+	valueNodeExecutionLogEvent := new(NodeExecutionLogEvent)
+	if err := json.Unmarshal(data, &valueNodeExecutionLogEvent); err == nil {
+		w.NodeExecutionLogEvent = valueNodeExecutionLogEvent
 		return nil
 	}
 	valueWorkflowExecutionInitiatedEvent := new(WorkflowExecutionInitiatedEvent)
@@ -201,6 +207,9 @@ func (w WorkflowEvent) MarshalJSON() ([]byte, error) {
 	if w.NodeExecutionResumedEvent != nil {
 		return json.Marshal(w.NodeExecutionResumedEvent)
 	}
+	if w.NodeExecutionLogEvent != nil {
+		return json.Marshal(w.NodeExecutionLogEvent)
+	}
 	if w.WorkflowExecutionInitiatedEvent != nil {
 		return json.Marshal(w.WorkflowExecutionInitiatedEvent)
 	}
@@ -232,6 +241,7 @@ type WorkflowEventVisitor interface {
 	VisitNodeExecutionRejectedEvent(*NodeExecutionRejectedEvent) error
 	VisitNodeExecutionPausedEvent(*NodeExecutionPausedEvent) error
 	VisitNodeExecutionResumedEvent(*NodeExecutionResumedEvent) error
+	VisitNodeExecutionLogEvent(*NodeExecutionLogEvent) error
 	VisitWorkflowExecutionInitiatedEvent(*WorkflowExecutionInitiatedEvent) error
 	VisitWorkflowExecutionStreamingEvent(*WorkflowExecutionStreamingEvent) error
 	VisitWorkflowExecutionRejectedEvent(*WorkflowExecutionRejectedEvent) error
@@ -259,6 +269,9 @@ func (w *WorkflowEvent) Accept(visitor WorkflowEventVisitor) error {
 	}
 	if w.NodeExecutionResumedEvent != nil {
 		return visitor.VisitNodeExecutionResumedEvent(w.NodeExecutionResumedEvent)
+	}
+	if w.NodeExecutionLogEvent != nil {
+		return visitor.VisitNodeExecutionLogEvent(w.NodeExecutionLogEvent)
 	}
 	if w.WorkflowExecutionInitiatedEvent != nil {
 		return visitor.VisitWorkflowExecutionInitiatedEvent(w.WorkflowExecutionInitiatedEvent)
