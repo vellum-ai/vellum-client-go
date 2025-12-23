@@ -21,6 +21,13 @@ type ListIntegrationToolsRequest struct {
 	Offset *int `json:"-" url:"offset,omitempty"`
 	// The search term to filter the tools by
 	Search *string `json:"-" url:"search,omitempty"`
+	// The version of the toolkit to lookup. Pass 'latest' to get the latest version, or a specific version string to pin it. If not provided, uses the provider's default.
+	ToolkitVersion *string `json:"-" url:"toolkit_version,omitempty"`
+}
+
+type RetrieveIntegrationProviderToolDefinitionRequest struct {
+	// The version of the toolkit to use. Pass 'latest' to get the latest version, or a specific version string to pin it. If not provided, uses the provider's default.
+	ToolkitVersion *string `json:"-" url:"toolkit_version,omitempty"`
 }
 
 type ComponentsSchemasSlimComposioToolDefinition = *SlimComposioToolDefinition
@@ -70,11 +77,12 @@ func (p *PaginatedSlimToolDefinitionList) String() string {
 }
 
 type SlimComposioToolDefinition struct {
-	Integration *Integration `json:"integration" url:"integration"`
-	Name        string       `json:"name" url:"name"`
-	Label       string       `json:"label" url:"label"`
-	Description string       `json:"description" url:"description"`
-	provider    string
+	Integration    *Integration `json:"integration" url:"integration"`
+	Name           string       `json:"name" url:"name"`
+	Label          string       `json:"label" url:"label"`
+	Description    string       `json:"description" url:"description"`
+	ToolkitVersion string       `json:"toolkit_version" url:"toolkit_version"`
+	provider       string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage

@@ -22,6 +22,11 @@ type IntegrationsListRequest struct {
 	SupportsIntegrationTriggers *string `json:"-" url:"supports_integration_triggers,omitempty"`
 }
 
+type RetrieveIntegrationToolDefinitionRequest struct {
+	// The version of the toolkit to use. Pass 'latest' to get the latest version, or a specific version string to pin it. If not provided, uses the provider's default.
+	ToolkitVersion *string `json:"-" url:"toolkit_version,omitempty"`
+}
+
 type ComponentsSchemasComposioExecuteToolRequest = *ComposioExecuteToolRequest
 
 type ComponentsSchemasComposioExecuteToolResponse = *ComposioExecuteToolResponse
@@ -30,8 +35,9 @@ type ComponentsSchemasComposioIntegrationExecConfig = *ComposioIntegrationExecCo
 
 // Payload for executing a Composio tool with provider id and tool arguments.
 type ComposioExecuteToolRequest struct {
-	Arguments map[string]interface{} `json:"arguments" url:"arguments"`
-	provider  string
+	Arguments      map[string]interface{} `json:"arguments" url:"arguments"`
+	ToolkitVersion *string                `json:"toolkit_version,omitempty" url:"toolkit_version,omitempty"`
+	provider       string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
