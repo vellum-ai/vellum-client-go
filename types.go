@@ -3578,6 +3578,7 @@ type ComposioToolDefinition struct {
 	Description      string                 `json:"description" url:"description"`
 	InputParameters  map[string]interface{} `json:"input_parameters" url:"input_parameters"`
 	OutputParameters map[string]interface{} `json:"output_parameters" url:"output_parameters"`
+	ToolkitVersion   string                 `json:"toolkit_version" url:"toolkit_version"`
 	provider         string
 
 	extraProperties map[string]interface{}
