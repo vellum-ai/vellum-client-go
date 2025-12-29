@@ -12028,6 +12028,7 @@ type NodeExecutionFulfilledBody struct {
 	InvokedPorts   []*InvokedPort                `json:"invoked_ports,omitempty" url:"invoked_ports,omitempty"`
 	Outputs        map[string]interface{}        `json:"outputs" url:"outputs"`
 	Mocked         *bool                         `json:"mocked,omitempty" url:"mocked,omitempty"`
+	Redacted       *bool                         `json:"redacted,omitempty" url:"redacted,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -25048,6 +25049,7 @@ type WorkflowExecutionFulfilledBody struct {
 	Outputs            map[string]interface{}        `json:"outputs" url:"outputs"`
 	FinalState         map[string]interface{}        `json:"final_state,omitempty" url:"final_state,omitempty"`
 	ServerMetadata     map[string]interface{}        `json:"server_metadata,omitempty" url:"server_metadata,omitempty"`
+	Redacted           *bool                         `json:"redacted,omitempty" url:"redacted,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
