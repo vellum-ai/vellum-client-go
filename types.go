@@ -9456,6 +9456,7 @@ func (i *Integration) String() string {
 // * `SENDGRID` - SendGrid
 // * `SERPAPI` - Serp Api
 // * `SHARE_POINT` - SharePoint
+// * `SHOPIFY` - Shopify
 // * `SHORTCUT` - Shortcut
 // * `SPOTIFY` - Spotify
 // * `STRIPE` - Stripe
@@ -9479,6 +9480,7 @@ func (i *Integration) String() string {
 // * `ACTIVE_CAMPAIGN` - Active Campaign
 // * `CUSTOMER_IO` - Customer.io
 // * `SEGMENT` - Segment
+// * `WHATSAPP` - WhatsApp
 type IntegrationName string
 
 const (
@@ -9555,6 +9557,7 @@ const (
 	IntegrationNameSendgrid            IntegrationName = "SENDGRID"
 	IntegrationNameSerpapi             IntegrationName = "SERPAPI"
 	IntegrationNameSharePoint          IntegrationName = "SHARE_POINT"
+	IntegrationNameShopify             IntegrationName = "SHOPIFY"
 	IntegrationNameShortcut            IntegrationName = "SHORTCUT"
 	IntegrationNameSpotify             IntegrationName = "SPOTIFY"
 	IntegrationNameStripe              IntegrationName = "STRIPE"
@@ -9578,6 +9581,7 @@ const (
 	IntegrationNameActiveCampaign      IntegrationName = "ACTIVE_CAMPAIGN"
 	IntegrationNameCustomerIo          IntegrationName = "CUSTOMER_IO"
 	IntegrationNameSegment             IntegrationName = "SEGMENT"
+	IntegrationNameWhatsapp            IntegrationName = "WHATSAPP"
 )
 
 func NewIntegrationNameFromString(s string) (IntegrationName, error) {
@@ -9728,6 +9732,8 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameSerpapi, nil
 	case "SHARE_POINT":
 		return IntegrationNameSharePoint, nil
+	case "SHOPIFY":
+		return IntegrationNameShopify, nil
 	case "SHORTCUT":
 		return IntegrationNameShortcut, nil
 	case "SPOTIFY":
@@ -9774,6 +9780,8 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameCustomerIo, nil
 	case "SEGMENT":
 		return IntegrationNameSegment, nil
+	case "WHATSAPP":
+		return IntegrationNameWhatsapp, nil
 	}
 	var t IntegrationName
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
