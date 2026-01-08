@@ -9459,6 +9459,7 @@ func (i *Integration) String() string {
 // * `SHARE_POINT` - SharePoint
 // * `SHOPIFY` - Shopify
 // * `SHORTCUT` - Shortcut
+// * `SLACKBOT` - Slackbot
 // * `SPOTIFY` - Spotify
 // * `STRIPE` - Stripe
 // * `SUPABASE` - Supabase
@@ -9561,6 +9562,7 @@ const (
 	IntegrationNameSharePoint          IntegrationName = "SHARE_POINT"
 	IntegrationNameShopify             IntegrationName = "SHOPIFY"
 	IntegrationNameShortcut            IntegrationName = "SHORTCUT"
+	IntegrationNameSlackbot            IntegrationName = "SLACKBOT"
 	IntegrationNameSpotify             IntegrationName = "SPOTIFY"
 	IntegrationNameStripe              IntegrationName = "STRIPE"
 	IntegrationNameSupabase            IntegrationName = "SUPABASE"
@@ -9740,6 +9742,8 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameShopify, nil
 	case "SHORTCUT":
 		return IntegrationNameShortcut, nil
+	case "SLACKBOT":
+		return IntegrationNameSlackbot, nil
 	case "SPOTIFY":
 		return IntegrationNameSpotify, nil
 	case "STRIPE":
