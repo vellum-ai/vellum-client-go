@@ -38,6 +38,94 @@ type SerializeWorkflowFilesRequest struct {
 	RunnerConfig *RunnerConfigRequest   `json:"runner_config,omitempty" url:"-"`
 }
 
+type CheckWorkflowExecutionStatusError struct {
+	Message *string                          `json:"message,omitempty" url:"message,omitempty"`
+	Code    *WorkflowExecutionEventErrorCode `json:"code,omitempty" url:"code,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CheckWorkflowExecutionStatusError) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CheckWorkflowExecutionStatusError) UnmarshalJSON(data []byte) error {
+	type unmarshaler CheckWorkflowExecutionStatusError
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CheckWorkflowExecutionStatusError(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CheckWorkflowExecutionStatusError) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Response serializer for workflow execution status check.
+type CheckWorkflowExecutionStatusResponse struct {
+	Status             WorkflowResultEventState           `json:"status" url:"status"`
+	Outputs            map[string]interface{}             `json:"outputs,omitempty" url:"outputs,omitempty"`
+	Error              *CheckWorkflowExecutionStatusError `json:"error,omitempty" url:"error,omitempty"`
+	ExecutionId        string                             `json:"execution_id" url:"execution_id"`
+	ExecutionDetailUrl *string                            `json:"execution_detail_url,omitempty" url:"execution_detail_url,omitempty"`
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (c *CheckWorkflowExecutionStatusResponse) GetExtraProperties() map[string]interface{} {
+	return c.extraProperties
+}
+
+func (c *CheckWorkflowExecutionStatusResponse) UnmarshalJSON(data []byte) error {
+	type unmarshaler CheckWorkflowExecutionStatusResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CheckWorkflowExecutionStatusResponse(value)
+
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+
+	c._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CheckWorkflowExecutionStatusResponse) String() string {
+	if len(c._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(c._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
 type DatasetRowPushRequest struct {
 	Id                *string                  `json:"id,omitempty" url:"id,omitempty"`
 	Label             string                   `json:"label" url:"label"`
