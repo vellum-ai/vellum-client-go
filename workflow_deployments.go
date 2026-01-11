@@ -9,6 +9,21 @@ import (
 	time "time"
 )
 
+type ExecuteWorkflowDeploymentStreamRequest struct {
+	// A mapping from input name to value.
+	Inputs map[string]interface{} `json:"inputs,omitempty" url:"-"`
+	// The name or ID of a workflow trigger to use for this execution. If not specified, then a default manual trigger will be chosen.
+	Trigger *string `json:"trigger,omitempty" url:"-"`
+	// Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
+	ReleaseTag *string `json:"release_tag,omitempty" url:"-"`
+	// Optionally include a unique identifier for tracking purposes. Must be unique within a given Workspace.
+	ExternalId *string `json:"external_id,omitempty" url:"-"`
+	// Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
+	Metadata map[string]interface{} `json:"metadata,omitempty" url:"-"`
+	// The ID of a previous workflow execution to reference for context.
+	PreviousExecutionId *string `json:"previous_execution_id,omitempty" url:"-"`
+}
+
 type WorkflowDeploymentsListRequest struct {
 	// Number of results to return per page.
 	Limit *int `json:"-" url:"limit,omitempty"`
