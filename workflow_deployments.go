@@ -888,6 +888,51 @@ func (w *WorkflowReleaseTagWorkflowDeploymentHistoryItem) String() string {
 	return fmt.Sprintf("%#v", w)
 }
 
+type ExecuteWorkflowDeploymentStreamRequestInputs struct {
+	// The list of inputs defined in the Workflow's Deployment with their corresponding values.
+	WorkflowRequestInputRequestList []*WorkflowRequestInputRequest
+	StringUnknownMap                map[string]interface{}
+}
+
+func (e *ExecuteWorkflowDeploymentStreamRequestInputs) UnmarshalJSON(data []byte) error {
+	var valueWorkflowRequestInputRequestList []*WorkflowRequestInputRequest
+	if err := json.Unmarshal(data, &valueWorkflowRequestInputRequestList); err == nil {
+		e.WorkflowRequestInputRequestList = valueWorkflowRequestInputRequestList
+		return nil
+	}
+	var valueStringUnknownMap map[string]interface{}
+	if err := json.Unmarshal(data, &valueStringUnknownMap); err == nil {
+		e.StringUnknownMap = valueStringUnknownMap
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, e)
+}
+
+func (e ExecuteWorkflowDeploymentStreamRequestInputs) MarshalJSON() ([]byte, error) {
+	if e.WorkflowRequestInputRequestList != nil {
+		return json.Marshal(e.WorkflowRequestInputRequestList)
+	}
+	if e.StringUnknownMap != nil {
+		return json.Marshal(e.StringUnknownMap)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", e)
+}
+
+type ExecuteWorkflowDeploymentStreamRequestInputsVisitor interface {
+	VisitWorkflowRequestInputRequestList([]*WorkflowRequestInputRequest) error
+	VisitStringUnknownMap(map[string]interface{}) error
+}
+
+func (e *ExecuteWorkflowDeploymentStreamRequestInputs) Accept(visitor ExecuteWorkflowDeploymentStreamRequestInputsVisitor) error {
+	if e.WorkflowRequestInputRequestList != nil {
+		return visitor.VisitWorkflowRequestInputRequestList(e.WorkflowRequestInputRequestList)
+	}
+	if e.StringUnknownMap != nil {
+		return visitor.VisitStringUnknownMap(e.StringUnknownMap)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", e)
+}
+
 type ListWorkflowReleaseTagsRequestSource string
 
 const (
@@ -935,4 +980,10 @@ func (w WorkflowDeploymentsListRequestStatus) Ptr() *WorkflowDeploymentsListRequ
 type PatchedWorkflowReleaseTagUpdateRequest struct {
 	// The ID of the Workflow Deployment History Item to tag
 	HistoryItemId *string `json:"history_item_id,omitempty" url:"-"`
+}
+
+type ExecuteWorkflowDeploymentStreamRequest struct {
+	Inputs *ExecuteWorkflowDeploymentStreamRequestInputs `json:"inputs,omitempty" url:"-"`
+	// The name or ID of a workflow trigger to use for this execution.
+	Trigger *string `json:"trigger,omitempty" url:"-"`
 }

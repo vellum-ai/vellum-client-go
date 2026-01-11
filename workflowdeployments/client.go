@@ -12,6 +12,7 @@ import (
 	option "github.com/vellum-ai/vellum-client-go/option"
 	io "io"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -22,8 +23,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.ApiVersion == "" {
+		options.ApiVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -120,6 +121,77 @@ func (c *Client) Retrieve(
 		return nil, err
 	}
 	return response, nil
+}
+
+// Executes a deployed Workflow and streams back its results.
+func (c *Client) WorkflowDeploymentExecuteStream(
+	ctx context.Context,
+	// Either the Workflow Deployment's ID or its unique name
+	id string,
+	request *vellumclientgo.ExecuteWorkflowDeploymentStreamRequest,
+	opts ...option.RequestOption,
+) (*core.Stream[vellumclientgo.WorkflowEvent], error) {
+	options := core.NewRequestOptions(opts...)
+
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := core.EncodeURL(baseURL+"/v1/workflow-deployments/%v/execute-stream", id)
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
+	errorDecoder := func(statusCode int, body io.Reader) error {
+		raw, err := io.ReadAll(body)
+		if err != nil {
+			return err
+		}
+		apiError := core.NewAPIError(statusCode, errors.New(string(raw)))
+		decoder := json.NewDecoder(bytes.NewReader(raw))
+		switch statusCode {
+		case 400:
+			value := new(vellumclientgo.BadRequestError)
+			value.APIError = apiError
+			if err := decoder.Decode(value); err != nil {
+				return apiError
+			}
+			return value
+		case 404:
+			value := new(vellumclientgo.NotFoundError)
+			value.APIError = apiError
+			if err := decoder.Decode(value); err != nil {
+				return apiError
+			}
+			return value
+		case 500:
+			value := new(vellumclientgo.InternalServerError)
+			value.APIError = apiError
+			if err := decoder.Decode(value); err != nil {
+				return apiError
+			}
+			return value
+		}
+		return apiError
+	}
+
+	streamer := core.NewStreamer[vellumclientgo.WorkflowEvent](c.caller)
+	return streamer.Stream(
+		ctx,
+		&core.StreamParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			MaxAttempts:     options.MaxAttempts,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Headers:         headers,
+			Client:          options.HTTPClient,
+			Request:         request,
+			ErrorDecoder:    errorDecoder,
+		},
+	)
 }
 
 func (c *Client) ListWorkflowDeploymentEventExecutions(
