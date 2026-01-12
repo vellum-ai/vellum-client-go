@@ -3,7 +3,6 @@
 package option
 
 import (
-	vellumclientgo "github.com/vellum-ai/vellum-client-go"
 	core "github.com/vellum-ai/vellum-client-go/core"
 	http "net/http"
 	url "net/url"
