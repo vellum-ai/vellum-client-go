@@ -8,9 +8,26 @@ import (
 	core "github.com/vellum-ai/vellum-client-go/core"
 )
 
+type ExecuteIntegrationToolRequest struct {
+	Body *ExecuteToolRequest `json:"-" url:"-"`
+}
+
+func (e *ExecuteIntegrationToolRequest) UnmarshalJSON(data []byte) error {
+	body := new(ExecuteToolRequest)
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	e.Body = body
+	return nil
+}
+
+func (e *ExecuteIntegrationToolRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(e.Body)
+}
+
 type IntegrationsListRequest struct {
 	// * `COMPOSIO` - Composio
-	IntegrationProvider *string `json:"-" url:"integration_provider,omitempty"`
+	IntegrationProvider *IntegrationsListRequestIntegrationProvider `json:"-" url:"integration_provider,omitempty"`
 	// Number of results to return per page.
 	Limit *int `json:"-" url:"limit,omitempty"`
 	// The initial index from which to return the results.
@@ -22,22 +39,18 @@ type IntegrationsListRequest struct {
 	SupportsIntegrationTriggers *string `json:"-" url:"supports_integration_triggers,omitempty"`
 }
 
+type IntegrationsRetrieveRequest struct {
+}
+
 type RetrieveIntegrationToolDefinitionRequest struct {
 	// The version of the toolkit to use. Pass 'latest' to get the latest version, or a specific version string to pin it. If not provided, uses the provider's default.
 	ToolkitVersion *string `json:"-" url:"toolkit_version,omitempty"`
 }
 
-type ComponentsSchemasComposioExecuteToolRequest = *ComposioExecuteToolRequest
-
-type ComponentsSchemasComposioExecuteToolResponse = *ComposioExecuteToolResponse
-
-type ComponentsSchemasComposioIntegrationExecConfig = *ComposioIntegrationExecConfig
-
 // Payload for executing a Composio tool with provider id and tool arguments.
 type ComposioExecuteToolRequest struct {
 	Arguments      map[string]interface{} `json:"arguments" url:"arguments"`
 	ToolkitVersion *string                `json:"toolkit_version,omitempty" url:"toolkit_version,omitempty"`
-	provider       string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -47,28 +60,15 @@ func (c *ComposioExecuteToolRequest) GetExtraProperties() map[string]interface{}
 	return c.extraProperties
 }
 
-func (c *ComposioExecuteToolRequest) Provider() string {
-	return c.provider
-}
-
 func (c *ComposioExecuteToolRequest) UnmarshalJSON(data []byte) error {
-	type embed ComposioExecuteToolRequest
-	var unmarshaler = struct {
-		embed
-		Provider string `json:"provider"`
-	}{
-		embed: embed(*c),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler ComposioExecuteToolRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*c = ComposioExecuteToolRequest(unmarshaler.embed)
-	if unmarshaler.Provider != "COMPOSIO" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", c, "COMPOSIO", unmarshaler.Provider)
-	}
-	c.provider = unmarshaler.Provider
+	*c = ComposioExecuteToolRequest(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *c, "provider")
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
@@ -76,18 +76,6 @@ func (c *ComposioExecuteToolRequest) UnmarshalJSON(data []byte) error {
 
 	c._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (c *ComposioExecuteToolRequest) MarshalJSON() ([]byte, error) {
-	type embed ComposioExecuteToolRequest
-	var marshaler = struct {
-		embed
-		Provider string `json:"provider"`
-	}{
-		embed:    embed(*c),
-		Provider: "COMPOSIO",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (c *ComposioExecuteToolRequest) String() string {
@@ -104,8 +92,7 @@ func (c *ComposioExecuteToolRequest) String() string {
 
 // Response payload with provider id and execution output from a Composio tool.
 type ComposioExecuteToolResponse struct {
-	Data     map[string]interface{} `json:"data" url:"data"`
-	provider string
+	Data map[string]interface{} `json:"data" url:"data"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -115,28 +102,15 @@ func (c *ComposioExecuteToolResponse) GetExtraProperties() map[string]interface{
 	return c.extraProperties
 }
 
-func (c *ComposioExecuteToolResponse) Provider() string {
-	return c.provider
-}
-
 func (c *ComposioExecuteToolResponse) UnmarshalJSON(data []byte) error {
-	type embed ComposioExecuteToolResponse
-	var unmarshaler = struct {
-		embed
-		Provider string `json:"provider"`
-	}{
-		embed: embed(*c),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler ComposioExecuteToolResponse
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*c = ComposioExecuteToolResponse(unmarshaler.embed)
-	if unmarshaler.Provider != "COMPOSIO" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", c, "COMPOSIO", unmarshaler.Provider)
-	}
-	c.provider = unmarshaler.Provider
+	*c = ComposioExecuteToolResponse(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *c, "provider")
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
@@ -144,18 +118,6 @@ func (c *ComposioExecuteToolResponse) UnmarshalJSON(data []byte) error {
 
 	c._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (c *ComposioExecuteToolResponse) MarshalJSON() ([]byte, error) {
-	type embed ComposioExecuteToolResponse
-	var marshaler = struct {
-		embed
-		Provider string `json:"provider"`
-	}{
-		embed:    embed(*c),
-		Provider: "COMPOSIO",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (c *ComposioExecuteToolResponse) String() string {
@@ -173,7 +135,6 @@ func (c *ComposioExecuteToolResponse) String() string {
 type ComposioIntegrationExecConfig struct {
 	Slug                    string `json:"slug" url:"slug"`
 	SupportsWebhookTriggers *bool  `json:"supports_webhook_triggers,omitempty" url:"supports_webhook_triggers,omitempty"`
-	type_                   string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -183,28 +144,15 @@ func (c *ComposioIntegrationExecConfig) GetExtraProperties() map[string]interfac
 	return c.extraProperties
 }
 
-func (c *ComposioIntegrationExecConfig) Type() string {
-	return c.type_
-}
-
 func (c *ComposioIntegrationExecConfig) UnmarshalJSON(data []byte) error {
-	type embed ComposioIntegrationExecConfig
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*c),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler ComposioIntegrationExecConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*c = ComposioIntegrationExecConfig(unmarshaler.embed)
-	if unmarshaler.Type != "COMPOSIO" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", c, "COMPOSIO", unmarshaler.Type)
-	}
-	c.type_ = unmarshaler.Type
+	*c = ComposioIntegrationExecConfig(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *c, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *c)
 	if err != nil {
 		return err
 	}
@@ -212,18 +160,6 @@ func (c *ComposioIntegrationExecConfig) UnmarshalJSON(data []byte) error {
 
 	c._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (c *ComposioIntegrationExecConfig) MarshalJSON() ([]byte, error) {
-	type embed ComposioIntegrationExecConfig
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*c),
-		Type:  "COMPOSIO",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (c *ComposioIntegrationExecConfig) String() string {
@@ -238,14 +174,149 @@ func (c *ComposioIntegrationExecConfig) String() string {
 	return fmt.Sprintf("%#v", c)
 }
 
+type ExecuteToolRequest struct {
+	Provider string
+	Composio *ComposioExecuteToolRequest
+}
+
+func (e *ExecuteToolRequest) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Provider string `json:"provider"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	e.Provider = unmarshaler.Provider
+	if unmarshaler.Provider == "" {
+		return fmt.Errorf("%T did not include discriminant provider", e)
+	}
+	switch unmarshaler.Provider {
+	case "COMPOSIO":
+		value := new(ComposioExecuteToolRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		e.Composio = value
+	}
+	return nil
+}
+
+func (e ExecuteToolRequest) MarshalJSON() ([]byte, error) {
+	if e.Composio != nil {
+		return core.MarshalJSONWithExtraProperty(e.Composio, "provider", "COMPOSIO")
+	}
+	return nil, fmt.Errorf("type %T does not define a non-empty union type", e)
+}
+
+type ExecuteToolRequestVisitor interface {
+	VisitComposio(*ComposioExecuteToolRequest) error
+}
+
+func (e *ExecuteToolRequest) Accept(visitor ExecuteToolRequestVisitor) error {
+	if e.Composio != nil {
+		return visitor.VisitComposio(e.Composio)
+	}
+	return fmt.Errorf("type %T does not define a non-empty union type", e)
+}
+
+type ExecuteToolResponse struct {
+	Provider string
+	Composio *ComposioExecuteToolResponse
+}
+
+func (e *ExecuteToolResponse) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Provider string `json:"provider"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	e.Provider = unmarshaler.Provider
+	if unmarshaler.Provider == "" {
+		return fmt.Errorf("%T did not include discriminant provider", e)
+	}
+	switch unmarshaler.Provider {
+	case "COMPOSIO":
+		value := new(ComposioExecuteToolResponse)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		e.Composio = value
+	}
+	return nil
+}
+
+func (e ExecuteToolResponse) MarshalJSON() ([]byte, error) {
+	if e.Composio != nil {
+		return core.MarshalJSONWithExtraProperty(e.Composio, "provider", "COMPOSIO")
+	}
+	return nil, fmt.Errorf("type %T does not define a non-empty union type", e)
+}
+
+type ExecuteToolResponseVisitor interface {
+	VisitComposio(*ComposioExecuteToolResponse) error
+}
+
+func (e *ExecuteToolResponse) Accept(visitor ExecuteToolResponseVisitor) error {
+	if e.Composio != nil {
+		return visitor.VisitComposio(e.Composio)
+	}
+	return fmt.Errorf("type %T does not define a non-empty union type", e)
+}
+
+type IntegrationExecConfig struct {
+	Type     string
+	Composio *ComposioIntegrationExecConfig
+}
+
+func (i *IntegrationExecConfig) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	i.Type = unmarshaler.Type
+	if unmarshaler.Type == "" {
+		return fmt.Errorf("%T did not include discriminant type", i)
+	}
+	switch unmarshaler.Type {
+	case "COMPOSIO":
+		value := new(ComposioIntegrationExecConfig)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		i.Composio = value
+	}
+	return nil
+}
+
+func (i IntegrationExecConfig) MarshalJSON() ([]byte, error) {
+	if i.Composio != nil {
+		return core.MarshalJSONWithExtraProperty(i.Composio, "type", "COMPOSIO")
+	}
+	return nil, fmt.Errorf("type %T does not define a non-empty union type", i)
+}
+
+type IntegrationExecConfigVisitor interface {
+	VisitComposio(*ComposioIntegrationExecConfig) error
+}
+
+func (i *IntegrationExecConfig) Accept(visitor IntegrationExecConfigVisitor) error {
+	if i.Composio != nil {
+		return visitor.VisitComposio(i.Composio)
+	}
+	return fmt.Errorf("type %T does not define a non-empty union type", i)
+}
+
 type IntegrationRead struct {
-	Id       string              `json:"id" url:"id"`
+	ID       string              `json:"id" url:"id"`
 	Label    *string             `json:"label,omitempty" url:"label,omitempty"`
-	IconUrl  string              `json:"icon_url" url:"icon_url"`
+	IconURL  string              `json:"icon_url" url:"icon_url"`
 	Name     IntegrationName     `json:"name" url:"name"`
 	Provider IntegrationProvider `json:"provider" url:"provider"`
 	// Integration provider specific information needed for filtering tools.
-	ExecConfig ComponentsSchemasComposioIntegrationExecConfig `json:"exec_config" url:"exec_config"`
+	ExecConfig *IntegrationExecConfig `json:"exec_config" url:"exec_config"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -330,9 +401,9 @@ func (p *PaginatedSlimIntegrationReadList) String() string {
 }
 
 type SlimIntegrationRead struct {
-	Id       string              `json:"id" url:"id"`
+	ID       string              `json:"id" url:"id"`
 	Label    *string             `json:"label,omitempty" url:"label,omitempty"`
-	IconUrl  string              `json:"icon_url" url:"icon_url"`
+	IconURL  string              `json:"icon_url" url:"icon_url"`
 	Name     IntegrationName     `json:"name" url:"name"`
 	Provider IntegrationProvider `json:"provider" url:"provider"`
 
@@ -372,4 +443,23 @@ func (s *SlimIntegrationRead) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", s)
+}
+
+type IntegrationsListRequestIntegrationProvider string
+
+const (
+	IntegrationsListRequestIntegrationProviderComposio IntegrationsListRequestIntegrationProvider = "COMPOSIO"
+)
+
+func NewIntegrationsListRequestIntegrationProviderFromString(s string) (IntegrationsListRequestIntegrationProvider, error) {
+	switch s {
+	case "COMPOSIO":
+		return IntegrationsListRequestIntegrationProviderComposio, nil
+	}
+	var t IntegrationsListRequestIntegrationProvider
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (i IntegrationsListRequestIntegrationProvider) Ptr() *IntegrationsListRequestIntegrationProvider {
+	return &i
 }

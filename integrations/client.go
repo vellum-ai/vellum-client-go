@@ -12,6 +12,7 @@ import (
 	option "github.com/vellum-ai/vellum-client-go/option"
 	io "io"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -22,8 +23,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.APIVersion == "" {
+		options.APIVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -39,15 +40,15 @@ func NewClient(opts ...option.RequestOption) *Client {
 
 func (c *Client) RetrieveIntegrationToolDefinition(
 	ctx context.Context,
-	// The integration name
-	integrationName string,
 	// The integration provider name
 	integrationProvider string,
+	// The integration name
+	integrationName string,
 	// The tool's unique name, as specified by the integration provider
 	toolName string,
 	request *vellumclientgo.RetrieveIntegrationToolDefinitionRequest,
 	opts ...option.RequestOption,
-) (vellumclientgo.ComponentsSchemasComposioToolDefinition, error) {
+) (*vellumclientgo.ToolDefinition, error) {
 	options := core.NewRequestOptions(opts...)
 
 	baseURL := "https://api.vellum.ai"
@@ -93,7 +94,7 @@ func (c *Client) RetrieveIntegrationToolDefinition(
 		return apiError
 	}
 
-	var response vellumclientgo.ComponentsSchemasComposioToolDefinition
+	var response *vellumclientgo.ToolDefinition
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
@@ -115,15 +116,15 @@ func (c *Client) RetrieveIntegrationToolDefinition(
 
 func (c *Client) ExecuteIntegrationTool(
 	ctx context.Context,
-	// The integration name
-	integrationName string,
 	// The integration provider name
 	integrationProvider string,
+	// The integration name
+	integrationName string,
 	// The tool's unique name, as specified by the integration provider
 	toolName string,
-	request vellumclientgo.ComponentsSchemasComposioExecuteToolRequest,
+	request *vellumclientgo.ExecuteIntegrationToolRequest,
 	opts ...option.RequestOption,
-) (vellumclientgo.ComponentsSchemasComposioExecuteToolResponse, error) {
+) (*vellumclientgo.ExecuteToolResponse, error) {
 	options := core.NewRequestOptions(opts...)
 
 	baseURL := "https://api.vellum.ai"
@@ -175,7 +176,7 @@ func (c *Client) ExecuteIntegrationTool(
 		return apiError
 	}
 
-	var response vellumclientgo.ComponentsSchemasComposioExecuteToolResponse
+	var response *vellumclientgo.ExecuteToolResponse
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{
@@ -247,6 +248,7 @@ func (c *Client) Retrieve(
 	ctx context.Context,
 	// A UUID string identifying this integration.
 	id string,
+	request *vellumclientgo.IntegrationsRetrieveRequest,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.IntegrationRead, error) {
 	options := core.NewRequestOptions(opts...)

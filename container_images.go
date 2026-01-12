@@ -34,6 +34,9 @@ type PushContainerImageRequest struct {
 	Force *bool    `json:"force,omitempty" url:"-"`
 }
 
+type ContainerImagesRetrieveRequest struct {
+}
+
 // * `QUEUED` - Queued
 // * `BUILDING` - Building
 // * `AVAILABLE` - Available
@@ -218,7 +221,7 @@ func (c *ContainerImageContainerImageTag) String() string {
 }
 
 type ContainerImageRead struct {
-	Id          string                             `json:"id" url:"id"`
+	ID          string                             `json:"id" url:"id"`
 	Name        string                             `json:"name" url:"name"`
 	Visibility  EntityVisibility                   `json:"visibility" url:"visibility"`
 	Created     time.Time                          `json:"created" url:"created"`
@@ -291,7 +294,7 @@ func (c *ContainerImageRead) String() string {
 
 type DockerServiceToken struct {
 	AccessToken    string `json:"access_token" url:"access_token"`
-	OrganizationId string `json:"organization_id" url:"organization_id"`
+	OrganizationID string `json:"organization_id" url:"organization_id"`
 	Repository     string `json:"repository" url:"repository"`
 
 	extraProperties map[string]interface{}

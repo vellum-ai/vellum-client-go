@@ -51,7 +51,7 @@ func (w *WorkspaceDisplayConfig) String() string {
 }
 
 type WorkspaceRead struct {
-	Id string `json:"id" url:"id"`
+	ID string `json:"id" url:"id"`
 	// The name of the Workspace.
 	Name          string                  `json:"name" url:"name"`
 	Label         string                  `json:"label" url:"label"`

@@ -9,6 +9,9 @@ import (
 	time "time"
 )
 
+type DeploymentHistoryItemRetrieveRequest struct {
+}
+
 type DeploymentsListRequest struct {
 	// Number of results to return per page.
 	Limit *int `json:"-" url:"limit,omitempty"`
@@ -30,9 +33,18 @@ type ListDeploymentReleaseTagsRequest struct {
 	Source   *ListDeploymentReleaseTagsRequestSource `json:"-" url:"source,omitempty"`
 }
 
+type DeploymentsRetrieveRequest struct {
+}
+
+type RetrieveDeploymentReleaseTagRequest struct {
+}
+
+type RetrievePromptDeploymentReleaseRequest struct {
+}
+
 type DeploymentProviderPayloadRequest struct {
 	// The ID of the deployment. Must provide either this or deployment_name.
-	DeploymentId *string `json:"deployment_id,omitempty" url:"-"`
+	DeploymentID *string `json:"deployment_id,omitempty" url:"-"`
 	// The name of the deployment. Must provide either this or deployment_id.
 	DeploymentName *string `json:"deployment_name,omitempty" url:"-"`
 	// The list of inputs defined in the Prompt's deployment with their corresponding values.
@@ -48,7 +60,7 @@ type CompilePromptDeploymentExpandMetaRequest struct {
 	// If enabled, the response will include the release tag of the Prompt Deployment.
 	DeploymentReleaseTag *bool `json:"deployment_release_tag,omitempty" url:"deployment_release_tag,omitempty"`
 	// If enabled, the response will include the ID of the Prompt Version backing the deployment.
-	PromptVersionId *bool `json:"prompt_version_id,omitempty" url:"prompt_version_id,omitempty"`
+	PromptVersionID *bool `json:"prompt_version_id,omitempty" url:"prompt_version_id,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -92,7 +104,7 @@ func (c *CompilePromptDeploymentExpandMetaRequest) String() string {
 type CompilePromptMeta struct {
 	ModelName            *string `json:"model_name,omitempty" url:"model_name,omitempty"`
 	DeploymentReleaseTag *string `json:"deployment_release_tag,omitempty" url:"deployment_release_tag,omitempty"`
-	PromptVersionId      *string `json:"prompt_version_id,omitempty" url:"prompt_version_id,omitempty"`
+	PromptVersionID      *string `json:"prompt_version_id,omitempty" url:"prompt_version_id,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -133,8 +145,8 @@ func (c *CompilePromptMeta) String() string {
 }
 
 type DeploymentHistoryItem struct {
-	Id           string    `json:"id" url:"id"`
-	DeploymentId string    `json:"deployment_id" url:"deployment_id"`
+	ID           string    `json:"id" url:"id"`
+	DeploymentID string    `json:"deployment_id" url:"deployment_id"`
 	Timestamp    time.Time `json:"timestamp" url:"timestamp"`
 	// A human-readable label for the deployment
 	Label string `json:"label" url:"label"`
@@ -287,7 +299,7 @@ func (d *DeploymentProviderPayloadResponsePayload) Accept(visitor DeploymentProv
 }
 
 type DeploymentReleaseTagDeploymentHistoryItem struct {
-	Id        string    `json:"id" url:"id"`
+	ID        string    `json:"id" url:"id"`
 	Timestamp time.Time `json:"timestamp" url:"timestamp"`
 
 	extraProperties map[string]interface{}
@@ -487,7 +499,7 @@ func (p *PaginatedSlimDeploymentReadList) String() string {
 
 // A subset of a Prompt Deployment's full details.
 type SlimDeploymentRead struct {
-	Id      string    `json:"id" url:"id"`
+	ID      string    `json:"id" url:"id"`
 	Created time.Time `json:"created" url:"created"`
 	// A human-readable label for the deployment
 	Label string `json:"label" url:"label"`
@@ -611,5 +623,5 @@ func (l ListDeploymentReleaseTagsRequestSource) Ptr() *ListDeploymentReleaseTags
 
 type PatchedDeploymentReleaseTagUpdateRequest struct {
 	// The ID of the Release to tag
-	HistoryItemId *string `json:"history_item_id,omitempty" url:"-"`
+	HistoryItemID *string `json:"history_item_id,omitempty" url:"-"`
 }

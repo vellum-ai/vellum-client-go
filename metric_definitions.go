@@ -13,6 +13,9 @@ type ExecuteMetricDefinition struct {
 	ReleaseTag *string                  `json:"release_tag,omitempty" url:"-"`
 }
 
+type MetricDefinitionHistoryItemRetrieveRequest struct {
+}
+
 type MetricDefinitionExecution struct {
 	Outputs []*TestSuiteRunMetricOutput `json:"outputs" url:"outputs"`
 
@@ -55,7 +58,7 @@ func (m *MetricDefinitionExecution) String() string {
 }
 
 type MetricDefinitionHistoryItem struct {
-	Id string `json:"id" url:"id"`
+	ID string `json:"id" url:"id"`
 	// A human-readable label for the metric
 	Label string `json:"label" url:"label"`
 	// A name that uniquely identifies this metric within its workspace
@@ -103,71 +106,88 @@ func (m *MetricDefinitionHistoryItem) String() string {
 }
 
 type MetricDefinitionInput struct {
-	StringInput      *StringInput
-	JsonInput        *JsonInput
-	ChatHistoryInput *ChatHistoryInput
-	NumberInput      *NumberInput
+	Type        string
+	String      *StringInput
+	JSON        *JSONInput
+	ChatHistory *ChatHistoryInput
+	Number      *NumberInput
 }
 
 func (m *MetricDefinitionInput) UnmarshalJSON(data []byte) error {
-	valueStringInput := new(StringInput)
-	if err := json.Unmarshal(data, &valueStringInput); err == nil {
-		m.StringInput = valueStringInput
-		return nil
+	var unmarshaler struct {
+		Type string `json:"type"`
 	}
-	valueJsonInput := new(JsonInput)
-	if err := json.Unmarshal(data, &valueJsonInput); err == nil {
-		m.JsonInput = valueJsonInput
-		return nil
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
 	}
-	valueChatHistoryInput := new(ChatHistoryInput)
-	if err := json.Unmarshal(data, &valueChatHistoryInput); err == nil {
-		m.ChatHistoryInput = valueChatHistoryInput
-		return nil
+	m.Type = unmarshaler.Type
+	if unmarshaler.Type == "" {
+		return fmt.Errorf("%T did not include discriminant type", m)
 	}
-	valueNumberInput := new(NumberInput)
-	if err := json.Unmarshal(data, &valueNumberInput); err == nil {
-		m.NumberInput = valueNumberInput
-		return nil
+	switch unmarshaler.Type {
+	case "STRING":
+		value := new(StringInput)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		m.String = value
+	case "JSON":
+		value := new(JSONInput)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		m.JSON = value
+	case "CHAT_HISTORY":
+		value := new(ChatHistoryInput)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		m.ChatHistory = value
+	case "NUMBER":
+		value := new(NumberInput)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		m.Number = value
 	}
-	return fmt.Errorf("%s cannot be deserialized as a %T", data, m)
+	return nil
 }
 
 func (m MetricDefinitionInput) MarshalJSON() ([]byte, error) {
-	if m.StringInput != nil {
-		return json.Marshal(m.StringInput)
+	if m.String != nil {
+		return core.MarshalJSONWithExtraProperty(m.String, "type", "STRING")
 	}
-	if m.JsonInput != nil {
-		return json.Marshal(m.JsonInput)
+	if m.JSON != nil {
+		return core.MarshalJSONWithExtraProperty(m.JSON, "type", "JSON")
 	}
-	if m.ChatHistoryInput != nil {
-		return json.Marshal(m.ChatHistoryInput)
+	if m.ChatHistory != nil {
+		return core.MarshalJSONWithExtraProperty(m.ChatHistory, "type", "CHAT_HISTORY")
 	}
-	if m.NumberInput != nil {
-		return json.Marshal(m.NumberInput)
+	if m.Number != nil {
+		return core.MarshalJSONWithExtraProperty(m.Number, "type", "NUMBER")
 	}
-	return nil, fmt.Errorf("type %T does not include a non-empty union type", m)
+	return nil, fmt.Errorf("type %T does not define a non-empty union type", m)
 }
 
 type MetricDefinitionInputVisitor interface {
-	VisitStringInput(*StringInput) error
-	VisitJsonInput(*JsonInput) error
-	VisitChatHistoryInput(*ChatHistoryInput) error
-	VisitNumberInput(*NumberInput) error
+	VisitString(*StringInput) error
+	VisitJSON(*JSONInput) error
+	VisitChatHistory(*ChatHistoryInput) error
+	VisitNumber(*NumberInput) error
 }
 
 func (m *MetricDefinitionInput) Accept(visitor MetricDefinitionInputVisitor) error {
-	if m.StringInput != nil {
-		return visitor.VisitStringInput(m.StringInput)
+	if m.String != nil {
+		return visitor.VisitString(m.String)
 	}
-	if m.JsonInput != nil {
-		return visitor.VisitJsonInput(m.JsonInput)
+	if m.JSON != nil {
+		return visitor.VisitJSON(m.JSON)
 	}
-	if m.ChatHistoryInput != nil {
-		return visitor.VisitChatHistoryInput(m.ChatHistoryInput)
+	if m.ChatHistory != nil {
+		return visitor.VisitChatHistory(m.ChatHistory)
 	}
-	if m.NumberInput != nil {
-		return visitor.VisitNumberInput(m.NumberInput)
+	if m.Number != nil {
+		return visitor.VisitNumber(m.Number)
 	}
-	return fmt.Errorf("type %T does not include a non-empty union type", m)
+	return fmt.Errorf("type %T does not define a non-empty union type", m)
 }

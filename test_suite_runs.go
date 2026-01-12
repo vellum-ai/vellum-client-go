@@ -11,7 +11,7 @@ import (
 
 type TestSuiteRunCreateRequest struct {
 	// The ID of the Test Suite to run. Must provide either this or test_suite_id.
-	TestSuiteId *string `json:"test_suite_id,omitempty" url:"-"`
+	TestSuiteID *string `json:"test_suite_id,omitempty" url:"-"`
 	// The name of the Test Suite to run. Must provide either this or test_suite_id.
 	TestSuiteName *string `json:"test_suite_name,omitempty" url:"-"`
 	// Configuration that defines how the Test Suite should be run
@@ -30,10 +30,13 @@ type TestSuiteRunsListExecutionsRequest struct {
 	Offset *int `json:"-" url:"offset,omitempty"`
 }
 
+type TestSuiteRunsRetrieveRequest struct {
+}
+
 type ExternalTestCaseExecution struct {
 	// The output values of a callable that was executed against a Test Case outside of Vellum
 	Outputs    []*NamedTestCaseVariableValue `json:"outputs" url:"outputs"`
-	TestCaseId string                        `json:"test_case_id" url:"test_case_id"`
+	TestCaseID string                        `json:"test_case_id" url:"test_case_id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -76,7 +79,7 @@ func (e *ExternalTestCaseExecution) String() string {
 type ExternalTestCaseExecutionRequest struct {
 	// The output values of a callable that was executed against a Test Case outside of Vellum
 	Outputs    []*NamedTestCaseVariableValueRequest `json:"outputs" url:"outputs"`
-	TestCaseId string                               `json:"test_case_id" url:"test_case_id"`
+	TestCaseID string                               `json:"test_case_id" url:"test_case_id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -120,7 +123,6 @@ func (e *ExternalTestCaseExecutionRequest) String() string {
 type NamedTestCaseArrayVariableValue struct {
 	Value []*VellumValue `json:"value,omitempty" url:"value,omitempty"`
 	Name  string         `json:"name" url:"name"`
-	type_ string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -130,28 +132,15 @@ func (n *NamedTestCaseArrayVariableValue) GetExtraProperties() map[string]interf
 	return n.extraProperties
 }
 
-func (n *NamedTestCaseArrayVariableValue) Type() string {
-	return n.type_
-}
-
 func (n *NamedTestCaseArrayVariableValue) UnmarshalJSON(data []byte) error {
-	type embed NamedTestCaseArrayVariableValue
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*n),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler NamedTestCaseArrayVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*n = NamedTestCaseArrayVariableValue(unmarshaler.embed)
-	if unmarshaler.Type != "ARRAY" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "ARRAY", unmarshaler.Type)
-	}
-	n.type_ = unmarshaler.Type
+	*n = NamedTestCaseArrayVariableValue(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
 	if err != nil {
 		return err
 	}
@@ -159,18 +148,6 @@ func (n *NamedTestCaseArrayVariableValue) UnmarshalJSON(data []byte) error {
 
 	n._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (n *NamedTestCaseArrayVariableValue) MarshalJSON() ([]byte, error) {
-	type embed NamedTestCaseArrayVariableValue
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*n),
-		Type:  "ARRAY",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (n *NamedTestCaseArrayVariableValue) String() string {
@@ -189,7 +166,6 @@ func (n *NamedTestCaseArrayVariableValue) String() string {
 type NamedTestCaseAudioVariableValue struct {
 	Value *VellumAudio `json:"value,omitempty" url:"value,omitempty"`
 	Name  string       `json:"name" url:"name"`
-	type_ string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -199,28 +175,15 @@ func (n *NamedTestCaseAudioVariableValue) GetExtraProperties() map[string]interf
 	return n.extraProperties
 }
 
-func (n *NamedTestCaseAudioVariableValue) Type() string {
-	return n.type_
-}
-
 func (n *NamedTestCaseAudioVariableValue) UnmarshalJSON(data []byte) error {
-	type embed NamedTestCaseAudioVariableValue
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*n),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler NamedTestCaseAudioVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*n = NamedTestCaseAudioVariableValue(unmarshaler.embed)
-	if unmarshaler.Type != "AUDIO" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "AUDIO", unmarshaler.Type)
-	}
-	n.type_ = unmarshaler.Type
+	*n = NamedTestCaseAudioVariableValue(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
 	if err != nil {
 		return err
 	}
@@ -228,18 +191,6 @@ func (n *NamedTestCaseAudioVariableValue) UnmarshalJSON(data []byte) error {
 
 	n._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (n *NamedTestCaseAudioVariableValue) MarshalJSON() ([]byte, error) {
-	type embed NamedTestCaseAudioVariableValue
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*n),
-		Type:  "AUDIO",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (n *NamedTestCaseAudioVariableValue) String() string {
@@ -258,7 +209,6 @@ func (n *NamedTestCaseAudioVariableValue) String() string {
 type NamedTestCaseChatHistoryVariableValue struct {
 	Value []*ChatMessage `json:"value,omitempty" url:"value,omitempty"`
 	Name  string         `json:"name" url:"name"`
-	type_ string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -268,28 +218,15 @@ func (n *NamedTestCaseChatHistoryVariableValue) GetExtraProperties() map[string]
 	return n.extraProperties
 }
 
-func (n *NamedTestCaseChatHistoryVariableValue) Type() string {
-	return n.type_
-}
-
 func (n *NamedTestCaseChatHistoryVariableValue) UnmarshalJSON(data []byte) error {
-	type embed NamedTestCaseChatHistoryVariableValue
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*n),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler NamedTestCaseChatHistoryVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*n = NamedTestCaseChatHistoryVariableValue(unmarshaler.embed)
-	if unmarshaler.Type != "CHAT_HISTORY" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "CHAT_HISTORY", unmarshaler.Type)
-	}
-	n.type_ = unmarshaler.Type
+	*n = NamedTestCaseChatHistoryVariableValue(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
 	if err != nil {
 		return err
 	}
@@ -297,18 +234,6 @@ func (n *NamedTestCaseChatHistoryVariableValue) UnmarshalJSON(data []byte) error
 
 	n._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (n *NamedTestCaseChatHistoryVariableValue) MarshalJSON() ([]byte, error) {
-	type embed NamedTestCaseChatHistoryVariableValue
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*n),
-		Type:  "CHAT_HISTORY",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (n *NamedTestCaseChatHistoryVariableValue) String() string {
@@ -326,7 +251,6 @@ func (n *NamedTestCaseChatHistoryVariableValue) String() string {
 type NamedTestCaseDocumentVariableValue struct {
 	Value *VellumDocument `json:"value,omitempty" url:"value,omitempty"`
 	Name  string          `json:"name" url:"name"`
-	type_ string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -336,28 +260,15 @@ func (n *NamedTestCaseDocumentVariableValue) GetExtraProperties() map[string]int
 	return n.extraProperties
 }
 
-func (n *NamedTestCaseDocumentVariableValue) Type() string {
-	return n.type_
-}
-
 func (n *NamedTestCaseDocumentVariableValue) UnmarshalJSON(data []byte) error {
-	type embed NamedTestCaseDocumentVariableValue
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*n),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler NamedTestCaseDocumentVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*n = NamedTestCaseDocumentVariableValue(unmarshaler.embed)
-	if unmarshaler.Type != "DOCUMENT" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "DOCUMENT", unmarshaler.Type)
-	}
-	n.type_ = unmarshaler.Type
+	*n = NamedTestCaseDocumentVariableValue(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
 	if err != nil {
 		return err
 	}
@@ -365,18 +276,6 @@ func (n *NamedTestCaseDocumentVariableValue) UnmarshalJSON(data []byte) error {
 
 	n._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (n *NamedTestCaseDocumentVariableValue) MarshalJSON() ([]byte, error) {
-	type embed NamedTestCaseDocumentVariableValue
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*n),
-		Type:  "DOCUMENT",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (n *NamedTestCaseDocumentVariableValue) String() string {
@@ -395,7 +294,6 @@ func (n *NamedTestCaseDocumentVariableValue) String() string {
 type NamedTestCaseErrorVariableValue struct {
 	Value *VellumError `json:"value,omitempty" url:"value,omitempty"`
 	Name  string       `json:"name" url:"name"`
-	type_ string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -405,28 +303,15 @@ func (n *NamedTestCaseErrorVariableValue) GetExtraProperties() map[string]interf
 	return n.extraProperties
 }
 
-func (n *NamedTestCaseErrorVariableValue) Type() string {
-	return n.type_
-}
-
 func (n *NamedTestCaseErrorVariableValue) UnmarshalJSON(data []byte) error {
-	type embed NamedTestCaseErrorVariableValue
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*n),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler NamedTestCaseErrorVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*n = NamedTestCaseErrorVariableValue(unmarshaler.embed)
-	if unmarshaler.Type != "ERROR" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "ERROR", unmarshaler.Type)
-	}
-	n.type_ = unmarshaler.Type
+	*n = NamedTestCaseErrorVariableValue(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
 	if err != nil {
 		return err
 	}
@@ -434,18 +319,6 @@ func (n *NamedTestCaseErrorVariableValue) UnmarshalJSON(data []byte) error {
 
 	n._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (n *NamedTestCaseErrorVariableValue) MarshalJSON() ([]byte, error) {
-	type embed NamedTestCaseErrorVariableValue
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*n),
-		Type:  "ERROR",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (n *NamedTestCaseErrorVariableValue) String() string {
@@ -464,7 +337,6 @@ func (n *NamedTestCaseErrorVariableValue) String() string {
 type NamedTestCaseFunctionCallVariableValue struct {
 	Value *FunctionCall `json:"value,omitempty" url:"value,omitempty"`
 	Name  string        `json:"name" url:"name"`
-	type_ string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -474,28 +346,15 @@ func (n *NamedTestCaseFunctionCallVariableValue) GetExtraProperties() map[string
 	return n.extraProperties
 }
 
-func (n *NamedTestCaseFunctionCallVariableValue) Type() string {
-	return n.type_
-}
-
 func (n *NamedTestCaseFunctionCallVariableValue) UnmarshalJSON(data []byte) error {
-	type embed NamedTestCaseFunctionCallVariableValue
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*n),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler NamedTestCaseFunctionCallVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*n = NamedTestCaseFunctionCallVariableValue(unmarshaler.embed)
-	if unmarshaler.Type != "FUNCTION_CALL" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "FUNCTION_CALL", unmarshaler.Type)
-	}
-	n.type_ = unmarshaler.Type
+	*n = NamedTestCaseFunctionCallVariableValue(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
 	if err != nil {
 		return err
 	}
@@ -503,18 +362,6 @@ func (n *NamedTestCaseFunctionCallVariableValue) UnmarshalJSON(data []byte) erro
 
 	n._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (n *NamedTestCaseFunctionCallVariableValue) MarshalJSON() ([]byte, error) {
-	type embed NamedTestCaseFunctionCallVariableValue
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*n),
-		Type:  "FUNCTION_CALL",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (n *NamedTestCaseFunctionCallVariableValue) String() string {
@@ -532,7 +379,6 @@ func (n *NamedTestCaseFunctionCallVariableValue) String() string {
 type NamedTestCaseImageVariableValue struct {
 	Value *VellumImage `json:"value,omitempty" url:"value,omitempty"`
 	Name  string       `json:"name" url:"name"`
-	type_ string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -542,28 +388,15 @@ func (n *NamedTestCaseImageVariableValue) GetExtraProperties() map[string]interf
 	return n.extraProperties
 }
 
-func (n *NamedTestCaseImageVariableValue) Type() string {
-	return n.type_
-}
-
 func (n *NamedTestCaseImageVariableValue) UnmarshalJSON(data []byte) error {
-	type embed NamedTestCaseImageVariableValue
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*n),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler NamedTestCaseImageVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*n = NamedTestCaseImageVariableValue(unmarshaler.embed)
-	if unmarshaler.Type != "IMAGE" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "IMAGE", unmarshaler.Type)
-	}
-	n.type_ = unmarshaler.Type
+	*n = NamedTestCaseImageVariableValue(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
 	if err != nil {
 		return err
 	}
@@ -571,18 +404,6 @@ func (n *NamedTestCaseImageVariableValue) UnmarshalJSON(data []byte) error {
 
 	n._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (n *NamedTestCaseImageVariableValue) MarshalJSON() ([]byte, error) {
-	type embed NamedTestCaseImageVariableValue
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*n),
-		Type:  "IMAGE",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (n *NamedTestCaseImageVariableValue) String() string {
@@ -598,41 +419,27 @@ func (n *NamedTestCaseImageVariableValue) String() string {
 }
 
 // Named Test Case value that is of type JSON
-type NamedTestCaseJsonVariableValue struct {
-	Value interface{} `json:"value" url:"value"`
+type NamedTestCaseJSONVariableValue struct {
+	Value interface{} `json:"value,omitempty" url:"value,omitempty"`
 	Name  string      `json:"name" url:"name"`
-	type_ string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
 }
 
-func (n *NamedTestCaseJsonVariableValue) GetExtraProperties() map[string]interface{} {
+func (n *NamedTestCaseJSONVariableValue) GetExtraProperties() map[string]interface{} {
 	return n.extraProperties
 }
 
-func (n *NamedTestCaseJsonVariableValue) Type() string {
-	return n.type_
-}
-
-func (n *NamedTestCaseJsonVariableValue) UnmarshalJSON(data []byte) error {
-	type embed NamedTestCaseJsonVariableValue
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*n),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+func (n *NamedTestCaseJSONVariableValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler NamedTestCaseJSONVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*n = NamedTestCaseJsonVariableValue(unmarshaler.embed)
-	if unmarshaler.Type != "JSON" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "JSON", unmarshaler.Type)
-	}
-	n.type_ = unmarshaler.Type
+	*n = NamedTestCaseJSONVariableValue(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
 	if err != nil {
 		return err
 	}
@@ -642,19 +449,7 @@ func (n *NamedTestCaseJsonVariableValue) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (n *NamedTestCaseJsonVariableValue) MarshalJSON() ([]byte, error) {
-	type embed NamedTestCaseJsonVariableValue
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*n),
-		Type:  "JSON",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (n *NamedTestCaseJsonVariableValue) String() string {
+func (n *NamedTestCaseJSONVariableValue) String() string {
 	if len(n._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(n._rawJSON); err == nil {
 			return value
@@ -670,7 +465,6 @@ func (n *NamedTestCaseJsonVariableValue) String() string {
 type NamedTestCaseNumberVariableValue struct {
 	Value *float64 `json:"value,omitempty" url:"value,omitempty"`
 	Name  string   `json:"name" url:"name"`
-	type_ string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -680,28 +474,15 @@ func (n *NamedTestCaseNumberVariableValue) GetExtraProperties() map[string]inter
 	return n.extraProperties
 }
 
-func (n *NamedTestCaseNumberVariableValue) Type() string {
-	return n.type_
-}
-
 func (n *NamedTestCaseNumberVariableValue) UnmarshalJSON(data []byte) error {
-	type embed NamedTestCaseNumberVariableValue
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*n),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler NamedTestCaseNumberVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*n = NamedTestCaseNumberVariableValue(unmarshaler.embed)
-	if unmarshaler.Type != "NUMBER" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "NUMBER", unmarshaler.Type)
-	}
-	n.type_ = unmarshaler.Type
+	*n = NamedTestCaseNumberVariableValue(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
 	if err != nil {
 		return err
 	}
@@ -709,18 +490,6 @@ func (n *NamedTestCaseNumberVariableValue) UnmarshalJSON(data []byte) error {
 
 	n._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (n *NamedTestCaseNumberVariableValue) MarshalJSON() ([]byte, error) {
-	type embed NamedTestCaseNumberVariableValue
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*n),
-		Type:  "NUMBER",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (n *NamedTestCaseNumberVariableValue) String() string {
@@ -739,7 +508,6 @@ func (n *NamedTestCaseNumberVariableValue) String() string {
 type NamedTestCaseSearchResultsVariableValue struct {
 	Value []*SearchResult `json:"value,omitempty" url:"value,omitempty"`
 	Name  string          `json:"name" url:"name"`
-	type_ string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -749,28 +517,15 @@ func (n *NamedTestCaseSearchResultsVariableValue) GetExtraProperties() map[strin
 	return n.extraProperties
 }
 
-func (n *NamedTestCaseSearchResultsVariableValue) Type() string {
-	return n.type_
-}
-
 func (n *NamedTestCaseSearchResultsVariableValue) UnmarshalJSON(data []byte) error {
-	type embed NamedTestCaseSearchResultsVariableValue
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*n),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler NamedTestCaseSearchResultsVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*n = NamedTestCaseSearchResultsVariableValue(unmarshaler.embed)
-	if unmarshaler.Type != "SEARCH_RESULTS" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "SEARCH_RESULTS", unmarshaler.Type)
-	}
-	n.type_ = unmarshaler.Type
+	*n = NamedTestCaseSearchResultsVariableValue(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
 	if err != nil {
 		return err
 	}
@@ -778,18 +533,6 @@ func (n *NamedTestCaseSearchResultsVariableValue) UnmarshalJSON(data []byte) err
 
 	n._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (n *NamedTestCaseSearchResultsVariableValue) MarshalJSON() ([]byte, error) {
-	type embed NamedTestCaseSearchResultsVariableValue
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*n),
-		Type:  "SEARCH_RESULTS",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (n *NamedTestCaseSearchResultsVariableValue) String() string {
@@ -808,7 +551,6 @@ func (n *NamedTestCaseSearchResultsVariableValue) String() string {
 type NamedTestCaseStringVariableValue struct {
 	Value *string `json:"value,omitempty" url:"value,omitempty"`
 	Name  string  `json:"name" url:"name"`
-	type_ string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -818,28 +560,15 @@ func (n *NamedTestCaseStringVariableValue) GetExtraProperties() map[string]inter
 	return n.extraProperties
 }
 
-func (n *NamedTestCaseStringVariableValue) Type() string {
-	return n.type_
-}
-
 func (n *NamedTestCaseStringVariableValue) UnmarshalJSON(data []byte) error {
-	type embed NamedTestCaseStringVariableValue
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*n),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler NamedTestCaseStringVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*n = NamedTestCaseStringVariableValue(unmarshaler.embed)
-	if unmarshaler.Type != "STRING" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "STRING", unmarshaler.Type)
-	}
-	n.type_ = unmarshaler.Type
+	*n = NamedTestCaseStringVariableValue(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
 	if err != nil {
 		return err
 	}
@@ -847,18 +576,6 @@ func (n *NamedTestCaseStringVariableValue) UnmarshalJSON(data []byte) error {
 
 	n._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (n *NamedTestCaseStringVariableValue) MarshalJSON() ([]byte, error) {
-	type embed NamedTestCaseStringVariableValue
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*n),
-		Type:  "STRING",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (n *NamedTestCaseStringVariableValue) String() string {
@@ -874,183 +591,207 @@ func (n *NamedTestCaseStringVariableValue) String() string {
 }
 
 type NamedTestCaseVariableValue struct {
-	NamedTestCaseStringVariableValue        *NamedTestCaseStringVariableValue
-	NamedTestCaseNumberVariableValue        *NamedTestCaseNumberVariableValue
-	NamedTestCaseJsonVariableValue          *NamedTestCaseJsonVariableValue
-	NamedTestCaseChatHistoryVariableValue   *NamedTestCaseChatHistoryVariableValue
-	NamedTestCaseSearchResultsVariableValue *NamedTestCaseSearchResultsVariableValue
-	NamedTestCaseErrorVariableValue         *NamedTestCaseErrorVariableValue
-	NamedTestCaseFunctionCallVariableValue  *NamedTestCaseFunctionCallVariableValue
-	NamedTestCaseArrayVariableValue         *NamedTestCaseArrayVariableValue
-	NamedTestCaseAudioVariableValue         *NamedTestCaseAudioVariableValue
-	NamedTestCaseVideoVariableValue         *NamedTestCaseVideoVariableValue
-	NamedTestCaseImageVariableValue         *NamedTestCaseImageVariableValue
-	NamedTestCaseDocumentVariableValue      *NamedTestCaseDocumentVariableValue
+	Type          string
+	String        *NamedTestCaseStringVariableValue
+	Number        *NamedTestCaseNumberVariableValue
+	JSON          *NamedTestCaseJSONVariableValue
+	ChatHistory   *NamedTestCaseChatHistoryVariableValue
+	SearchResults *NamedTestCaseSearchResultsVariableValue
+	Error         *NamedTestCaseErrorVariableValue
+	FunctionCall  *NamedTestCaseFunctionCallVariableValue
+	Array         *NamedTestCaseArrayVariableValue
+	Audio         *NamedTestCaseAudioVariableValue
+	Video         *NamedTestCaseVideoVariableValue
+	Image         *NamedTestCaseImageVariableValue
+	Document      *NamedTestCaseDocumentVariableValue
 }
 
 func (n *NamedTestCaseVariableValue) UnmarshalJSON(data []byte) error {
-	valueNamedTestCaseStringVariableValue := new(NamedTestCaseStringVariableValue)
-	if err := json.Unmarshal(data, &valueNamedTestCaseStringVariableValue); err == nil {
-		n.NamedTestCaseStringVariableValue = valueNamedTestCaseStringVariableValue
-		return nil
+	var unmarshaler struct {
+		Type string `json:"type"`
 	}
-	valueNamedTestCaseNumberVariableValue := new(NamedTestCaseNumberVariableValue)
-	if err := json.Unmarshal(data, &valueNamedTestCaseNumberVariableValue); err == nil {
-		n.NamedTestCaseNumberVariableValue = valueNamedTestCaseNumberVariableValue
-		return nil
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
 	}
-	valueNamedTestCaseJsonVariableValue := new(NamedTestCaseJsonVariableValue)
-	if err := json.Unmarshal(data, &valueNamedTestCaseJsonVariableValue); err == nil {
-		n.NamedTestCaseJsonVariableValue = valueNamedTestCaseJsonVariableValue
-		return nil
+	n.Type = unmarshaler.Type
+	if unmarshaler.Type == "" {
+		return fmt.Errorf("%T did not include discriminant type", n)
 	}
-	valueNamedTestCaseChatHistoryVariableValue := new(NamedTestCaseChatHistoryVariableValue)
-	if err := json.Unmarshal(data, &valueNamedTestCaseChatHistoryVariableValue); err == nil {
-		n.NamedTestCaseChatHistoryVariableValue = valueNamedTestCaseChatHistoryVariableValue
-		return nil
+	switch unmarshaler.Type {
+	case "STRING":
+		value := new(NamedTestCaseStringVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.String = value
+	case "NUMBER":
+		value := new(NamedTestCaseNumberVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.Number = value
+	case "JSON":
+		value := new(NamedTestCaseJSONVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.JSON = value
+	case "CHAT_HISTORY":
+		value := new(NamedTestCaseChatHistoryVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.ChatHistory = value
+	case "SEARCH_RESULTS":
+		value := new(NamedTestCaseSearchResultsVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.SearchResults = value
+	case "ERROR":
+		value := new(NamedTestCaseErrorVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.Error = value
+	case "FUNCTION_CALL":
+		value := new(NamedTestCaseFunctionCallVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.FunctionCall = value
+	case "ARRAY":
+		value := new(NamedTestCaseArrayVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.Array = value
+	case "AUDIO":
+		value := new(NamedTestCaseAudioVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.Audio = value
+	case "VIDEO":
+		value := new(NamedTestCaseVideoVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.Video = value
+	case "IMAGE":
+		value := new(NamedTestCaseImageVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.Image = value
+	case "DOCUMENT":
+		value := new(NamedTestCaseDocumentVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		n.Document = value
 	}
-	valueNamedTestCaseSearchResultsVariableValue := new(NamedTestCaseSearchResultsVariableValue)
-	if err := json.Unmarshal(data, &valueNamedTestCaseSearchResultsVariableValue); err == nil {
-		n.NamedTestCaseSearchResultsVariableValue = valueNamedTestCaseSearchResultsVariableValue
-		return nil
-	}
-	valueNamedTestCaseErrorVariableValue := new(NamedTestCaseErrorVariableValue)
-	if err := json.Unmarshal(data, &valueNamedTestCaseErrorVariableValue); err == nil {
-		n.NamedTestCaseErrorVariableValue = valueNamedTestCaseErrorVariableValue
-		return nil
-	}
-	valueNamedTestCaseFunctionCallVariableValue := new(NamedTestCaseFunctionCallVariableValue)
-	if err := json.Unmarshal(data, &valueNamedTestCaseFunctionCallVariableValue); err == nil {
-		n.NamedTestCaseFunctionCallVariableValue = valueNamedTestCaseFunctionCallVariableValue
-		return nil
-	}
-	valueNamedTestCaseArrayVariableValue := new(NamedTestCaseArrayVariableValue)
-	if err := json.Unmarshal(data, &valueNamedTestCaseArrayVariableValue); err == nil {
-		n.NamedTestCaseArrayVariableValue = valueNamedTestCaseArrayVariableValue
-		return nil
-	}
-	valueNamedTestCaseAudioVariableValue := new(NamedTestCaseAudioVariableValue)
-	if err := json.Unmarshal(data, &valueNamedTestCaseAudioVariableValue); err == nil {
-		n.NamedTestCaseAudioVariableValue = valueNamedTestCaseAudioVariableValue
-		return nil
-	}
-	valueNamedTestCaseVideoVariableValue := new(NamedTestCaseVideoVariableValue)
-	if err := json.Unmarshal(data, &valueNamedTestCaseVideoVariableValue); err == nil {
-		n.NamedTestCaseVideoVariableValue = valueNamedTestCaseVideoVariableValue
-		return nil
-	}
-	valueNamedTestCaseImageVariableValue := new(NamedTestCaseImageVariableValue)
-	if err := json.Unmarshal(data, &valueNamedTestCaseImageVariableValue); err == nil {
-		n.NamedTestCaseImageVariableValue = valueNamedTestCaseImageVariableValue
-		return nil
-	}
-	valueNamedTestCaseDocumentVariableValue := new(NamedTestCaseDocumentVariableValue)
-	if err := json.Unmarshal(data, &valueNamedTestCaseDocumentVariableValue); err == nil {
-		n.NamedTestCaseDocumentVariableValue = valueNamedTestCaseDocumentVariableValue
-		return nil
-	}
-	return fmt.Errorf("%s cannot be deserialized as a %T", data, n)
+	return nil
 }
 
 func (n NamedTestCaseVariableValue) MarshalJSON() ([]byte, error) {
-	if n.NamedTestCaseStringVariableValue != nil {
-		return json.Marshal(n.NamedTestCaseStringVariableValue)
+	if n.String != nil {
+		return core.MarshalJSONWithExtraProperty(n.String, "type", "STRING")
 	}
-	if n.NamedTestCaseNumberVariableValue != nil {
-		return json.Marshal(n.NamedTestCaseNumberVariableValue)
+	if n.Number != nil {
+		return core.MarshalJSONWithExtraProperty(n.Number, "type", "NUMBER")
 	}
-	if n.NamedTestCaseJsonVariableValue != nil {
-		return json.Marshal(n.NamedTestCaseJsonVariableValue)
+	if n.JSON != nil {
+		return core.MarshalJSONWithExtraProperty(n.JSON, "type", "JSON")
 	}
-	if n.NamedTestCaseChatHistoryVariableValue != nil {
-		return json.Marshal(n.NamedTestCaseChatHistoryVariableValue)
+	if n.ChatHistory != nil {
+		return core.MarshalJSONWithExtraProperty(n.ChatHistory, "type", "CHAT_HISTORY")
 	}
-	if n.NamedTestCaseSearchResultsVariableValue != nil {
-		return json.Marshal(n.NamedTestCaseSearchResultsVariableValue)
+	if n.SearchResults != nil {
+		return core.MarshalJSONWithExtraProperty(n.SearchResults, "type", "SEARCH_RESULTS")
 	}
-	if n.NamedTestCaseErrorVariableValue != nil {
-		return json.Marshal(n.NamedTestCaseErrorVariableValue)
+	if n.Error != nil {
+		return core.MarshalJSONWithExtraProperty(n.Error, "type", "ERROR")
 	}
-	if n.NamedTestCaseFunctionCallVariableValue != nil {
-		return json.Marshal(n.NamedTestCaseFunctionCallVariableValue)
+	if n.FunctionCall != nil {
+		return core.MarshalJSONWithExtraProperty(n.FunctionCall, "type", "FUNCTION_CALL")
 	}
-	if n.NamedTestCaseArrayVariableValue != nil {
-		return json.Marshal(n.NamedTestCaseArrayVariableValue)
+	if n.Array != nil {
+		return core.MarshalJSONWithExtraProperty(n.Array, "type", "ARRAY")
 	}
-	if n.NamedTestCaseAudioVariableValue != nil {
-		return json.Marshal(n.NamedTestCaseAudioVariableValue)
+	if n.Audio != nil {
+		return core.MarshalJSONWithExtraProperty(n.Audio, "type", "AUDIO")
 	}
-	if n.NamedTestCaseVideoVariableValue != nil {
-		return json.Marshal(n.NamedTestCaseVideoVariableValue)
+	if n.Video != nil {
+		return core.MarshalJSONWithExtraProperty(n.Video, "type", "VIDEO")
 	}
-	if n.NamedTestCaseImageVariableValue != nil {
-		return json.Marshal(n.NamedTestCaseImageVariableValue)
+	if n.Image != nil {
+		return core.MarshalJSONWithExtraProperty(n.Image, "type", "IMAGE")
 	}
-	if n.NamedTestCaseDocumentVariableValue != nil {
-		return json.Marshal(n.NamedTestCaseDocumentVariableValue)
+	if n.Document != nil {
+		return core.MarshalJSONWithExtraProperty(n.Document, "type", "DOCUMENT")
 	}
-	return nil, fmt.Errorf("type %T does not include a non-empty union type", n)
+	return nil, fmt.Errorf("type %T does not define a non-empty union type", n)
 }
 
 type NamedTestCaseVariableValueVisitor interface {
-	VisitNamedTestCaseStringVariableValue(*NamedTestCaseStringVariableValue) error
-	VisitNamedTestCaseNumberVariableValue(*NamedTestCaseNumberVariableValue) error
-	VisitNamedTestCaseJsonVariableValue(*NamedTestCaseJsonVariableValue) error
-	VisitNamedTestCaseChatHistoryVariableValue(*NamedTestCaseChatHistoryVariableValue) error
-	VisitNamedTestCaseSearchResultsVariableValue(*NamedTestCaseSearchResultsVariableValue) error
-	VisitNamedTestCaseErrorVariableValue(*NamedTestCaseErrorVariableValue) error
-	VisitNamedTestCaseFunctionCallVariableValue(*NamedTestCaseFunctionCallVariableValue) error
-	VisitNamedTestCaseArrayVariableValue(*NamedTestCaseArrayVariableValue) error
-	VisitNamedTestCaseAudioVariableValue(*NamedTestCaseAudioVariableValue) error
-	VisitNamedTestCaseVideoVariableValue(*NamedTestCaseVideoVariableValue) error
-	VisitNamedTestCaseImageVariableValue(*NamedTestCaseImageVariableValue) error
-	VisitNamedTestCaseDocumentVariableValue(*NamedTestCaseDocumentVariableValue) error
+	VisitString(*NamedTestCaseStringVariableValue) error
+	VisitNumber(*NamedTestCaseNumberVariableValue) error
+	VisitJSON(*NamedTestCaseJSONVariableValue) error
+	VisitChatHistory(*NamedTestCaseChatHistoryVariableValue) error
+	VisitSearchResults(*NamedTestCaseSearchResultsVariableValue) error
+	VisitError(*NamedTestCaseErrorVariableValue) error
+	VisitFunctionCall(*NamedTestCaseFunctionCallVariableValue) error
+	VisitArray(*NamedTestCaseArrayVariableValue) error
+	VisitAudio(*NamedTestCaseAudioVariableValue) error
+	VisitVideo(*NamedTestCaseVideoVariableValue) error
+	VisitImage(*NamedTestCaseImageVariableValue) error
+	VisitDocument(*NamedTestCaseDocumentVariableValue) error
 }
 
 func (n *NamedTestCaseVariableValue) Accept(visitor NamedTestCaseVariableValueVisitor) error {
-	if n.NamedTestCaseStringVariableValue != nil {
-		return visitor.VisitNamedTestCaseStringVariableValue(n.NamedTestCaseStringVariableValue)
+	if n.String != nil {
+		return visitor.VisitString(n.String)
 	}
-	if n.NamedTestCaseNumberVariableValue != nil {
-		return visitor.VisitNamedTestCaseNumberVariableValue(n.NamedTestCaseNumberVariableValue)
+	if n.Number != nil {
+		return visitor.VisitNumber(n.Number)
 	}
-	if n.NamedTestCaseJsonVariableValue != nil {
-		return visitor.VisitNamedTestCaseJsonVariableValue(n.NamedTestCaseJsonVariableValue)
+	if n.JSON != nil {
+		return visitor.VisitJSON(n.JSON)
 	}
-	if n.NamedTestCaseChatHistoryVariableValue != nil {
-		return visitor.VisitNamedTestCaseChatHistoryVariableValue(n.NamedTestCaseChatHistoryVariableValue)
+	if n.ChatHistory != nil {
+		return visitor.VisitChatHistory(n.ChatHistory)
 	}
-	if n.NamedTestCaseSearchResultsVariableValue != nil {
-		return visitor.VisitNamedTestCaseSearchResultsVariableValue(n.NamedTestCaseSearchResultsVariableValue)
+	if n.SearchResults != nil {
+		return visitor.VisitSearchResults(n.SearchResults)
 	}
-	if n.NamedTestCaseErrorVariableValue != nil {
-		return visitor.VisitNamedTestCaseErrorVariableValue(n.NamedTestCaseErrorVariableValue)
+	if n.Error != nil {
+		return visitor.VisitError(n.Error)
 	}
-	if n.NamedTestCaseFunctionCallVariableValue != nil {
-		return visitor.VisitNamedTestCaseFunctionCallVariableValue(n.NamedTestCaseFunctionCallVariableValue)
+	if n.FunctionCall != nil {
+		return visitor.VisitFunctionCall(n.FunctionCall)
 	}
-	if n.NamedTestCaseArrayVariableValue != nil {
-		return visitor.VisitNamedTestCaseArrayVariableValue(n.NamedTestCaseArrayVariableValue)
+	if n.Array != nil {
+		return visitor.VisitArray(n.Array)
 	}
-	if n.NamedTestCaseAudioVariableValue != nil {
-		return visitor.VisitNamedTestCaseAudioVariableValue(n.NamedTestCaseAudioVariableValue)
+	if n.Audio != nil {
+		return visitor.VisitAudio(n.Audio)
 	}
-	if n.NamedTestCaseVideoVariableValue != nil {
-		return visitor.VisitNamedTestCaseVideoVariableValue(n.NamedTestCaseVideoVariableValue)
+	if n.Video != nil {
+		return visitor.VisitVideo(n.Video)
 	}
-	if n.NamedTestCaseImageVariableValue != nil {
-		return visitor.VisitNamedTestCaseImageVariableValue(n.NamedTestCaseImageVariableValue)
+	if n.Image != nil {
+		return visitor.VisitImage(n.Image)
 	}
-	if n.NamedTestCaseDocumentVariableValue != nil {
-		return visitor.VisitNamedTestCaseDocumentVariableValue(n.NamedTestCaseDocumentVariableValue)
+	if n.Document != nil {
+		return visitor.VisitDocument(n.Document)
 	}
-	return fmt.Errorf("type %T does not include a non-empty union type", n)
+	return fmt.Errorf("type %T does not define a non-empty union type", n)
 }
 
 type NamedTestCaseVideoVariableValue struct {
 	Value *VellumVideo `json:"value,omitempty" url:"value,omitempty"`
 	Name  string       `json:"name" url:"name"`
-	type_ string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -1060,28 +801,15 @@ func (n *NamedTestCaseVideoVariableValue) GetExtraProperties() map[string]interf
 	return n.extraProperties
 }
 
-func (n *NamedTestCaseVideoVariableValue) Type() string {
-	return n.type_
-}
-
 func (n *NamedTestCaseVideoVariableValue) UnmarshalJSON(data []byte) error {
-	type embed NamedTestCaseVideoVariableValue
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*n),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler NamedTestCaseVideoVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*n = NamedTestCaseVideoVariableValue(unmarshaler.embed)
-	if unmarshaler.Type != "VIDEO" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", n, "VIDEO", unmarshaler.Type)
-	}
-	n.type_ = unmarshaler.Type
+	*n = NamedTestCaseVideoVariableValue(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *n, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *n)
 	if err != nil {
 		return err
 	}
@@ -1089,18 +817,6 @@ func (n *NamedTestCaseVideoVariableValue) UnmarshalJSON(data []byte) error {
 
 	n._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (n *NamedTestCaseVideoVariableValue) MarshalJSON() ([]byte, error) {
-	type embed NamedTestCaseVideoVariableValue
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*n),
-		Type:  "VIDEO",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (n *NamedTestCaseVideoVariableValue) String() string {
@@ -1163,8 +879,7 @@ func (p *PaginatedTestSuiteRunExecutionList) String() string {
 type TestSuiteRunDeploymentReleaseTagExecConfig struct {
 	Data *TestSuiteRunDeploymentReleaseTagExecConfigData `json:"data" url:"data"`
 	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
-	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
-	type_       string
+	TestCaseIDs []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -1174,28 +889,15 @@ func (t *TestSuiteRunDeploymentReleaseTagExecConfig) GetExtraProperties() map[st
 	return t.extraProperties
 }
 
-func (t *TestSuiteRunDeploymentReleaseTagExecConfig) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteRunDeploymentReleaseTagExecConfig) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteRunDeploymentReleaseTagExecConfig
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteRunDeploymentReleaseTagExecConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteRunDeploymentReleaseTagExecConfig(unmarshaler.embed)
-	if unmarshaler.Type != "DEPLOYMENT_RELEASE_TAG" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "DEPLOYMENT_RELEASE_TAG", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteRunDeploymentReleaseTagExecConfig(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -1203,18 +905,6 @@ func (t *TestSuiteRunDeploymentReleaseTagExecConfig) UnmarshalJSON(data []byte) 
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteRunDeploymentReleaseTagExecConfig) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteRunDeploymentReleaseTagExecConfig
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "DEPLOYMENT_RELEASE_TAG",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteRunDeploymentReleaseTagExecConfig) String() string {
@@ -1231,7 +921,7 @@ func (t *TestSuiteRunDeploymentReleaseTagExecConfig) String() string {
 
 type TestSuiteRunDeploymentReleaseTagExecConfigData struct {
 	// The ID of the Prompt Deployment to run the Test Suite against.
-	DeploymentId string `json:"deployment_id" url:"deployment_id"`
+	DeploymentID string `json:"deployment_id" url:"deployment_id"`
 	// A tag identifying which release of the Prompt Deployment to run the Test Suite against. Useful for testing past versions of the Prompt Deployment
 	Tag *string `json:"tag,omitempty" url:"tag,omitempty"`
 
@@ -1275,7 +965,7 @@ func (t *TestSuiteRunDeploymentReleaseTagExecConfigData) String() string {
 
 type TestSuiteRunDeploymentReleaseTagExecConfigDataRequest struct {
 	// The ID of the Prompt Deployment to run the Test Suite against.
-	DeploymentId string `json:"deployment_id" url:"deployment_id"`
+	DeploymentID string `json:"deployment_id" url:"deployment_id"`
 	// A tag identifying which release of the Prompt Deployment to run the Test Suite against. Useful for testing past versions of the Prompt Deployment
 	Tag *string `json:"tag,omitempty" url:"tag,omitempty"`
 
@@ -1321,8 +1011,7 @@ func (t *TestSuiteRunDeploymentReleaseTagExecConfigDataRequest) String() string 
 type TestSuiteRunDeploymentReleaseTagExecConfigRequest struct {
 	Data *TestSuiteRunDeploymentReleaseTagExecConfigDataRequest `json:"data" url:"data"`
 	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
-	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
-	type_       string
+	TestCaseIDs []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -1332,28 +1021,15 @@ func (t *TestSuiteRunDeploymentReleaseTagExecConfigRequest) GetExtraProperties()
 	return t.extraProperties
 }
 
-func (t *TestSuiteRunDeploymentReleaseTagExecConfigRequest) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteRunDeploymentReleaseTagExecConfigRequest) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteRunDeploymentReleaseTagExecConfigRequest
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteRunDeploymentReleaseTagExecConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteRunDeploymentReleaseTagExecConfigRequest(unmarshaler.embed)
-	if unmarshaler.Type != "DEPLOYMENT_RELEASE_TAG" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "DEPLOYMENT_RELEASE_TAG", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteRunDeploymentReleaseTagExecConfigRequest(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -1361,18 +1037,6 @@ func (t *TestSuiteRunDeploymentReleaseTagExecConfigRequest) UnmarshalJSON(data [
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteRunDeploymentReleaseTagExecConfigRequest) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteRunDeploymentReleaseTagExecConfigRequest
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "DEPLOYMENT_RELEASE_TAG",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteRunDeploymentReleaseTagExecConfigRequest) String() string {
@@ -1388,200 +1052,238 @@ func (t *TestSuiteRunDeploymentReleaseTagExecConfigRequest) String() string {
 }
 
 type TestSuiteRunExecConfig struct {
-	TestSuiteRunDeploymentReleaseTagExecConfig       *TestSuiteRunDeploymentReleaseTagExecConfig
-	TestSuiteRunPromptSandboxHistoryItemExecConfig   *TestSuiteRunPromptSandboxHistoryItemExecConfig
-	TestSuiteRunWorkflowReleaseTagExecConfig         *TestSuiteRunWorkflowReleaseTagExecConfig
-	TestSuiteRunWorkflowSandboxHistoryItemExecConfig *TestSuiteRunWorkflowSandboxHistoryItemExecConfig
-	TestSuiteRunExternalExecConfig                   *TestSuiteRunExternalExecConfig
+	Type                       string
+	DeploymentReleaseTag       *TestSuiteRunDeploymentReleaseTagExecConfig
+	PromptSandboxHistoryItem   *TestSuiteRunPromptSandboxHistoryItemExecConfig
+	WorkflowReleaseTag         *TestSuiteRunWorkflowReleaseTagExecConfig
+	WorkflowSandboxHistoryItem *TestSuiteRunWorkflowSandboxHistoryItemExecConfig
+	External                   *TestSuiteRunExternalExecConfig
 }
 
 func (t *TestSuiteRunExecConfig) UnmarshalJSON(data []byte) error {
-	valueTestSuiteRunDeploymentReleaseTagExecConfig := new(TestSuiteRunDeploymentReleaseTagExecConfig)
-	if err := json.Unmarshal(data, &valueTestSuiteRunDeploymentReleaseTagExecConfig); err == nil {
-		t.TestSuiteRunDeploymentReleaseTagExecConfig = valueTestSuiteRunDeploymentReleaseTagExecConfig
-		return nil
+	var unmarshaler struct {
+		Type string `json:"type"`
 	}
-	valueTestSuiteRunPromptSandboxHistoryItemExecConfig := new(TestSuiteRunPromptSandboxHistoryItemExecConfig)
-	if err := json.Unmarshal(data, &valueTestSuiteRunPromptSandboxHistoryItemExecConfig); err == nil {
-		t.TestSuiteRunPromptSandboxHistoryItemExecConfig = valueTestSuiteRunPromptSandboxHistoryItemExecConfig
-		return nil
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
 	}
-	valueTestSuiteRunWorkflowReleaseTagExecConfig := new(TestSuiteRunWorkflowReleaseTagExecConfig)
-	if err := json.Unmarshal(data, &valueTestSuiteRunWorkflowReleaseTagExecConfig); err == nil {
-		t.TestSuiteRunWorkflowReleaseTagExecConfig = valueTestSuiteRunWorkflowReleaseTagExecConfig
-		return nil
+	t.Type = unmarshaler.Type
+	if unmarshaler.Type == "" {
+		return fmt.Errorf("%T did not include discriminant type", t)
 	}
-	valueTestSuiteRunWorkflowSandboxHistoryItemExecConfig := new(TestSuiteRunWorkflowSandboxHistoryItemExecConfig)
-	if err := json.Unmarshal(data, &valueTestSuiteRunWorkflowSandboxHistoryItemExecConfig); err == nil {
-		t.TestSuiteRunWorkflowSandboxHistoryItemExecConfig = valueTestSuiteRunWorkflowSandboxHistoryItemExecConfig
-		return nil
+	switch unmarshaler.Type {
+	case "DEPLOYMENT_RELEASE_TAG":
+		value := new(TestSuiteRunDeploymentReleaseTagExecConfig)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.DeploymentReleaseTag = value
+	case "PROMPT_SANDBOX_HISTORY_ITEM":
+		value := new(TestSuiteRunPromptSandboxHistoryItemExecConfig)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.PromptSandboxHistoryItem = value
+	case "WORKFLOW_RELEASE_TAG":
+		value := new(TestSuiteRunWorkflowReleaseTagExecConfig)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.WorkflowReleaseTag = value
+	case "WORKFLOW_SANDBOX_HISTORY_ITEM":
+		value := new(TestSuiteRunWorkflowSandboxHistoryItemExecConfig)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.WorkflowSandboxHistoryItem = value
+	case "EXTERNAL":
+		value := new(TestSuiteRunExternalExecConfig)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.External = value
 	}
-	valueTestSuiteRunExternalExecConfig := new(TestSuiteRunExternalExecConfig)
-	if err := json.Unmarshal(data, &valueTestSuiteRunExternalExecConfig); err == nil {
-		t.TestSuiteRunExternalExecConfig = valueTestSuiteRunExternalExecConfig
-		return nil
-	}
-	return fmt.Errorf("%s cannot be deserialized as a %T", data, t)
+	return nil
 }
 
 func (t TestSuiteRunExecConfig) MarshalJSON() ([]byte, error) {
-	if t.TestSuiteRunDeploymentReleaseTagExecConfig != nil {
-		return json.Marshal(t.TestSuiteRunDeploymentReleaseTagExecConfig)
+	if t.DeploymentReleaseTag != nil {
+		return core.MarshalJSONWithExtraProperty(t.DeploymentReleaseTag, "type", "DEPLOYMENT_RELEASE_TAG")
 	}
-	if t.TestSuiteRunPromptSandboxHistoryItemExecConfig != nil {
-		return json.Marshal(t.TestSuiteRunPromptSandboxHistoryItemExecConfig)
+	if t.PromptSandboxHistoryItem != nil {
+		return core.MarshalJSONWithExtraProperty(t.PromptSandboxHistoryItem, "type", "PROMPT_SANDBOX_HISTORY_ITEM")
 	}
-	if t.TestSuiteRunWorkflowReleaseTagExecConfig != nil {
-		return json.Marshal(t.TestSuiteRunWorkflowReleaseTagExecConfig)
+	if t.WorkflowReleaseTag != nil {
+		return core.MarshalJSONWithExtraProperty(t.WorkflowReleaseTag, "type", "WORKFLOW_RELEASE_TAG")
 	}
-	if t.TestSuiteRunWorkflowSandboxHistoryItemExecConfig != nil {
-		return json.Marshal(t.TestSuiteRunWorkflowSandboxHistoryItemExecConfig)
+	if t.WorkflowSandboxHistoryItem != nil {
+		return core.MarshalJSONWithExtraProperty(t.WorkflowSandboxHistoryItem, "type", "WORKFLOW_SANDBOX_HISTORY_ITEM")
 	}
-	if t.TestSuiteRunExternalExecConfig != nil {
-		return json.Marshal(t.TestSuiteRunExternalExecConfig)
+	if t.External != nil {
+		return core.MarshalJSONWithExtraProperty(t.External, "type", "EXTERNAL")
 	}
-	return nil, fmt.Errorf("type %T does not include a non-empty union type", t)
+	return nil, fmt.Errorf("type %T does not define a non-empty union type", t)
 }
 
 type TestSuiteRunExecConfigVisitor interface {
-	VisitTestSuiteRunDeploymentReleaseTagExecConfig(*TestSuiteRunDeploymentReleaseTagExecConfig) error
-	VisitTestSuiteRunPromptSandboxHistoryItemExecConfig(*TestSuiteRunPromptSandboxHistoryItemExecConfig) error
-	VisitTestSuiteRunWorkflowReleaseTagExecConfig(*TestSuiteRunWorkflowReleaseTagExecConfig) error
-	VisitTestSuiteRunWorkflowSandboxHistoryItemExecConfig(*TestSuiteRunWorkflowSandboxHistoryItemExecConfig) error
-	VisitTestSuiteRunExternalExecConfig(*TestSuiteRunExternalExecConfig) error
+	VisitDeploymentReleaseTag(*TestSuiteRunDeploymentReleaseTagExecConfig) error
+	VisitPromptSandboxHistoryItem(*TestSuiteRunPromptSandboxHistoryItemExecConfig) error
+	VisitWorkflowReleaseTag(*TestSuiteRunWorkflowReleaseTagExecConfig) error
+	VisitWorkflowSandboxHistoryItem(*TestSuiteRunWorkflowSandboxHistoryItemExecConfig) error
+	VisitExternal(*TestSuiteRunExternalExecConfig) error
 }
 
 func (t *TestSuiteRunExecConfig) Accept(visitor TestSuiteRunExecConfigVisitor) error {
-	if t.TestSuiteRunDeploymentReleaseTagExecConfig != nil {
-		return visitor.VisitTestSuiteRunDeploymentReleaseTagExecConfig(t.TestSuiteRunDeploymentReleaseTagExecConfig)
+	if t.DeploymentReleaseTag != nil {
+		return visitor.VisitDeploymentReleaseTag(t.DeploymentReleaseTag)
 	}
-	if t.TestSuiteRunPromptSandboxHistoryItemExecConfig != nil {
-		return visitor.VisitTestSuiteRunPromptSandboxHistoryItemExecConfig(t.TestSuiteRunPromptSandboxHistoryItemExecConfig)
+	if t.PromptSandboxHistoryItem != nil {
+		return visitor.VisitPromptSandboxHistoryItem(t.PromptSandboxHistoryItem)
 	}
-	if t.TestSuiteRunWorkflowReleaseTagExecConfig != nil {
-		return visitor.VisitTestSuiteRunWorkflowReleaseTagExecConfig(t.TestSuiteRunWorkflowReleaseTagExecConfig)
+	if t.WorkflowReleaseTag != nil {
+		return visitor.VisitWorkflowReleaseTag(t.WorkflowReleaseTag)
 	}
-	if t.TestSuiteRunWorkflowSandboxHistoryItemExecConfig != nil {
-		return visitor.VisitTestSuiteRunWorkflowSandboxHistoryItemExecConfig(t.TestSuiteRunWorkflowSandboxHistoryItemExecConfig)
+	if t.WorkflowSandboxHistoryItem != nil {
+		return visitor.VisitWorkflowSandboxHistoryItem(t.WorkflowSandboxHistoryItem)
 	}
-	if t.TestSuiteRunExternalExecConfig != nil {
-		return visitor.VisitTestSuiteRunExternalExecConfig(t.TestSuiteRunExternalExecConfig)
+	if t.External != nil {
+		return visitor.VisitExternal(t.External)
 	}
-	return fmt.Errorf("type %T does not include a non-empty union type", t)
+	return fmt.Errorf("type %T does not define a non-empty union type", t)
 }
 
 type TestSuiteRunExecConfigRequest struct {
-	TestSuiteRunDeploymentReleaseTagExecConfigRequest       *TestSuiteRunDeploymentReleaseTagExecConfigRequest
-	TestSuiteRunPromptSandboxExecConfigRequest              *TestSuiteRunPromptSandboxExecConfigRequest
-	TestSuiteRunPromptSandboxHistoryItemExecConfigRequest   *TestSuiteRunPromptSandboxHistoryItemExecConfigRequest
-	TestSuiteRunWorkflowReleaseTagExecConfigRequest         *TestSuiteRunWorkflowReleaseTagExecConfigRequest
-	TestSuiteRunWorkflowSandboxExecConfigRequest            *TestSuiteRunWorkflowSandboxExecConfigRequest
-	TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest *TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest
-	TestSuiteRunExternalExecConfigRequest                   *TestSuiteRunExternalExecConfigRequest
+	Type                       string
+	DeploymentReleaseTag       *TestSuiteRunDeploymentReleaseTagExecConfigRequest
+	PromptSandbox              *TestSuiteRunPromptSandboxExecConfigRequest
+	PromptSandboxHistoryItem   *TestSuiteRunPromptSandboxHistoryItemExecConfigRequest
+	WorkflowReleaseTag         *TestSuiteRunWorkflowReleaseTagExecConfigRequest
+	WorkflowSandbox            *TestSuiteRunWorkflowSandboxExecConfigRequest
+	WorkflowSandboxHistoryItem *TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest
+	External                   *TestSuiteRunExternalExecConfigRequest
 }
 
 func (t *TestSuiteRunExecConfigRequest) UnmarshalJSON(data []byte) error {
-	valueTestSuiteRunDeploymentReleaseTagExecConfigRequest := new(TestSuiteRunDeploymentReleaseTagExecConfigRequest)
-	if err := json.Unmarshal(data, &valueTestSuiteRunDeploymentReleaseTagExecConfigRequest); err == nil {
-		t.TestSuiteRunDeploymentReleaseTagExecConfigRequest = valueTestSuiteRunDeploymentReleaseTagExecConfigRequest
-		return nil
+	var unmarshaler struct {
+		Type string `json:"type"`
 	}
-	valueTestSuiteRunPromptSandboxExecConfigRequest := new(TestSuiteRunPromptSandboxExecConfigRequest)
-	if err := json.Unmarshal(data, &valueTestSuiteRunPromptSandboxExecConfigRequest); err == nil {
-		t.TestSuiteRunPromptSandboxExecConfigRequest = valueTestSuiteRunPromptSandboxExecConfigRequest
-		return nil
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
 	}
-	valueTestSuiteRunPromptSandboxHistoryItemExecConfigRequest := new(TestSuiteRunPromptSandboxHistoryItemExecConfigRequest)
-	if err := json.Unmarshal(data, &valueTestSuiteRunPromptSandboxHistoryItemExecConfigRequest); err == nil {
-		t.TestSuiteRunPromptSandboxHistoryItemExecConfigRequest = valueTestSuiteRunPromptSandboxHistoryItemExecConfigRequest
-		return nil
+	t.Type = unmarshaler.Type
+	if unmarshaler.Type == "" {
+		return fmt.Errorf("%T did not include discriminant type", t)
 	}
-	valueTestSuiteRunWorkflowReleaseTagExecConfigRequest := new(TestSuiteRunWorkflowReleaseTagExecConfigRequest)
-	if err := json.Unmarshal(data, &valueTestSuiteRunWorkflowReleaseTagExecConfigRequest); err == nil {
-		t.TestSuiteRunWorkflowReleaseTagExecConfigRequest = valueTestSuiteRunWorkflowReleaseTagExecConfigRequest
-		return nil
+	switch unmarshaler.Type {
+	case "DEPLOYMENT_RELEASE_TAG":
+		value := new(TestSuiteRunDeploymentReleaseTagExecConfigRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.DeploymentReleaseTag = value
+	case "PROMPT_SANDBOX":
+		value := new(TestSuiteRunPromptSandboxExecConfigRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.PromptSandbox = value
+	case "PROMPT_SANDBOX_HISTORY_ITEM":
+		value := new(TestSuiteRunPromptSandboxHistoryItemExecConfigRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.PromptSandboxHistoryItem = value
+	case "WORKFLOW_RELEASE_TAG":
+		value := new(TestSuiteRunWorkflowReleaseTagExecConfigRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.WorkflowReleaseTag = value
+	case "WORKFLOW_SANDBOX":
+		value := new(TestSuiteRunWorkflowSandboxExecConfigRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.WorkflowSandbox = value
+	case "WORKFLOW_SANDBOX_HISTORY_ITEM":
+		value := new(TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.WorkflowSandboxHistoryItem = value
+	case "EXTERNAL":
+		value := new(TestSuiteRunExternalExecConfigRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.External = value
 	}
-	valueTestSuiteRunWorkflowSandboxExecConfigRequest := new(TestSuiteRunWorkflowSandboxExecConfigRequest)
-	if err := json.Unmarshal(data, &valueTestSuiteRunWorkflowSandboxExecConfigRequest); err == nil {
-		t.TestSuiteRunWorkflowSandboxExecConfigRequest = valueTestSuiteRunWorkflowSandboxExecConfigRequest
-		return nil
-	}
-	valueTestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest := new(TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest)
-	if err := json.Unmarshal(data, &valueTestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest); err == nil {
-		t.TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest = valueTestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest
-		return nil
-	}
-	valueTestSuiteRunExternalExecConfigRequest := new(TestSuiteRunExternalExecConfigRequest)
-	if err := json.Unmarshal(data, &valueTestSuiteRunExternalExecConfigRequest); err == nil {
-		t.TestSuiteRunExternalExecConfigRequest = valueTestSuiteRunExternalExecConfigRequest
-		return nil
-	}
-	return fmt.Errorf("%s cannot be deserialized as a %T", data, t)
+	return nil
 }
 
 func (t TestSuiteRunExecConfigRequest) MarshalJSON() ([]byte, error) {
-	if t.TestSuiteRunDeploymentReleaseTagExecConfigRequest != nil {
-		return json.Marshal(t.TestSuiteRunDeploymentReleaseTagExecConfigRequest)
+	if t.DeploymentReleaseTag != nil {
+		return core.MarshalJSONWithExtraProperty(t.DeploymentReleaseTag, "type", "DEPLOYMENT_RELEASE_TAG")
 	}
-	if t.TestSuiteRunPromptSandboxExecConfigRequest != nil {
-		return json.Marshal(t.TestSuiteRunPromptSandboxExecConfigRequest)
+	if t.PromptSandbox != nil {
+		return core.MarshalJSONWithExtraProperty(t.PromptSandbox, "type", "PROMPT_SANDBOX")
 	}
-	if t.TestSuiteRunPromptSandboxHistoryItemExecConfigRequest != nil {
-		return json.Marshal(t.TestSuiteRunPromptSandboxHistoryItemExecConfigRequest)
+	if t.PromptSandboxHistoryItem != nil {
+		return core.MarshalJSONWithExtraProperty(t.PromptSandboxHistoryItem, "type", "PROMPT_SANDBOX_HISTORY_ITEM")
 	}
-	if t.TestSuiteRunWorkflowReleaseTagExecConfigRequest != nil {
-		return json.Marshal(t.TestSuiteRunWorkflowReleaseTagExecConfigRequest)
+	if t.WorkflowReleaseTag != nil {
+		return core.MarshalJSONWithExtraProperty(t.WorkflowReleaseTag, "type", "WORKFLOW_RELEASE_TAG")
 	}
-	if t.TestSuiteRunWorkflowSandboxExecConfigRequest != nil {
-		return json.Marshal(t.TestSuiteRunWorkflowSandboxExecConfigRequest)
+	if t.WorkflowSandbox != nil {
+		return core.MarshalJSONWithExtraProperty(t.WorkflowSandbox, "type", "WORKFLOW_SANDBOX")
 	}
-	if t.TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest != nil {
-		return json.Marshal(t.TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest)
+	if t.WorkflowSandboxHistoryItem != nil {
+		return core.MarshalJSONWithExtraProperty(t.WorkflowSandboxHistoryItem, "type", "WORKFLOW_SANDBOX_HISTORY_ITEM")
 	}
-	if t.TestSuiteRunExternalExecConfigRequest != nil {
-		return json.Marshal(t.TestSuiteRunExternalExecConfigRequest)
+	if t.External != nil {
+		return core.MarshalJSONWithExtraProperty(t.External, "type", "EXTERNAL")
 	}
-	return nil, fmt.Errorf("type %T does not include a non-empty union type", t)
+	return nil, fmt.Errorf("type %T does not define a non-empty union type", t)
 }
 
 type TestSuiteRunExecConfigRequestVisitor interface {
-	VisitTestSuiteRunDeploymentReleaseTagExecConfigRequest(*TestSuiteRunDeploymentReleaseTagExecConfigRequest) error
-	VisitTestSuiteRunPromptSandboxExecConfigRequest(*TestSuiteRunPromptSandboxExecConfigRequest) error
-	VisitTestSuiteRunPromptSandboxHistoryItemExecConfigRequest(*TestSuiteRunPromptSandboxHistoryItemExecConfigRequest) error
-	VisitTestSuiteRunWorkflowReleaseTagExecConfigRequest(*TestSuiteRunWorkflowReleaseTagExecConfigRequest) error
-	VisitTestSuiteRunWorkflowSandboxExecConfigRequest(*TestSuiteRunWorkflowSandboxExecConfigRequest) error
-	VisitTestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest(*TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest) error
-	VisitTestSuiteRunExternalExecConfigRequest(*TestSuiteRunExternalExecConfigRequest) error
+	VisitDeploymentReleaseTag(*TestSuiteRunDeploymentReleaseTagExecConfigRequest) error
+	VisitPromptSandbox(*TestSuiteRunPromptSandboxExecConfigRequest) error
+	VisitPromptSandboxHistoryItem(*TestSuiteRunPromptSandboxHistoryItemExecConfigRequest) error
+	VisitWorkflowReleaseTag(*TestSuiteRunWorkflowReleaseTagExecConfigRequest) error
+	VisitWorkflowSandbox(*TestSuiteRunWorkflowSandboxExecConfigRequest) error
+	VisitWorkflowSandboxHistoryItem(*TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest) error
+	VisitExternal(*TestSuiteRunExternalExecConfigRequest) error
 }
 
 func (t *TestSuiteRunExecConfigRequest) Accept(visitor TestSuiteRunExecConfigRequestVisitor) error {
-	if t.TestSuiteRunDeploymentReleaseTagExecConfigRequest != nil {
-		return visitor.VisitTestSuiteRunDeploymentReleaseTagExecConfigRequest(t.TestSuiteRunDeploymentReleaseTagExecConfigRequest)
+	if t.DeploymentReleaseTag != nil {
+		return visitor.VisitDeploymentReleaseTag(t.DeploymentReleaseTag)
 	}
-	if t.TestSuiteRunPromptSandboxExecConfigRequest != nil {
-		return visitor.VisitTestSuiteRunPromptSandboxExecConfigRequest(t.TestSuiteRunPromptSandboxExecConfigRequest)
+	if t.PromptSandbox != nil {
+		return visitor.VisitPromptSandbox(t.PromptSandbox)
 	}
-	if t.TestSuiteRunPromptSandboxHistoryItemExecConfigRequest != nil {
-		return visitor.VisitTestSuiteRunPromptSandboxHistoryItemExecConfigRequest(t.TestSuiteRunPromptSandboxHistoryItemExecConfigRequest)
+	if t.PromptSandboxHistoryItem != nil {
+		return visitor.VisitPromptSandboxHistoryItem(t.PromptSandboxHistoryItem)
 	}
-	if t.TestSuiteRunWorkflowReleaseTagExecConfigRequest != nil {
-		return visitor.VisitTestSuiteRunWorkflowReleaseTagExecConfigRequest(t.TestSuiteRunWorkflowReleaseTagExecConfigRequest)
+	if t.WorkflowReleaseTag != nil {
+		return visitor.VisitWorkflowReleaseTag(t.WorkflowReleaseTag)
 	}
-	if t.TestSuiteRunWorkflowSandboxExecConfigRequest != nil {
-		return visitor.VisitTestSuiteRunWorkflowSandboxExecConfigRequest(t.TestSuiteRunWorkflowSandboxExecConfigRequest)
+	if t.WorkflowSandbox != nil {
+		return visitor.VisitWorkflowSandbox(t.WorkflowSandbox)
 	}
-	if t.TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest != nil {
-		return visitor.VisitTestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest(t.TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest)
+	if t.WorkflowSandboxHistoryItem != nil {
+		return visitor.VisitWorkflowSandboxHistoryItem(t.WorkflowSandboxHistoryItem)
 	}
-	if t.TestSuiteRunExternalExecConfigRequest != nil {
-		return visitor.VisitTestSuiteRunExternalExecConfigRequest(t.TestSuiteRunExternalExecConfigRequest)
+	if t.External != nil {
+		return visitor.VisitExternal(t.External)
 	}
-	return fmt.Errorf("type %T does not include a non-empty union type", t)
+	return fmt.Errorf("type %T does not define a non-empty union type", t)
 }
 
 type TestSuiteRunExecution struct {
-	Id            string                               `json:"id" url:"id"`
-	TestCaseId    string                               `json:"test_case_id" url:"test_case_id"`
+	ID            string                               `json:"id" url:"id"`
+	TestCaseID    string                               `json:"test_case_id" url:"test_case_id"`
 	Outputs       []*TestSuiteRunExecutionOutput       `json:"outputs" url:"outputs"`
 	MetricResults []*TestSuiteRunExecutionMetricResult `json:"metric_results" url:"metric_results"`
 
@@ -1627,8 +1329,7 @@ func (t *TestSuiteRunExecution) String() string {
 type TestSuiteRunExecutionArrayOutput struct {
 	Name             string         `json:"name" url:"name"`
 	Value            []*VellumValue `json:"value,omitempty" url:"value,omitempty"`
-	OutputVariableId string         `json:"output_variable_id" url:"output_variable_id"`
-	type_            string
+	OutputVariableID string         `json:"output_variable_id" url:"output_variable_id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -1638,28 +1339,15 @@ func (t *TestSuiteRunExecutionArrayOutput) GetExtraProperties() map[string]inter
 	return t.extraProperties
 }
 
-func (t *TestSuiteRunExecutionArrayOutput) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteRunExecutionArrayOutput) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteRunExecutionArrayOutput
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteRunExecutionArrayOutput
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteRunExecutionArrayOutput(unmarshaler.embed)
-	if unmarshaler.Type != "ARRAY" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "ARRAY", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteRunExecutionArrayOutput(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -1667,18 +1355,6 @@ func (t *TestSuiteRunExecutionArrayOutput) UnmarshalJSON(data []byte) error {
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteRunExecutionArrayOutput) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteRunExecutionArrayOutput
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "ARRAY",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteRunExecutionArrayOutput) String() string {
@@ -1697,8 +1373,7 @@ func (t *TestSuiteRunExecutionArrayOutput) String() string {
 type TestSuiteRunExecutionChatHistoryOutput struct {
 	Name             string         `json:"name" url:"name"`
 	Value            []*ChatMessage `json:"value,omitempty" url:"value,omitempty"`
-	OutputVariableId string         `json:"output_variable_id" url:"output_variable_id"`
-	type_            string
+	OutputVariableID string         `json:"output_variable_id" url:"output_variable_id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -1708,28 +1383,15 @@ func (t *TestSuiteRunExecutionChatHistoryOutput) GetExtraProperties() map[string
 	return t.extraProperties
 }
 
-func (t *TestSuiteRunExecutionChatHistoryOutput) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteRunExecutionChatHistoryOutput) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteRunExecutionChatHistoryOutput
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteRunExecutionChatHistoryOutput
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteRunExecutionChatHistoryOutput(unmarshaler.embed)
-	if unmarshaler.Type != "CHAT_HISTORY" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "CHAT_HISTORY", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteRunExecutionChatHistoryOutput(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -1737,18 +1399,6 @@ func (t *TestSuiteRunExecutionChatHistoryOutput) UnmarshalJSON(data []byte) erro
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteRunExecutionChatHistoryOutput) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteRunExecutionChatHistoryOutput
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "CHAT_HISTORY",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteRunExecutionChatHistoryOutput) String() string {
@@ -1767,8 +1417,7 @@ func (t *TestSuiteRunExecutionChatHistoryOutput) String() string {
 type TestSuiteRunExecutionErrorOutput struct {
 	Name             string       `json:"name" url:"name"`
 	Value            *VellumError `json:"value,omitempty" url:"value,omitempty"`
-	OutputVariableId string       `json:"output_variable_id" url:"output_variable_id"`
-	type_            string
+	OutputVariableID string       `json:"output_variable_id" url:"output_variable_id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -1778,28 +1427,15 @@ func (t *TestSuiteRunExecutionErrorOutput) GetExtraProperties() map[string]inter
 	return t.extraProperties
 }
 
-func (t *TestSuiteRunExecutionErrorOutput) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteRunExecutionErrorOutput) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteRunExecutionErrorOutput
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteRunExecutionErrorOutput
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteRunExecutionErrorOutput(unmarshaler.embed)
-	if unmarshaler.Type != "ERROR" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "ERROR", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteRunExecutionErrorOutput(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -1807,18 +1443,6 @@ func (t *TestSuiteRunExecutionErrorOutput) UnmarshalJSON(data []byte) error {
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteRunExecutionErrorOutput) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteRunExecutionErrorOutput
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "ERROR",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteRunExecutionErrorOutput) String() string {
@@ -1837,8 +1461,7 @@ func (t *TestSuiteRunExecutionErrorOutput) String() string {
 type TestSuiteRunExecutionFunctionCallOutput struct {
 	Name             string        `json:"name" url:"name"`
 	Value            *FunctionCall `json:"value,omitempty" url:"value,omitempty"`
-	OutputVariableId string        `json:"output_variable_id" url:"output_variable_id"`
-	type_            string
+	OutputVariableID string        `json:"output_variable_id" url:"output_variable_id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -1848,28 +1471,15 @@ func (t *TestSuiteRunExecutionFunctionCallOutput) GetExtraProperties() map[strin
 	return t.extraProperties
 }
 
-func (t *TestSuiteRunExecutionFunctionCallOutput) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteRunExecutionFunctionCallOutput) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteRunExecutionFunctionCallOutput
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteRunExecutionFunctionCallOutput
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteRunExecutionFunctionCallOutput(unmarshaler.embed)
-	if unmarshaler.Type != "FUNCTION_CALL" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "FUNCTION_CALL", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteRunExecutionFunctionCallOutput(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -1877,18 +1487,6 @@ func (t *TestSuiteRunExecutionFunctionCallOutput) UnmarshalJSON(data []byte) err
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteRunExecutionFunctionCallOutput) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteRunExecutionFunctionCallOutput
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "FUNCTION_CALL",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteRunExecutionFunctionCallOutput) String() string {
@@ -1904,42 +1502,28 @@ func (t *TestSuiteRunExecutionFunctionCallOutput) String() string {
 }
 
 // Execution output of an entity evaluated during a Test Suite Run that is of type JSON
-type TestSuiteRunExecutionJsonOutput struct {
+type TestSuiteRunExecutionJSONOutput struct {
 	Name             string      `json:"name" url:"name"`
-	Value            interface{} `json:"value" url:"value"`
-	OutputVariableId string      `json:"output_variable_id" url:"output_variable_id"`
-	type_            string
+	Value            interface{} `json:"value,omitempty" url:"value,omitempty"`
+	OutputVariableID string      `json:"output_variable_id" url:"output_variable_id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
 }
 
-func (t *TestSuiteRunExecutionJsonOutput) GetExtraProperties() map[string]interface{} {
+func (t *TestSuiteRunExecutionJSONOutput) GetExtraProperties() map[string]interface{} {
 	return t.extraProperties
 }
 
-func (t *TestSuiteRunExecutionJsonOutput) Type() string {
-	return t.type_
-}
-
-func (t *TestSuiteRunExecutionJsonOutput) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteRunExecutionJsonOutput
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+func (t *TestSuiteRunExecutionJSONOutput) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestSuiteRunExecutionJSONOutput
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteRunExecutionJsonOutput(unmarshaler.embed)
-	if unmarshaler.Type != "JSON" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "JSON", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteRunExecutionJSONOutput(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -1949,19 +1533,7 @@ func (t *TestSuiteRunExecutionJsonOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (t *TestSuiteRunExecutionJsonOutput) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteRunExecutionJsonOutput
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "JSON",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (t *TestSuiteRunExecutionJsonOutput) String() string {
+func (t *TestSuiteRunExecutionJSONOutput) String() string {
 	if len(t._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
 			return value
@@ -1974,7 +1546,7 @@ func (t *TestSuiteRunExecutionJsonOutput) String() string {
 }
 
 type TestSuiteRunExecutionMetricDefinition struct {
-	Id    *string `json:"id,omitempty" url:"id,omitempty"`
+	ID    *string `json:"id,omitempty" url:"id,omitempty"`
 	Label *string `json:"label,omitempty" url:"label,omitempty"`
 	Name  *string `json:"name,omitempty" url:"name,omitempty"`
 
@@ -2017,7 +1589,7 @@ func (t *TestSuiteRunExecutionMetricDefinition) String() string {
 }
 
 type TestSuiteRunExecutionMetricResult struct {
-	MetricId         string                                 `json:"metric_id" url:"metric_id"`
+	MetricID         string                                 `json:"metric_id" url:"metric_id"`
 	Outputs          []*TestSuiteRunMetricOutput            `json:"outputs" url:"outputs"`
 	MetricLabel      *string                                `json:"metric_label,omitempty" url:"metric_label,omitempty"`
 	MetricDefinition *TestSuiteRunExecutionMetricDefinition `json:"metric_definition,omitempty" url:"metric_definition,omitempty"`
@@ -2064,8 +1636,7 @@ func (t *TestSuiteRunExecutionMetricResult) String() string {
 type TestSuiteRunExecutionNumberOutput struct {
 	Name             string   `json:"name" url:"name"`
 	Value            *float64 `json:"value,omitempty" url:"value,omitempty"`
-	OutputVariableId string   `json:"output_variable_id" url:"output_variable_id"`
-	type_            string
+	OutputVariableID string   `json:"output_variable_id" url:"output_variable_id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -2075,28 +1646,15 @@ func (t *TestSuiteRunExecutionNumberOutput) GetExtraProperties() map[string]inte
 	return t.extraProperties
 }
 
-func (t *TestSuiteRunExecutionNumberOutput) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteRunExecutionNumberOutput) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteRunExecutionNumberOutput
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteRunExecutionNumberOutput
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteRunExecutionNumberOutput(unmarshaler.embed)
-	if unmarshaler.Type != "NUMBER" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "NUMBER", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteRunExecutionNumberOutput(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -2104,18 +1662,6 @@ func (t *TestSuiteRunExecutionNumberOutput) UnmarshalJSON(data []byte) error {
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteRunExecutionNumberOutput) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteRunExecutionNumberOutput
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "NUMBER",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteRunExecutionNumberOutput) String() string {
@@ -2131,133 +1677,153 @@ func (t *TestSuiteRunExecutionNumberOutput) String() string {
 }
 
 type TestSuiteRunExecutionOutput struct {
-	TestSuiteRunExecutionStringOutput        *TestSuiteRunExecutionStringOutput
-	TestSuiteRunExecutionNumberOutput        *TestSuiteRunExecutionNumberOutput
-	TestSuiteRunExecutionJsonOutput          *TestSuiteRunExecutionJsonOutput
-	TestSuiteRunExecutionChatHistoryOutput   *TestSuiteRunExecutionChatHistoryOutput
-	TestSuiteRunExecutionSearchResultsOutput *TestSuiteRunExecutionSearchResultsOutput
-	TestSuiteRunExecutionErrorOutput         *TestSuiteRunExecutionErrorOutput
-	TestSuiteRunExecutionFunctionCallOutput  *TestSuiteRunExecutionFunctionCallOutput
-	TestSuiteRunExecutionArrayOutput         *TestSuiteRunExecutionArrayOutput
+	Type          string
+	String        *TestSuiteRunExecutionStringOutput
+	Number        *TestSuiteRunExecutionNumberOutput
+	JSON          *TestSuiteRunExecutionJSONOutput
+	ChatHistory   *TestSuiteRunExecutionChatHistoryOutput
+	SearchResults *TestSuiteRunExecutionSearchResultsOutput
+	Error         *TestSuiteRunExecutionErrorOutput
+	FunctionCall  *TestSuiteRunExecutionFunctionCallOutput
+	Array         *TestSuiteRunExecutionArrayOutput
 }
 
 func (t *TestSuiteRunExecutionOutput) UnmarshalJSON(data []byte) error {
-	valueTestSuiteRunExecutionStringOutput := new(TestSuiteRunExecutionStringOutput)
-	if err := json.Unmarshal(data, &valueTestSuiteRunExecutionStringOutput); err == nil {
-		t.TestSuiteRunExecutionStringOutput = valueTestSuiteRunExecutionStringOutput
-		return nil
+	var unmarshaler struct {
+		Type string `json:"type"`
 	}
-	valueTestSuiteRunExecutionNumberOutput := new(TestSuiteRunExecutionNumberOutput)
-	if err := json.Unmarshal(data, &valueTestSuiteRunExecutionNumberOutput); err == nil {
-		t.TestSuiteRunExecutionNumberOutput = valueTestSuiteRunExecutionNumberOutput
-		return nil
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
 	}
-	valueTestSuiteRunExecutionJsonOutput := new(TestSuiteRunExecutionJsonOutput)
-	if err := json.Unmarshal(data, &valueTestSuiteRunExecutionJsonOutput); err == nil {
-		t.TestSuiteRunExecutionJsonOutput = valueTestSuiteRunExecutionJsonOutput
-		return nil
+	t.Type = unmarshaler.Type
+	if unmarshaler.Type == "" {
+		return fmt.Errorf("%T did not include discriminant type", t)
 	}
-	valueTestSuiteRunExecutionChatHistoryOutput := new(TestSuiteRunExecutionChatHistoryOutput)
-	if err := json.Unmarshal(data, &valueTestSuiteRunExecutionChatHistoryOutput); err == nil {
-		t.TestSuiteRunExecutionChatHistoryOutput = valueTestSuiteRunExecutionChatHistoryOutput
-		return nil
+	switch unmarshaler.Type {
+	case "STRING":
+		value := new(TestSuiteRunExecutionStringOutput)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.String = value
+	case "NUMBER":
+		value := new(TestSuiteRunExecutionNumberOutput)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Number = value
+	case "JSON":
+		value := new(TestSuiteRunExecutionJSONOutput)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.JSON = value
+	case "CHAT_HISTORY":
+		value := new(TestSuiteRunExecutionChatHistoryOutput)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.ChatHistory = value
+	case "SEARCH_RESULTS":
+		value := new(TestSuiteRunExecutionSearchResultsOutput)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.SearchResults = value
+	case "ERROR":
+		value := new(TestSuiteRunExecutionErrorOutput)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Error = value
+	case "FUNCTION_CALL":
+		value := new(TestSuiteRunExecutionFunctionCallOutput)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.FunctionCall = value
+	case "ARRAY":
+		value := new(TestSuiteRunExecutionArrayOutput)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Array = value
 	}
-	valueTestSuiteRunExecutionSearchResultsOutput := new(TestSuiteRunExecutionSearchResultsOutput)
-	if err := json.Unmarshal(data, &valueTestSuiteRunExecutionSearchResultsOutput); err == nil {
-		t.TestSuiteRunExecutionSearchResultsOutput = valueTestSuiteRunExecutionSearchResultsOutput
-		return nil
-	}
-	valueTestSuiteRunExecutionErrorOutput := new(TestSuiteRunExecutionErrorOutput)
-	if err := json.Unmarshal(data, &valueTestSuiteRunExecutionErrorOutput); err == nil {
-		t.TestSuiteRunExecutionErrorOutput = valueTestSuiteRunExecutionErrorOutput
-		return nil
-	}
-	valueTestSuiteRunExecutionFunctionCallOutput := new(TestSuiteRunExecutionFunctionCallOutput)
-	if err := json.Unmarshal(data, &valueTestSuiteRunExecutionFunctionCallOutput); err == nil {
-		t.TestSuiteRunExecutionFunctionCallOutput = valueTestSuiteRunExecutionFunctionCallOutput
-		return nil
-	}
-	valueTestSuiteRunExecutionArrayOutput := new(TestSuiteRunExecutionArrayOutput)
-	if err := json.Unmarshal(data, &valueTestSuiteRunExecutionArrayOutput); err == nil {
-		t.TestSuiteRunExecutionArrayOutput = valueTestSuiteRunExecutionArrayOutput
-		return nil
-	}
-	return fmt.Errorf("%s cannot be deserialized as a %T", data, t)
+	return nil
 }
 
 func (t TestSuiteRunExecutionOutput) MarshalJSON() ([]byte, error) {
-	if t.TestSuiteRunExecutionStringOutput != nil {
-		return json.Marshal(t.TestSuiteRunExecutionStringOutput)
+	if t.String != nil {
+		return core.MarshalJSONWithExtraProperty(t.String, "type", "STRING")
 	}
-	if t.TestSuiteRunExecutionNumberOutput != nil {
-		return json.Marshal(t.TestSuiteRunExecutionNumberOutput)
+	if t.Number != nil {
+		return core.MarshalJSONWithExtraProperty(t.Number, "type", "NUMBER")
 	}
-	if t.TestSuiteRunExecutionJsonOutput != nil {
-		return json.Marshal(t.TestSuiteRunExecutionJsonOutput)
+	if t.JSON != nil {
+		return core.MarshalJSONWithExtraProperty(t.JSON, "type", "JSON")
 	}
-	if t.TestSuiteRunExecutionChatHistoryOutput != nil {
-		return json.Marshal(t.TestSuiteRunExecutionChatHistoryOutput)
+	if t.ChatHistory != nil {
+		return core.MarshalJSONWithExtraProperty(t.ChatHistory, "type", "CHAT_HISTORY")
 	}
-	if t.TestSuiteRunExecutionSearchResultsOutput != nil {
-		return json.Marshal(t.TestSuiteRunExecutionSearchResultsOutput)
+	if t.SearchResults != nil {
+		return core.MarshalJSONWithExtraProperty(t.SearchResults, "type", "SEARCH_RESULTS")
 	}
-	if t.TestSuiteRunExecutionErrorOutput != nil {
-		return json.Marshal(t.TestSuiteRunExecutionErrorOutput)
+	if t.Error != nil {
+		return core.MarshalJSONWithExtraProperty(t.Error, "type", "ERROR")
 	}
-	if t.TestSuiteRunExecutionFunctionCallOutput != nil {
-		return json.Marshal(t.TestSuiteRunExecutionFunctionCallOutput)
+	if t.FunctionCall != nil {
+		return core.MarshalJSONWithExtraProperty(t.FunctionCall, "type", "FUNCTION_CALL")
 	}
-	if t.TestSuiteRunExecutionArrayOutput != nil {
-		return json.Marshal(t.TestSuiteRunExecutionArrayOutput)
+	if t.Array != nil {
+		return core.MarshalJSONWithExtraProperty(t.Array, "type", "ARRAY")
 	}
-	return nil, fmt.Errorf("type %T does not include a non-empty union type", t)
+	return nil, fmt.Errorf("type %T does not define a non-empty union type", t)
 }
 
 type TestSuiteRunExecutionOutputVisitor interface {
-	VisitTestSuiteRunExecutionStringOutput(*TestSuiteRunExecutionStringOutput) error
-	VisitTestSuiteRunExecutionNumberOutput(*TestSuiteRunExecutionNumberOutput) error
-	VisitTestSuiteRunExecutionJsonOutput(*TestSuiteRunExecutionJsonOutput) error
-	VisitTestSuiteRunExecutionChatHistoryOutput(*TestSuiteRunExecutionChatHistoryOutput) error
-	VisitTestSuiteRunExecutionSearchResultsOutput(*TestSuiteRunExecutionSearchResultsOutput) error
-	VisitTestSuiteRunExecutionErrorOutput(*TestSuiteRunExecutionErrorOutput) error
-	VisitTestSuiteRunExecutionFunctionCallOutput(*TestSuiteRunExecutionFunctionCallOutput) error
-	VisitTestSuiteRunExecutionArrayOutput(*TestSuiteRunExecutionArrayOutput) error
+	VisitString(*TestSuiteRunExecutionStringOutput) error
+	VisitNumber(*TestSuiteRunExecutionNumberOutput) error
+	VisitJSON(*TestSuiteRunExecutionJSONOutput) error
+	VisitChatHistory(*TestSuiteRunExecutionChatHistoryOutput) error
+	VisitSearchResults(*TestSuiteRunExecutionSearchResultsOutput) error
+	VisitError(*TestSuiteRunExecutionErrorOutput) error
+	VisitFunctionCall(*TestSuiteRunExecutionFunctionCallOutput) error
+	VisitArray(*TestSuiteRunExecutionArrayOutput) error
 }
 
 func (t *TestSuiteRunExecutionOutput) Accept(visitor TestSuiteRunExecutionOutputVisitor) error {
-	if t.TestSuiteRunExecutionStringOutput != nil {
-		return visitor.VisitTestSuiteRunExecutionStringOutput(t.TestSuiteRunExecutionStringOutput)
+	if t.String != nil {
+		return visitor.VisitString(t.String)
 	}
-	if t.TestSuiteRunExecutionNumberOutput != nil {
-		return visitor.VisitTestSuiteRunExecutionNumberOutput(t.TestSuiteRunExecutionNumberOutput)
+	if t.Number != nil {
+		return visitor.VisitNumber(t.Number)
 	}
-	if t.TestSuiteRunExecutionJsonOutput != nil {
-		return visitor.VisitTestSuiteRunExecutionJsonOutput(t.TestSuiteRunExecutionJsonOutput)
+	if t.JSON != nil {
+		return visitor.VisitJSON(t.JSON)
 	}
-	if t.TestSuiteRunExecutionChatHistoryOutput != nil {
-		return visitor.VisitTestSuiteRunExecutionChatHistoryOutput(t.TestSuiteRunExecutionChatHistoryOutput)
+	if t.ChatHistory != nil {
+		return visitor.VisitChatHistory(t.ChatHistory)
 	}
-	if t.TestSuiteRunExecutionSearchResultsOutput != nil {
-		return visitor.VisitTestSuiteRunExecutionSearchResultsOutput(t.TestSuiteRunExecutionSearchResultsOutput)
+	if t.SearchResults != nil {
+		return visitor.VisitSearchResults(t.SearchResults)
 	}
-	if t.TestSuiteRunExecutionErrorOutput != nil {
-		return visitor.VisitTestSuiteRunExecutionErrorOutput(t.TestSuiteRunExecutionErrorOutput)
+	if t.Error != nil {
+		return visitor.VisitError(t.Error)
 	}
-	if t.TestSuiteRunExecutionFunctionCallOutput != nil {
-		return visitor.VisitTestSuiteRunExecutionFunctionCallOutput(t.TestSuiteRunExecutionFunctionCallOutput)
+	if t.FunctionCall != nil {
+		return visitor.VisitFunctionCall(t.FunctionCall)
 	}
-	if t.TestSuiteRunExecutionArrayOutput != nil {
-		return visitor.VisitTestSuiteRunExecutionArrayOutput(t.TestSuiteRunExecutionArrayOutput)
+	if t.Array != nil {
+		return visitor.VisitArray(t.Array)
 	}
-	return fmt.Errorf("type %T does not include a non-empty union type", t)
+	return fmt.Errorf("type %T does not define a non-empty union type", t)
 }
 
 // Execution output of an entity evaluated during a Test Suite Run that is of type SEARCH_RESULTS
 type TestSuiteRunExecutionSearchResultsOutput struct {
 	Name             string          `json:"name" url:"name"`
 	Value            []*SearchResult `json:"value,omitempty" url:"value,omitempty"`
-	OutputVariableId string          `json:"output_variable_id" url:"output_variable_id"`
-	type_            string
+	OutputVariableID string          `json:"output_variable_id" url:"output_variable_id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -2267,28 +1833,15 @@ func (t *TestSuiteRunExecutionSearchResultsOutput) GetExtraProperties() map[stri
 	return t.extraProperties
 }
 
-func (t *TestSuiteRunExecutionSearchResultsOutput) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteRunExecutionSearchResultsOutput) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteRunExecutionSearchResultsOutput
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteRunExecutionSearchResultsOutput
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteRunExecutionSearchResultsOutput(unmarshaler.embed)
-	if unmarshaler.Type != "SEARCH_RESULTS" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "SEARCH_RESULTS", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteRunExecutionSearchResultsOutput(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -2296,18 +1849,6 @@ func (t *TestSuiteRunExecutionSearchResultsOutput) UnmarshalJSON(data []byte) er
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteRunExecutionSearchResultsOutput) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteRunExecutionSearchResultsOutput
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "SEARCH_RESULTS",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteRunExecutionSearchResultsOutput) String() string {
@@ -2326,8 +1867,7 @@ func (t *TestSuiteRunExecutionSearchResultsOutput) String() string {
 type TestSuiteRunExecutionStringOutput struct {
 	Name             string  `json:"name" url:"name"`
 	Value            *string `json:"value,omitempty" url:"value,omitempty"`
-	OutputVariableId string  `json:"output_variable_id" url:"output_variable_id"`
-	type_            string
+	OutputVariableID string  `json:"output_variable_id" url:"output_variable_id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -2337,28 +1877,15 @@ func (t *TestSuiteRunExecutionStringOutput) GetExtraProperties() map[string]inte
 	return t.extraProperties
 }
 
-func (t *TestSuiteRunExecutionStringOutput) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteRunExecutionStringOutput) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteRunExecutionStringOutput
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteRunExecutionStringOutput
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteRunExecutionStringOutput(unmarshaler.embed)
-	if unmarshaler.Type != "STRING" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "STRING", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteRunExecutionStringOutput(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -2366,18 +1893,6 @@ func (t *TestSuiteRunExecutionStringOutput) UnmarshalJSON(data []byte) error {
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteRunExecutionStringOutput) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteRunExecutionStringOutput
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "STRING",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteRunExecutionStringOutput) String() string {
@@ -2396,8 +1911,7 @@ func (t *TestSuiteRunExecutionStringOutput) String() string {
 type TestSuiteRunExternalExecConfig struct {
 	Data *TestSuiteRunExternalExecConfigData `json:"data" url:"data"`
 	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
-	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
-	type_       string
+	TestCaseIDs []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -2407,28 +1921,15 @@ func (t *TestSuiteRunExternalExecConfig) GetExtraProperties() map[string]interfa
 	return t.extraProperties
 }
 
-func (t *TestSuiteRunExternalExecConfig) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteRunExternalExecConfig) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteRunExternalExecConfig
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteRunExternalExecConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteRunExternalExecConfig(unmarshaler.embed)
-	if unmarshaler.Type != "EXTERNAL" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "EXTERNAL", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteRunExternalExecConfig(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -2436,18 +1937,6 @@ func (t *TestSuiteRunExternalExecConfig) UnmarshalJSON(data []byte) error {
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteRunExternalExecConfig) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteRunExternalExecConfig
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "EXTERNAL",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteRunExternalExecConfig) String() string {
@@ -2550,8 +2039,7 @@ func (t *TestSuiteRunExternalExecConfigDataRequest) String() string {
 type TestSuiteRunExternalExecConfigRequest struct {
 	Data *TestSuiteRunExternalExecConfigDataRequest `json:"data" url:"data"`
 	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
-	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
-	type_       string
+	TestCaseIDs []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -2561,28 +2049,15 @@ func (t *TestSuiteRunExternalExecConfigRequest) GetExtraProperties() map[string]
 	return t.extraProperties
 }
 
-func (t *TestSuiteRunExternalExecConfigRequest) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteRunExternalExecConfigRequest) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteRunExternalExecConfigRequest
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteRunExternalExecConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteRunExternalExecConfigRequest(unmarshaler.embed)
-	if unmarshaler.Type != "EXTERNAL" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "EXTERNAL", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteRunExternalExecConfigRequest(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -2590,18 +2065,6 @@ func (t *TestSuiteRunExternalExecConfigRequest) UnmarshalJSON(data []byte) error
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteRunExternalExecConfigRequest) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteRunExternalExecConfigRequest
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "EXTERNAL",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteRunExternalExecConfigRequest) String() string {
@@ -2660,9 +2123,9 @@ func (t *TestSuiteRunProgress) String() string {
 
 type TestSuiteRunPromptSandboxExecConfigDataRequest struct {
 	// The ID of the Prompt Sandbox to run the Test Suite against.
-	PromptSandboxId string `json:"prompt_sandbox_id" url:"prompt_sandbox_id"`
+	PromptSandboxID string `json:"prompt_sandbox_id" url:"prompt_sandbox_id"`
 	// The ID of the Prompt Variant within the Prompt Sandbox that you'd like to run the Test Suite against.
-	PromptVariantId string `json:"prompt_variant_id" url:"prompt_variant_id"`
+	PromptVariantID string `json:"prompt_variant_id" url:"prompt_variant_id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -2706,8 +2169,7 @@ func (t *TestSuiteRunPromptSandboxExecConfigDataRequest) String() string {
 type TestSuiteRunPromptSandboxExecConfigRequest struct {
 	Data *TestSuiteRunPromptSandboxExecConfigDataRequest `json:"data" url:"data"`
 	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
-	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
-	type_       string
+	TestCaseIDs []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -2717,28 +2179,15 @@ func (t *TestSuiteRunPromptSandboxExecConfigRequest) GetExtraProperties() map[st
 	return t.extraProperties
 }
 
-func (t *TestSuiteRunPromptSandboxExecConfigRequest) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteRunPromptSandboxExecConfigRequest) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteRunPromptSandboxExecConfigRequest
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteRunPromptSandboxExecConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteRunPromptSandboxExecConfigRequest(unmarshaler.embed)
-	if unmarshaler.Type != "PROMPT_SANDBOX" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "PROMPT_SANDBOX", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteRunPromptSandboxExecConfigRequest(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -2746,18 +2195,6 @@ func (t *TestSuiteRunPromptSandboxExecConfigRequest) UnmarshalJSON(data []byte) 
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteRunPromptSandboxExecConfigRequest) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteRunPromptSandboxExecConfigRequest
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "PROMPT_SANDBOX",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteRunPromptSandboxExecConfigRequest) String() string {
@@ -2776,8 +2213,7 @@ func (t *TestSuiteRunPromptSandboxExecConfigRequest) String() string {
 type TestSuiteRunPromptSandboxHistoryItemExecConfig struct {
 	Data *TestSuiteRunPromptSandboxHistoryItemExecConfigData `json:"data" url:"data"`
 	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
-	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
-	type_       string
+	TestCaseIDs []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -2787,28 +2223,15 @@ func (t *TestSuiteRunPromptSandboxHistoryItemExecConfig) GetExtraProperties() ma
 	return t.extraProperties
 }
 
-func (t *TestSuiteRunPromptSandboxHistoryItemExecConfig) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteRunPromptSandboxHistoryItemExecConfig) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteRunPromptSandboxHistoryItemExecConfig
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteRunPromptSandboxHistoryItemExecConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteRunPromptSandboxHistoryItemExecConfig(unmarshaler.embed)
-	if unmarshaler.Type != "PROMPT_SANDBOX_HISTORY_ITEM" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "PROMPT_SANDBOX_HISTORY_ITEM", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteRunPromptSandboxHistoryItemExecConfig(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -2816,18 +2239,6 @@ func (t *TestSuiteRunPromptSandboxHistoryItemExecConfig) UnmarshalJSON(data []by
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteRunPromptSandboxHistoryItemExecConfig) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteRunPromptSandboxHistoryItemExecConfig
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "PROMPT_SANDBOX_HISTORY_ITEM",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteRunPromptSandboxHistoryItemExecConfig) String() string {
@@ -2844,9 +2255,9 @@ func (t *TestSuiteRunPromptSandboxHistoryItemExecConfig) String() string {
 
 type TestSuiteRunPromptSandboxHistoryItemExecConfigData struct {
 	// The ID of the Prompt Sandbox History Item that the Test Suite will run against.
-	HistoryItemId string `json:"history_item_id" url:"history_item_id"`
+	HistoryItemID string `json:"history_item_id" url:"history_item_id"`
 	// The ID of the Prompt Variant within the Prompt Sandbox History Item that you'd like to run the Test Suite against.
-	PromptVariantId string `json:"prompt_variant_id" url:"prompt_variant_id"`
+	PromptVariantID string `json:"prompt_variant_id" url:"prompt_variant_id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -2888,9 +2299,9 @@ func (t *TestSuiteRunPromptSandboxHistoryItemExecConfigData) String() string {
 
 type TestSuiteRunPromptSandboxHistoryItemExecConfigDataRequest struct {
 	// The ID of the Prompt Sandbox History Item that the Test Suite will run against.
-	HistoryItemId string `json:"history_item_id" url:"history_item_id"`
+	HistoryItemID string `json:"history_item_id" url:"history_item_id"`
 	// The ID of the Prompt Variant within the Prompt Sandbox History Item that you'd like to run the Test Suite against.
-	PromptVariantId string `json:"prompt_variant_id" url:"prompt_variant_id"`
+	PromptVariantID string `json:"prompt_variant_id" url:"prompt_variant_id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -2934,8 +2345,7 @@ func (t *TestSuiteRunPromptSandboxHistoryItemExecConfigDataRequest) String() str
 type TestSuiteRunPromptSandboxHistoryItemExecConfigRequest struct {
 	Data *TestSuiteRunPromptSandboxHistoryItemExecConfigDataRequest `json:"data" url:"data"`
 	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
-	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
-	type_       string
+	TestCaseIDs []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -2945,28 +2355,15 @@ func (t *TestSuiteRunPromptSandboxHistoryItemExecConfigRequest) GetExtraProperti
 	return t.extraProperties
 }
 
-func (t *TestSuiteRunPromptSandboxHistoryItemExecConfigRequest) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteRunPromptSandboxHistoryItemExecConfigRequest) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteRunPromptSandboxHistoryItemExecConfigRequest
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteRunPromptSandboxHistoryItemExecConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteRunPromptSandboxHistoryItemExecConfigRequest(unmarshaler.embed)
-	if unmarshaler.Type != "PROMPT_SANDBOX_HISTORY_ITEM" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "PROMPT_SANDBOX_HISTORY_ITEM", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteRunPromptSandboxHistoryItemExecConfigRequest(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -2974,18 +2371,6 @@ func (t *TestSuiteRunPromptSandboxHistoryItemExecConfigRequest) UnmarshalJSON(da
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteRunPromptSandboxHistoryItemExecConfigRequest) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteRunPromptSandboxHistoryItemExecConfigRequest
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "PROMPT_SANDBOX_HISTORY_ITEM",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteRunPromptSandboxHistoryItemExecConfigRequest) String() string {
@@ -3001,7 +2386,7 @@ func (t *TestSuiteRunPromptSandboxHistoryItemExecConfigRequest) String() string 
 }
 
 type TestSuiteRunRead struct {
-	Id        string                 `json:"id" url:"id"`
+	ID        string                 `json:"id" url:"id"`
 	Created   time.Time              `json:"created" url:"created"`
 	TestSuite *TestSuiteRunTestSuite `json:"test_suite" url:"test_suite"`
 	// The current state of this run
@@ -3109,8 +2494,8 @@ func (t TestSuiteRunState) Ptr() *TestSuiteRunState {
 }
 
 type TestSuiteRunTestSuite struct {
-	Id            string `json:"id" url:"id"`
-	HistoryItemId string `json:"history_item_id" url:"history_item_id"`
+	ID            string `json:"id" url:"id"`
+	HistoryItemID string `json:"history_item_id" url:"history_item_id"`
 	Label         string `json:"label" url:"label"`
 
 	extraProperties map[string]interface{}
@@ -3155,8 +2540,7 @@ func (t *TestSuiteRunTestSuite) String() string {
 type TestSuiteRunWorkflowReleaseTagExecConfig struct {
 	Data *TestSuiteRunWorkflowReleaseTagExecConfigData `json:"data" url:"data"`
 	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
-	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
-	type_       string
+	TestCaseIDs []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -3166,28 +2550,15 @@ func (t *TestSuiteRunWorkflowReleaseTagExecConfig) GetExtraProperties() map[stri
 	return t.extraProperties
 }
 
-func (t *TestSuiteRunWorkflowReleaseTagExecConfig) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteRunWorkflowReleaseTagExecConfig) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteRunWorkflowReleaseTagExecConfig
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteRunWorkflowReleaseTagExecConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteRunWorkflowReleaseTagExecConfig(unmarshaler.embed)
-	if unmarshaler.Type != "WORKFLOW_RELEASE_TAG" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "WORKFLOW_RELEASE_TAG", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteRunWorkflowReleaseTagExecConfig(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -3195,18 +2566,6 @@ func (t *TestSuiteRunWorkflowReleaseTagExecConfig) UnmarshalJSON(data []byte) er
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteRunWorkflowReleaseTagExecConfig) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteRunWorkflowReleaseTagExecConfig
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "WORKFLOW_RELEASE_TAG",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteRunWorkflowReleaseTagExecConfig) String() string {
@@ -3223,7 +2582,7 @@ func (t *TestSuiteRunWorkflowReleaseTagExecConfig) String() string {
 
 type TestSuiteRunWorkflowReleaseTagExecConfigData struct {
 	// The ID of the Workflow Deployment to run the Test Suite against.
-	WorkflowDeploymentId string `json:"workflow_deployment_id" url:"workflow_deployment_id"`
+	WorkflowDeploymentID string `json:"workflow_deployment_id" url:"workflow_deployment_id"`
 	// A tag identifying which release of the Workflow Deployment to run the Test Suite against. Useful for testing past versions of the Workflow Deployment
 	Tag *string `json:"tag,omitempty" url:"tag,omitempty"`
 
@@ -3267,7 +2626,7 @@ func (t *TestSuiteRunWorkflowReleaseTagExecConfigData) String() string {
 
 type TestSuiteRunWorkflowReleaseTagExecConfigDataRequest struct {
 	// The ID of the Workflow Deployment to run the Test Suite against.
-	WorkflowDeploymentId string `json:"workflow_deployment_id" url:"workflow_deployment_id"`
+	WorkflowDeploymentID string `json:"workflow_deployment_id" url:"workflow_deployment_id"`
 	// A tag identifying which release of the Workflow Deployment to run the Test Suite against. Useful for testing past versions of the Workflow Deployment
 	Tag *string `json:"tag,omitempty" url:"tag,omitempty"`
 
@@ -3313,8 +2672,7 @@ func (t *TestSuiteRunWorkflowReleaseTagExecConfigDataRequest) String() string {
 type TestSuiteRunWorkflowReleaseTagExecConfigRequest struct {
 	Data *TestSuiteRunWorkflowReleaseTagExecConfigDataRequest `json:"data" url:"data"`
 	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
-	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
-	type_       string
+	TestCaseIDs []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -3324,28 +2682,15 @@ func (t *TestSuiteRunWorkflowReleaseTagExecConfigRequest) GetExtraProperties() m
 	return t.extraProperties
 }
 
-func (t *TestSuiteRunWorkflowReleaseTagExecConfigRequest) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteRunWorkflowReleaseTagExecConfigRequest) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteRunWorkflowReleaseTagExecConfigRequest
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteRunWorkflowReleaseTagExecConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteRunWorkflowReleaseTagExecConfigRequest(unmarshaler.embed)
-	if unmarshaler.Type != "WORKFLOW_RELEASE_TAG" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "WORKFLOW_RELEASE_TAG", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteRunWorkflowReleaseTagExecConfigRequest(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -3353,18 +2698,6 @@ func (t *TestSuiteRunWorkflowReleaseTagExecConfigRequest) UnmarshalJSON(data []b
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteRunWorkflowReleaseTagExecConfigRequest) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteRunWorkflowReleaseTagExecConfigRequest
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "WORKFLOW_RELEASE_TAG",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteRunWorkflowReleaseTagExecConfigRequest) String() string {
@@ -3381,7 +2714,7 @@ func (t *TestSuiteRunWorkflowReleaseTagExecConfigRequest) String() string {
 
 type TestSuiteRunWorkflowSandboxExecConfigDataRequest struct {
 	// The ID of the Workflow Sandbox to run the Test Suite against.
-	WorkflowSandboxId string `json:"workflow_sandbox_id" url:"workflow_sandbox_id"`
+	WorkflowSandboxID string `json:"workflow_sandbox_id" url:"workflow_sandbox_id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -3425,8 +2758,7 @@ func (t *TestSuiteRunWorkflowSandboxExecConfigDataRequest) String() string {
 type TestSuiteRunWorkflowSandboxExecConfigRequest struct {
 	Data *TestSuiteRunWorkflowSandboxExecConfigDataRequest `json:"data" url:"data"`
 	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
-	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
-	type_       string
+	TestCaseIDs []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -3436,28 +2768,15 @@ func (t *TestSuiteRunWorkflowSandboxExecConfigRequest) GetExtraProperties() map[
 	return t.extraProperties
 }
 
-func (t *TestSuiteRunWorkflowSandboxExecConfigRequest) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteRunWorkflowSandboxExecConfigRequest) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteRunWorkflowSandboxExecConfigRequest
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteRunWorkflowSandboxExecConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteRunWorkflowSandboxExecConfigRequest(unmarshaler.embed)
-	if unmarshaler.Type != "WORKFLOW_SANDBOX" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "WORKFLOW_SANDBOX", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteRunWorkflowSandboxExecConfigRequest(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -3465,18 +2784,6 @@ func (t *TestSuiteRunWorkflowSandboxExecConfigRequest) UnmarshalJSON(data []byte
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteRunWorkflowSandboxExecConfigRequest) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteRunWorkflowSandboxExecConfigRequest
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "WORKFLOW_SANDBOX",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteRunWorkflowSandboxExecConfigRequest) String() string {
@@ -3495,8 +2802,7 @@ func (t *TestSuiteRunWorkflowSandboxExecConfigRequest) String() string {
 type TestSuiteRunWorkflowSandboxHistoryItemExecConfig struct {
 	Data *TestSuiteRunWorkflowSandboxHistoryItemExecConfigData `json:"data" url:"data"`
 	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
-	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
-	type_       string
+	TestCaseIDs []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -3506,28 +2812,15 @@ func (t *TestSuiteRunWorkflowSandboxHistoryItemExecConfig) GetExtraProperties() 
 	return t.extraProperties
 }
 
-func (t *TestSuiteRunWorkflowSandboxHistoryItemExecConfig) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteRunWorkflowSandboxHistoryItemExecConfig) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteRunWorkflowSandboxHistoryItemExecConfig
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteRunWorkflowSandboxHistoryItemExecConfig
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteRunWorkflowSandboxHistoryItemExecConfig(unmarshaler.embed)
-	if unmarshaler.Type != "WORKFLOW_SANDBOX_HISTORY_ITEM" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "WORKFLOW_SANDBOX_HISTORY_ITEM", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteRunWorkflowSandboxHistoryItemExecConfig(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -3535,18 +2828,6 @@ func (t *TestSuiteRunWorkflowSandboxHistoryItemExecConfig) UnmarshalJSON(data []
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteRunWorkflowSandboxHistoryItemExecConfig) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteRunWorkflowSandboxHistoryItemExecConfig
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "WORKFLOW_SANDBOX_HISTORY_ITEM",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteRunWorkflowSandboxHistoryItemExecConfig) String() string {
@@ -3563,9 +2844,9 @@ func (t *TestSuiteRunWorkflowSandboxHistoryItemExecConfig) String() string {
 
 type TestSuiteRunWorkflowSandboxHistoryItemExecConfigData struct {
 	// The ID of the Workflow Sandbox History Item that the Test Suite will run against.
-	HistoryItemId string `json:"history_item_id" url:"history_item_id"`
+	HistoryItemID string `json:"history_item_id" url:"history_item_id"`
 	// The ID of the Workflow Variant within the Workflow Sandbox History Item that you'd like to run the Test Suite against.
-	WorkflowVariantId string `json:"workflow_variant_id" url:"workflow_variant_id"`
+	WorkflowVariantID string `json:"workflow_variant_id" url:"workflow_variant_id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -3607,9 +2888,9 @@ func (t *TestSuiteRunWorkflowSandboxHistoryItemExecConfigData) String() string {
 
 type TestSuiteRunWorkflowSandboxHistoryItemExecConfigDataRequest struct {
 	// The ID of the Workflow Sandbox History Item that the Test Suite will run against.
-	HistoryItemId string `json:"history_item_id" url:"history_item_id"`
+	HistoryItemID string `json:"history_item_id" url:"history_item_id"`
 	// The ID of the Workflow Variant within the Workflow Sandbox History Item that you'd like to run the Test Suite against.
-	WorkflowVariantId string `json:"workflow_variant_id" url:"workflow_variant_id"`
+	WorkflowVariantID string `json:"workflow_variant_id" url:"workflow_variant_id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -3653,8 +2934,7 @@ func (t *TestSuiteRunWorkflowSandboxHistoryItemExecConfigDataRequest) String() s
 type TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest struct {
 	Data *TestSuiteRunWorkflowSandboxHistoryItemExecConfigDataRequest `json:"data" url:"data"`
 	// Optionally specify a subset of test case ids to run. If not provided, all test cases within the test suite will be run by default.
-	TestCaseIds []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
-	type_       string
+	TestCaseIDs []string `json:"test_case_ids,omitempty" url:"test_case_ids,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -3664,28 +2944,15 @@ func (t *TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest) GetExtraProper
 	return t.extraProperties
 }
 
-func (t *TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest(unmarshaler.embed)
-	if unmarshaler.Type != "WORKFLOW_SANDBOX_HISTORY_ITEM" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "WORKFLOW_SANDBOX_HISTORY_ITEM", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -3693,18 +2960,6 @@ func (t *TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest) UnmarshalJSON(
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "WORKFLOW_SANDBOX_HISTORY_ITEM",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteRunWorkflowSandboxHistoryItemExecConfigRequest) String() string {

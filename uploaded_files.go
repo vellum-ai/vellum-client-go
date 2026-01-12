@@ -15,9 +15,9 @@ type UploadedFilesRetrieveRequest struct {
 
 // Represents a file that has been uploaded to a Vellum Workspace.
 type UploadedFileRead struct {
-	Id *string `json:"id,omitempty" url:"id,omitempty"`
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
 	// A signed URL to download the uploaded file.
-	FileUrl *string `json:"file_url,omitempty" url:"file_url,omitempty"`
+	FileURL *string `json:"file_url,omitempty" url:"file_url,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage

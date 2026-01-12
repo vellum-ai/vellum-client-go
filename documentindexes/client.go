@@ -8,6 +8,7 @@ import (
 	core "github.com/vellum-ai/vellum-client-go/core"
 	option "github.com/vellum-ai/vellum-client-go/option"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -18,8 +19,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.APIVersion == "" {
+		options.APIVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -212,6 +213,7 @@ func (c *Client) Destroy(
 	ctx context.Context,
 	// Either the Document Index's ID or its unique name
 	id string,
+	request *vellumclientgo.DocumentIndexesDestroyRequest,
 	opts ...option.RequestOption,
 ) error {
 	options := core.NewRequestOptions(opts...)
@@ -288,10 +290,11 @@ func (c *Client) PartialUpdate(
 // Adds a previously uploaded Document to the specified Document Index.
 func (c *Client) AddDocument(
 	ctx context.Context,
-	// Either the Vellum-generated ID or the originally supplied external_id that uniquely identifies the Document you'd like to add.
-	documentId string,
 	// Either the Vellum-generated ID or the originally specified name that uniquely identifies the Document Index to which you'd like to add the Document.
 	id string,
+	// Either the Vellum-generated ID or the originally supplied external_id that uniquely identifies the Document you'd like to add.
+	documentID string,
+	request *vellumclientgo.AddDocumentRequest,
 	opts ...option.RequestOption,
 ) error {
 	options := core.NewRequestOptions(opts...)
@@ -306,7 +309,7 @@ func (c *Client) AddDocument(
 	endpointURL := core.EncodeURL(
 		baseURL+"/v1/document-indexes/%v/documents/%v",
 		id,
-		documentId,
+		documentID,
 	)
 
 	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
@@ -331,10 +334,11 @@ func (c *Client) AddDocument(
 // Removes a Document from a Document Index without deleting the Document itself.
 func (c *Client) RemoveDocument(
 	ctx context.Context,
-	// Either the Vellum-generated ID or the originally supplied external_id that uniquely identifies the Document you'd like to remove.
-	documentId string,
 	// Either the Vellum-generated ID or the originally specified name that uniquely identifies the Document Index from which you'd like to remove a Document.
 	id string,
+	// Either the Vellum-generated ID or the originally supplied external_id that uniquely identifies the Document you'd like to remove.
+	documentID string,
+	request *vellumclientgo.RemoveDocumentRequest,
 	opts ...option.RequestOption,
 ) error {
 	options := core.NewRequestOptions(opts...)
@@ -349,7 +353,7 @@ func (c *Client) RemoveDocument(
 	endpointURL := core.EncodeURL(
 		baseURL+"/v1/document-indexes/%v/documents/%v",
 		id,
-		documentId,
+		documentID,
 	)
 
 	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())

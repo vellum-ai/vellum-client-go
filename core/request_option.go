@@ -4,18 +4,9 @@ package core
 
 import (
 	fmt "fmt"
-	"os"
+	vellumclientgo "github.com/vellum-ai/vellum-client-go"
 	http "net/http"
 	url "net/url"
-)
-
-// * `2024-10-25` - V2024_10_25
-// * `2025-07-30` - V2025_07_30
-type ApiVersionEnum string
-
-const (
-	ApiVersionEnumTwoThousandTwentyFour1025 ApiVersionEnum = "2024-10-25"
-	ApiVersionEnumTwoThousandTwentyFive0730 ApiVersionEnum = "2025-07-30"
 )
 
 // RequestOption adapts the behavior of the client or an individual request.
@@ -34,8 +25,8 @@ type RequestOptions struct {
 	BodyProperties  map[string]interface{}
 	QueryParameters url.Values
 	MaxAttempts     uint
-	ApiKey          string
-	ApiVersion      *ApiVersionEnum
+	APIKey          string
+	APIVersion      *vellumclientgo.APIVersionEnum
 }
 
 // NewRequestOptions returns a new *RequestOptions value.
@@ -58,11 +49,11 @@ func NewRequestOptions(opts ...RequestOption) *RequestOptions {
 // for the request(s).
 func (r *RequestOptions) ToHeader() http.Header {
 	header := r.cloneHeader()
-	if r.ApiKey != "" {
-		header.Set("X-API-KEY", fmt.Sprintf("%v", r.ApiKey))
+	if r.APIKey != "" {
+		header.Set("X-API-KEY", fmt.Sprintf("%v", r.APIKey))
 	}
-	if r.ApiVersion != nil {
-		header.Set("X-API-Version", fmt.Sprintf("%v", *r.ApiVersion))
+	if r.APIVersion != nil {
+		header.Set("X-API-Version", fmt.Sprintf("%v", *r.APIVersion))
 	}
 	return header
 }
@@ -71,7 +62,7 @@ func (r *RequestOptions) cloneHeader() http.Header {
 	headers := r.HTTPHeader.Clone()
 	headers.Set("X-Fern-Language", "Go")
 	headers.Set("X-Fern-SDK-Name", "github.com/vellum-ai/vellum-client-go")
-	headers.Set("X-Fern-SDK-Version", "v1.13.0")
+	headers.Set("X-Fern-SDK-Version", "v0.0.3962")
 	return headers
 }
 
@@ -129,33 +120,20 @@ func (m *MaxAttemptsOption) applyRequestOptions(opts *RequestOptions) {
 	opts.MaxAttempts = m.MaxAttempts
 }
 
-// ApiKeyOption implements the RequestOption interface.
-type ApiKeyOption struct {
-	ApiKey string
+// APIKeyOption implements the RequestOption interface.
+type APIKeyOption struct {
+	APIKey string
 }
 
-func (a *ApiKeyOption) applyRequestOptions(opts *RequestOptions) {
-	opts.ApiKey = a.ApiKey
+func (a *APIKeyOption) applyRequestOptions(opts *RequestOptions) {
+	opts.APIKey = a.APIKey
 }
 
-// ApiVersionOption implements the RequestOption interface.
-type ApiVersionOption struct {
-	ApiVersion *ApiVersionEnum
+// APIVersionOption implements the RequestOption interface.
+type APIVersionOption struct {
+	APIVersion *vellumclientgo.APIVersionEnum
 }
 
-func (a *ApiVersionOption) applyRequestOptions(opts *RequestOptions) {
-	opts.ApiVersion = a.ApiVersion
-}
-
-func getEnvWithDefault(key, defaultValue string) string {
-	if value := os.Getenv(key); value != "" {
-		return value
-	}
-	return defaultValue
-}
-
-func GetDefaultApiVersion() *ApiVersionEnum {
-	envVersion := getEnvWithDefault("VELLUM_API_VERSION", "2025-07-30")
-	apiVersion := ApiVersionEnum(envVersion)
-	return &apiVersion
+func (a *APIVersionOption) applyRequestOptions(opts *RequestOptions) {
+	opts.APIVersion = a.APIVersion
 }

@@ -11,7 +11,7 @@ import (
 
 type AddEntityToFolderRequest struct {
 	// The ID of the entity you would like to move.
-	EntityId string `json:"entity_id" url:"-"`
+	EntityID string `json:"entity_id" url:"-"`
 }
 
 type FolderEntitiesListRequest struct {
@@ -34,110 +34,128 @@ type FolderEntitiesListRequest struct {
 	// - WORKFLOW_SANDBOX
 	// - DOCUMENT_INDEX
 	// - TEST_SUITE
-	ParentFolderId string `json:"-" url:"parent_folder_id"`
+	ParentFolderID string `json:"-" url:"parent_folder_id"`
 }
 
 type FolderEntity struct {
-	FolderEntityFolder          *FolderEntityFolder
-	FolderEntityPromptSandbox   *FolderEntityPromptSandbox
-	FolderEntityWorkflowSandbox *FolderEntityWorkflowSandbox
-	FolderEntityDocumentIndex   *FolderEntityDocumentIndex
-	FolderEntityTestSuite       *FolderEntityTestSuite
-	FolderEntityDataset         *FolderEntityDataset
+	Type            string
+	Folder          *FolderEntityFolder
+	PromptSandbox   *FolderEntityPromptSandbox
+	WorkflowSandbox *FolderEntityWorkflowSandbox
+	DocumentIndex   *FolderEntityDocumentIndex
+	TestSuite       *FolderEntityTestSuite
+	Dataset         *FolderEntityDataset
 }
 
 func (f *FolderEntity) UnmarshalJSON(data []byte) error {
-	valueFolderEntityFolder := new(FolderEntityFolder)
-	if err := json.Unmarshal(data, &valueFolderEntityFolder); err == nil {
-		f.FolderEntityFolder = valueFolderEntityFolder
-		return nil
+	var unmarshaler struct {
+		Type string `json:"type"`
 	}
-	valueFolderEntityPromptSandbox := new(FolderEntityPromptSandbox)
-	if err := json.Unmarshal(data, &valueFolderEntityPromptSandbox); err == nil {
-		f.FolderEntityPromptSandbox = valueFolderEntityPromptSandbox
-		return nil
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
 	}
-	valueFolderEntityWorkflowSandbox := new(FolderEntityWorkflowSandbox)
-	if err := json.Unmarshal(data, &valueFolderEntityWorkflowSandbox); err == nil {
-		f.FolderEntityWorkflowSandbox = valueFolderEntityWorkflowSandbox
-		return nil
+	f.Type = unmarshaler.Type
+	if unmarshaler.Type == "" {
+		return fmt.Errorf("%T did not include discriminant type", f)
 	}
-	valueFolderEntityDocumentIndex := new(FolderEntityDocumentIndex)
-	if err := json.Unmarshal(data, &valueFolderEntityDocumentIndex); err == nil {
-		f.FolderEntityDocumentIndex = valueFolderEntityDocumentIndex
-		return nil
+	switch unmarshaler.Type {
+	case "FOLDER":
+		value := new(FolderEntityFolder)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		f.Folder = value
+	case "PROMPT_SANDBOX":
+		value := new(FolderEntityPromptSandbox)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		f.PromptSandbox = value
+	case "WORKFLOW_SANDBOX":
+		value := new(FolderEntityWorkflowSandbox)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		f.WorkflowSandbox = value
+	case "DOCUMENT_INDEX":
+		value := new(FolderEntityDocumentIndex)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		f.DocumentIndex = value
+	case "TEST_SUITE":
+		value := new(FolderEntityTestSuite)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		f.TestSuite = value
+	case "DATASET":
+		value := new(FolderEntityDataset)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		f.Dataset = value
 	}
-	valueFolderEntityTestSuite := new(FolderEntityTestSuite)
-	if err := json.Unmarshal(data, &valueFolderEntityTestSuite); err == nil {
-		f.FolderEntityTestSuite = valueFolderEntityTestSuite
-		return nil
-	}
-	valueFolderEntityDataset := new(FolderEntityDataset)
-	if err := json.Unmarshal(data, &valueFolderEntityDataset); err == nil {
-		f.FolderEntityDataset = valueFolderEntityDataset
-		return nil
-	}
-	return fmt.Errorf("%s cannot be deserialized as a %T", data, f)
+	return nil
 }
 
 func (f FolderEntity) MarshalJSON() ([]byte, error) {
-	if f.FolderEntityFolder != nil {
-		return json.Marshal(f.FolderEntityFolder)
+	if f.Folder != nil {
+		return core.MarshalJSONWithExtraProperty(f.Folder, "type", "FOLDER")
 	}
-	if f.FolderEntityPromptSandbox != nil {
-		return json.Marshal(f.FolderEntityPromptSandbox)
+	if f.PromptSandbox != nil {
+		return core.MarshalJSONWithExtraProperty(f.PromptSandbox, "type", "PROMPT_SANDBOX")
 	}
-	if f.FolderEntityWorkflowSandbox != nil {
-		return json.Marshal(f.FolderEntityWorkflowSandbox)
+	if f.WorkflowSandbox != nil {
+		return core.MarshalJSONWithExtraProperty(f.WorkflowSandbox, "type", "WORKFLOW_SANDBOX")
 	}
-	if f.FolderEntityDocumentIndex != nil {
-		return json.Marshal(f.FolderEntityDocumentIndex)
+	if f.DocumentIndex != nil {
+		return core.MarshalJSONWithExtraProperty(f.DocumentIndex, "type", "DOCUMENT_INDEX")
 	}
-	if f.FolderEntityTestSuite != nil {
-		return json.Marshal(f.FolderEntityTestSuite)
+	if f.TestSuite != nil {
+		return core.MarshalJSONWithExtraProperty(f.TestSuite, "type", "TEST_SUITE")
 	}
-	if f.FolderEntityDataset != nil {
-		return json.Marshal(f.FolderEntityDataset)
+	if f.Dataset != nil {
+		return core.MarshalJSONWithExtraProperty(f.Dataset, "type", "DATASET")
 	}
-	return nil, fmt.Errorf("type %T does not include a non-empty union type", f)
+	return nil, fmt.Errorf("type %T does not define a non-empty union type", f)
 }
 
 type FolderEntityVisitor interface {
-	VisitFolderEntityFolder(*FolderEntityFolder) error
-	VisitFolderEntityPromptSandbox(*FolderEntityPromptSandbox) error
-	VisitFolderEntityWorkflowSandbox(*FolderEntityWorkflowSandbox) error
-	VisitFolderEntityDocumentIndex(*FolderEntityDocumentIndex) error
-	VisitFolderEntityTestSuite(*FolderEntityTestSuite) error
-	VisitFolderEntityDataset(*FolderEntityDataset) error
+	VisitFolder(*FolderEntityFolder) error
+	VisitPromptSandbox(*FolderEntityPromptSandbox) error
+	VisitWorkflowSandbox(*FolderEntityWorkflowSandbox) error
+	VisitDocumentIndex(*FolderEntityDocumentIndex) error
+	VisitTestSuite(*FolderEntityTestSuite) error
+	VisitDataset(*FolderEntityDataset) error
 }
 
 func (f *FolderEntity) Accept(visitor FolderEntityVisitor) error {
-	if f.FolderEntityFolder != nil {
-		return visitor.VisitFolderEntityFolder(f.FolderEntityFolder)
+	if f.Folder != nil {
+		return visitor.VisitFolder(f.Folder)
 	}
-	if f.FolderEntityPromptSandbox != nil {
-		return visitor.VisitFolderEntityPromptSandbox(f.FolderEntityPromptSandbox)
+	if f.PromptSandbox != nil {
+		return visitor.VisitPromptSandbox(f.PromptSandbox)
 	}
-	if f.FolderEntityWorkflowSandbox != nil {
-		return visitor.VisitFolderEntityWorkflowSandbox(f.FolderEntityWorkflowSandbox)
+	if f.WorkflowSandbox != nil {
+		return visitor.VisitWorkflowSandbox(f.WorkflowSandbox)
 	}
-	if f.FolderEntityDocumentIndex != nil {
-		return visitor.VisitFolderEntityDocumentIndex(f.FolderEntityDocumentIndex)
+	if f.DocumentIndex != nil {
+		return visitor.VisitDocumentIndex(f.DocumentIndex)
 	}
-	if f.FolderEntityTestSuite != nil {
-		return visitor.VisitFolderEntityTestSuite(f.FolderEntityTestSuite)
+	if f.TestSuite != nil {
+		return visitor.VisitTestSuite(f.TestSuite)
 	}
-	if f.FolderEntityDataset != nil {
-		return visitor.VisitFolderEntityDataset(f.FolderEntityDataset)
+	if f.Dataset != nil {
+		return visitor.VisitDataset(f.Dataset)
 	}
-	return fmt.Errorf("type %T does not include a non-empty union type", f)
+	return fmt.Errorf("type %T does not define a non-empty union type", f)
 }
 
 // A slim representation of a Dataset, as it exists within a Folder.
 type FolderEntityDataset struct {
-	Id    string                   `json:"id" url:"id"`
-	Data  *FolderEntityDatasetData `json:"data" url:"data"`
-	type_ string
+	ID   string                   `json:"id" url:"id"`
+	Data *FolderEntityDatasetData `json:"data" url:"data"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -147,28 +165,15 @@ func (f *FolderEntityDataset) GetExtraProperties() map[string]interface{} {
 	return f.extraProperties
 }
 
-func (f *FolderEntityDataset) Type() string {
-	return f.type_
-}
-
 func (f *FolderEntityDataset) UnmarshalJSON(data []byte) error {
-	type embed FolderEntityDataset
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*f),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler FolderEntityDataset
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*f = FolderEntityDataset(unmarshaler.embed)
-	if unmarshaler.Type != "DATASET" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "DATASET", unmarshaler.Type)
-	}
-	f.type_ = unmarshaler.Type
+	*f = FolderEntityDataset(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *f, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
 	if err != nil {
 		return err
 	}
@@ -176,18 +181,6 @@ func (f *FolderEntityDataset) UnmarshalJSON(data []byte) error {
 
 	f._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (f *FolderEntityDataset) MarshalJSON() ([]byte, error) {
-	type embed FolderEntityDataset
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*f),
-		Type:  "DATASET",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (f *FolderEntityDataset) String() string {
@@ -203,7 +196,7 @@ func (f *FolderEntityDataset) String() string {
 }
 
 type FolderEntityDatasetData struct {
-	Id          string    `json:"id" url:"id"`
+	ID          string    `json:"id" url:"id"`
 	Label       string    `json:"label" url:"label"`
 	Name        string    `json:"name" url:"name"`
 	Description *string   `json:"description,omitempty" url:"description,omitempty"`
@@ -272,9 +265,8 @@ func (f *FolderEntityDatasetData) String() string {
 
 // A slim representation of a Document Index, as it exists within a Folder.
 type FolderEntityDocumentIndex struct {
-	Id    string                         `json:"id" url:"id"`
-	Data  *FolderEntityDocumentIndexData `json:"data" url:"data"`
-	type_ string
+	ID   string                         `json:"id" url:"id"`
+	Data *FolderEntityDocumentIndexData `json:"data" url:"data"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -284,28 +276,15 @@ func (f *FolderEntityDocumentIndex) GetExtraProperties() map[string]interface{} 
 	return f.extraProperties
 }
 
-func (f *FolderEntityDocumentIndex) Type() string {
-	return f.type_
-}
-
 func (f *FolderEntityDocumentIndex) UnmarshalJSON(data []byte) error {
-	type embed FolderEntityDocumentIndex
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*f),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler FolderEntityDocumentIndex
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*f = FolderEntityDocumentIndex(unmarshaler.embed)
-	if unmarshaler.Type != "DOCUMENT_INDEX" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "DOCUMENT_INDEX", unmarshaler.Type)
-	}
-	f.type_ = unmarshaler.Type
+	*f = FolderEntityDocumentIndex(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *f, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
 	if err != nil {
 		return err
 	}
@@ -313,18 +292,6 @@ func (f *FolderEntityDocumentIndex) UnmarshalJSON(data []byte) error {
 
 	f._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (f *FolderEntityDocumentIndex) MarshalJSON() ([]byte, error) {
-	type embed FolderEntityDocumentIndex
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*f),
-		Type:  "DOCUMENT_INDEX",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (f *FolderEntityDocumentIndex) String() string {
@@ -340,7 +307,7 @@ func (f *FolderEntityDocumentIndex) String() string {
 }
 
 type FolderEntityDocumentIndexData struct {
-	Id             string                       `json:"id" url:"id"`
+	ID             string                       `json:"id" url:"id"`
 	Label          string                       `json:"label" url:"label"`
 	Created        time.Time                    `json:"created" url:"created"`
 	Modified       time.Time                    `json:"modified" url:"modified"`
@@ -409,9 +376,8 @@ func (f *FolderEntityDocumentIndexData) String() string {
 
 // A slim representation of a Folder, as it exists within another Folder.
 type FolderEntityFolder struct {
-	Id    string                  `json:"id" url:"id"`
-	Data  *FolderEntityFolderData `json:"data" url:"data"`
-	type_ string
+	ID   string                  `json:"id" url:"id"`
+	Data *FolderEntityFolderData `json:"data" url:"data"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -421,28 +387,15 @@ func (f *FolderEntityFolder) GetExtraProperties() map[string]interface{} {
 	return f.extraProperties
 }
 
-func (f *FolderEntityFolder) Type() string {
-	return f.type_
-}
-
 func (f *FolderEntityFolder) UnmarshalJSON(data []byte) error {
-	type embed FolderEntityFolder
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*f),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler FolderEntityFolder
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*f = FolderEntityFolder(unmarshaler.embed)
-	if unmarshaler.Type != "FOLDER" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "FOLDER", unmarshaler.Type)
-	}
-	f.type_ = unmarshaler.Type
+	*f = FolderEntityFolder(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *f, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
 	if err != nil {
 		return err
 	}
@@ -450,18 +403,6 @@ func (f *FolderEntityFolder) UnmarshalJSON(data []byte) error {
 
 	f._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (f *FolderEntityFolder) MarshalJSON() ([]byte, error) {
-	type embed FolderEntityFolder
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*f),
-		Type:  "FOLDER",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (f *FolderEntityFolder) String() string {
@@ -477,7 +418,7 @@ func (f *FolderEntityFolder) String() string {
 }
 
 type FolderEntityFolderData struct {
-	Id          string    `json:"id" url:"id"`
+	ID          string    `json:"id" url:"id"`
 	Label       string    `json:"label" url:"label"`
 	Created     time.Time `json:"created" url:"created"`
 	Modified    time.Time `json:"modified" url:"modified"`
@@ -545,9 +486,8 @@ func (f *FolderEntityFolderData) String() string {
 
 // A slim representation of a Prompt Sandbox, as it exists within a Folder.
 type FolderEntityPromptSandbox struct {
-	Id    string                         `json:"id" url:"id"`
-	Data  *FolderEntityPromptSandboxData `json:"data" url:"data"`
-	type_ string
+	ID   string                         `json:"id" url:"id"`
+	Data *FolderEntityPromptSandboxData `json:"data" url:"data"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -557,28 +497,15 @@ func (f *FolderEntityPromptSandbox) GetExtraProperties() map[string]interface{} 
 	return f.extraProperties
 }
 
-func (f *FolderEntityPromptSandbox) Type() string {
-	return f.type_
-}
-
 func (f *FolderEntityPromptSandbox) UnmarshalJSON(data []byte) error {
-	type embed FolderEntityPromptSandbox
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*f),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler FolderEntityPromptSandbox
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*f = FolderEntityPromptSandbox(unmarshaler.embed)
-	if unmarshaler.Type != "PROMPT_SANDBOX" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "PROMPT_SANDBOX", unmarshaler.Type)
-	}
-	f.type_ = unmarshaler.Type
+	*f = FolderEntityPromptSandbox(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *f, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
 	if err != nil {
 		return err
 	}
@@ -586,18 +513,6 @@ func (f *FolderEntityPromptSandbox) UnmarshalJSON(data []byte) error {
 
 	f._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (f *FolderEntityPromptSandbox) MarshalJSON() ([]byte, error) {
-	type embed FolderEntityPromptSandbox
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*f),
-		Type:  "PROMPT_SANDBOX",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (f *FolderEntityPromptSandbox) String() string {
@@ -613,7 +528,7 @@ func (f *FolderEntityPromptSandbox) String() string {
 }
 
 type FolderEntityPromptSandboxData struct {
-	Id             string       `json:"id" url:"id"`
+	ID             string       `json:"id" url:"id"`
 	Label          string       `json:"label" url:"label"`
 	Created        time.Time    `json:"created" url:"created"`
 	Modified       time.Time    `json:"modified" url:"modified"`
@@ -687,9 +602,8 @@ func (f *FolderEntityPromptSandboxData) String() string {
 
 // A slim representation of a Test Suite, as it exists within a Folder.
 type FolderEntityTestSuite struct {
-	Id    string                     `json:"id" url:"id"`
-	Data  *FolderEntityTestSuiteData `json:"data" url:"data"`
-	type_ string
+	ID   string                     `json:"id" url:"id"`
+	Data *FolderEntityTestSuiteData `json:"data" url:"data"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -699,28 +613,15 @@ func (f *FolderEntityTestSuite) GetExtraProperties() map[string]interface{} {
 	return f.extraProperties
 }
 
-func (f *FolderEntityTestSuite) Type() string {
-	return f.type_
-}
-
 func (f *FolderEntityTestSuite) UnmarshalJSON(data []byte) error {
-	type embed FolderEntityTestSuite
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*f),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler FolderEntityTestSuite
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*f = FolderEntityTestSuite(unmarshaler.embed)
-	if unmarshaler.Type != "TEST_SUITE" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "TEST_SUITE", unmarshaler.Type)
-	}
-	f.type_ = unmarshaler.Type
+	*f = FolderEntityTestSuite(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *f, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
 	if err != nil {
 		return err
 	}
@@ -728,18 +629,6 @@ func (f *FolderEntityTestSuite) UnmarshalJSON(data []byte) error {
 
 	f._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (f *FolderEntityTestSuite) MarshalJSON() ([]byte, error) {
-	type embed FolderEntityTestSuite
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*f),
-		Type:  "TEST_SUITE",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (f *FolderEntityTestSuite) String() string {
@@ -755,7 +644,7 @@ func (f *FolderEntityTestSuite) String() string {
 }
 
 type FolderEntityTestSuiteData struct {
-	Id       string       `json:"id" url:"id"`
+	ID       string       `json:"id" url:"id"`
 	Label    string       `json:"label" url:"label"`
 	Created  time.Time    `json:"created" url:"created"`
 	Modified time.Time    `json:"modified" url:"modified"`
@@ -823,9 +712,8 @@ func (f *FolderEntityTestSuiteData) String() string {
 
 // A slim representation of a Workflow Sandbox, as it exists within a Folder.
 type FolderEntityWorkflowSandbox struct {
-	Id    string                           `json:"id" url:"id"`
-	Data  *FolderEntityWorkflowSandboxData `json:"data" url:"data"`
-	type_ string
+	ID   string                           `json:"id" url:"id"`
+	Data *FolderEntityWorkflowSandboxData `json:"data" url:"data"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -835,28 +723,15 @@ func (f *FolderEntityWorkflowSandbox) GetExtraProperties() map[string]interface{
 	return f.extraProperties
 }
 
-func (f *FolderEntityWorkflowSandbox) Type() string {
-	return f.type_
-}
-
 func (f *FolderEntityWorkflowSandbox) UnmarshalJSON(data []byte) error {
-	type embed FolderEntityWorkflowSandbox
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*f),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler FolderEntityWorkflowSandbox
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*f = FolderEntityWorkflowSandbox(unmarshaler.embed)
-	if unmarshaler.Type != "WORKFLOW_SANDBOX" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", f, "WORKFLOW_SANDBOX", unmarshaler.Type)
-	}
-	f.type_ = unmarshaler.Type
+	*f = FolderEntityWorkflowSandbox(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *f, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *f)
 	if err != nil {
 		return err
 	}
@@ -864,18 +739,6 @@ func (f *FolderEntityWorkflowSandbox) UnmarshalJSON(data []byte) error {
 
 	f._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (f *FolderEntityWorkflowSandbox) MarshalJSON() ([]byte, error) {
-	type embed FolderEntityWorkflowSandbox
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*f),
-		Type:  "WORKFLOW_SANDBOX",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (f *FolderEntityWorkflowSandbox) String() string {
@@ -891,7 +754,7 @@ func (f *FolderEntityWorkflowSandbox) String() string {
 }
 
 type FolderEntityWorkflowSandboxData struct {
-	Id             string                      `json:"id" url:"id"`
+	ID             string                      `json:"id" url:"id"`
 	Label          string                      `json:"label" url:"label"`
 	Created        time.Time                   `json:"created" url:"created"`
 	Modified       time.Time                   `json:"modified" url:"modified"`

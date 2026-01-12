@@ -37,6 +37,7 @@ import (
 	workspacesecrets "github.com/vellum-ai/vellum-client-go/workspacesecrets"
 	io "io"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -73,8 +74,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.APIVersion == "" {
+		options.APIVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -113,11 +114,11 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
-func (c *Client) ExecuteApi(
+func (c *Client) ExecuteAPI(
 	ctx context.Context,
-	request *vellumclientgo.ExecuteApiRequest,
+	request *vellumclientgo.ExecuteAPIRequest,
 	opts ...option.RequestOption,
-) (*vellumclientgo.ExecuteApiResponse, error) {
+) (*vellumclientgo.ExecuteAPIResponse, error) {
 	options := core.NewRequestOptions(opts...)
 
 	baseURL := "https://api.vellum.ai"
@@ -131,7 +132,7 @@ func (c *Client) ExecuteApi(
 
 	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
-	var response *vellumclientgo.ExecuteApiResponse
+	var response *vellumclientgo.ExecuteAPIResponse
 	if err := c.caller.Call(
 		ctx,
 		&core.CallParams{

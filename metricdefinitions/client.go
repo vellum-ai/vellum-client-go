@@ -8,6 +8,7 @@ import (
 	core "github.com/vellum-ai/vellum-client-go/core"
 	option "github.com/vellum-ai/vellum-client-go/option"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -18,8 +19,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.APIVersion == "" {
+		options.APIVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -75,10 +76,11 @@ func (c *Client) ExecuteMetricDefinition(
 
 func (c *Client) MetricDefinitionHistoryItemRetrieve(
 	ctx context.Context,
-	// Either the UUID of Metric Definition History Item you'd like to retrieve, or the name of a Release Tag that's pointing to the Metric Definition History Item you'd like to retrieve.
-	historyIdOrReleaseTag string,
 	// A UUID string identifying this metric definition.
 	id string,
+	// Either the UUID of Metric Definition History Item you'd like to retrieve, or the name of a Release Tag that's pointing to the Metric Definition History Item you'd like to retrieve.
+	historyIDOrReleaseTag string,
+	request *vellumclientgo.MetricDefinitionHistoryItemRetrieveRequest,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.MetricDefinitionHistoryItem, error) {
 	options := core.NewRequestOptions(opts...)
@@ -93,7 +95,7 @@ func (c *Client) MetricDefinitionHistoryItemRetrieve(
 	endpointURL := core.EncodeURL(
 		baseURL+"/v1/metric-definitions/%v/history/%v",
 		id,
-		historyIdOrReleaseTag,
+		historyIDOrReleaseTag,
 	)
 
 	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())

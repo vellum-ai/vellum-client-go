@@ -14,6 +14,7 @@ import (
 	io "io"
 	multipart "mime/multipart"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -24,8 +25,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.APIVersion == "" {
+		options.APIVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -112,7 +113,8 @@ func (c *Client) Pull(
 func (c *Client) RetrieveState(
 	ctx context.Context,
 	// The span ID of the workflow execution to retrieve state for
-	spanId string,
+	spanID string,
+	request *vellumclientgo.WorkflowsRetrieveStateRequest,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.WorkflowResolvedState, error) {
 	options := core.NewRequestOptions(opts...)
@@ -124,7 +126,7 @@ func (c *Client) RetrieveState(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v1/workflows/%v/state", spanId)
+	endpointURL := core.EncodeURL(baseURL+"/v1/workflows/%v/state", spanID)
 
 	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
@@ -147,11 +149,77 @@ func (c *Client) RetrieveState(
 	return response, nil
 }
 
+func (c *Client) ExecuteNode(
+	ctx context.Context,
+	request *vellumclientgo.WorkflowRunNodeRequest,
+	opts ...option.RequestOption,
+) (*vellumclientgo.WorkflowSandboxExecuteNodeResponse, error) {
+	options := core.NewRequestOptions(opts...)
+
+	baseURL := "https://api.vellum.ai"
+	if c.baseURL != "" {
+		baseURL = c.baseURL
+	}
+	if options.BaseURL != "" {
+		baseURL = options.BaseURL
+	}
+	endpointURL := baseURL + "/v1/workflows/execute-node"
+
+	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
+
+	errorDecoder := func(statusCode int, body io.Reader) error {
+		raw, err := io.ReadAll(body)
+		if err != nil {
+			return err
+		}
+		apiError := core.NewAPIError(statusCode, errors.New(string(raw)))
+		decoder := json.NewDecoder(bytes.NewReader(raw))
+		switch statusCode {
+		case 400:
+			value := new(vellumclientgo.BadRequestError)
+			value.APIError = apiError
+			if err := decoder.Decode(value); err != nil {
+				return apiError
+			}
+			return value
+		case 500:
+			value := new(vellumclientgo.InternalServerError)
+			value.APIError = apiError
+			if err := decoder.Decode(value); err != nil {
+				return apiError
+			}
+			return value
+		}
+		return apiError
+	}
+
+	var response *vellumclientgo.WorkflowSandboxExecuteNodeResponse
+	if err := c.caller.Call(
+		ctx,
+		&core.CallParams{
+			URL:             endpointURL,
+			Method:          http.MethodPost,
+			MaxAttempts:     options.MaxAttempts,
+			Headers:         headers,
+			BodyProperties:  options.BodyProperties,
+			QueryParameters: options.QueryParameters,
+			Client:          options.HTTPClient,
+			Request:         request,
+			Response:        &response,
+			ErrorDecoder:    errorDecoder,
+		},
+	); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
 // Checks if a workflow execution is currently executing (not fulfilled, not rejected, and has no end time).
 // Uses the ClickHouse Prime summary materialized view.
 func (c *Client) WorkflowExecutionStatus(
 	ctx context.Context,
-	executionId string,
+	executionID string,
+	request *vellumclientgo.WorkflowExecutionStatusRequest,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.CheckWorkflowExecutionStatusResponse, error) {
 	options := core.NewRequestOptions(opts...)
@@ -163,7 +231,7 @@ func (c *Client) WorkflowExecutionStatus(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v1/workflows/executions/%v/status", executionId)
+	endpointURL := core.EncodeURL(baseURL+"/v1/workflows/executions/%v/status", executionID)
 
 	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 
@@ -260,8 +328,8 @@ func (c *Client) Push(
 			return nil, err
 		}
 	}
-	if request.WorkflowSandboxId != nil {
-		if err := writer.WriteField("workflow_sandbox_id", fmt.Sprintf("%v", *request.WorkflowSandboxId)); err != nil {
+	if request.WorkflowSandboxID != nil {
+		if err := writer.WriteField("workflow_sandbox_id", fmt.Sprintf("%v", *request.WorkflowSandboxID)); err != nil {
 			return nil, err
 		}
 	}

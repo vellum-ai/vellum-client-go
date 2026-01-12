@@ -17,11 +17,11 @@ type ExecuteWorkflowDeploymentStreamRequest struct {
 	// Optionally specify a release tag if you want to pin to a specific release of the Workflow Deployment
 	ReleaseTag *string `json:"release_tag,omitempty" url:"-"`
 	// Optionally include a unique identifier for tracking purposes. Must be unique within a given Workspace.
-	ExternalId *string `json:"external_id,omitempty" url:"-"`
+	ExternalID *string `json:"external_id,omitempty" url:"-"`
 	// Arbitrary JSON metadata associated with this request. Can be used to capture additional monitoring data such as user id, session id, etc. for future analysis.
 	Metadata map[string]interface{} `json:"metadata,omitempty" url:"-"`
 	// The ID of a previous workflow execution to reference for context.
-	PreviousExecutionId *string `json:"previous_execution_id,omitempty" url:"-"`
+	PreviousExecutionID *string `json:"previous_execution_id,omitempty" url:"-"`
 }
 
 type WorkflowDeploymentsListRequest struct {
@@ -61,6 +61,15 @@ type ListWorkflowReleaseTagsRequest struct {
 	// Which field to use when ordering the results.
 	Ordering *string                               `json:"-" url:"ordering,omitempty"`
 	Source   *ListWorkflowReleaseTagsRequestSource `json:"-" url:"source,omitempty"`
+}
+
+type WorkflowDeploymentsRetrieveRequest struct {
+}
+
+type RetrieveWorkflowDeploymentReleaseRequest struct {
+}
+
+type RetrieveWorkflowReleaseTagRequest struct {
 }
 
 type PaginatedSlimWorkflowDeploymentList struct {
@@ -197,7 +206,7 @@ func (p *PaginatedWorkflowReleaseTagReadList) String() string {
 
 // A subset of a Workflow Deployment's full details.
 type SlimWorkflowDeployment struct {
-	Id string `json:"id" url:"id"`
+	ID string `json:"id" url:"id"`
 	// A name that uniquely identifies this workflow deployment within its workspace
 	Name string `json:"name" url:"name"`
 	// A human-readable label for the workflow deployment
@@ -279,7 +288,7 @@ func (s *SlimWorkflowDeployment) String() string {
 }
 
 type SlimWorkflowExecutionRead struct {
-	SpanId        string                                         `json:"span_id" url:"span_id"`
+	SpanID        string                                         `json:"span_id" url:"span_id"`
 	Start         time.Time                                      `json:"start" url:"start"`
 	End           *time.Time                                     `json:"end,omitempty" url:"end,omitempty"`
 	Inputs        []*ExecutionVellumValue                        `json:"inputs" url:"inputs"`
@@ -393,8 +402,8 @@ func (w *WorkflowDeploymentEventExecutionsResponse) String() string {
 }
 
 type WorkflowDeploymentHistoryItem struct {
-	Id                   string    `json:"id" url:"id"`
-	WorkflowDeploymentId string    `json:"workflow_deployment_id" url:"workflow_deployment_id"`
+	ID                   string    `json:"id" url:"id"`
+	WorkflowDeploymentID string    `json:"workflow_deployment_id" url:"workflow_deployment_id"`
 	Timestamp            time.Time `json:"timestamp" url:"timestamp"`
 	// A human-readable label for the workflow deployment
 	Label string `json:"label" url:"label"`
@@ -462,7 +471,7 @@ func (w *WorkflowDeploymentHistoryItem) String() string {
 }
 
 type WorkflowDeploymentRelease struct {
-	Id              string                                       `json:"id" url:"id"`
+	ID              string                                       `json:"id" url:"id"`
 	Created         time.Time                                    `json:"created" url:"created"`
 	Environment     *ReleaseEnvironment                          `json:"environment" url:"environment"`
 	CreatedBy       *ReleaseCreatedBy                            `json:"created_by,omitempty" url:"created_by,omitempty"`
@@ -529,7 +538,7 @@ func (w *WorkflowDeploymentRelease) String() string {
 }
 
 type WorkflowDeploymentReleaseWorkflowDeployment struct {
-	Id   string `json:"id" url:"id"`
+	ID   string `json:"id" url:"id"`
 	Name string `json:"name" url:"name"`
 
 	extraProperties map[string]interface{}
@@ -571,7 +580,7 @@ func (w *WorkflowDeploymentReleaseWorkflowDeployment) String() string {
 }
 
 type WorkflowDeploymentReleaseWorkflowVersion struct {
-	Id              string            `json:"id" url:"id"`
+	ID              string            `json:"id" url:"id"`
 	InputVariables  []*VellumVariable `json:"input_variables" url:"input_variables"`
 	OutputVariables []*VellumVariable `json:"output_variables" url:"output_variables"`
 
@@ -614,7 +623,7 @@ func (w *WorkflowDeploymentReleaseWorkflowVersion) String() string {
 }
 
 type WorkflowEventExecutionRead struct {
-	SpanId        string                                         `json:"span_id" url:"span_id"`
+	SpanID        string                                         `json:"span_id" url:"span_id"`
 	Start         time.Time                                      `json:"start" url:"start"`
 	End           *time.Time                                     `json:"end,omitempty" url:"end,omitempty"`
 	Inputs        []*ExecutionVellumValue                        `json:"inputs" url:"inputs"`
@@ -752,7 +761,7 @@ func (w *WorkflowExecutionActual) String() string {
 type WorkflowExecutionViewOnlineEvalMetricResult struct {
 	Outputs  []*ExecutionVellumValue `json:"outputs" url:"outputs"`
 	Label    string                  `json:"label" url:"label"`
-	MetricId string                  `json:"metric_id" url:"metric_id"`
+	MetricID string                  `json:"metric_id" url:"metric_id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -844,7 +853,7 @@ func (w *WorkflowReleaseTagRead) String() string {
 }
 
 type WorkflowReleaseTagWorkflowDeploymentHistoryItem struct {
-	Id        string    `json:"id" url:"id"`
+	ID        string    `json:"id" url:"id"`
 	Timestamp time.Time `json:"timestamp" url:"timestamp"`
 
 	extraProperties map[string]interface{}
@@ -949,5 +958,11 @@ func (w WorkflowDeploymentsListRequestStatus) Ptr() *WorkflowDeploymentsListRequ
 
 type PatchedWorkflowReleaseTagUpdateRequest struct {
 	// The ID of the Workflow Deployment History Item to tag
-	HistoryItemId *string `json:"history_item_id,omitempty" url:"-"`
+	HistoryItemID *string `json:"history_item_id,omitempty" url:"-"`
+}
+
+type WorkflowDeploymentEventExecutionRequest struct {
+}
+
+type WorkflowDeploymentHistoryItemRetrieveRequest struct {
 }

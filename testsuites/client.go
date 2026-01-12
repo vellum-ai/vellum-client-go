@@ -8,6 +8,7 @@ import (
 	core "github.com/vellum-ai/vellum-client-go/core"
 	option "github.com/vellum-ai/vellum-client-go/option"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -18,8 +19,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.APIVersion == "" {
+		options.APIVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -133,7 +134,7 @@ func (c *Client) TestSuiteTestCasesBulk(
 	ctx context.Context,
 	// Either the Test Suites' ID or its unique name
 	id string,
-	request []*vellumclientgo.TestSuiteTestCaseBulkOperationRequest,
+	request *vellumclientgo.TestSuiteTestCasesBulkRequest,
 	opts ...option.RequestOption,
 ) (*core.Stream[[]*vellumclientgo.TestSuiteTestCaseBulkResult], error) {
 	options := core.NewRequestOptions(opts...)
@@ -171,7 +172,8 @@ func (c *Client) DeleteTestSuiteTestCase(
 	// Either the Test Suites' ID or its unique name
 	id string,
 	// An id identifying the test case that you'd like to delete
-	testCaseId string,
+	testCaseID string,
+	request *vellumclientgo.DeleteTestSuiteTestCaseRequest,
 	opts ...option.RequestOption,
 ) error {
 	options := core.NewRequestOptions(opts...)
@@ -186,7 +188,7 @@ func (c *Client) DeleteTestSuiteTestCase(
 	endpointURL := core.EncodeURL(
 		baseURL+"/v1/test-suites/%v/test-cases/%v",
 		id,
-		testCaseId,
+		testCaseID,
 	)
 
 	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())

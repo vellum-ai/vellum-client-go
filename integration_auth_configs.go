@@ -30,14 +30,14 @@ type ListIntegrationAuthConfigsRequest struct {
 type AuthTypeEnum string
 
 const (
-	AuthTypeEnumApiKey AuthTypeEnum = "API_KEY"
+	AuthTypeEnumAPIKey AuthTypeEnum = "API_KEY"
 	AuthTypeEnumOauth2 AuthTypeEnum = "OAUTH2"
 )
 
 func NewAuthTypeEnumFromString(s string) (AuthTypeEnum, error) {
 	switch s {
 	case "API_KEY":
-		return AuthTypeEnumApiKey, nil
+		return AuthTypeEnumAPIKey, nil
 	case "OAUTH2":
 		return AuthTypeEnumOauth2, nil
 	}
@@ -50,7 +50,7 @@ func (a AuthTypeEnum) Ptr() *AuthTypeEnum {
 }
 
 type IntegrationAuthConfigIntegration struct {
-	Id       string              `json:"id" url:"id"`
+	ID       string              `json:"id" url:"id"`
 	Provider IntegrationProvider `json:"provider" url:"provider"`
 	Name     IntegrationName     `json:"name" url:"name"`
 
@@ -93,7 +93,7 @@ func (i *IntegrationAuthConfigIntegration) String() string {
 }
 
 type IntegrationAuthConfigIntegrationCredential struct {
-	Id string `json:"id" url:"id"`
+	ID string `json:"id" url:"id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -203,7 +203,7 @@ func (p *PaginatedSlimIntegrationAuthConfigReadList) String() string {
 
 // A slim representation of an Integration Auth Config.
 type SlimIntegrationAuthConfigRead struct {
-	Id                     string                                        `json:"id" url:"id"`
+	ID                     string                                        `json:"id" url:"id"`
 	Integration            *IntegrationAuthConfigIntegration             `json:"integration" url:"integration"`
 	AuthType               *AuthTypeEnum                                 `json:"auth_type,omitempty" url:"auth_type,omitempty"`
 	IntegrationCredentials []*IntegrationAuthConfigIntegrationCredential `json:"integration_credentials,omitempty" url:"integration_credentials,omitempty"`

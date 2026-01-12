@@ -8,11 +8,31 @@ import (
 	core "github.com/vellum-ai/vellum-client-go/core"
 )
 
+type DeleteTestSuiteTestCaseRequest struct {
+}
+
 type ListTestSuiteTestCasesRequest struct {
 	// Number of results to return per page.
 	Limit *int `json:"-" url:"limit,omitempty"`
 	// The initial index from which to return the results.
 	Offset *int `json:"-" url:"offset,omitempty"`
+}
+
+type TestSuiteTestCasesBulkRequest struct {
+	Body []*TestSuiteTestCaseBulkOperationRequest `json:"-" url:"-"`
+}
+
+func (t *TestSuiteTestCasesBulkRequest) UnmarshalJSON(data []byte) error {
+	var body []*TestSuiteTestCaseBulkOperationRequest
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	t.Body = body
+	return nil
+}
+
+func (t *TestSuiteTestCasesBulkRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(t.Body)
 }
 
 // Information about the Test Case to create
@@ -24,7 +44,7 @@ type CreateTestSuiteTestCaseRequest struct {
 	// Values for each of the Test Case's evaluation variables
 	EvaluationValues []*NamedTestCaseVariableValueRequest `json:"evaluation_values" url:"evaluation_values"`
 	// Optionally provide an ID that uniquely identifies this Test Case in your system. Useful for updating this Test Cases data after initial creation. Cannot be changed later.
-	ExternalId *string `json:"external_id,omitempty" url:"external_id,omitempty"`
+	ExternalID *string `json:"external_id,omitempty" url:"external_id,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -111,9 +131,9 @@ func (p *PaginatedTestSuiteTestCaseList) String() string {
 // Information about the Test Case to replace
 type ReplaceTestSuiteTestCaseRequest struct {
 	// The Vellum-generated ID of the Test Case whose data you'd like to replace. Must specify either this or external_id.
-	Id *string `json:"id,omitempty" url:"id,omitempty"`
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
 	// The ID that was originally provided upon Test Case creation that uniquely identifies the Test Case whose data you'd like to replace. Must specify either this of id.
-	ExternalId *string `json:"external_id,omitempty" url:"external_id,omitempty"`
+	ExternalID *string `json:"external_id,omitempty" url:"external_id,omitempty"`
 	// A human-readable label used to convey the intention of this Test Case
 	Label *string `json:"label,omitempty" url:"label,omitempty"`
 	// Values for each of the Test Case's input variables
@@ -161,10 +181,9 @@ func (r *ReplaceTestSuiteTestCaseRequest) String() string {
 
 // An Array value for a variable in a Test Case.
 type TestCaseArrayVariableValue struct {
-	VariableId string         `json:"variable_id" url:"variable_id"`
+	VariableID string         `json:"variable_id" url:"variable_id"`
 	Name       string         `json:"name" url:"name"`
 	Value      []*VellumValue `json:"value,omitempty" url:"value,omitempty"`
-	type_      string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -174,28 +193,15 @@ func (t *TestCaseArrayVariableValue) GetExtraProperties() map[string]interface{}
 	return t.extraProperties
 }
 
-func (t *TestCaseArrayVariableValue) Type() string {
-	return t.type_
-}
-
 func (t *TestCaseArrayVariableValue) UnmarshalJSON(data []byte) error {
-	type embed TestCaseArrayVariableValue
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestCaseArrayVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestCaseArrayVariableValue(unmarshaler.embed)
-	if unmarshaler.Type != "ARRAY" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "ARRAY", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestCaseArrayVariableValue(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -203,18 +209,6 @@ func (t *TestCaseArrayVariableValue) UnmarshalJSON(data []byte) error {
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestCaseArrayVariableValue) MarshalJSON() ([]byte, error) {
-	type embed TestCaseArrayVariableValue
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "ARRAY",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestCaseArrayVariableValue) String() string {
@@ -231,10 +225,9 @@ func (t *TestCaseArrayVariableValue) String() string {
 
 // An audio value for a variable in a Test Case.
 type TestCaseAudioVariableValue struct {
-	VariableId string       `json:"variable_id" url:"variable_id"`
+	VariableID string       `json:"variable_id" url:"variable_id"`
 	Name       *string      `json:"name,omitempty" url:"name,omitempty"`
 	Value      *VellumAudio `json:"value,omitempty" url:"value,omitempty"`
-	type_      string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -244,28 +237,15 @@ func (t *TestCaseAudioVariableValue) GetExtraProperties() map[string]interface{}
 	return t.extraProperties
 }
 
-func (t *TestCaseAudioVariableValue) Type() string {
-	return t.type_
-}
-
 func (t *TestCaseAudioVariableValue) UnmarshalJSON(data []byte) error {
-	type embed TestCaseAudioVariableValue
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestCaseAudioVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestCaseAudioVariableValue(unmarshaler.embed)
-	if unmarshaler.Type != "AUDIO" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "AUDIO", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestCaseAudioVariableValue(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -273,18 +253,6 @@ func (t *TestCaseAudioVariableValue) UnmarshalJSON(data []byte) error {
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestCaseAudioVariableValue) MarshalJSON() ([]byte, error) {
-	type embed TestCaseAudioVariableValue
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "AUDIO",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestCaseAudioVariableValue) String() string {
@@ -301,10 +269,9 @@ func (t *TestCaseAudioVariableValue) String() string {
 
 // A chat history value for a variable in a Test Case.
 type TestCaseChatHistoryVariableValue struct {
-	VariableId string         `json:"variable_id" url:"variable_id"`
+	VariableID string         `json:"variable_id" url:"variable_id"`
 	Name       string         `json:"name" url:"name"`
 	Value      []*ChatMessage `json:"value,omitempty" url:"value,omitempty"`
-	type_      string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -314,28 +281,15 @@ func (t *TestCaseChatHistoryVariableValue) GetExtraProperties() map[string]inter
 	return t.extraProperties
 }
 
-func (t *TestCaseChatHistoryVariableValue) Type() string {
-	return t.type_
-}
-
 func (t *TestCaseChatHistoryVariableValue) UnmarshalJSON(data []byte) error {
-	type embed TestCaseChatHistoryVariableValue
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestCaseChatHistoryVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestCaseChatHistoryVariableValue(unmarshaler.embed)
-	if unmarshaler.Type != "CHAT_HISTORY" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "CHAT_HISTORY", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestCaseChatHistoryVariableValue(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -343,18 +297,6 @@ func (t *TestCaseChatHistoryVariableValue) UnmarshalJSON(data []byte) error {
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestCaseChatHistoryVariableValue) MarshalJSON() ([]byte, error) {
-	type embed TestCaseChatHistoryVariableValue
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "CHAT_HISTORY",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestCaseChatHistoryVariableValue) String() string {
@@ -371,10 +313,9 @@ func (t *TestCaseChatHistoryVariableValue) String() string {
 
 // A document value for a variable in a Test Case.
 type TestCaseDocumentVariableValue struct {
-	VariableId string          `json:"variable_id" url:"variable_id"`
+	VariableID string          `json:"variable_id" url:"variable_id"`
 	Name       *string         `json:"name,omitempty" url:"name,omitempty"`
 	Value      *VellumDocument `json:"value,omitempty" url:"value,omitempty"`
-	type_      string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -384,28 +325,15 @@ func (t *TestCaseDocumentVariableValue) GetExtraProperties() map[string]interfac
 	return t.extraProperties
 }
 
-func (t *TestCaseDocumentVariableValue) Type() string {
-	return t.type_
-}
-
 func (t *TestCaseDocumentVariableValue) UnmarshalJSON(data []byte) error {
-	type embed TestCaseDocumentVariableValue
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestCaseDocumentVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestCaseDocumentVariableValue(unmarshaler.embed)
-	if unmarshaler.Type != "DOCUMENT" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "DOCUMENT", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestCaseDocumentVariableValue(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -413,18 +341,6 @@ func (t *TestCaseDocumentVariableValue) UnmarshalJSON(data []byte) error {
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestCaseDocumentVariableValue) MarshalJSON() ([]byte, error) {
-	type embed TestCaseDocumentVariableValue
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "DOCUMENT",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestCaseDocumentVariableValue) String() string {
@@ -441,10 +357,9 @@ func (t *TestCaseDocumentVariableValue) String() string {
 
 // An error value for a variable in a Test Case.
 type TestCaseErrorVariableValue struct {
-	VariableId string       `json:"variable_id" url:"variable_id"`
+	VariableID string       `json:"variable_id" url:"variable_id"`
 	Name       string       `json:"name" url:"name"`
 	Value      *VellumError `json:"value,omitempty" url:"value,omitempty"`
-	type_      string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -454,28 +369,15 @@ func (t *TestCaseErrorVariableValue) GetExtraProperties() map[string]interface{}
 	return t.extraProperties
 }
 
-func (t *TestCaseErrorVariableValue) Type() string {
-	return t.type_
-}
-
 func (t *TestCaseErrorVariableValue) UnmarshalJSON(data []byte) error {
-	type embed TestCaseErrorVariableValue
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestCaseErrorVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestCaseErrorVariableValue(unmarshaler.embed)
-	if unmarshaler.Type != "ERROR" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "ERROR", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestCaseErrorVariableValue(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -483,18 +385,6 @@ func (t *TestCaseErrorVariableValue) UnmarshalJSON(data []byte) error {
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestCaseErrorVariableValue) MarshalJSON() ([]byte, error) {
-	type embed TestCaseErrorVariableValue
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "ERROR",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestCaseErrorVariableValue) String() string {
@@ -511,10 +401,9 @@ func (t *TestCaseErrorVariableValue) String() string {
 
 // A function call value for a variable in a Test Case.
 type TestCaseFunctionCallVariableValue struct {
-	VariableId string        `json:"variable_id" url:"variable_id"`
+	VariableID string        `json:"variable_id" url:"variable_id"`
 	Name       string        `json:"name" url:"name"`
 	Value      *FunctionCall `json:"value,omitempty" url:"value,omitempty"`
-	type_      string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -524,28 +413,15 @@ func (t *TestCaseFunctionCallVariableValue) GetExtraProperties() map[string]inte
 	return t.extraProperties
 }
 
-func (t *TestCaseFunctionCallVariableValue) Type() string {
-	return t.type_
-}
-
 func (t *TestCaseFunctionCallVariableValue) UnmarshalJSON(data []byte) error {
-	type embed TestCaseFunctionCallVariableValue
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestCaseFunctionCallVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestCaseFunctionCallVariableValue(unmarshaler.embed)
-	if unmarshaler.Type != "FUNCTION_CALL" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "FUNCTION_CALL", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestCaseFunctionCallVariableValue(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -553,18 +429,6 @@ func (t *TestCaseFunctionCallVariableValue) UnmarshalJSON(data []byte) error {
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestCaseFunctionCallVariableValue) MarshalJSON() ([]byte, error) {
-	type embed TestCaseFunctionCallVariableValue
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "FUNCTION_CALL",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestCaseFunctionCallVariableValue) String() string {
@@ -581,10 +445,9 @@ func (t *TestCaseFunctionCallVariableValue) String() string {
 
 // An image value for a variable in a Test Case.
 type TestCaseImageVariableValue struct {
-	VariableId string       `json:"variable_id" url:"variable_id"`
+	VariableID string       `json:"variable_id" url:"variable_id"`
 	Name       *string      `json:"name,omitempty" url:"name,omitempty"`
 	Value      *VellumImage `json:"value,omitempty" url:"value,omitempty"`
-	type_      string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -594,28 +457,15 @@ func (t *TestCaseImageVariableValue) GetExtraProperties() map[string]interface{}
 	return t.extraProperties
 }
 
-func (t *TestCaseImageVariableValue) Type() string {
-	return t.type_
-}
-
 func (t *TestCaseImageVariableValue) UnmarshalJSON(data []byte) error {
-	type embed TestCaseImageVariableValue
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestCaseImageVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestCaseImageVariableValue(unmarshaler.embed)
-	if unmarshaler.Type != "IMAGE" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "IMAGE", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestCaseImageVariableValue(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -623,18 +473,6 @@ func (t *TestCaseImageVariableValue) UnmarshalJSON(data []byte) error {
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestCaseImageVariableValue) MarshalJSON() ([]byte, error) {
-	type embed TestCaseImageVariableValue
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "IMAGE",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestCaseImageVariableValue) String() string {
@@ -650,42 +488,28 @@ func (t *TestCaseImageVariableValue) String() string {
 }
 
 // A JSON value for a variable in a Test Case.
-type TestCaseJsonVariableValue struct {
-	VariableId string      `json:"variable_id" url:"variable_id"`
+type TestCaseJSONVariableValue struct {
+	VariableID string      `json:"variable_id" url:"variable_id"`
 	Name       string      `json:"name" url:"name"`
-	Value      interface{} `json:"value" url:"value"`
-	type_      string
+	Value      interface{} `json:"value,omitempty" url:"value,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
 }
 
-func (t *TestCaseJsonVariableValue) GetExtraProperties() map[string]interface{} {
+func (t *TestCaseJSONVariableValue) GetExtraProperties() map[string]interface{} {
 	return t.extraProperties
 }
 
-func (t *TestCaseJsonVariableValue) Type() string {
-	return t.type_
-}
-
-func (t *TestCaseJsonVariableValue) UnmarshalJSON(data []byte) error {
-	type embed TestCaseJsonVariableValue
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+func (t *TestCaseJSONVariableValue) UnmarshalJSON(data []byte) error {
+	type unmarshaler TestCaseJSONVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestCaseJsonVariableValue(unmarshaler.embed)
-	if unmarshaler.Type != "JSON" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "JSON", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestCaseJSONVariableValue(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -695,19 +519,7 @@ func (t *TestCaseJsonVariableValue) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (t *TestCaseJsonVariableValue) MarshalJSON() ([]byte, error) {
-	type embed TestCaseJsonVariableValue
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "JSON",
-	}
-	return json.Marshal(marshaler)
-}
-
-func (t *TestCaseJsonVariableValue) String() string {
+func (t *TestCaseJSONVariableValue) String() string {
 	if len(t._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(t._rawJSON); err == nil {
 			return value
@@ -721,10 +533,9 @@ func (t *TestCaseJsonVariableValue) String() string {
 
 // A numerical value for a variable in a Test Case.
 type TestCaseNumberVariableValue struct {
-	VariableId string   `json:"variable_id" url:"variable_id"`
+	VariableID string   `json:"variable_id" url:"variable_id"`
 	Name       string   `json:"name" url:"name"`
 	Value      *float64 `json:"value,omitempty" url:"value,omitempty"`
-	type_      string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -734,28 +545,15 @@ func (t *TestCaseNumberVariableValue) GetExtraProperties() map[string]interface{
 	return t.extraProperties
 }
 
-func (t *TestCaseNumberVariableValue) Type() string {
-	return t.type_
-}
-
 func (t *TestCaseNumberVariableValue) UnmarshalJSON(data []byte) error {
-	type embed TestCaseNumberVariableValue
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestCaseNumberVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestCaseNumberVariableValue(unmarshaler.embed)
-	if unmarshaler.Type != "NUMBER" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "NUMBER", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestCaseNumberVariableValue(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -763,18 +561,6 @@ func (t *TestCaseNumberVariableValue) UnmarshalJSON(data []byte) error {
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestCaseNumberVariableValue) MarshalJSON() ([]byte, error) {
-	type embed TestCaseNumberVariableValue
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "NUMBER",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestCaseNumberVariableValue) String() string {
@@ -791,10 +577,9 @@ func (t *TestCaseNumberVariableValue) String() string {
 
 // A search results value for a variable in a Test Case.
 type TestCaseSearchResultsVariableValue struct {
-	VariableId string          `json:"variable_id" url:"variable_id"`
+	VariableID string          `json:"variable_id" url:"variable_id"`
 	Name       string          `json:"name" url:"name"`
 	Value      []*SearchResult `json:"value,omitempty" url:"value,omitempty"`
-	type_      string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -804,28 +589,15 @@ func (t *TestCaseSearchResultsVariableValue) GetExtraProperties() map[string]int
 	return t.extraProperties
 }
 
-func (t *TestCaseSearchResultsVariableValue) Type() string {
-	return t.type_
-}
-
 func (t *TestCaseSearchResultsVariableValue) UnmarshalJSON(data []byte) error {
-	type embed TestCaseSearchResultsVariableValue
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestCaseSearchResultsVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestCaseSearchResultsVariableValue(unmarshaler.embed)
-	if unmarshaler.Type != "SEARCH_RESULTS" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "SEARCH_RESULTS", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestCaseSearchResultsVariableValue(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -833,18 +605,6 @@ func (t *TestCaseSearchResultsVariableValue) UnmarshalJSON(data []byte) error {
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestCaseSearchResultsVariableValue) MarshalJSON() ([]byte, error) {
-	type embed TestCaseSearchResultsVariableValue
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "SEARCH_RESULTS",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestCaseSearchResultsVariableValue) String() string {
@@ -861,10 +621,9 @@ func (t *TestCaseSearchResultsVariableValue) String() string {
 
 // A string value for a variable in a Test Case.
 type TestCaseStringVariableValue struct {
-	VariableId string  `json:"variable_id" url:"variable_id"`
+	VariableID string  `json:"variable_id" url:"variable_id"`
 	Name       string  `json:"name" url:"name"`
 	Value      *string `json:"value,omitempty" url:"value,omitempty"`
-	type_      string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -874,28 +633,15 @@ func (t *TestCaseStringVariableValue) GetExtraProperties() map[string]interface{
 	return t.extraProperties
 }
 
-func (t *TestCaseStringVariableValue) Type() string {
-	return t.type_
-}
-
 func (t *TestCaseStringVariableValue) UnmarshalJSON(data []byte) error {
-	type embed TestCaseStringVariableValue
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestCaseStringVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestCaseStringVariableValue(unmarshaler.embed)
-	if unmarshaler.Type != "STRING" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "STRING", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestCaseStringVariableValue(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -903,18 +649,6 @@ func (t *TestCaseStringVariableValue) UnmarshalJSON(data []byte) error {
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestCaseStringVariableValue) MarshalJSON() ([]byte, error) {
-	type embed TestCaseStringVariableValue
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "STRING",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestCaseStringVariableValue) String() string {
@@ -930,185 +664,209 @@ func (t *TestCaseStringVariableValue) String() string {
 }
 
 type TestCaseVariableValue struct {
-	TestCaseStringVariableValue        *TestCaseStringVariableValue
-	TestCaseNumberVariableValue        *TestCaseNumberVariableValue
-	TestCaseJsonVariableValue          *TestCaseJsonVariableValue
-	TestCaseChatHistoryVariableValue   *TestCaseChatHistoryVariableValue
-	TestCaseSearchResultsVariableValue *TestCaseSearchResultsVariableValue
-	TestCaseErrorVariableValue         *TestCaseErrorVariableValue
-	TestCaseFunctionCallVariableValue  *TestCaseFunctionCallVariableValue
-	TestCaseArrayVariableValue         *TestCaseArrayVariableValue
-	TestCaseAudioVariableValue         *TestCaseAudioVariableValue
-	TestCaseImageVariableValue         *TestCaseImageVariableValue
-	TestCaseVideoVariableValue         *TestCaseVideoVariableValue
-	TestCaseDocumentVariableValue      *TestCaseDocumentVariableValue
+	Type          string
+	String        *TestCaseStringVariableValue
+	Number        *TestCaseNumberVariableValue
+	JSON          *TestCaseJSONVariableValue
+	ChatHistory   *TestCaseChatHistoryVariableValue
+	SearchResults *TestCaseSearchResultsVariableValue
+	Error         *TestCaseErrorVariableValue
+	FunctionCall  *TestCaseFunctionCallVariableValue
+	Array         *TestCaseArrayVariableValue
+	Audio         *TestCaseAudioVariableValue
+	Image         *TestCaseImageVariableValue
+	Video         *TestCaseVideoVariableValue
+	Document      *TestCaseDocumentVariableValue
 }
 
 func (t *TestCaseVariableValue) UnmarshalJSON(data []byte) error {
-	valueTestCaseStringVariableValue := new(TestCaseStringVariableValue)
-	if err := json.Unmarshal(data, &valueTestCaseStringVariableValue); err == nil {
-		t.TestCaseStringVariableValue = valueTestCaseStringVariableValue
-		return nil
+	var unmarshaler struct {
+		Type string `json:"type"`
 	}
-	valueTestCaseNumberVariableValue := new(TestCaseNumberVariableValue)
-	if err := json.Unmarshal(data, &valueTestCaseNumberVariableValue); err == nil {
-		t.TestCaseNumberVariableValue = valueTestCaseNumberVariableValue
-		return nil
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
 	}
-	valueTestCaseJsonVariableValue := new(TestCaseJsonVariableValue)
-	if err := json.Unmarshal(data, &valueTestCaseJsonVariableValue); err == nil {
-		t.TestCaseJsonVariableValue = valueTestCaseJsonVariableValue
-		return nil
+	t.Type = unmarshaler.Type
+	if unmarshaler.Type == "" {
+		return fmt.Errorf("%T did not include discriminant type", t)
 	}
-	valueTestCaseChatHistoryVariableValue := new(TestCaseChatHistoryVariableValue)
-	if err := json.Unmarshal(data, &valueTestCaseChatHistoryVariableValue); err == nil {
-		t.TestCaseChatHistoryVariableValue = valueTestCaseChatHistoryVariableValue
-		return nil
+	switch unmarshaler.Type {
+	case "STRING":
+		value := new(TestCaseStringVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.String = value
+	case "NUMBER":
+		value := new(TestCaseNumberVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Number = value
+	case "JSON":
+		value := new(TestCaseJSONVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.JSON = value
+	case "CHAT_HISTORY":
+		value := new(TestCaseChatHistoryVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.ChatHistory = value
+	case "SEARCH_RESULTS":
+		value := new(TestCaseSearchResultsVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.SearchResults = value
+	case "ERROR":
+		value := new(TestCaseErrorVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Error = value
+	case "FUNCTION_CALL":
+		value := new(TestCaseFunctionCallVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.FunctionCall = value
+	case "ARRAY":
+		value := new(TestCaseArrayVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Array = value
+	case "AUDIO":
+		value := new(TestCaseAudioVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Audio = value
+	case "IMAGE":
+		value := new(TestCaseImageVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Image = value
+	case "VIDEO":
+		value := new(TestCaseVideoVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Video = value
+	case "DOCUMENT":
+		value := new(TestCaseDocumentVariableValue)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Document = value
 	}
-	valueTestCaseSearchResultsVariableValue := new(TestCaseSearchResultsVariableValue)
-	if err := json.Unmarshal(data, &valueTestCaseSearchResultsVariableValue); err == nil {
-		t.TestCaseSearchResultsVariableValue = valueTestCaseSearchResultsVariableValue
-		return nil
-	}
-	valueTestCaseErrorVariableValue := new(TestCaseErrorVariableValue)
-	if err := json.Unmarshal(data, &valueTestCaseErrorVariableValue); err == nil {
-		t.TestCaseErrorVariableValue = valueTestCaseErrorVariableValue
-		return nil
-	}
-	valueTestCaseFunctionCallVariableValue := new(TestCaseFunctionCallVariableValue)
-	if err := json.Unmarshal(data, &valueTestCaseFunctionCallVariableValue); err == nil {
-		t.TestCaseFunctionCallVariableValue = valueTestCaseFunctionCallVariableValue
-		return nil
-	}
-	valueTestCaseArrayVariableValue := new(TestCaseArrayVariableValue)
-	if err := json.Unmarshal(data, &valueTestCaseArrayVariableValue); err == nil {
-		t.TestCaseArrayVariableValue = valueTestCaseArrayVariableValue
-		return nil
-	}
-	valueTestCaseAudioVariableValue := new(TestCaseAudioVariableValue)
-	if err := json.Unmarshal(data, &valueTestCaseAudioVariableValue); err == nil {
-		t.TestCaseAudioVariableValue = valueTestCaseAudioVariableValue
-		return nil
-	}
-	valueTestCaseImageVariableValue := new(TestCaseImageVariableValue)
-	if err := json.Unmarshal(data, &valueTestCaseImageVariableValue); err == nil {
-		t.TestCaseImageVariableValue = valueTestCaseImageVariableValue
-		return nil
-	}
-	valueTestCaseVideoVariableValue := new(TestCaseVideoVariableValue)
-	if err := json.Unmarshal(data, &valueTestCaseVideoVariableValue); err == nil {
-		t.TestCaseVideoVariableValue = valueTestCaseVideoVariableValue
-		return nil
-	}
-	valueTestCaseDocumentVariableValue := new(TestCaseDocumentVariableValue)
-	if err := json.Unmarshal(data, &valueTestCaseDocumentVariableValue); err == nil {
-		t.TestCaseDocumentVariableValue = valueTestCaseDocumentVariableValue
-		return nil
-	}
-	return fmt.Errorf("%s cannot be deserialized as a %T", data, t)
+	return nil
 }
 
 func (t TestCaseVariableValue) MarshalJSON() ([]byte, error) {
-	if t.TestCaseStringVariableValue != nil {
-		return json.Marshal(t.TestCaseStringVariableValue)
+	if t.String != nil {
+		return core.MarshalJSONWithExtraProperty(t.String, "type", "STRING")
 	}
-	if t.TestCaseNumberVariableValue != nil {
-		return json.Marshal(t.TestCaseNumberVariableValue)
+	if t.Number != nil {
+		return core.MarshalJSONWithExtraProperty(t.Number, "type", "NUMBER")
 	}
-	if t.TestCaseJsonVariableValue != nil {
-		return json.Marshal(t.TestCaseJsonVariableValue)
+	if t.JSON != nil {
+		return core.MarshalJSONWithExtraProperty(t.JSON, "type", "JSON")
 	}
-	if t.TestCaseChatHistoryVariableValue != nil {
-		return json.Marshal(t.TestCaseChatHistoryVariableValue)
+	if t.ChatHistory != nil {
+		return core.MarshalJSONWithExtraProperty(t.ChatHistory, "type", "CHAT_HISTORY")
 	}
-	if t.TestCaseSearchResultsVariableValue != nil {
-		return json.Marshal(t.TestCaseSearchResultsVariableValue)
+	if t.SearchResults != nil {
+		return core.MarshalJSONWithExtraProperty(t.SearchResults, "type", "SEARCH_RESULTS")
 	}
-	if t.TestCaseErrorVariableValue != nil {
-		return json.Marshal(t.TestCaseErrorVariableValue)
+	if t.Error != nil {
+		return core.MarshalJSONWithExtraProperty(t.Error, "type", "ERROR")
 	}
-	if t.TestCaseFunctionCallVariableValue != nil {
-		return json.Marshal(t.TestCaseFunctionCallVariableValue)
+	if t.FunctionCall != nil {
+		return core.MarshalJSONWithExtraProperty(t.FunctionCall, "type", "FUNCTION_CALL")
 	}
-	if t.TestCaseArrayVariableValue != nil {
-		return json.Marshal(t.TestCaseArrayVariableValue)
+	if t.Array != nil {
+		return core.MarshalJSONWithExtraProperty(t.Array, "type", "ARRAY")
 	}
-	if t.TestCaseAudioVariableValue != nil {
-		return json.Marshal(t.TestCaseAudioVariableValue)
+	if t.Audio != nil {
+		return core.MarshalJSONWithExtraProperty(t.Audio, "type", "AUDIO")
 	}
-	if t.TestCaseImageVariableValue != nil {
-		return json.Marshal(t.TestCaseImageVariableValue)
+	if t.Image != nil {
+		return core.MarshalJSONWithExtraProperty(t.Image, "type", "IMAGE")
 	}
-	if t.TestCaseVideoVariableValue != nil {
-		return json.Marshal(t.TestCaseVideoVariableValue)
+	if t.Video != nil {
+		return core.MarshalJSONWithExtraProperty(t.Video, "type", "VIDEO")
 	}
-	if t.TestCaseDocumentVariableValue != nil {
-		return json.Marshal(t.TestCaseDocumentVariableValue)
+	if t.Document != nil {
+		return core.MarshalJSONWithExtraProperty(t.Document, "type", "DOCUMENT")
 	}
-	return nil, fmt.Errorf("type %T does not include a non-empty union type", t)
+	return nil, fmt.Errorf("type %T does not define a non-empty union type", t)
 }
 
 type TestCaseVariableValueVisitor interface {
-	VisitTestCaseStringVariableValue(*TestCaseStringVariableValue) error
-	VisitTestCaseNumberVariableValue(*TestCaseNumberVariableValue) error
-	VisitTestCaseJsonVariableValue(*TestCaseJsonVariableValue) error
-	VisitTestCaseChatHistoryVariableValue(*TestCaseChatHistoryVariableValue) error
-	VisitTestCaseSearchResultsVariableValue(*TestCaseSearchResultsVariableValue) error
-	VisitTestCaseErrorVariableValue(*TestCaseErrorVariableValue) error
-	VisitTestCaseFunctionCallVariableValue(*TestCaseFunctionCallVariableValue) error
-	VisitTestCaseArrayVariableValue(*TestCaseArrayVariableValue) error
-	VisitTestCaseAudioVariableValue(*TestCaseAudioVariableValue) error
-	VisitTestCaseImageVariableValue(*TestCaseImageVariableValue) error
-	VisitTestCaseVideoVariableValue(*TestCaseVideoVariableValue) error
-	VisitTestCaseDocumentVariableValue(*TestCaseDocumentVariableValue) error
+	VisitString(*TestCaseStringVariableValue) error
+	VisitNumber(*TestCaseNumberVariableValue) error
+	VisitJSON(*TestCaseJSONVariableValue) error
+	VisitChatHistory(*TestCaseChatHistoryVariableValue) error
+	VisitSearchResults(*TestCaseSearchResultsVariableValue) error
+	VisitError(*TestCaseErrorVariableValue) error
+	VisitFunctionCall(*TestCaseFunctionCallVariableValue) error
+	VisitArray(*TestCaseArrayVariableValue) error
+	VisitAudio(*TestCaseAudioVariableValue) error
+	VisitImage(*TestCaseImageVariableValue) error
+	VisitVideo(*TestCaseVideoVariableValue) error
+	VisitDocument(*TestCaseDocumentVariableValue) error
 }
 
 func (t *TestCaseVariableValue) Accept(visitor TestCaseVariableValueVisitor) error {
-	if t.TestCaseStringVariableValue != nil {
-		return visitor.VisitTestCaseStringVariableValue(t.TestCaseStringVariableValue)
+	if t.String != nil {
+		return visitor.VisitString(t.String)
 	}
-	if t.TestCaseNumberVariableValue != nil {
-		return visitor.VisitTestCaseNumberVariableValue(t.TestCaseNumberVariableValue)
+	if t.Number != nil {
+		return visitor.VisitNumber(t.Number)
 	}
-	if t.TestCaseJsonVariableValue != nil {
-		return visitor.VisitTestCaseJsonVariableValue(t.TestCaseJsonVariableValue)
+	if t.JSON != nil {
+		return visitor.VisitJSON(t.JSON)
 	}
-	if t.TestCaseChatHistoryVariableValue != nil {
-		return visitor.VisitTestCaseChatHistoryVariableValue(t.TestCaseChatHistoryVariableValue)
+	if t.ChatHistory != nil {
+		return visitor.VisitChatHistory(t.ChatHistory)
 	}
-	if t.TestCaseSearchResultsVariableValue != nil {
-		return visitor.VisitTestCaseSearchResultsVariableValue(t.TestCaseSearchResultsVariableValue)
+	if t.SearchResults != nil {
+		return visitor.VisitSearchResults(t.SearchResults)
 	}
-	if t.TestCaseErrorVariableValue != nil {
-		return visitor.VisitTestCaseErrorVariableValue(t.TestCaseErrorVariableValue)
+	if t.Error != nil {
+		return visitor.VisitError(t.Error)
 	}
-	if t.TestCaseFunctionCallVariableValue != nil {
-		return visitor.VisitTestCaseFunctionCallVariableValue(t.TestCaseFunctionCallVariableValue)
+	if t.FunctionCall != nil {
+		return visitor.VisitFunctionCall(t.FunctionCall)
 	}
-	if t.TestCaseArrayVariableValue != nil {
-		return visitor.VisitTestCaseArrayVariableValue(t.TestCaseArrayVariableValue)
+	if t.Array != nil {
+		return visitor.VisitArray(t.Array)
 	}
-	if t.TestCaseAudioVariableValue != nil {
-		return visitor.VisitTestCaseAudioVariableValue(t.TestCaseAudioVariableValue)
+	if t.Audio != nil {
+		return visitor.VisitAudio(t.Audio)
 	}
-	if t.TestCaseImageVariableValue != nil {
-		return visitor.VisitTestCaseImageVariableValue(t.TestCaseImageVariableValue)
+	if t.Image != nil {
+		return visitor.VisitImage(t.Image)
 	}
-	if t.TestCaseVideoVariableValue != nil {
-		return visitor.VisitTestCaseVideoVariableValue(t.TestCaseVideoVariableValue)
+	if t.Video != nil {
+		return visitor.VisitVideo(t.Video)
 	}
-	if t.TestCaseDocumentVariableValue != nil {
-		return visitor.VisitTestCaseDocumentVariableValue(t.TestCaseDocumentVariableValue)
+	if t.Document != nil {
+		return visitor.VisitDocument(t.Document)
 	}
-	return fmt.Errorf("type %T does not include a non-empty union type", t)
+	return fmt.Errorf("type %T does not define a non-empty union type", t)
 }
 
 // A video value for a variable in a Test Case.
 type TestCaseVideoVariableValue struct {
-	VariableId string       `json:"variable_id" url:"variable_id"`
+	VariableID string       `json:"variable_id" url:"variable_id"`
 	Name       *string      `json:"name,omitempty" url:"name,omitempty"`
 	Value      *VellumVideo `json:"value,omitempty" url:"value,omitempty"`
-	type_      string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -1118,28 +876,15 @@ func (t *TestCaseVideoVariableValue) GetExtraProperties() map[string]interface{}
 	return t.extraProperties
 }
 
-func (t *TestCaseVideoVariableValue) Type() string {
-	return t.type_
-}
-
 func (t *TestCaseVideoVariableValue) UnmarshalJSON(data []byte) error {
-	type embed TestCaseVideoVariableValue
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestCaseVideoVariableValue
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestCaseVideoVariableValue(unmarshaler.embed)
-	if unmarshaler.Type != "VIDEO" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "VIDEO", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestCaseVideoVariableValue(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -1147,18 +892,6 @@ func (t *TestCaseVideoVariableValue) UnmarshalJSON(data []byte) error {
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestCaseVideoVariableValue) MarshalJSON() ([]byte, error) {
-	type embed TestCaseVideoVariableValue
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "VIDEO",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestCaseVideoVariableValue) String() string {
@@ -1174,8 +907,8 @@ func (t *TestCaseVideoVariableValue) String() string {
 }
 
 type TestSuiteTestCase struct {
-	Id               *string                  `json:"id,omitempty" url:"id,omitempty"`
-	ExternalId       *string                  `json:"external_id,omitempty" url:"external_id,omitempty"`
+	ID               *string                  `json:"id,omitempty" url:"id,omitempty"`
+	ExternalID       *string                  `json:"external_id,omitempty" url:"external_id,omitempty"`
 	Label            *string                  `json:"label,omitempty" url:"label,omitempty"`
 	InputValues      []*TestCaseVariableValue `json:"input_values" url:"input_values"`
 	EvaluationValues []*TestCaseVariableValue `json:"evaluation_values" url:"evaluation_values"`
@@ -1219,151 +952,184 @@ func (t *TestSuiteTestCase) String() string {
 }
 
 type TestSuiteTestCaseBulkOperationRequest struct {
-	TestSuiteTestCaseCreateBulkOperationRequest  *TestSuiteTestCaseCreateBulkOperationRequest
-	TestSuiteTestCaseReplaceBulkOperationRequest *TestSuiteTestCaseReplaceBulkOperationRequest
-	TestSuiteTestCaseUpsertBulkOperationRequest  *TestSuiteTestCaseUpsertBulkOperationRequest
-	TestSuiteTestCaseDeleteBulkOperationRequest  *TestSuiteTestCaseDeleteBulkOperationRequest
+	Type    string
+	Create  *TestSuiteTestCaseCreateBulkOperationRequest
+	Replace *TestSuiteTestCaseReplaceBulkOperationRequest
+	Upsert  *TestSuiteTestCaseUpsertBulkOperationRequest
+	Delete  *TestSuiteTestCaseDeleteBulkOperationRequest
 }
 
 func (t *TestSuiteTestCaseBulkOperationRequest) UnmarshalJSON(data []byte) error {
-	valueTestSuiteTestCaseCreateBulkOperationRequest := new(TestSuiteTestCaseCreateBulkOperationRequest)
-	if err := json.Unmarshal(data, &valueTestSuiteTestCaseCreateBulkOperationRequest); err == nil {
-		t.TestSuiteTestCaseCreateBulkOperationRequest = valueTestSuiteTestCaseCreateBulkOperationRequest
-		return nil
+	var unmarshaler struct {
+		Type string `json:"type"`
 	}
-	valueTestSuiteTestCaseReplaceBulkOperationRequest := new(TestSuiteTestCaseReplaceBulkOperationRequest)
-	if err := json.Unmarshal(data, &valueTestSuiteTestCaseReplaceBulkOperationRequest); err == nil {
-		t.TestSuiteTestCaseReplaceBulkOperationRequest = valueTestSuiteTestCaseReplaceBulkOperationRequest
-		return nil
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
 	}
-	valueTestSuiteTestCaseUpsertBulkOperationRequest := new(TestSuiteTestCaseUpsertBulkOperationRequest)
-	if err := json.Unmarshal(data, &valueTestSuiteTestCaseUpsertBulkOperationRequest); err == nil {
-		t.TestSuiteTestCaseUpsertBulkOperationRequest = valueTestSuiteTestCaseUpsertBulkOperationRequest
-		return nil
+	t.Type = unmarshaler.Type
+	if unmarshaler.Type == "" {
+		return fmt.Errorf("%T did not include discriminant type", t)
 	}
-	valueTestSuiteTestCaseDeleteBulkOperationRequest := new(TestSuiteTestCaseDeleteBulkOperationRequest)
-	if err := json.Unmarshal(data, &valueTestSuiteTestCaseDeleteBulkOperationRequest); err == nil {
-		t.TestSuiteTestCaseDeleteBulkOperationRequest = valueTestSuiteTestCaseDeleteBulkOperationRequest
-		return nil
+	switch unmarshaler.Type {
+	case "CREATE":
+		value := new(TestSuiteTestCaseCreateBulkOperationRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Create = value
+	case "REPLACE":
+		value := new(TestSuiteTestCaseReplaceBulkOperationRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Replace = value
+	case "UPSERT":
+		value := new(TestSuiteTestCaseUpsertBulkOperationRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Upsert = value
+	case "DELETE":
+		value := new(TestSuiteTestCaseDeleteBulkOperationRequest)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Delete = value
 	}
-	return fmt.Errorf("%s cannot be deserialized as a %T", data, t)
+	return nil
 }
 
 func (t TestSuiteTestCaseBulkOperationRequest) MarshalJSON() ([]byte, error) {
-	if t.TestSuiteTestCaseCreateBulkOperationRequest != nil {
-		return json.Marshal(t.TestSuiteTestCaseCreateBulkOperationRequest)
+	if t.Create != nil {
+		return core.MarshalJSONWithExtraProperty(t.Create, "type", "CREATE")
 	}
-	if t.TestSuiteTestCaseReplaceBulkOperationRequest != nil {
-		return json.Marshal(t.TestSuiteTestCaseReplaceBulkOperationRequest)
+	if t.Replace != nil {
+		return core.MarshalJSONWithExtraProperty(t.Replace, "type", "REPLACE")
 	}
-	if t.TestSuiteTestCaseUpsertBulkOperationRequest != nil {
-		return json.Marshal(t.TestSuiteTestCaseUpsertBulkOperationRequest)
+	if t.Upsert != nil {
+		return core.MarshalJSONWithExtraProperty(t.Upsert, "type", "UPSERT")
 	}
-	if t.TestSuiteTestCaseDeleteBulkOperationRequest != nil {
-		return json.Marshal(t.TestSuiteTestCaseDeleteBulkOperationRequest)
+	if t.Delete != nil {
+		return core.MarshalJSONWithExtraProperty(t.Delete, "type", "DELETE")
 	}
-	return nil, fmt.Errorf("type %T does not include a non-empty union type", t)
+	return nil, fmt.Errorf("type %T does not define a non-empty union type", t)
 }
 
 type TestSuiteTestCaseBulkOperationRequestVisitor interface {
-	VisitTestSuiteTestCaseCreateBulkOperationRequest(*TestSuiteTestCaseCreateBulkOperationRequest) error
-	VisitTestSuiteTestCaseReplaceBulkOperationRequest(*TestSuiteTestCaseReplaceBulkOperationRequest) error
-	VisitTestSuiteTestCaseUpsertBulkOperationRequest(*TestSuiteTestCaseUpsertBulkOperationRequest) error
-	VisitTestSuiteTestCaseDeleteBulkOperationRequest(*TestSuiteTestCaseDeleteBulkOperationRequest) error
+	VisitCreate(*TestSuiteTestCaseCreateBulkOperationRequest) error
+	VisitReplace(*TestSuiteTestCaseReplaceBulkOperationRequest) error
+	VisitUpsert(*TestSuiteTestCaseUpsertBulkOperationRequest) error
+	VisitDelete(*TestSuiteTestCaseDeleteBulkOperationRequest) error
 }
 
 func (t *TestSuiteTestCaseBulkOperationRequest) Accept(visitor TestSuiteTestCaseBulkOperationRequestVisitor) error {
-	if t.TestSuiteTestCaseCreateBulkOperationRequest != nil {
-		return visitor.VisitTestSuiteTestCaseCreateBulkOperationRequest(t.TestSuiteTestCaseCreateBulkOperationRequest)
+	if t.Create != nil {
+		return visitor.VisitCreate(t.Create)
 	}
-	if t.TestSuiteTestCaseReplaceBulkOperationRequest != nil {
-		return visitor.VisitTestSuiteTestCaseReplaceBulkOperationRequest(t.TestSuiteTestCaseReplaceBulkOperationRequest)
+	if t.Replace != nil {
+		return visitor.VisitReplace(t.Replace)
 	}
-	if t.TestSuiteTestCaseUpsertBulkOperationRequest != nil {
-		return visitor.VisitTestSuiteTestCaseUpsertBulkOperationRequest(t.TestSuiteTestCaseUpsertBulkOperationRequest)
+	if t.Upsert != nil {
+		return visitor.VisitUpsert(t.Upsert)
 	}
-	if t.TestSuiteTestCaseDeleteBulkOperationRequest != nil {
-		return visitor.VisitTestSuiteTestCaseDeleteBulkOperationRequest(t.TestSuiteTestCaseDeleteBulkOperationRequest)
+	if t.Delete != nil {
+		return visitor.VisitDelete(t.Delete)
 	}
-	return fmt.Errorf("type %T does not include a non-empty union type", t)
+	return fmt.Errorf("type %T does not define a non-empty union type", t)
 }
 
 type TestSuiteTestCaseBulkResult struct {
-	TestSuiteTestCaseCreatedBulkResult  *TestSuiteTestCaseCreatedBulkResult
-	TestSuiteTestCaseReplacedBulkResult *TestSuiteTestCaseReplacedBulkResult
-	TestSuiteTestCaseDeletedBulkResult  *TestSuiteTestCaseDeletedBulkResult
-	TestSuiteTestCaseRejectedBulkResult *TestSuiteTestCaseRejectedBulkResult
+	Type     string
+	Created  *TestSuiteTestCaseCreatedBulkResult
+	Replaced *TestSuiteTestCaseReplacedBulkResult
+	Deleted  *TestSuiteTestCaseDeletedBulkResult
+	Rejected *TestSuiteTestCaseRejectedBulkResult
 }
 
 func (t *TestSuiteTestCaseBulkResult) UnmarshalJSON(data []byte) error {
-	valueTestSuiteTestCaseCreatedBulkResult := new(TestSuiteTestCaseCreatedBulkResult)
-	if err := json.Unmarshal(data, &valueTestSuiteTestCaseCreatedBulkResult); err == nil {
-		t.TestSuiteTestCaseCreatedBulkResult = valueTestSuiteTestCaseCreatedBulkResult
-		return nil
+	var unmarshaler struct {
+		Type string `json:"type"`
 	}
-	valueTestSuiteTestCaseReplacedBulkResult := new(TestSuiteTestCaseReplacedBulkResult)
-	if err := json.Unmarshal(data, &valueTestSuiteTestCaseReplacedBulkResult); err == nil {
-		t.TestSuiteTestCaseReplacedBulkResult = valueTestSuiteTestCaseReplacedBulkResult
-		return nil
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
 	}
-	valueTestSuiteTestCaseDeletedBulkResult := new(TestSuiteTestCaseDeletedBulkResult)
-	if err := json.Unmarshal(data, &valueTestSuiteTestCaseDeletedBulkResult); err == nil {
-		t.TestSuiteTestCaseDeletedBulkResult = valueTestSuiteTestCaseDeletedBulkResult
-		return nil
+	t.Type = unmarshaler.Type
+	if unmarshaler.Type == "" {
+		return fmt.Errorf("%T did not include discriminant type", t)
 	}
-	valueTestSuiteTestCaseRejectedBulkResult := new(TestSuiteTestCaseRejectedBulkResult)
-	if err := json.Unmarshal(data, &valueTestSuiteTestCaseRejectedBulkResult); err == nil {
-		t.TestSuiteTestCaseRejectedBulkResult = valueTestSuiteTestCaseRejectedBulkResult
-		return nil
+	switch unmarshaler.Type {
+	case "CREATED":
+		value := new(TestSuiteTestCaseCreatedBulkResult)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Created = value
+	case "REPLACED":
+		value := new(TestSuiteTestCaseReplacedBulkResult)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Replaced = value
+	case "DELETED":
+		value := new(TestSuiteTestCaseDeletedBulkResult)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Deleted = value
+	case "REJECTED":
+		value := new(TestSuiteTestCaseRejectedBulkResult)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		t.Rejected = value
 	}
-	return fmt.Errorf("%s cannot be deserialized as a %T", data, t)
+	return nil
 }
 
 func (t TestSuiteTestCaseBulkResult) MarshalJSON() ([]byte, error) {
-	if t.TestSuiteTestCaseCreatedBulkResult != nil {
-		return json.Marshal(t.TestSuiteTestCaseCreatedBulkResult)
+	if t.Created != nil {
+		return core.MarshalJSONWithExtraProperty(t.Created, "type", "CREATED")
 	}
-	if t.TestSuiteTestCaseReplacedBulkResult != nil {
-		return json.Marshal(t.TestSuiteTestCaseReplacedBulkResult)
+	if t.Replaced != nil {
+		return core.MarshalJSONWithExtraProperty(t.Replaced, "type", "REPLACED")
 	}
-	if t.TestSuiteTestCaseDeletedBulkResult != nil {
-		return json.Marshal(t.TestSuiteTestCaseDeletedBulkResult)
+	if t.Deleted != nil {
+		return core.MarshalJSONWithExtraProperty(t.Deleted, "type", "DELETED")
 	}
-	if t.TestSuiteTestCaseRejectedBulkResult != nil {
-		return json.Marshal(t.TestSuiteTestCaseRejectedBulkResult)
+	if t.Rejected != nil {
+		return core.MarshalJSONWithExtraProperty(t.Rejected, "type", "REJECTED")
 	}
-	return nil, fmt.Errorf("type %T does not include a non-empty union type", t)
+	return nil, fmt.Errorf("type %T does not define a non-empty union type", t)
 }
 
 type TestSuiteTestCaseBulkResultVisitor interface {
-	VisitTestSuiteTestCaseCreatedBulkResult(*TestSuiteTestCaseCreatedBulkResult) error
-	VisitTestSuiteTestCaseReplacedBulkResult(*TestSuiteTestCaseReplacedBulkResult) error
-	VisitTestSuiteTestCaseDeletedBulkResult(*TestSuiteTestCaseDeletedBulkResult) error
-	VisitTestSuiteTestCaseRejectedBulkResult(*TestSuiteTestCaseRejectedBulkResult) error
+	VisitCreated(*TestSuiteTestCaseCreatedBulkResult) error
+	VisitReplaced(*TestSuiteTestCaseReplacedBulkResult) error
+	VisitDeleted(*TestSuiteTestCaseDeletedBulkResult) error
+	VisitRejected(*TestSuiteTestCaseRejectedBulkResult) error
 }
 
 func (t *TestSuiteTestCaseBulkResult) Accept(visitor TestSuiteTestCaseBulkResultVisitor) error {
-	if t.TestSuiteTestCaseCreatedBulkResult != nil {
-		return visitor.VisitTestSuiteTestCaseCreatedBulkResult(t.TestSuiteTestCaseCreatedBulkResult)
+	if t.Created != nil {
+		return visitor.VisitCreated(t.Created)
 	}
-	if t.TestSuiteTestCaseReplacedBulkResult != nil {
-		return visitor.VisitTestSuiteTestCaseReplacedBulkResult(t.TestSuiteTestCaseReplacedBulkResult)
+	if t.Replaced != nil {
+		return visitor.VisitReplaced(t.Replaced)
 	}
-	if t.TestSuiteTestCaseDeletedBulkResult != nil {
-		return visitor.VisitTestSuiteTestCaseDeletedBulkResult(t.TestSuiteTestCaseDeletedBulkResult)
+	if t.Deleted != nil {
+		return visitor.VisitDeleted(t.Deleted)
 	}
-	if t.TestSuiteTestCaseRejectedBulkResult != nil {
-		return visitor.VisitTestSuiteTestCaseRejectedBulkResult(t.TestSuiteTestCaseRejectedBulkResult)
+	if t.Rejected != nil {
+		return visitor.VisitRejected(t.Rejected)
 	}
-	return fmt.Errorf("type %T does not include a non-empty union type", t)
+	return fmt.Errorf("type %T does not define a non-empty union type", t)
 }
 
 // A bulk operation that represents the creation of a Test Case.
 type TestSuiteTestCaseCreateBulkOperationRequest struct {
 	// An ID representing this specific operation. Can later be used to look up information about the operation's success in the response.
-	Id    string                          `json:"id" url:"id"`
-	Data  *CreateTestSuiteTestCaseRequest `json:"data" url:"data"`
-	type_ string
+	ID   string                          `json:"id" url:"id"`
+	Data *CreateTestSuiteTestCaseRequest `json:"data" url:"data"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -1373,28 +1139,15 @@ func (t *TestSuiteTestCaseCreateBulkOperationRequest) GetExtraProperties() map[s
 	return t.extraProperties
 }
 
-func (t *TestSuiteTestCaseCreateBulkOperationRequest) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteTestCaseCreateBulkOperationRequest) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteTestCaseCreateBulkOperationRequest
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteTestCaseCreateBulkOperationRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteTestCaseCreateBulkOperationRequest(unmarshaler.embed)
-	if unmarshaler.Type != "CREATE" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "CREATE", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteTestCaseCreateBulkOperationRequest(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -1402,18 +1155,6 @@ func (t *TestSuiteTestCaseCreateBulkOperationRequest) UnmarshalJSON(data []byte)
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteTestCaseCreateBulkOperationRequest) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteTestCaseCreateBulkOperationRequest
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "CREATE",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteTestCaseCreateBulkOperationRequest) String() string {
@@ -1430,9 +1171,8 @@ func (t *TestSuiteTestCaseCreateBulkOperationRequest) String() string {
 
 // The result of a bulk operation that created a Test Case.
 type TestSuiteTestCaseCreatedBulkResult struct {
-	Id    string                                  `json:"id" url:"id"`
-	Data  *TestSuiteTestCaseCreatedBulkResultData `json:"data" url:"data"`
-	type_ string
+	ID   string                                  `json:"id" url:"id"`
+	Data *TestSuiteTestCaseCreatedBulkResultData `json:"data" url:"data"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -1442,28 +1182,15 @@ func (t *TestSuiteTestCaseCreatedBulkResult) GetExtraProperties() map[string]int
 	return t.extraProperties
 }
 
-func (t *TestSuiteTestCaseCreatedBulkResult) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteTestCaseCreatedBulkResult) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteTestCaseCreatedBulkResult
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteTestCaseCreatedBulkResult
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteTestCaseCreatedBulkResult(unmarshaler.embed)
-	if unmarshaler.Type != "CREATED" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "CREATED", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteTestCaseCreatedBulkResult(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -1471,18 +1198,6 @@ func (t *TestSuiteTestCaseCreatedBulkResult) UnmarshalJSON(data []byte) error {
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteTestCaseCreatedBulkResult) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteTestCaseCreatedBulkResult
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "CREATED",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteTestCaseCreatedBulkResult) String() string {
@@ -1499,7 +1214,7 @@ func (t *TestSuiteTestCaseCreatedBulkResult) String() string {
 
 // Information about the Test Case that was created.
 type TestSuiteTestCaseCreatedBulkResultData struct {
-	Id string `json:"id" url:"id"`
+	ID string `json:"id" url:"id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -1540,7 +1255,7 @@ func (t *TestSuiteTestCaseCreatedBulkResultData) String() string {
 }
 
 type TestSuiteTestCaseDeleteBulkOperationDataRequest struct {
-	Id string `json:"id" url:"id"`
+	ID string `json:"id" url:"id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -1583,10 +1298,9 @@ func (t *TestSuiteTestCaseDeleteBulkOperationDataRequest) String() string {
 // A bulk operation that represents the deletion of a Test Case.
 type TestSuiteTestCaseDeleteBulkOperationRequest struct {
 	// An ID representing this specific operation. Can later be used to look up information about the operation's success in the response.
-	Id string `json:"id" url:"id"`
+	ID string `json:"id" url:"id"`
 	// Information about the Test Case to delete
-	Data  *TestSuiteTestCaseDeleteBulkOperationDataRequest `json:"data" url:"data"`
-	type_ string
+	Data *TestSuiteTestCaseDeleteBulkOperationDataRequest `json:"data" url:"data"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -1596,28 +1310,15 @@ func (t *TestSuiteTestCaseDeleteBulkOperationRequest) GetExtraProperties() map[s
 	return t.extraProperties
 }
 
-func (t *TestSuiteTestCaseDeleteBulkOperationRequest) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteTestCaseDeleteBulkOperationRequest) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteTestCaseDeleteBulkOperationRequest
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteTestCaseDeleteBulkOperationRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteTestCaseDeleteBulkOperationRequest(unmarshaler.embed)
-	if unmarshaler.Type != "DELETE" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "DELETE", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteTestCaseDeleteBulkOperationRequest(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -1625,18 +1326,6 @@ func (t *TestSuiteTestCaseDeleteBulkOperationRequest) UnmarshalJSON(data []byte)
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteTestCaseDeleteBulkOperationRequest) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteTestCaseDeleteBulkOperationRequest
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "DELETE",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteTestCaseDeleteBulkOperationRequest) String() string {
@@ -1654,9 +1343,8 @@ func (t *TestSuiteTestCaseDeleteBulkOperationRequest) String() string {
 // The result of a bulk operation that deleted a Test Case.
 type TestSuiteTestCaseDeletedBulkResult struct {
 	// An ID that maps back to one of the initially supplied operations. Can be used to determine the result of a given operation.
-	Id    string                                  `json:"id" url:"id"`
-	Data  *TestSuiteTestCaseDeletedBulkResultData `json:"data" url:"data"`
-	type_ string
+	ID   string                                  `json:"id" url:"id"`
+	Data *TestSuiteTestCaseDeletedBulkResultData `json:"data" url:"data"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -1666,28 +1354,15 @@ func (t *TestSuiteTestCaseDeletedBulkResult) GetExtraProperties() map[string]int
 	return t.extraProperties
 }
 
-func (t *TestSuiteTestCaseDeletedBulkResult) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteTestCaseDeletedBulkResult) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteTestCaseDeletedBulkResult
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteTestCaseDeletedBulkResult
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteTestCaseDeletedBulkResult(unmarshaler.embed)
-	if unmarshaler.Type != "DELETED" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "DELETED", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteTestCaseDeletedBulkResult(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -1695,18 +1370,6 @@ func (t *TestSuiteTestCaseDeletedBulkResult) UnmarshalJSON(data []byte) error {
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteTestCaseDeletedBulkResult) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteTestCaseDeletedBulkResult
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "DELETED",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteTestCaseDeletedBulkResult) String() string {
@@ -1723,7 +1386,7 @@ func (t *TestSuiteTestCaseDeletedBulkResult) String() string {
 
 // Information about the Test Case that was deleted
 type TestSuiteTestCaseDeletedBulkResultData struct {
-	Id string `json:"id" url:"id"`
+	ID string `json:"id" url:"id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -1766,10 +1429,9 @@ func (t *TestSuiteTestCaseDeletedBulkResultData) String() string {
 // The result of a bulk operation that failed to operate on a Test Case.
 type TestSuiteTestCaseRejectedBulkResult struct {
 	// An ID that maps back to one of the initially supplied operations. Can be used to determine the result of a given operation.
-	Id *string `json:"id,omitempty" url:"id,omitempty"`
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
 	// Details about the error that occurred
-	Data  map[string]interface{} `json:"data" url:"data"`
-	type_ string
+	Data map[string]interface{} `json:"data" url:"data"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -1779,28 +1441,15 @@ func (t *TestSuiteTestCaseRejectedBulkResult) GetExtraProperties() map[string]in
 	return t.extraProperties
 }
 
-func (t *TestSuiteTestCaseRejectedBulkResult) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteTestCaseRejectedBulkResult) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteTestCaseRejectedBulkResult
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteTestCaseRejectedBulkResult
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteTestCaseRejectedBulkResult(unmarshaler.embed)
-	if unmarshaler.Type != "REJECTED" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "REJECTED", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteTestCaseRejectedBulkResult(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -1808,18 +1457,6 @@ func (t *TestSuiteTestCaseRejectedBulkResult) UnmarshalJSON(data []byte) error {
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteTestCaseRejectedBulkResult) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteTestCaseRejectedBulkResult
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "REJECTED",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteTestCaseRejectedBulkResult) String() string {
@@ -1837,9 +1474,8 @@ func (t *TestSuiteTestCaseRejectedBulkResult) String() string {
 // A bulk operation that represents the replacing of a Test Case.
 type TestSuiteTestCaseReplaceBulkOperationRequest struct {
 	// An ID representing this specific operation. Can later be used to look up information about the operation's success in the response.
-	Id    string                           `json:"id" url:"id"`
-	Data  *ReplaceTestSuiteTestCaseRequest `json:"data" url:"data"`
-	type_ string
+	ID   string                           `json:"id" url:"id"`
+	Data *ReplaceTestSuiteTestCaseRequest `json:"data" url:"data"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -1849,28 +1485,15 @@ func (t *TestSuiteTestCaseReplaceBulkOperationRequest) GetExtraProperties() map[
 	return t.extraProperties
 }
 
-func (t *TestSuiteTestCaseReplaceBulkOperationRequest) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteTestCaseReplaceBulkOperationRequest) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteTestCaseReplaceBulkOperationRequest
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteTestCaseReplaceBulkOperationRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteTestCaseReplaceBulkOperationRequest(unmarshaler.embed)
-	if unmarshaler.Type != "REPLACE" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "REPLACE", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteTestCaseReplaceBulkOperationRequest(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -1878,18 +1501,6 @@ func (t *TestSuiteTestCaseReplaceBulkOperationRequest) UnmarshalJSON(data []byte
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteTestCaseReplaceBulkOperationRequest) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteTestCaseReplaceBulkOperationRequest
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "REPLACE",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteTestCaseReplaceBulkOperationRequest) String() string {
@@ -1907,9 +1518,8 @@ func (t *TestSuiteTestCaseReplaceBulkOperationRequest) String() string {
 // The result of a bulk operation that replaced a Test Case.
 type TestSuiteTestCaseReplacedBulkResult struct {
 	// An ID that maps back to one of the initially supplied operations. Can be used to determine the result of a given operation.
-	Id    string                                   `json:"id" url:"id"`
-	Data  *TestSuiteTestCaseReplacedBulkResultData `json:"data" url:"data"`
-	type_ string
+	ID   string                                   `json:"id" url:"id"`
+	Data *TestSuiteTestCaseReplacedBulkResultData `json:"data" url:"data"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -1919,28 +1529,15 @@ func (t *TestSuiteTestCaseReplacedBulkResult) GetExtraProperties() map[string]in
 	return t.extraProperties
 }
 
-func (t *TestSuiteTestCaseReplacedBulkResult) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteTestCaseReplacedBulkResult) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteTestCaseReplacedBulkResult
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteTestCaseReplacedBulkResult
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteTestCaseReplacedBulkResult(unmarshaler.embed)
-	if unmarshaler.Type != "REPLACED" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "REPLACED", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteTestCaseReplacedBulkResult(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -1948,18 +1545,6 @@ func (t *TestSuiteTestCaseReplacedBulkResult) UnmarshalJSON(data []byte) error {
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteTestCaseReplacedBulkResult) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteTestCaseReplacedBulkResult
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "REPLACED",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteTestCaseReplacedBulkResult) String() string {
@@ -1976,7 +1561,7 @@ func (t *TestSuiteTestCaseReplacedBulkResult) String() string {
 
 // Information about the Test Case that was replaced
 type TestSuiteTestCaseReplacedBulkResultData struct {
-	Id string `json:"id" url:"id"`
+	ID string `json:"id" url:"id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -2019,9 +1604,8 @@ func (t *TestSuiteTestCaseReplacedBulkResultData) String() string {
 // A bulk operation that represents the upserting of a Test Case.
 type TestSuiteTestCaseUpsertBulkOperationRequest struct {
 	// An ID representing this specific operation. Can later be used to look up information about the operation's success in the response.
-	Id    string                          `json:"id" url:"id"`
-	Data  *UpsertTestSuiteTestCaseRequest `json:"data" url:"data"`
-	type_ string
+	ID   string                              `json:"id" url:"id"`
+	Data *UpsertTestSuiteTestCaseRequestBody `json:"data" url:"data"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -2031,28 +1615,15 @@ func (t *TestSuiteTestCaseUpsertBulkOperationRequest) GetExtraProperties() map[s
 	return t.extraProperties
 }
 
-func (t *TestSuiteTestCaseUpsertBulkOperationRequest) Type() string {
-	return t.type_
-}
-
 func (t *TestSuiteTestCaseUpsertBulkOperationRequest) UnmarshalJSON(data []byte) error {
-	type embed TestSuiteTestCaseUpsertBulkOperationRequest
-	var unmarshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler TestSuiteTestCaseUpsertBulkOperationRequest
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*t = TestSuiteTestCaseUpsertBulkOperationRequest(unmarshaler.embed)
-	if unmarshaler.Type != "UPSERT" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", t, "UPSERT", unmarshaler.Type)
-	}
-	t.type_ = unmarshaler.Type
+	*t = TestSuiteTestCaseUpsertBulkOperationRequest(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *t, "type")
+	extraProperties, err := core.ExtractExtraProperties(data, *t)
 	if err != nil {
 		return err
 	}
@@ -2060,18 +1631,6 @@ func (t *TestSuiteTestCaseUpsertBulkOperationRequest) UnmarshalJSON(data []byte)
 
 	t._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (t *TestSuiteTestCaseUpsertBulkOperationRequest) MarshalJSON() ([]byte, error) {
-	type embed TestSuiteTestCaseUpsertBulkOperationRequest
-	var marshaler = struct {
-		embed
-		Type string `json:"type"`
-	}{
-		embed: embed(*t),
-		Type:  "UPSERT",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (t *TestSuiteTestCaseUpsertBulkOperationRequest) String() string {
@@ -2086,11 +1645,11 @@ func (t *TestSuiteTestCaseUpsertBulkOperationRequest) String() string {
 	return fmt.Sprintf("%#v", t)
 }
 
-type UpsertTestSuiteTestCaseRequest struct {
+type UpsertTestSuiteTestCaseRequestBody struct {
 	// The Vellum-generated ID of an existing Test Case whose data you'd like to replace. If specified and no Test Case exists with this ID, a 404 will be returned.
-	Id *string `json:"id,omitempty" url:"id,omitempty"`
+	ID *string `json:"id,omitempty" url:"id,omitempty"`
 	// An ID external to Vellum that uniquely identifies the Test Case that you'd like to create/update. If there's a match on a Test Case that was previously created with the same external_id, it will be updated. Otherwise, a new Test Case will be created with this value as its external_id. If no external_id is specified, then a new Test Case will always be created.
-	ExternalId *string `json:"external_id,omitempty" url:"external_id,omitempty"`
+	ExternalID *string `json:"external_id,omitempty" url:"external_id,omitempty"`
 	// A human-readable label used to convey the intention of this Test Case
 	Label *string `json:"label,omitempty" url:"label,omitempty"`
 	// Values for each of the Test Case's input variables
@@ -2102,17 +1661,17 @@ type UpsertTestSuiteTestCaseRequest struct {
 	_rawJSON        json.RawMessage
 }
 
-func (u *UpsertTestSuiteTestCaseRequest) GetExtraProperties() map[string]interface{} {
+func (u *UpsertTestSuiteTestCaseRequestBody) GetExtraProperties() map[string]interface{} {
 	return u.extraProperties
 }
 
-func (u *UpsertTestSuiteTestCaseRequest) UnmarshalJSON(data []byte) error {
-	type unmarshaler UpsertTestSuiteTestCaseRequest
+func (u *UpsertTestSuiteTestCaseRequestBody) UnmarshalJSON(data []byte) error {
+	type unmarshaler UpsertTestSuiteTestCaseRequestBody
 	var value unmarshaler
 	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*u = UpsertTestSuiteTestCaseRequest(value)
+	*u = UpsertTestSuiteTestCaseRequestBody(value)
 
 	extraProperties, err := core.ExtractExtraProperties(data, *u)
 	if err != nil {
@@ -2124,7 +1683,7 @@ func (u *UpsertTestSuiteTestCaseRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (u *UpsertTestSuiteTestCaseRequest) String() string {
+func (u *UpsertTestSuiteTestCaseRequestBody) String() string {
 	if len(u._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(u._rawJSON); err == nil {
 			return value
@@ -2134,4 +1693,21 @@ func (u *UpsertTestSuiteTestCaseRequest) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", u)
+}
+
+type UpsertTestSuiteTestCaseRequest struct {
+	Body *UpsertTestSuiteTestCaseRequestBody `json:"-" url:"-"`
+}
+
+func (u *UpsertTestSuiteTestCaseRequest) UnmarshalJSON(data []byte) error {
+	body := new(UpsertTestSuiteTestCaseRequestBody)
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	u.Body = body
+	return nil
+}
+
+func (u *UpsertTestSuiteTestCaseRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(u.Body)
 }

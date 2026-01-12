@@ -30,13 +30,11 @@ type RetrieveIntegrationProviderToolDefinitionRequest struct {
 	ToolkitVersion *string `json:"-" url:"toolkit_version,omitempty"`
 }
 
-type ComponentsSchemasSlimComposioToolDefinition = *SlimComposioToolDefinition
-
 type PaginatedSlimToolDefinitionList struct {
-	Count    int                                           `json:"count" url:"count"`
-	Next     *string                                       `json:"next,omitempty" url:"next,omitempty"`
-	Previous *string                                       `json:"previous,omitempty" url:"previous,omitempty"`
-	Results  []ComponentsSchemasSlimComposioToolDefinition `json:"results" url:"results"`
+	Count    int                   `json:"count" url:"count"`
+	Next     *string               `json:"next,omitempty" url:"next,omitempty"`
+	Previous *string               `json:"previous,omitempty" url:"previous,omitempty"`
+	Results  []*SlimToolDefinition `json:"results" url:"results"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -82,7 +80,6 @@ type SlimComposioToolDefinition struct {
 	Label          string       `json:"label" url:"label"`
 	Description    string       `json:"description" url:"description"`
 	ToolkitVersion string       `json:"toolkit_version" url:"toolkit_version"`
-	provider       string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -92,28 +89,15 @@ func (s *SlimComposioToolDefinition) GetExtraProperties() map[string]interface{}
 	return s.extraProperties
 }
 
-func (s *SlimComposioToolDefinition) Provider() string {
-	return s.provider
-}
-
 func (s *SlimComposioToolDefinition) UnmarshalJSON(data []byte) error {
-	type embed SlimComposioToolDefinition
-	var unmarshaler = struct {
-		embed
-		Provider string `json:"provider"`
-	}{
-		embed: embed(*s),
-	}
-	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+	type unmarshaler SlimComposioToolDefinition
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*s = SlimComposioToolDefinition(unmarshaler.embed)
-	if unmarshaler.Provider != "COMPOSIO" {
-		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", s, "COMPOSIO", unmarshaler.Provider)
-	}
-	s.provider = unmarshaler.Provider
+	*s = SlimComposioToolDefinition(value)
 
-	extraProperties, err := core.ExtractExtraProperties(data, *s, "provider")
+	extraProperties, err := core.ExtractExtraProperties(data, *s)
 	if err != nil {
 		return err
 	}
@@ -121,18 +105,6 @@ func (s *SlimComposioToolDefinition) UnmarshalJSON(data []byte) error {
 
 	s._rawJSON = json.RawMessage(data)
 	return nil
-}
-
-func (s *SlimComposioToolDefinition) MarshalJSON() ([]byte, error) {
-	type embed SlimComposioToolDefinition
-	var marshaler = struct {
-		embed
-		Provider string `json:"provider"`
-	}{
-		embed:    embed(*s),
-		Provider: "COMPOSIO",
-	}
-	return json.Marshal(marshaler)
 }
 
 func (s *SlimComposioToolDefinition) String() string {
@@ -145,4 +117,49 @@ func (s *SlimComposioToolDefinition) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", s)
+}
+
+type SlimToolDefinition struct {
+	Provider string
+	Composio *SlimComposioToolDefinition
+}
+
+func (s *SlimToolDefinition) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Provider string `json:"provider"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	s.Provider = unmarshaler.Provider
+	if unmarshaler.Provider == "" {
+		return fmt.Errorf("%T did not include discriminant provider", s)
+	}
+	switch unmarshaler.Provider {
+	case "COMPOSIO":
+		value := new(SlimComposioToolDefinition)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		s.Composio = value
+	}
+	return nil
+}
+
+func (s SlimToolDefinition) MarshalJSON() ([]byte, error) {
+	if s.Composio != nil {
+		return core.MarshalJSONWithExtraProperty(s.Composio, "provider", "COMPOSIO")
+	}
+	return nil, fmt.Errorf("type %T does not define a non-empty union type", s)
+}
+
+type SlimToolDefinitionVisitor interface {
+	VisitComposio(*SlimComposioToolDefinition) error
+}
+
+func (s *SlimToolDefinition) Accept(visitor SlimToolDefinitionVisitor) error {
+	if s.Composio != nil {
+		return visitor.VisitComposio(s.Composio)
+	}
+	return fmt.Errorf("type %T does not define a non-empty union type", s)
 }

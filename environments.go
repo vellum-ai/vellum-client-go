@@ -50,7 +50,7 @@ func (e *EnvironmentDisplayConfig) String() string {
 }
 
 type EnvironmentRead struct {
-	Id            *string                   `json:"id,omitempty" url:"id,omitempty"`
+	ID            *string                   `json:"id,omitempty" url:"id,omitempty"`
 	Name          string                    `json:"name" url:"name"`
 	Label         string                    `json:"label" url:"label"`
 	DisplayConfig *EnvironmentDisplayConfig `json:"display_config,omitempty" url:"display_config,omitempty"`

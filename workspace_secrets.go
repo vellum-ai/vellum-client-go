@@ -14,6 +14,9 @@ type PatchedWorkspaceSecretUpdateRequest struct {
 	Value *string `json:"value,omitempty" url:"-"`
 }
 
+type WorkspaceSecretsRetrieveRequest struct {
+}
+
 // * `USER_DEFINED` - User Defined
 // * `HMAC` - Hmac
 // * `INTERNAL_API_KEY` - Internal Api Key
@@ -23,7 +26,7 @@ type SecretTypeEnum string
 const (
 	SecretTypeEnumUserDefined           SecretTypeEnum = "USER_DEFINED"
 	SecretTypeEnumHmac                  SecretTypeEnum = "HMAC"
-	SecretTypeEnumInternalApiKey        SecretTypeEnum = "INTERNAL_API_KEY"
+	SecretTypeEnumInternalAPIKey        SecretTypeEnum = "INTERNAL_API_KEY"
 	SecretTypeEnumExternallyProvisioned SecretTypeEnum = "EXTERNALLY_PROVISIONED"
 )
 
@@ -34,7 +37,7 @@ func NewSecretTypeEnumFromString(s string) (SecretTypeEnum, error) {
 	case "HMAC":
 		return SecretTypeEnumHmac, nil
 	case "INTERNAL_API_KEY":
-		return SecretTypeEnumInternalApiKey, nil
+		return SecretTypeEnumInternalAPIKey, nil
 	case "EXTERNALLY_PROVISIONED":
 		return SecretTypeEnumExternallyProvisioned, nil
 	}
@@ -47,7 +50,7 @@ func (s SecretTypeEnum) Ptr() *SecretTypeEnum {
 }
 
 type WorkspaceSecretRead struct {
-	Id         string         `json:"id" url:"id"`
+	ID         string         `json:"id" url:"id"`
 	Modified   time.Time      `json:"modified" url:"modified"`
 	Name       string         `json:"name" url:"name"`
 	Label      string         `json:"label" url:"label"`

@@ -9,10 +9,16 @@ import (
 	time "time"
 )
 
+type WorkflowRunNodeRequest struct {
+	Files  map[string]string      `json:"files,omitempty" url:"-"`
+	Node   string                 `json:"node" url:"-"`
+	Inputs map[string]interface{} `json:"inputs,omitempty" url:"-"`
+}
+
 type WorkflowsPullRequest struct {
 	ExcludeCode    *bool `json:"-" url:"exclude_code,omitempty"`
 	ExcludeDisplay *bool `json:"-" url:"exclude_display,omitempty"`
-	IncludeJson    *bool `json:"-" url:"include_json,omitempty"`
+	IncludeJSON    *bool `json:"-" url:"include_json,omitempty"`
 	IncludeSandbox *bool `json:"-" url:"include_sandbox,omitempty"`
 	// Release tag to use when pulling from deployment (implies deployment-only lookup)
 	ReleaseTag *string `json:"-" url:"release_tag,omitempty"`
@@ -24,12 +30,15 @@ type WorkflowsPullRequest struct {
 type WorkflowPushRequest struct {
 	// The execution configuration of the workflow. If not provided, it will be derived from the artifact.
 	ExecConfig        *WorkflowPushExecConfig              `json:"exec_config,omitempty" url:"-"`
-	WorkflowSandboxId *string                              `json:"workflow_sandbox_id,omitempty" url:"-"`
+	WorkflowSandboxID *string                              `json:"workflow_sandbox_id,omitempty" url:"-"`
 	DeploymentConfig  *WorkflowPushDeploymentConfigRequest `json:"deployment_config,omitempty" url:"-"`
 	// List of dataset rows with inputs for scenarios.
 	Dataset []*DatasetRowPushRequest `json:"dataset,omitempty" url:"-"`
 	DryRun  *bool                    `json:"dry_run,omitempty" url:"-"`
 	Strict  *bool                    `json:"strict,omitempty" url:"-"`
+}
+
+type WorkflowsRetrieveStateRequest struct {
 }
 
 type SerializeWorkflowFilesRequest struct {
@@ -85,8 +94,8 @@ type CheckWorkflowExecutionStatusResponse struct {
 	Status             WorkflowResultEventState           `json:"status" url:"status"`
 	Outputs            map[string]interface{}             `json:"outputs,omitempty" url:"outputs,omitempty"`
 	Error              *CheckWorkflowExecutionStatusError `json:"error,omitempty" url:"error,omitempty"`
-	ExecutionId        string                             `json:"execution_id" url:"execution_id"`
-	ExecutionDetailUrl *string                            `json:"execution_detail_url,omitempty" url:"execution_detail_url,omitempty"`
+	ExecutionID        string                             `json:"execution_id" url:"execution_id"`
+	ExecutionDetailURL *string                            `json:"execution_detail_url,omitempty" url:"execution_detail_url,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -127,11 +136,11 @@ func (c *CheckWorkflowExecutionStatusResponse) String() string {
 }
 
 type DatasetRowPushRequest struct {
-	Id                *string                  `json:"id,omitempty" url:"id,omitempty"`
+	ID                *string                  `json:"id,omitempty" url:"id,omitempty"`
 	Label             string                   `json:"label" url:"label"`
 	Inputs            map[string]interface{}   `json:"inputs" url:"inputs"`
 	Mocks             []map[string]interface{} `json:"mocks,omitempty" url:"mocks,omitempty"`
-	WorkflowTriggerId *string                  `json:"workflow_trigger_id,omitempty" url:"workflow_trigger_id,omitempty"`
+	WorkflowTriggerID *string                  `json:"workflow_trigger_id,omitempty" url:"workflow_trigger_id,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -265,8 +274,8 @@ func (w *WorkflowPushDeploymentConfigRequest) String() string {
 type WorkflowPushExecConfig = string
 
 type WorkflowPushResponse struct {
-	WorkflowSandboxId    string                 `json:"workflow_sandbox_id" url:"workflow_sandbox_id"`
-	WorkflowDeploymentId *string                `json:"workflow_deployment_id,omitempty" url:"workflow_deployment_id,omitempty"`
+	WorkflowSandboxID    string                 `json:"workflow_sandbox_id" url:"workflow_sandbox_id"`
+	WorkflowDeploymentID *string                `json:"workflow_deployment_id,omitempty" url:"workflow_deployment_id,omitempty"`
 	ProposedDiffs        map[string]interface{} `json:"proposed_diffs,omitempty" url:"proposed_diffs,omitempty"`
 
 	extraProperties map[string]interface{}
@@ -309,14 +318,14 @@ func (w *WorkflowPushResponse) String() string {
 
 // The latest execution state of a given Workflow Execution
 type WorkflowResolvedState struct {
-	TraceId         string                 `json:"trace_id" url:"trace_id"`
+	TraceID         string                 `json:"trace_id" url:"trace_id"`
 	Timestamp       time.Time              `json:"timestamp" url:"timestamp"`
-	SpanId          string                 `json:"span_id" url:"span_id"`
+	SpanID          string                 `json:"span_id" url:"span_id"`
 	State           map[string]interface{} `json:"state" url:"state"`
-	PreviousSpanId  *string                `json:"previous_span_id,omitempty" url:"previous_span_id,omitempty"`
-	PreviousTraceId *string                `json:"previous_trace_id,omitempty" url:"previous_trace_id,omitempty"`
-	RootSpanId      *string                `json:"root_span_id,omitempty" url:"root_span_id,omitempty"`
-	RootTraceId     *string                `json:"root_trace_id,omitempty" url:"root_trace_id,omitempty"`
+	PreviousSpanID  *string                `json:"previous_span_id,omitempty" url:"previous_span_id,omitempty"`
+	PreviousTraceID *string                `json:"previous_trace_id,omitempty" url:"previous_trace_id,omitempty"`
+	RootSpanID      *string                `json:"root_span_id,omitempty" url:"root_span_id,omitempty"`
+	RootTraceID     *string                `json:"root_trace_id,omitempty" url:"root_trace_id,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -372,4 +381,66 @@ func (w *WorkflowResolvedState) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", w)
+}
+
+type WorkflowSandboxExecuteNodeResponse struct {
+	Name                   string
+	NodeExecutionFulfilled *NodeExecutionFulfilledEvent
+	NodeExecutionRejected  *NodeExecutionRejectedEvent
+}
+
+func (w *WorkflowSandboxExecuteNodeResponse) UnmarshalJSON(data []byte) error {
+	var unmarshaler struct {
+		Name string `json:"name"`
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	w.Name = unmarshaler.Name
+	if unmarshaler.Name == "" {
+		return fmt.Errorf("%T did not include discriminant name", w)
+	}
+	switch unmarshaler.Name {
+	case "node.execution.fulfilled":
+		value := new(NodeExecutionFulfilledEvent)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		w.NodeExecutionFulfilled = value
+	case "node.execution.rejected":
+		value := new(NodeExecutionRejectedEvent)
+		if err := json.Unmarshal(data, &value); err != nil {
+			return err
+		}
+		w.NodeExecutionRejected = value
+	}
+	return nil
+}
+
+func (w WorkflowSandboxExecuteNodeResponse) MarshalJSON() ([]byte, error) {
+	if w.NodeExecutionFulfilled != nil {
+		return core.MarshalJSONWithExtraProperty(w.NodeExecutionFulfilled, "name", "node.execution.fulfilled")
+	}
+	if w.NodeExecutionRejected != nil {
+		return core.MarshalJSONWithExtraProperty(w.NodeExecutionRejected, "name", "node.execution.rejected")
+	}
+	return nil, fmt.Errorf("type %T does not define a non-empty union type", w)
+}
+
+type WorkflowSandboxExecuteNodeResponseVisitor interface {
+	VisitNodeExecutionFulfilled(*NodeExecutionFulfilledEvent) error
+	VisitNodeExecutionRejected(*NodeExecutionRejectedEvent) error
+}
+
+func (w *WorkflowSandboxExecuteNodeResponse) Accept(visitor WorkflowSandboxExecuteNodeResponseVisitor) error {
+	if w.NodeExecutionFulfilled != nil {
+		return visitor.VisitNodeExecutionFulfilled(w.NodeExecutionFulfilled)
+	}
+	if w.NodeExecutionRejected != nil {
+		return visitor.VisitNodeExecutionRejected(w.NodeExecutionRejected)
+	}
+	return fmt.Errorf("type %T does not define a non-empty union type", w)
+}
+
+type WorkflowExecutionStatusRequest struct {
 }

@@ -12,6 +12,7 @@ import (
 	option "github.com/vellum-ai/vellum-client-go/option"
 	io "io"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -22,8 +23,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.APIVersion == "" {
+		options.APIVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -88,6 +89,7 @@ func (c *Client) Retrieve(
 	ctx context.Context,
 	// Either the Prompt Deployment's ID or its unique name
 	id string,
+	request *vellumclientgo.DeploymentsRetrieveRequest,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.DeploymentRead, error) {
 	options := core.NewRequestOptions(opts...)
@@ -126,10 +128,11 @@ func (c *Client) Retrieve(
 // `retrieve_prompt_deployment_release` xendpoint instead.
 func (c *Client) DeploymentHistoryItemRetrieve(
 	ctx context.Context,
-	// Either the UUID of Deployment History Item you'd like to retrieve, or the name of a Release Tag that's pointing to the Deployment History Item you'd like to retrieve.
-	historyIdOrReleaseTag string,
 	// Either the Prompt Deployment's ID or its unique name
 	id string,
+	// Either the UUID of Deployment History Item you'd like to retrieve, or the name of a Release Tag that's pointing to the Deployment History Item you'd like to retrieve.
+	historyIDOrReleaseTag string,
+	request *vellumclientgo.DeploymentHistoryItemRetrieveRequest,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.DeploymentHistoryItem, error) {
 	options := core.NewRequestOptions(opts...)
@@ -144,7 +147,7 @@ func (c *Client) DeploymentHistoryItemRetrieve(
 	endpointURL := core.EncodeURL(
 		baseURL+"/v1/deployments/%v/history/%v",
 		id,
-		historyIdOrReleaseTag,
+		historyIDOrReleaseTag,
 	)
 
 	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
@@ -223,6 +226,7 @@ func (c *Client) RetrieveDeploymentReleaseTag(
 	id string,
 	// The name of the Release Tag associated with this Deployment that you'd like to retrieve.
 	name string,
+	request *vellumclientgo.RetrieveDeploymentReleaseTagRequest,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.DeploymentReleaseTagRead, error) {
 	options := core.NewRequestOptions(opts...)
@@ -314,7 +318,8 @@ func (c *Client) RetrievePromptDeploymentRelease(
 	// Either the Prompt Deployment's ID or its unique name
 	id string,
 	// Either the UUID of Prompt Deployment Release you'd like to retrieve, or the name of a Release Tag that's pointing to the Prompt Deployment Release you'd like to retrieve.
-	releaseIdOrReleaseTag string,
+	releaseIDOrReleaseTag string,
+	request *vellumclientgo.RetrievePromptDeploymentReleaseRequest,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.PromptDeploymentRelease, error) {
 	options := core.NewRequestOptions(opts...)
@@ -329,7 +334,7 @@ func (c *Client) RetrievePromptDeploymentRelease(
 	endpointURL := core.EncodeURL(
 		baseURL+"/v1/deployments/%v/releases/%v",
 		id,
-		releaseIdOrReleaseTag,
+		releaseIDOrReleaseTag,
 	)
 
 	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())

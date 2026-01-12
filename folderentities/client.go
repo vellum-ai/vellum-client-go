@@ -8,6 +8,7 @@ import (
 	core "github.com/vellum-ai/vellum-client-go/core"
 	option "github.com/vellum-ai/vellum-client-go/option"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -18,8 +19,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.APIVersion == "" {
+		options.APIVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -90,7 +91,7 @@ func (c *Client) AddEntityToFolder(
 	// - WORKFLOW_SANDBOX
 	// - DOCUMENT_INDEX
 	// - TEST_SUITE
-	folderId string,
+	folderID string,
 	request *vellumclientgo.AddEntityToFolderRequest,
 	opts ...option.RequestOption,
 ) error {
@@ -103,7 +104,7 @@ func (c *Client) AddEntityToFolder(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v1/folders/%v/add-entity", folderId)
+	endpointURL := core.EncodeURL(baseURL+"/v1/folders/%v/add-entity", folderID)
 
 	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
 

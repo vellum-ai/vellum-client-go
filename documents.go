@@ -9,9 +9,12 @@ import (
 	time "time"
 )
 
+type DocumentsDestroyRequest struct {
+}
+
 type DocumentsListRequest struct {
 	// Filter down to only those documents that are included in the specified index. You may provide either the Vellum-generated ID or the unique name of the index specified upon initial creation.
-	DocumentIndexId *string `json:"-" url:"document_index_id,omitempty"`
+	DocumentIndexID *string `json:"-" url:"document_index_id,omitempty"`
 	// Number of results to return per page.
 	Limit *int `json:"-" url:"limit,omitempty"`
 	// The initial index from which to return the results.
@@ -35,14 +38,17 @@ type PatchedDocumentUpdateRequest struct {
 	Metadata map[string]interface{} `json:"metadata,omitempty" url:"-"`
 }
 
+type DocumentsRetrieveRequest struct {
+}
+
 // A detailed representation of the link between a Document and a Document Index it's a member of.
 type DocumentDocumentToDocumentIndex struct {
 	// Vellum-generated ID that uniquely identifies this link.
-	Id string `json:"id" url:"id"`
+	ID string `json:"id" url:"id"`
 	// Vellum-generated ID that uniquely identifies the environment index this document is included in.
-	EnvironmentDocumentIndexId string `json:"environment_document_index_id" url:"environment_document_index_id"`
+	EnvironmentDocumentIndexID string `json:"environment_document_index_id" url:"environment_document_index_id"`
 	// Vellum-generated ID that uniquely identifies the index this document is included in.
-	DocumentIndexId *string `json:"document_index_id,omitempty" url:"document_index_id,omitempty"`
+	DocumentIndexID *string `json:"document_index_id,omitempty" url:"document_index_id,omitempty"`
 	// An enum value representing where this document is along its indexing lifecycle for this index.
 	//
 	// * `AWAITING_PROCESSING` - Awaiting Processing
@@ -51,7 +57,7 @@ type DocumentDocumentToDocumentIndex struct {
 	// * `INDEXED` - Indexed
 	// * `FAILED` - Failed
 	IndexingState        *IndexingStateEnum `json:"indexing_state,omitempty" url:"indexing_state,omitempty"`
-	ExtractedTextFileUrl *string            `json:"extracted_text_file_url,omitempty" url:"extracted_text_file_url,omitempty"`
+	ExtractedTextFileURL *string            `json:"extracted_text_file_url,omitempty" url:"extracted_text_file_url,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -128,9 +134,9 @@ func (d DocumentProcessingState) Ptr() *DocumentProcessingState {
 }
 
 type DocumentRead struct {
-	Id string `json:"id" url:"id"`
+	ID string `json:"id" url:"id"`
 	// The unique id of this document as it exists in the user's system.
-	ExternalId     *string   `json:"external_id,omitempty" url:"external_id,omitempty"`
+	ExternalID     *string   `json:"external_id,omitempty" url:"external_id,omitempty"`
 	LastUploadedAt time.Time `json:"last_uploaded_at" url:"last_uploaded_at"`
 	// A human-readable label for the document. Defaults to the originally uploaded file's file name.
 	Label           string                  `json:"label" url:"label"`
@@ -141,7 +147,7 @@ type DocumentRead struct {
 	Status *DocumentStatus `json:"status,omitempty" url:"status,omitempty"`
 	// A list of keywords that'll be associated with the document. Used as part of keyword search.
 	Keywords                  []string                           `json:"keywords,omitempty" url:"keywords,omitempty"`
-	OriginalFileUrl           *string                            `json:"original_file_url,omitempty" url:"original_file_url,omitempty"`
+	OriginalFileURL           *string                            `json:"original_file_url,omitempty" url:"original_file_url,omitempty"`
 	DocumentToDocumentIndexes []*DocumentDocumentToDocumentIndex `json:"document_to_document_indexes" url:"document_to_document_indexes"`
 	// A previously supplied JSON object containing metadata that can be filtered on when searching.
 	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
@@ -203,7 +209,24 @@ func (d *DocumentRead) String() string {
 }
 
 // * `ACTIVE` - Active
-type DocumentStatus = string
+type DocumentStatus string
+
+const (
+	DocumentStatusActive DocumentStatus = "ACTIVE"
+)
+
+func NewDocumentStatusFromString(s string) (DocumentStatus, error) {
+	switch s {
+	case "ACTIVE":
+		return DocumentStatusActive, nil
+	}
+	var t DocumentStatus
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (d DocumentStatus) Ptr() *DocumentStatus {
+	return &d
+}
 
 // * `AWAITING_PROCESSING` - Awaiting Processing
 // * `QUEUED` - Queued
@@ -315,9 +338,9 @@ func (p ProcessingFailureReasonEnum) Ptr() *ProcessingFailureReasonEnum {
 
 type SlimDocument struct {
 	// Vellum-generated ID that uniquely identifies this document.
-	Id string `json:"id" url:"id"`
+	ID string `json:"id" url:"id"`
 	// The external ID that was originally provided when uploading the document.
-	ExternalId *string `json:"external_id,omitempty" url:"external_id,omitempty"`
+	ExternalID *string `json:"external_id,omitempty" url:"external_id,omitempty"`
 	// A timestamp representing when this document was most recently uploaded.
 	LastUploadedAt time.Time `json:"last_uploaded_at" url:"last_uploaded_at"`
 	// Human-friendly name for this document.
@@ -398,11 +421,11 @@ func (s *SlimDocument) String() string {
 // A slim representation of the link between a Document and a Document Index it's a member of.
 type SlimDocumentDocumentToDocumentIndex struct {
 	// Vellum-generated ID that uniquely identifies this link.
-	Id string `json:"id" url:"id"`
+	ID string `json:"id" url:"id"`
 	// Vellum-generated ID that uniquely identifies the environment index this document is included in.
-	EnvironmentDocumentIndexId string `json:"environment_document_index_id" url:"environment_document_index_id"`
+	EnvironmentDocumentIndexID string `json:"environment_document_index_id" url:"environment_document_index_id"`
 	// Vellum-generated ID that uniquely identifies the index this document is included in.
-	DocumentIndexId *string `json:"document_index_id,omitempty" url:"document_index_id,omitempty"`
+	DocumentIndexID *string `json:"document_index_id,omitempty" url:"document_index_id,omitempty"`
 	// An enum value representing where this document is along its indexing lifecycle for this index.
 	//
 	// * `AWAITING_PROCESSING` - Awaiting Processing
@@ -452,7 +475,7 @@ func (s *SlimDocumentDocumentToDocumentIndex) String() string {
 
 type UploadDocumentResponse struct {
 	// The ID of the newly created document.
-	DocumentId string `json:"document_id" url:"document_id"`
+	DocumentID string `json:"document_id" url:"document_id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -496,11 +519,11 @@ type UploadDocumentBodyRequest struct {
 	// Optionally include the names of all indexes that you'd like this document to be included in
 	AddToIndexNames []string `json:"add_to_index_names,omitempty" url:"-"`
 	// Optionally include an external ID for this document. This is useful if you want to re-upload the same document later when its contents change and would like it to be re-indexed.
-	ExternalId *string `json:"external_id,omitempty" url:"-"`
+	ExternalID *string `json:"external_id,omitempty" url:"-"`
 	// A human-friendly name for this document. Typically the filename.
 	Label string `json:"label" url:"-"`
 	// A URL from which the document can be downloaded. Either contents or url must be provided.
-	Url *string `json:"url,omitempty" url:"-"`
+	URL *string `json:"url,omitempty" url:"-"`
 	// Optionally include a list of keywords that'll be associated with this document. Used when performing keyword searches.
 	Keywords []string `json:"keywords,omitempty" url:"-"`
 	// A stringified JSON object containing any metadata associated with the document that you'd like to filter upon later.

@@ -9,9 +9,12 @@ import (
 	time "time"
 )
 
+type MlModelsRetrieveRequest struct {
+}
+
 // An ML Model that your Workspace has access to.
 type MlModelRead struct {
-	Id string `json:"id" url:"id"`
+	ID string `json:"id" url:"id"`
 	// The unique name of the ML Model.
 	Name         string    `json:"name" url:"name"`
 	IntroducedOn time.Time `json:"introduced_on" url:"introduced_on"`

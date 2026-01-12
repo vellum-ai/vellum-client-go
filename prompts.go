@@ -11,7 +11,7 @@ import (
 type PromptsPullRequest struct {
 	// Set to 'application/yaml' to receive YAML response, otherwise JSON will be returned
 	// The ID of the Prompt Variant within a Prompt Sandbox to pull. Must be included if providing the ID of a Prompt Sandbox.
-	PromptVariantId *string `json:"-" url:"prompt_variant_id,omitempty"`
+	PromptVariantID *string `json:"-" url:"prompt_variant_id,omitempty"`
 	accept          string
 }
 
@@ -21,10 +21,10 @@ func (p *PromptsPullRequest) Accept() string {
 
 type PromptPush struct {
 	// If specified, an existing Prompt Variant by the provided ID will be updated. Otherwise, a new Prompt Variant will be created and an ID generated.
-	PromptVariantId *string `json:"prompt_variant_id,omitempty" url:"-"`
+	PromptVariantID *string `json:"prompt_variant_id,omitempty" url:"-"`
 	// If provided, then the created/updated Prompt Variant will have this label.
 	PromptVariantLabel *string           `json:"prompt_variant_label,omitempty" url:"-"`
-	PromptSandboxId    *string           `json:"prompt_sandbox_id,omitempty" url:"-"`
+	PromptSandboxID    *string           `json:"prompt_sandbox_id,omitempty" url:"-"`
 	ExecConfig         *PromptExecConfig `json:"exec_config,omitempty" url:"-"`
 }
 
@@ -75,8 +75,8 @@ func (p *PromptExecConfig) String() string {
 }
 
 type PromptPushResponse struct {
-	PromptVariantId string `json:"prompt_variant_id" url:"prompt_variant_id"`
-	PromptSandboxId string `json:"prompt_sandbox_id" url:"prompt_sandbox_id"`
+	PromptVariantID string `json:"prompt_variant_id" url:"prompt_variant_id"`
+	PromptSandboxID string `json:"prompt_sandbox_id" url:"prompt_sandbox_id"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage

@@ -8,6 +8,7 @@ import (
 	core "github.com/vellum-ai/vellum-client-go/core"
 	option "github.com/vellum-ai/vellum-client-go/option"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -18,8 +19,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.APIVersion == "" {
+		options.APIVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -38,7 +39,7 @@ func (c *Client) DeployPrompt(
 	// A UUID string identifying this sandbox.
 	id string,
 	// An ID identifying the Prompt you'd like to deploy.
-	promptVariantId string,
+	promptVariantID string,
 	request *vellumclientgo.DeploySandboxPromptRequest,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.DeploymentRead, error) {
@@ -54,7 +55,7 @@ func (c *Client) DeployPrompt(
 	endpointURL := core.EncodeURL(
 		baseURL+"/v1/sandboxes/%v/prompts/%v/deploy",
 		id,
-		promptVariantId,
+		promptVariantID,
 	)
 
 	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
@@ -132,7 +133,8 @@ func (c *Client) DeleteSandboxScenario(
 	// A UUID string identifying this sandbox.
 	id string,
 	// An id identifying the scenario that you'd like to delete
-	scenarioId string,
+	scenarioID string,
+	request *vellumclientgo.DeleteSandboxScenarioRequest,
 	opts ...option.RequestOption,
 ) error {
 	options := core.NewRequestOptions(opts...)
@@ -147,7 +149,7 @@ func (c *Client) DeleteSandboxScenario(
 	endpointURL := core.EncodeURL(
 		baseURL+"/v1/sandboxes/%v/scenarios/%v",
 		id,
-		scenarioId,
+		scenarioID,
 	)
 
 	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())

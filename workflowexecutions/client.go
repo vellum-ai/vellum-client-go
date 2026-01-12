@@ -12,6 +12,7 @@ import (
 	option "github.com/vellum-ai/vellum-client-go/option"
 	io "io"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -22,8 +23,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.APIVersion == "" {
+		options.APIVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -39,7 +40,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 
 func (c *Client) RetrieveWorkflowExecutionDetail(
 	ctx context.Context,
-	executionId string,
+	executionID string,
 	request *vellumclientgo.RetrieveWorkflowExecutionDetailRequest,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.WorkflowExecutionDetail, error) {
@@ -52,7 +53,7 @@ func (c *Client) RetrieveWorkflowExecutionDetail(
 	if options.BaseURL != "" {
 		baseURL = options.BaseURL
 	}
-	endpointURL := core.EncodeURL(baseURL+"/v1/workflow-executions/%v/detail", executionId)
+	endpointURL := core.EncodeURL(baseURL+"/v1/workflow-executions/%v/detail", executionID)
 
 	queryParams, err := core.QueryValues(request)
 	if err != nil {

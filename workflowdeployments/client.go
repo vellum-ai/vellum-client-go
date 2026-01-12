@@ -12,6 +12,7 @@ import (
 	option "github.com/vellum-ai/vellum-client-go/option"
 	io "io"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -22,8 +23,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.APIVersion == "" {
+		options.APIVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -88,6 +89,7 @@ func (c *Client) Retrieve(
 	ctx context.Context,
 	// Either the Workflow Deployment's ID or its unique name
 	id string,
+	request *vellumclientgo.WorkflowDeploymentsRetrieveRequest,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.WorkflowDeploymentRead, error) {
 	options := core.NewRequestOptions(opts...)
@@ -241,8 +243,9 @@ func (c *Client) ListWorkflowDeploymentEventExecutions(
 
 func (c *Client) WorkflowDeploymentEventExecution(
 	ctx context.Context,
-	executionId string,
 	id string,
+	executionID string,
+	request *vellumclientgo.WorkflowDeploymentEventExecutionRequest,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.WorkflowEventExecutionRead, error) {
 	options := core.NewRequestOptions(opts...)
@@ -257,7 +260,7 @@ func (c *Client) WorkflowDeploymentEventExecution(
 	endpointURL := core.EncodeURL(
 		baseURL+"/v1/workflow-deployments/%v/execution-events/%v",
 		id,
-		executionId,
+		executionID,
 	)
 
 	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
@@ -319,10 +322,11 @@ func (c *Client) WorkflowDeploymentEventExecution(
 // `retrieve_workflow_deployment_release` endpoint instead.
 func (c *Client) WorkflowDeploymentHistoryItemRetrieve(
 	ctx context.Context,
-	// Either the UUID of Workflow Deployment History Item you'd like to retrieve, or the name of a Release Tag that's pointing to the Workflow Deployment History Item you'd like to retrieve.
-	historyIdOrReleaseTag string,
 	// Either the Workflow Deployment's ID or its unique name
 	id string,
+	// Either the UUID of Workflow Deployment History Item you'd like to retrieve, or the name of a Release Tag that's pointing to the Workflow Deployment History Item you'd like to retrieve.
+	historyIDOrReleaseTag string,
+	request *vellumclientgo.WorkflowDeploymentHistoryItemRetrieveRequest,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.WorkflowDeploymentHistoryItem, error) {
 	options := core.NewRequestOptions(opts...)
@@ -337,7 +341,7 @@ func (c *Client) WorkflowDeploymentHistoryItemRetrieve(
 	endpointURL := core.EncodeURL(
 		baseURL+"/v1/workflow-deployments/%v/history/%v",
 		id,
-		historyIdOrReleaseTag,
+		historyIDOrReleaseTag,
 	)
 
 	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())
@@ -416,6 +420,7 @@ func (c *Client) RetrieveWorkflowReleaseTag(
 	id string,
 	// The name of the Release Tag associated with this Workflow Deployment that you'd like to retrieve.
 	name string,
+	request *vellumclientgo.RetrieveWorkflowReleaseTagRequest,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.WorkflowReleaseTagRead, error) {
 	options := core.NewRequestOptions(opts...)
@@ -555,7 +560,8 @@ func (c *Client) RetrieveWorkflowDeploymentRelease(
 	// Either the Workflow Deployment's ID or its unique name
 	id string,
 	// Either the UUID of Workflow Deployment Release you'd like to retrieve, or the name of a Release Tag that's pointing to the Workflow Deployment Release you'd like to retrieve.
-	releaseIdOrReleaseTag string,
+	releaseIDOrReleaseTag string,
+	request *vellumclientgo.RetrieveWorkflowDeploymentReleaseRequest,
 	opts ...option.RequestOption,
 ) (*vellumclientgo.WorkflowDeploymentRelease, error) {
 	options := core.NewRequestOptions(opts...)
@@ -570,7 +576,7 @@ func (c *Client) RetrieveWorkflowDeploymentRelease(
 	endpointURL := core.EncodeURL(
 		baseURL+"/v1/workflow-deployments/%v/releases/%v",
 		id,
-		releaseIdOrReleaseTag,
+		releaseIDOrReleaseTag,
 	)
 
 	headers := core.MergeHeaders(c.header.Clone(), options.ToHeader())

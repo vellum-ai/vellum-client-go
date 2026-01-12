@@ -10,7 +10,7 @@ import (
 
 type DeploySandboxWorkflowRequest struct {
 	// The Vellum-generated ID of the Workflow Deployment you'd like to update. Cannot specify both this and workflow_deployment_name. Leave null to create a new Workflow Deployment.
-	WorkflowDeploymentId *string `json:"workflow_deployment_id,omitempty" url:"-"`
+	WorkflowDeploymentID *string `json:"workflow_deployment_id,omitempty" url:"-"`
 	// The unique name of the Workflow Deployment you'd like to either create or update. Cannot specify both this and workflow_deployment_id. If provided and matches an existing Workflow Deployment, that Workflow Deployment will be updated. Otherwise, a new Prompt Deployment will be created.
 	WorkflowDeploymentName *string `json:"workflow_deployment_name,omitempty" url:"-"`
 	// In the event that a new Workflow Deployment is created, this will be the label it's given.
@@ -76,12 +76,12 @@ func (p *PaginatedWorkflowSandboxExampleList) String() string {
 }
 
 type WorkflowSandboxExample struct {
-	Id           string  `json:"id" url:"id"`
+	ID           string  `json:"id" url:"id"`
 	Label        string  `json:"label" url:"label"`
 	Description  *string `json:"description,omitempty" url:"description,omitempty"`
 	IconName     *string `json:"icon_name,omitempty" url:"icon_name,omitempty"`
-	UiImageUrl   *string `json:"ui_image_url,omitempty" url:"ui_image_url,omitempty"`
-	CodeImageUrl *string `json:"code_image_url,omitempty" url:"code_image_url,omitempty"`
+	UIImageURL   *string `json:"ui_image_url,omitempty" url:"ui_image_url,omitempty"`
+	CodeImageURL *string `json:"code_image_url,omitempty" url:"code_image_url,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
