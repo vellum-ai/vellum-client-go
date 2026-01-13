@@ -9,6 +9,12 @@ import (
 	time "time"
 )
 
+type WorkflowRunNodeRequest struct {
+	Files  map[string]string      `json:"files,omitempty" url:"-"`
+	Node   string                 `json:"node" url:"-"`
+	Inputs map[string]interface{} `json:"inputs,omitempty" url:"-"`
+}
+
 type WorkflowsPullRequest struct {
 	ExcludeCode    *bool `json:"-" url:"exclude_code,omitempty"`
 	ExcludeDisplay *bool `json:"-" url:"exclude_display,omitempty"`
@@ -372,4 +378,48 @@ func (w *WorkflowResolvedState) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", w)
+}
+
+type WorkflowSandboxExecuteNodeResponse struct {
+	NodeExecutionFulfilledEvent *NodeExecutionFulfilledEvent
+	NodeExecutionRejectedEvent  *NodeExecutionRejectedEvent
+}
+
+func (w *WorkflowSandboxExecuteNodeResponse) UnmarshalJSON(data []byte) error {
+	valueNodeExecutionFulfilledEvent := new(NodeExecutionFulfilledEvent)
+	if err := json.Unmarshal(data, &valueNodeExecutionFulfilledEvent); err == nil {
+		w.NodeExecutionFulfilledEvent = valueNodeExecutionFulfilledEvent
+		return nil
+	}
+	valueNodeExecutionRejectedEvent := new(NodeExecutionRejectedEvent)
+	if err := json.Unmarshal(data, &valueNodeExecutionRejectedEvent); err == nil {
+		w.NodeExecutionRejectedEvent = valueNodeExecutionRejectedEvent
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, w)
+}
+
+func (w WorkflowSandboxExecuteNodeResponse) MarshalJSON() ([]byte, error) {
+	if w.NodeExecutionFulfilledEvent != nil {
+		return json.Marshal(w.NodeExecutionFulfilledEvent)
+	}
+	if w.NodeExecutionRejectedEvent != nil {
+		return json.Marshal(w.NodeExecutionRejectedEvent)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", w)
+}
+
+type WorkflowSandboxExecuteNodeResponseVisitor interface {
+	VisitNodeExecutionFulfilledEvent(*NodeExecutionFulfilledEvent) error
+	VisitNodeExecutionRejectedEvent(*NodeExecutionRejectedEvent) error
+}
+
+func (w *WorkflowSandboxExecuteNodeResponse) Accept(visitor WorkflowSandboxExecuteNodeResponseVisitor) error {
+	if w.NodeExecutionFulfilledEvent != nil {
+		return visitor.VisitNodeExecutionFulfilledEvent(w.NodeExecutionFulfilledEvent)
+	}
+	if w.NodeExecutionRejectedEvent != nil {
+		return visitor.VisitNodeExecutionRejectedEvent(w.NodeExecutionRejectedEvent)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", w)
 }
