@@ -171,6 +171,13 @@ func (c *Client) ExecuteIntegrationTool(
 				return apiError
 			}
 			return value
+		case 429:
+			value := new(vellumclientgo.TooManyRequestsError)
+			value.APIError = apiError
+			if err := decoder.Decode(value); err != nil {
+				return apiError
+			}
+			return value
 		}
 		return apiError
 	}

@@ -124,11 +124,11 @@ func (n *NotFoundError) Unwrap() error {
 
 type TooManyRequestsError struct {
 	*core.APIError
-	Body *ErrorDetailResponse
+	Body interface{}
 }
 
 func (t *TooManyRequestsError) UnmarshalJSON(data []byte) error {
-	var body *ErrorDetailResponse
+	var body interface{}
 	if err := json.Unmarshal(data, &body); err != nil {
 		return err
 	}
