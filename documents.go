@@ -52,6 +52,7 @@ type DocumentDocumentToDocumentIndex struct {
 	// * `FAILED` - Failed
 	IndexingState        *IndexingStateEnum `json:"indexing_state,omitempty" url:"indexing_state,omitempty"`
 	ExtractedTextFileUrl *string            `json:"extracted_text_file_url,omitempty" url:"extracted_text_file_url,omitempty"`
+	ProcessingState      *string            `json:"processing_state,omitempty" url:"processing_state,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -410,7 +411,8 @@ type SlimDocumentDocumentToDocumentIndex struct {
 	// * `INDEXING` - Indexing
 	// * `INDEXED` - Indexed
 	// * `FAILED` - Failed
-	IndexingState *IndexingStateEnum `json:"indexing_state,omitempty" url:"indexing_state,omitempty"`
+	IndexingState   *IndexingStateEnum `json:"indexing_state,omitempty" url:"indexing_state,omitempty"`
+	ProcessingState *string            `json:"processing_state,omitempty" url:"processing_state,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
