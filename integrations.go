@@ -35,9 +35,13 @@ type ComponentsSchemasComposioIntegrationExecConfig = *ComposioIntegrationExecCo
 
 // Payload for executing a Composio tool with provider id and tool arguments.
 type ComposioExecuteToolRequest struct {
-	Arguments      map[string]interface{} `json:"arguments" url:"arguments"`
-	ToolkitVersion *string                `json:"toolkit_version,omitempty" url:"toolkit_version,omitempty"`
-	provider       string
+	Arguments       map[string]interface{} `json:"arguments" url:"arguments"`
+	ToolkitVersion  *string                `json:"toolkit_version,omitempty" url:"toolkit_version,omitempty"`
+	IntegrationName *string                `json:"integration_name,omitempty" url:"integration_name,omitempty"`
+	Integration     *string                `json:"integration,omitempty" url:"integration,omitempty"`
+	ToolName        *string                `json:"tool_name,omitempty" url:"tool_name,omitempty"`
+	Tool            *string                `json:"tool,omitempty" url:"tool,omitempty"`
+	provider        string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
