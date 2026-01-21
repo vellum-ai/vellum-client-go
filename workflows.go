@@ -42,6 +42,12 @@ type SerializeWorkflowFilesRequest struct {
 	Files        map[string]interface{} `json:"files,omitempty" url:"-"`
 	Module       *string                `json:"module,omitempty" url:"-"`
 	RunnerConfig *RunnerConfigRequest   `json:"runner_config,omitempty" url:"-"`
+	// Optional type checker to run during serialization. Supported values: mypy, zuban, default.
+	//
+	// * `mypy` - Mypy
+	// * `zuban` - Zuban
+	// * `default` - Default
+	TypeChecker *TypeCheckerEnum `json:"type_checker,omitempty" url:"-"`
 }
 
 type CheckWorkflowExecutionStatusError struct {
@@ -221,6 +227,34 @@ func (r *RunnerConfigRequest) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", r)
+}
+
+// * `mypy` - Mypy
+// * `zuban` - Zuban
+// * `default` - Default
+type TypeCheckerEnum string
+
+const (
+	TypeCheckerEnumMypy    TypeCheckerEnum = "mypy"
+	TypeCheckerEnumZuban   TypeCheckerEnum = "zuban"
+	TypeCheckerEnumDefault TypeCheckerEnum = "default"
+)
+
+func NewTypeCheckerEnumFromString(s string) (TypeCheckerEnum, error) {
+	switch s {
+	case "mypy":
+		return TypeCheckerEnumMypy, nil
+	case "zuban":
+		return TypeCheckerEnumZuban, nil
+	case "default":
+		return TypeCheckerEnumDefault, nil
+	}
+	var t TypeCheckerEnum
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (t TypeCheckerEnum) Ptr() *TypeCheckerEnum {
+	return &t
 }
 
 type WorkflowPushDeploymentConfigRequest struct {
