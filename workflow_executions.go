@@ -19,7 +19,7 @@ type RetrieveWorkflowExecutionDetailRequest struct {
 type WorkflowExecutionDetail struct {
 	SpanId        string                          `json:"span_id" url:"span_id"`
 	ParentContext *ParentContext                  `json:"parent_context,omitempty" url:"parent_context,omitempty"`
-	Start         time.Time                       `json:"start" url:"start"`
+	Start         *time.Time                      `json:"start,omitempty" url:"start,omitempty"`
 	End           *time.Time                      `json:"end,omitempty" url:"end,omitempty"`
 	Inputs        []*ExecutionVellumValue         `json:"inputs" url:"inputs"`
 	Outputs       []*ExecutionVellumValue         `json:"outputs" url:"outputs"`
@@ -40,7 +40,7 @@ func (w *WorkflowExecutionDetail) UnmarshalJSON(data []byte) error {
 	type embed WorkflowExecutionDetail
 	var unmarshaler = struct {
 		embed
-		Start *core.DateTime `json:"start"`
+		Start *core.DateTime `json:"start,omitempty"`
 		End   *core.DateTime `json:"end,omitempty"`
 	}{
 		embed: embed(*w),
@@ -49,7 +49,7 @@ func (w *WorkflowExecutionDetail) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*w = WorkflowExecutionDetail(unmarshaler.embed)
-	w.Start = unmarshaler.Start.Time()
+	w.Start = unmarshaler.Start.TimePtr()
 	w.End = unmarshaler.End.TimePtr()
 
 	extraProperties, err := core.ExtractExtraProperties(data, *w)
@@ -66,11 +66,11 @@ func (w *WorkflowExecutionDetail) MarshalJSON() ([]byte, error) {
 	type embed WorkflowExecutionDetail
 	var marshaler = struct {
 		embed
-		Start *core.DateTime `json:"start"`
+		Start *core.DateTime `json:"start,omitempty"`
 		End   *core.DateTime `json:"end,omitempty"`
 	}{
 		embed: embed(*w),
-		Start: core.NewDateTime(w.Start),
+		Start: core.NewOptionalDateTime(w.Start),
 		End:   core.NewOptionalDateTime(w.End),
 	}
 	return json.Marshal(marshaler)
