@@ -26,18 +26,22 @@ type ListIntegrationAuthConfigsRequest struct {
 }
 
 // * `API_KEY` - API Key
+// * `GOOGLE_SERVICE_ACCOUNT` - Google Service Account
 // * `OAUTH2` - OAuth2
 type AuthTypeEnum string
 
 const (
-	AuthTypeEnumApiKey AuthTypeEnum = "API_KEY"
-	AuthTypeEnumOauth2 AuthTypeEnum = "OAUTH2"
+	AuthTypeEnumApiKey               AuthTypeEnum = "API_KEY"
+	AuthTypeEnumGoogleServiceAccount AuthTypeEnum = "GOOGLE_SERVICE_ACCOUNT"
+	AuthTypeEnumOauth2               AuthTypeEnum = "OAUTH2"
 )
 
 func NewAuthTypeEnumFromString(s string) (AuthTypeEnum, error) {
 	switch s {
 	case "API_KEY":
 		return AuthTypeEnumApiKey, nil
+	case "GOOGLE_SERVICE_ACCOUNT":
+		return AuthTypeEnumGoogleServiceAccount, nil
 	case "OAUTH2":
 		return AuthTypeEnumOauth2, nil
 	}
