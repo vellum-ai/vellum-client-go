@@ -9415,6 +9415,7 @@ func (i *Integration) String() string {
 // * `GMAIL` - Gmail
 // * `GOOGLE_ADS` - Google Ads
 // * `GOOGLE_ANALYTICS` - Google Analytics
+// * `GOOGLE_BIGQUERY` - Google BigQuery
 // * `GOOGLE_DOCS` - Google Docs
 // * `GOOGLE_PHOTOS` - Google Photos
 // * `GOOGLE_SEARCH_CONSOLE` - Google Search Console
@@ -9518,6 +9519,7 @@ const (
 	IntegrationNameGmail               IntegrationName = "GMAIL"
 	IntegrationNameGoogleAds           IntegrationName = "GOOGLE_ADS"
 	IntegrationNameGoogleAnalytics     IntegrationName = "GOOGLE_ANALYTICS"
+	IntegrationNameGoogleBigquery      IntegrationName = "GOOGLE_BIGQUERY"
 	IntegrationNameGoogleDocs          IntegrationName = "GOOGLE_DOCS"
 	IntegrationNameGooglePhotos        IntegrationName = "GOOGLE_PHOTOS"
 	IntegrationNameGoogleSearchConsole IntegrationName = "GOOGLE_SEARCH_CONSOLE"
@@ -9650,6 +9652,8 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameGoogleAds, nil
 	case "GOOGLE_ANALYTICS":
 		return IntegrationNameGoogleAnalytics, nil
+	case "GOOGLE_BIGQUERY":
+		return IntegrationNameGoogleBigquery, nil
 	case "GOOGLE_DOCS":
 		return IntegrationNameGoogleDocs, nil
 	case "GOOGLE_PHOTOS":
@@ -25390,6 +25394,7 @@ func (w *WorkflowExecutionFulfilledEvent) String() string {
 type WorkflowExecutionInitiatedBody struct {
 	WorkflowDefinition *VellumCodeResourceDefinition `json:"workflow_definition" url:"workflow_definition"`
 	Inputs             map[string]interface{}        `json:"inputs" url:"inputs"`
+	Trigger            *VellumCodeResourceDefinition `json:"trigger,omitempty" url:"trigger,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
