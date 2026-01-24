@@ -1971,7 +1971,8 @@ type ChatMessage struct {
 	Role    ChatMessageRole     `json:"role" url:"role"`
 	Content *ChatMessageContent `json:"content,omitempty" url:"content,omitempty"`
 	// An optional identifier representing who or what generated this message.
-	Source *string `json:"source,omitempty" url:"source,omitempty"`
+	Source   *string                `json:"source,omitempty" url:"source,omitempty"`
+	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -2307,7 +2308,8 @@ type ChatMessageRequest struct {
 	Role    ChatMessageRole            `json:"role" url:"role"`
 	Content *ChatMessageContentRequest `json:"content,omitempty" url:"content,omitempty"`
 	// An optional identifier representing who or what generated this message.
-	Source *string `json:"source,omitempty" url:"source,omitempty"`
+	Source   *string                `json:"source,omitempty" url:"source,omitempty"`
+	Metadata map[string]interface{} `json:"metadata,omitempty" url:"metadata,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -25394,7 +25396,6 @@ func (w *WorkflowExecutionFulfilledEvent) String() string {
 type WorkflowExecutionInitiatedBody struct {
 	WorkflowDefinition *VellumCodeResourceDefinition `json:"workflow_definition" url:"workflow_definition"`
 	Inputs             map[string]interface{}        `json:"inputs" url:"inputs"`
-	Trigger            *VellumCodeResourceDefinition `json:"trigger,omitempty" url:"trigger,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
