@@ -7,6 +7,29 @@ import (
 	core "github.com/vellum-ai/vellum-client-go/core"
 )
 
+type BadGatewayError struct {
+	*core.APIError
+	Body map[string]interface{}
+}
+
+func (b *BadGatewayError) UnmarshalJSON(data []byte) error {
+	var body map[string]interface{}
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	b.StatusCode = 502
+	b.Body = body
+	return nil
+}
+
+func (b *BadGatewayError) MarshalJSON() ([]byte, error) {
+	return json.Marshal(b.Body)
+}
+
+func (b *BadGatewayError) Unwrap() error {
+	return b.APIError
+}
+
 type BadRequestError struct {
 	*core.APIError
 	Body interface{}
@@ -30,6 +53,29 @@ func (b *BadRequestError) Unwrap() error {
 	return b.APIError
 }
 
+type ContentTooLargeError struct {
+	*core.APIError
+	Body map[string]interface{}
+}
+
+func (c *ContentTooLargeError) UnmarshalJSON(data []byte) error {
+	var body map[string]interface{}
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	c.StatusCode = 413
+	c.Body = body
+	return nil
+}
+
+func (c *ContentTooLargeError) MarshalJSON() ([]byte, error) {
+	return json.Marshal(c.Body)
+}
+
+func (c *ContentTooLargeError) Unwrap() error {
+	return c.APIError
+}
+
 type ForbiddenError struct {
 	*core.APIError
 	Body interface{}
@@ -51,6 +97,29 @@ func (f *ForbiddenError) MarshalJSON() ([]byte, error) {
 
 func (f *ForbiddenError) Unwrap() error {
 	return f.APIError
+}
+
+type GoneError struct {
+	*core.APIError
+	Body map[string]interface{}
+}
+
+func (g *GoneError) UnmarshalJSON(data []byte) error {
+	var body map[string]interface{}
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	g.StatusCode = 410
+	g.Body = body
+	return nil
+}
+
+func (g *GoneError) MarshalJSON() ([]byte, error) {
+	return json.Marshal(g.Body)
+}
+
+func (g *GoneError) Unwrap() error {
+	return g.APIError
 }
 
 type InternalServerError struct {
@@ -122,6 +191,29 @@ func (n *NotFoundError) Unwrap() error {
 	return n.APIError
 }
 
+type ServiceUnavailableError struct {
+	*core.APIError
+	Body map[string]interface{}
+}
+
+func (s *ServiceUnavailableError) UnmarshalJSON(data []byte) error {
+	var body map[string]interface{}
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	s.StatusCode = 503
+	s.Body = body
+	return nil
+}
+
+func (s *ServiceUnavailableError) MarshalJSON() ([]byte, error) {
+	return json.Marshal(s.Body)
+}
+
+func (s *ServiceUnavailableError) Unwrap() error {
+	return s.APIError
+}
+
 type TooManyRequestsError struct {
 	*core.APIError
 	Body interface{}
@@ -147,11 +239,11 @@ func (t *TooManyRequestsError) Unwrap() error {
 
 type UnauthorizedError struct {
 	*core.APIError
-	Body *ErrorDetailResponse
+	Body interface{}
 }
 
 func (u *UnauthorizedError) UnmarshalJSON(data []byte) error {
-	var body *ErrorDetailResponse
+	var body interface{}
 	if err := json.Unmarshal(data, &body); err != nil {
 		return err
 	}
@@ -165,5 +257,28 @@ func (u *UnauthorizedError) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UnauthorizedError) Unwrap() error {
+	return u.APIError
+}
+
+type UnprocessableEntityError struct {
+	*core.APIError
+	Body map[string]interface{}
+}
+
+func (u *UnprocessableEntityError) UnmarshalJSON(data []byte) error {
+	var body map[string]interface{}
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	u.StatusCode = 422
+	u.Body = body
+	return nil
+}
+
+func (u *UnprocessableEntityError) MarshalJSON() ([]byte, error) {
+	return json.Marshal(u.Body)
+}
+
+func (u *UnprocessableEntityError) Unwrap() error {
 	return u.APIError
 }
