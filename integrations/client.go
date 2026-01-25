@@ -12,6 +12,7 @@ import (
 	option "github.com/vellum-ai/vellum-client-go/option"
 	io "io"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -22,8 +23,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.ApiVersion == "" {
+		options.ApiVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -157,6 +158,13 @@ func (c *Client) ExecuteIntegrationTool(
 				return apiError
 			}
 			return value
+		case 401:
+			value := new(vellumclientgo.UnauthorizedError)
+			value.APIError = apiError
+			if err := decoder.Decode(value); err != nil {
+				return apiError
+			}
+			return value
 		case 403:
 			value := new(vellumclientgo.ForbiddenError)
 			value.APIError = apiError
@@ -171,8 +179,43 @@ func (c *Client) ExecuteIntegrationTool(
 				return apiError
 			}
 			return value
+		case 410:
+			value := new(vellumclientgo.GoneError)
+			value.APIError = apiError
+			if err := decoder.Decode(value); err != nil {
+				return apiError
+			}
+			return value
+		case 413:
+			value := new(vellumclientgo.ContentTooLargeError)
+			value.APIError = apiError
+			if err := decoder.Decode(value); err != nil {
+				return apiError
+			}
+			return value
+		case 422:
+			value := new(vellumclientgo.UnprocessableEntityError)
+			value.APIError = apiError
+			if err := decoder.Decode(value); err != nil {
+				return apiError
+			}
+			return value
 		case 429:
 			value := new(vellumclientgo.TooManyRequestsError)
+			value.APIError = apiError
+			if err := decoder.Decode(value); err != nil {
+				return apiError
+			}
+			return value
+		case 502:
+			value := new(vellumclientgo.BadGatewayError)
+			value.APIError = apiError
+			if err := decoder.Decode(value); err != nil {
+				return apiError
+			}
+			return value
+		case 503:
+			value := new(vellumclientgo.ServiceUnavailableError)
 			value.APIError = apiError
 			if err := decoder.Decode(value); err != nil {
 				return apiError
