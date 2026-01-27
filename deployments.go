@@ -497,6 +497,7 @@ type SlimDeploymentRead struct {
 	//
 	// * `ACTIVE` - Active
 	// * `ARCHIVED` - Archived
+	// * `PENDING_DELETION` - Pending Deletion
 	Status *EntityStatus `json:"status,omitempty" url:"status,omitempty"`
 	// Deprecated. The value returned will always be 'PRODUCTION'.
 	Environment    *EnvironmentEnum  `json:"environment,omitempty" url:"environment,omitempty"`
@@ -568,8 +569,9 @@ func (s *SlimDeploymentRead) String() string {
 type DeploymentsListRequestStatus string
 
 const (
-	DeploymentsListRequestStatusActive   DeploymentsListRequestStatus = "ACTIVE"
-	DeploymentsListRequestStatusArchived DeploymentsListRequestStatus = "ARCHIVED"
+	DeploymentsListRequestStatusActive          DeploymentsListRequestStatus = "ACTIVE"
+	DeploymentsListRequestStatusArchived        DeploymentsListRequestStatus = "ARCHIVED"
+	DeploymentsListRequestStatusPendingDeletion DeploymentsListRequestStatus = "PENDING_DELETION"
 )
 
 func NewDeploymentsListRequestStatusFromString(s string) (DeploymentsListRequestStatus, error) {
@@ -578,6 +580,8 @@ func NewDeploymentsListRequestStatusFromString(s string) (DeploymentsListRequest
 		return DeploymentsListRequestStatusActive, nil
 	case "ARCHIVED":
 		return DeploymentsListRequestStatusArchived, nil
+	case "PENDING_DELETION":
+		return DeploymentsListRequestStatusPendingDeletion, nil
 	}
 	var t DeploymentsListRequestStatus
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
