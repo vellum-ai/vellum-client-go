@@ -3904,6 +3904,7 @@ type DeploymentRead struct {
 	//
 	// * `ACTIVE` - Active
 	// * `ARCHIVED` - Archived
+	// * `PENDING_DELETION` - Pending Deletion
 	Status *EntityStatus `json:"status,omitempty" url:"status,omitempty"`
 	// Deprecated. The value returned will always be 'PRODUCTION'.
 	Environment    *EnvironmentEnum  `json:"environment,omitempty" url:"environment,omitempty"`
@@ -4633,11 +4634,13 @@ func (e *EnrichedNormalizedCompletion) String() string {
 
 // * `ACTIVE` - Active
 // * `ARCHIVED` - Archived
+// * `PENDING_DELETION` - Pending Deletion
 type EntityStatus string
 
 const (
-	EntityStatusActive   EntityStatus = "ACTIVE"
-	EntityStatusArchived EntityStatus = "ARCHIVED"
+	EntityStatusActive          EntityStatus = "ACTIVE"
+	EntityStatusArchived        EntityStatus = "ARCHIVED"
+	EntityStatusPendingDeletion EntityStatus = "PENDING_DELETION"
 )
 
 func NewEntityStatusFromString(s string) (EntityStatus, error) {
@@ -4646,6 +4649,8 @@ func NewEntityStatusFromString(s string) (EntityStatus, error) {
 		return EntityStatusActive, nil
 	case "ARCHIVED":
 		return EntityStatusArchived, nil
+	case "PENDING_DELETION":
+		return EntityStatusPendingDeletion, nil
 	}
 	var t EntityStatus
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -9430,6 +9435,7 @@ func (i *Integration) String() string {
 // * `SUPABASE` - Supabase
 // * `TAVILY` - Tavily
 // * `TELEGRAM` - Telegram
+// * `TIKTOK` - TikTok
 // * `TODOIST` - Todoist
 // * `WEBFLOW` - Webflow
 // * `YOUSEARCH` - You Search
@@ -9534,6 +9540,7 @@ const (
 	IntegrationNameSupabase            IntegrationName = "SUPABASE"
 	IntegrationNameTavily              IntegrationName = "TAVILY"
 	IntegrationNameTelegram            IntegrationName = "TELEGRAM"
+	IntegrationNameTiktok              IntegrationName = "TIKTOK"
 	IntegrationNameTodoist             IntegrationName = "TODOIST"
 	IntegrationNameWebflow             IntegrationName = "WEBFLOW"
 	IntegrationNameYousearch           IntegrationName = "YOUSEARCH"
@@ -9722,6 +9729,8 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameTavily, nil
 	case "TELEGRAM":
 		return IntegrationNameTelegram, nil
+	case "TIKTOK":
+		return IntegrationNameTiktok, nil
 	case "TODOIST":
 		return IntegrationNameTodoist, nil
 	case "WEBFLOW":
@@ -22734,8 +22743,8 @@ func (v *VellumNodeExecutionEvent) Accept(visitor VellumNodeExecutionEventVisito
 
 type VellumSdkError struct {
 	Message string                 `json:"message" url:"message"`
+	RawData *VellumSdkErrorRawData `json:"raw_data,omitempty" url:"raw_data,omitempty"`
 	Code    VellumSdkErrorCodeEnum `json:"code" url:"code"`
-	RawData map[string]interface{} `json:"raw_data,omitempty" url:"raw_data,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -22857,6 +22866,50 @@ func NewVellumSdkErrorCodeEnumFromString(s string) (VellumSdkErrorCodeEnum, erro
 
 func (v VellumSdkErrorCodeEnum) Ptr() *VellumSdkErrorCodeEnum {
 	return &v
+}
+
+type VellumSdkErrorRawData struct {
+	StringUnknownMap map[string]interface{}
+	String           string
+}
+
+func (v *VellumSdkErrorRawData) UnmarshalJSON(data []byte) error {
+	var valueStringUnknownMap map[string]interface{}
+	if err := json.Unmarshal(data, &valueStringUnknownMap); err == nil {
+		v.StringUnknownMap = valueStringUnknownMap
+		return nil
+	}
+	var valueString string
+	if err := json.Unmarshal(data, &valueString); err == nil {
+		v.String = valueString
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, v)
+}
+
+func (v VellumSdkErrorRawData) MarshalJSON() ([]byte, error) {
+	if v.StringUnknownMap != nil {
+		return json.Marshal(v.StringUnknownMap)
+	}
+	if v.String != "" {
+		return json.Marshal(v.String)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", v)
+}
+
+type VellumSdkErrorRawDataVisitor interface {
+	VisitStringUnknownMap(map[string]interface{}) error
+	VisitString(string) error
+}
+
+func (v *VellumSdkErrorRawData) Accept(visitor VellumSdkErrorRawDataVisitor) error {
+	if v.StringUnknownMap != nil {
+		return visitor.VisitStringUnknownMap(v.StringUnknownMap)
+	}
+	if v.String != "" {
+		return visitor.VisitString(v.String)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", v)
 }
 
 type VellumSecret struct {
@@ -24487,6 +24540,7 @@ type WorkflowDeploymentRead struct {
 	//
 	// * `ACTIVE` - Active
 	// * `ARCHIVED` - Archived
+	// * `PENDING_DELETION` - Pending Deletion
 	Status *EntityStatus `json:"status,omitempty" url:"status,omitempty"`
 	// Deprecated. The value returned will always be 'PRODUCTION'.
 	Environment    *EnvironmentEnum `json:"environment,omitempty" url:"environment,omitempty"`
@@ -24852,8 +24906,8 @@ func (w *WorkflowEvent) Accept(visitor WorkflowEventVisitor) error {
 
 type WorkflowEventError struct {
 	Message    string                          `json:"message" url:"message"`
+	RawData    *WorkflowEventErrorRawData      `json:"raw_data,omitempty" url:"raw_data,omitempty"`
 	Code       WorkflowExecutionEventErrorCode `json:"code" url:"code"`
-	RawData    map[string]interface{}          `json:"raw_data,omitempty" url:"raw_data,omitempty"`
 	Stacktrace *string                         `json:"stacktrace,omitempty" url:"stacktrace,omitempty"`
 
 	extraProperties map[string]interface{}
@@ -24892,6 +24946,50 @@ func (w *WorkflowEventError) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", w)
+}
+
+type WorkflowEventErrorRawData struct {
+	StringUnknownMap map[string]interface{}
+	String           string
+}
+
+func (w *WorkflowEventErrorRawData) UnmarshalJSON(data []byte) error {
+	var valueStringUnknownMap map[string]interface{}
+	if err := json.Unmarshal(data, &valueStringUnknownMap); err == nil {
+		w.StringUnknownMap = valueStringUnknownMap
+		return nil
+	}
+	var valueString string
+	if err := json.Unmarshal(data, &valueString); err == nil {
+		w.String = valueString
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, w)
+}
+
+func (w WorkflowEventErrorRawData) MarshalJSON() ([]byte, error) {
+	if w.StringUnknownMap != nil {
+		return json.Marshal(w.StringUnknownMap)
+	}
+	if w.String != "" {
+		return json.Marshal(w.String)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", w)
+}
+
+type WorkflowEventErrorRawDataVisitor interface {
+	VisitStringUnknownMap(map[string]interface{}) error
+	VisitString(string) error
+}
+
+func (w *WorkflowEventErrorRawData) Accept(visitor WorkflowEventErrorRawDataVisitor) error {
+	if w.StringUnknownMap != nil {
+		return visitor.VisitStringUnknownMap(w.StringUnknownMap)
+	}
+	if w.String != "" {
+		return visitor.VisitString(w.String)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", w)
 }
 
 type WorkflowExecutionActualChatHistoryRequest struct {
