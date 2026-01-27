@@ -19,6 +19,7 @@ type FolderEntitiesListRequest struct {
 	//
 	// * `ACTIVE` - Active
 	// * `ARCHIVED` - Archived
+	// * `PENDING_DELETION` - Pending Deletion
 	EntityStatus *FolderEntitiesListRequestEntityStatus `json:"-" url:"entity_status,omitempty"`
 	// Number of results to return per page.
 	Limit *int `json:"-" url:"limit,omitempty"`
@@ -1054,8 +1055,9 @@ func (w *WorkflowSandboxDisplayData) String() string {
 type FolderEntitiesListRequestEntityStatus string
 
 const (
-	FolderEntitiesListRequestEntityStatusActive   FolderEntitiesListRequestEntityStatus = "ACTIVE"
-	FolderEntitiesListRequestEntityStatusArchived FolderEntitiesListRequestEntityStatus = "ARCHIVED"
+	FolderEntitiesListRequestEntityStatusActive          FolderEntitiesListRequestEntityStatus = "ACTIVE"
+	FolderEntitiesListRequestEntityStatusArchived        FolderEntitiesListRequestEntityStatus = "ARCHIVED"
+	FolderEntitiesListRequestEntityStatusPendingDeletion FolderEntitiesListRequestEntityStatus = "PENDING_DELETION"
 )
 
 func NewFolderEntitiesListRequestEntityStatusFromString(s string) (FolderEntitiesListRequestEntityStatus, error) {
@@ -1064,6 +1066,8 @@ func NewFolderEntitiesListRequestEntityStatusFromString(s string) (FolderEntitie
 		return FolderEntitiesListRequestEntityStatusActive, nil
 	case "ARCHIVED":
 		return FolderEntitiesListRequestEntityStatusArchived, nil
+	case "PENDING_DELETION":
+		return FolderEntitiesListRequestEntityStatusPendingDeletion, nil
 	}
 	var t FolderEntitiesListRequestEntityStatus
 	return "", fmt.Errorf("%s is not a valid %T", s, t)

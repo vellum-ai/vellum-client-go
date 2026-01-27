@@ -18,6 +18,7 @@ type DocumentIndexCreateRequest struct {
 	//
 	// * `ACTIVE` - Active
 	// * `ARCHIVED` - Archived
+	// * `PENDING_DELETION` - Pending Deletion
 	Status         *EntityStatus                       `json:"status,omitempty" url:"-"`
 	IndexingConfig *DocumentIndexIndexingConfigRequest `json:"indexing_config,omitempty" url:"-"`
 	// Optionally specify the id of a document index from which you'd like to copy and re-index its documents into this newly created index
@@ -37,6 +38,7 @@ type DocumentIndexesListRequest struct {
 	//
 	// * `ACTIVE` - Active
 	// * `ARCHIVED` - Archived
+	// * `PENDING_DELETION` - Pending Deletion
 	Status *DocumentIndexesListRequestStatus `json:"-" url:"status,omitempty"`
 }
 
@@ -47,6 +49,7 @@ type PatchedDocumentIndexUpdateRequest struct {
 	//
 	// * `ACTIVE` - Active
 	// * `ARCHIVED` - Archived
+	// * `PENDING_DELETION` - Pending Deletion
 	Status *EntityStatus `json:"status,omitempty" url:"-"`
 }
 
@@ -491,6 +494,7 @@ type DocumentIndexRead struct {
 	//
 	// * `ACTIVE` - Active
 	// * `ARCHIVED` - Archived
+	// * `PENDING_DELETION` - Pending Deletion
 	Status         *EntityStatus                `json:"status,omitempty" url:"status,omitempty"`
 	IndexingConfig *DocumentIndexIndexingConfig `json:"indexing_config" url:"indexing_config"`
 
@@ -1838,8 +1842,9 @@ func (t *TokenOverlappingWindowChunkingRequest) String() string {
 type DocumentIndexesListRequestStatus string
 
 const (
-	DocumentIndexesListRequestStatusActive   DocumentIndexesListRequestStatus = "ACTIVE"
-	DocumentIndexesListRequestStatusArchived DocumentIndexesListRequestStatus = "ARCHIVED"
+	DocumentIndexesListRequestStatusActive          DocumentIndexesListRequestStatus = "ACTIVE"
+	DocumentIndexesListRequestStatusArchived        DocumentIndexesListRequestStatus = "ARCHIVED"
+	DocumentIndexesListRequestStatusPendingDeletion DocumentIndexesListRequestStatus = "PENDING_DELETION"
 )
 
 func NewDocumentIndexesListRequestStatusFromString(s string) (DocumentIndexesListRequestStatus, error) {
@@ -1848,6 +1853,8 @@ func NewDocumentIndexesListRequestStatusFromString(s string) (DocumentIndexesLis
 		return DocumentIndexesListRequestStatusActive, nil
 	case "ARCHIVED":
 		return DocumentIndexesListRequestStatusArchived, nil
+	case "PENDING_DELETION":
+		return DocumentIndexesListRequestStatusPendingDeletion, nil
 	}
 	var t DocumentIndexesListRequestStatus
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
@@ -1864,5 +1871,6 @@ type DocumentIndexUpdateRequest struct {
 	//
 	// * `ACTIVE` - Active
 	// * `ARCHIVED` - Archived
+	// * `PENDING_DELETION` - Pending Deletion
 	Status *EntityStatus `json:"status,omitempty" url:"-"`
 }

@@ -206,6 +206,7 @@ type SlimWorkflowDeployment struct {
 	//
 	// * `ACTIVE` - Active
 	// * `ARCHIVED` - Archived
+	// * `PENDING_DELETION` - Pending Deletion
 	Status *EntityStatus `json:"status,omitempty" url:"status,omitempty"`
 	// Deprecated. The value returned will always be 'PRODUCTION'.
 	Environment    *EnvironmentEnum `json:"environment,omitempty" url:"environment,omitempty"`
@@ -928,8 +929,9 @@ func (l ListWorkflowReleaseTagsRequestSource) Ptr() *ListWorkflowReleaseTagsRequ
 type WorkflowDeploymentsListRequestStatus string
 
 const (
-	WorkflowDeploymentsListRequestStatusActive   WorkflowDeploymentsListRequestStatus = "ACTIVE"
-	WorkflowDeploymentsListRequestStatusArchived WorkflowDeploymentsListRequestStatus = "ARCHIVED"
+	WorkflowDeploymentsListRequestStatusActive          WorkflowDeploymentsListRequestStatus = "ACTIVE"
+	WorkflowDeploymentsListRequestStatusArchived        WorkflowDeploymentsListRequestStatus = "ARCHIVED"
+	WorkflowDeploymentsListRequestStatusPendingDeletion WorkflowDeploymentsListRequestStatus = "PENDING_DELETION"
 )
 
 func NewWorkflowDeploymentsListRequestStatusFromString(s string) (WorkflowDeploymentsListRequestStatus, error) {
@@ -938,6 +940,8 @@ func NewWorkflowDeploymentsListRequestStatusFromString(s string) (WorkflowDeploy
 		return WorkflowDeploymentsListRequestStatusActive, nil
 	case "ARCHIVED":
 		return WorkflowDeploymentsListRequestStatusArchived, nil
+	case "PENDING_DELETION":
+		return WorkflowDeploymentsListRequestStatusPendingDeletion, nil
 	}
 	var t WorkflowDeploymentsListRequestStatus
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
