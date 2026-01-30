@@ -25,12 +25,18 @@ type ExecuteWorkflowDeploymentStreamRequest struct {
 }
 
 type WorkflowDeploymentsListRequest struct {
+	// has_story_config
+	HasStoryConfig *string `json:"-" url:"has_story_config,omitempty"`
+	// is_public
+	IsPublic *string `json:"-" url:"is_public,omitempty"`
 	// Number of results to return per page.
 	Limit *int `json:"-" url:"limit,omitempty"`
 	// The initial index from which to return the results.
 	Offset *int `json:"-" url:"offset,omitempty"`
 	// Which field to use when ordering the results.
 	Ordering *string `json:"-" url:"ordering,omitempty"`
+	// owned_by
+	OwnedBy *string `json:"-" url:"owned_by,omitempty"`
 	// status
 	Status *WorkflowDeploymentsListRequestStatus `json:"-" url:"status,omitempty"`
 }
