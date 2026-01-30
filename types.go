@@ -9376,6 +9376,7 @@ func (i *Integration) String() string {
 // * `GITHUB` - Github
 // * `GOOGLE_SHEETS` - Google Sheets
 // * `GOOGLE_CALENDAR` - Google Calendar
+// * `GOOGLE_CLASSROOM` - Google Classroom
 // * `GOOGLE_DRIVE` - Google Drive
 // * `GMAIL` - Gmail
 // * `GOOGLE_ADS` - Google Ads
@@ -9410,6 +9411,7 @@ func (i *Integration) String() string {
 // * `FIGMA` - Figma
 // * `FIREFLIES` - Fireflies
 // * `GOOGLE_MAPS` - Google Maps
+// * `GOOGLEMEET` - Google Meet
 // * `HEYGEN` - HeyGen
 // * `JIRA` - Jira
 // * `JUNGLESCOUT` - Jungle Scout
@@ -9420,6 +9422,7 @@ func (i *Integration) String() string {
 // * `PERPLEXITY` - Perplexity
 // * `POSTHOG` - PostHog
 // * `PRODUCTBOARD` - Productboard
+// * `QUICKBOOKS` - QuickBooks
 // * `REDDIT` - Reddit
 // * `SALESFORCE` - Salesforce
 // * `SEMRUSH` - Semrush
@@ -9449,11 +9452,13 @@ func (i *Integration) String() string {
 // * `DISCORD` - Discord
 // * `DOCUSIGN` - DocuSign
 // * `TRELLO` - Trello
+// * `TWITTER` - Twitter
 // * `HEYREACH` - HeyReach
 // * `ACTIVE_CAMPAIGN` - Active Campaign
 // * `CUSTOMER_IO` - Customer.io
 // * `SEGMENT` - Segment
 // * `WHATSAPP` - WhatsApp
+// * `YOUTUBE` - YouTube
 type IntegrationName string
 
 const (
@@ -9481,6 +9486,7 @@ const (
 	IntegrationNameGithub              IntegrationName = "GITHUB"
 	IntegrationNameGoogleSheets        IntegrationName = "GOOGLE_SHEETS"
 	IntegrationNameGoogleCalendar      IntegrationName = "GOOGLE_CALENDAR"
+	IntegrationNameGoogleClassroom     IntegrationName = "GOOGLE_CLASSROOM"
 	IntegrationNameGoogleDrive         IntegrationName = "GOOGLE_DRIVE"
 	IntegrationNameGmail               IntegrationName = "GMAIL"
 	IntegrationNameGoogleAds           IntegrationName = "GOOGLE_ADS"
@@ -9515,6 +9521,7 @@ const (
 	IntegrationNameFigma               IntegrationName = "FIGMA"
 	IntegrationNameFireflies           IntegrationName = "FIREFLIES"
 	IntegrationNameGoogleMaps          IntegrationName = "GOOGLE_MAPS"
+	IntegrationNameGooglemeet          IntegrationName = "GOOGLEMEET"
 	IntegrationNameHeygen              IntegrationName = "HEYGEN"
 	IntegrationNameJira                IntegrationName = "JIRA"
 	IntegrationNameJunglescout         IntegrationName = "JUNGLESCOUT"
@@ -9525,6 +9532,7 @@ const (
 	IntegrationNamePerplexity          IntegrationName = "PERPLEXITY"
 	IntegrationNamePosthog             IntegrationName = "POSTHOG"
 	IntegrationNameProductboard        IntegrationName = "PRODUCTBOARD"
+	IntegrationNameQuickbooks          IntegrationName = "QUICKBOOKS"
 	IntegrationNameReddit              IntegrationName = "REDDIT"
 	IntegrationNameSalesforce          IntegrationName = "SALESFORCE"
 	IntegrationNameSemrush             IntegrationName = "SEMRUSH"
@@ -9554,11 +9562,13 @@ const (
 	IntegrationNameDiscord             IntegrationName = "DISCORD"
 	IntegrationNameDocusign            IntegrationName = "DOCUSIGN"
 	IntegrationNameTrello              IntegrationName = "TRELLO"
+	IntegrationNameTwitter             IntegrationName = "TWITTER"
 	IntegrationNameHeyreach            IntegrationName = "HEYREACH"
 	IntegrationNameActiveCampaign      IntegrationName = "ACTIVE_CAMPAIGN"
 	IntegrationNameCustomerIo          IntegrationName = "CUSTOMER_IO"
 	IntegrationNameSegment             IntegrationName = "SEGMENT"
 	IntegrationNameWhatsapp            IntegrationName = "WHATSAPP"
+	IntegrationNameYoutube             IntegrationName = "YOUTUBE"
 )
 
 func NewIntegrationNameFromString(s string) (IntegrationName, error) {
@@ -9611,6 +9621,8 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameGoogleSheets, nil
 	case "GOOGLE_CALENDAR":
 		return IntegrationNameGoogleCalendar, nil
+	case "GOOGLE_CLASSROOM":
+		return IntegrationNameGoogleClassroom, nil
 	case "GOOGLE_DRIVE":
 		return IntegrationNameGoogleDrive, nil
 	case "GMAIL":
@@ -9679,6 +9691,8 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameFireflies, nil
 	case "GOOGLE_MAPS":
 		return IntegrationNameGoogleMaps, nil
+	case "GOOGLEMEET":
+		return IntegrationNameGooglemeet, nil
 	case "HEYGEN":
 		return IntegrationNameHeygen, nil
 	case "JIRA":
@@ -9699,6 +9713,8 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNamePosthog, nil
 	case "PRODUCTBOARD":
 		return IntegrationNameProductboard, nil
+	case "QUICKBOOKS":
+		return IntegrationNameQuickbooks, nil
 	case "REDDIT":
 		return IntegrationNameReddit, nil
 	case "SALESFORCE":
@@ -9757,6 +9773,8 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameDocusign, nil
 	case "TRELLO":
 		return IntegrationNameTrello, nil
+	case "TWITTER":
+		return IntegrationNameTwitter, nil
 	case "HEYREACH":
 		return IntegrationNameHeyreach, nil
 	case "ACTIVE_CAMPAIGN":
@@ -9767,6 +9785,8 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameSegment, nil
 	case "WHATSAPP":
 		return IntegrationNameWhatsapp, nil
+	case "YOUTUBE":
+		return IntegrationNameYoutube, nil
 	}
 	var t IntegrationName
 	return "", fmt.Errorf("%s is not a valid %T", s, t)
