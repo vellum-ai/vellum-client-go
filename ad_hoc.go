@@ -367,10 +367,11 @@ func (d *DeprecatedPromptRequestInput) Accept(visitor DeprecatedPromptRequestInp
 
 // The final data event returned indicating that the stream has ended and all final resolved values from the model can be found.
 type FulfilledAdHocExecutePromptEvent struct {
-	Outputs     []*PromptOutput                    `json:"outputs" url:"outputs"`
-	ExecutionId string                             `json:"execution_id" url:"execution_id"`
-	Meta        *AdHocFulfilledPromptExecutionMeta `json:"meta,omitempty" url:"meta,omitempty"`
-	state       string
+	Outputs             []*PromptOutput                    `json:"outputs" url:"outputs"`
+	ExecutionId         string                             `json:"execution_id" url:"execution_id"`
+	Meta                *AdHocFulfilledPromptExecutionMeta `json:"meta,omitempty" url:"meta,omitempty"`
+	ChatMessageMetadata map[string]interface{}             `json:"chat_message_metadata,omitempty" url:"chat_message_metadata,omitempty"`
+	state               string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage

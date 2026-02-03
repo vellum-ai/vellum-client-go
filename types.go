@@ -6733,10 +6733,11 @@ func (f FinishReasonEnum) Ptr() *FinishReasonEnum {
 
 // The final data event returned indicating that the stream has ended and all final resolved values from the model can be found.
 type FulfilledExecutePromptEvent struct {
-	Outputs     []*PromptOutput               `json:"outputs" url:"outputs"`
-	ExecutionId string                        `json:"execution_id" url:"execution_id"`
-	Meta        *FulfilledPromptExecutionMeta `json:"meta,omitempty" url:"meta,omitempty"`
-	state       string
+	Outputs             []*PromptOutput               `json:"outputs" url:"outputs"`
+	ExecutionId         string                        `json:"execution_id" url:"execution_id"`
+	Meta                *FulfilledPromptExecutionMeta `json:"meta,omitempty" url:"meta,omitempty"`
+	ChatMessageMetadata map[string]interface{}        `json:"chat_message_metadata,omitempty" url:"chat_message_metadata,omitempty"`
+	state               string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -6807,9 +6808,10 @@ type FulfilledExecutePromptResponse struct {
 	// The subset of the raw response from the model that the request opted into with `expand_raw`.
 	Raw map[string]interface{} `json:"raw,omitempty" url:"raw,omitempty"`
 	// The ID of the execution.
-	ExecutionId string          `json:"execution_id" url:"execution_id"`
-	Outputs     []*PromptOutput `json:"outputs" url:"outputs"`
-	state       string
+	ExecutionId         string                 `json:"execution_id" url:"execution_id"`
+	Outputs             []*PromptOutput        `json:"outputs" url:"outputs"`
+	ChatMessageMetadata map[string]interface{} `json:"chat_message_metadata,omitempty" url:"chat_message_metadata,omitempty"`
+	state               string
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -9373,6 +9375,7 @@ func (i *Integration) String() string {
 // * `MONDAY` - Monday
 // * `NEON` - Neon
 // * `OUTLOOK` - Outlook
+// * `MICROSOFT_TEAMS` - Microsoft Teams
 // * `GITHUB` - Github
 // * `GOOGLE_SHEETS` - Google Sheets
 // * `GOOGLE_CALENDAR` - Google Calendar
@@ -9483,6 +9486,7 @@ const (
 	IntegrationNameMonday              IntegrationName = "MONDAY"
 	IntegrationNameNeon                IntegrationName = "NEON"
 	IntegrationNameOutlook             IntegrationName = "OUTLOOK"
+	IntegrationNameMicrosoftTeams      IntegrationName = "MICROSOFT_TEAMS"
 	IntegrationNameGithub              IntegrationName = "GITHUB"
 	IntegrationNameGoogleSheets        IntegrationName = "GOOGLE_SHEETS"
 	IntegrationNameGoogleCalendar      IntegrationName = "GOOGLE_CALENDAR"
@@ -9615,6 +9619,8 @@ func NewIntegrationNameFromString(s string) (IntegrationName, error) {
 		return IntegrationNameNeon, nil
 	case "OUTLOOK":
 		return IntegrationNameOutlook, nil
+	case "MICROSOFT_TEAMS":
+		return IntegrationNameMicrosoftTeams, nil
 	case "GITHUB":
 		return IntegrationNameGithub, nil
 	case "GOOGLE_SHEETS":
