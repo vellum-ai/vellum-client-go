@@ -9,12 +9,181 @@ import (
 	time "time"
 )
 
+// * `ANTHROPIC` - Anthropic
+// * `AWS_BEDROCK` - AWS Bedrock
+// * `AZURE_AI_FOUNDRY` - Azure AI Foundry
+// * `AZURE_OPENAI` - Azure OpenAI
+// * `BASETEN` - BaseTen
+// * `CEREBRAS` - Cerebras
+// * `COHERE` - Cohere
+// * `CUSTOM` - Custom
+// * `DEEP_SEEK` - DeepSeek
+// * `FIREWORKS_AI` - Fireworks AI
+// * `GOOGLE` - Google
+// * `GOOGLE_VERTEX_AI` - Google Vertex AI
+// * `GROQ` - Groq
+// * `HUGGINGFACE` - HuggingFace
+// * `IBM_WATSONX` - IBM WatsonX
+// * `MISTRAL_AI` - Mistral AI
+// * `MOSAICML` - MosaicML
+// * `MYSTIC` - Mystic
+// * `NVIDIA` - NVIDIA
+// * `OPENAI` - OpenAI
+// * `OPEN_ROUTER` - Open Router
+// * `OPENPIPE` - OpenPipe
+// * `PERPLEXITY` - Perplexity
+// * `PYQ` - Pyq
+// * `REPLICATE` - Replicate
+// * `SAMBANOVA` - SambaNova
+// * `TOGETHER_AI` - Together AI
+// * `X_AI` - xAI
+// * `FASTWEB` - Fastweb
+// * `SWISSCOM` - Swisscom
+type MlModelHostingInterface string
+
+const (
+	MlModelHostingInterfaceAnthropic      MlModelHostingInterface = "ANTHROPIC"
+	MlModelHostingInterfaceAwsBedrock     MlModelHostingInterface = "AWS_BEDROCK"
+	MlModelHostingInterfaceAzureAiFoundry MlModelHostingInterface = "AZURE_AI_FOUNDRY"
+	MlModelHostingInterfaceAzureOpenai    MlModelHostingInterface = "AZURE_OPENAI"
+	MlModelHostingInterfaceBaseten        MlModelHostingInterface = "BASETEN"
+	MlModelHostingInterfaceCerebras       MlModelHostingInterface = "CEREBRAS"
+	MlModelHostingInterfaceCohere         MlModelHostingInterface = "COHERE"
+	MlModelHostingInterfaceCustom         MlModelHostingInterface = "CUSTOM"
+	MlModelHostingInterfaceDeepSeek       MlModelHostingInterface = "DEEP_SEEK"
+	MlModelHostingInterfaceFireworksAi    MlModelHostingInterface = "FIREWORKS_AI"
+	MlModelHostingInterfaceGoogle         MlModelHostingInterface = "GOOGLE"
+	MlModelHostingInterfaceGoogleVertexAi MlModelHostingInterface = "GOOGLE_VERTEX_AI"
+	MlModelHostingInterfaceGroq           MlModelHostingInterface = "GROQ"
+	MlModelHostingInterfaceHuggingface    MlModelHostingInterface = "HUGGINGFACE"
+	MlModelHostingInterfaceIbmWatsonx     MlModelHostingInterface = "IBM_WATSONX"
+	MlModelHostingInterfaceMistralAi      MlModelHostingInterface = "MISTRAL_AI"
+	MlModelHostingInterfaceMosaicml       MlModelHostingInterface = "MOSAICML"
+	MlModelHostingInterfaceMystic         MlModelHostingInterface = "MYSTIC"
+	MlModelHostingInterfaceNvidia         MlModelHostingInterface = "NVIDIA"
+	MlModelHostingInterfaceOpenai         MlModelHostingInterface = "OPENAI"
+	MlModelHostingInterfaceOpenRouter     MlModelHostingInterface = "OPEN_ROUTER"
+	MlModelHostingInterfaceOpenpipe       MlModelHostingInterface = "OPENPIPE"
+	MlModelHostingInterfacePerplexity     MlModelHostingInterface = "PERPLEXITY"
+	MlModelHostingInterfacePyq            MlModelHostingInterface = "PYQ"
+	MlModelHostingInterfaceReplicate      MlModelHostingInterface = "REPLICATE"
+	MlModelHostingInterfaceSambanova      MlModelHostingInterface = "SAMBANOVA"
+	MlModelHostingInterfaceTogetherAi     MlModelHostingInterface = "TOGETHER_AI"
+	MlModelHostingInterfaceXAi            MlModelHostingInterface = "X_AI"
+	MlModelHostingInterfaceFastweb        MlModelHostingInterface = "FASTWEB"
+	MlModelHostingInterfaceSwisscom       MlModelHostingInterface = "SWISSCOM"
+)
+
+func NewMlModelHostingInterfaceFromString(s string) (MlModelHostingInterface, error) {
+	switch s {
+	case "ANTHROPIC":
+		return MlModelHostingInterfaceAnthropic, nil
+	case "AWS_BEDROCK":
+		return MlModelHostingInterfaceAwsBedrock, nil
+	case "AZURE_AI_FOUNDRY":
+		return MlModelHostingInterfaceAzureAiFoundry, nil
+	case "AZURE_OPENAI":
+		return MlModelHostingInterfaceAzureOpenai, nil
+	case "BASETEN":
+		return MlModelHostingInterfaceBaseten, nil
+	case "CEREBRAS":
+		return MlModelHostingInterfaceCerebras, nil
+	case "COHERE":
+		return MlModelHostingInterfaceCohere, nil
+	case "CUSTOM":
+		return MlModelHostingInterfaceCustom, nil
+	case "DEEP_SEEK":
+		return MlModelHostingInterfaceDeepSeek, nil
+	case "FIREWORKS_AI":
+		return MlModelHostingInterfaceFireworksAi, nil
+	case "GOOGLE":
+		return MlModelHostingInterfaceGoogle, nil
+	case "GOOGLE_VERTEX_AI":
+		return MlModelHostingInterfaceGoogleVertexAi, nil
+	case "GROQ":
+		return MlModelHostingInterfaceGroq, nil
+	case "HUGGINGFACE":
+		return MlModelHostingInterfaceHuggingface, nil
+	case "IBM_WATSONX":
+		return MlModelHostingInterfaceIbmWatsonx, nil
+	case "MISTRAL_AI":
+		return MlModelHostingInterfaceMistralAi, nil
+	case "MOSAICML":
+		return MlModelHostingInterfaceMosaicml, nil
+	case "MYSTIC":
+		return MlModelHostingInterfaceMystic, nil
+	case "NVIDIA":
+		return MlModelHostingInterfaceNvidia, nil
+	case "OPENAI":
+		return MlModelHostingInterfaceOpenai, nil
+	case "OPEN_ROUTER":
+		return MlModelHostingInterfaceOpenRouter, nil
+	case "OPENPIPE":
+		return MlModelHostingInterfaceOpenpipe, nil
+	case "PERPLEXITY":
+		return MlModelHostingInterfacePerplexity, nil
+	case "PYQ":
+		return MlModelHostingInterfacePyq, nil
+	case "REPLICATE":
+		return MlModelHostingInterfaceReplicate, nil
+	case "SAMBANOVA":
+		return MlModelHostingInterfaceSambanova, nil
+	case "TOGETHER_AI":
+		return MlModelHostingInterfaceTogetherAi, nil
+	case "X_AI":
+		return MlModelHostingInterfaceXAi, nil
+	case "FASTWEB":
+		return MlModelHostingInterfaceFastweb, nil
+	case "SWISSCOM":
+		return MlModelHostingInterfaceSwisscom, nil
+	}
+	var t MlModelHostingInterface
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (m MlModelHostingInterface) Ptr() *MlModelHostingInterface {
+	return &m
+}
+
 // An ML Model that your Workspace has access to.
 type MlModelRead struct {
 	Id string `json:"id" url:"id"`
 	// The unique name of the ML Model.
-	Name         string    `json:"name" url:"name"`
-	IntroducedOn time.Time `json:"introduced_on" url:"introduced_on"`
+	Name string `json:"name" url:"name"`
+	// The organization hosting the ML Model.
+	//
+	// * `ANTHROPIC` - Anthropic
+	// * `AWS_BEDROCK` - AWS Bedrock
+	// * `AZURE_AI_FOUNDRY` - Azure AI Foundry
+	// * `AZURE_OPENAI` - Azure OpenAI
+	// * `BASETEN` - BaseTen
+	// * `CEREBRAS` - Cerebras
+	// * `COHERE` - Cohere
+	// * `CUSTOM` - Custom
+	// * `DEEP_SEEK` - DeepSeek
+	// * `FIREWORKS_AI` - Fireworks AI
+	// * `GOOGLE` - Google
+	// * `GOOGLE_VERTEX_AI` - Google Vertex AI
+	// * `GROQ` - Groq
+	// * `HUGGINGFACE` - HuggingFace
+	// * `IBM_WATSONX` - IBM WatsonX
+	// * `MISTRAL_AI` - Mistral AI
+	// * `MOSAICML` - MosaicML
+	// * `MYSTIC` - Mystic
+	// * `NVIDIA` - NVIDIA
+	// * `OPENAI` - OpenAI
+	// * `OPEN_ROUTER` - Open Router
+	// * `OPENPIPE` - OpenPipe
+	// * `PERPLEXITY` - Perplexity
+	// * `PYQ` - Pyq
+	// * `REPLICATE` - Replicate
+	// * `SAMBANOVA` - SambaNova
+	// * `TOGETHER_AI` - Together AI
+	// * `X_AI` - xAI
+	// * `FASTWEB` - Fastweb
+	// * `SWISSCOM` - Swisscom
+	HostedBy     MlModelHostingInterface `json:"hosted_by" url:"hosted_by"`
+	IntroducedOn time.Time               `json:"introduced_on" url:"introduced_on"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
