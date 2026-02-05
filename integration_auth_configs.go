@@ -12,8 +12,10 @@ type ListIntegrationAuthConfigsRequest struct {
 	// The response fields to expand for more information.
 	// - 'integration_credentials' expands the list of integration credentials that the authenticated entity has access to for the auth config.
 	// - 'additional_parameters' (retrieve only) fetches additional parameter requirements for the auth config.
-	Expand              []*string `json:"-" url:"expand,omitempty"`
-	IntegrationName     *string   `json:"-" url:"integration_name,omitempty"`
+	Expand          []*string `json:"-" url:"expand,omitempty"`
+	IntegrationName *string   `json:"-" url:"integration_name,omitempty"`
+	// Multiple values may be separated by commas.
+	IntegrationNames    []*string `json:"-" url:"integration_names,omitempty"`
 	IntegrationProvider *string   `json:"-" url:"integration_provider,omitempty"`
 	// Number of results to return per page.
 	Limit *int `json:"-" url:"limit,omitempty"`
