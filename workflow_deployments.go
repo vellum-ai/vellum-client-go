@@ -363,6 +363,50 @@ func (s *SlimWorkflowExecutionRead) String() string {
 	return fmt.Sprintf("%#v", s)
 }
 
+type WorkflowDependency struct {
+	WorkflowIntegrationDependency   *WorkflowIntegrationDependency
+	WorkflowModelProviderDependency *WorkflowModelProviderDependency
+}
+
+func (w *WorkflowDependency) UnmarshalJSON(data []byte) error {
+	valueWorkflowIntegrationDependency := new(WorkflowIntegrationDependency)
+	if err := json.Unmarshal(data, &valueWorkflowIntegrationDependency); err == nil {
+		w.WorkflowIntegrationDependency = valueWorkflowIntegrationDependency
+		return nil
+	}
+	valueWorkflowModelProviderDependency := new(WorkflowModelProviderDependency)
+	if err := json.Unmarshal(data, &valueWorkflowModelProviderDependency); err == nil {
+		w.WorkflowModelProviderDependency = valueWorkflowModelProviderDependency
+		return nil
+	}
+	return fmt.Errorf("%s cannot be deserialized as a %T", data, w)
+}
+
+func (w WorkflowDependency) MarshalJSON() ([]byte, error) {
+	if w.WorkflowIntegrationDependency != nil {
+		return json.Marshal(w.WorkflowIntegrationDependency)
+	}
+	if w.WorkflowModelProviderDependency != nil {
+		return json.Marshal(w.WorkflowModelProviderDependency)
+	}
+	return nil, fmt.Errorf("type %T does not include a non-empty union type", w)
+}
+
+type WorkflowDependencyVisitor interface {
+	VisitWorkflowIntegrationDependency(*WorkflowIntegrationDependency) error
+	VisitWorkflowModelProviderDependency(*WorkflowModelProviderDependency) error
+}
+
+func (w *WorkflowDependency) Accept(visitor WorkflowDependencyVisitor) error {
+	if w.WorkflowIntegrationDependency != nil {
+		return visitor.VisitWorkflowIntegrationDependency(w.WorkflowIntegrationDependency)
+	}
+	if w.WorkflowModelProviderDependency != nil {
+		return visitor.VisitWorkflowModelProviderDependency(w.WorkflowModelProviderDependency)
+	}
+	return fmt.Errorf("type %T does not include a non-empty union type", w)
+}
+
 type WorkflowDeploymentEventExecutionsResponse struct {
 	Count   int                          `json:"count" url:"count"`
 	Results []*SlimWorkflowExecutionRead `json:"results" url:"results"`
@@ -583,10 +627,20 @@ func (w *WorkflowDeploymentReleaseWorkflowDeployment) String() string {
 	return fmt.Sprintf("%#v", w)
 }
 
+// Mixin for serializers using VellumSerializerMethodField to enable custom OpenAPI required behavior.
+//
+// This mixin must be used with any serializer that contains VellumSerializerMethodField fields
+// for the custom required behavior to work correctly.
+//
+// Usage:
+//
+//	class MySerializer(VellumSerializerMethodFieldMixin, serializers.Serializer):
+//	    computed = VellumSerializerMethodField(required=True)
 type WorkflowDeploymentReleaseWorkflowVersion struct {
-	Id              string            `json:"id" url:"id"`
-	InputVariables  []*VellumVariable `json:"input_variables" url:"input_variables"`
-	OutputVariables []*VellumVariable `json:"output_variables" url:"output_variables"`
+	Id              string                `json:"id" url:"id"`
+	InputVariables  []*VellumVariable     `json:"input_variables" url:"input_variables"`
+	OutputVariables []*VellumVariable     `json:"output_variables" url:"output_variables"`
+	Dependencies    []*WorkflowDependency `json:"dependencies,omitempty" url:"dependencies,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -794,6 +848,144 @@ func (w *WorkflowExecutionViewOnlineEvalMetricResult) UnmarshalJSON(data []byte)
 }
 
 func (w *WorkflowExecutionViewOnlineEvalMetricResult) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
+}
+
+type WorkflowIntegrationDependency struct {
+	Name     IntegrationName `json:"name" url:"name"`
+	Provider string          `json:"provider" url:"provider"`
+	Label    *string         `json:"label,omitempty" url:"label,omitempty"`
+	type_    string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowIntegrationDependency) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkflowIntegrationDependency) Type() string {
+	return w.type_
+}
+
+func (w *WorkflowIntegrationDependency) UnmarshalJSON(data []byte) error {
+	type embed WorkflowIntegrationDependency
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*w),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*w = WorkflowIntegrationDependency(unmarshaler.embed)
+	if unmarshaler.Type != "INTEGRATION" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "INTEGRATION", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowIntegrationDependency) MarshalJSON() ([]byte, error) {
+	type embed WorkflowIntegrationDependency
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*w),
+		Type:  "INTEGRATION",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (w *WorkflowIntegrationDependency) String() string {
+	if len(w._rawJSON) > 0 {
+		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := core.StringifyJSON(w); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", w)
+}
+
+type WorkflowModelProviderDependency struct {
+	Name      MlModelHostingInterface `json:"name" url:"name"`
+	Label     *string                 `json:"label,omitempty" url:"label,omitempty"`
+	ModelName string                  `json:"model_name" url:"model_name"`
+	type_     string
+
+	extraProperties map[string]interface{}
+	_rawJSON        json.RawMessage
+}
+
+func (w *WorkflowModelProviderDependency) GetExtraProperties() map[string]interface{} {
+	return w.extraProperties
+}
+
+func (w *WorkflowModelProviderDependency) Type() string {
+	return w.type_
+}
+
+func (w *WorkflowModelProviderDependency) UnmarshalJSON(data []byte) error {
+	type embed WorkflowModelProviderDependency
+	var unmarshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*w),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*w = WorkflowModelProviderDependency(unmarshaler.embed)
+	if unmarshaler.Type != "MODEL_PROVIDER" {
+		return fmt.Errorf("unexpected value for literal on type %T; expected %v got %v", w, "MODEL_PROVIDER", unmarshaler.Type)
+	}
+	w.type_ = unmarshaler.Type
+
+	extraProperties, err := core.ExtractExtraProperties(data, *w, "type")
+	if err != nil {
+		return err
+	}
+	w.extraProperties = extraProperties
+
+	w._rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (w *WorkflowModelProviderDependency) MarshalJSON() ([]byte, error) {
+	type embed WorkflowModelProviderDependency
+	var marshaler = struct {
+		embed
+		Type string `json:"type"`
+	}{
+		embed: embed(*w),
+		Type:  "MODEL_PROVIDER",
+	}
+	return json.Marshal(marshaler)
+}
+
+func (w *WorkflowModelProviderDependency) String() string {
 	if len(w._rawJSON) > 0 {
 		if value, err := core.StringifyJSON(w._rawJSON); err == nil {
 			return value
