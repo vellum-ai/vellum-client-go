@@ -12423,9 +12423,9 @@ func (n *NodeExecutionInitiatedEvent) String() string {
 
 type NodeExecutionLogBody struct {
 	NodeDefinition *VellumCodeResourceDefinition `json:"node_definition" url:"node_definition"`
+	Message        string                        `json:"message" url:"message"`
 	Attributes     map[string]interface{}        `json:"attributes,omitempty" url:"attributes,omitempty"`
 	Severity       SeverityEnum                  `json:"severity" url:"severity"`
-	Message        string                        `json:"message" url:"message"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
