@@ -53,6 +53,12 @@ type DocumentDocumentToDocumentIndex struct {
 	IndexingState        *IndexingStateEnum `json:"indexing_state,omitempty" url:"indexing_state,omitempty"`
 	ExtractedTextFileUrl *string            `json:"extracted_text_file_url,omitempty" url:"extracted_text_file_url,omitempty"`
 	ProcessingState      *string            `json:"processing_state,omitempty" url:"processing_state,omitempty"`
+	// An enum value representing why the document could not be processed for this index. Is null unless processing_state is FAILED.
+	//
+	// * `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit
+	// * `INVALID_FILE` - Invalid File
+	// * `INVALID_CREDENTIALS` - Invalid Credentials
+	ProcessingFailureReason *ProcessingFailureReasonEnum `json:"processing_failure_reason,omitempty" url:"processing_failure_reason,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage
@@ -413,6 +419,12 @@ type SlimDocumentDocumentToDocumentIndex struct {
 	// * `FAILED` - Failed
 	IndexingState   *IndexingStateEnum `json:"indexing_state,omitempty" url:"indexing_state,omitempty"`
 	ProcessingState *string            `json:"processing_state,omitempty" url:"processing_state,omitempty"`
+	// An enum value representing why the document could not be processed for this index. Is null unless processing_state is FAILED.
+	//
+	// * `EXCEEDED_CHARACTER_LIMIT` - Exceeded Character Limit
+	// * `INVALID_FILE` - Invalid File
+	// * `INVALID_CREDENTIALS` - Invalid Credentials
+	ProcessingFailureReason *ProcessingFailureReasonEnum `json:"processing_failure_reason,omitempty" url:"processing_failure_reason,omitempty"`
 
 	extraProperties map[string]interface{}
 	_rawJSON        json.RawMessage

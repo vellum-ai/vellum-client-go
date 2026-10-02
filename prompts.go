@@ -12,7 +12,9 @@ type PromptsPullRequest struct {
 	// Set to 'application/yaml' to receive YAML response, otherwise JSON will be returned
 	// The ID of the Prompt Variant within a Prompt Sandbox to pull. Must be included if providing the ID of a Prompt Sandbox.
 	PromptVariantId *string `json:"-" url:"prompt_variant_id,omitempty"`
-	accept          string
+	// The Release Tag to pull when providing a Prompt Deployment ID or name. Defaults to LATEST.
+	ReleaseTag *string `json:"-" url:"release_tag,omitempty"`
+	accept     string
 }
 
 func (p *PromptsPullRequest) Accept() string {

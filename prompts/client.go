@@ -41,7 +41,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Used to pull the definition of a Prompt from Vellum.
 func (c *Client) Pull(
 	ctx context.Context,
-	// The ID of the Prompt to pull from. Prompt Sandbox IDs are currently supported.
+	// The ID of the Prompt to pull from. Prompt Deployment IDs or names, Prompt Sandbox IDs, and Prompt Version IDs are currently supported.
 	id string,
 	request *vellumclientgo.PromptsPullRequest,
 	opts ...option.RequestOption,

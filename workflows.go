@@ -16,13 +16,18 @@ type WorkflowRunNodeRequest struct {
 }
 
 type WorkflowsPullRequest struct {
-	ExcludeCode    *bool `json:"-" url:"exclude_code,omitempty"`
+	// If true, omit the Workflow's code from the response.
+	ExcludeCode *bool `json:"-" url:"exclude_code,omitempty"`
+	// If true, omit UI display metadata files when pulling from a Workflow Sandbox.
 	ExcludeDisplay *bool `json:"-" url:"exclude_display,omitempty"`
-	IncludeJson    *bool `json:"-" url:"include_json,omitempty"`
+	// If true, include a JSON representation of the Workflow's definition alongside its code.
+	IncludeJson *bool `json:"-" url:"include_json,omitempty"`
+	// If true, include the Workflow Sandbox's scenarios as sandbox inputs when pulling from a Workflow Sandbox.
 	IncludeSandbox *bool `json:"-" url:"include_sandbox,omitempty"`
 	// Release tag to use when pulling from deployment (implies deployment-only lookup)
 	ReleaseTag *string `json:"-" url:"release_tag,omitempty"`
-	Strict     *bool   `json:"-" url:"strict,omitempty"`
+	// If true, fail on any code generation error instead of returning best-effort code.
+	Strict *bool `json:"-" url:"strict,omitempty"`
 	// Semantic version range to validate against the Workflow SDK version (e.g., '>=1.0.0,<1.2.3')
 	Version *string `json:"-" url:"version,omitempty"`
 }
