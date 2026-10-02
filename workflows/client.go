@@ -14,6 +14,7 @@ import (
 	io "io"
 	multipart "mime/multipart"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -24,8 +25,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.ApiVersion == "" {
+		options.ApiVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -39,9 +40,10 @@ func NewClient(opts ...option.RequestOption) *Client {
 	}
 }
 
+// Used to pull the definition of a Workflow from Vellum. Returns a zip archive of the Workflow's code by default, or a flattened plain-text representation if the Accept header is set to 'text/plain'.
 func (c *Client) Pull(
 	ctx context.Context,
-	// The ID of the Workflow to pull from
+	// The ID or name of the Workflow Deployment, or the ID of the Workflow Sandbox, to pull from.
 	id string,
 	request *vellumclientgo.WorkflowsPullRequest,
 	opts ...option.RequestOption,

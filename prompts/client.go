@@ -13,6 +13,7 @@ import (
 	option "github.com/vellum-ai/vellum-client-go/option"
 	io "io"
 	http "net/http"
+	os "os"
 )
 
 type Client struct {
@@ -23,8 +24,8 @@ type Client struct {
 
 func NewClient(opts ...option.RequestOption) *Client {
 	options := core.NewRequestOptions(opts...)
-	if options.ApiVersion == nil || *options.ApiVersion == "" {
-		options.ApiVersion = core.GetDefaultApiVersion()
+	if options.ApiVersion == "" {
+		options.ApiVersion = os.Getenv("VELLUM_API_VERSION")
 	}
 	return &Client{
 		baseURL: options.BaseURL,
@@ -41,7 +42,7 @@ func NewClient(opts ...option.RequestOption) *Client {
 // Used to pull the definition of a Prompt from Vellum.
 func (c *Client) Pull(
 	ctx context.Context,
-	// The ID of the Prompt to pull from. Prompt Sandbox IDs are currently supported.
+	// The ID of the Prompt to pull from. Prompt Deployment IDs or names, Prompt Sandbox IDs, and Prompt Version IDs are currently supported.
 	id string,
 	request *vellumclientgo.PromptsPullRequest,
 	opts ...option.RequestOption,

@@ -2,3 +2,6 @@
 README.md
 LICENSE
 documents/client.go
+.fern/replay.lock
+.fern/replay.yml
+.gitattributes
